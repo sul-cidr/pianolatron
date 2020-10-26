@@ -1,0 +1,12 @@
+{
+  "printWidth": 80,
+  "semi": true,
+  "singleQuote": false,
+  "svelteAllowShorthand": true,
+  "svelteBracketNewLine": true,
+  "svelteSortOrder": "styles-scripts-markup",
+  "svelteStrictMode": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "useTabs": false
+}
