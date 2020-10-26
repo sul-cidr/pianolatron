@@ -11,8 +11,12 @@
     "build": "parcel build src/index.html --detailed-report"
   },
   "devDependencies": {
+    "eslint": "^7.12.0",
+    "eslint-plugin-svelte3": "^2.7.3",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-svelte": "^4.0.6",
+    "prettier": "^2.1.2",
+    "prettier-plugin-svelte": "^1.4.1",
     "svelte": "^3.29.4"
   }
 }
