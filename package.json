@@ -8,7 +8,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "parcel --no-cache src/index.html",
-    "build": "parcel build src/index.html --detailed-report"
+    "build": "parcel build src/index.html --detailed-report",
+    "lint": "eslint src/ --ext svelte --ext js"
   },
   "devDependencies": {
     "eslint": "^7.12.0",
