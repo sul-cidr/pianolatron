@@ -5,5 +5,10 @@
   "main": "index.js",
   "repository": "git@github.com:sul-cidr/pianolatron.git",
   "author": "Simon Wiles <simonjwiles@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-svelte": "^4.0.6",
+    "svelte": "^3.29.4"
+  }
 }
