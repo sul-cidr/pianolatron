@@ -9,7 +9,10 @@
   "scripts": {
     "dev": "parcel --no-cache src/index.html",
     "build": "parcel build src/index.html --detailed-report",
-    "lint": "eslint src/ --ext svelte --ext js"
+    "lint": "eslint src/ --ext svelte --ext js",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "coverage": "jest --passWithNoTests --coverage"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
