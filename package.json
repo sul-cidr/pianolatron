@@ -1,0 +1,9 @@
+{
+  "name": "pianolatron",
+  "version": "0.1.0",
+  "description": "CIDR Pianolatron application",
+  "main": "index.js",
+  "repository": "git@github.com:sul-cidr/pianolatron.git",
+  "author": "Simon Wiles <simonjwiles@gmail.com>",
+  "license": "MIT"
+}
