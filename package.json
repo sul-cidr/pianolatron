@@ -6,6 +6,10 @@
   "repository": "git@github.com:sul-cidr/pianolatron.git",
   "author": "Simon Wiles <simonjwiles@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "parcel --no-cache index.html",
+    "build": "parcel build index.html --detailed-report"
+  },
   "devDependencies": {
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-svelte": "^4.0.6",
