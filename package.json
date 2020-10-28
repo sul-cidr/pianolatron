@@ -34,6 +34,9 @@
     "svelte-jester": "^1.1.5"
   },
   "dependencies": {
-    "midi-player-js": "^2.0.13"
+    "@tonejs/piano": "^0.2.1",
+    "midi-player-js": "^2.0.13",
+    "tone": "^14.7.58",
+    "webmidi": "^2.5.1"
   }
 }
