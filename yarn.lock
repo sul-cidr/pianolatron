@@ -5879,6 +5879,11 @@ micromatch@^4.0.2:
     braces "^3.0.1"
     picomatch "^2.0.5"
 
+midi-player-js@^2.0.13:
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/midi-player-js/-/midi-player-js-2.0.13.tgz#e955c76ca55eedc8adbf3f2a97a3b00c9c669834"
+  integrity sha512-VhUhhJec9D2EPRZA/Z/bktp0h7YlaObEJ6qsEvW/TQOjg9AZrQV+UQjPJSQUDqoLJSmOoOu9J9ROwvDW1lnu+w==
+
 miller-rabin@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/miller-rabin/-/miller-rabin-4.0.1.tgz#f080351c865b0dc562a8462966daa53543c78a4d"
