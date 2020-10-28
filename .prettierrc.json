@@ -5,7 +5,7 @@
   "svelteAllowShorthand": true,
   "svelteBracketNewLine": true,
   "svelteSortOrder": "styles-scripts-markup",
-  "svelteStrictMode": true,
+  "svelteStrictMode": false,
   "tabWidth": 2,
   "trailingComma": "all",
   "useTabs": false
