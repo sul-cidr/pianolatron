@@ -26,7 +26,7 @@
   <li><strong>Label:</strong> {rollMetadata.LABEL}</li>
   <li>
     <strong>PURL:</strong>
-    <a href="{rollMetadata.PURL}">{rollMetadata.PURL}</a>
+    <a href={rollMetadata.PURL}>{rollMetadata.PURL}</a>
   </li>
   <li><strong>Call No:</strong> {rollMetadata.CALLNUM}</li>
 </ul>
