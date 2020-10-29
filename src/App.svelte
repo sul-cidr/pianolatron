@@ -8,7 +8,7 @@
     stopMidiFile,
   } from "./components/SamplePlayer.svelte";
   import RollDetails from "./components/RollDetails.svelte";
-  import ScoreControls from "./components/ScoreControls.svelte";
+  import PlaybackControls from "./components/PlaybackControls.svelte";
 
   const title = "Pianolatron!";
 
@@ -28,5 +28,5 @@
 <h1>{title}</h1>
 {#if appReady}
   <RollDetails {rollMetadata} />
-  <ScoreControls {playPauseMidiFile} {stopMidiFile} />
+  <PlaybackControls {playPauseMidiFile} {stopMidiFile} />
 {/if}
