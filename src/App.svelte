@@ -1,4 +1,6 @@
 <script>
+  import mididataUrl from "url:./assets/mididata.json";
+
   import {
     midiSamplePlayer,
     rollMetadata,
@@ -8,13 +10,23 @@
   import ScoreDetails from "./components/ScoreDetails.svelte";
   import ScoreControls from "./components/ScoreControls.svelte";
 
-  import mididata from "./assets/mididata.json";
-
   const title = "Pianolatron!";
 
-  midiSamplePlayer.loadDataUri(mididata.mozart_rondo_alla_turca);
+  let appReady = false;
+
+  // Use the url to fetch the file asynchronously
+  fetch(mididataUrl)
+    .then((mididataResponse) => mididataResponse.json())
+    .then((mididataJson) =>
+      midiSamplePlayer.loadDataUri(mididataJson.mozart_rondo_alla_turca),
+    )
+    .then(() => {
+      appReady = true;
+    });
 </script>
 
 <h1>{title}</h1>
-<ScoreDetails {rollMetadata} />
-<ScoreControls {playPauseMidiFile} {stopMidiFile} />
+{#if appReady}
+  <ScoreDetails {rollMetadata} />
+  <ScoreControls {playPauseMidiFile} {stopMidiFile} />
+{/if}
