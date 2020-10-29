@@ -52,13 +52,20 @@
     );
   });
 
+  const controllerChange = Object.freeze({
+    SUSTAIN_PEDAL: 64,
+    SOFT_PEDAL: 67, // (una corda)
+    PEDAL_ON: 127,
+    PANNING_POSITION: 10,
+  });
+
   const DEFAULT_NOTE_VELOCITY = 33.0;
+  const SOFT_PEDAL_RATIO = 0.67;
   const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
 
   const BASE_DATA_URL = "https://broadwell.github.io/javatron/";
 
-  const activeNotes = [];
-  const playComputedExpressions = true;
+  let softPedalOn = false;
   let volumeRatio = 1.0;
   let leftVolumeRatio = 1.0;
   let rightVolumeRatio = 1.0;
@@ -91,28 +98,37 @@
     piano.keyUp({ midi: noteNumber });
   };
 
-  midiSamplePlayer.on("midiEvent", ({ name, noteNumber, velocity }) => {
-    if (name === "Note on") {
-      if (velocity === 0) {
-        // Note off
-        while (activeNotes.includes(parseInt(noteNumber, 10))) {
-          activeNotes.splice(activeNotes.indexOf(parseInt(noteNumber, 10)), 1);
+  midiSamplePlayer.on(
+    "midiEvent",
+    ({ name, value, number, noteNumber, velocity }) => {
+      if (name === "Note on") {
+        if (velocity === 0) {
+          // Note off
+          stopNote(noteNumber);
+        } else {
+          // Note on
+          let updatedVolume = (velocity / 128.0) * volumeRatio;
+          if (softPedalOn) {
+            updatedVolume *= SOFT_PEDAL_RATIO;
+          }
+          if (parseInt(noteNumber, 10) < panBoundary) {
+            updatedVolume *= leftVolumeRatio;
+          } else if (parseInt(noteNumber, 10) >= panBoundary) {
+            updatedVolume *= rightVolumeRatio;
+          }
+          startNote(noteNumber, updatedVolume);
         }
-        stopNote(noteNumber);
-      } else {
-        // Note on
-        let updatedVolume = (velocity / 128.0) * volumeRatio;
-        if (parseInt(noteNumber, 10) < panBoundary) {
-          updatedVolume *= leftVolumeRatio;
-        } else if (parseInt(noteNumber, 10) >= panBoundary) {
-          updatedVolume *= rightVolumeRatio;
-        }
-        startNote(noteNumber, updatedVolume);
-
-        if (!activeNotes.includes(noteNumber)) {
-          activeNotes.push(parseInt(noteNumber, 10));
+      } else if (name === "Controller Change") {
+        if (number === controllerChange.SUSTAIN_PEDAL) {
+          if (value === controllerChange.PEDAL_ON) {
+            piano.pedalDown();
+          } else {
+            piano.pedalUp();
+          }
+        } else if (number === controllerChange.SOFT_PEDAL) {
+          softPedalOn = value === controllerChange.PEDAL_ON;
         }
       }
-    }
-  });
+    },
+  );
 </script>
