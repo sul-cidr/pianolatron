@@ -2,11 +2,20 @@
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
-import { rollMetadata, pedalling } from "../stores";
+import { rollMetadata, pedalling, volume } from "../stores";
 
 let softPedalOn;
 pedalling.subscribe(({ soft }) => {
   softPedalOn = soft;
+});
+
+let masterVolumeRatio;
+let leftVolumeRatio;
+let rightVolumeRatio;
+volume.subscribe(({ master, right, left }) => {
+  masterVolumeRatio = master;
+  rightVolumeRatio = right;
+  leftVolumeRatio = left;
 });
 
 const decodeHtmlEntities = (string) =>
@@ -71,9 +80,6 @@ const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "p
 
 const BASE_DATA_URL = "https://broadwell.github.io/javatron/";
 
-let masterVolumeRatio = 1.0;
-let leftVolumeRatio = 1.0;
-let rightVolumeRatio = 1.0;
 let panBoundary = HALF_BOUNDARY;
 
 const piano = new Piano({
