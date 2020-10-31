@@ -96,11 +96,12 @@ const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
     ((softPedalOn && SOFT_PEDAL_RATIO) || 1) *
     masterVolumeRatio *
     (noteNumber < panBoundary ? leftVolumeRatio : rightVolumeRatio);
-
-  piano.keyDown({
-    midi: noteNumber,
-    velocity: Math.min(modifiedVelocity, 1),
-  });
+  if (modifiedVelocity) {
+    piano.keyDown({
+      midi: noteNumber,
+      velocity: Math.min(modifiedVelocity, 1),
+    });
+  }
 };
 
 const stopNote = (noteNumber) => {
