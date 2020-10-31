@@ -4,7 +4,7 @@
   "description": "CIDR Pianolatron application",
   "main": "dist/index.html",
   "repository": "git@github.com:sul-cidr/pianolatron.git",
-  "author": "Simon Wiles <simonjwiles@gmail.com>",
+  "author": "CIDR <contact-cidr@stanford.edu>",
   "license": "MIT",
   "scripts": {
     "dev": "parcel --no-cache src/index.html",
