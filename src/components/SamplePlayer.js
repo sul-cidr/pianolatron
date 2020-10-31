@@ -2,7 +2,12 @@
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
-import { rollMetadata } from "../stores";
+import { rollMetadata, pedalling } from "../stores";
+
+let softPedalOn;
+pedalling.subscribe(({ soft }) => {
+  softPedalOn = soft;
+});
 
 const decodeHtmlEntities = (string) =>
   string
@@ -66,7 +71,6 @@ const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "p
 
 const BASE_DATA_URL = "https://broadwell.github.io/javatron/";
 
-let softPedalOn = false;
 let volumeRatio = 1.0;
 let leftVolumeRatio = 1.0;
 let rightVolumeRatio = 1.0;
@@ -123,11 +127,16 @@ midiSamplePlayer.on(
       if (number === controllerChange.SUSTAIN_PEDAL) {
         if (value === controllerChange.PEDAL_ON) {
           piano.pedalDown();
+          pedalling.update((val) => ({ ...val, sustain: true }));
         } else {
           piano.pedalUp();
+          pedalling.update((val) => ({ ...val, sustain: false }));
         }
       } else if (number === controllerChange.SOFT_PEDAL) {
-        softPedalOn = value === controllerChange.PEDAL_ON;
+        pedalling.update((val) => ({
+          ...val,
+          soft: value === controllerChange.PEDAL_ON,
+        }));
       }
     }
   },
