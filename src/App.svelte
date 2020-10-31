@@ -3,6 +3,7 @@
 
   import {
     midiSamplePlayer,
+    pianoReady,
     playPauseMidiFile,
     stopMidiFile,
   } from "./components/SamplePlayer";
@@ -14,14 +15,15 @@
   let appReady = false;
 
   // Use the url to fetch the file asynchronously
-  fetch(mididataUrl)
+  const mididataReady = fetch(mididataUrl)
     .then((mididataResponse) => mididataResponse.json())
     .then((mididataJson) =>
       midiSamplePlayer.loadDataUri(mididataJson.mozart_rondo_alla_turca),
-    )
-    .then(() => {
-      appReady = true;
-    });
+    );
+
+  Promise.all([mididataReady, pianoReady]).then(() => {
+    appReady = true;
+  });
 </script>
 
 <h1>{title}</h1>

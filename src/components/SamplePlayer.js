@@ -88,7 +88,7 @@ const piano = new Piano({
   maxPolyphony: 64,
 }).toDestination();
 
-piano.load();
+export const pianoReady = piano.load();
 
 const startNote = (noteNumber, velocity) => {
   if (velocity > 0) {
