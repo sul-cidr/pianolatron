@@ -16,9 +16,9 @@ const decodeHtmlEntities = (string) =>
       String.fromCodePoint(parseInt(num, 16)),
     );
 
-export const midiSamplePlayer = new MidiPlayer.Player();
+const midiSamplePlayer = new MidiPlayer.Player();
 
-export const playPauseMidiFile = () => {
+const playPauseMidiFile = () => {
   if (midiSamplePlayer.isPlaying()) {
     midiSamplePlayer.pause();
   } else {
@@ -26,7 +26,7 @@ export const playPauseMidiFile = () => {
   }
 };
 
-export const stopMidiFile = () => {
+const stopMidiFile = () => {
   midiSamplePlayer.stop();
 };
 
@@ -88,7 +88,7 @@ const piano = new Piano({
   maxPolyphony: 64,
 }).toDestination();
 
-export const pianoReady = piano.load();
+const pianoReady = piano.load();
 
 const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
   const modifiedVelocity =
@@ -136,3 +136,5 @@ midiSamplePlayer.on(
     }
   },
 );
+
+export { midiSamplePlayer, playPauseMidiFile, stopMidiFile, pianoReady };
