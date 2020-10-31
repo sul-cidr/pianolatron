@@ -5,7 +5,7 @@
 </style>
 
 <script>
-  import { pedalling } from "../stores";
+  import { pedalling, volume } from "../stores";
 
   export let playPauseMidiFile;
   export let stopMidiFile;
@@ -27,4 +27,17 @@
         sustain: !val.sustain,
       }))}
   >Sustain</button>
+
+  <div>
+    Master Volume:
+    <input
+      type="range"
+      min="0"
+      max="4"
+      step=".1"
+      bind:value={$volume.master}
+      name="volume"
+    />
+    {$volume.master}
+  </div>
 </div>
