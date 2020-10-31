@@ -40,4 +40,28 @@
     />
     {$volume.master}
   </div>
+  <div>
+    Bass Volume:
+    <input
+      type="range"
+      min="0"
+      max="4"
+      step=".1"
+      bind:value={$volume.left}
+      name="volume"
+    />
+    {$volume.left}
+  </div>
+  <div>
+    Treble Volume:
+    <input
+      type="range"
+      min="0"
+      max="4"
+      step=".1"
+      bind:value={$volume.right}
+      name="volume"
+    />
+    {$volume.right}
+  </div>
 </div>
