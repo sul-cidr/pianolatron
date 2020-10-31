@@ -6,7 +6,7 @@
     rollMetadata,
     playPauseMidiFile,
     stopMidiFile,
-  } from "./components/SamplePlayer.svelte";
+  } from "./components/SamplePlayer";
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
 
