@@ -16,17 +16,17 @@
 </style>
 
 <script>
-  export let rollMetadata;
+  import { rollMetadata } from "../stores";
 </script>
 
 <ul>
-  <li><strong>Title:</strong> {rollMetadata.TITLE}</li>
-  <li><strong>Performer:</strong> {rollMetadata.PERFORMER}</li>
-  <li><strong>Composer:</strong> {rollMetadata.COMPOSER}</li>
-  <li><strong>Label:</strong> {rollMetadata.LABEL}</li>
+  <li><strong>Title:</strong> {$rollMetadata.TITLE}</li>
+  <li><strong>Performer:</strong> {$rollMetadata.PERFORMER}</li>
+  <li><strong>Composer:</strong> {$rollMetadata.COMPOSER}</li>
+  <li><strong>Label:</strong> {$rollMetadata.LABEL}</li>
   <li>
     <strong>PURL:</strong>
-    <a href={rollMetadata.PURL}>{rollMetadata.PURL}</a>
+    <a href={$rollMetadata.PURL}>{$rollMetadata.PURL}</a>
   </li>
-  <li><strong>Call No:</strong> {rollMetadata.CALLNUM}</li>
+  <li><strong>Call No:</strong> {$rollMetadata.CALLNUM}</li>
 </ul>

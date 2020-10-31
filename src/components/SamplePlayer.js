@@ -2,6 +2,8 @@
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
+import { rollMetadata } from "../stores";
+
 const decodeHtmlEntities = (string) =>
   string
     .replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num))
@@ -10,8 +12,6 @@ const decodeHtmlEntities = (string) =>
     );
 
 export const midiSamplePlayer = new MidiPlayer.Player();
-
-export let rollMetadata;
 
 export const playPauseMidiFile = () => {
   if (midiSamplePlayer.isPlaying()) {
@@ -39,15 +39,17 @@ midiSamplePlayer.on("fileLoaded", () => {
    * All of the source/performance/recording metadata is in this track as well.
    */
 
-  rollMetadata = Object.fromEntries(
-    metadataTrack
-      .filter((event) => event.name === "Text Event")
-      .map((event) =>
-        event.string
-          .match(/^@([^:]*):[\t\s]*(.*)$/)
-          .slice(1, 3)
-          .map((value) => decodeHtmlEntities(value)),
-      ),
+  rollMetadata.set(
+    Object.fromEntries(
+      metadataTrack
+        .filter((event) => event.name === "Text Event")
+        .map((event) =>
+          event.string
+            .match(/^@([^:]*):[\t\s]*(.*)$/)
+            .slice(1, 3)
+            .map((value) => decodeHtmlEntities(value)),
+        ),
+    ),
   );
 });
 

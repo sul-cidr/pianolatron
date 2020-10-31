@@ -3,7 +3,6 @@
 
   import {
     midiSamplePlayer,
-    rollMetadata,
     playPauseMidiFile,
     stopMidiFile,
   } from "./components/SamplePlayer";
@@ -27,6 +26,6 @@
 
 <h1>{title}</h1>
 {#if appReady}
-  <RollDetails {rollMetadata} />
+  <RollDetails />
   <PlaybackControls {playPauseMidiFile} {stopMidiFile} />
 {/if}
