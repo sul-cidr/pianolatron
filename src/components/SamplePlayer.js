@@ -71,7 +71,7 @@ const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "p
 
 const BASE_DATA_URL = "https://broadwell.github.io/javatron/";
 
-let volumeRatio = 1.0;
+let masterVolumeRatio = 1.0;
 let leftVolumeRatio = 1.0;
 let rightVolumeRatio = 1.0;
 let panBoundary = HALF_BOUNDARY;
@@ -90,13 +90,17 @@ const piano = new Piano({
 
 export const pianoReady = piano.load();
 
-const startNote = (noteNumber, velocity) => {
-  if (velocity > 0) {
-    piano.keyDown({
-      midi: noteNumber,
-      velocity: Math.min(velocity || DEFAULT_NOTE_VELOCITY / 128.0, 1.0),
-    });
-  }
+const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
+  const modifiedVelocity =
+    (velocity / 128) *
+    ((softPedalOn && SOFT_PEDAL_RATIO) || 1) *
+    masterVolumeRatio *
+    (noteNumber < panBoundary ? leftVolumeRatio : rightVolumeRatio);
+
+  piano.keyDown({
+    midi: noteNumber,
+    velocity: Math.min(modifiedVelocity, 1),
+  });
 };
 
 const stopNote = (noteNumber) => {
@@ -112,16 +116,7 @@ midiSamplePlayer.on(
         stopNote(noteNumber);
       } else {
         // Note on
-        let updatedVolume = (velocity / 128.0) * volumeRatio;
-        if (softPedalOn) {
-          updatedVolume *= SOFT_PEDAL_RATIO;
-        }
-        if (parseInt(noteNumber, 10) < panBoundary) {
-          updatedVolume *= leftVolumeRatio;
-        } else if (parseInt(noteNumber, 10) >= panBoundary) {
-          updatedVolume *= rightVolumeRatio;
-        }
-        startNote(noteNumber, updatedVolume);
+        startNote(noteNumber, velocity);
       }
     } else if (name === "Controller Change") {
       if (number === controllerChange.SUSTAIN_PEDAL) {
