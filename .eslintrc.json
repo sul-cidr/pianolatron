@@ -16,7 +16,7 @@
     }
   ],
   "settings": {
-    "import/resolver": "parcel"
+    "import/resolver": "parcel2"
   },
   "rules": {
     "no-underscore-dangle": 0,

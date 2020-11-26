@@ -22,7 +22,7 @@
     "eslint": "^7.12.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.14.0",
-    "eslint-import-resolver-parcel": "^1.10.5",
+    "eslint-import-resolver-parcel2": "^1.0.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-svelte3": "^2.7.3",
