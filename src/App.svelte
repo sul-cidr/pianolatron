@@ -1,6 +1,4 @@
 <script>
-  import mididataUrl from "url:./assets/mididata.json";
-
   import {
     midiSamplePlayer,
     pianoReady,
@@ -15,7 +13,7 @@
   let appReady = false;
 
   // Use the url to fetch the file asynchronously
-  const mididataReady = fetch(mididataUrl)
+  const mididataReady = fetch("./assets/mididata.json")
     .then((mididataResponse) => mididataResponse.json())
     .then((mididataJson) =>
       midiSamplePlayer.loadDataUri(mididataJson.mozart_rondo_alla_turca),
