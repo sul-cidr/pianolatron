@@ -88,7 +88,7 @@ const piano = new Piano({
   // local folder seems problematic...
   url: `${BASE_DATA_URL}audio/mp3/`, // works if available
   // url: '/audio/', // note sure we want to try to bundle these...
-  velocities: 8,
+  velocities: 2,
   release: true,
   pedal: true,
   maxPolyphony: 64,
