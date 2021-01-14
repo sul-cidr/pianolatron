@@ -17,11 +17,13 @@
   <button
     type="button"
     class:pedal-on={$pedalling.soft}
+    aria-pressed={$pedalling.soft}
     on:click={() => pedalling.update((val) => ({ ...val, soft: !val.soft }))}
   >Soft</button>
   <button
     type="button"
     class:pedal-on={$pedalling.sustain}
+    aria-pressed={$pedalling.sustain}
     on:click={() => pedalling.update((val) => ({
         ...val,
         sustain: !val.sustain,
