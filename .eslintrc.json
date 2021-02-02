@@ -15,9 +15,6 @@
       "processor": "svelte3/svelte3"
     }
   ],
-  "settings": {
-    "import/resolver": "parcel2"
-  },
   "rules": {
     "no-underscore-dangle": 0,
     "jsx-a11y/label-has-for": [
