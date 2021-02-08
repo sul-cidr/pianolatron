@@ -7,7 +7,7 @@
   "author": "CIDR <contact-cidr@stanford.edu>",
   "license": "MIT",
   "scripts": {
-    "dev": "snowpack dev",
+    "dev": "snowpack dev --polyfill-node",
     "build": "snowpack build",
     "lint": "eslint src/ --ext svelte --ext js",
     "test": "jest --passWithNoTests",
