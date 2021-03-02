@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "snowpack dev --polyfill-node",
-    "build": "snowpack build",
+    "build": "snowpack build --polyfill-node",
     "lint": "eslint src/ --ext svelte --ext js",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
