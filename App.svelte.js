@@ -135,7 +135,7 @@ function create_fragment(ctx) {
 	};
 }
 
-const title = "Pianolatron!";
+const title = "Pianolatron Development";
 
 function instance($$self, $$props, $$invalidate) {
 	let appReady = false;
