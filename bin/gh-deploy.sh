@@ -13,7 +13,7 @@ if [ "$current_branch" != "$MAIN_BRANCH" ]; then
 fi;
 
 
-if unclean=$(git status --porcelain) && [ -z "$unclean" ]; then
+if unclean=$(git status --porcelain) && [ -n "$unclean" ]; then
   echo "Working directory is not clean -- aborting!" >&2
   exit 1
 fi
