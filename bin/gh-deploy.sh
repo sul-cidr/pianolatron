@@ -6,6 +6,18 @@ MAIN_BRANCH=main;
 DEPLOY_BRANCH=gh-pages;
 BUILD_FOLDER=build;
 
+current_branch=$(git rev-parse --abbrev-ref HEAD);
+if [ "$current_branch" != "$MAIN_BRANCH" ]; then
+  echo "Won't deploy from branch '$current_branch' -- aborting!" >&2;
+  exit 1;
+fi;
+
+
+if unclean=$(git status --porcelain) && [ -z "$unclean" ]; then
+  echo "Working directory is not clean -- aborting!" >&2
+  exit 1
+fi
+
 COMMIT_MESSAGE="Deploy from $(git log -n 1 --format="%h" HEAD) at $(date +"%Y-%m-%d %H:%M:%S %Z")";
 
 yarn build;
