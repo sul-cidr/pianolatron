@@ -10,5 +10,5 @@ module.exports = {
   devOptions: {
     open: "none",
   },
-  buildOptions: {},
+  buildOptions: { baseUrl: "/pianolatron" },
 };
