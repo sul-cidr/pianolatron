@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "@tonejs/piano": "./@tonejs/piano.js",
+    "midi-player-js": "./midi-player-js.js",
+    "svelte/internal": "./svelte/internal.js",
+    "svelte/store": "./svelte/store.js"
+  }
+}
