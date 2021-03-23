@@ -22,3 +22,7 @@ Development repository for the CIDR Pianolatron application.
 - `yarn lint` to run eslint
 - `yarn test` to run jest
 - `yarn coverage` to run code coverage check
+
+## GitHub Pages Deployment
+
+Users with write permissions to the repo can deploy to GitHub Pages with `yarn gh-deploy`.
