@@ -6,22 +6,19 @@ MAIN_BRANCH=main;
 DEPLOY_BRANCH=gh-pages;
 BUILD_FOLDER=build;
 
-if [ ! -d "$BUILD_FOLDER" ]; then
-  echo "'$BUILD_FOLDER' does not exist -- aborting!" >&2;
-  exit 1;
-fi;
+function abort() {
+  [ ! -t 1 ] && printf "%s\n" "$1" >&2 && exit 1;
+  printf "\e[;31m%s\e[0m\n" "$1" >&2 && exit 1;
+}
+
+
+[ ! -d "$BUILD_FOLDER" ] && abort "'$BUILD_FOLDER' does not exist -- aborting!";
 
 current_branch=$(git rev-parse --abbrev-ref HEAD);
-if [ "$current_branch" != "$MAIN_BRANCH" ]; then
-  echo "Won't deploy from branch '$current_branch' -- aborting!" >&2;
-  exit 1;
-fi;
+[ "$current_branch" != "$MAIN_BRANCH" ] && abort "Won't deploy from branch '$current_branch' -- aborting!";
 
+unclean=$(git status --porcelain) && [ -n "$unclean" ] && abort "Working directory is not clean -- aborting!";
 
-if unclean=$(git status --porcelain) && [ -n "$unclean" ]; then
-  echo "Working directory is not clean -- aborting!" >&2
-  exit 1;
-fi;
 
 COMMIT_MESSAGE="Deploy from $(git log -n 1 --format="%h" HEAD) at $(date +"%Y-%m-%d %H:%M:%S %Z")";
 
