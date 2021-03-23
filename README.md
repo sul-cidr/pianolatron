@@ -15,7 +15,7 @@ Development repository for the CIDR Pianolatron application.
 ### Static Build
 
 1. `yarn build` for a development build (with sourcemaps), `yarn build:production` for a production build
-1. Serve `dist/` using an http server
+1. Serve `build/` using an http server
 
 ## Linting and Testing
 
