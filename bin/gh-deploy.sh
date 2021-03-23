@@ -7,8 +7,8 @@ DEPLOY_BRANCH=gh-pages;
 BUILD_FOLDER=build;
 
 function abort() {
-  [ ! -t 1 ] && printf "%s\n" "$1" >&2 && exit 1;
-  printf "\e[;31m%s\e[0m\n" "$1" >&2 && exit 1;
+  [ ! -t 1 ] && printf "%s\n" "$1" >&2 && exit "${2-1}";
+  printf "\e[;31m%s\e[0m\n" "$1" >&2 && exit "${2-1}";
 }
 
 
@@ -31,18 +31,16 @@ touch "$BUILD_FOLDER/.nojekyll";
 git --work-tree "$BUILD_FOLDER" reset --mixed --quiet;
 git --work-tree "$BUILD_FOLDER" add --all;
 
-set +o errexit
-diff=$(git --work-tree "$BUILD_FOLDER" diff --exit-code --quiet HEAD --)$?
-set -o errexit
+set +o errexit;
+diff=$(git --work-tree "$BUILD_FOLDER" diff --exit-code --quiet HEAD --)$?;
+set -o errexit;
 case $diff in
   0) echo "$BUILD_FOLDER unchanged -- nothing to commit.";;
   1) git --work-tree "$BUILD_FOLDER" commit -m "$COMMIT_MESSAGE";
      git push origin "$DEPLOY_BRANCH";
      ;;
   *)
-    echo "git diff exited with code $diff -- aborting.  Use 'git checkout --force $MAIN_BRANCH' to return to $MAIN_BRANCH." >&2
-    exit "$diff"
-    ;;
-esac
+    abort "git diff exited with code $diff -- aborting. Use 'git checkout --force $MAIN_BRANCH' to return to $MAIN_BRANCH." "$diff";;
+esac;
 
 git checkout --force "$MAIN_BRANCH";
