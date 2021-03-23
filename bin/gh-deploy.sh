@@ -35,7 +35,9 @@ set +o errexit;
 diff=$(git --work-tree "$BUILD_FOLDER" diff --exit-code --quiet HEAD --)$?;
 set -o errexit;
 case $diff in
-  0) echo "$BUILD_FOLDER unchanged -- nothing to commit.";;
+  0) git checkout --force "$MAIN_BRANCH";
+     abort "'$BUILD_FOLDER' unchanged -- nothing to commit." 0;
+     ;;
   1) git --work-tree "$BUILD_FOLDER" commit -m "$COMMIT_MESSAGE";
      git push origin "$DEPLOY_BRANCH";
      ;;
