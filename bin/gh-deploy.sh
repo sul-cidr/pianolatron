@@ -15,8 +15,8 @@ fi;
 
 if unclean=$(git status --porcelain) && [ -n "$unclean" ]; then
   echo "Working directory is not clean -- aborting!" >&2
-  exit 1
-fi
+  exit 1;
+fi;
 
 COMMIT_MESSAGE="Deploy from $(git log -n 1 --format="%h" HEAD) at $(date +"%Y-%m-%d %H:%M:%S %Z")";
 
