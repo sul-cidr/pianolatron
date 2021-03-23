@@ -40,9 +40,8 @@ case $diff in
      ;;
   1) git --work-tree "$BUILD_FOLDER" commit -m "$COMMIT_MESSAGE";
      git push origin "$DEPLOY_BRANCH";
+     git checkout --force "$MAIN_BRANCH";
      ;;
   *)
     abort "git diff exited with code $diff -- aborting. Use 'git checkout --force $MAIN_BRANCH' to return to $MAIN_BRANCH." "$diff";;
 esac;
-
-git checkout --force "$MAIN_BRANCH";
