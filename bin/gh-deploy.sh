@@ -20,8 +20,6 @@ fi
 
 COMMIT_MESSAGE="Deploy from $(git log -n 1 --format="%h" HEAD) at $(date +"%Y-%m-%d %H:%M:%S %Z")";
 
-yarn build;
-
 # Ensure $DEPLOY_BRANCH is up-to-date with remote
 git fetch --force origin "$DEPLOY_BRANCH":"$DEPLOY_BRANCH";
 

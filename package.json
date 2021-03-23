@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "snowpack dev --polyfill-node",
     "build": "snowpack build --polyfill-node",
+    "gh-deploy": "yarn build && bin/gh-deploy.sh",
     "lint": "eslint src/ --ext svelte --ext js",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
