@@ -6,6 +6,11 @@ MAIN_BRANCH=main;
 DEPLOY_BRANCH=gh-pages;
 BUILD_FOLDER=build;
 
+if [ ! -d "$BUILD_FOLDER" ]; then
+  echo "'$BUILD_FOLDER' does not exist -- aborting!" >&2;
+  exit 1;
+fi;
+
 current_branch=$(git rev-parse --abbrev-ref HEAD);
 if [ "$current_branch" != "$MAIN_BRANCH" ]; then
   echo "Won't deploy from branch '$current_branch' -- aborting!" >&2;
