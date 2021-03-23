@@ -8,7 +8,7 @@
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
 
-  const title = "Pianolatron!";
+  const title = "Pianolatron Development";
 
   let appReady = false;
 
