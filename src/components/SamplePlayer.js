@@ -2,7 +2,9 @@
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
-import { rollMetadata, pedalling, volume } from "../stores";
+import { rollMetadata, pedalling, volume, tempo } from "../stores";
+
+const midiSamplePlayer = new MidiPlayer.Player();
 
 let softPedalOn;
 pedalling.subscribe(({ soft }) => {
@@ -18,14 +20,16 @@ volume.subscribe(({ master, right, left }) => {
   leftVolumeRatio = left;
 });
 
+tempo.subscribe((newTempo) => {
+  midiSamplePlayer.setTempo(newTempo);
+});
+
 const decodeHtmlEntities = (string) =>
   string
     .replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num))
     .replace(/&#x([A-Za-z0-9]+);/g, (match, num) =>
       String.fromCodePoint(parseInt(num, 16)),
     );
-
-const midiSamplePlayer = new MidiPlayer.Player();
 
 const playPauseMidiFile = () => {
   if (midiSamplePlayer.isPlaying()) {
