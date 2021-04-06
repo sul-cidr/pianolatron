@@ -20,8 +20,18 @@ volume.subscribe(({ master, right, left }) => {
   leftVolumeRatio = left;
 });
 
+let baseTempo = 60;
+let tempoRatio = 1.0;
+let tempoControlValue;
 tempoControl.subscribe((newTempo) => {
-  midiSamplePlayer.setTempo(newTempo);
+  tempoControlValue = newTempo;
+  if (midiSamplePlayer.isPlaying()) {
+    midiSamplePlayer.pause();
+    midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
+    midiSamplePlayer.play();
+  } else {
+    midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
+  }
 });
 
 const decodeHtmlEntities = (string) =>
@@ -120,7 +130,7 @@ const stopNote = (noteNumber) => {
 
 midiSamplePlayer.on(
   "midiEvent",
-  ({ name, value, number, noteNumber, velocity }) => {
+  ({ name, value, number, noteNumber, velocity, data }) => {
     if (name === "Note on") {
       if (velocity === 0) {
         // Note off
@@ -144,6 +154,10 @@ midiSamplePlayer.on(
           soft: value === controllerChange.PEDAL_ON,
         }));
       }
+    } else if (name === "Set Tempo") {
+      let midiTempo = parseFloat(data);
+      tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
+      midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
     }
   },
 );
