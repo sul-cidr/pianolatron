@@ -12,6 +12,16 @@ import {
 
 const midiSamplePlayer = new MidiPlayer.Player();
 
+const updatePlayer = (fn) => {
+  if (midiSamplePlayer.isPlaying()) {
+    midiSamplePlayer.pause();
+    fn();
+    midiSamplePlayer.play();
+    return;
+  }
+  fn();
+};
+
 let softPedalOn;
 pedalling.subscribe(({ soft }) => {
   softPedalOn = soft;
@@ -31,13 +41,7 @@ let tempoRatio = 1.0;
 let tempoControlValue;
 tempoControl.subscribe((newTempo) => {
   tempoControlValue = newTempo;
-  if (midiSamplePlayer.isPlaying()) {
-    midiSamplePlayer.pause();
-    midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
-    midiSamplePlayer.play();
-  } else {
-    midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
-  }
+  updatePlayer(() => midiSamplePlayer.setTempo(tempoControlValue * tempoRatio));
 });
 
 const decodeHtmlEntities = (string) =>
@@ -59,15 +63,10 @@ const stopMidiFile = () => {
   midiSamplePlayer.stop();
 };
 
-const skipToPercentage = (percentage) => {
-  if (midiSamplePlayer.isPlaying()) {
-    midiSamplePlayer.pause();
-    midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage);
-    midiSamplePlayer.play();
-  } else {
-    midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage);
-  }
-};
+const skipToPercentage = (percentage) =>
+  updatePlayer(() =>
+    midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage),
+  );
 
 midiSamplePlayer.on("fileLoaded", () => {
   const metadataTrack = midiSamplePlayer.events[0];
