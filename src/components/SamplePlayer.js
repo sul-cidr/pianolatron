@@ -2,7 +2,7 @@
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
-import { rollMetadata, pedalling, volume, tempo } from "../stores";
+import { rollMetadata, pedalling, volume, tempoControl } from "../stores";
 
 const midiSamplePlayer = new MidiPlayer.Player();
 
@@ -20,7 +20,7 @@ volume.subscribe(({ master, right, left }) => {
   leftVolumeRatio = left;
 });
 
-tempo.subscribe((newTempo) => {
+tempoControl.subscribe((newTempo) => {
   midiSamplePlayer.setTempo(newTempo);
 });
 
