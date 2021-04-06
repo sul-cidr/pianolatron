@@ -59,6 +59,16 @@ const stopMidiFile = () => {
   midiSamplePlayer.stop();
 };
 
+const skipToPercentage = (percentage) => {
+  if (midiSamplePlayer.isPlaying()) {
+    midiSamplePlayer.pause();
+    midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage);
+    midiSamplePlayer.play();
+  } else {
+    midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage);
+  }
+};
+
 midiSamplePlayer.on("fileLoaded", () => {
   const metadataTrack = midiSamplePlayer.events[0];
   /* @IMAGE_WIDTH and @IMAGE_LENGTH should be the same as from viewport._contentSize
@@ -175,4 +185,10 @@ midiSamplePlayer.on(
   },
 );
 
-export { midiSamplePlayer, playPauseMidiFile, stopMidiFile, pianoReady };
+export {
+  midiSamplePlayer,
+  playPauseMidiFile,
+  stopMidiFile,
+  pianoReady,
+  skipToPercentage,
+};

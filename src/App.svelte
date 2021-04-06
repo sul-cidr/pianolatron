@@ -4,6 +4,7 @@
     pianoReady,
     playPauseMidiFile,
     stopMidiFile,
+    skipToPercentage
   } from "./components/SamplePlayer";
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
@@ -27,5 +28,5 @@
 <h1>{title}</h1>
 {#if appReady}
   <RollDetails />
-  <PlaybackControls {playPauseMidiFile} {stopMidiFile} />
+  <PlaybackControls {playPauseMidiFile} {stopMidiFile} {skipToPercentage}/>
 {/if}

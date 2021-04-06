@@ -9,6 +9,7 @@
 
   export let playPauseMidiFile;
   export let stopMidiFile;
+  export let skipToPercentage;
 </script>
 
 <div id="score-controls">
@@ -85,10 +86,11 @@
       min="0"
       max="1"
       step="0.01"
-      bind:value={$playbackProgress}
+      value={$playbackProgress}
       name="progress"
+      on:input={({target: {value}}) => skipToPercentage(value)}
     />
-    {$playbackProgress}
+    {($playbackProgress * 100).toFixed(2)}%
   </div>
 
 </div>
