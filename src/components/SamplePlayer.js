@@ -20,7 +20,7 @@ volume.subscribe(({ master, right, left }) => {
   leftVolumeRatio = left;
 });
 
-let baseTempo = 60;
+let baseTempo;
 let tempoRatio = 1.0;
 let tempoControlValue;
 tempoControl.subscribe((newTempo) => {
@@ -79,6 +79,12 @@ midiSamplePlayer.on("fileLoaded", () => {
         ),
     ),
   );
+
+  baseTempo = metadataTrack
+    .filter((event) => event.name === "Set Tempo")
+    .reduce((prevEvent, event) =>
+      event.tick < prevEvent.tick ? event : prevEvent,
+    ).data;
 });
 
 const controllerChange = Object.freeze({
