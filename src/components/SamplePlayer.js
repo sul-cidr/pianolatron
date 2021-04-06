@@ -2,7 +2,13 @@
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
-import { rollMetadata, pedalling, volume, tempoControl } from "../stores";
+import {
+  rollMetadata,
+  pedalling,
+  volume,
+  tempoControl,
+  playbackProgress,
+} from "../stores";
 
 const midiSamplePlayer = new MidiPlayer.Player();
 
@@ -136,7 +142,7 @@ const stopNote = (noteNumber) => {
 
 midiSamplePlayer.on(
   "midiEvent",
-  ({ name, value, number, noteNumber, velocity, data }) => {
+  ({ name, value, number, noteNumber, velocity, data, tick }) => {
     if (name === "Note on") {
       if (velocity === 0) {
         // Note off
@@ -165,6 +171,7 @@ midiSamplePlayer.on(
       tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
       midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
     }
+    playbackProgress.update(() => tick / midiSamplePlayer.totalTicks);
   },
 );
 

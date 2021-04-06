@@ -5,7 +5,7 @@
 </style>
 
 <script>
-  import { pedalling, volume, tempoControl } from "../stores";
+  import { pedalling, volume, tempoControl, playbackProgress } from "../stores";
 
   export let playPauseMidiFile;
   export let stopMidiFile;
@@ -77,6 +77,18 @@
       name="tempo"
     />
     {$tempoControl}
+  </div>
+  <div>
+    Progress:
+    <input
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      bind:value={$playbackProgress}
+      name="progress"
+    />
+    {$playbackProgress}
   </div>
 
 </div>
