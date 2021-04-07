@@ -4,6 +4,7 @@ module.exports = {
     src: "/",
   },
   plugins: ["@snowpack/plugin-svelte"],
+  preprocess: require("svelte-preprocess")(),
   routes: [],
   optimize: {},
   packageOptions: {},
