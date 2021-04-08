@@ -1,6 +1,20 @@
-<style>
+<style lang="scss">
   .pedal-on {
     background: yellow;
+  }
+
+  .control {
+    align-items: center;
+    display: flex;
+    gap: 0.5em;
+    padding: 0.5em 0;
+
+    :first-child {
+      width: 8em;
+    }
+    :global(input[type="range"]) {
+      width: 20em;
+    }
   }
 </style>
 
@@ -33,8 +47,8 @@
       }))}
   >Sustain</button>
 
-  <div>
-    Master Volume:
+  <div class="control">
+    <span>Master Volume:</span>
     <RangeSlider
       min="0"
       max="4"
@@ -44,8 +58,8 @@
     />
     {$volume.master}
   </div>
-  <div>
-    Bass Volume:
+  <div class="control">
+    <span>Bass Volume:</span>
     <RangeSlider
       min="0"
       max="4"
@@ -55,8 +69,8 @@
     />
     {$volume.left}
   </div>
-  <div>
-    Treble Volume:
+  <div class="control">
+    <span>Treble Volume:</span>
     <RangeSlider
       min="0"
       max="4"
@@ -66,8 +80,8 @@
     />
     {$volume.right}
   </div>
-  <div>
-    Tempo:
+  <div class="control">
+    <span>Tempo:</span>
     <RangeSlider
       min="0"
       max="180"
@@ -77,8 +91,8 @@
     />
     {$tempoControl}
   </div>
-  <div>
-    Progress:
+  <div class="control">
+    <span>Progress:</span>
     <RangeSlider
       min="0"
       max="1"
