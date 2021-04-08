@@ -5,10 +5,11 @@
 </style>
 
 <script>
-  import { pedalling, volume, tempoControl } from "../stores";
+  import { pedalling, volume, tempoControl, playbackProgress } from "../stores";
 
   export let playPauseMidiFile;
   export let stopMidiFile;
+  export let skipToPercentage;
 </script>
 
 <div id="score-controls">
@@ -78,5 +79,20 @@
     />
     {$tempoControl}
   </div>
-
+  <div>
+    Progress:
+    <input
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      value={$playbackProgress}
+      name="progress"
+      on:input={({ target: { value } }) => {
+        skipToPercentage(value);
+        $playbackProgress = value;
+      }}
+    />
+    {($playbackProgress * 100).toFixed(2)}%
+  </div>
 </div>
