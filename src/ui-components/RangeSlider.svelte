@@ -171,6 +171,24 @@
   export let step;
   export let name;
   export let value;
+
+  const handleWheel = (event) => {
+    const precision = (step.split(".")[1] || "").length;
+    if (event.deltaY > 0) {
+      value = (parseFloat(value) + parseFloat(step)).toFixed(precision);
+    } else {
+      value = (parseFloat(value) - parseFloat(step)).toFixed(precision);
+    }
+  };
 </script>
 
-<input type="range" bind:value on:input {min} {max} {step} {name} />
+<input
+  type="range"
+  bind:value
+  on:input
+  on:mousewheel={handleWheel}
+  {min}
+  {max}
+  {step}
+  {name}
+/>
