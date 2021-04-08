@@ -171,4 +171,4 @@
   export let value;
 </script>
 
-<input type="range" bind:value {min} {max} {step} {name} />
+<input type="range" bind:value on:input {min} {max} {step} {name} />
