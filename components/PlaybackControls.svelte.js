@@ -22,10 +22,10 @@ import {
 	toggle_class
 } from "../_snowpack/pkg/svelte/internal.js";
 
-import { pedalling, volume } from "../stores.js";
+import { pedalling, volume, tempoControl } from "../stores.js";
 
 function create_fragment(ctx) {
-	let div3;
+	let div4;
 	let button0;
 	let t1;
 	let button1;
@@ -58,12 +58,18 @@ function create_fragment(ctx) {
 	let t17;
 	let t18_value = /*$volume*/ ctx[3].right + "";
 	let t18;
+	let t19;
+	let div3;
+	let t20;
+	let input3;
+	let t21;
+	let t22;
 	let mounted;
 	let dispose;
 
 	return {
 		c() {
-			div3 = element("div");
+			div4 = element("div");
 			button0 = element("button");
 			button0.textContent = "Play/Pause";
 			t1 = space();
@@ -93,6 +99,12 @@ function create_fragment(ctx) {
 			input2 = element("input");
 			t17 = space();
 			t18 = text(t18_value);
+			t19 = space();
+			div3 = element("div");
+			t20 = text("Tempo:\n    ");
+			input3 = element("input");
+			t21 = space();
+			t22 = text(/*$tempoControl*/ ctx[4]);
 			attr(button0, "type", "button");
 			attr(button1, "type", "button");
 			attr(button2, "type", "button");
@@ -118,40 +130,52 @@ function create_fragment(ctx) {
 			attr(input2, "max", "4");
 			attr(input2, "step", ".1");
 			attr(input2, "name", "volume");
-			attr(div3, "id", "score-controls");
+			attr(input3, "type", "range");
+			attr(input3, "min", "0");
+			attr(input3, "max", "180");
+			attr(input3, "step", "10");
+			attr(input3, "name", "tempo");
+			attr(div4, "id", "score-controls");
 		},
 		m(target, anchor) {
-			insert(target, div3, anchor);
-			append(div3, button0);
-			append(div3, t1);
-			append(div3, button1);
-			append(div3, t3);
-			append(div3, button2);
+			insert(target, div4, anchor);
+			append(div4, button0);
+			append(div4, t1);
+			append(div4, button1);
+			append(div4, t3);
+			append(div4, button2);
 			append(button2, t4);
-			append(div3, t5);
-			append(div3, button3);
+			append(div4, t5);
+			append(div4, button3);
 			append(button3, t6);
-			append(div3, t7);
-			append(div3, div0);
+			append(div4, t7);
+			append(div4, div0);
 			append(div0, t8);
 			append(div0, input0);
 			set_input_value(input0, /*$volume*/ ctx[3].master);
 			append(div0, t9);
 			append(div0, t10);
-			append(div3, t11);
-			append(div3, div1);
+			append(div4, t11);
+			append(div4, div1);
 			append(div1, t12);
 			append(div1, input1);
 			set_input_value(input1, /*$volume*/ ctx[3].left);
 			append(div1, t13);
 			append(div1, t14);
-			append(div3, t15);
-			append(div3, div2);
+			append(div4, t15);
+			append(div4, div2);
 			append(div2, t16);
 			append(div2, input2);
 			set_input_value(input2, /*$volume*/ ctx[3].right);
 			append(div2, t17);
 			append(div2, t18);
+			append(div4, t19);
+			append(div4, div3);
+			append(div3, t20);
+			append(div3, input3);
+			set_input_value(input3, /*$tempoControl*/ ctx[4]);
+			append(div3, t21);
+			append(div3, t22);
 
 			if (!mounted) {
 				dispose = [
@@ -161,14 +185,16 @@ function create_fragment(ctx) {
 					listen(button1, "click", function () {
 						if (is_function(/*stopMidiFile*/ ctx[1])) /*stopMidiFile*/ ctx[1].apply(this, arguments);
 					}),
-					listen(button2, "click", /*click_handler*/ ctx[4]),
-					listen(button3, "click", /*click_handler_1*/ ctx[5]),
-					listen(input0, "change", /*input0_change_input_handler*/ ctx[6]),
-					listen(input0, "input", /*input0_change_input_handler*/ ctx[6]),
-					listen(input1, "change", /*input1_change_input_handler*/ ctx[7]),
-					listen(input1, "input", /*input1_change_input_handler*/ ctx[7]),
-					listen(input2, "change", /*input2_change_input_handler*/ ctx[8]),
-					listen(input2, "input", /*input2_change_input_handler*/ ctx[8])
+					listen(button2, "click", /*click_handler*/ ctx[5]),
+					listen(button3, "click", /*click_handler_1*/ ctx[6]),
+					listen(input0, "change", /*input0_change_input_handler*/ ctx[7]),
+					listen(input0, "input", /*input0_change_input_handler*/ ctx[7]),
+					listen(input1, "change", /*input1_change_input_handler*/ ctx[8]),
+					listen(input1, "input", /*input1_change_input_handler*/ ctx[8]),
+					listen(input2, "change", /*input2_change_input_handler*/ ctx[9]),
+					listen(input2, "input", /*input2_change_input_handler*/ ctx[9]),
+					listen(input3, "change", /*input3_change_input_handler*/ ctx[10]),
+					listen(input3, "input", /*input3_change_input_handler*/ ctx[10])
 				];
 
 				mounted = true;
@@ -210,11 +236,17 @@ function create_fragment(ctx) {
 			}
 
 			if (dirty & /*$volume*/ 8 && t18_value !== (t18_value = /*$volume*/ ctx[3].right + "")) set_data(t18, t18_value);
+
+			if (dirty & /*$tempoControl*/ 16) {
+				set_input_value(input3, /*$tempoControl*/ ctx[4]);
+			}
+
+			if (dirty & /*$tempoControl*/ 16) set_data(t22, /*$tempoControl*/ ctx[4]);
 		},
 		i: noop,
 		o: noop,
 		d(detaching) {
-			if (detaching) detach(div3);
+			if (detaching) detach(div4);
 			mounted = false;
 			run_all(dispose);
 		}
@@ -224,8 +256,10 @@ function create_fragment(ctx) {
 function instance($$self, $$props, $$invalidate) {
 	let $pedalling;
 	let $volume;
+	let $tempoControl;
 	component_subscribe($$self, pedalling, $$value => $$invalidate(2, $pedalling = $$value));
 	component_subscribe($$self, volume, $$value => $$invalidate(3, $volume = $$value));
+	component_subscribe($$self, tempoControl, $$value => $$invalidate(4, $tempoControl = $$value));
 	let { playPauseMidiFile } = $$props;
 	let { stopMidiFile } = $$props;
 	const click_handler = () => pedalling.update(val => ({ ...val, soft: !val.soft }));
@@ -246,6 +280,11 @@ function instance($$self, $$props, $$invalidate) {
 		volume.set($volume);
 	}
 
+	function input3_change_input_handler() {
+		$tempoControl = to_number(this.value);
+		tempoControl.set($tempoControl);
+	}
+
 	$$self.$$set = $$props => {
 		if ("playPauseMidiFile" in $$props) $$invalidate(0, playPauseMidiFile = $$props.playPauseMidiFile);
 		if ("stopMidiFile" in $$props) $$invalidate(1, stopMidiFile = $$props.stopMidiFile);
@@ -256,11 +295,13 @@ function instance($$self, $$props, $$invalidate) {
 		stopMidiFile,
 		$pedalling,
 		$volume,
+		$tempoControl,
 		click_handler,
 		click_handler_1,
 		input0_change_input_handler,
 		input1_change_input_handler,
-		input2_change_input_handler
+		input2_change_input_handler,
+		input3_change_input_handler
 	];
 }
 
