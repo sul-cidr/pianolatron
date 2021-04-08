@@ -2,7 +2,9 @@
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
-import { rollMetadata, pedalling, volume } from "../stores";
+import { rollMetadata, pedalling, volume, tempoControl } from "../stores";
+
+const midiSamplePlayer = new MidiPlayer.Player();
 
 let softPedalOn;
 pedalling.subscribe(({ soft }) => {
@@ -18,14 +20,26 @@ volume.subscribe(({ master, right, left }) => {
   leftVolumeRatio = left;
 });
 
+let baseTempo;
+let tempoRatio = 1.0;
+let tempoControlValue;
+tempoControl.subscribe((newTempo) => {
+  tempoControlValue = newTempo;
+  if (midiSamplePlayer.isPlaying()) {
+    midiSamplePlayer.pause();
+    midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
+    midiSamplePlayer.play();
+  } else {
+    midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
+  }
+});
+
 const decodeHtmlEntities = (string) =>
   string
     .replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num))
     .replace(/&#x([A-Za-z0-9]+);/g, (match, num) =>
       String.fromCodePoint(parseInt(num, 16)),
     );
-
-const midiSamplePlayer = new MidiPlayer.Player();
 
 const playPauseMidiFile = () => {
   if (midiSamplePlayer.isPlaying()) {
@@ -65,6 +79,12 @@ midiSamplePlayer.on("fileLoaded", () => {
         ),
     ),
   );
+
+  baseTempo = metadataTrack
+    .filter((event) => event.name === "Set Tempo")
+    .reduce((prevEvent, event) =>
+      event.tick < prevEvent.tick ? event : prevEvent,
+    ).data;
 });
 
 const controllerChange = Object.freeze({
@@ -116,7 +136,7 @@ const stopNote = (noteNumber) => {
 
 midiSamplePlayer.on(
   "midiEvent",
-  ({ name, value, number, noteNumber, velocity }) => {
+  ({ name, value, number, noteNumber, velocity, data }) => {
     if (name === "Note on") {
       if (velocity === 0) {
         // Note off
@@ -140,6 +160,10 @@ midiSamplePlayer.on(
           soft: value === controllerChange.PEDAL_ON,
         }));
       }
+    } else if (name === "Set Tempo") {
+      let midiTempo = parseFloat(data);
+      tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
+      midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
     }
   },
 );
