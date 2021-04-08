@@ -1,7 +1,7 @@
 <style lang="scss">
   // based on https://github.com/darlanrod/input-range-scss
   $track-color: #eaeaea;
-  $thumb-color: rebeccapurple;
+  $thumb-color: $primary-accent;
 
   $thumb-radius: 12px;
   $thumb-height: 18px;
