@@ -7,6 +7,8 @@
 <script>
   import { pedalling, volume, tempoControl, playbackProgress } from "../stores";
 
+  import RangeSlider from "../ui-components/RangeSlider.svelte";
+
   export let playPauseMidiFile;
   export let stopMidiFile;
   export let skipToPercentage;
@@ -33,8 +35,7 @@
 
   <div>
     Master Volume:
-    <input
-      type="range"
+    <RangeSlider
       min="0"
       max="4"
       step=".1"
@@ -45,8 +46,7 @@
   </div>
   <div>
     Bass Volume:
-    <input
-      type="range"
+    <RangeSlider
       min="0"
       max="4"
       step=".1"
@@ -57,8 +57,7 @@
   </div>
   <div>
     Treble Volume:
-    <input
-      type="range"
+    <RangeSlider
       min="0"
       max="4"
       step=".1"
@@ -69,8 +68,7 @@
   </div>
   <div>
     Tempo:
-    <input
-      type="range"
+    <RangeSlider
       min="0"
       max="180"
       step="10"
@@ -81,8 +79,7 @@
   </div>
   <div>
     Progress:
-    <input
-      type="range"
+    <RangeSlider
       min="0"
       max="1"
       step="0.01"
