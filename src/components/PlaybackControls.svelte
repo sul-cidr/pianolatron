@@ -103,6 +103,7 @@
         skipToPercentage(value);
         $playbackProgress = value;
       }}
+      mousewheel={false}
     />
     {($playbackProgress * 100).toFixed(2)}%
   </div>

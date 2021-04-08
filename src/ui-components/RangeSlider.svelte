@@ -171,6 +171,7 @@
   export let step;
   export let name;
   export let value;
+  export let mousewheel = true;
 
   const clamp = (value) => Math.min(Math.max(value, min), max);
 
@@ -188,7 +189,7 @@
   type="range"
   bind:value
   on:input
-  on:mousewheel={handleWheel}
+  on:mousewheel={mousewheel ? handleWheel : () => {}}
   {min}
   {max}
   {step}
