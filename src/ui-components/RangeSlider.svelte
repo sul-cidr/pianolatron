@@ -172,12 +172,14 @@
   export let name;
   export let value;
 
+  const clamp = (value) => Math.min(Math.max(value, min), max);
+
   const handleWheel = (event) => {
     const precision = (step.split(".")[1] || "").length;
     if (event.deltaY > 0) {
-      value = (parseFloat(value) + parseFloat(step)).toFixed(precision);
+      value = clamp((Number(value) + Number(step)).toFixed(precision));
     } else {
-      value = (parseFloat(value) - parseFloat(step)).toFixed(precision);
+      value = clamp((Number(value) - Number(step)).toFixed(precision));
     }
   };
 </script>
