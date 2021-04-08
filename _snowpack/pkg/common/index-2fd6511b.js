@@ -27,6 +27,10 @@ function subscribe(store, ...callbacks) {
 function component_subscribe(component, store, callback) {
     component.$$.on_destroy.push(subscribe(store, callback));
 }
+function set_store_value(store, ret, value = ret) {
+    store.set(value);
+    return ret;
+}
 
 function append(target, node) {
     target.appendChild(node);
@@ -304,4 +308,4 @@ class SvelteComponent {
     }
 }
 
-export { SvelteComponent as S, create_component as a, detach as b, check_outros as c, destroy_component as d, element as e, empty as f, group_outros as g, insert as h, init as i, space as j, transition_out as k, append as l, mount_component as m, noop as n, attr as o, component_subscribe as p, is_function as q, listen as r, safe_not_equal as s, transition_in as t, run_all as u, set_data as v, set_input_value as w, text as x, to_number as y, toggle_class as z };
+export { toggle_class as A, SvelteComponent as S, create_component as a, detach as b, check_outros as c, destroy_component as d, element as e, empty as f, group_outros as g, insert as h, init as i, space as j, transition_out as k, append as l, mount_component as m, noop as n, attr as o, component_subscribe as p, is_function as q, listen as r, safe_not_equal as s, transition_in as t, run_all as u, set_data as v, set_input_value as w, set_store_value as x, text as y, to_number as z };

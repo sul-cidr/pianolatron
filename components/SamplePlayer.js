@@ -2,9 +2,25 @@
 import MidiPlayer from "../_snowpack/pkg/midi-player-js.js";
 import { Piano } from "../_snowpack/pkg/@tonejs/piano.js";
 
-import { rollMetadata, pedalling, volume, tempoControl } from "../stores.js";
+import {
+  rollMetadata,
+  pedalling,
+  volume,
+  tempoControl,
+  playbackProgress,
+} from "../stores.js";
 
 const midiSamplePlayer = new MidiPlayer.Player();
+
+const updatePlayer = (fn) => {
+  if (midiSamplePlayer.isPlaying()) {
+    midiSamplePlayer.pause();
+    fn();
+    midiSamplePlayer.play();
+    return;
+  }
+  fn();
+};
 
 let softPedalOn;
 pedalling.subscribe(({ soft }) => {
@@ -25,13 +41,7 @@ let tempoRatio = 1.0;
 let tempoControlValue;
 tempoControl.subscribe((newTempo) => {
   tempoControlValue = newTempo;
-  if (midiSamplePlayer.isPlaying()) {
-    midiSamplePlayer.pause();
-    midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
-    midiSamplePlayer.play();
-  } else {
-    midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
-  }
+  updatePlayer(() => midiSamplePlayer.setTempo(tempoControlValue * tempoRatio));
 });
 
 const decodeHtmlEntities = (string) =>
@@ -52,6 +62,11 @@ const playPauseMidiFile = () => {
 const stopMidiFile = () => {
   midiSamplePlayer.stop();
 };
+
+const skipToPercentage = (percentage) =>
+  updatePlayer(() =>
+    midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage),
+  );
 
 midiSamplePlayer.on("fileLoaded", () => {
   const metadataTrack = midiSamplePlayer.events[0];
@@ -136,7 +151,7 @@ const stopNote = (noteNumber) => {
 
 midiSamplePlayer.on(
   "midiEvent",
-  ({ name, value, number, noteNumber, velocity, data }) => {
+  ({ name, value, number, noteNumber, velocity, data, tick }) => {
     if (name === "Note on") {
       if (velocity === 0) {
         // Note off
@@ -165,7 +180,14 @@ midiSamplePlayer.on(
       tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
       midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
     }
+    playbackProgress.update(() => tick / midiSamplePlayer.totalTicks);
   },
 );
 
-export { midiSamplePlayer, playPauseMidiFile, stopMidiFile, pianoReady };
+export {
+  midiSamplePlayer,
+  playPauseMidiFile,
+  stopMidiFile,
+  pianoReady,
+  skipToPercentage,
+};

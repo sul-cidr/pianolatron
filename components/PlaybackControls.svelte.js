@@ -16,16 +16,17 @@ import {
 	safe_not_equal,
 	set_data,
 	set_input_value,
+	set_store_value,
 	space,
 	text,
 	to_number,
 	toggle_class
 } from "../_snowpack/pkg/svelte/internal.js";
 
-import { pedalling, volume, tempoControl } from "../stores.js";
+import { pedalling, volume, tempoControl, playbackProgress } from "../stores.js";
 
 function create_fragment(ctx) {
-	let div4;
+	let div5;
 	let button0;
 	let t1;
 	let button1;
@@ -42,21 +43,21 @@ function create_fragment(ctx) {
 	let t8;
 	let input0;
 	let t9;
-	let t10_value = /*$volume*/ ctx[3].master + "";
+	let t10_value = /*$volume*/ ctx[4].master + "";
 	let t10;
 	let t11;
 	let div1;
 	let t12;
 	let input1;
 	let t13;
-	let t14_value = /*$volume*/ ctx[3].left + "";
+	let t14_value = /*$volume*/ ctx[4].left + "";
 	let t14;
 	let t15;
 	let div2;
 	let t16;
 	let input2;
 	let t17;
-	let t18_value = /*$volume*/ ctx[3].right + "";
+	let t18_value = /*$volume*/ ctx[4].right + "";
 	let t18;
 	let t19;
 	let div3;
@@ -64,12 +65,20 @@ function create_fragment(ctx) {
 	let input3;
 	let t21;
 	let t22;
+	let t23;
+	let div4;
+	let t24;
+	let input4;
+	let t25;
+	let t26_value = (/*$playbackProgress*/ ctx[6] * 100).toFixed(2) + "";
+	let t26;
+	let t27;
 	let mounted;
 	let dispose;
 
 	return {
 		c() {
-			div4 = element("div");
+			div5 = element("div");
 			button0 = element("button");
 			button0.textContent = "Play/Pause";
 			t1 = space();
@@ -104,17 +113,24 @@ function create_fragment(ctx) {
 			t20 = text("Tempo:\n    ");
 			input3 = element("input");
 			t21 = space();
-			t22 = text(/*$tempoControl*/ ctx[4]);
+			t22 = text(/*$tempoControl*/ ctx[5]);
+			t23 = space();
+			div4 = element("div");
+			t24 = text("Progress:\n    ");
+			input4 = element("input");
+			t25 = space();
+			t26 = text(t26_value);
+			t27 = text("%");
 			attr(button0, "type", "button");
 			attr(button1, "type", "button");
 			attr(button2, "type", "button");
-			attr(button2, "aria-pressed", button2_aria_pressed_value = /*$pedalling*/ ctx[2].soft);
+			attr(button2, "aria-pressed", button2_aria_pressed_value = /*$pedalling*/ ctx[3].soft);
 			attr(button2, "class", "svelte-zgolxe");
-			toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[2].soft);
+			toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[3].soft);
 			attr(button3, "type", "button");
-			attr(button3, "aria-pressed", button3_aria_pressed_value = /*$pedalling*/ ctx[2].sustain);
+			attr(button3, "aria-pressed", button3_aria_pressed_value = /*$pedalling*/ ctx[3].sustain);
 			attr(button3, "class", "svelte-zgolxe");
-			toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[2].sustain);
+			toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[3].sustain);
 			attr(input0, "type", "range");
 			attr(input0, "min", "0");
 			attr(input0, "max", "4");
@@ -135,47 +151,60 @@ function create_fragment(ctx) {
 			attr(input3, "max", "180");
 			attr(input3, "step", "10");
 			attr(input3, "name", "tempo");
-			attr(div4, "id", "score-controls");
+			attr(input4, "type", "range");
+			attr(input4, "min", "0");
+			attr(input4, "max", "1");
+			attr(input4, "step", "0.01");
+			input4.value = /*$playbackProgress*/ ctx[6];
+			attr(input4, "name", "progress");
+			attr(div5, "id", "score-controls");
 		},
 		m(target, anchor) {
-			insert(target, div4, anchor);
-			append(div4, button0);
-			append(div4, t1);
-			append(div4, button1);
-			append(div4, t3);
-			append(div4, button2);
+			insert(target, div5, anchor);
+			append(div5, button0);
+			append(div5, t1);
+			append(div5, button1);
+			append(div5, t3);
+			append(div5, button2);
 			append(button2, t4);
-			append(div4, t5);
-			append(div4, button3);
+			append(div5, t5);
+			append(div5, button3);
 			append(button3, t6);
-			append(div4, t7);
-			append(div4, div0);
+			append(div5, t7);
+			append(div5, div0);
 			append(div0, t8);
 			append(div0, input0);
-			set_input_value(input0, /*$volume*/ ctx[3].master);
+			set_input_value(input0, /*$volume*/ ctx[4].master);
 			append(div0, t9);
 			append(div0, t10);
-			append(div4, t11);
-			append(div4, div1);
+			append(div5, t11);
+			append(div5, div1);
 			append(div1, t12);
 			append(div1, input1);
-			set_input_value(input1, /*$volume*/ ctx[3].left);
+			set_input_value(input1, /*$volume*/ ctx[4].left);
 			append(div1, t13);
 			append(div1, t14);
-			append(div4, t15);
-			append(div4, div2);
+			append(div5, t15);
+			append(div5, div2);
 			append(div2, t16);
 			append(div2, input2);
-			set_input_value(input2, /*$volume*/ ctx[3].right);
+			set_input_value(input2, /*$volume*/ ctx[4].right);
 			append(div2, t17);
 			append(div2, t18);
-			append(div4, t19);
-			append(div4, div3);
+			append(div5, t19);
+			append(div5, div3);
 			append(div3, t20);
 			append(div3, input3);
-			set_input_value(input3, /*$tempoControl*/ ctx[4]);
+			set_input_value(input3, /*$tempoControl*/ ctx[5]);
 			append(div3, t21);
 			append(div3, t22);
+			append(div5, t23);
+			append(div5, div4);
+			append(div4, t24);
+			append(div4, input4);
+			append(div4, t25);
+			append(div4, t26);
+			append(div4, t27);
 
 			if (!mounted) {
 				dispose = [
@@ -185,16 +214,17 @@ function create_fragment(ctx) {
 					listen(button1, "click", function () {
 						if (is_function(/*stopMidiFile*/ ctx[1])) /*stopMidiFile*/ ctx[1].apply(this, arguments);
 					}),
-					listen(button2, "click", /*click_handler*/ ctx[5]),
-					listen(button3, "click", /*click_handler_1*/ ctx[6]),
-					listen(input0, "change", /*input0_change_input_handler*/ ctx[7]),
-					listen(input0, "input", /*input0_change_input_handler*/ ctx[7]),
-					listen(input1, "change", /*input1_change_input_handler*/ ctx[8]),
-					listen(input1, "input", /*input1_change_input_handler*/ ctx[8]),
-					listen(input2, "change", /*input2_change_input_handler*/ ctx[9]),
-					listen(input2, "input", /*input2_change_input_handler*/ ctx[9]),
-					listen(input3, "change", /*input3_change_input_handler*/ ctx[10]),
-					listen(input3, "input", /*input3_change_input_handler*/ ctx[10])
+					listen(button2, "click", /*click_handler*/ ctx[7]),
+					listen(button3, "click", /*click_handler_1*/ ctx[8]),
+					listen(input0, "change", /*input0_change_input_handler*/ ctx[9]),
+					listen(input0, "input", /*input0_change_input_handler*/ ctx[9]),
+					listen(input1, "change", /*input1_change_input_handler*/ ctx[10]),
+					listen(input1, "input", /*input1_change_input_handler*/ ctx[10]),
+					listen(input2, "change", /*input2_change_input_handler*/ ctx[11]),
+					listen(input2, "input", /*input2_change_input_handler*/ ctx[11]),
+					listen(input3, "change", /*input3_change_input_handler*/ ctx[12]),
+					listen(input3, "input", /*input3_change_input_handler*/ ctx[12]),
+					listen(input4, "input", /*input_handler*/ ctx[13])
 				];
 
 				mounted = true;
@@ -203,50 +233,56 @@ function create_fragment(ctx) {
 		p(new_ctx, [dirty]) {
 			ctx = new_ctx;
 
-			if (dirty & /*$pedalling*/ 4 && button2_aria_pressed_value !== (button2_aria_pressed_value = /*$pedalling*/ ctx[2].soft)) {
+			if (dirty & /*$pedalling*/ 8 && button2_aria_pressed_value !== (button2_aria_pressed_value = /*$pedalling*/ ctx[3].soft)) {
 				attr(button2, "aria-pressed", button2_aria_pressed_value);
 			}
 
-			if (dirty & /*$pedalling*/ 4) {
-				toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[2].soft);
+			if (dirty & /*$pedalling*/ 8) {
+				toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[3].soft);
 			}
 
-			if (dirty & /*$pedalling*/ 4 && button3_aria_pressed_value !== (button3_aria_pressed_value = /*$pedalling*/ ctx[2].sustain)) {
+			if (dirty & /*$pedalling*/ 8 && button3_aria_pressed_value !== (button3_aria_pressed_value = /*$pedalling*/ ctx[3].sustain)) {
 				attr(button3, "aria-pressed", button3_aria_pressed_value);
 			}
 
-			if (dirty & /*$pedalling*/ 4) {
-				toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[2].sustain);
+			if (dirty & /*$pedalling*/ 8) {
+				toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[3].sustain);
 			}
 
-			if (dirty & /*$volume*/ 8) {
-				set_input_value(input0, /*$volume*/ ctx[3].master);
+			if (dirty & /*$volume*/ 16) {
+				set_input_value(input0, /*$volume*/ ctx[4].master);
 			}
 
-			if (dirty & /*$volume*/ 8 && t10_value !== (t10_value = /*$volume*/ ctx[3].master + "")) set_data(t10, t10_value);
+			if (dirty & /*$volume*/ 16 && t10_value !== (t10_value = /*$volume*/ ctx[4].master + "")) set_data(t10, t10_value);
 
-			if (dirty & /*$volume*/ 8) {
-				set_input_value(input1, /*$volume*/ ctx[3].left);
+			if (dirty & /*$volume*/ 16) {
+				set_input_value(input1, /*$volume*/ ctx[4].left);
 			}
 
-			if (dirty & /*$volume*/ 8 && t14_value !== (t14_value = /*$volume*/ ctx[3].left + "")) set_data(t14, t14_value);
+			if (dirty & /*$volume*/ 16 && t14_value !== (t14_value = /*$volume*/ ctx[4].left + "")) set_data(t14, t14_value);
 
-			if (dirty & /*$volume*/ 8) {
-				set_input_value(input2, /*$volume*/ ctx[3].right);
+			if (dirty & /*$volume*/ 16) {
+				set_input_value(input2, /*$volume*/ ctx[4].right);
 			}
 
-			if (dirty & /*$volume*/ 8 && t18_value !== (t18_value = /*$volume*/ ctx[3].right + "")) set_data(t18, t18_value);
+			if (dirty & /*$volume*/ 16 && t18_value !== (t18_value = /*$volume*/ ctx[4].right + "")) set_data(t18, t18_value);
 
-			if (dirty & /*$tempoControl*/ 16) {
-				set_input_value(input3, /*$tempoControl*/ ctx[4]);
+			if (dirty & /*$tempoControl*/ 32) {
+				set_input_value(input3, /*$tempoControl*/ ctx[5]);
 			}
 
-			if (dirty & /*$tempoControl*/ 16) set_data(t22, /*$tempoControl*/ ctx[4]);
+			if (dirty & /*$tempoControl*/ 32) set_data(t22, /*$tempoControl*/ ctx[5]);
+
+			if (dirty & /*$playbackProgress*/ 64) {
+				input4.value = /*$playbackProgress*/ ctx[6];
+			}
+
+			if (dirty & /*$playbackProgress*/ 64 && t26_value !== (t26_value = (/*$playbackProgress*/ ctx[6] * 100).toFixed(2) + "")) set_data(t26, t26_value);
 		},
 		i: noop,
 		o: noop,
 		d(detaching) {
-			if (detaching) detach(div4);
+			if (detaching) detach(div5);
 			mounted = false;
 			run_all(dispose);
 		}
@@ -257,11 +293,14 @@ function instance($$self, $$props, $$invalidate) {
 	let $pedalling;
 	let $volume;
 	let $tempoControl;
-	component_subscribe($$self, pedalling, $$value => $$invalidate(2, $pedalling = $$value));
-	component_subscribe($$self, volume, $$value => $$invalidate(3, $volume = $$value));
-	component_subscribe($$self, tempoControl, $$value => $$invalidate(4, $tempoControl = $$value));
+	let $playbackProgress;
+	component_subscribe($$self, pedalling, $$value => $$invalidate(3, $pedalling = $$value));
+	component_subscribe($$self, volume, $$value => $$invalidate(4, $volume = $$value));
+	component_subscribe($$self, tempoControl, $$value => $$invalidate(5, $tempoControl = $$value));
+	component_subscribe($$self, playbackProgress, $$value => $$invalidate(6, $playbackProgress = $$value));
 	let { playPauseMidiFile } = $$props;
 	let { stopMidiFile } = $$props;
+	let { skipToPercentage } = $$props;
 	const click_handler = () => pedalling.update(val => ({ ...val, soft: !val.soft }));
 	const click_handler_1 = () => pedalling.update(val => ({ ...val, sustain: !val.sustain }));
 
@@ -285,30 +324,44 @@ function instance($$self, $$props, $$invalidate) {
 		tempoControl.set($tempoControl);
 	}
 
+	const input_handler = ({ target: { value } }) => {
+		skipToPercentage(value);
+		set_store_value(playbackProgress, $playbackProgress = value, $playbackProgress);
+	};
+
 	$$self.$$set = $$props => {
 		if ("playPauseMidiFile" in $$props) $$invalidate(0, playPauseMidiFile = $$props.playPauseMidiFile);
 		if ("stopMidiFile" in $$props) $$invalidate(1, stopMidiFile = $$props.stopMidiFile);
+		if ("skipToPercentage" in $$props) $$invalidate(2, skipToPercentage = $$props.skipToPercentage);
 	};
 
 	return [
 		playPauseMidiFile,
 		stopMidiFile,
+		skipToPercentage,
 		$pedalling,
 		$volume,
 		$tempoControl,
+		$playbackProgress,
 		click_handler,
 		click_handler_1,
 		input0_change_input_handler,
 		input1_change_input_handler,
 		input2_change_input_handler,
-		input3_change_input_handler
+		input3_change_input_handler,
+		input_handler
 	];
 }
 
 class PlaybackControls extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { playPauseMidiFile: 0, stopMidiFile: 1 });
+
+		init(this, options, instance, create_fragment, safe_not_equal, {
+			playPauseMidiFile: 0,
+			stopMidiFile: 1,
+			skipToPercentage: 2
+		});
 	}
 }
 

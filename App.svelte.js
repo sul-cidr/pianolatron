@@ -22,7 +22,8 @@ import {
 	midiSamplePlayer,
 	pianoReady,
 	playPauseMidiFile,
-	stopMidiFile
+	stopMidiFile,
+	skipToPercentage
 } from "./components/SamplePlayer.js";
 
 import RollDetails from "./components/RollDetails.svelte.js";
@@ -36,7 +37,11 @@ function create_if_block(ctx) {
 	rolldetails = new RollDetails({});
 
 	playbackcontrols = new PlaybackControls({
-			props: { playPauseMidiFile, stopMidiFile }
+			props: {
+				playPauseMidiFile,
+				stopMidiFile,
+				skipToPercentage
+			}
 		});
 
 	return {
