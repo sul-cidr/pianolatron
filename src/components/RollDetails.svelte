@@ -1,4 +1,4 @@
-<style>
+<style lang="scss">
   ul {
     background: beige;
     border-bottom: 1px solid black;
@@ -10,6 +10,7 @@
   }
 
   strong {
+    font-family: $primary-typeface;
     display: inline-block;
     width: 6em;
   }

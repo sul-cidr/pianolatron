@@ -3,7 +3,7 @@ module.exports = {
   mount: {
     src: "/",
   },
-  plugins: ["@snowpack/plugin-svelte"],
+  plugins: ["@snowpack/plugin-svelte", "@snowpack/plugin-sass"],
   routes: [],
   optimize: {},
   packageOptions: {},
