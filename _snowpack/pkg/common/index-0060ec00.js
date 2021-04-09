@@ -85,6 +85,15 @@ let current_component;
 function set_current_component(component) {
     current_component = component;
 }
+// TODO figure out if we still want to support
+// shorthand events, or if we want to implement
+// a real bubbling mechanism
+function bubble(component, event) {
+    const callbacks = component.$$.callbacks[event.type];
+    if (callbacks) {
+        callbacks.slice().forEach(fn => fn(event));
+    }
+}
 
 const dirty_components = [];
 const binding_callbacks = [];
@@ -100,6 +109,9 @@ function schedule_update() {
 }
 function add_render_callback(fn) {
     render_callbacks.push(fn);
+}
+function add_flush_callback(fn) {
+    flush_callbacks.push(fn);
 }
 let flushing = false;
 const seen_callbacks = new Set();
@@ -184,6 +196,14 @@ function transition_out(block, local, detach, callback) {
             }
         });
         block.o(local);
+    }
+}
+
+function bind(component, name, callback) {
+    const index = component.$$.props[name];
+    if (index !== undefined) {
+        component.$$.bound[index] = callback;
+        callback(component.$$.ctx[index]);
     }
 }
 function create_component(block) {
@@ -308,4 +328,4 @@ class SvelteComponent {
     }
 }
 
-export { toggle_class as A, SvelteComponent as S, create_component as a, detach as b, check_outros as c, destroy_component as d, element as e, empty as f, group_outros as g, insert as h, init as i, space as j, transition_out as k, append as l, mount_component as m, noop as n, attr as o, component_subscribe as p, is_function as q, listen as r, safe_not_equal as s, transition_in as t, run_all as u, set_data as v, set_input_value as w, set_store_value as x, text as y, to_number as z };
+export { text as A, toggle_class as B, bubble as C, set_input_value as D, to_number as E, SvelteComponent as S, create_component as a, detach as b, check_outros as c, destroy_component as d, element as e, empty as f, group_outros as g, insert as h, init as i, space as j, transition_out as k, add_flush_callback as l, mount_component as m, noop as n, append as o, attr as p, bind as q, binding_callbacks as r, safe_not_equal as s, transition_in as t, component_subscribe as u, is_function as v, listen as w, run_all as x, set_data as y, set_store_value as z };

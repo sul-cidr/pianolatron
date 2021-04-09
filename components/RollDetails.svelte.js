@@ -97,14 +97,14 @@ function create_fragment(ctx) {
 			strong5.textContent = "Call No:";
 			t21 = space();
 			t22 = text(t22_value);
-			attr(strong0, "class", "svelte-76gl8c");
-			attr(strong1, "class", "svelte-76gl8c");
-			attr(strong2, "class", "svelte-76gl8c");
-			attr(strong3, "class", "svelte-76gl8c");
-			attr(strong4, "class", "svelte-76gl8c");
+			attr(strong0, "class", "svelte-1l1fhvk");
+			attr(strong1, "class", "svelte-1l1fhvk");
+			attr(strong2, "class", "svelte-1l1fhvk");
+			attr(strong3, "class", "svelte-1l1fhvk");
+			attr(strong4, "class", "svelte-1l1fhvk");
 			attr(a, "href", a_href_value = /*$rollMetadata*/ ctx[0].PURL);
-			attr(strong5, "class", "svelte-76gl8c");
-			attr(ul, "class", "svelte-76gl8c");
+			attr(strong5, "class", "svelte-1l1fhvk");
+			attr(ul, "class", "svelte-1l1fhvk");
 		},
 		m(target, anchor) {
 			insert(target, ul, anchor);
