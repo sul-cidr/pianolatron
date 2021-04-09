@@ -17,6 +17,7 @@
   let appReady = false;
   let mididataReady;
   let currentRollDruid = "zb497jz4405";
+  let previousRollDruid;
 
   const resetApp = () => {
     mididataReady = false;
@@ -44,10 +45,18 @@
       })
       .catch((err) => {
         notify({ title: "Error!", message: err, type: "error" });
+        currentRollDruid = previousRollDruid;
       });
   };
 
-  $: loadRoll(currentRollDruid);
+  $: {
+    if (currentRollDruid !== previousRollDruid) {
+      loadRoll(currentRollDruid);
+      mididataReady.then(() => {
+        previousRollDruid = currentRollDruid;
+      });
+    }
+  }
 </script>
 
 <h1>{title}</h1>
