@@ -1,11 +1,27 @@
-<style>
+<style lang="scss">
   .pedal-on {
     background: yellow;
+  }
+
+  .control {
+    align-items: center;
+    display: flex;
+    gap: 0.5em;
+    padding: 0.5em 0;
+
+    :first-child {
+      width: 8em;
+    }
+    :global(input[type="range"]) {
+      width: 20em;
+    }
   }
 </style>
 
 <script>
   import { pedalling, volume, tempoControl, playbackProgress } from "../stores";
+
+  import RangeSlider from "../ui-components/RangeSlider.svelte";
 
   export let playPauseMidiFile;
   export let stopMidiFile;
@@ -31,10 +47,9 @@
       }))}
   >Sustain</button>
 
-  <div>
-    Master Volume:
-    <input
-      type="range"
+  <div class="control">
+    <span>Master Volume:</span>
+    <RangeSlider
       min="0"
       max="4"
       step=".1"
@@ -43,10 +58,9 @@
     />
     {$volume.master}
   </div>
-  <div>
-    Bass Volume:
-    <input
-      type="range"
+  <div class="control">
+    <span>Bass Volume:</span>
+    <RangeSlider
       min="0"
       max="4"
       step=".1"
@@ -55,10 +69,9 @@
     />
     {$volume.left}
   </div>
-  <div>
-    Treble Volume:
-    <input
-      type="range"
+  <div class="control">
+    <span>Treble Volume:</span>
+    <RangeSlider
       min="0"
       max="4"
       step=".1"
@@ -67,10 +80,9 @@
     />
     {$volume.right}
   </div>
-  <div>
-    Tempo:
-    <input
-      type="range"
+  <div class="control">
+    <span>Tempo:</span>
+    <RangeSlider
       min="0"
       max="180"
       step="10"
@@ -79,10 +91,9 @@
     />
     {$tempoControl}
   </div>
-  <div>
-    Progress:
-    <input
-      type="range"
+  <div class="control">
+    <span>Progress:</span>
+    <RangeSlider
       min="0"
       max="1"
       step="0.01"
@@ -92,6 +103,7 @@
         skipToPercentage(value);
         $playbackProgress = value;
       }}
+      mousewheel={false}
     />
     {($playbackProgress * 100).toFixed(2)}%
   </div>
