@@ -16,8 +16,8 @@
 
   let appReady = false;
   let mididataReady;
-  let currentRollDruid = "zb497jz4405";
-  let previousRollDruid;
+  let currentRoll;
+  let previousRoll;
 
   const resetApp = () => {
     mididataReady = false;
@@ -29,8 +29,8 @@
     playbackProgress.set(0);
   };
 
-  const loadRoll = (druid) => {
-    mididataReady = fetch(`./assets/midi/${druid}.mid`)
+  const loadRoll = (roll) => {
+    mididataReady = fetch(`./assets/midi/${roll.druid}.mid`)
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
@@ -45,22 +45,22 @@
       })
       .catch((err) => {
         notify({ title: "Error!", message: err, type: "error" });
-        currentRollDruid = previousRollDruid;
+        currentRoll = previousRoll;
       });
   };
 
   $: {
-    if (currentRollDruid !== previousRollDruid) {
-      loadRoll(currentRollDruid);
+    if (currentRoll !== previousRoll) {
+      loadRoll(currentRoll);
       mididataReady.then(() => {
-        previousRollDruid = currentRollDruid;
+        previousRoll = currentRoll;
       });
     }
   }
 </script>
 
 <h1>{title}</h1>
-<RollSelector bind:currentRollDruid />
+<RollSelector bind:currentRoll />
 {#if appReady}
   <RollDetails />
   <PlaybackControls {playPauseMidiFile} {stopMidiFile} {skipToPercentage} />

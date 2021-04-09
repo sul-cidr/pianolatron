@@ -2,11 +2,11 @@
   // bundling this, for now at least
   import catalog from "../assets/catalog.json";
 
-  export let currentRollDruid;
+  export let currentRoll;
 </script>
 
-<select bind:value={currentRollDruid}>
-  {#each Object.entries(catalog) as [druid, roll]}
-    <option value={druid}>{roll.title}</option>
+<select bind:value={currentRoll}>
+  {#each catalog as roll}
+    <option value={roll}>{roll.title}</option>
   {/each}
 </select>
