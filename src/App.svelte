@@ -11,6 +11,7 @@
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
+  import RollViewer from "./components/RollViewer.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
 
   const title = "Pianolatron Development";
@@ -96,5 +97,6 @@
 {#if appReady}
   <RollDetails />
   <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
+  <RollViewer imageUrl={currentRoll.image_url} />
 {/if}
 <Notification />
