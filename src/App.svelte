@@ -16,6 +16,7 @@
 
   let appReady = false;
   let mididataReady;
+  let currentRollDruid = "zb497jz4405";
 
   const resetApp = () => {
     mididataReady = false;
@@ -46,11 +47,11 @@
       });
   };
 
-  loadRoll("zb497jz4405");
+  $: loadRoll(currentRollDruid);
 </script>
 
 <h1>{title}</h1>
-<RollSelector {loadRoll} />
+<RollSelector bind:currentRollDruid />
 {#if appReady}
   <RollDetails />
   <PlaybackControls {playPauseMidiFile} {stopMidiFile} {skipToPercentage} />
