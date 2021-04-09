@@ -10,6 +10,7 @@
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
+  import Notification, { notify } from "./ui-components/Notification.svelte";
 
   const title = "Pianolatron Development";
 
@@ -28,13 +29,20 @@
 
   const loadRoll = (druid) => {
     mididataReady = fetch(`./assets/midi/${druid}.mid`)
-      .then((mididataResponse) => mididataResponse.arrayBuffer())
+      .then((mididataResponse) => {
+        if (mididataResponse.status === 200)
+          return mididataResponse.arrayBuffer();
+        throw new Error("Error fetching MIDI file! (Operation cancelled)");
+      })
       .then((mididataArrayBuffer) => {
         resetApp();
         midiSamplePlayer.loadArrayBuffer(mididataArrayBuffer);
         Promise.all([mididataReady, pianoReady]).then(() => {
           appReady = true;
         });
+      })
+      .catch((err) => {
+        notify({ title: "Error!", message: err, type: "error" });
       });
   };
 
@@ -47,3 +55,4 @@
   <RollDetails />
   <PlaybackControls {playPauseMidiFile} {stopMidiFile} {skipToPercentage} />
 {/if}
+<Notification />
