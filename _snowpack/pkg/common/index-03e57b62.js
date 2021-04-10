@@ -41,6 +41,12 @@ function insert(target, node, anchor) {
 function detach(node) {
     node.parentNode.removeChild(node);
 }
+function destroy_each(iterations, detaching) {
+    for (let i = 0; i < iterations.length; i += 1) {
+        if (iterations[i])
+            iterations[i].d(detaching);
+    }
+}
 function element(name) {
     return document.createElement(name);
 }
@@ -76,6 +82,19 @@ function set_data(text, data) {
 }
 function set_input_value(input, value) {
     input.value = value == null ? '' : value;
+}
+function select_option(select, value) {
+    for (let i = 0; i < select.options.length; i += 1) {
+        const option = select.options[i];
+        if (option.__value === value) {
+            option.selected = true;
+            return;
+        }
+    }
+}
+function select_value(select) {
+    const selected_option = select.querySelector(':checked') || select.options[0];
+    return selected_option && selected_option.__value;
 }
 function toggle_class(element, name, toggle) {
     element.classList[toggle ? 'add' : 'remove'](name);
@@ -328,4 +347,4 @@ class SvelteComponent {
     }
 }
 
-export { text as A, toggle_class as B, bubble as C, set_input_value as D, to_number as E, SvelteComponent as S, create_component as a, detach as b, check_outros as c, destroy_component as d, element as e, empty as f, group_outros as g, insert as h, init as i, space as j, transition_out as k, add_flush_callback as l, mount_component as m, noop as n, append as o, attr as p, bind as q, binding_callbacks as r, safe_not_equal as s, transition_in as t, component_subscribe as u, is_function as v, listen as w, run_all as x, set_data as y, set_store_value as z };
+export { toggle_class as A, add_render_callback as B, destroy_each as C, select_option as D, select_value as E, empty as F, bubble as G, set_input_value as H, to_number as I, SvelteComponent as S, add_flush_callback as a, bind as b, binding_callbacks as c, check_outros as d, create_component as e, destroy_component as f, detach as g, element as h, group_outros as i, init as j, insert as k, space as l, mount_component as m, noop as n, transition_out as o, append as p, attr as q, component_subscribe as r, safe_not_equal as s, transition_in as t, is_function as u, listen as v, run_all as w, set_data as x, set_store_value as y, text as z };
