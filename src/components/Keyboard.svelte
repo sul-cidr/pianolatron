@@ -1,4 +1,5 @@
 <style lang="scss">
+  $key-width: 40px;
   #keyboard {
     background: linear-gradient(-60deg, #000, #333, #000, #666, #333 70%);
     border-radius: 0 0 5px 5px;
@@ -26,7 +27,7 @@
     float: left;
     list-style: none;
     position: relative;
-    width: 40px;
+    width: $key-width;
 
     /* White Keys */
     div {
@@ -81,10 +82,10 @@
       box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4),
         0 2px 3px rgba(0, 0, 0, 0.4);
       height: 120px;
-      left: -12px;
+      left: -2 - ($key-width / 2 / 2);
       position: absolute;
       top: 0px;
-      width: 20px;
+      width: $key-width / 2;
       z-index: 10;
 
       &:active {
