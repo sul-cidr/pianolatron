@@ -1,5 +1,5 @@
 <style lang="scss">
-  $key-width: 40px;
+  $key-width: 1.8vw;
 
   // colours
   $grad0: #000;
@@ -117,38 +117,51 @@
   }
 </style>
 
+<script>
+  export let keyCount = 87;
+  const notes = [
+    "A",
+    "A#",
+    "B",
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+  ];
+
+  const keys = [];
+  let keyNumber = 1;
+  let octave = 0;
+  while (keyNumber <= keyCount) {
+    notes.forEach((note) => {
+      if (note === "C") octave++;
+      if (keyNumber > keyCount) return;
+      if (note.endsWith("#")) {
+        keys[keys.length - 1].push({
+          "data-key": keyNumber,
+          title: `${note}${octave}`,
+        });
+      } else {
+        keys.push([{ "data-key": keyNumber, title: `${note}${octave}` }]);
+      }
+      keyNumber++;
+    });
+  }
+</script>
+
 <div id="keyboard">
   <div id="keys">
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
-    <div><span /><span /></div>
+    {#each keys as key}
+      <div>
+        {#each key as _key}
+          <span title={_key.title} data-key={_key['data-key']} />
+        {/each}
+      </div>
+    {/each}
   </div>
 </div>
