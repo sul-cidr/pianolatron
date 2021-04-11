@@ -1,11 +1,32 @@
 <style lang="scss">
   $key-width: 40px;
+
+  // colours
+  $grad0: #000;
+  $grad3: #333;
+  $grad5: #555;
+  $grad6: #666;
+
+  // $grad0: #1f0d01;
+  // $grad3: #2e1c10;
+  // $grad5: #4c3a2e;
+  // $grad6: #3d2b1f;
+
+  $white_50: rgba(255, 255, 255, 0.5);
+
   #keyboard {
-    background: linear-gradient(-60deg, #000, #333, #000, #666, #333 70%);
+    background: linear-gradient(
+      -60deg,
+      $grad0,
+      $grad3,
+      $grad0,
+      $grad6,
+      $grad3 70%
+    );
     border-radius: 0 0 5px 5px;
-    border: 2px solid #333;
-    box-shadow: 0 2px 0px #666, 0 3px 0px #555, 0 4px 0px #444, 0 6px 6px #000,
-      inset 0 -1px 1px rgba(255, 255, 255, 0.5), inset 0 -4px 5px #000;
+    border: 2px solid $grad3;
+    box-shadow: 0 2px 0 $grad6, 0 3px 0 $grad5, 0 4px 0 $grad3, 0 6px 6px $grad0,
+      inset 0 -1px 1px $white_50, inset 0 -4px 5px $grad0;
     margin: 1em auto;
     position: relative;
     width: fit-content;
