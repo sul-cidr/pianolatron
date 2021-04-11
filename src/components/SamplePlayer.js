@@ -8,6 +8,7 @@ import {
   volume,
   tempoControl,
   playbackProgress,
+  activeNotes,
 } from "../stores";
 
 const midiSamplePlayer = new MidiPlayer.Player();
@@ -156,9 +157,11 @@ midiSamplePlayer.on(
       if (velocity === 0) {
         // Note off
         stopNote(noteNumber);
+        activeNotes.delete(noteNumber);
       } else {
         // Note on
         startNote(noteNumber, velocity);
+        activeNotes.add(noteNumber);
       }
     } else if (name === "Controller Change") {
       if (number === controllerChange.SUSTAIN_PEDAL) {
