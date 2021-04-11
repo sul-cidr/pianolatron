@@ -99,6 +99,6 @@
   <RollDetails />
   <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
   <RollViewer imageUrl={currentRoll.image_url} />
-  <Keyboard keyCount="87" />
+  <Keyboard keyCount="87" {activeNotes} />
 {/if}
 <Notification />

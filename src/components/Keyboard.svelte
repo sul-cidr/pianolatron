@@ -120,6 +120,7 @@
 
 <script>
   export let keyCount = 87;
+  export let activeNotes;
   const notes = [
     "A",
     "A#",
@@ -152,6 +153,15 @@
       }
       keyNumber++;
     });
+  }
+
+  $: {
+    document
+      .querySelectorAll(".depressed")
+      .forEach((el) => el.classList.remove("depressed"));
+    $activeNotes.forEach((note) =>
+      document.querySelector(`[data-key="${note}"]`).classList.add("depressed"),
+    );
   }
 </script>
 
