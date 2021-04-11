@@ -99,7 +99,7 @@
         box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4),
           0 2px 3px rgba(0, 0, 0, 0.4);
         height: 120px;
-        left: calc(-2px - #{$key-width / 4});
+        left: calc(#{$key-width} - 2px - #{$key-width / 4});
         position: absolute;
         top: 0px;
         width: $key-width / 2;
