@@ -56,36 +56,36 @@
           0 4px 3px rgba(0, 0, 0, 0.7);
         display: block;
         height: calc(#{$key-width} * 6 - 20px);
+      }
+      :first-child:active,
+      :global(:first-child.depressed) {
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+        height: calc(#{$key-width} * 6 - 24px);
+        position: relative;
+        top: 2px;
 
-        &:active {
-          box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
-          height: calc(#{$key-width} * 6 - 24px);
-          position: relative;
-          top: 2px;
+        &:before {
+          border-color: transparent transparent transparent rgba(0, 0, 0, 0.1);
+          border-style: solid;
+          border-width: calc(#{$key-width} * 6 - 24px) 5px 0px;
+          content: "";
+          height: 0px;
+          left: 0px;
+          position: absolute;
+          top: 0px;
+          width: 0px;
+        }
 
-          &:before {
-            border-color: transparent transparent transparent rgba(0, 0, 0, 0.1);
-            border-style: solid;
-            border-width: calc(#{$key-width} * 6 - 24px) 5px 0px;
-            content: "";
-            height: 0px;
-            left: 0px;
-            position: absolute;
-            top: 0px;
-            width: 0px;
-          }
-
-          &:after {
-            border-color: transparent rgba(0, 0, 0, 0.1) transparent transparent;
-            border-style: solid;
-            border-width: calc(#{$key-width} * 6 - 24px) 5px 0px;
-            content: "";
-            height: 0px;
-            position: absolute;
-            right: 0px;
-            top: 0px;
-            width: 0px;
-          }
+        &:after {
+          border-color: transparent rgba(0, 0, 0, 0.1) transparent transparent;
+          border-style: solid;
+          border-width: calc(#{$key-width} * 6 - 24px) 5px 0px;
+          content: "";
+          height: 0px;
+          position: absolute;
+          right: 0px;
+          top: 0px;
+          width: 0px;
         }
       }
 
@@ -104,14 +104,15 @@
         top: 0px;
         width: $key-width / 2;
         z-index: 10;
+      }
 
-        &:active {
-          border-bottom-width: 2px;
-          box-shadow: inset 0px -1px 1px rgba(255, 255, 255, 0.4),
-            0 1px 0px rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
-            0 -1px 0px #000;
-          height: calc(#{$key-width} * 3 + 3px);
-        }
+      :nth-child(2):active,
+      :global(:nth-child(2).depressed) {
+        border-bottom-width: 2px;
+        box-shadow: inset 0px -1px 1px rgba(255, 255, 255, 0.4),
+          0 1px 0px rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
+          0 -1px 0px #000;
+        height: calc(#{$key-width} * 3 + 3px);
       }
     }
   }
