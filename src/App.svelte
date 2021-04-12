@@ -33,6 +33,7 @@
 
   const stopApp = () => {
     midiSamplePlayer.stop();
+    playbackProgress.set(0);
   };
 
   const resetApp = () => {
