@@ -52,18 +52,6 @@ const decodeHtmlEntities = (string) =>
       String.fromCodePoint(parseInt(num, 16)),
     );
 
-const playPauseMidiFile = () => {
-  if (midiSamplePlayer.isPlaying()) {
-    midiSamplePlayer.pause();
-  } else {
-    midiSamplePlayer.play();
-  }
-};
-
-const stopMidiFile = () => {
-  midiSamplePlayer.stop();
-};
-
 const skipToPercentage = (percentage) =>
   updatePlayer(() =>
     midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage),
@@ -187,10 +175,4 @@ midiSamplePlayer.on(
   },
 );
 
-export {
-  midiSamplePlayer,
-  playPauseMidiFile,
-  stopMidiFile,
-  pianoReady,
-  skipToPercentage,
-};
+export { midiSamplePlayer, pianoReady, skipToPercentage };
