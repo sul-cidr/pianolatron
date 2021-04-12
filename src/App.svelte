@@ -26,6 +26,7 @@
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
+      activeNotes.reset();
     } else {
       midiSamplePlayer.play();
     }
@@ -34,6 +35,7 @@
   const stopApp = () => {
     midiSamplePlayer.stop();
     playbackProgress.set(0);
+    activeNotes.reset();
   };
 
   const resetApp = () => {
