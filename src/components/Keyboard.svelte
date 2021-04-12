@@ -1,5 +1,6 @@
 <style lang="scss">
   $key-width: 1.8vw;
+  $active-key-highlight: #b5e2ff;
 
   // colours
   $grad0: #000;
@@ -88,6 +89,9 @@
           width: 0px;
         }
       }
+      :global(:first-child.depressed) {
+        background: $active-key-highlight;
+      }
 
       // Black Keys
       :nth-child(2) {
@@ -113,6 +117,9 @@
           0 1px 0px rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
           0 -1px 0px #000;
         height: calc(#{$key-width} * 3 + 3px);
+      }
+      :global(:nth-child(2).depressed) {
+        background: $active-key-highlight;
       }
     }
   }
