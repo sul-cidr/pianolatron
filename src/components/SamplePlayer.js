@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */ // FIXME
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
@@ -59,18 +58,6 @@ const skipToPercentage = (percentage) =>
 
 midiSamplePlayer.on("fileLoaded", () => {
   const metadataTrack = midiSamplePlayer.events[0];
-  /* @IMAGE_WIDTH and @IMAGE_LENGTH should be the same as from viewport._contentSize
-   * Can't think of why they wouldn't be, but maybe check anyway. Would need to scale
-   * all pixel values if so.
-   * Other potentially useful values, e.g., for drawing overlays:
-   * @ROLL_WIDTH (this is smaller than the image width)
-   * @HARD_MARGIN_TREBLE
-   * @HARD_MARGIN_BASS
-   * @HOLE_SEPARATION
-   * @HOLE_OFFSET
-   * All of the source/performance/recording metadata is in this track as well.
-   */
-
   rollMetadata.set(
     Object.fromEntries(
       metadataTrack
@@ -104,7 +91,7 @@ const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "p
 
 const BASE_DATA_URL = "https://broadwell.github.io/piano_rolls/";
 
-let panBoundary = HALF_BOUNDARY;
+const panBoundary = HALF_BOUNDARY;
 
 const piano = new Piano({
   // XXX The samples load from the guy's Github site
@@ -167,7 +154,7 @@ midiSamplePlayer.on(
         }));
       }
     } else if (name === "Set Tempo") {
-      let midiTempo = parseFloat(data);
+      const midiTempo = parseFloat(data);
       tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
       midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
     }
