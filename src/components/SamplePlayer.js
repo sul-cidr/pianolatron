@@ -119,9 +119,13 @@ const stopNote = (noteNumber) => {
   piano.keyUp({ midi: noteNumber });
 };
 
+midiSamplePlayer.on("playing", ({ tick }) => {
+  playbackProgress.update(() => tick / midiSamplePlayer.totalTicks);
+});
+
 midiSamplePlayer.on(
   "midiEvent",
-  ({ name, value, number, noteNumber, velocity, data, tick }) => {
+  ({ name, value, number, noteNumber, velocity, data }) => {
     if (name === "Note on") {
       if (velocity === 0) {
         // Note off
@@ -152,7 +156,6 @@ midiSamplePlayer.on(
       tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
       midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
     }
-    playbackProgress.update(() => tick / midiSamplePlayer.totalTicks);
   },
 );
 
