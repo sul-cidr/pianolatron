@@ -160,7 +160,9 @@
       .querySelectorAll(".depressed")
       .forEach((el) => el.classList.remove("depressed"));
     $activeNotes.forEach((note) =>
-      document.querySelector(`[data-key="${note}"]`).classList.add("depressed"),
+      document
+        .querySelector(`[data-key="${note}"]`)
+        ?.classList.add("depressed"),
     );
   }
 </script>
