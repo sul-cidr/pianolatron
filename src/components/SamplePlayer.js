@@ -89,16 +89,10 @@ const DEFAULT_NOTE_VELOCITY = 33.0;
 const SOFT_PEDAL_RATIO = 0.67;
 const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
 
-const BASE_DATA_URL = "https://broadwell.github.io/piano_rolls/";
-
 const panBoundary = HALF_BOUNDARY;
 
 const piano = new Piano({
-  // XXX The samples load from the guy's Github site
-  // unless there's a valid URL, and using a
-  // local folder seems problematic...
-  url: `${BASE_DATA_URL}audio/mp3/`, // works if available
-  // url: '/audio/', // note sure we want to try to bundle these...
+  url: "/assets/samples/",
   velocities: 2,
   release: true,
   pedal: true,
