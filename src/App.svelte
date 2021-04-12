@@ -1,5 +1,11 @@
 <script>
-  import { pedalling, volume, tempoControl, playbackProgress } from "./stores";
+  import {
+    pedalling,
+    volume,
+    tempoControl,
+    playbackProgress,
+    activeNotes,
+  } from "./stores";
   import {
     midiSamplePlayer,
     pianoReady,
@@ -23,6 +29,7 @@
     mididataReady = false;
     appReady = false;
     midiSamplePlayer.stop();
+    activeNotes.reset();
     tempoControl.set(60);
     pedalling.set({ soft: false, sustain: false });
     volume.set({ master: 1, left: 1, right: 1 });
