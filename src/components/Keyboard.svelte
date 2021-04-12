@@ -145,11 +145,11 @@
       if (keyNumber > keyCount) return;
       if (note.endsWith("#")) {
         keys[keys.length - 1].push({
-          "data-key": keyNumber,
+          "data-key": keyNumber + 20,
           title: `${note}${octave}`,
         });
       } else {
-        keys.push([{ "data-key": keyNumber, title: `${note}${octave}` }]);
+        keys.push([{ "data-key": keyNumber + 20, title: `${note}${octave}` }]);
       }
       keyNumber++;
     });
