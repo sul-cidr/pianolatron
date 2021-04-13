@@ -40,7 +40,7 @@
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 
     const lineCenter = new OpenSeadragon.Point(
-      viewportBounds.width / 2,
+      viewportBounds.x + viewportBounds.width / 2,
       lineViewport.y,
     );
 
