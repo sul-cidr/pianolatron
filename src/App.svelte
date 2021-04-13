@@ -45,8 +45,8 @@
     volume.set({ master: 1, left: 1, right: 1 });
   };
 
-  const skipToPercentage = (percentage) => {
-    $currentTick = midiSamplePlayer.totalTicks * percentage;
+  const skipToTick = (tick) => {
+    $currentTick = tick;
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       midiSamplePlayer.skipToTick($currentTick);
@@ -55,6 +55,9 @@
       midiSamplePlayer.skipToTick($currentTick);
     }
   };
+
+  const skipToPercentage = (percentage) =>
+    skipToTick(midiSamplePlayer.totalTicks * percentage);
 
   const loadRoll = (roll) => {
     mididataReady = fetch(`./assets/midi/${roll.druid}.mid`)
