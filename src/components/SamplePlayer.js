@@ -115,9 +115,7 @@ const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
   }
 };
 
-const stopNote = (noteNumber) => {
-  piano.keyUp({ midi: noteNumber });
-};
+const stopNote = (noteNumber) => piano.keyUp({ midi: noteNumber });
 
 midiSamplePlayer.on("playing", ({ tick }) => {
   playbackProgress.update(() => tick / midiSamplePlayer.totalTicks);
