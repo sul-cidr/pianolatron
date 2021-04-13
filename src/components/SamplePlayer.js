@@ -51,11 +51,6 @@ const decodeHtmlEntities = (string) =>
       String.fromCodePoint(parseInt(num, 16)),
     );
 
-const skipToPercentage = (percentage) =>
-  updatePlayer(() =>
-    midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage),
-  );
-
 midiSamplePlayer.on("fileLoaded", () => {
   const metadataTrack = midiSamplePlayer.events[0];
   rollMetadata.set(
@@ -155,4 +150,4 @@ midiSamplePlayer.on(
   },
 );
 
-export { midiSamplePlayer, pianoReady, skipToPercentage };
+export { midiSamplePlayer, pianoReady };

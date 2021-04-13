@@ -7,11 +7,7 @@
     activeNotes,
     currentTick,
   } from "./stores";
-  import {
-    midiSamplePlayer,
-    pianoReady,
-    skipToPercentage,
-  } from "./components/SamplePlayer";
+  import { midiSamplePlayer, pianoReady } from "./components/SamplePlayer";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
@@ -47,6 +43,17 @@
     tempoControl.set(60);
     pedalling.set({ soft: false, sustain: false });
     volume.set({ master: 1, left: 1, right: 1 });
+  };
+
+  const skipToPercentage = (percentage) => {
+    $currentTick = midiSamplePlayer.totalTicks * percentage;
+    if (midiSamplePlayer.isPlaying()) {
+      midiSamplePlayer.pause();
+      midiSamplePlayer.skipToTick($currentTick);
+      midiSamplePlayer.play();
+    } else {
+      midiSamplePlayer.skipToTick($currentTick);
+    }
   };
 
   const loadRoll = (roll) => {
