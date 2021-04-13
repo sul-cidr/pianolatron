@@ -99,10 +99,7 @@
       step="0.01"
       value={$playbackProgress}
       name="progress"
-      on:input={({ target: { value } }) => {
-        skipToPercentage(value);
-        $playbackProgress = value;
-      }}
+      on:input={({ target: { value } }) => skipToPercentage(value)}
       mousewheel={false}
     />
     {($playbackProgress * 100).toFixed(2)}%

@@ -5,12 +5,9 @@
     tempoControl,
     playbackProgress,
     activeNotes,
+    currentTick,
   } from "./stores";
-  import {
-    midiSamplePlayer,
-    pianoReady,
-    skipToPercentage,
-  } from "./components/SamplePlayer";
+  import { midiSamplePlayer, pianoReady } from "./components/SamplePlayer";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
@@ -35,19 +32,32 @@
   const stopApp = () => {
     midiSamplePlayer.stop();
     playbackProgress.set(0);
+    currentTick.set(0);
     activeNotes.reset();
   };
 
   const resetApp = () => {
     mididataReady = false;
     appReady = false;
-    midiSamplePlayer.stop();
-    activeNotes.reset();
+    stopApp();
     tempoControl.set(60);
     pedalling.set({ soft: false, sustain: false });
     volume.set({ master: 1, left: 1, right: 1 });
-    playbackProgress.set(0);
   };
+
+  const skipToTick = (tick) => {
+    $currentTick = tick;
+    if (midiSamplePlayer.isPlaying()) {
+      midiSamplePlayer.pause();
+      midiSamplePlayer.skipToTick($currentTick);
+      midiSamplePlayer.play();
+    } else {
+      midiSamplePlayer.skipToTick($currentTick);
+    }
+  };
+
+  const skipToPercentage = (percentage) =>
+    skipToTick(midiSamplePlayer.totalTicks * percentage);
 
   const loadRoll = (roll) => {
     mididataReady = fetch(`./assets/midi/${roll.druid}.mid`)
@@ -77,6 +87,8 @@
       });
     }
   }
+
+  $: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 </script>
 
 <h1>{title}</h1>
