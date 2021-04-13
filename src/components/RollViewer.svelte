@@ -51,7 +51,7 @@
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
       showNavigationControl: false,
-      panHorizontal: false,
+      panHorizontal: true,
       visibilityRatio: 1,
       defaultZoomLevel: 1,
       minZoomLevel: 0.01,
