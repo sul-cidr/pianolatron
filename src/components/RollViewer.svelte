@@ -25,7 +25,7 @@
   export let imageUrl;
   let openSeadragon;
 
-  export const panViewportToTick = (tick) => {
+  const panViewportToTick = (tick) => {
     if (!openSeadragon) return;
     const { viewport } = openSeadragon;
     const viewportBounds = viewport.getBounds();
