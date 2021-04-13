@@ -92,7 +92,7 @@ const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "p
 const panBoundary = HALF_BOUNDARY;
 
 const piano = new Piano({
-  url: "/assets/samples/",
+  url: "assets/samples/",
   velocities: 2,
   release: true,
   pedal: true,
