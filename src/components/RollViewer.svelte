@@ -9,10 +9,30 @@
   import { onMount } from "svelte";
   import OpenSeadragon from "openseadragon";
 
+  import { rollMetadata } from "../stores";
+
   export let imageUrl;
+  let openSeadragon;
+
+  export const panViewportToTick = (tick) => {
+    if (!openSeadragon) return;
+    const { viewport } = openSeadragon;
+    const viewportBounds = viewport.getBounds();
+    const linePx =
+      parseInt($rollMetadata.FIRST_HOLE, 10) + (scrollDownwards ? tick : -tick);
+
+    const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
+
+    const lineCenter = new OpenSeadragon.Point(
+      viewportBounds.width / 2,
+      lineViewport.y,
+    );
+
+    viewport.panTo(lineCenter);
+  };
 
   onMount(async () => {
-    const openSeadragon = OpenSeadragon({
+    openSeadragon = OpenSeadragon({
       id: "roll-viewer",
       showNavigationControl: false,
       panHorizontal: false,
@@ -24,6 +44,8 @@
 
     openSeadragon.open(imageUrl);
   });
+
+  $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
 </script>
 
 <div id="roll-viewer" />
