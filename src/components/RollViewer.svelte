@@ -9,7 +9,7 @@
   import { onMount } from "svelte";
   import OpenSeadragon from "openseadragon";
 
-  import { rollMetadata } from "../stores";
+  import { rollMetadata, currentTick } from "../stores";
 
   export let imageUrl;
   let openSeadragon;
@@ -49,6 +49,7 @@
     openSeadragon.open(imageUrl);
   });
 
+  $: panViewportToTick($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
 </script>
 
