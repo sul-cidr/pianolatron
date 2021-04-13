@@ -14,6 +14,10 @@
       top: 50%;
       width: 100%;
     }
+
+    :global(.openseadragon-canvas:focus) {
+      outline: none;
+    }
   }
 </style>
 
