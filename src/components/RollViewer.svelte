@@ -29,11 +29,15 @@
 
   export let imageUrl;
   let openSeadragon;
+  let dragging;
 
   const panViewportToTick = (tick) => {
     if (!openSeadragon) return;
     const { viewport } = openSeadragon;
-    const viewportBounds = viewport.getBounds();
+    // if we're dragging we want the target bounds, if otherwise (and most
+    //   especially if we happen to be zooming) we want the current bounds
+    const viewportBounds = viewport.getBounds(!dragging);
+
     const linePx =
       parseInt($rollMetadata.FIRST_HOLE, 10) + (scrollDownwards ? tick : -tick);
 
@@ -61,6 +65,14 @@
 
     openSeadragon.addOnceHandler("update-viewport", () => {
       panViewportToTick(0);
+    });
+
+    openSeadragon.addHandler("canvas-drag", () => {
+      dragging = true;
+    });
+
+    openSeadragon.addHandler("canvas-drag-end", () => {
+      dragging = false;
     });
 
     openSeadragon.open(imageUrl);
