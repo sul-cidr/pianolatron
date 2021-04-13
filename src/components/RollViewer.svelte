@@ -42,6 +42,10 @@
       maxZoomLevel: 4,
     });
 
+    openSeadragon.addOnceHandler("update-viewport", () => {
+      panViewportToTick(0);
+    });
+
     openSeadragon.open(imageUrl);
   });
 
