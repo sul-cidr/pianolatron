@@ -20,13 +20,17 @@ import {
 	transition_out
 } from "./_snowpack/pkg/svelte/internal.js";
 
-import { pedalling, volume, tempoControl, playbackProgress } from "./stores.js";
+import {
+	pedalling,
+	volume,
+	tempoControl,
+	playbackProgress,
+	activeNotes
+} from "./stores.js";
 
 import {
 	midiSamplePlayer,
 	pianoReady,
-	playPauseMidiFile,
-	stopMidiFile,
 	skipToPercentage
 } from "./components/SamplePlayer.js";
 
@@ -44,8 +48,8 @@ function create_if_block(ctx) {
 
 	playbackcontrols = new PlaybackControls({
 			props: {
-				playPauseMidiFile,
-				stopMidiFile,
+				playPauseApp: /*playPauseApp*/ ctx[2],
+				stopApp: /*stopApp*/ ctx[3],
 				skipToPercentage
 			}
 		});
@@ -93,7 +97,7 @@ function create_fragment(ctx) {
 	let current;
 
 	function rollselector_currentRoll_binding(value) {
-		/*rollselector_currentRoll_binding*/ ctx[2].call(null, value);
+		/*rollselector_currentRoll_binding*/ ctx[4].call(null, value);
 	}
 
 	let rollselector_props = {};
@@ -195,10 +199,26 @@ function instance($$self, $$props, $$invalidate) {
 	let currentRoll;
 	let previousRoll;
 
+	const playPauseApp = () => {
+		if (midiSamplePlayer.isPlaying()) {
+			midiSamplePlayer.pause();
+			activeNotes.reset();
+		} else {
+			midiSamplePlayer.play();
+		}
+	};
+
+	const stopApp = () => {
+		midiSamplePlayer.stop();
+		playbackProgress.set(0);
+		activeNotes.reset();
+	};
+
 	const resetApp = () => {
-		$$invalidate(3, mididataReady = false);
+		$$invalidate(5, mididataReady = false);
 		$$invalidate(0, appReady = false);
 		midiSamplePlayer.stop();
+		activeNotes.reset();
 		tempoControl.set(60);
 		pedalling.set({ soft: false, sustain: false });
 		volume.set({ master: 1, left: 1, right: 1 });
@@ -206,7 +226,7 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const loadRoll = roll => {
-		$$invalidate(3, mididataReady = fetch(`./assets/midi/${roll.druid}.mid`).then(mididataResponse => {
+		$$invalidate(5, mididataReady = fetch(`./assets/midi/${roll.druid}.mid`).then(mididataResponse => {
 			if (mididataResponse.status === 200) return mididataResponse.arrayBuffer();
 			throw new Error("Error fetching MIDI file! (Operation cancelled)");
 		}).then(mididataArrayBuffer => {
@@ -233,20 +253,20 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*currentRoll, previousRoll, mididataReady*/ 26) {
+		if ($$self.$$.dirty & /*currentRoll, previousRoll, mididataReady*/ 98) {
 			$: {
 				if (currentRoll !== previousRoll) {
 					loadRoll(currentRoll);
 
 					mididataReady.then(() => {
-						$$invalidate(4, previousRoll = currentRoll);
+						$$invalidate(6, previousRoll = currentRoll);
 					});
 				}
 			}
 		}
 	};
 
-	return [appReady, currentRoll, rollselector_currentRoll_binding];
+	return [appReady, currentRoll, playPauseApp, stopApp, rollselector_currentRoll_binding];
 }
 
 class App extends SvelteComponent {

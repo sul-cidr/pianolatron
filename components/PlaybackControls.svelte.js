@@ -306,10 +306,10 @@ function create_fragment(ctx) {
 			if (!mounted) {
 				dispose = [
 					listen(button0, "click", function () {
-						if (is_function(/*playPauseMidiFile*/ ctx[0])) /*playPauseMidiFile*/ ctx[0].apply(this, arguments);
+						if (is_function(/*playPauseApp*/ ctx[0])) /*playPauseApp*/ ctx[0].apply(this, arguments);
 					}),
 					listen(button1, "click", function () {
-						if (is_function(/*stopMidiFile*/ ctx[1])) /*stopMidiFile*/ ctx[1].apply(this, arguments);
+						if (is_function(/*stopApp*/ ctx[1])) /*stopApp*/ ctx[1].apply(this, arguments);
 					}),
 					listen(button2, "click", /*click_handler*/ ctx[7]),
 					listen(button3, "click", /*click_handler_1*/ ctx[8])
@@ -421,8 +421,8 @@ function instance($$self, $$props, $$invalidate) {
 	component_subscribe($$self, volume, $$value => $$invalidate(4, $volume = $$value));
 	component_subscribe($$self, tempoControl, $$value => $$invalidate(5, $tempoControl = $$value));
 	component_subscribe($$self, playbackProgress, $$value => $$invalidate(6, $playbackProgress = $$value));
-	let { playPauseMidiFile } = $$props;
-	let { stopMidiFile } = $$props;
+	let { playPauseApp } = $$props;
+	let { stopApp } = $$props;
 	let { skipToPercentage } = $$props;
 	const click_handler = () => pedalling.update(val => ({ ...val, soft: !val.soft }));
 	const click_handler_1 = () => pedalling.update(val => ({ ...val, sustain: !val.sustain }));
@@ -453,14 +453,14 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	$$self.$$set = $$props => {
-		if ("playPauseMidiFile" in $$props) $$invalidate(0, playPauseMidiFile = $$props.playPauseMidiFile);
-		if ("stopMidiFile" in $$props) $$invalidate(1, stopMidiFile = $$props.stopMidiFile);
+		if ("playPauseApp" in $$props) $$invalidate(0, playPauseApp = $$props.playPauseApp);
+		if ("stopApp" in $$props) $$invalidate(1, stopApp = $$props.stopApp);
 		if ("skipToPercentage" in $$props) $$invalidate(2, skipToPercentage = $$props.skipToPercentage);
 	};
 
 	return [
-		playPauseMidiFile,
-		stopMidiFile,
+		playPauseApp,
+		stopApp,
 		skipToPercentage,
 		$pedalling,
 		$volume,
@@ -481,8 +481,8 @@ class PlaybackControls extends SvelteComponent {
 		super();
 
 		init(this, options, instance, create_fragment, safe_not_equal, {
-			playPauseMidiFile: 0,
-			stopMidiFile: 1,
+			playPauseApp: 0,
+			stopApp: 1,
 			skipToPercentage: 2
 		});
 	}

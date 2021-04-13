@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */ // FIXME
 import MidiPlayer from "../_snowpack/pkg/midi-player-js.js";
 import { Piano } from "../_snowpack/pkg/@tonejs/piano.js";
 
@@ -8,6 +7,7 @@ import {
   volume,
   tempoControl,
   playbackProgress,
+  activeNotes,
 } from "../stores.js";
 
 const midiSamplePlayer = new MidiPlayer.Player();
@@ -51,18 +51,6 @@ const decodeHtmlEntities = (string) =>
       String.fromCodePoint(parseInt(num, 16)),
     );
 
-const playPauseMidiFile = () => {
-  if (midiSamplePlayer.isPlaying()) {
-    midiSamplePlayer.pause();
-  } else {
-    midiSamplePlayer.play();
-  }
-};
-
-const stopMidiFile = () => {
-  midiSamplePlayer.stop();
-};
-
 const skipToPercentage = (percentage) =>
   updatePlayer(() =>
     midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage),
@@ -70,18 +58,6 @@ const skipToPercentage = (percentage) =>
 
 midiSamplePlayer.on("fileLoaded", () => {
   const metadataTrack = midiSamplePlayer.events[0];
-  /* @IMAGE_WIDTH and @IMAGE_LENGTH should be the same as from viewport._contentSize
-   * Can't think of why they wouldn't be, but maybe check anyway. Would need to scale
-   * all pixel values if so.
-   * Other potentially useful values, e.g., for drawing overlays:
-   * @ROLL_WIDTH (this is smaller than the image width)
-   * @HARD_MARGIN_TREBLE
-   * @HARD_MARGIN_BASS
-   * @HOLE_SEPARATION
-   * @HOLE_OFFSET
-   * All of the source/performance/recording metadata is in this track as well.
-   */
-
   rollMetadata.set(
     Object.fromEntries(
       metadataTrack
@@ -113,16 +89,10 @@ const DEFAULT_NOTE_VELOCITY = 33.0;
 const SOFT_PEDAL_RATIO = 0.67;
 const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
 
-const BASE_DATA_URL = "https://broadwell.github.io/piano_rolls/";
-
-let panBoundary = HALF_BOUNDARY;
+const panBoundary = HALF_BOUNDARY;
 
 const piano = new Piano({
-  // XXX The samples load from the guy's Github site
-  // unless there's a valid URL, and using a
-  // local folder seems problematic...
-  url: `${BASE_DATA_URL}audio/mp3/`, // works if available
-  // url: '/audio/', // note sure we want to try to bundle these...
+  url: "/assets/samples/",
   velocities: 2,
   release: true,
   pedal: true,
@@ -156,9 +126,11 @@ midiSamplePlayer.on(
       if (velocity === 0) {
         // Note off
         stopNote(noteNumber);
+        activeNotes.delete(noteNumber);
       } else {
         // Note on
         startNote(noteNumber, velocity);
+        activeNotes.add(noteNumber);
       }
     } else if (name === "Controller Change") {
       if (number === controllerChange.SUSTAIN_PEDAL) {
@@ -176,7 +148,7 @@ midiSamplePlayer.on(
         }));
       }
     } else if (name === "Set Tempo") {
-      let midiTempo = parseFloat(data);
+      const midiTempo = parseFloat(data);
       tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
       midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
     }
@@ -184,10 +156,4 @@ midiSamplePlayer.on(
   },
 );
 
-export {
-  midiSamplePlayer,
-  playPauseMidiFile,
-  stopMidiFile,
-  pianoReady,
-  skipToPercentage,
-};
+export { midiSamplePlayer, pianoReady, skipToPercentage };
