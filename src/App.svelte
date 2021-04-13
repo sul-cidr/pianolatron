@@ -41,12 +41,10 @@
   const resetApp = () => {
     mididataReady = false;
     appReady = false;
-    midiSamplePlayer.stop();
-    activeNotes.reset();
+    stopApp();
     tempoControl.set(60);
     pedalling.set({ soft: false, sustain: false });
     volume.set({ master: 1, left: 1, right: 1 });
-    playbackProgress.set(0);
   };
 
   const loadRoll = (roll) => {
