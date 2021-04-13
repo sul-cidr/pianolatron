@@ -23,14 +23,14 @@
 
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
-  export let playPauseMidiFile;
-  export let stopMidiFile;
+  export let playPauseApp;
+  export let stopApp;
   export let skipToPercentage;
 </script>
 
 <div id="score-controls">
-  <button type="button" on:click={playPauseMidiFile}>Play/Pause</button>
-  <button type="button" on:click={stopMidiFile}>Stop</button>
+  <button type="button" on:click={playPauseApp}>Play/Pause</button>
+  <button type="button" on:click={stopApp}>Stop</button>
   <button
     type="button"
     class:pedal-on={$pedalling.soft}

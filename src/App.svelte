@@ -9,8 +9,6 @@
   import {
     midiSamplePlayer,
     pianoReady,
-    playPauseMidiFile,
-    stopMidiFile,
     skipToPercentage,
   } from "./components/SamplePlayer";
   import RollSelector from "./components/RollSelector.svelte";
@@ -24,6 +22,21 @@
   let mididataReady;
   let currentRoll;
   let previousRoll;
+
+  const playPauseApp = () => {
+    if (midiSamplePlayer.isPlaying()) {
+      midiSamplePlayer.pause();
+      activeNotes.reset();
+    } else {
+      midiSamplePlayer.play();
+    }
+  };
+
+  const stopApp = () => {
+    midiSamplePlayer.stop();
+    playbackProgress.set(0);
+    activeNotes.reset();
+  };
 
   const resetApp = () => {
     mididataReady = false;
@@ -70,6 +83,6 @@
 <RollSelector bind:currentRoll />
 {#if appReady}
   <RollDetails />
-  <PlaybackControls {playPauseMidiFile} {stopMidiFile} {skipToPercentage} />
+  <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
 {/if}
 <Notification />
