@@ -5,6 +5,7 @@
     tempoControl,
     playbackProgress,
     activeNotes,
+    currentTick,
   } from "./stores";
   import {
     midiSamplePlayer,
@@ -35,6 +36,7 @@
   const stopApp = () => {
     midiSamplePlayer.stop();
     playbackProgress.set(0);
+    currentTick.set(0);
     activeNotes.reset();
   };
 
@@ -75,6 +77,8 @@
       });
     }
   }
+
+  $: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 </script>
 
 <h1>{title}</h1>

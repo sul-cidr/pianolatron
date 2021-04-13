@@ -6,8 +6,8 @@ import {
   pedalling,
   volume,
   tempoControl,
-  playbackProgress,
   activeNotes,
+  currentTick,
 } from "../stores";
 
 const midiSamplePlayer = new MidiPlayer.Player();
@@ -117,9 +117,7 @@ const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
 
 const stopNote = (noteNumber) => piano.keyUp({ midi: noteNumber });
 
-midiSamplePlayer.on("playing", ({ tick }) => {
-  playbackProgress.update(() => tick / midiSamplePlayer.totalTicks);
-});
+midiSamplePlayer.on("playing", ({ tick }) => currentTick.set(tick));
 
 midiSamplePlayer.on(
   "midiEvent",
