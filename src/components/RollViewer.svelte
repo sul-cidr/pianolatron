@@ -56,6 +56,7 @@
       defaultZoomLevel: 1,
       minZoomLevel: 0.01,
       maxZoomLevel: 4,
+      constrainDuringPan: true,
     });
 
     openSeadragon.addOnceHandler("update-viewport", () => {
