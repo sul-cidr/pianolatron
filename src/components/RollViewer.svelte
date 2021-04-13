@@ -1,7 +1,18 @@
-<style>
+<style lang="scss">
   #roll-viewer {
-    width: 100%;
+    position: relative;
     height: 200px;
+    width: 100%;
+
+    &::after {
+      background: red;
+      content: "";
+      display: block;
+      height: 1px;
+      position: absolute;
+      top: 50%;
+      width: 100%;
+    }
   }
 </style>
 
