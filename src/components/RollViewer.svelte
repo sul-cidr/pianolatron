@@ -9,6 +9,7 @@
       content: "";
       display: block;
       height: 1px;
+      pointer-events: none;
       position: absolute;
       top: 50%;
       width: 100%;
