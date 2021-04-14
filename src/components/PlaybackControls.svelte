@@ -30,24 +30,6 @@
 </script>
 
 <div id="score-controls">
-  <button type="button" on:click={playPauseApp}>Play/Pause</button>
-  <button type="button" on:click={stopApp}>Stop</button>
-  <button
-    type="button"
-    class:pedal-on={$pedalling.soft}
-    aria-pressed={$pedalling.soft}
-    on:click={() => pedalling.update((val) => ({ ...val, soft: !val.soft }))}
-  >Soft</button>
-  <button
-    type="button"
-    class:pedal-on={$pedalling.sustain}
-    aria-pressed={$pedalling.sustain}
-    on:click={() => pedalling.update((val) => ({
-        ...val,
-        sustain: !val.sustain,
-      }))}
-  >Sustain</button>
-
   <div class="control">
     <span>Master Volume:</span>
     <RangeSlider
@@ -105,4 +87,22 @@
     />
     {($playbackProgress * 100).toFixed(2)}%
   </div>
+
+  <button type="button" on:click={playPauseApp}>Play/Pause</button>
+  <button type="button" on:click={stopApp}>Stop</button>
+  <button
+    type="button"
+    class:pedal-on={$pedalling.soft}
+    aria-pressed={$pedalling.soft}
+    on:click={() => pedalling.update((val) => ({ ...val, soft: !val.soft }))}
+  >Soft</button>
+  <button
+    type="button"
+    class:pedal-on={$pedalling.sustain}
+    aria-pressed={$pedalling.sustain}
+    on:click={() => pedalling.update((val) => ({
+        ...val,
+        sustain: !val.sustain,
+      }))}
+  >Sustain</button>
 </div>
