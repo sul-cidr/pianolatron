@@ -1,3 +1,10 @@
+<style>
+  select {
+    margin: 1em;
+    padding: 0.25em 0;
+  }
+</style>
+
 <script>
   // bundling this, for now at least
   import catalog from "../assets/catalog.json";
