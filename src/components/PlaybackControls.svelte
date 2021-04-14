@@ -2,10 +2,6 @@
   #score-controls {
     margin: 0.5em;
   }
-  .pedal-on {
-    background: yellow;
-  }
-
   .control {
     align-items: center;
     display: grid;
@@ -18,6 +14,28 @@
     :global(input[type="range"]) {
       grid-area: slider;
       width: 100%;
+    }
+  }
+
+  button {
+    display: inline-block;
+    padding: 0.35em 0.8em;
+    border: 0.1em solid #ffffff;
+    margin: 0;
+    border-radius: 0.25em;
+    color: #ffffff;
+    transition: all 0.2s;
+    background-color: $primary-accent;
+
+    &:hover,
+    &.pedal-on {
+      color: $primary-accent;
+      border-color: $primary-accent;
+      background-color: #ffffff;
+    }
+
+    &.pedal-on {
+      background-color: yellow;
     }
   }
 </style>
