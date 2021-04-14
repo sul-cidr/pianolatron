@@ -1,18 +1,15 @@
 <style lang="scss">
-  ul {
-    background: beige;
-    border-bottom: 1px solid black;
-    columns: 2;
+  dl {
     display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0.5em 2em;
+    margin: 1em;
+    padding: 0.5em 1em;
   }
 
-  strong {
+  dt {
     font-family: $primary-typeface;
-    display: inline-block;
-    width: 6em;
+    font-size: 1.4em;
+    margin-top: 0.5em;
+    margin-bottom: 0.2em;
   }
 </style>
 
@@ -20,14 +17,17 @@
   import { rollMetadata } from "../stores";
 </script>
 
-<ul>
-  <li><strong>Title:</strong> {$rollMetadata.TITLE}</li>
-  <li><strong>Performer:</strong> {$rollMetadata.PERFORMER}</li>
-  <li><strong>Composer:</strong> {$rollMetadata.COMPOSER}</li>
-  <li><strong>Label:</strong> {$rollMetadata.LABEL}</li>
-  <li>
-    <strong>PURL:</strong>
-    <a href={$rollMetadata.PURL}>{$rollMetadata.PURL}</a>
-  </li>
-  <li><strong>Call No:</strong> {$rollMetadata.CALLNUM}</li>
-</ul>
+<dl>
+  <dt>Title</dt>
+  <dd>{$rollMetadata.TITLE}</dd>
+  <dt>Performer</dt>
+  <dd>{$rollMetadata.PERFORMER}</dd>
+  <dt>Composer</dt>
+  <dd>{$rollMetadata.COMPOSER}</dd>
+  <dt>Label</dt>
+  <dd>{$rollMetadata.LABEL}</dd>
+  <dt>PURL</dt>
+  <dd><a href={$rollMetadata.PURL}>{$rollMetadata.PURL}</a></dd>
+  <dt>Call No</dt>
+  <dd>{$rollMetadata.CALLNUM}</dd>
+</dl>

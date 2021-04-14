@@ -12,6 +12,7 @@
     :first-child {
       width: 8em;
     }
+
     :global(input[type="range"]) {
       width: 20em;
     }
