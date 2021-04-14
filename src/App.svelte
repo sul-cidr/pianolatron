@@ -15,8 +15,6 @@
   import Keyboard from "./components/Keyboard.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
 
-  const title = "Pianolatron Development";
-
   let appReady = false;
   let mididataReady;
   let currentRoll;
@@ -93,7 +91,6 @@
   $: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 </script>
 
-<h1>{title}</h1>
 <RollSelector bind:currentRoll />
 {#if appReady}
   <RollDetails />
