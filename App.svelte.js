@@ -5,6 +5,7 @@ import {
 	bind,
 	binding_callbacks,
 	check_outros,
+	component_subscribe,
 	create_component,
 	destroy_component,
 	detach,
@@ -13,8 +14,8 @@ import {
 	init,
 	insert,
 	mount_component,
-	noop,
 	safe_not_equal,
+	set_store_value,
 	space,
 	transition_in,
 	transition_out
@@ -25,24 +26,23 @@ import {
 	volume,
 	tempoControl,
 	playbackProgress,
-	activeNotes
+	activeNotes,
+	currentTick
 } from "./stores.js";
 
-import {
-	midiSamplePlayer,
-	pianoReady,
-	skipToPercentage
-} from "./components/SamplePlayer.js";
-
+import { midiSamplePlayer, pianoReady } from "./components/SamplePlayer.js";
 import RollSelector from "./components/RollSelector.svelte.js";
 import RollDetails from "./components/RollDetails.svelte.js";
 import PlaybackControls from "./components/PlaybackControls.svelte.js";
+import RollViewer from "./components/RollViewer.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
 
 function create_if_block(ctx) {
 	let rolldetails;
-	let t;
+	let t0;
 	let playbackcontrols;
+	let t1;
+	let rollviewer;
 	let current;
 	rolldetails = new RollDetails({});
 
@@ -50,38 +50,56 @@ function create_if_block(ctx) {
 			props: {
 				playPauseApp: /*playPauseApp*/ ctx[2],
 				stopApp: /*stopApp*/ ctx[3],
-				skipToPercentage
+				skipToPercentage: /*skipToPercentage*/ ctx[4]
+			}
+		});
+
+	rollviewer = new RollViewer({
+			props: {
+				imageUrl: /*currentRoll*/ ctx[1].image_url
 			}
 		});
 
 	return {
 		c() {
 			create_component(rolldetails.$$.fragment);
-			t = space();
+			t0 = space();
 			create_component(playbackcontrols.$$.fragment);
+			t1 = space();
+			create_component(rollviewer.$$.fragment);
 		},
 		m(target, anchor) {
 			mount_component(rolldetails, target, anchor);
-			insert(target, t, anchor);
+			insert(target, t0, anchor);
 			mount_component(playbackcontrols, target, anchor);
+			insert(target, t1, anchor);
+			mount_component(rollviewer, target, anchor);
 			current = true;
 		},
-		p: noop,
+		p(ctx, dirty) {
+			const rollviewer_changes = {};
+			if (dirty & /*currentRoll*/ 2) rollviewer_changes.imageUrl = /*currentRoll*/ ctx[1].image_url;
+			rollviewer.$set(rollviewer_changes);
+		},
 		i(local) {
 			if (current) return;
 			transition_in(rolldetails.$$.fragment, local);
 			transition_in(playbackcontrols.$$.fragment, local);
+			transition_in(rollviewer.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
 			transition_out(rolldetails.$$.fragment, local);
 			transition_out(playbackcontrols.$$.fragment, local);
+			transition_out(rollviewer.$$.fragment, local);
 			current = false;
 		},
 		d(detaching) {
 			destroy_component(rolldetails, detaching);
-			if (detaching) detach(t);
+			if (detaching) detach(t0);
 			destroy_component(playbackcontrols, detaching);
+			if (detaching) detach(t1);
+			destroy_component(rollviewer, detaching);
 		}
 	};
 }
@@ -97,7 +115,7 @@ function create_fragment(ctx) {
 	let current;
 
 	function rollselector_currentRoll_binding(value) {
-		/*rollselector_currentRoll_binding*/ ctx[4].call(null, value);
+		/*rollselector_currentRoll_binding*/ ctx[5].call(null, value);
 	}
 
 	let rollselector_props = {};
@@ -194,6 +212,8 @@ function create_fragment(ctx) {
 const title = "Pianolatron Development";
 
 function instance($$self, $$props, $$invalidate) {
+	let $currentTick;
+	component_subscribe($$self, currentTick, $$value => $$invalidate(8, $currentTick = $$value));
 	let appReady = false;
 	let mididataReady;
 	let currentRoll;
@@ -211,22 +231,35 @@ function instance($$self, $$props, $$invalidate) {
 	const stopApp = () => {
 		midiSamplePlayer.stop();
 		playbackProgress.set(0);
+		currentTick.set(0);
 		activeNotes.reset();
 	};
 
 	const resetApp = () => {
-		$$invalidate(5, mididataReady = false);
+		$$invalidate(6, mididataReady = false);
 		$$invalidate(0, appReady = false);
-		midiSamplePlayer.stop();
-		activeNotes.reset();
+		stopApp();
 		tempoControl.set(60);
 		pedalling.set({ soft: false, sustain: false });
 		volume.set({ master: 1, left: 1, right: 1 });
-		playbackProgress.set(0);
 	};
 
+	const skipToTick = tick => {
+		set_store_value(currentTick, $currentTick = tick, $currentTick);
+
+		if (midiSamplePlayer.isPlaying()) {
+			midiSamplePlayer.pause();
+			midiSamplePlayer.skipToTick($currentTick);
+			midiSamplePlayer.play();
+		} else {
+			midiSamplePlayer.skipToTick($currentTick);
+		}
+	};
+
+	const skipToPercentage = percentage => skipToTick(midiSamplePlayer.totalTicks * percentage);
+
 	const loadRoll = roll => {
-		$$invalidate(5, mididataReady = fetch(`./assets/midi/${roll.druid}.mid`).then(mididataResponse => {
+		$$invalidate(6, mididataReady = fetch(`./assets/midi/${roll.druid}.mid`).then(mididataResponse => {
 			if (mididataResponse.status === 200) return mididataResponse.arrayBuffer();
 			throw new Error("Error fetching MIDI file! (Operation cancelled)");
 		}).then(mididataArrayBuffer => {
@@ -253,20 +286,31 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*currentRoll, previousRoll, mididataReady*/ 98) {
+		if ($$self.$$.dirty & /*currentRoll, previousRoll, mididataReady*/ 194) {
 			$: {
 				if (currentRoll !== previousRoll) {
 					loadRoll(currentRoll);
 
 					mididataReady.then(() => {
-						$$invalidate(6, previousRoll = currentRoll);
+						$$invalidate(7, previousRoll = currentRoll);
 					});
 				}
 			}
 		}
+
+		if ($$self.$$.dirty & /*$currentTick*/ 256) {
+			$: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
+		}
 	};
 
-	return [appReady, currentRoll, playPauseApp, stopApp, rollselector_currentRoll_binding];
+	return [
+		appReady,
+		currentRoll,
+		playPauseApp,
+		stopApp,
+		skipToPercentage,
+		rollselector_currentRoll_binding
+	];
 }
 
 class App extends SvelteComponent {

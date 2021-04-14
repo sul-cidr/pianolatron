@@ -20,7 +20,6 @@ import {
 	run_all,
 	safe_not_equal,
 	set_data,
-	set_store_value,
 	space,
 	text,
 	toggle_class,
@@ -447,10 +446,7 @@ function instance($$self, $$props, $$invalidate) {
 		tempoControl.set($tempoControl);
 	}
 
-	const input_handler = ({ target: { value } }) => {
-		skipToPercentage(value);
-		set_store_value(playbackProgress, $playbackProgress = value, $playbackProgress);
-	};
+	const input_handler = ({ target: { value } }) => skipToPercentage(value);
 
 	$$self.$$set = $$props => {
 		if ("playPauseApp" in $$props) $$invalidate(0, playPauseApp = $$props.playPauseApp);

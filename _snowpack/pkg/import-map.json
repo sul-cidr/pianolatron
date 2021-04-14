@@ -2,6 +2,8 @@
   "imports": {
     "@tonejs/piano": "./@tonejs/piano.js",
     "midi-player-js": "./midi-player-js.js",
+    "openseadragon": "./openseadragon.js",
+    "svelte": "./svelte.js",
     "svelte/internal": "./svelte/internal.js",
     "svelte/store": "./svelte/store.js"
   }

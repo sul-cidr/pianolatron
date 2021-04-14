@@ -104,6 +104,14 @@ let current_component;
 function set_current_component(component) {
     current_component = component;
 }
+function get_current_component() {
+    if (!current_component)
+        throw new Error('Function called outside component initialization');
+    return current_component;
+}
+function onMount(fn) {
+    get_current_component().$$.on_mount.push(fn);
+}
 // TODO figure out if we still want to support
 // shorthand events, or if we want to implement
 // a real bubbling mechanism
@@ -347,4 +355,4 @@ class SvelteComponent {
     }
 }
 
-export { toggle_class as A, add_render_callback as B, destroy_each as C, select_option as D, select_value as E, empty as F, bubble as G, set_input_value as H, to_number as I, SvelteComponent as S, add_flush_callback as a, bind as b, binding_callbacks as c, check_outros as d, create_component as e, destroy_component as f, detach as g, element as h, group_outros as i, init as j, insert as k, space as l, mount_component as m, noop as n, transition_out as o, append as p, attr as q, component_subscribe as r, safe_not_equal as s, transition_in as t, is_function as u, listen as v, run_all as w, set_data as x, set_store_value as y, text as z };
+export { toggle_class as A, noop as B, add_render_callback as C, destroy_each as D, select_option as E, select_value as F, empty as G, bubble as H, set_input_value as I, to_number as J, SvelteComponent as S, add_flush_callback as a, bind as b, binding_callbacks as c, check_outros as d, component_subscribe as e, create_component as f, destroy_component as g, detach as h, element as i, group_outros as j, init as k, insert as l, mount_component as m, set_store_value as n, onMount as o, space as p, transition_out as q, append as r, safe_not_equal as s, transition_in as t, attr as u, is_function as v, listen as w, run_all as x, set_data as y, text as z };

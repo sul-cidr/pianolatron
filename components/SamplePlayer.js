@@ -6,8 +6,8 @@ import {
   pedalling,
   volume,
   tempoControl,
-  playbackProgress,
   activeNotes,
+  currentTick,
 } from "../stores.js";
 
 const midiSamplePlayer = new MidiPlayer.Player();
@@ -50,11 +50,6 @@ const decodeHtmlEntities = (string) =>
     .replace(/&#x([A-Za-z0-9]+);/g, (match, num) =>
       String.fromCodePoint(parseInt(num, 16)),
     );
-
-const skipToPercentage = (percentage) =>
-  updatePlayer(() =>
-    midiSamplePlayer.skipToTick(midiSamplePlayer.totalTicks * percentage),
-  );
 
 midiSamplePlayer.on("fileLoaded", () => {
   const metadataTrack = midiSamplePlayer.events[0];
@@ -115,13 +110,13 @@ const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
   }
 };
 
-const stopNote = (noteNumber) => {
-  piano.keyUp({ midi: noteNumber });
-};
+const stopNote = (noteNumber) => piano.keyUp({ midi: noteNumber });
+
+midiSamplePlayer.on("playing", ({ tick }) => currentTick.set(tick));
 
 midiSamplePlayer.on(
   "midiEvent",
-  ({ name, value, number, noteNumber, velocity, data, tick }) => {
+  ({ name, value, number, noteNumber, velocity, data }) => {
     if (name === "Note on") {
       if (velocity === 0) {
         // Note off
@@ -152,8 +147,7 @@ midiSamplePlayer.on(
       tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
       midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
     }
-    playbackProgress.update(() => tick / midiSamplePlayer.totalTicks);
   },
 );
 
-export { midiSamplePlayer, pianoReady, skipToPercentage };
+export { midiSamplePlayer, pianoReady };
