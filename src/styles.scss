@@ -31,6 +31,7 @@ select {
 }
 
 body {
+  background: $background-color;
   font-family: $secondary-typeface;
   min-height: 100vh;
   text-rendering: optimizeSpeed;
