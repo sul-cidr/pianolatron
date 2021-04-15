@@ -3,7 +3,7 @@ module.exports = {
   plugins: ["svelte3", "jsx-a11y"],
   extends: ["airbnb-base", "prettier"],
   parserOptions: {
-    ecmaVersion: 2019,
+    ecmaVersion: 2020,
     sourceType: "module",
   },
   env: {
