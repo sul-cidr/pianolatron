@@ -2,34 +2,10 @@
   $key-width: 1.8vw;
   $active-key-highlight: #b5e2ff;
 
-  // black "housing"
-  $grad0: #000;
-  $grad3: #333;
-  $grad5: #555;
-  $grad6: #666;
-
-  // brown "housing"
-  $grad0: #3a1a05;
-  $grad3: #5c371e;
-  $grad5: #4c3a2e;
-  $grad6: #5f4330;
   #keyboard {
-    background: linear-gradient(
-      -60deg,
-      $grad0,
-      $grad3,
-      $grad0,
-      $grad6,
-      $grad3 70%
-    );
-    border-radius: 0 0 5px 5px;
-    border: 2px solid $grad3;
-    box-shadow: 0 2px 0 $grad6, 0 3px 0 $grad5, 0 4px 0 $grad3, 0 6px 6px $grad0,
-      inset 0 -1px 1px rgba(white, 0.5), inset 0 -4px 5px $grad0;
     margin: 1em auto;
     position: relative;
     width: fit-content;
-    padding: 0 2em;
   }
 
   div#keys {
