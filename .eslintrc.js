@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   plugins: ["svelte3", "jsx-a11y"],
   extends: ["airbnb-base", "prettier"],
   parserOptions: {
