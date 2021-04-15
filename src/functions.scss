@@ -1,0 +1,45 @@
+@function whiteToBackgroundOverlayColor($color) {
+  $high-bound: 1;
+  $low-bound: 0;
+  $tolerance: 0.01;
+  $color-by-channel: (red($color) green($color) blue($color));
+
+  // binary search to find the highest possible opacity level
+  // that generates non-negative values for all three channels
+  @while ($high-bound - $low-bound > $tolerance) {
+    $middle: $low-bound + (($high-bound - $low-bound) / 2);
+    @if (getOverlayChannelValues($middle, $color-by-channel, false)) {
+      $high-bound: $middle;
+    } @else {
+      $low-bound: $middle;
+    }
+  }
+  $opacity: $high-bound;
+  $color-by-channel: getOverlayChannelValues($opacity, $color-by-channel);
+  @return rgba(
+    nth($color-by-channel, 1),
+    nth($color-by-channel, 2),
+    nth($color-by-channel, 3),
+    $opacity
+  );
+}
+
+@function getOverlayChannelValues(
+  $opacity,
+  $color-by-channel,
+  $return-color: true
+) {
+  $overlay-color: ();
+  @each $channel in $color-by-channel {
+    $channel-color: 255 - (255 - $channel) / $opacity;
+    @if ($channel-color >= 0) {
+      $overlay-color: append($overlay-color, $channel-color);
+    } @else {
+      @return false;
+    }
+  }
+  @if ($return-color) {
+    @return $overlay-color;
+  }
+  @return true;
+}

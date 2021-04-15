@@ -17,11 +17,10 @@
     }
 
     &::after {
-      background-color: $background-color;
+      background-color: whiteToBackgroundOverlayColor($background-color);
       bottom: 0;
       content: " ";
       left: 0;
-      mix-blend-mode: multiply;
       pointer-events: none;
       position: absolute;
       right: 0;
@@ -30,6 +29,10 @@
 
     :global(.openseadragon-canvas:focus) {
       outline: none;
+    }
+
+    :global(canvas) {
+      background: white !important;
     }
   }
 </style>
