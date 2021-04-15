@@ -21,7 +21,7 @@
     grid-area: right;
   }
 
-  #keyboard {
+  #keyboard-container {
     grid-area: keyboard;
   }
 </style>
@@ -133,7 +133,7 @@
     <div id="roll">
       <RollViewer imageUrl={currentRoll.image_url} />
     </div>
-    <div id="keyboard">
+    <div id="keyboard-container">
       <Keyboard keyCount="87" {activeNotes} />
     </div>
   {/if}
