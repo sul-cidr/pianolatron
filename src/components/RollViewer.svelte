@@ -5,7 +5,7 @@
     width: 100%;
 
     &::before {
-      background: red;
+      background: $primary-accent;
       content: "";
       display: block;
       height: 1px;
