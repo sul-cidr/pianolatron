@@ -29,6 +29,7 @@
         -1px 0px 3px rgba(0, 0, 0, 0.7);
       z-index: 3;
     }
+
     div {
       float: left;
       position: relative;
@@ -45,6 +46,7 @@
         display: block;
         height: calc(#{$key-width} * 6 - 20px);
       }
+
       :first-child:active,
       :global(:first-child.depressed) {
         box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
@@ -76,6 +78,7 @@
           width: 0px;
         }
       }
+
       :global(:first-child.depressed) {
         background: $active-key-highlight;
       }
@@ -105,6 +108,7 @@
           0 -1px 0px #000;
         height: calc(#{$key-width} * 3 + 3px);
       }
+
       :global(:nth-child(2).depressed) {
         background: $active-key-highlight;
       }
