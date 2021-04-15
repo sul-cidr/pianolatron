@@ -42,6 +42,7 @@
 
   export let imageUrl;
   let openSeadragon;
+  let firstHolePx;
   let dragging;
 
   const panViewportToTick = (tick) => {
@@ -51,8 +52,7 @@
     //   especially if we happen to be zooming) we want the current bounds
     const viewportBounds = viewport.getBounds(!dragging);
 
-    const linePx =
-      parseInt($rollMetadata.FIRST_HOLE, 10) + (scrollDownwards ? tick : -tick);
+    const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
 
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 
@@ -93,6 +93,10 @@
 
   $: panViewportToTick($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
+  $: firstHolePx = scrollDownwards
+    ? parseInt($rollMetadata.FIRST_HOLE, 10)
+    : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
+      parseInt($rollMetadata.FIRST_HOLE, 10);
 </script>
 
 <div id="roll-viewer" />
