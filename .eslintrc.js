@@ -31,4 +31,7 @@ module.exports = {
     "import/no-mutable-exports": "off",
     "import/prefer-default-export": "off",
   },
+  settings: {
+    "svelte3/ignore-styles": (attribs) => "lang" in attribs,
+  },
 };
