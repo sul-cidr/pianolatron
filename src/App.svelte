@@ -62,6 +62,7 @@
     playbackProgress.set(0);
     currentTick.set(0);
     activeNotes.reset();
+    pedalling.set({ soft: false, sustain: false });
   };
 
   const resetApp = () => {
@@ -69,7 +70,6 @@
     appReady = false;
     stopApp();
     tempoControl.set(60);
-    pedalling.set({ soft: false, sustain: false });
     volume.set({ master: 1, left: 1, right: 1 });
   };
 
