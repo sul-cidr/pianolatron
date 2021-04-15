@@ -1,6 +1,6 @@
 <style lang="scss">
-  #score-controls {
-    margin: 0.5em;
+  #playback-controls {
+    margin: 6em 2em 0 2em;
   }
   .control {
     align-items: center;
@@ -50,7 +50,7 @@
   export let skipToPercentage;
 </script>
 
-<div id="score-controls">
+<div id="playback-controls">
   <div class="control">
     <span>Master Volume:</span>
     <span>{$volume.master}</span>
