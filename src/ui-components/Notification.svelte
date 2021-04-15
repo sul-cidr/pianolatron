@@ -54,6 +54,7 @@
 
 <script context="module">
   import { writable } from "svelte/store";
+
   const NotificationStore = writable();
   export const notify = (detail) => NotificationStore.set(detail);
 </script>

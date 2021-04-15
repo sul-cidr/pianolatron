@@ -134,9 +134,10 @@
   let keyNumber = 1;
   let octave = 0;
   while (keyNumber <= keyCount) {
-    notes.forEach((note) => {
-      if (note === "C") octave++;
-      if (keyNumber > keyCount) return;
+    for (let i = 0; i < notes.length; i += 1) {
+      const note = notes[i];
+      if (note === "C") octave += 1;
+      if (keyNumber > keyCount) break;
       if (note.endsWith("#")) {
         keys[keys.length - 1].push({
           "data-key": keyNumber + 20,
@@ -145,8 +146,8 @@
       } else {
         keys.push([{ "data-key": keyNumber + 20, title: `${note}${octave}` }]);
       }
-      keyNumber++;
-    });
+      keyNumber += 1;
+    }
   }
 
   $: {

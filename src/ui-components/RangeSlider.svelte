@@ -173,7 +173,7 @@
   export let value;
   export let mousewheel = true;
 
-  const clamp = (value) => Math.min(Math.max(value, min), max);
+  const clamp = (_value) => Math.min(Math.max(_value, min), max);
 
   const handleWheel = (event) => {
     const precision = (step.split(".")[1] || "").length;
