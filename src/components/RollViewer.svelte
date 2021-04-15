@@ -4,7 +4,7 @@
     height: 100%;
     width: 100%;
 
-    &::after {
+    &::before {
       background: red;
       content: "";
       display: block;
@@ -13,6 +13,19 @@
       position: absolute;
       top: 50%;
       width: 100%;
+      z-index: 3;
+    }
+
+    &::after {
+      background-color: $background-color;
+      bottom: 0;
+      content: " ";
+      left: 0;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      position: absolute;
+      right: 0;
+      top: 0;
     }
 
     :global(.openseadragon-canvas:focus) {
