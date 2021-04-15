@@ -1,21 +1,34 @@
 <style lang="scss">
   $key-width: 1.8vw;
   $active-key-highlight: #b5e2ff;
+  $felt-strip-height: 12px;
 
   #keyboard {
+    display: flow-root;
     margin: 1em auto;
     position: relative;
     width: fit-content;
   }
 
   div#keys {
-    border-top: 2px solid #222;
     display: block;
     height: calc(#{$key-width} * 6);
-    margin: 0;
+    margin-top: $felt-strip-height;
     padding: 0;
     width: 100%;
 
+    &::before {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAd0lEQVQYV0WMPQoDIRQGv1dZKFjIWjyst1i23sOlyQFShNQ5nZVg7Q+CaDApMuUwDL3Oc+acoZQCEYGex/EVvXdIKUHv65ree2itUUoBPfZ91lqxEEKA7szTOYcY4++zHq01GGOwSrpt22RmhBD+xRgDKSVYa/EBmDYy7EuYDVgAAAAASUVORK5CYII=);
+      content: "";
+      position: absolute;
+      top: 0;
+      height: $felt-strip-height;
+      left: -4px;
+      right: -4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 1px 0px 3px rgba(0, 0, 0, 0.7),
+        -1px 0px 3px rgba(0, 0, 0, 0.7);
+      z-index: 3;
+    }
     div {
       float: left;
       position: relative;
