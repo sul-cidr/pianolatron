@@ -35,6 +35,7 @@ import RollSelector from "./components/RollSelector.svelte.js";
 import RollDetails from "./components/RollDetails.svelte.js";
 import PlaybackControls from "./components/PlaybackControls.svelte.js";
 import RollViewer from "./components/RollViewer.svelte.js";
+import Keyboard from "./components/Keyboard.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
 
 function create_if_block(ctx) {
@@ -43,6 +44,8 @@ function create_if_block(ctx) {
 	let playbackcontrols;
 	let t1;
 	let rollviewer;
+	let t2;
+	let keyboard;
 	let current;
 	rolldetails = new RollDetails({});
 
@@ -60,6 +63,8 @@ function create_if_block(ctx) {
 			}
 		});
 
+	keyboard = new Keyboard({ props: { keyCount: "87", activeNotes } });
+
 	return {
 		c() {
 			create_component(rolldetails.$$.fragment);
@@ -67,6 +72,8 @@ function create_if_block(ctx) {
 			create_component(playbackcontrols.$$.fragment);
 			t1 = space();
 			create_component(rollviewer.$$.fragment);
+			t2 = space();
+			create_component(keyboard.$$.fragment);
 		},
 		m(target, anchor) {
 			mount_component(rolldetails, target, anchor);
@@ -74,6 +81,8 @@ function create_if_block(ctx) {
 			mount_component(playbackcontrols, target, anchor);
 			insert(target, t1, anchor);
 			mount_component(rollviewer, target, anchor);
+			insert(target, t2, anchor);
+			mount_component(keyboard, target, anchor);
 			current = true;
 		},
 		p(ctx, dirty) {
@@ -86,12 +95,14 @@ function create_if_block(ctx) {
 			transition_in(rolldetails.$$.fragment, local);
 			transition_in(playbackcontrols.$$.fragment, local);
 			transition_in(rollviewer.$$.fragment, local);
+			transition_in(keyboard.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
 			transition_out(rolldetails.$$.fragment, local);
 			transition_out(playbackcontrols.$$.fragment, local);
 			transition_out(rollviewer.$$.fragment, local);
+			transition_out(keyboard.$$.fragment, local);
 			current = false;
 		},
 		d(detaching) {
@@ -100,6 +111,8 @@ function create_if_block(ctx) {
 			destroy_component(playbackcontrols, detaching);
 			if (detaching) detach(t1);
 			destroy_component(rollviewer, detaching);
+			if (detaching) detach(t2);
+			destroy_component(keyboard, detaching);
 		}
 	};
 }
