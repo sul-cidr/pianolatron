@@ -1,7 +1,7 @@
 <style lang="scss">
   $key-width: 1.8vw;
   $active-key-highlight: #b5e2ff;
-  $felt-strip-height: 12px;
+  $felt-strip-height: 2px;
 
   #keyboard {
     display: flow-root;
@@ -24,10 +24,10 @@
       position: absolute;
       top: 0;
       height: $felt-strip-height;
-      left: -4px;
-      right: -4px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 1px 0px 3px rgba(0, 0, 0, 0.7),
-        -1px 0px 3px rgba(0, 0, 0, 0.7);
+      left: 0;
+      right: 0;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7), 1px 0px 1px rgba(0, 0, 0, 0.7),
+        -1px 0px 1px rgba(0, 0, 0, 0.7);
       z-index: 3;
     }
 
