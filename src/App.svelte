@@ -135,7 +135,7 @@
       <RollViewer imageUrl={currentRoll.image_url} />
     </div>
     <div id="keyboard-container">
-      <Keyboard keyCount="87" {activeNotes} />
+      <Keyboard keyCount="88" {activeNotes} />
     </div>
   {/if}
 </div>

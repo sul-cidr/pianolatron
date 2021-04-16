@@ -118,7 +118,7 @@
 </style>
 
 <script>
-  export let keyCount = 87;
+  export let keyCount = 88;
   export let activeNotes;
   const notes = [
     "A",
