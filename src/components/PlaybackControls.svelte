@@ -130,9 +130,7 @@
     type="button"
     class:pedal-on={$pedalling.accent}
     aria-pressed={$pedalling.accent}
-    on:click={() => pedalling.update((val) => ({
-        ...val,
-        accent: !val.accent,
-      }))}
+    on:mousedown={() => pedalling.update((val) => ({ ...val, accent: true }))}
+    on:mouseup={() => pedalling.update((val) => ({ ...val, accent: false }))}
   >Accent</button>
 </div>
