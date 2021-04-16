@@ -18,7 +18,8 @@
     width: 100%;
 
     &::before {
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAd0lEQVQYV0WMPQoDIRQGv1dZKFjIWjyst1i23sOlyQFShNQ5nZVg7Q+CaDApMuUwDL3Oc+acoZQCEYGex/EVvXdIKUHv65ree2itUUoBPfZ91lqxEEKA7szTOYcY4++zHq01GGOwSrpt22RmhBD+xRgDKSVYa/EBmDYy7EuYDVgAAAAASUVORK5CYII=);
+      background-color: $primary-accent;
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAfUlEQVQYVyXMoQ3AIBBG4f92qEIiLkyAqmQBBmAChmgXqOwO1GHOMQEOhWQBJqhqQu2XvEelFL7vG601hBBA3ntWSuG6LjjnQDFGft8XtVZYa0HGGB5jYN/3haS15m3bcBzHD713Timt/jxPkIhwzhlzTsQY/+nzPGsoIvgAaMAzN5CzOpMAAAAASUVORK5CYII=);
       content: "";
       position: absolute;
       top: 0;
