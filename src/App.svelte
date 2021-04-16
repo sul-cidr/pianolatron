@@ -1,4 +1,4 @@
-<style lang="scss">
+<style>
   #app {
     display: grid;
     grid-template-rows: 1fr auto;
@@ -23,61 +23,6 @@
 
   #keyboard-container {
     grid-area: keyboard;
-  }
-
-  #loading {
-    position: absolute;
-    display: grid;
-    place-content: center;
-    height: 100vh;
-    width: 100vw;
-    text-align: center;
-    color: $primary-accent;
-    font-size: 1.4em;
-
-    div {
-      width: 100px;
-      height: 80px;
-      text-align: center;
-      font-size: 10px;
-      margin: 10px auto;
-
-      span {
-        background-color: $primary-accent;
-        height: 100%;
-        width: 12px;
-        display: inline-block;
-
-        animation: pulse 1.2s infinite ease-in-out;
-
-        &:nth-child(2) {
-          animation-delay: -1.1s;
-        }
-
-        &:nth-child(3) {
-          animation-delay: -1s;
-        }
-
-        &:nth-child(4) {
-          animation-delay: -0.9s;
-        }
-
-        &:nth-child(5) {
-          animation-delay: -0.8s;
-        }
-      }
-    }
-  }
-
-  @keyframes pulse {
-    0%,
-    40%,
-    100% {
-      transform: scaleY(0.6);
-    }
-    20% {
-      transform: scaleY(1);
-    }
   }
 </style>
 
