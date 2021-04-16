@@ -1,19 +1,41 @@
 <style lang="scss">
-  .pedal-on {
-    background: yellow;
+  #playback-controls {
+    margin: 6em 2em 0 2em;
   }
-
   .control {
     align-items: center;
-    display: flex;
+    display: grid;
     gap: 0.5em;
     padding: 0.5em 0;
+    grid:
+      "title value" auto
+      "slider slider" auto / 1fr auto;
 
-    :first-child {
-      width: 8em;
-    }
     :global(input[type="range"]) {
-      width: 20em;
+      grid-area: slider;
+      width: 100%;
+    }
+  }
+
+  button {
+    display: inline-block;
+    padding: 0.35em 0.8em;
+    border: 0.1em solid #ffffff;
+    margin: 0;
+    border-radius: 0.25em;
+    color: #ffffff;
+    transition: all 0.2s;
+    background-color: $primary-accent;
+
+    &:hover,
+    &.pedal-on {
+      color: $primary-accent;
+      border-color: $primary-accent;
+      background-color: #ffffff;
+    }
+
+    &.pedal-on {
+      background-color: yellow;
     }
   }
 </style>
@@ -28,7 +50,65 @@
   export let skipToPercentage;
 </script>
 
-<div id="score-controls">
+<div id="playback-controls">
+  <div class="control">
+    <span>Master Volume:</span>
+    <span>{$volume.master}</span>
+    <RangeSlider
+      min="0"
+      max="4"
+      step=".1"
+      bind:value={$volume.master}
+      name="volume"
+    />
+  </div>
+  <div class="control">
+    <span>Bass Volume:</span>
+    <span>{$volume.left}</span>
+    <RangeSlider
+      min="0"
+      max="4"
+      step=".1"
+      bind:value={$volume.left}
+      name="volume"
+    />
+  </div>
+  <div class="control">
+    <span>Treble Volume:</span>
+    <span>{$volume.right}</span>
+    <RangeSlider
+      min="0"
+      max="4"
+      step=".1"
+      bind:value={$volume.right}
+      name="volume"
+    />
+  </div>
+  <div class="control">
+    <span>Tempo:</span>
+    <span>{$tempoControl}</span>
+    <RangeSlider
+      min="0"
+      max="180"
+      step="10"
+      bind:value={$tempoControl}
+      name="tempo"
+    />
+  </div>
+  <div class="control">
+    <span>Progress:</span>
+    <span>{($playbackProgress * 100).toFixed(2)}%</span>
+    <RangeSlider
+      min="0"
+      max="1"
+      step="0.01"
+      value={$playbackProgress}
+      name="progress"
+      on:input={({ target: { value } }) => skipToPercentage(value)}
+      mousewheel={false}
+    />
+  </div>
+
   <button type="button" on:click={playPauseApp}>Play/Pause</button>
   <button type="button" on:click={stopApp}>Stop</button>
   <button
@@ -46,62 +126,4 @@
         sustain: !val.sustain,
       }))}
   >Sustain</button>
-
-  <div class="control">
-    <span>Master Volume:</span>
-    <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
-      bind:value={$volume.master}
-      name="volume"
-    />
-    {$volume.master}
-  </div>
-  <div class="control">
-    <span>Bass Volume:</span>
-    <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
-      bind:value={$volume.left}
-      name="volume"
-    />
-    {$volume.left}
-  </div>
-  <div class="control">
-    <span>Treble Volume:</span>
-    <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
-      bind:value={$volume.right}
-      name="volume"
-    />
-    {$volume.right}
-  </div>
-  <div class="control">
-    <span>Tempo:</span>
-    <RangeSlider
-      min="0"
-      max="180"
-      step="10"
-      bind:value={$tempoControl}
-      name="tempo"
-    />
-    {$tempoControl}
-  </div>
-  <div class="control">
-    <span>Progress:</span>
-    <RangeSlider
-      min="0"
-      max="1"
-      step="0.01"
-      value={$playbackProgress}
-      name="progress"
-      on:input={({ target: { value } }) => skipToPercentage(value)}
-      mousewheel={false}
-    />
-    {($playbackProgress * 100).toFixed(2)}%
-  </div>
 </div>

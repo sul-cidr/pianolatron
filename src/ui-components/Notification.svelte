@@ -7,7 +7,7 @@
     left: 50%;
     min-width: 400px;
     position: absolute;
-    top: 50%;
+    top: 20%;
     transform: translate(-50%);
     z-index: 1000;
 

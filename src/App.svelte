@@ -1,3 +1,31 @@
+<style>
+  #app {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "left roll right"
+      "keyboard keyboard keyboard";
+    height: 100vh;
+  }
+
+  #roll-details {
+    grid-area: left;
+  }
+
+  #roll {
+    grid-area: roll;
+  }
+
+  #audio-controls {
+    grid-area: right;
+  }
+
+  #keyboard {
+    grid-area: keyboard;
+  }
+</style>
+
 <script>
   import {
     pedalling,
@@ -14,8 +42,6 @@
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
-
-  const title = "Pianolatron Development";
 
   let appReady = false;
   let mididataReady;
@@ -93,12 +119,23 @@
   $: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 </script>
 
-<h1>{title}</h1>
-<RollSelector bind:currentRoll />
-{#if appReady}
-  <RollDetails />
-  <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
-  <RollViewer imageUrl={currentRoll.image_url} />
-  <Keyboard keyCount="87" {activeNotes} />
-{/if}
+<div id="app">
+  <div id="roll-details">
+    <RollSelector bind:currentRoll />
+    {#if appReady}
+      <RollDetails />
+    {/if}
+  </div>
+  {#if appReady}
+    <div id="audio-controls">
+      <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
+    </div>
+    <div id="roll">
+      <RollViewer imageUrl={currentRoll.image_url} />
+    </div>
+    <div id="keyboard">
+      <Keyboard keyCount="87" {activeNotes} />
+    </div>
+  {/if}
+</div>
 <Notification />

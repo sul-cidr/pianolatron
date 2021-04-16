@@ -1,7 +1,44 @@
 @import "globals";
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
 body {
+  background: $background-color;
   font-family: $secondary-typeface;
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+}
+
+a {
+  text-decoration-skip-ink: auto;
 }
 
 h1 {
