@@ -32,67 +32,72 @@ import RangeSlider from "../ui-components/RangeSlider.svelte.js";
 
 function create_fragment(ctx) {
 	let div5;
-	let button0;
-	let t1;
-	let button1;
-	let t3;
-	let button2;
-	let t4;
-	let button2_aria_pressed_value;
-	let t5;
-	let button3;
-	let t6;
-	let button3_aria_pressed_value;
-	let t7;
 	let div0;
 	let span0;
-	let t9;
+	let t1;
+	let span1;
+	let t2_value = /*$volume*/ ctx[3].master + "";
+	let t2;
+	let t3;
 	let rangeslider0;
 	let updating_value;
-	let t10;
-	let t11_value = /*$volume*/ ctx[4].master + "";
-	let t11;
-	let t12;
+	let t4;
 	let div1;
-	let span1;
-	let t14;
+	let span2;
+	let t6;
+	let span3;
+	let t7_value = /*$volume*/ ctx[3].left + "";
+	let t7;
+	let t8;
 	let rangeslider1;
 	let updating_value_1;
-	let t15;
-	let t16_value = /*$volume*/ ctx[4].left + "";
-	let t16;
-	let t17;
+	let t9;
 	let div2;
-	let span2;
-	let t19;
+	let span4;
+	let t11;
+	let span5;
+	let t12_value = /*$volume*/ ctx[3].right + "";
+	let t12;
+	let t13;
 	let rangeslider2;
 	let updating_value_2;
-	let t20;
-	let t21_value = /*$volume*/ ctx[4].right + "";
-	let t21;
-	let t22;
+	let t14;
 	let div3;
-	let span3;
-	let t24;
+	let span6;
+	let t16;
+	let span7;
+	let t17;
+	let t18;
 	let rangeslider3;
 	let updating_value_3;
-	let t25;
-	let t26;
-	let t27;
+	let t19;
 	let div4;
-	let span4;
-	let t29;
+	let span8;
+	let t21;
+	let span9;
+	let t22_value = (/*$playbackProgress*/ ctx[5] * 100).toFixed(2) + "";
+	let t22;
+	let t23;
+	let t24;
 	let rangeslider4;
+	let t25;
+	let button0;
+	let t27;
+	let button1;
+	let t29;
+	let button2;
 	let t30;
-	let t31_value = (/*$playbackProgress*/ ctx[6] * 100).toFixed(2) + "";
+	let button2_aria_pressed_value;
 	let t31;
+	let button3;
 	let t32;
+	let button3_aria_pressed_value;
 	let current;
 	let mounted;
 	let dispose;
 
 	function rangeslider0_value_binding(value) {
-		/*rangeslider0_value_binding*/ ctx[9].call(null, value);
+		/*rangeslider0_value_binding*/ ctx[7].call(null, value);
 	}
 
 	let rangeslider0_props = {
@@ -102,15 +107,15 @@ function create_fragment(ctx) {
 		name: "volume"
 	};
 
-	if (/*$volume*/ ctx[4].master !== void 0) {
-		rangeslider0_props.value = /*$volume*/ ctx[4].master;
+	if (/*$volume*/ ctx[3].master !== void 0) {
+		rangeslider0_props.value = /*$volume*/ ctx[3].master;
 	}
 
 	rangeslider0 = new RangeSlider({ props: rangeslider0_props });
 	binding_callbacks.push(() => bind(rangeslider0, "value", rangeslider0_value_binding));
 
 	function rangeslider1_value_binding(value) {
-		/*rangeslider1_value_binding*/ ctx[10].call(null, value);
+		/*rangeslider1_value_binding*/ ctx[8].call(null, value);
 	}
 
 	let rangeslider1_props = {
@@ -120,15 +125,15 @@ function create_fragment(ctx) {
 		name: "volume"
 	};
 
-	if (/*$volume*/ ctx[4].left !== void 0) {
-		rangeslider1_props.value = /*$volume*/ ctx[4].left;
+	if (/*$volume*/ ctx[3].left !== void 0) {
+		rangeslider1_props.value = /*$volume*/ ctx[3].left;
 	}
 
 	rangeslider1 = new RangeSlider({ props: rangeslider1_props });
 	binding_callbacks.push(() => bind(rangeslider1, "value", rangeslider1_value_binding));
 
 	function rangeslider2_value_binding(value) {
-		/*rangeslider2_value_binding*/ ctx[11].call(null, value);
+		/*rangeslider2_value_binding*/ ctx[9].call(null, value);
 	}
 
 	let rangeslider2_props = {
@@ -138,15 +143,15 @@ function create_fragment(ctx) {
 		name: "volume"
 	};
 
-	if (/*$volume*/ ctx[4].right !== void 0) {
-		rangeslider2_props.value = /*$volume*/ ctx[4].right;
+	if (/*$volume*/ ctx[3].right !== void 0) {
+		rangeslider2_props.value = /*$volume*/ ctx[3].right;
 	}
 
 	rangeslider2 = new RangeSlider({ props: rangeslider2_props });
 	binding_callbacks.push(() => bind(rangeslider2, "value", rangeslider2_value_binding));
 
 	function rangeslider3_value_binding(value) {
-		/*rangeslider3_value_binding*/ ctx[12].call(null, value);
+		/*rangeslider3_value_binding*/ ctx[10].call(null, value);
 	}
 
 	let rangeslider3_props = {
@@ -156,8 +161,8 @@ function create_fragment(ctx) {
 		name: "tempo"
 	};
 
-	if (/*$tempoControl*/ ctx[5] !== void 0) {
-		rangeslider3_props.value = /*$tempoControl*/ ctx[5];
+	if (/*$tempoControl*/ ctx[4] !== void 0) {
+		rangeslider3_props.value = /*$tempoControl*/ ctx[4];
 	}
 
 	rangeslider3 = new RangeSlider({ props: rangeslider3_props });
@@ -168,138 +173,146 @@ function create_fragment(ctx) {
 				min: "0",
 				max: "1",
 				step: "0.01",
-				value: /*$playbackProgress*/ ctx[6],
+				value: /*$playbackProgress*/ ctx[5],
 				name: "progress",
 				mousewheel: false
 			}
 		});
 
-	rangeslider4.$on("input", /*input_handler*/ ctx[13]);
+	rangeslider4.$on("input", /*input_handler*/ ctx[11]);
 
 	return {
 		c() {
 			div5 = element("div");
-			button0 = element("button");
-			button0.textContent = "Play/Pause";
-			t1 = space();
-			button1 = element("button");
-			button1.textContent = "Stop";
-			t3 = space();
-			button2 = element("button");
-			t4 = text("Soft");
-			t5 = space();
-			button3 = element("button");
-			t6 = text("Sustain");
-			t7 = space();
 			div0 = element("div");
 			span0 = element("span");
 			span0.textContent = "Master Volume:";
-			t9 = space();
-			create_component(rangeslider0.$$.fragment);
-			t10 = space();
-			t11 = text(t11_value);
-			t12 = space();
-			div1 = element("div");
+			t1 = space();
 			span1 = element("span");
-			span1.textContent = "Bass Volume:";
-			t14 = space();
-			create_component(rangeslider1.$$.fragment);
-			t15 = space();
-			t16 = text(t16_value);
-			t17 = space();
-			div2 = element("div");
+			t2 = text(t2_value);
+			t3 = space();
+			create_component(rangeslider0.$$.fragment);
+			t4 = space();
+			div1 = element("div");
 			span2 = element("span");
-			span2.textContent = "Treble Volume:";
-			t19 = space();
-			create_component(rangeslider2.$$.fragment);
-			t20 = space();
-			t21 = text(t21_value);
-			t22 = space();
-			div3 = element("div");
+			span2.textContent = "Bass Volume:";
+			t6 = space();
 			span3 = element("span");
-			span3.textContent = "Tempo:";
-			t24 = space();
-			create_component(rangeslider3.$$.fragment);
-			t25 = space();
-			t26 = text(/*$tempoControl*/ ctx[5]);
-			t27 = space();
-			div4 = element("div");
+			t7 = text(t7_value);
+			t8 = space();
+			create_component(rangeslider1.$$.fragment);
+			t9 = space();
+			div2 = element("div");
 			span4 = element("span");
-			span4.textContent = "Progress:";
-			t29 = space();
+			span4.textContent = "Treble Volume:";
+			t11 = space();
+			span5 = element("span");
+			t12 = text(t12_value);
+			t13 = space();
+			create_component(rangeslider2.$$.fragment);
+			t14 = space();
+			div3 = element("div");
+			span6 = element("span");
+			span6.textContent = "Tempo:";
+			t16 = space();
+			span7 = element("span");
+			t17 = text(/*$tempoControl*/ ctx[4]);
+			t18 = space();
+			create_component(rangeslider3.$$.fragment);
+			t19 = space();
+			div4 = element("div");
+			span8 = element("span");
+			span8.textContent = "Progress:";
+			t21 = space();
+			span9 = element("span");
+			t22 = text(t22_value);
+			t23 = text("%");
+			t24 = space();
 			create_component(rangeslider4.$$.fragment);
-			t30 = space();
-			t31 = text(t31_value);
-			t32 = text("%");
+			t25 = space();
+			button0 = element("button");
+			button0.textContent = "Play/Pause";
+			t27 = space();
+			button1 = element("button");
+			button1.textContent = "Stop";
+			t29 = space();
+			button2 = element("button");
+			t30 = text("Soft");
+			t31 = space();
+			button3 = element("button");
+			t32 = text("Sustain");
+			attr(div0, "class", "control svelte-kl0s1z");
+			attr(div1, "class", "control svelte-kl0s1z");
+			attr(div2, "class", "control svelte-kl0s1z");
+			attr(div3, "class", "control svelte-kl0s1z");
+			attr(div4, "class", "control svelte-kl0s1z");
 			attr(button0, "type", "button");
+			attr(button0, "class", "svelte-kl0s1z");
 			attr(button1, "type", "button");
+			attr(button1, "class", "svelte-kl0s1z");
 			attr(button2, "type", "button");
-			attr(button2, "aria-pressed", button2_aria_pressed_value = /*$pedalling*/ ctx[3].soft);
-			attr(button2, "class", "svelte-18ab2mh");
-			toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[3].soft);
+			attr(button2, "aria-pressed", button2_aria_pressed_value = /*$pedalling*/ ctx[6].soft);
+			attr(button2, "class", "svelte-kl0s1z");
+			toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[6].soft);
 			attr(button3, "type", "button");
-			attr(button3, "aria-pressed", button3_aria_pressed_value = /*$pedalling*/ ctx[3].sustain);
-			attr(button3, "class", "svelte-18ab2mh");
-			toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[3].sustain);
-			attr(span0, "class", "svelte-18ab2mh");
-			attr(div0, "class", "control svelte-18ab2mh");
-			attr(span1, "class", "svelte-18ab2mh");
-			attr(div1, "class", "control svelte-18ab2mh");
-			attr(span2, "class", "svelte-18ab2mh");
-			attr(div2, "class", "control svelte-18ab2mh");
-			attr(span3, "class", "svelte-18ab2mh");
-			attr(div3, "class", "control svelte-18ab2mh");
-			attr(span4, "class", "svelte-18ab2mh");
-			attr(div4, "class", "control svelte-18ab2mh");
-			attr(div5, "id", "score-controls");
+			attr(button3, "aria-pressed", button3_aria_pressed_value = /*$pedalling*/ ctx[6].sustain);
+			attr(button3, "class", "svelte-kl0s1z");
+			toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[6].sustain);
+			attr(div5, "id", "playback-controls");
+			attr(div5, "class", "svelte-kl0s1z");
 		},
 		m(target, anchor) {
 			insert(target, div5, anchor);
-			append(div5, button0);
-			append(div5, t1);
-			append(div5, button1);
-			append(div5, t3);
-			append(div5, button2);
-			append(button2, t4);
-			append(div5, t5);
-			append(div5, button3);
-			append(button3, t6);
-			append(div5, t7);
 			append(div5, div0);
 			append(div0, span0);
-			append(div0, t9);
+			append(div0, t1);
+			append(div0, span1);
+			append(span1, t2);
+			append(div0, t3);
 			mount_component(rangeslider0, div0, null);
-			append(div0, t10);
-			append(div0, t11);
-			append(div5, t12);
+			append(div5, t4);
 			append(div5, div1);
-			append(div1, span1);
-			append(div1, t14);
+			append(div1, span2);
+			append(div1, t6);
+			append(div1, span3);
+			append(span3, t7);
+			append(div1, t8);
 			mount_component(rangeslider1, div1, null);
-			append(div1, t15);
-			append(div1, t16);
-			append(div5, t17);
+			append(div5, t9);
 			append(div5, div2);
-			append(div2, span2);
-			append(div2, t19);
+			append(div2, span4);
+			append(div2, t11);
+			append(div2, span5);
+			append(span5, t12);
+			append(div2, t13);
 			mount_component(rangeslider2, div2, null);
-			append(div2, t20);
-			append(div2, t21);
-			append(div5, t22);
+			append(div5, t14);
 			append(div5, div3);
-			append(div3, span3);
-			append(div3, t24);
+			append(div3, span6);
+			append(div3, t16);
+			append(div3, span7);
+			append(span7, t17);
+			append(div3, t18);
 			mount_component(rangeslider3, div3, null);
-			append(div3, t25);
-			append(div3, t26);
-			append(div5, t27);
+			append(div5, t19);
 			append(div5, div4);
-			append(div4, span4);
-			append(div4, t29);
+			append(div4, span8);
+			append(div4, t21);
+			append(div4, span9);
+			append(span9, t22);
+			append(span9, t23);
+			append(div4, t24);
 			mount_component(rangeslider4, div4, null);
-			append(div4, t30);
-			append(div4, t31);
-			append(div4, t32);
+			append(div5, t25);
+			append(div5, button0);
+			append(div5, t27);
+			append(div5, button1);
+			append(div5, t29);
+			append(div5, button2);
+			append(button2, t30);
+			append(div5, t31);
+			append(div5, button3);
+			append(button3, t32);
 			current = true;
 
 			if (!mounted) {
@@ -310,8 +323,8 @@ function create_fragment(ctx) {
 					listen(button1, "click", function () {
 						if (is_function(/*stopApp*/ ctx[1])) /*stopApp*/ ctx[1].apply(this, arguments);
 					}),
-					listen(button2, "click", /*click_handler*/ ctx[7]),
-					listen(button3, "click", /*click_handler_1*/ ctx[8])
+					listen(button2, "click", /*click_handler*/ ctx[12]),
+					listen(button3, "click", /*click_handler_1*/ ctx[13])
 				];
 
 				mounted = true;
@@ -319,67 +332,66 @@ function create_fragment(ctx) {
 		},
 		p(new_ctx, [dirty]) {
 			ctx = new_ctx;
-
-			if (!current || dirty & /*$pedalling*/ 8 && button2_aria_pressed_value !== (button2_aria_pressed_value = /*$pedalling*/ ctx[3].soft)) {
-				attr(button2, "aria-pressed", button2_aria_pressed_value);
-			}
-
-			if (dirty & /*$pedalling*/ 8) {
-				toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[3].soft);
-			}
-
-			if (!current || dirty & /*$pedalling*/ 8 && button3_aria_pressed_value !== (button3_aria_pressed_value = /*$pedalling*/ ctx[3].sustain)) {
-				attr(button3, "aria-pressed", button3_aria_pressed_value);
-			}
-
-			if (dirty & /*$pedalling*/ 8) {
-				toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[3].sustain);
-			}
-
+			if ((!current || dirty & /*$volume*/ 8) && t2_value !== (t2_value = /*$volume*/ ctx[3].master + "")) set_data(t2, t2_value);
 			const rangeslider0_changes = {};
 
-			if (!updating_value && dirty & /*$volume*/ 16) {
+			if (!updating_value && dirty & /*$volume*/ 8) {
 				updating_value = true;
-				rangeslider0_changes.value = /*$volume*/ ctx[4].master;
+				rangeslider0_changes.value = /*$volume*/ ctx[3].master;
 				add_flush_callback(() => updating_value = false);
 			}
 
 			rangeslider0.$set(rangeslider0_changes);
-			if ((!current || dirty & /*$volume*/ 16) && t11_value !== (t11_value = /*$volume*/ ctx[4].master + "")) set_data(t11, t11_value);
+			if ((!current || dirty & /*$volume*/ 8) && t7_value !== (t7_value = /*$volume*/ ctx[3].left + "")) set_data(t7, t7_value);
 			const rangeslider1_changes = {};
 
-			if (!updating_value_1 && dirty & /*$volume*/ 16) {
+			if (!updating_value_1 && dirty & /*$volume*/ 8) {
 				updating_value_1 = true;
-				rangeslider1_changes.value = /*$volume*/ ctx[4].left;
+				rangeslider1_changes.value = /*$volume*/ ctx[3].left;
 				add_flush_callback(() => updating_value_1 = false);
 			}
 
 			rangeslider1.$set(rangeslider1_changes);
-			if ((!current || dirty & /*$volume*/ 16) && t16_value !== (t16_value = /*$volume*/ ctx[4].left + "")) set_data(t16, t16_value);
+			if ((!current || dirty & /*$volume*/ 8) && t12_value !== (t12_value = /*$volume*/ ctx[3].right + "")) set_data(t12, t12_value);
 			const rangeslider2_changes = {};
 
-			if (!updating_value_2 && dirty & /*$volume*/ 16) {
+			if (!updating_value_2 && dirty & /*$volume*/ 8) {
 				updating_value_2 = true;
-				rangeslider2_changes.value = /*$volume*/ ctx[4].right;
+				rangeslider2_changes.value = /*$volume*/ ctx[3].right;
 				add_flush_callback(() => updating_value_2 = false);
 			}
 
 			rangeslider2.$set(rangeslider2_changes);
-			if ((!current || dirty & /*$volume*/ 16) && t21_value !== (t21_value = /*$volume*/ ctx[4].right + "")) set_data(t21, t21_value);
+			if (!current || dirty & /*$tempoControl*/ 16) set_data(t17, /*$tempoControl*/ ctx[4]);
 			const rangeslider3_changes = {};
 
-			if (!updating_value_3 && dirty & /*$tempoControl*/ 32) {
+			if (!updating_value_3 && dirty & /*$tempoControl*/ 16) {
 				updating_value_3 = true;
-				rangeslider3_changes.value = /*$tempoControl*/ ctx[5];
+				rangeslider3_changes.value = /*$tempoControl*/ ctx[4];
 				add_flush_callback(() => updating_value_3 = false);
 			}
 
 			rangeslider3.$set(rangeslider3_changes);
-			if (!current || dirty & /*$tempoControl*/ 32) set_data(t26, /*$tempoControl*/ ctx[5]);
+			if ((!current || dirty & /*$playbackProgress*/ 32) && t22_value !== (t22_value = (/*$playbackProgress*/ ctx[5] * 100).toFixed(2) + "")) set_data(t22, t22_value);
 			const rangeslider4_changes = {};
-			if (dirty & /*$playbackProgress*/ 64) rangeslider4_changes.value = /*$playbackProgress*/ ctx[6];
+			if (dirty & /*$playbackProgress*/ 32) rangeslider4_changes.value = /*$playbackProgress*/ ctx[5];
 			rangeslider4.$set(rangeslider4_changes);
-			if ((!current || dirty & /*$playbackProgress*/ 64) && t31_value !== (t31_value = (/*$playbackProgress*/ ctx[6] * 100).toFixed(2) + "")) set_data(t31, t31_value);
+
+			if (!current || dirty & /*$pedalling*/ 64 && button2_aria_pressed_value !== (button2_aria_pressed_value = /*$pedalling*/ ctx[6].soft)) {
+				attr(button2, "aria-pressed", button2_aria_pressed_value);
+			}
+
+			if (dirty & /*$pedalling*/ 64) {
+				toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[6].soft);
+			}
+
+			if (!current || dirty & /*$pedalling*/ 64 && button3_aria_pressed_value !== (button3_aria_pressed_value = /*$pedalling*/ ctx[6].sustain)) {
+				attr(button3, "aria-pressed", button3_aria_pressed_value);
+			}
+
+			if (dirty & /*$pedalling*/ 64) {
+				toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[6].sustain);
+			}
 		},
 		i(local) {
 			if (current) return;
@@ -412,19 +424,17 @@ function create_fragment(ctx) {
 }
 
 function instance($$self, $$props, $$invalidate) {
-	let $pedalling;
 	let $volume;
 	let $tempoControl;
 	let $playbackProgress;
-	component_subscribe($$self, pedalling, $$value => $$invalidate(3, $pedalling = $$value));
-	component_subscribe($$self, volume, $$value => $$invalidate(4, $volume = $$value));
-	component_subscribe($$self, tempoControl, $$value => $$invalidate(5, $tempoControl = $$value));
-	component_subscribe($$self, playbackProgress, $$value => $$invalidate(6, $playbackProgress = $$value));
+	let $pedalling;
+	component_subscribe($$self, volume, $$value => $$invalidate(3, $volume = $$value));
+	component_subscribe($$self, tempoControl, $$value => $$invalidate(4, $tempoControl = $$value));
+	component_subscribe($$self, playbackProgress, $$value => $$invalidate(5, $playbackProgress = $$value));
+	component_subscribe($$self, pedalling, $$value => $$invalidate(6, $pedalling = $$value));
 	let { playPauseApp } = $$props;
 	let { stopApp } = $$props;
 	let { skipToPercentage } = $$props;
-	const click_handler = () => pedalling.update(val => ({ ...val, soft: !val.soft }));
-	const click_handler_1 = () => pedalling.update(val => ({ ...val, sustain: !val.sustain }));
 
 	function rangeslider0_value_binding(value) {
 		$volume.master = value;
@@ -447,6 +457,8 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	const input_handler = ({ target: { value } }) => skipToPercentage(value);
+	const click_handler = () => pedalling.update(val => ({ ...val, soft: !val.soft }));
+	const click_handler_1 = () => pedalling.update(val => ({ ...val, sustain: !val.sustain }));
 
 	$$self.$$set = $$props => {
 		if ("playPauseApp" in $$props) $$invalidate(0, playPauseApp = $$props.playPauseApp);
@@ -458,17 +470,17 @@ function instance($$self, $$props, $$invalidate) {
 		playPauseApp,
 		stopApp,
 		skipToPercentage,
-		$pedalling,
 		$volume,
 		$tempoControl,
 		$playbackProgress,
-		click_handler,
-		click_handler_1,
+		$pedalling,
 		rangeslider0_value_binding,
 		rangeslider1_value_binding,
 		rangeslider2_value_binding,
 		rangeslider3_value_binding,
-		input_handler
+		input_handler,
+		click_handler,
+		click_handler_1
 	];
 }
 

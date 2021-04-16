@@ -1,6 +1,6 @@
 // [snowpack] add styles to the page (skip if no document exists)
 if (typeof document !== 'undefined') {
-  const code = "dl.svelte-191eahf{display:block;margin:1em;padding:0.5em 1em}dt.svelte-191eahf{font-family:serif;font-size:1.4em;margin-top:0.5em;margin-bottom:0.2em}";
+  const code = "select.svelte-9htvim{margin:1em;padding:0.25em 0}";
 
   const styleEl = document.createElement("style");
   const codeEl = document.createTextNode(code);

@@ -23,7 +23,7 @@ function create_fragment(ctx) {
 		c() {
 			div = element("div");
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-ucgn32");
+			attr(div, "class", "svelte-14punfu");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);

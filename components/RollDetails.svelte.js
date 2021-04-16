@@ -12,150 +12,116 @@ import {
 	noop,
 	safe_not_equal,
 	set_data,
-	space,
 	text
 } from "../_snowpack/pkg/svelte/internal.js";
 
 import { rollMetadata } from "../stores.js";
 
 function create_fragment(ctx) {
-	let ul;
-	let li0;
-	let strong0;
+	let dl;
+	let dt0;
+	let dd0;
+	let t1_value = /*$rollMetadata*/ ctx[0].TITLE + "";
 	let t1;
-	let t2_value = /*$rollMetadata*/ ctx[0].TITLE + "";
-	let t2;
+	let dt1;
+	let dd1;
+	let t3_value = /*$rollMetadata*/ ctx[0].PERFORMER + "";
 	let t3;
-	let li1;
-	let strong1;
+	let dt2;
+	let dd2;
+	let t5_value = /*$rollMetadata*/ ctx[0].COMPOSER + "";
 	let t5;
-	let t6_value = /*$rollMetadata*/ ctx[0].PERFORMER + "";
-	let t6;
+	let dt3;
+	let dd3;
+	let t7_value = /*$rollMetadata*/ ctx[0].LABEL + "";
 	let t7;
-	let li2;
-	let strong2;
-	let t9;
-	let t10_value = /*$rollMetadata*/ ctx[0].COMPOSER + "";
-	let t10;
-	let t11;
-	let li3;
-	let strong3;
-	let t13;
-	let t14_value = /*$rollMetadata*/ ctx[0].LABEL + "";
-	let t14;
-	let t15;
-	let li4;
-	let strong4;
-	let t17;
+	let dt4;
+	let dd4;
 	let a;
-	let t18_value = /*$rollMetadata*/ ctx[0].PURL + "";
-	let t18;
+	let t9_value = /*$rollMetadata*/ ctx[0].PURL + "";
+	let t9;
 	let a_href_value;
-	let t19;
-	let li5;
-	let strong5;
-	let t21;
-	let t22_value = /*$rollMetadata*/ ctx[0].CALLNUM + "";
-	let t22;
+	let dt5;
+	let dd5;
+	let t11_value = /*$rollMetadata*/ ctx[0].CALLNUM + "";
+	let t11;
 
 	return {
 		c() {
-			ul = element("ul");
-			li0 = element("li");
-			strong0 = element("strong");
-			strong0.textContent = "Title:";
-			t1 = space();
-			t2 = text(t2_value);
-			t3 = space();
-			li1 = element("li");
-			strong1 = element("strong");
-			strong1.textContent = "Performer:";
-			t5 = space();
-			t6 = text(t6_value);
-			t7 = space();
-			li2 = element("li");
-			strong2 = element("strong");
-			strong2.textContent = "Composer:";
-			t9 = space();
-			t10 = text(t10_value);
-			t11 = space();
-			li3 = element("li");
-			strong3 = element("strong");
-			strong3.textContent = "Label:";
-			t13 = space();
-			t14 = text(t14_value);
-			t15 = space();
-			li4 = element("li");
-			strong4 = element("strong");
-			strong4.textContent = "PURL:";
-			t17 = space();
+			dl = element("dl");
+			dt0 = element("dt");
+			dt0.textContent = "Title";
+			dd0 = element("dd");
+			t1 = text(t1_value);
+			dt1 = element("dt");
+			dt1.textContent = "Performer";
+			dd1 = element("dd");
+			t3 = text(t3_value);
+			dt2 = element("dt");
+			dt2.textContent = "Composer";
+			dd2 = element("dd");
+			t5 = text(t5_value);
+			dt3 = element("dt");
+			dt3.textContent = "Label";
+			dd3 = element("dd");
+			t7 = text(t7_value);
+			dt4 = element("dt");
+			dt4.textContent = "PURL";
+			dd4 = element("dd");
 			a = element("a");
-			t18 = text(t18_value);
-			t19 = space();
-			li5 = element("li");
-			strong5 = element("strong");
-			strong5.textContent = "Call No:";
-			t21 = space();
-			t22 = text(t22_value);
-			attr(strong0, "class", "svelte-1l1fhvk");
-			attr(strong1, "class", "svelte-1l1fhvk");
-			attr(strong2, "class", "svelte-1l1fhvk");
-			attr(strong3, "class", "svelte-1l1fhvk");
-			attr(strong4, "class", "svelte-1l1fhvk");
+			t9 = text(t9_value);
+			dt5 = element("dt");
+			dt5.textContent = "Call No";
+			dd5 = element("dd");
+			t11 = text(t11_value);
+			attr(dt0, "class", "svelte-191eahf");
+			attr(dt1, "class", "svelte-191eahf");
+			attr(dt2, "class", "svelte-191eahf");
+			attr(dt3, "class", "svelte-191eahf");
+			attr(dt4, "class", "svelte-191eahf");
 			attr(a, "href", a_href_value = /*$rollMetadata*/ ctx[0].PURL);
-			attr(strong5, "class", "svelte-1l1fhvk");
-			attr(ul, "class", "svelte-1l1fhvk");
+			attr(dt5, "class", "svelte-191eahf");
+			attr(dl, "class", "svelte-191eahf");
 		},
 		m(target, anchor) {
-			insert(target, ul, anchor);
-			append(ul, li0);
-			append(li0, strong0);
-			append(li0, t1);
-			append(li0, t2);
-			append(ul, t3);
-			append(ul, li1);
-			append(li1, strong1);
-			append(li1, t5);
-			append(li1, t6);
-			append(ul, t7);
-			append(ul, li2);
-			append(li2, strong2);
-			append(li2, t9);
-			append(li2, t10);
-			append(ul, t11);
-			append(ul, li3);
-			append(li3, strong3);
-			append(li3, t13);
-			append(li3, t14);
-			append(ul, t15);
-			append(ul, li4);
-			append(li4, strong4);
-			append(li4, t17);
-			append(li4, a);
-			append(a, t18);
-			append(ul, t19);
-			append(ul, li5);
-			append(li5, strong5);
-			append(li5, t21);
-			append(li5, t22);
+			insert(target, dl, anchor);
+			append(dl, dt0);
+			append(dl, dd0);
+			append(dd0, t1);
+			append(dl, dt1);
+			append(dl, dd1);
+			append(dd1, t3);
+			append(dl, dt2);
+			append(dl, dd2);
+			append(dd2, t5);
+			append(dl, dt3);
+			append(dl, dd3);
+			append(dd3, t7);
+			append(dl, dt4);
+			append(dl, dd4);
+			append(dd4, a);
+			append(a, t9);
+			append(dl, dt5);
+			append(dl, dd5);
+			append(dd5, t11);
 		},
 		p(ctx, [dirty]) {
-			if (dirty & /*$rollMetadata*/ 1 && t2_value !== (t2_value = /*$rollMetadata*/ ctx[0].TITLE + "")) set_data(t2, t2_value);
-			if (dirty & /*$rollMetadata*/ 1 && t6_value !== (t6_value = /*$rollMetadata*/ ctx[0].PERFORMER + "")) set_data(t6, t6_value);
-			if (dirty & /*$rollMetadata*/ 1 && t10_value !== (t10_value = /*$rollMetadata*/ ctx[0].COMPOSER + "")) set_data(t10, t10_value);
-			if (dirty & /*$rollMetadata*/ 1 && t14_value !== (t14_value = /*$rollMetadata*/ ctx[0].LABEL + "")) set_data(t14, t14_value);
-			if (dirty & /*$rollMetadata*/ 1 && t18_value !== (t18_value = /*$rollMetadata*/ ctx[0].PURL + "")) set_data(t18, t18_value);
+			if (dirty & /*$rollMetadata*/ 1 && t1_value !== (t1_value = /*$rollMetadata*/ ctx[0].TITLE + "")) set_data(t1, t1_value);
+			if (dirty & /*$rollMetadata*/ 1 && t3_value !== (t3_value = /*$rollMetadata*/ ctx[0].PERFORMER + "")) set_data(t3, t3_value);
+			if (dirty & /*$rollMetadata*/ 1 && t5_value !== (t5_value = /*$rollMetadata*/ ctx[0].COMPOSER + "")) set_data(t5, t5_value);
+			if (dirty & /*$rollMetadata*/ 1 && t7_value !== (t7_value = /*$rollMetadata*/ ctx[0].LABEL + "")) set_data(t7, t7_value);
+			if (dirty & /*$rollMetadata*/ 1 && t9_value !== (t9_value = /*$rollMetadata*/ ctx[0].PURL + "")) set_data(t9, t9_value);
 
 			if (dirty & /*$rollMetadata*/ 1 && a_href_value !== (a_href_value = /*$rollMetadata*/ ctx[0].PURL)) {
 				attr(a, "href", a_href_value);
 			}
 
-			if (dirty & /*$rollMetadata*/ 1 && t22_value !== (t22_value = /*$rollMetadata*/ ctx[0].CALLNUM + "")) set_data(t22, t22_value);
+			if (dirty & /*$rollMetadata*/ 1 && t11_value !== (t11_value = /*$rollMetadata*/ ctx[0].CALLNUM + "")) set_data(t11, t11_value);
 		},
 		i: noop,
 		o: noop,
 		d(detaching) {
-			if (detaching) detach(ul);
+			if (detaching) detach(dl);
 		}
 	};
 }

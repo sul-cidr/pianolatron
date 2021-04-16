@@ -45,10 +45,10 @@ function create_if_block(ctx) {
 			t2 = space();
 			div0 = element("div");
 			div0.textContent = "×";
-			attr(p, "class", "svelte-i7i5dr");
-			attr(section, "class", "svelte-i7i5dr");
-			attr(div0, "class", "close svelte-i7i5dr");
-			attr(div1, "class", div1_class_value = "notification " + (/*$NotificationStore*/ ctx[0].type || "default") + " svelte-i7i5dr");
+			attr(p, "class", "svelte-1x048n2");
+			attr(section, "class", "svelte-1x048n2");
+			attr(div0, "class", "close svelte-1x048n2");
+			attr(div1, "class", div1_class_value = "notification " + (/*$NotificationStore*/ ctx[0].type || "default") + " svelte-1x048n2");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -81,7 +81,7 @@ function create_if_block(ctx) {
 
 			if (dirty & /*$NotificationStore*/ 1 && t1_value !== (t1_value = /*$NotificationStore*/ ctx[0].message + "")) set_data(t1, t1_value);
 
-			if (dirty & /*$NotificationStore*/ 1 && div1_class_value !== (div1_class_value = "notification " + (/*$NotificationStore*/ ctx[0].type || "default") + " svelte-i7i5dr")) {
+			if (dirty & /*$NotificationStore*/ 1 && div1_class_value !== (div1_class_value = "notification " + (/*$NotificationStore*/ ctx[0].type || "default") + " svelte-1x048n2")) {
 				attr(div1, "class", div1_class_value);
 			}
 		},
@@ -104,7 +104,7 @@ function create_if_block_1(ctx) {
 		c() {
 			header = element("header");
 			t = text(t_value);
-			attr(header, "class", "svelte-i7i5dr");
+			attr(header, "class", "svelte-1x048n2");
 		},
 		m(target, anchor) {
 			insert(target, header, anchor);
