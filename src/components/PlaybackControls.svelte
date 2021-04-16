@@ -126,8 +126,10 @@
         sustain: !val.sustain,
       }))}
   >Sustain</button>
+  <br />
   <button
     type="button"
+    style="width:100%"
     class:pedal-on={$pedalling.accent}
     aria-pressed={$pedalling.accent}
     on:mousedown={() => pedalling.update((val) => ({ ...val, accent: true }))}
