@@ -42,10 +42,11 @@
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
+  import catalog from "./assets/catalog.json";
 
   let appReady = false;
   let mididataReady;
-  let currentRoll;
+  let currentRoll = catalog[Math.floor(Math.random() * catalog.length)];
   let previousRoll;
 
   const playPauseApp = () => {
