@@ -116,6 +116,7 @@
     }
   }
 
+  midiSamplePlayer.on("endOfFile", () => stopApp());
   $: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 </script>
 
