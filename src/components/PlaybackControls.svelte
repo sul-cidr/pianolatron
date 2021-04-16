@@ -126,4 +126,13 @@
         sustain: !val.sustain,
       }))}
   >Sustain</button>
+  <button
+    type="button"
+    class:pedal-on={$pedalling.accent}
+    aria-pressed={$pedalling.accent}
+    on:click={() => pedalling.update((val) => ({
+        ...val,
+        accent: !val.accent,
+      }))}
+  >Accent</button>
 </div>
