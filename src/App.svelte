@@ -65,6 +65,7 @@
   import {
     midiSamplePlayer,
     pianoReady,
+    updatePlayer,
     startNote,
     stopNote,
     stopAllNotes,
@@ -144,13 +145,7 @@
 
   const skipToTick = (tick) => {
     $currentTick = tick;
-    if (midiSamplePlayer.isPlaying()) {
-      midiSamplePlayer.pause();
-      midiSamplePlayer.skipToTick($currentTick);
-      midiSamplePlayer.play();
-    } else {
-      midiSamplePlayer.skipToTick($currentTick);
-    }
+    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 
   const skipToPercentage = (percentage) =>

@@ -170,4 +170,11 @@ midiSamplePlayer.on(
   },
 );
 
-export { midiSamplePlayer, pianoReady, startNote, stopNote, stopAllNotes };
+export {
+  midiSamplePlayer,
+  pianoReady,
+  updatePlayer,
+  startNote,
+  stopNote,
+  stopAllNotes,
+};
