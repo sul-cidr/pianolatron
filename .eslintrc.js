@@ -17,9 +17,10 @@ module.exports = {
     },
   ],
   rules: {
-    "no-underscore-dangle": 0,
+    "no-underscore-dangle": "off",
+    "no-return-assign": ["error", "except-parens"],
     "jsx-a11y/label-has-for": [
-      2,
+      "error",
       {
         components: ["Label"],
         required: {

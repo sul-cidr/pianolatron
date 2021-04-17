@@ -37,10 +37,10 @@
 <script>
   import { onMount } from "svelte";
   import OpenSeadragon from "openseadragon";
-
   import { rollMetadata, currentTick } from "../stores";
 
   export let imageUrl;
+
   let openSeadragon;
   let firstHolePx;
   let dragging;
@@ -51,11 +51,8 @@
     // if we're dragging we want the target bounds, if otherwise (and most
     //   especially if we happen to be zooming) we want the current bounds
     const viewportBounds = viewport.getBounds(!dragging);
-
     const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
-
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
-
     const lineCenter = new OpenSeadragon.Point(
       viewportBounds.x + viewportBounds.width / 2,
       lineViewport.y,
@@ -76,18 +73,9 @@
       constrainDuringPan: true,
     });
 
-    openSeadragon.addOnceHandler("update-viewport", () => {
-      panViewportToTick(0);
-    });
-
-    openSeadragon.addHandler("canvas-drag", () => {
-      dragging = true;
-    });
-
-    openSeadragon.addHandler("canvas-drag-end", () => {
-      dragging = false;
-    });
-
+    openSeadragon.addOnceHandler("update-viewport", () => panViewportToTick(0));
+    openSeadragon.addHandler("canvas-drag", () => (dragging = true));
+    openSeadragon.addHandler("canvas-drag-end", () => (dragging = false));
     openSeadragon.open(imageUrl);
   });
 
