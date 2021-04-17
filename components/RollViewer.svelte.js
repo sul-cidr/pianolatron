@@ -38,12 +38,13 @@ function create_fragment(ctx) {
 }
 
 function instance($$self, $$props, $$invalidate) {
-	let $rollMetadata;
 	let $currentTick;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(3, $rollMetadata = $$value));
+	let $rollMetadata;
 	component_subscribe($$self, currentTick, $$value => $$invalidate(5, $currentTick = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(6, $rollMetadata = $$value));
 	let { imageUrl } = $$props;
 	let openSeadragon;
+	let firstHolePx;
 	let dragging;
 
 	const panViewportToTick = tick => {
@@ -54,7 +55,7 @@ function instance($$self, $$props, $$invalidate) {
 		//   especially if we happen to be zooming) we want the current bounds
 		const viewportBounds = viewport.getBounds(!dragging);
 
-		const linePx = parseInt($rollMetadata.FIRST_HOLE, 10) + (scrollDownwards ? tick : -tick);
+		const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
 		const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 		const lineCenter = new OpenSeadragon.Point(viewportBounds.x + viewportBounds.width / 2, lineViewport.y);
 		viewport.panTo(lineCenter);
@@ -98,8 +99,14 @@ function instance($$self, $$props, $$invalidate) {
 			$: panViewportToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 8) {
-			$: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
+		if ($$self.$$.dirty & /*$rollMetadata*/ 64) {
+			$: $$invalidate(4, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		}
+
+		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 80) {
+			$: firstHolePx = scrollDownwards
+			? parseInt($rollMetadata.FIRST_HOLE, 10)
+			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
 		}
 	};
 

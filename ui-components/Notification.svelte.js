@@ -94,7 +94,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (61:6) {#if $NotificationStore.title}
+// (62:6) {#if $NotificationStore.title}
 function create_if_block_1(ctx) {
 	let header;
 	let t_value = /*$NotificationStore*/ ctx[0].title + "";

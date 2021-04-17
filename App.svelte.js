@@ -40,6 +40,7 @@ import PlaybackControls from "./components/PlaybackControls.svelte.js";
 import RollViewer from "./components/RollViewer.svelte.js";
 import Keyboard from "./components/Keyboard.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
+import catalog from "./assets/catalog.json.proxy.js";
 
 function create_if_block_1(ctx) {
 	let rolldetails;
@@ -69,7 +70,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (129:2) {#if appReady}
+// (131:2) {#if appReady}
 function create_if_block(ctx) {
 	let div0;
 	let playbackcontrols;
@@ -95,7 +96,7 @@ function create_if_block(ctx) {
 			}
 		});
 
-	keyboard = new Keyboard({ props: { keyCount: "87", activeNotes } });
+	keyboard = new Keyboard({ props: { keyCount: "88", activeNotes } });
 
 	return {
 		c() {
@@ -108,11 +109,11 @@ function create_if_block(ctx) {
 			div2 = element("div");
 			create_component(keyboard.$$.fragment);
 			attr(div0, "id", "audio-controls");
-			attr(div0, "class", "svelte-6exmy8");
+			attr(div0, "class", "svelte-1d08kzi");
 			attr(div1, "id", "roll");
-			attr(div1, "class", "svelte-6exmy8");
-			attr(div2, "id", "keyboard");
-			attr(div2, "class", "svelte-6exmy8");
+			attr(div1, "class", "svelte-1d08kzi");
+			attr(div2, "id", "keyboard-container");
+			attr(div2, "class", "svelte-1d08kzi");
 		},
 		m(target, anchor) {
 			insert(target, div0, anchor);
@@ -195,9 +196,9 @@ function create_fragment(ctx) {
 			t2 = space();
 			create_component(notification.$$.fragment);
 			attr(div0, "id", "roll-details");
-			attr(div0, "class", "svelte-6exmy8");
+			attr(div0, "class", "svelte-1d08kzi");
 			attr(div1, "id", "app");
-			attr(div1, "class", "svelte-6exmy8");
+			attr(div1, "class", "svelte-1d08kzi");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -297,7 +298,7 @@ function instance($$self, $$props, $$invalidate) {
 	component_subscribe($$self, currentTick, $$value => $$invalidate(8, $currentTick = $$value));
 	let appReady = false;
 	let mididataReady;
-	let currentRoll;
+	let currentRoll = catalog[Math.floor(Math.random() * catalog.length)];
 	let previousRoll;
 
 	const playPauseApp = () => {
@@ -314,6 +315,7 @@ function instance($$self, $$props, $$invalidate) {
 		playbackProgress.set(0);
 		currentTick.set(0);
 		activeNotes.reset();
+		pedalling.set({ soft: false, sustain: false });
 	};
 
 	const resetApp = () => {
@@ -321,7 +323,6 @@ function instance($$self, $$props, $$invalidate) {
 		$$invalidate(0, appReady = false);
 		stopApp();
 		tempoControl.set(60);
-		pedalling.set({ soft: false, sustain: false });
 		volume.set({ master: 1, left: 1, right: 1 });
 	};
 
@@ -360,6 +361,8 @@ function instance($$self, $$props, $$invalidate) {
 			$$invalidate(1, currentRoll = previousRoll);
 		}));
 	};
+
+	midiSamplePlayer.on("endOfFile", () => stopApp());
 
 	function rollselector_currentRoll_binding(value) {
 		currentRoll = value;

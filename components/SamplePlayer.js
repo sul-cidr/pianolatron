@@ -112,7 +112,9 @@ const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
 
 const stopNote = (noteNumber) => piano.keyUp({ midi: noteNumber });
 
-midiSamplePlayer.on("playing", ({ tick }) => currentTick.set(tick));
+midiSamplePlayer.on("playing", ({ tick }) => {
+  if (tick <= midiSamplePlayer.totalTicks) currentTick.set(tick);
+});
 
 midiSamplePlayer.on(
   "midiEvent",

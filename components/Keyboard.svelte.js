@@ -27,7 +27,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (150:8) {#each key as _key}
+// (152:8) {#each key as _key}
 function create_each_block_1(ctx) {
 	let span;
 	let span_title_value;
@@ -38,7 +38,7 @@ function create_each_block_1(ctx) {
 			span = element("span");
 			attr(span, "title", span_title_value = /*_key*/ ctx[10].title);
 			attr(span, "data-key", span_data_key_value = /*_key*/ ctx[10]["data-key"]);
-			attr(span, "class", "svelte-b6m1um");
+			attr(span, "class", "svelte-1prvgpa");
 		},
 		m(target, anchor) {
 			insert(target, span, anchor);
@@ -50,7 +50,7 @@ function create_each_block_1(ctx) {
 	};
 }
 
-// (148:4) {#each keys as key}
+// (150:4) {#each keys as key}
 function create_each_block(ctx) {
 	let div;
 	let t;
@@ -70,7 +70,7 @@ function create_each_block(ctx) {
 			}
 
 			t = space();
-			attr(div, "class", "svelte-b6m1um");
+			attr(div, "class", "svelte-1prvgpa");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -132,9 +132,9 @@ function create_fragment(ctx) {
 			}
 
 			attr(div0, "id", "keys");
-			attr(div0, "class", "svelte-b6m1um");
+			attr(div0, "class", "svelte-1prvgpa");
 			attr(div1, "id", "keyboard");
-			attr(div1, "class", "svelte-b6m1um");
+			attr(div1, "class", "svelte-1prvgpa");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -183,7 +183,7 @@ function instance($$self, $$props, $$invalidate) {
 		$$subscribe_activeNotes = () => ($$unsubscribe_activeNotes(), $$unsubscribe_activeNotes = subscribe(activeNotes, $$value => $$invalidate(5, $activeNotes = $$value)), activeNotes);
 
 	$$self.$$.on_destroy.push(() => $$unsubscribe_activeNotes());
-	let { keyCount = 87 } = $$props;
+	let { keyCount = 88 } = $$props;
 	let { activeNotes } = $$props;
 	$$subscribe_activeNotes();
 	const notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
@@ -192,9 +192,10 @@ function instance($$self, $$props, $$invalidate) {
 	let octave = 0;
 
 	while (keyNumber <= keyCount) {
-		notes.forEach(note => {
-			if (note === "C") octave++;
-			if (keyNumber > keyCount) return;
+		for (let i = 0; i < notes.length; i += 1) {
+			const note = notes[i];
+			if (note === "C") octave += 1;
+			if (keyNumber > keyCount) break;
 
 			if (note.endsWith("#")) {
 				keys[keys.length - 1].push({
@@ -210,8 +211,8 @@ function instance($$self, $$props, $$invalidate) {
 				]);
 			}
 
-			keyNumber++;
-		});
+			keyNumber += 1;
+		}
 	}
 
 	$$self.$$set = $$props => {
