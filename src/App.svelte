@@ -21,7 +21,7 @@
     grid-area: right;
   }
 
-  #keyboard {
+  #keyboard-container {
     grid-area: keyboard;
   }
 </style>
@@ -42,10 +42,11 @@
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
+  import catalog from "./assets/catalog.json";
 
   let appReady = false;
   let mididataReady;
-  let currentRoll;
+  let currentRoll = catalog[Math.floor(Math.random() * catalog.length)];
   let previousRoll;
 
   const playPauseApp = () => {
@@ -62,6 +63,7 @@
     playbackProgress.set(0);
     currentTick.set(0);
     activeNotes.reset();
+    pedalling.set({ soft: false, sustain: false });
   };
 
   const resetApp = () => {
@@ -69,7 +71,6 @@
     appReady = false;
     stopApp();
     tempoControl.set(60);
-    pedalling.set({ soft: false, sustain: false });
     volume.set({ master: 1, left: 1, right: 1 });
   };
 
@@ -116,6 +117,7 @@
     }
   }
 
+  midiSamplePlayer.on("endOfFile", () => stopApp());
   $: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 </script>
 
@@ -133,8 +135,8 @@
     <div id="roll">
       <RollViewer imageUrl={currentRoll.image_url} />
     </div>
-    <div id="keyboard">
-      <Keyboard keyCount="87" {activeNotes} />
+    <div id="keyboard-container">
+      <Keyboard keyCount="88" {activeNotes} />
     </div>
   {/if}
 </div>

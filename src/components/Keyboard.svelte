@@ -1,7 +1,7 @@
 <style lang="scss">
   $key-width: 1.8vw;
   $active-key-highlight: #b5e2ff;
-  $felt-strip-height: 12px;
+  $felt-strip-height: 2px;
 
   #keyboard {
     display: flow-root;
@@ -18,17 +18,19 @@
     width: 100%;
 
     &::before {
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAd0lEQVQYV0WMPQoDIRQGv1dZKFjIWjyst1i23sOlyQFShNQ5nZVg7Q+CaDApMuUwDL3Oc+acoZQCEYGex/EVvXdIKUHv65ree2itUUoBPfZ91lqxEEKA7szTOYcY4++zHq01GGOwSrpt22RmhBD+xRgDKSVYa/EBmDYy7EuYDVgAAAAASUVORK5CYII=);
+      background-color: $primary-accent;
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAfUlEQVQYVyXMoQ3AIBBG4f92qEIiLkyAqmQBBmAChmgXqOwO1GHOMQEOhWQBJqhqQu2XvEelFL7vG601hBBA3ntWSuG6LjjnQDFGft8XtVZYa0HGGB5jYN/3haS15m3bcBzHD713Timt/jxPkIhwzhlzTsQY/+nzPGsoIvgAaMAzN5CzOpMAAAAASUVORK5CYII=);
       content: "";
       position: absolute;
       top: 0;
       height: $felt-strip-height;
-      left: -4px;
-      right: -4px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 1px 0px 3px rgba(0, 0, 0, 0.7),
-        -1px 0px 3px rgba(0, 0, 0, 0.7);
+      left: 0;
+      right: 0;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7), 1px 0px 1px rgba(0, 0, 0, 0.7),
+        -1px 0px 1px rgba(0, 0, 0, 0.7);
       z-index: 3;
     }
+
     div {
       float: left;
       position: relative;
@@ -45,6 +47,7 @@
         display: block;
         height: calc(#{$key-width} * 6 - 20px);
       }
+
       :first-child:active,
       :global(:first-child.depressed) {
         box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
@@ -76,6 +79,7 @@
           width: 0px;
         }
       }
+
       :global(:first-child.depressed) {
         background: $active-key-highlight;
       }
@@ -105,6 +109,7 @@
           0 -1px 0px #000;
         height: calc(#{$key-width} * 3 + 3px);
       }
+
       :global(:nth-child(2).depressed) {
         background: $active-key-highlight;
       }
@@ -113,7 +118,7 @@
 </style>
 
 <script>
-  export let keyCount = 87;
+  export let keyCount = 88;
   export let activeNotes;
   const notes = [
     "A",
