@@ -19,13 +19,13 @@
 
 <dl>
   <dt>Title</dt>
-  <dd>{$rollMetadata.TITLE}</dd>
+  <dd>{$rollMetadata.TITLE || $rollMetadata.title}</dd>
   <dt>Performer</dt>
-  <dd>{$rollMetadata.PERFORMER}</dd>
+  <dd>{$rollMetadata.PERFORMER || $rollMetadata.performer}</dd>
   <dt>Composer</dt>
-  <dd>{$rollMetadata.COMPOSER}</dd>
+  <dd>{$rollMetadata.COMPOSER || $rollMetadata.composer}</dd>
   <dt>Label</dt>
-  <dd>{$rollMetadata.LABEL}</dd>
+  <dd>{$rollMetadata.LABEL || $rollMetadata.label}</dd>
   <dt>PURL</dt>
   <dd><a href={$rollMetadata.PURL}>{$rollMetadata.PURL}</a></dd>
   <dt>Call No</dt>

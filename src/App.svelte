@@ -34,6 +34,7 @@
     playbackProgress,
     activeNotes,
     currentTick,
+    rollMetadata,
   } from "./stores";
   import { midiSamplePlayer, pianoReady } from "./components/SamplePlayer";
   import RollSelector from "./components/RollSelector.svelte";
@@ -48,7 +49,6 @@
   let metadataReady;
   let currentRoll;
   let previousRoll;
-  let currentMetadata;
 
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
@@ -110,7 +110,10 @@
         if (metadataResponse.status === 200) return metadataResponse.json();
         throw new Error("Error fetching metadata file! (Operation cancelled)");
       })
-      .then((metadataJson) => (currentMetadata = metadataJson))
+      .then(
+        (metadataJson) =>
+          ($rollMetadata = { ...$rollMetadata, ...metadataJson }),
+      )
       .catch((err) => {
         notify({ title: "Error!", message: err, type: "error" });
         currentRoll = previousRoll;
