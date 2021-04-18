@@ -45,8 +45,10 @@
 
   let appReady = false;
   let mididataReady;
+  let metadataReady;
   let currentRoll;
   let previousRoll;
+  let currentMetadata;
 
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
@@ -97,16 +99,24 @@
       .then((mididataArrayBuffer) => {
         resetApp();
         midiSamplePlayer.loadArrayBuffer(mididataArrayBuffer);
-        Promise.all([mididataReady, pianoReady]).then(() => {
-          appReady = true;
-        });
       })
       .catch((err) => {
         notify({ title: "Error!", message: err, type: "error" });
         currentRoll = previousRoll;
       });
 
-    Promise.all([mididataReady, pianoReady]).then(() => {
+    metadataReady = fetch(`./assets/json/${roll.druid}.json`)
+      .then((metadataResponse) => {
+        if (metadataResponse.status === 200) return metadataResponse.json();
+        throw new Error("Error fetching metadata file! (Operation cancelled)");
+      })
+      .then((metadataJson) => (currentMetadata = metadataJson))
+      .catch((err) => {
+        notify({ title: "Error!", message: err, type: "error" });
+        currentRoll = previousRoll;
+      });
+
+    Promise.all([mididataReady, metadataReady, pianoReady]).then(() => {
       appReady = true;
       previousRoll = currentRoll;
     });
