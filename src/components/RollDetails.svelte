@@ -12,6 +12,10 @@
     margin-bottom: 0.2em;
   }
 
+  dd:not(:has(a)) {
+    text-transform: capitalize;
+  }
+
   dd :global(span) {
     opacity: 0.5;
   }
