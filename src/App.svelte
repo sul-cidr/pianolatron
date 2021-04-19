@@ -106,14 +106,16 @@
         notify({ title: "Error!", message: err, type: "error" });
         currentRoll = previousRoll;
       });
+
+    Promise.all([mididataReady, pianoReady]).then(() => {
+      appReady = true;
+      previousRoll = currentRoll;
+    });
   };
 
   $: {
     if (currentRoll !== previousRoll) {
       loadRoll(currentRoll);
-      mididataReady.then(() => {
-        previousRoll = currentRoll;
-      });
     }
   }
 
