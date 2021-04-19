@@ -1,4 +1,4 @@
-<style>
+<style lang="scss">
   #app {
     display: grid;
     grid-template-rows: 1fr auto;
@@ -11,6 +11,13 @@
 
   #roll-details {
     grid-area: left;
+    max-width: calc(348px + 2em);
+
+    p {
+      margin: 1em;
+      opacity: 0.5;
+      padding: 0.5em 1em;
+    }
   }
 
   #roll {
@@ -167,6 +174,12 @@
     <RollSelector bind:currentRoll />
     {#if appReady}
       <RollDetails />
+      {#if !holesByPx.count}
+        <p>
+          Note:<br />Hole visualization data is not available for this roll at
+          this time. Hole highlighting will not be enabled.
+        </p>
+      {/if}
     {/if}
   </div>
   {#if appReady}
