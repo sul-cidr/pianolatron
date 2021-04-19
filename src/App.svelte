@@ -110,19 +110,18 @@
         if (metadataResponse.status === 200) return metadataResponse.json();
         throw new Error("Error fetching metadata file! (Operation cancelled)");
       })
-      .then(
-        (metadataJson) =>
-          ($rollMetadata = { ...$rollMetadata, ...metadataJson }),
-      )
       .catch((err) => {
         notify({ title: "Error!", message: err, type: "error" });
         currentRoll = previousRoll;
       });
 
-    Promise.all([mididataReady, metadataReady, pianoReady]).then(() => {
-      appReady = true;
-      previousRoll = currentRoll;
-    });
+    Promise.all([mididataReady, metadataReady, pianoReady]).then(
+      ({ 1: metadataJson }) => {
+        $rollMetadata = { ...$rollMetadata, ...metadataJson };
+        appReady = true;
+        previousRoll = currentRoll;
+      },
+    );
   };
 
   $: {
