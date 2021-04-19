@@ -19,15 +19,17 @@
 
 <dl>
   <dt>Title</dt>
-  <dd>{$rollMetadata.TITLE || $rollMetadata.title}</dd>
+  <dd>{$rollMetadata.TITLE || $rollMetadata.title || 'Unavailable'}</dd>
   <dt>Performer</dt>
-  <dd>{$rollMetadata.PERFORMER || $rollMetadata.performer}</dd>
+  <dd>{$rollMetadata.PERFORMER || $rollMetadata.performer || 'Unavailable'}</dd>
   <dt>Composer</dt>
-  <dd>{$rollMetadata.COMPOSER || $rollMetadata.composer}</dd>
+  <dd>{$rollMetadata.COMPOSER || $rollMetadata.composer || 'Unavailable'}</dd>
   <dt>Label</dt>
-  <dd>{$rollMetadata.LABEL || $rollMetadata.label}</dd>
+  <dd>{$rollMetadata.LABEL || $rollMetadata.label || 'Unavailable'}</dd>
   <dt>PURL</dt>
-  <dd><a href={$rollMetadata.PURL}>{$rollMetadata.PURL}</a></dd>
+  <dd>
+    <a href={$rollMetadata.PURL}>{$rollMetadata.PURL || 'Unavailable'}</a>
+  </dd>
   <dt>Call No</dt>
-  <dd>{$rollMetadata.CALLNUM}</dd>
+  <dd>{$rollMetadata.CALLNUM || 'Unavailable'}</dd>
 </dl>
