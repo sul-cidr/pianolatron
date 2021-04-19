@@ -11,25 +11,41 @@
     margin-top: 0.5em;
     margin-bottom: 0.2em;
   }
+
+  dd :global(span) {
+    opacity: 0.5;
+  }
 </style>
 
 <script>
   import { rollMetadata } from "../stores";
+
+  const unavailable = "<span>Unavailable</span>";
 </script>
 
 <dl>
   <dt>Title</dt>
-  <dd>{$rollMetadata.TITLE || $rollMetadata.title || 'Unavailable'}</dd>
+  <dd>
+    {@html $rollMetadata.TITLE || $rollMetadata.title || unavailable}
+  </dd>
   <dt>Performer</dt>
-  <dd>{$rollMetadata.PERFORMER || $rollMetadata.performer || 'Unavailable'}</dd>
+  <dd>
+    {@html $rollMetadata.PERFORMER || $rollMetadata.performer || unavailable}
+  </dd>
   <dt>Composer</dt>
-  <dd>{$rollMetadata.COMPOSER || $rollMetadata.composer || 'Unavailable'}</dd>
+  <dd>
+    {@html $rollMetadata.COMPOSER || $rollMetadata.composer || unavailable}
+  </dd>
   <dt>Label</dt>
-  <dd>{$rollMetadata.LABEL || $rollMetadata.label || 'Unavailable'}</dd>
+  <dd>
+    {@html $rollMetadata.LABEL || $rollMetadata.label || unavailable}
+  </dd>
   <dt>PURL</dt>
   <dd>
-    <a href={$rollMetadata.PURL}>{$rollMetadata.PURL || 'Unavailable'}</a>
+    <a href={$rollMetadata.PURL}>{@html $rollMetadata.PURL || unavailable}</a>
   </dd>
   <dt>Call No</dt>
-  <dd>{$rollMetadata.CALLNUM || 'Unavailable'}</dd>
+  <dd>
+    {@html $rollMetadata.CALLNUM || unavailable}
+  </dd>
 </dl>
