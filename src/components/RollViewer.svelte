@@ -34,6 +34,10 @@
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
+
+    :global(mark) {
+      background-color: yellow;
+    }
   }
 </style>
 
@@ -43,10 +47,12 @@
   import { rollMetadata, currentTick } from "../stores";
 
   export let imageUrl;
+  export let holesByPx;
 
   let openSeadragon;
   let firstHolePx;
   let dragging;
+  let paintedHoles = [];
 
   const panViewportToTick = (tick) => {
     if (!openSeadragon) return;
@@ -62,6 +68,47 @@
     );
 
     viewport.panTo(lineCenter);
+  };
+
+  const highlightHoles = (tick) => {
+    if (!openSeadragon) return;
+
+    const holes = holesByPx.search(tick, tick);
+
+    paintedHoles.forEach((elem) => {
+      openSeadragon.viewport.viewer.removeOverlay(elem);
+    });
+
+    paintedHoles = [];
+
+    holes.forEach((hole) => {
+      const holeId = `${hole.TRACKER_HOLE}.${hole.ORIGIN_ROW}`;
+
+      if (holeId in Object.keys(paintedHoles)) {
+        return;
+      }
+
+      const markWidth = hole.WIDTH_COL;
+      const markStartX = hole.ORIGIN_COL;
+      const markStartY = hole.ORIGIN_ROW;
+      const markEndY = hole.OFF_TIME;
+      const markHeight = markEndY - markStartY;
+      const midiNumber = hole.TRACKER_HOLE;
+
+      const mark = document.createElement("mark");
+
+      mark.dataset.midiNumber = midiNumber;
+
+      const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
+        markStartX,
+        markStartY,
+        markWidth,
+        markHeight,
+      );
+      openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
+
+      paintedHoles[holeId] = mark;
+    });
   };
 
   onMount(async () => {
@@ -83,6 +130,7 @@
   });
 
   $: panViewportToTick($currentTick);
+  $: highlightHoles($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: firstHolePx = scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)

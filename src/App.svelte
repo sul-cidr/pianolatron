@@ -188,7 +188,7 @@
       <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
     </div>
     <div id="roll">
-      <RollViewer imageUrl={currentRoll.image_url} />
+      <RollViewer imageUrl={currentRoll.image_url} {holesByPx} />
     </div>
     <div id="keyboard-container">
       <Keyboard keyCount="88" {activeNotes} />
