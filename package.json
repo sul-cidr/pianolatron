@@ -37,6 +37,7 @@
   "dependencies": {
     "@snowpack/plugin-sass": "^1.4.0",
     "@tonejs/piano": "^0.2.1",
+    "loader": "^2.1.1",
     "midi-player-js": "^2.0.13",
     "openseadragon": "^2.4.2",
     "svelte": "^3.29.4",

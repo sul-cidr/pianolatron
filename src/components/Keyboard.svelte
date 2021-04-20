@@ -7,7 +7,7 @@
     display: flow-root;
     margin: 1em auto;
     position: relative;
-    width: fit-content;
+    width: max-content;
   }
 
   div#keys {

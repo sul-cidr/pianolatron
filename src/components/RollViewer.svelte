@@ -28,6 +28,9 @@
       top: 0;
     }
 
+    :global(canvas) {
+      background: white !important;
+    }
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
