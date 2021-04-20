@@ -52,7 +52,7 @@
   let openSeadragon;
   let firstHolePx;
   let dragging;
-  let paintedHoles = [];
+  let marks = [];
 
   const panViewportToTick = (tick) => {
     if (!openSeadragon) return;
@@ -75,18 +75,14 @@
 
     const holes = holesByPx.search(tick, tick);
 
-    paintedHoles.forEach((elem) => {
+    marks = marks.filter(([hole, elem]) => {
+      if (holes.includes(hole)) return true;
       openSeadragon.viewport.viewer.removeOverlay(elem);
+      return false;
     });
 
-    paintedHoles = [];
-
     holes.forEach((hole) => {
-      const holeId = `${hole.TRACKER_HOLE}.${hole.ORIGIN_ROW}`;
-
-      if (holeId in Object.keys(paintedHoles)) {
-        return;
-      }
+      if (marks.map(([_hole]) => _hole).includes(hole)) return;
 
       const markWidth = hole.WIDTH_COL;
       const markStartX = hole.ORIGIN_COL;
@@ -107,7 +103,7 @@
       );
       openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
 
-      paintedHoles[holeId] = mark;
+      marks.push([hole, mark]);
     });
   };
 
