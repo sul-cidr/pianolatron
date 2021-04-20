@@ -27,6 +27,7 @@
 </style>
 
 <script>
+  import IntervalTree from "node-interval-tree";
   import {
     pedalling,
     volume,
@@ -49,6 +50,32 @@
   let metadataReady;
   let currentRoll;
   let previousRoll;
+  let holesByPx = new IntervalTree();
+
+  const buildHolesByPx = (holeData) => {
+    const scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
+    const firstHolePx = scrollDownwards
+      ? parseInt($rollMetadata.FIRST_HOLE, 10)
+      : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
+        parseInt($rollMetadata.FIRST_HOLE, 10);
+
+    holeData.forEach((hole) => {
+      const tickOn = scrollDownwards
+        ? hole.ORIGIN_ROW - firstHolePx
+        : firstHolePx - hole.ORIGIN_ROW;
+
+      let tickOff;
+      if (hole.OFF_TIME !== undefined) {
+        tickOff = scrollDownwards
+          ? hole.OFF_TIME - firstHolePx
+          : firstHolePx - hole.OFF_TIME;
+      } else {
+        tickOff = tickOn;
+      }
+
+      holesByPx.insert(tickOn, tickOff, hole);
+    });
+  };
 
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
@@ -118,6 +145,7 @@
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ({ 1: metadataJson }) => {
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
+        if (metadataJson.holeData) buildHolesByPx(metadataJson.holeData);
         appReady = true;
         previousRoll = currentRoll;
       },
