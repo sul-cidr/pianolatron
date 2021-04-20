@@ -139,5 +139,11 @@
       <Keyboard keyCount="88" {activeNotes} />
     </div>
   {/if}
+  {#if !appReady}
+    <div id="loading">
+      <div><span /> <span /> <span /> <span /> <span /></div>
+      Loading resources...
+    </div>
+  {/if}
 </div>
 <Notification />
