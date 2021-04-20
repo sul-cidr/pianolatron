@@ -39,6 +39,7 @@
     "@tonejs/piano": "^0.2.1",
     "loader": "^2.1.1",
     "midi-player-js": "^2.0.13",
+    "node-interval-tree": "^1.3.3",
     "openseadragon": "^2.4.2",
     "svelte": "^3.29.4",
     "svelte-preprocess": "^4.7.0",
