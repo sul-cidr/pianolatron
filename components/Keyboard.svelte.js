@@ -38,7 +38,7 @@ function create_each_block_1(ctx) {
 			span = element("span");
 			attr(span, "title", span_title_value = /*_key*/ ctx[10].title);
 			attr(span, "data-key", span_data_key_value = /*_key*/ ctx[10]["data-key"]);
-			attr(span, "class", "svelte-1prvgpa");
+			attr(span, "class", "svelte-v7q0wb");
 		},
 		m(target, anchor) {
 			insert(target, span, anchor);
@@ -70,7 +70,7 @@ function create_each_block(ctx) {
 			}
 
 			t = space();
-			attr(div, "class", "svelte-1prvgpa");
+			attr(div, "class", "svelte-v7q0wb");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -132,9 +132,9 @@ function create_fragment(ctx) {
 			}
 
 			attr(div0, "id", "keys");
-			attr(div0, "class", "svelte-1prvgpa");
+			attr(div0, "class", "svelte-v7q0wb");
 			attr(div1, "id", "keyboard");
-			attr(div1, "class", "svelte-1prvgpa");
+			attr(div1, "class", "svelte-v7q0wb");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);

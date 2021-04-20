@@ -40,7 +40,6 @@ import PlaybackControls from "./components/PlaybackControls.svelte.js";
 import RollViewer from "./components/RollViewer.svelte.js";
 import Keyboard from "./components/Keyboard.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
-import catalog from "./assets/catalog.json.proxy.js";
 
 function create_if_block_2(ctx) {
 	let rolldetails;
@@ -70,7 +69,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (131:2) {#if appReady}
+// (132:2) {#if appReady}
 function create_if_block_1(ctx) {
 	let div0;
 	let playbackcontrols;
@@ -157,7 +156,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (142:2) {#if !appReady}
+// (143:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -340,7 +339,7 @@ function instance($$self, $$props, $$invalidate) {
 	component_subscribe($$self, currentTick, $$value => $$invalidate(8, $currentTick = $$value));
 	let appReady = false;
 	let mididataReady;
-	let currentRoll = catalog[Math.floor(Math.random() * catalog.length)];
+	let currentRoll;
 	let previousRoll;
 
 	const playPauseApp = () => {
@@ -361,7 +360,7 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const resetApp = () => {
-		$$invalidate(6, mididataReady = false);
+		mididataReady = false;
 		$$invalidate(0, appReady = false);
 		stopApp();
 		tempoControl.set(60);
@@ -383,7 +382,7 @@ function instance($$self, $$props, $$invalidate) {
 	const skipToPercentage = percentage => skipToTick(midiSamplePlayer.totalTicks * percentage);
 
 	const loadRoll = roll => {
-		$$invalidate(6, mididataReady = fetch(`./assets/midi/${roll.druid}.mid`).then(mididataResponse => {
+		mididataReady = fetch(`./assets/midi/${roll.druid}.mid`).then(mididataResponse => {
 			if (mididataResponse.status === 200) return mididataResponse.arrayBuffer();
 			throw new Error("Error fetching MIDI file! (Operation cancelled)");
 		}).then(mididataArrayBuffer => {
@@ -401,7 +400,12 @@ function instance($$self, $$props, $$invalidate) {
 			});
 
 			$$invalidate(1, currentRoll = previousRoll);
-		}));
+		});
+
+		Promise.all([mididataReady, pianoReady]).then(() => {
+			$$invalidate(0, appReady = true);
+			$$invalidate(7, previousRoll = currentRoll);
+		});
 	};
 
 	midiSamplePlayer.on("endOfFile", () => stopApp());
@@ -412,14 +416,10 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*currentRoll, previousRoll, mididataReady*/ 194) {
+		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 130) {
 			$: {
 				if (currentRoll !== previousRoll) {
 					loadRoll(currentRoll);
-
-					mididataReady.then(() => {
-						$$invalidate(7, previousRoll = currentRoll);
-					});
 				}
 			}
 		}

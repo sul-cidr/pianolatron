@@ -127,7 +127,7 @@ function create_fragment(ctx) {
 }
 
 function instance($$self, $$props, $$invalidate) {
-	let { currentRoll } = $$props;
+	let { currentRoll = catalog[Math.floor(Math.random() * catalog.length)] } = $$props;
 
 	function select_change_handler() {
 		currentRoll = select_value(this);
