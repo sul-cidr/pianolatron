@@ -42,7 +42,7 @@ import Keyboard from "./components/Keyboard.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
 import catalog from "./assets/catalog.json.proxy.js";
 
-function create_if_block_1(ctx) {
+function create_if_block_2(ctx) {
 	let rolldetails;
 	let current;
 	rolldetails = new RollDetails({});
@@ -71,7 +71,7 @@ function create_if_block_1(ctx) {
 }
 
 // (131:2) {#if appReady}
-function create_if_block(ctx) {
+function create_if_block_1(ctx) {
 	let div0;
 	let playbackcontrols;
 	let t0;
@@ -157,6 +157,28 @@ function create_if_block(ctx) {
 	};
 }
 
+// (142:2) {#if !appReady}
+function create_if_block(ctx) {
+	let div1;
+
+	return {
+		c() {
+			div1 = element("div");
+
+			div1.innerHTML = `<div><span></span>  <span></span>  <span></span>  <span></span>  <span></span></div>
+      Loading resources...`;
+
+			attr(div1, "id", "loading");
+		},
+		m(target, anchor) {
+			insert(target, div1, anchor);
+		},
+		d(detaching) {
+			if (detaching) detach(div1);
+		}
+	};
+}
+
 function create_fragment(ctx) {
 	let div1;
 	let div0;
@@ -165,6 +187,7 @@ function create_fragment(ctx) {
 	let t0;
 	let t1;
 	let t2;
+	let t3;
 	let notification;
 	let current;
 
@@ -180,8 +203,9 @@ function create_fragment(ctx) {
 
 	rollselector = new RollSelector({ props: rollselector_props });
 	binding_callbacks.push(() => bind(rollselector, "currentRoll", rollselector_currentRoll_binding));
-	let if_block0 = /*appReady*/ ctx[0] && create_if_block_1(ctx);
-	let if_block1 = /*appReady*/ ctx[0] && create_if_block(ctx);
+	let if_block0 = /*appReady*/ ctx[0] && create_if_block_2(ctx);
+	let if_block1 = /*appReady*/ ctx[0] && create_if_block_1(ctx);
+	let if_block2 = !/*appReady*/ ctx[0] && create_if_block(ctx);
 	notification = new Notification({});
 
 	return {
@@ -194,6 +218,8 @@ function create_fragment(ctx) {
 			t1 = space();
 			if (if_block1) if_block1.c();
 			t2 = space();
+			if (if_block2) if_block2.c();
+			t3 = space();
 			create_component(notification.$$.fragment);
 			attr(div0, "id", "roll-details");
 			attr(div0, "class", "svelte-1d08kzi");
@@ -208,7 +234,9 @@ function create_fragment(ctx) {
 			if (if_block0) if_block0.m(div0, null);
 			append(div1, t1);
 			if (if_block1) if_block1.m(div1, null);
-			insert(target, t2, anchor);
+			append(div1, t2);
+			if (if_block2) if_block2.m(div1, null);
+			insert(target, t3, anchor);
 			mount_component(notification, target, anchor);
 			current = true;
 		},
@@ -229,7 +257,7 @@ function create_fragment(ctx) {
 						transition_in(if_block0, 1);
 					}
 				} else {
-					if_block0 = create_if_block_1(ctx);
+					if_block0 = create_if_block_2(ctx);
 					if_block0.c();
 					transition_in(if_block0, 1);
 					if_block0.m(div0, null);
@@ -252,10 +280,10 @@ function create_fragment(ctx) {
 						transition_in(if_block1, 1);
 					}
 				} else {
-					if_block1 = create_if_block(ctx);
+					if_block1 = create_if_block_1(ctx);
 					if_block1.c();
 					transition_in(if_block1, 1);
-					if_block1.m(div1, null);
+					if_block1.m(div1, t2);
 				}
 			} else if (if_block1) {
 				group_outros();
@@ -265,6 +293,19 @@ function create_fragment(ctx) {
 				});
 
 				check_outros();
+			}
+
+			if (!/*appReady*/ ctx[0]) {
+				if (if_block2) {
+					
+				} else {
+					if_block2 = create_if_block(ctx);
+					if_block2.c();
+					if_block2.m(div1, null);
+				}
+			} else if (if_block2) {
+				if_block2.d(1);
+				if_block2 = null;
 			}
 		},
 		i(local) {
@@ -287,7 +328,8 @@ function create_fragment(ctx) {
 			destroy_component(rollselector);
 			if (if_block0) if_block0.d();
 			if (if_block1) if_block1.d();
-			if (detaching) detach(t2);
+			if (if_block2) if_block2.d();
+			if (detaching) detach(t3);
 			destroy_component(notification, detaching);
 		}
 	};

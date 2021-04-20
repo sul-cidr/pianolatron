@@ -73,18 +73,9 @@ function instance($$self, $$props, $$invalidate) {
 			constrainDuringPan: true
 		});
 
-		openSeadragon.addOnceHandler("update-viewport", () => {
-			panViewportToTick(0);
-		});
-
-		openSeadragon.addHandler("canvas-drag", () => {
-			dragging = true;
-		});
-
-		openSeadragon.addHandler("canvas-drag-end", () => {
-			dragging = false;
-		});
-
+		openSeadragon.addOnceHandler("update-viewport", () => panViewportToTick(0));
+		openSeadragon.addHandler("canvas-drag", () => dragging = true);
+		openSeadragon.addHandler("canvas-drag-end", () => dragging = false);
 		openSeadragon.open(imageUrl);
 	});
 

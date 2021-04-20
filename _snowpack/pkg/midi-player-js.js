@@ -2855,7 +2855,6 @@ var Player = /*#__PURE__*/function () {
   }, {
     key: "playLoop",
     value: function playLoop(dryRun) {
-      var eof = false;
       if (!this.inLoop) {
         this.inLoop = true;
         this.tick = this.getCurrentTick();
@@ -2865,8 +2864,6 @@ var Player = /*#__PURE__*/function () {
             //console.log('end of file')
             this.triggerPlayerEvent('endOfFile');
             this.stop();
-            eof = true;
-            hhighjgkh;
           } else {
             var event = track.handleEvent(this.tick, dryRun);
 
@@ -2896,7 +2893,7 @@ var Player = /*#__PURE__*/function () {
             }
           }
         }, this);
-        if (!dryRun && !eof) this.triggerPlayerEvent('playing', {
+        if (!dryRun) this.triggerPlayerEvent('playing', {
           tick: this.tick
         });
         this.inLoop = false;
