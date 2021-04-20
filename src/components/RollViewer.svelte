@@ -36,7 +36,17 @@
     }
 
     :global(mark) {
+      animation: mark-recede 0.5s ease-in-out;
       background-color: yellow;
+      box-shadow: 0 0 5px yellow;
+      mix-blend-mode: multiply;
+    }
+  }
+
+  @keyframes mark-recede {
+    from {
+      border-radius: 30%;
+      mix-blend-mode: normal;
     }
   }
 </style>
