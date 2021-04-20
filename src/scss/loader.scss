@@ -9,6 +9,7 @@
   text-align: center;
   color: $primary-accent;
   font-size: 1.4em;
+  text-shadow: 1px 2px white;
 
   div {
     width: 100px;
@@ -22,6 +23,8 @@
       height: 100%;
       width: 12px;
       display: inline-block;
+      box-shadow: 0px 0px 10px 3px white;
+      border-radius: 0px 20px 0px 20px;
 
       animation: pulse 1.2s infinite ease-in-out;
 
