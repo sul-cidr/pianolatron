@@ -20,6 +20,7 @@ import {
 	run_all,
 	safe_not_equal,
 	set_data,
+	set_style,
 	space,
 	text,
 	toggle_class,
@@ -92,12 +93,18 @@ function create_fragment(ctx) {
 	let button3;
 	let t32;
 	let button3_aria_pressed_value;
+	let t33;
+	let br;
+	let t34;
+	let button4;
+	let t35;
+	let button4_aria_pressed_value;
 	let current;
 	let mounted;
 	let dispose;
 
 	function rangeslider0_value_binding(value) {
-		/*rangeslider0_value_binding*/ ctx[7].call(null, value);
+		/*rangeslider0_value_binding*/ ctx[8].call(null, value);
 	}
 
 	let rangeslider0_props = {
@@ -115,7 +122,7 @@ function create_fragment(ctx) {
 	binding_callbacks.push(() => bind(rangeslider0, "value", rangeslider0_value_binding));
 
 	function rangeslider1_value_binding(value) {
-		/*rangeslider1_value_binding*/ ctx[8].call(null, value);
+		/*rangeslider1_value_binding*/ ctx[9].call(null, value);
 	}
 
 	let rangeslider1_props = {
@@ -133,7 +140,7 @@ function create_fragment(ctx) {
 	binding_callbacks.push(() => bind(rangeslider1, "value", rangeslider1_value_binding));
 
 	function rangeslider2_value_binding(value) {
-		/*rangeslider2_value_binding*/ ctx[9].call(null, value);
+		/*rangeslider2_value_binding*/ ctx[10].call(null, value);
 	}
 
 	let rangeslider2_props = {
@@ -151,7 +158,7 @@ function create_fragment(ctx) {
 	binding_callbacks.push(() => bind(rangeslider2, "value", rangeslider2_value_binding));
 
 	function rangeslider3_value_binding(value) {
-		/*rangeslider3_value_binding*/ ctx[10].call(null, value);
+		/*rangeslider3_value_binding*/ ctx[11].call(null, value);
 	}
 
 	let rangeslider3_props = {
@@ -179,7 +186,7 @@ function create_fragment(ctx) {
 			}
 		});
 
-	rangeslider4.$on("input", /*input_handler*/ ctx[11]);
+	rangeslider4.$on("input", /*input_handler*/ ctx[12]);
 
 	return {
 		c() {
@@ -241,6 +248,11 @@ function create_fragment(ctx) {
 			t31 = space();
 			button3 = element("button");
 			t32 = text("Sustain");
+			t33 = space();
+			br = element("br");
+			t34 = space();
+			button4 = element("button");
+			t35 = text("Accent");
 			attr(div0, "class", "control svelte-kl0s1z");
 			attr(div1, "class", "control svelte-kl0s1z");
 			attr(div2, "class", "control svelte-kl0s1z");
@@ -258,6 +270,11 @@ function create_fragment(ctx) {
 			attr(button3, "aria-pressed", button3_aria_pressed_value = /*$pedalling*/ ctx[6].sustain);
 			attr(button3, "class", "svelte-kl0s1z");
 			toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[6].sustain);
+			attr(button4, "type", "button");
+			set_style(button4, "width", "100%");
+			attr(button4, "aria-pressed", button4_aria_pressed_value = /*$pedalling*/ ctx[6].accent);
+			attr(button4, "class", "svelte-kl0s1z");
+			toggle_class(button4, "pedal-on", /*$pedalling*/ ctx[6].accent);
 			attr(div5, "id", "playback-controls");
 			attr(div5, "class", "svelte-kl0s1z");
 		},
@@ -313,18 +330,25 @@ function create_fragment(ctx) {
 			append(div5, t31);
 			append(div5, button3);
 			append(button3, t32);
+			append(div5, t33);
+			append(div5, br);
+			append(div5, t34);
+			append(div5, button4);
+			append(button4, t35);
 			current = true;
 
 			if (!mounted) {
 				dispose = [
+					listen(window, "mouseup", /*mouseup_handler*/ ctx[7]),
 					listen(button0, "click", function () {
 						if (is_function(/*playPauseApp*/ ctx[0])) /*playPauseApp*/ ctx[0].apply(this, arguments);
 					}),
 					listen(button1, "click", function () {
 						if (is_function(/*stopApp*/ ctx[1])) /*stopApp*/ ctx[1].apply(this, arguments);
 					}),
-					listen(button2, "click", /*click_handler*/ ctx[12]),
-					listen(button3, "click", /*click_handler_1*/ ctx[13])
+					listen(button2, "click", /*click_handler*/ ctx[13]),
+					listen(button3, "click", /*click_handler_1*/ ctx[14]),
+					listen(button4, "mousedown", /*mousedown_handler*/ ctx[15])
 				];
 
 				mounted = true;
@@ -392,6 +416,14 @@ function create_fragment(ctx) {
 			if (dirty & /*$pedalling*/ 64) {
 				toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[6].sustain);
 			}
+
+			if (!current || dirty & /*$pedalling*/ 64 && button4_aria_pressed_value !== (button4_aria_pressed_value = /*$pedalling*/ ctx[6].accent)) {
+				attr(button4, "aria-pressed", button4_aria_pressed_value);
+			}
+
+			if (dirty & /*$pedalling*/ 64) {
+				toggle_class(button4, "pedal-on", /*$pedalling*/ ctx[6].accent);
+			}
 		},
 		i(local) {
 			if (current) return;
@@ -435,6 +467,7 @@ function instance($$self, $$props, $$invalidate) {
 	let { playPauseApp } = $$props;
 	let { stopApp } = $$props;
 	let { skipToPercentage } = $$props;
+	const mouseup_handler = () => pedalling.update(val => ({ ...val, accent: false }));
 
 	function rangeslider0_value_binding(value) {
 		$volume.master = value;
@@ -459,6 +492,7 @@ function instance($$self, $$props, $$invalidate) {
 	const input_handler = ({ target: { value } }) => skipToPercentage(value);
 	const click_handler = () => pedalling.update(val => ({ ...val, soft: !val.soft }));
 	const click_handler_1 = () => pedalling.update(val => ({ ...val, sustain: !val.sustain }));
+	const mousedown_handler = () => pedalling.update(val => ({ ...val, accent: true }));
 
 	$$self.$$set = $$props => {
 		if ("playPauseApp" in $$props) $$invalidate(0, playPauseApp = $$props.playPauseApp);
@@ -474,13 +508,15 @@ function instance($$self, $$props, $$invalidate) {
 		$tempoControl,
 		$playbackProgress,
 		$pedalling,
+		mouseup_handler,
 		rangeslider0_value_binding,
 		rangeslider1_value_binding,
 		rangeslider2_value_binding,
 		rangeslider3_value_binding,
 		input_handler,
 		click_handler,
-		click_handler_1
+		click_handler_1,
+		mousedown_handler
 	];
 }
 

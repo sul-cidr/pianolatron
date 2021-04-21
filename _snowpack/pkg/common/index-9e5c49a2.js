@@ -83,6 +83,9 @@ function set_data(text, data) {
 function set_input_value(input, value) {
     input.value = value == null ? '' : value;
 }
+function set_style(node, key, value, important) {
+    node.style.setProperty(key, value, important ? 'important' : '');
+}
 function select_option(select, value) {
     for (let i = 0; i < select.options.length; i += 1) {
         const option = select.options[i];
@@ -355,4 +358,4 @@ class SvelteComponent {
     }
 }
 
-export { run_all as A, set_data as B, text as C, toggle_class as D, add_render_callback as E, select_option as F, select_value as G, empty as H, bubble as I, set_input_value as J, to_number as K, SvelteComponent as S, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, group_outros as l, init as m, insert as n, onMount as o, mount_component as p, set_store_value as q, space as r, safe_not_equal as s, transition_in as t, transition_out as u, destroy_each as v, noop as w, subscribe as x, is_function as y, listen as z };
+export { run_all as A, set_data as B, set_style as C, text as D, toggle_class as E, add_render_callback as F, select_option as G, select_value as H, empty as I, bubble as J, set_input_value as K, to_number as L, SvelteComponent as S, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, group_outros as l, init as m, insert as n, onMount as o, mount_component as p, set_store_value as q, space as r, safe_not_equal as s, transition_in as t, transition_out as u, destroy_each as v, noop as w, subscribe as x, is_function as y, listen as z };

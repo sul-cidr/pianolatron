@@ -23,8 +23,10 @@ const updatePlayer = (fn) => {
 };
 
 let softPedalOn;
-pedalling.subscribe(({ soft }) => {
+let accentOn;
+pedalling.subscribe(({ soft, accent }) => {
   softPedalOn = soft;
+  accentOn = accent;
 });
 
 let masterVolumeRatio;
@@ -83,6 +85,7 @@ const controllerChange = Object.freeze({
 const DEFAULT_NOTE_VELOCITY = 33.0;
 const SOFT_PEDAL_RATIO = 0.67;
 const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
+const ACCENT_BUMP = 1.5;
 
 const panBoundary = HALF_BOUNDARY;
 
@@ -100,6 +103,7 @@ const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
   const modifiedVelocity =
     (velocity / 128) *
     ((softPedalOn && SOFT_PEDAL_RATIO) || 1) *
+    ((accentOn && ACCENT_BUMP) || 1) *
     masterVolumeRatio *
     (noteNumber < panBoundary ? leftVolumeRatio : rightVolumeRatio);
   if (modifiedVelocity) {
