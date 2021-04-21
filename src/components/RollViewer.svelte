@@ -59,10 +59,40 @@
   export let imageUrl;
   export let holesByTickInterval;
 
+  const WELTE_MIDI_START = 14;
+  const WELTE_RED_FIRST_NOTE = 28;
+  const WELTE_RED_LAST_NOTE = 103;
+
   let openSeadragon;
   let firstHolePx;
   let dragging;
   let marks = [];
+
+  const getNoteName = (trackerHole) => {
+    const midiNumber = trackerHole + WELTE_MIDI_START;
+    if (
+      midiNumber >= WELTE_RED_FIRST_NOTE &&
+      midiNumber <= WELTE_RED_LAST_NOTE
+    ) {
+      const octave = parseInt(midiNumber / 12, 10) - 1;
+      const name = [
+        "A",
+        "A#",
+        "B",
+        "C",
+        "C#",
+        "D",
+        "D#",
+        "E",
+        "F",
+        "F#",
+        "G",
+        "G#",
+      ][(midiNumber - 21) % 12];
+      return `${name}${octave}`;
+    }
+    return "??";
+  };
 
   const panViewportToTick = (tick) => {
     if (!openSeadragon) return;
@@ -94,8 +124,15 @@
     holes.forEach((hole) => {
       if (marks.map(([_hole]) => _hole).includes(hole)) return;
 
-      const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME } = hole;
+      const {
+        WIDTH_COL,
+        ORIGIN_COL,
+        ORIGIN_ROW,
+        OFF_TIME,
+        TRACKER_HOLE,
+      } = hole;
       const mark = document.createElement("mark");
+      mark.dataset.info = getNoteName(TRACKER_HOLE);
       const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
         ORIGIN_COL,
         ORIGIN_ROW,
