@@ -102,6 +102,37 @@ function select_value(select) {
 function toggle_class(element, name, toggle) {
     element.classList[toggle ? 'add' : 'remove'](name);
 }
+class HtmlTag {
+    constructor(anchor = null) {
+        this.a = anchor;
+        this.e = this.n = null;
+    }
+    m(html, target, anchor = null) {
+        if (!this.e) {
+            this.e = element(target.nodeName);
+            this.t = target;
+            this.h(html);
+        }
+        this.i(anchor);
+    }
+    h(html) {
+        this.e.innerHTML = html;
+        this.n = Array.from(this.e.childNodes);
+    }
+    i(anchor) {
+        for (let i = 0; i < this.n.length; i += 1) {
+            insert(this.t, this.n[i], anchor);
+        }
+    }
+    p(html) {
+        this.d();
+        this.h(html);
+        this.i(this.a);
+    }
+    d() {
+        this.n.forEach(detach);
+    }
+}
 
 let current_component;
 function set_current_component(component) {
@@ -358,4 +389,4 @@ class SvelteComponent {
     }
 }
 
-export { run_all as A, set_data as B, set_style as C, text as D, toggle_class as E, add_render_callback as F, select_option as G, select_value as H, empty as I, bubble as J, set_input_value as K, to_number as L, SvelteComponent as S, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, group_outros as l, init as m, insert as n, onMount as o, mount_component as p, set_store_value as q, space as r, safe_not_equal as s, transition_in as t, transition_out as u, destroy_each as v, noop as w, subscribe as x, is_function as y, listen as z };
+export { run_all as A, set_data as B, set_style as C, text as D, toggle_class as E, add_render_callback as F, select_option as G, HtmlTag as H, select_value as I, empty as J, bubble as K, set_input_value as L, to_number as M, SvelteComponent as S, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, group_outros as l, init as m, insert as n, onMount as o, mount_component as p, set_store_value as q, space as r, safe_not_equal as s, transition_in as t, transition_out as u, destroy_each as v, noop as w, subscribe as x, is_function as y, listen as z };

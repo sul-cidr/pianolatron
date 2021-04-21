@@ -30,7 +30,8 @@ import {
 	tempoControl,
 	playbackProgress,
 	activeNotes,
-	currentTick
+	currentTick,
+	rollMetadata
 } from "./stores.js";
 
 import { midiSamplePlayer, pianoReady } from "./components/SamplePlayer.js";
@@ -69,7 +70,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (132:2) {#if appReady}
+// (144:2) {#if appReady}
 function create_if_block_1(ctx) {
 	let div0;
 	let playbackcontrols;
@@ -156,7 +157,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (143:2) {#if !appReady}
+// (155:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -336,9 +337,12 @@ function create_fragment(ctx) {
 
 function instance($$self, $$props, $$invalidate) {
 	let $currentTick;
-	component_subscribe($$self, currentTick, $$value => $$invalidate(8, $currentTick = $$value));
+	let $rollMetadata;
+	component_subscribe($$self, currentTick, $$value => $$invalidate(9, $currentTick = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(10, $rollMetadata = $$value));
 	let appReady = false;
 	let mididataReady;
+	let metadataReady;
 	let currentRoll;
 	let previousRoll;
 
@@ -388,10 +392,6 @@ function instance($$self, $$props, $$invalidate) {
 		}).then(mididataArrayBuffer => {
 			resetApp();
 			midiSamplePlayer.loadArrayBuffer(mididataArrayBuffer);
-
-			Promise.all([mididataReady, pianoReady]).then(() => {
-				$$invalidate(0, appReady = true);
-			});
 		}).catch(err => {
 			notify({
 				title: "Error!",
@@ -402,9 +402,23 @@ function instance($$self, $$props, $$invalidate) {
 			$$invalidate(1, currentRoll = previousRoll);
 		});
 
-		Promise.all([mididataReady, pianoReady]).then(() => {
+		metadataReady = fetch(`./assets/json/${roll.druid}.json`).then(metadataResponse => {
+			if (metadataResponse.status === 200) return metadataResponse.json();
+			throw new Error("Error fetching metadata file! (Operation cancelled)");
+		}).catch(err => {
+			notify({
+				title: "Error!",
+				message: err,
+				type: "error"
+			});
+
+			$$invalidate(1, currentRoll = previousRoll);
+		});
+
+		Promise.all([mididataReady, metadataReady, pianoReady]).then(({ 1: metadataJson }) => {
+			set_store_value(rollMetadata, $rollMetadata = { ...$rollMetadata, ...metadataJson }, $rollMetadata);
 			$$invalidate(0, appReady = true);
-			$$invalidate(7, previousRoll = currentRoll);
+			$$invalidate(8, previousRoll = currentRoll);
 		});
 	};
 
@@ -416,7 +430,7 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 130) {
+		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 258) {
 			$: {
 				if (currentRoll !== previousRoll) {
 					loadRoll(currentRoll);
@@ -424,7 +438,7 @@ function instance($$self, $$props, $$invalidate) {
 			}
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 256) {
+		if ($$self.$$.dirty & /*$currentTick*/ 512) {
 			$: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 		}
 	};
