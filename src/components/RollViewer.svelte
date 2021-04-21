@@ -1,4 +1,9 @@
 <style lang="scss">
+  $hole-highlight-color: yellow;
+  $highlight-hover-outline-color: darkturquoise;
+  $highlight-hover-outline-width: 6px;
+  $highlight-hover-outline-offset: 8px;
+
   #roll-viewer {
     position: relative;
     height: 100%;
@@ -37,9 +42,35 @@
 
     :global(mark) {
       animation: mark-recede 0.5s ease-in-out;
-      background-color: yellow;
-      box-shadow: 0 0 5px yellow;
+      background-color: $hole-highlight-color;
+      box-shadow: 0 0 5px $hole-highlight-color;
       mix-blend-mode: multiply;
+
+      &:hover {
+        background-color: transparent;
+        box-shadow: none;
+        mix-blend-mode: normal;
+        outline: $highlight-hover-outline-width solid
+          $highlight-hover-outline-color;
+        outline-offset: $highlight-hover-outline-offset;
+        z-index: 4;
+
+        &::after {
+          background-color: $highlight-hover-outline-color;
+          color: white;
+          content: attr(data-info);
+          display: block;
+          font-weight: bold;
+          left: calc(
+            100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+          );
+          padding: 8px ($highlight-hover-outline-width + 4px) 8px 4px;
+          position: absolute;
+          text-shadow: 0px 0px 8px black;
+          top: -($highlight-hover-outline-offset +
+                $highlight-hover-outline-width);
+        }
+      }
     }
   }
 
