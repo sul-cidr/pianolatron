@@ -71,14 +71,9 @@
         ? hole.ORIGIN_ROW - firstHolePx
         : firstHolePx - hole.ORIGIN_ROW;
 
-      let tickOff;
-      if (hole.OFF_TIME !== undefined) {
-        tickOff = scrollDownwards
-          ? hole.OFF_TIME - firstHolePx
-          : firstHolePx - hole.OFF_TIME;
-      } else {
-        tickOff = tickOn;
-      }
+      const tickOff = scrollDownwards
+        ? hole.OFF_TIME - firstHolePx
+        : firstHolePx - hole.OFF_TIME;
 
       holesByPx.insert(tickOn, tickOff, hole);
     });
