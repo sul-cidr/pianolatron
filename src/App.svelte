@@ -57,9 +57,9 @@
   let metadataReady;
   let currentRoll;
   let previousRoll;
-  let holesByPx = new IntervalTree();
+  let holesByTickInterval = new IntervalTree();
 
-  const buildHolesByPx = (holeData) => {
+  const buildHolesIntervalTree = (holeData) => {
     const scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
     const firstHolePx = scrollDownwards
       ? parseInt($rollMetadata.FIRST_HOLE, 10)
@@ -75,7 +75,7 @@
         ? hole.OFF_TIME - firstHolePx
         : firstHolePx - hole.OFF_TIME;
 
-      holesByPx.insert(tickOn, tickOff, hole);
+      holesByTickInterval.insert(tickOn, tickOff, hole);
     });
   };
 
@@ -102,7 +102,7 @@
     stopApp();
     tempoControl.set(60);
     volume.set({ master: 1, left: 1, right: 1 });
-    holesByPx = new IntervalTree();
+    holesByTickInterval = new IntervalTree();
   };
 
   const skipToTick = (tick) => {
@@ -148,7 +148,8 @@
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ({ 1: metadataJson }) => {
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
-        if (metadataJson.holeData) buildHolesByPx(metadataJson.holeData);
+        if (metadataJson.holeData)
+          buildHolesIntervalTree(metadataJson.holeData);
         appReady = true;
         previousRoll = currentRoll;
       },
@@ -170,7 +171,7 @@
     <RollSelector bind:currentRoll />
     {#if appReady}
       <RollDetails />
-      {#if !holesByPx.count}
+      {#if !holesByTickInterval.count}
         <p>
           Note:<br />Hole visualization data is not available for this roll at
           this time. Hole highlighting will not be enabled.
@@ -183,7 +184,7 @@
       <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
     </div>
     <div id="roll">
-      <RollViewer imageUrl={currentRoll.image_url} {holesByPx} />
+      <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
     </div>
     <div id="keyboard-container">
       <Keyboard keyCount="88" {activeNotes} />

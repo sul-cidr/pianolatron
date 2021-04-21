@@ -57,7 +57,7 @@
   import { rollMetadata, currentTick } from "../stores";
 
   export let imageUrl;
-  export let holesByPx;
+  export let holesByTickInterval;
 
   let openSeadragon;
   let firstHolePx;
@@ -83,7 +83,7 @@
   const highlightHoles = (tick) => {
     if (!openSeadragon) return;
 
-    const holes = holesByPx.search(tick, tick);
+    const holes = holesByTickInterval.search(tick, tick);
 
     marks = marks.filter(([hole, elem]) => {
       if (holes.includes(hole)) return true;
@@ -94,22 +94,13 @@
     holes.forEach((hole) => {
       if (marks.map(([_hole]) => _hole).includes(hole)) return;
 
-      const markWidth = hole.WIDTH_COL;
-      const markStartX = hole.ORIGIN_COL;
-      const markStartY = hole.ORIGIN_ROW;
-      const markEndY = hole.OFF_TIME;
-      const markHeight = markEndY - markStartY;
-      const midiNumber = hole.TRACKER_HOLE;
-
+      const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME } = hole;
       const mark = document.createElement("mark");
-
-      mark.dataset.midiNumber = midiNumber;
-
       const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
-        markStartX,
-        markStartY,
-        markWidth,
-        markHeight,
+        ORIGIN_COL,
+        ORIGIN_ROW,
+        WIDTH_COL,
+        OFF_TIME - ORIGIN_ROW,
       );
       openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
 
