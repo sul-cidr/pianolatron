@@ -23,7 +23,7 @@ function create_fragment(ctx) {
 		c() {
 			div = element("div");
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-d0lp5");
+			attr(div, "class", "svelte-a5m2iq");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -62,7 +62,7 @@ function instance($$self, $$props, $$invalidate) {
 			return `${name}${octave}`;
 		}
 
-		return "??";
+		return null;
 	};
 
 	const panViewportToTick = tick => {
@@ -93,7 +93,8 @@ function instance($$self, $$props, $$invalidate) {
 			if (marks.map(([_hole]) => _hole).includes(hole)) return;
 			const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
 			const mark = document.createElement("mark");
-			mark.dataset.info = getNoteName(TRACKER_HOLE);
+			const noteName = getNoteName(TRACKER_HOLE);
+			if (noteName) mark.dataset.info = noteName;
 			const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME - ORIGIN_ROW);
 			openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
 			marks.push([hole, mark]);
