@@ -90,8 +90,8 @@
   export let imageUrl;
   export let holesByTickInterval;
 
-  const WELTE_MIDI_START = 14;
-  const WELTE_RED_FIRST_NOTE = 28;
+  const WELTE_MIDI_START = 10;
+  const WELTE_RED_FIRST_NOTE = 24;
   const WELTE_RED_LAST_NOTE = 103;
 
   let openSeadragon;
