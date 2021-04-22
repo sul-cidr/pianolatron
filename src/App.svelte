@@ -1,4 +1,4 @@
-<style>
+<style lang="scss">
   #app {
     display: grid;
     grid-template-rows: 1fr auto;
@@ -11,6 +11,13 @@
 
   #roll-details {
     grid-area: left;
+    max-width: calc(348px + 2em);
+
+    p {
+      margin: 1em;
+      opacity: 0.5;
+      padding: 0.5em 1em;
+    }
   }
 
   #roll {
@@ -27,6 +34,7 @@
 </style>
 
 <script>
+  import IntervalTree from "node-interval-tree";
   import {
     pedalling,
     volume,
@@ -49,6 +57,27 @@
   let metadataReady;
   let currentRoll;
   let previousRoll;
+  let holesByTickInterval = new IntervalTree();
+
+  const buildHolesIntervalTree = (holeData) => {
+    const scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
+    const firstHolePx = scrollDownwards
+      ? parseInt($rollMetadata.FIRST_HOLE, 10)
+      : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
+        parseInt($rollMetadata.FIRST_HOLE, 10);
+
+    holeData.forEach((hole) => {
+      const tickOn = scrollDownwards
+        ? hole.ORIGIN_ROW - firstHolePx
+        : firstHolePx - hole.ORIGIN_ROW;
+
+      const tickOff = scrollDownwards
+        ? hole.OFF_TIME - firstHolePx
+        : firstHolePx - hole.OFF_TIME;
+
+      holesByTickInterval.insert(tickOn, tickOff, hole);
+    });
+  };
 
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
@@ -73,6 +102,7 @@
     stopApp();
     tempoControl.set(60);
     volume.set({ master: 1, left: 1, right: 1 });
+    holesByTickInterval = new IntervalTree();
   };
 
   const skipToTick = (tick) => {
@@ -118,6 +148,8 @@
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ({ 1: metadataJson }) => {
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
+        if (metadataJson.holeData)
+          buildHolesIntervalTree(metadataJson.holeData);
         appReady = true;
         previousRoll = currentRoll;
       },
@@ -139,6 +171,12 @@
     <RollSelector bind:currentRoll />
     {#if appReady}
       <RollDetails />
+      {#if !holesByTickInterval.count}
+        <p>
+          Note:<br />Hole visualization data is not available for this roll at
+          this time. Hole highlighting will not be enabled.
+        </p>
+      {/if}
     {/if}
   </div>
   {#if appReady}
@@ -146,7 +184,7 @@
       <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
     </div>
     <div id="roll">
-      <RollViewer imageUrl={currentRoll.image_url} />
+      <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
     </div>
     <div id="keyboard-container">
       <Keyboard keyCount="88" {activeNotes} />

@@ -1,4 +1,9 @@
 <style lang="scss">
+  $hole-highlight-color: yellow;
+  $highlight-hover-outline-color: darkturquoise;
+  $highlight-hover-outline-width: 6px;
+  $highlight-hover-outline-offset: 8px;
+
   #roll-viewer {
     position: relative;
     height: 100%;
@@ -34,6 +39,46 @@
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
+
+    :global(mark) {
+      animation: mark-recede 0.5s ease-in-out;
+      background-color: $hole-highlight-color;
+      box-shadow: 0 0 5px $hole-highlight-color;
+      mix-blend-mode: multiply;
+
+      &:hover {
+        background-color: transparent;
+        box-shadow: none;
+        mix-blend-mode: normal;
+        outline: $highlight-hover-outline-width solid
+          $highlight-hover-outline-color;
+        outline-offset: $highlight-hover-outline-offset;
+        z-index: 4;
+
+        &::after {
+          background-color: $highlight-hover-outline-color;
+          color: white;
+          content: attr(data-info);
+          display: block;
+          font-weight: bold;
+          left: calc(
+            100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+          );
+          padding: 8px ($highlight-hover-outline-width + 4px) 8px 4px;
+          position: absolute;
+          text-shadow: 0px 0px 8px black;
+          top: -($highlight-hover-outline-offset +
+                $highlight-hover-outline-width);
+        }
+      }
+    }
+  }
+
+  @keyframes mark-recede {
+    from {
+      border-radius: 30%;
+      mix-blend-mode: normal;
+    }
   }
 </style>
 
@@ -43,10 +88,42 @@
   import { rollMetadata, currentTick } from "../stores";
 
   export let imageUrl;
+  export let holesByTickInterval;
+
+  const WELTE_MIDI_START = 14;
+  const WELTE_RED_FIRST_NOTE = 28;
+  const WELTE_RED_LAST_NOTE = 103;
 
   let openSeadragon;
   let firstHolePx;
   let dragging;
+  let marks = [];
+
+  const getNoteName = (trackerHole) => {
+    const midiNumber = trackerHole + WELTE_MIDI_START;
+    if (
+      midiNumber >= WELTE_RED_FIRST_NOTE &&
+      midiNumber <= WELTE_RED_LAST_NOTE
+    ) {
+      const octave = parseInt(midiNumber / 12, 10) - 1;
+      const name = [
+        "A",
+        "A#",
+        "B",
+        "C",
+        "C#",
+        "D",
+        "D#",
+        "E",
+        "F",
+        "F#",
+        "G",
+        "G#",
+      ][(midiNumber - 21) % 12];
+      return `${name}${octave}`;
+    }
+    return "??";
+  };
 
   const panViewportToTick = (tick) => {
     if (!openSeadragon) return;
@@ -62,6 +139,41 @@
     );
 
     viewport.panTo(lineCenter);
+  };
+
+  const highlightHoles = (tick) => {
+    if (!openSeadragon) return;
+
+    const holes = holesByTickInterval.search(tick, tick);
+
+    marks = marks.filter(([hole, elem]) => {
+      if (holes.includes(hole)) return true;
+      openSeadragon.viewport.viewer.removeOverlay(elem);
+      return false;
+    });
+
+    holes.forEach((hole) => {
+      if (marks.map(([_hole]) => _hole).includes(hole)) return;
+
+      const {
+        WIDTH_COL,
+        ORIGIN_COL,
+        ORIGIN_ROW,
+        OFF_TIME,
+        TRACKER_HOLE,
+      } = hole;
+      const mark = document.createElement("mark");
+      mark.dataset.info = getNoteName(TRACKER_HOLE);
+      const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
+        ORIGIN_COL,
+        ORIGIN_ROW,
+        WIDTH_COL,
+        OFF_TIME - ORIGIN_ROW,
+      );
+      openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
+
+      marks.push([hole, mark]);
+    });
   };
 
   onMount(async () => {
@@ -83,6 +195,7 @@
   });
 
   $: panViewportToTick($currentTick);
+  $: highlightHoles($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: firstHolePx = scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
