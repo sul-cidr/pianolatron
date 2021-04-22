@@ -55,7 +55,7 @@
         outline-offset: $highlight-hover-outline-offset;
         z-index: 4;
 
-        &::after {
+        &[data-info]::after {
           background-color: $highlight-hover-outline-color;
           color: white;
           content: attr(data-info);
@@ -122,7 +122,7 @@
       ][(midiNumber - 21) % 12];
       return `${name}${octave}`;
     }
-    return "??";
+    return null;
   };
 
   const panViewportToTick = (tick) => {
@@ -163,7 +163,8 @@
         TRACKER_HOLE,
       } = hole;
       const mark = document.createElement("mark");
-      mark.dataset.info = getNoteName(TRACKER_HOLE);
+      const noteName = getNoteName(TRACKER_HOLE);
+      if (noteName) mark.dataset.info = noteName;
       const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
         ORIGIN_COL,
         ORIGIN_ROW,
