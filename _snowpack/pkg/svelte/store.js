@@ -1,4 +1,4 @@
-import { w as noop, s as safe_not_equal } from '../common/index-d32dcc97.js';
+import { x as noop, s as safe_not_equal } from '../common/index-1630e2ec.js';
 
 const subscriber_queue = [];
 /**

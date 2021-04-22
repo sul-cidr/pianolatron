@@ -23,7 +23,7 @@ function create_fragment(ctx) {
 		c() {
 			div = element("div");
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-1vutt7g");
+			attr(div, "class", "svelte-d0lp5");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -37,15 +37,33 @@ function create_fragment(ctx) {
 	};
 }
 
+const WELTE_MIDI_START = 10;
+const WELTE_RED_FIRST_NOTE = 24;
+const WELTE_RED_LAST_NOTE = 103;
+
 function instance($$self, $$props, $$invalidate) {
 	let $currentTick;
 	let $rollMetadata;
-	component_subscribe($$self, currentTick, $$value => $$invalidate(5, $currentTick = $$value));
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(6, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(7, $currentTick = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(8, $rollMetadata = $$value));
 	let { imageUrl } = $$props;
+	let { holesByTickInterval } = $$props;
 	let openSeadragon;
 	let firstHolePx;
 	let dragging;
+	let marks = [];
+
+	const getNoteName = trackerHole => {
+		const midiNumber = trackerHole + WELTE_MIDI_START;
+
+		if (midiNumber >= WELTE_RED_FIRST_NOTE && midiNumber <= WELTE_RED_LAST_NOTE) {
+			const octave = parseInt(midiNumber / 12, 10) - 1;
+			const name = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"][(midiNumber - 21) % 12];
+			return `${name}${octave}`;
+		}
+
+		return "??";
+	};
 
 	const panViewportToTick = tick => {
 		if (!openSeadragon) return;
@@ -59,6 +77,27 @@ function instance($$self, $$props, $$invalidate) {
 		const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 		const lineCenter = new OpenSeadragon.Point(viewportBounds.x + viewportBounds.width / 2, lineViewport.y);
 		viewport.panTo(lineCenter);
+	};
+
+	const highlightHoles = tick => {
+		if (!openSeadragon) return;
+		const holes = holesByTickInterval.search(tick, tick);
+
+		marks = marks.filter(([hole, elem]) => {
+			if (holes.includes(hole)) return true;
+			openSeadragon.viewport.viewer.removeOverlay(elem);
+			return false;
+		});
+
+		holes.forEach(hole => {
+			if (marks.map(([_hole]) => _hole).includes(hole)) return;
+			const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
+			const mark = document.createElement("mark");
+			mark.dataset.info = getNoteName(TRACKER_HOLE);
+			const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME - ORIGIN_ROW);
+			openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
+			marks.push([hole, mark]);
+		});
 	};
 
 	onMount(async () => {
@@ -81,33 +120,38 @@ function instance($$self, $$props, $$invalidate) {
 
 	$$self.$$set = $$props => {
 		if ("imageUrl" in $$props) $$invalidate(0, imageUrl = $$props.imageUrl);
+		if ("holesByTickInterval" in $$props) $$invalidate(1, holesByTickInterval = $$props.holesByTickInterval);
 	};
 
 	let scrollDownwards;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$currentTick*/ 32) {
+		if ($$self.$$.dirty & /*$currentTick*/ 128) {
 			$: panViewportToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 64) {
-			$: $$invalidate(4, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		if ($$self.$$.dirty & /*$currentTick*/ 128) {
+			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 80) {
+		if ($$self.$$.dirty & /*$rollMetadata*/ 256) {
+			$: $$invalidate(6, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		}
+
+		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 320) {
 			$: firstHolePx = scrollDownwards
 			? parseInt($rollMetadata.FIRST_HOLE, 10)
 			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
 		}
 	};
 
-	return [imageUrl];
+	return [imageUrl, holesByTickInterval];
 }
 
 class RollViewer extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { imageUrl: 0 });
+		init(this, options, instance, create_fragment, safe_not_equal, { imageUrl: 0, holesByTickInterval: 1 });
 	}
 }
 

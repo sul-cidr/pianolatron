@@ -1,4 +1,4 @@
-import { c as createCommonjsModule, a as commonjsGlobal } from './common/_commonjsHelpers-eb5a497e.js';
+import { c as createCommonjsModule, a as commonjsGlobal } from './common/_commonjsHelpers-8c19dec8.js';
 
 var openseadragon = createCommonjsModule(function (module) {
 //! openseadragon 2.4.2

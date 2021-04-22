@@ -13,6 +13,7 @@ import {
 	destroy_component,
 	detach,
 	element,
+	empty,
 	group_outros,
 	init,
 	insert,
@@ -23,6 +24,8 @@ import {
 	transition_in,
 	transition_out
 } from "./_snowpack/pkg/svelte/internal.js";
+
+import IntervalTree from "./_snowpack/pkg/node-interval-tree.js";
 
 import {
 	pedalling,
@@ -44,16 +47,39 @@ import Notification, { notify } from "./ui-components/Notification.svelte.js";
 
 function create_if_block_2(ctx) {
 	let rolldetails;
+	let t;
+	let if_block_anchor;
 	let current;
 	rolldetails = new RollDetails({});
+	let if_block = !/*holesByTickInterval*/ ctx[2].count && create_if_block_3(ctx);
 
 	return {
 		c() {
 			create_component(rolldetails.$$.fragment);
+			t = space();
+			if (if_block) if_block.c();
+			if_block_anchor = empty();
 		},
 		m(target, anchor) {
 			mount_component(rolldetails, target, anchor);
+			insert(target, t, anchor);
+			if (if_block) if_block.m(target, anchor);
+			insert(target, if_block_anchor, anchor);
 			current = true;
+		},
+		p(ctx, dirty) {
+			if (!/*holesByTickInterval*/ ctx[2].count) {
+				if (if_block) {
+					
+				} else {
+					if_block = create_if_block_3(ctx);
+					if_block.c();
+					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+				}
+			} else if (if_block) {
+				if_block.d(1);
+				if_block = null;
+			}
 		},
 		i(local) {
 			if (current) return;
@@ -66,11 +92,36 @@ function create_if_block_2(ctx) {
 		},
 		d(detaching) {
 			destroy_component(rolldetails, detaching);
+			if (detaching) detach(t);
+			if (if_block) if_block.d(detaching);
+			if (detaching) detach(if_block_anchor);
 		}
 	};
 }
 
-// (144:2) {#if appReady}
+// (169:6) {#if !holesByTickInterval.count}
+function create_if_block_3(ctx) {
+	let p;
+
+	return {
+		c() {
+			p = element("p");
+
+			p.innerHTML = `Note:<br/>Hole visualization data is not available for this roll at
+          this time. Hole highlighting will not be enabled.`;
+
+			attr(p, "class", "svelte-1s3dlkg");
+		},
+		m(target, anchor) {
+			insert(target, p, anchor);
+		},
+		d(detaching) {
+			if (detaching) detach(p);
+		}
+	};
+}
+
+// (177:2) {#if appReady}
 function create_if_block_1(ctx) {
 	let div0;
 	let playbackcontrols;
@@ -84,15 +135,16 @@ function create_if_block_1(ctx) {
 
 	playbackcontrols = new PlaybackControls({
 			props: {
-				playPauseApp: /*playPauseApp*/ ctx[2],
-				stopApp: /*stopApp*/ ctx[3],
-				skipToPercentage: /*skipToPercentage*/ ctx[4]
+				playPauseApp: /*playPauseApp*/ ctx[3],
+				stopApp: /*stopApp*/ ctx[4],
+				skipToPercentage: /*skipToPercentage*/ ctx[5]
 			}
 		});
 
 	rollviewer = new RollViewer({
 			props: {
-				imageUrl: /*currentRoll*/ ctx[1].image_url
+				imageUrl: /*currentRoll*/ ctx[1].image_url,
+				holesByTickInterval: /*holesByTickInterval*/ ctx[2]
 			}
 		});
 
@@ -109,11 +161,11 @@ function create_if_block_1(ctx) {
 			div2 = element("div");
 			create_component(keyboard.$$.fragment);
 			attr(div0, "id", "audio-controls");
-			attr(div0, "class", "svelte-1d08kzi");
+			attr(div0, "class", "svelte-1s3dlkg");
 			attr(div1, "id", "roll");
-			attr(div1, "class", "svelte-1d08kzi");
+			attr(div1, "class", "svelte-1s3dlkg");
 			attr(div2, "id", "keyboard-container");
-			attr(div2, "class", "svelte-1d08kzi");
+			attr(div2, "class", "svelte-1s3dlkg");
 		},
 		m(target, anchor) {
 			insert(target, div0, anchor);
@@ -129,6 +181,7 @@ function create_if_block_1(ctx) {
 		p(ctx, dirty) {
 			const rollviewer_changes = {};
 			if (dirty & /*currentRoll*/ 2) rollviewer_changes.imageUrl = /*currentRoll*/ ctx[1].image_url;
+			if (dirty & /*holesByTickInterval*/ 4) rollviewer_changes.holesByTickInterval = /*holesByTickInterval*/ ctx[2];
 			rollviewer.$set(rollviewer_changes);
 		},
 		i(local) {
@@ -157,7 +210,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (155:2) {#if !appReady}
+// (188:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -192,7 +245,7 @@ function create_fragment(ctx) {
 	let current;
 
 	function rollselector_currentRoll_binding(value) {
-		/*rollselector_currentRoll_binding*/ ctx[5].call(null, value);
+		/*rollselector_currentRoll_binding*/ ctx[6].call(null, value);
 	}
 
 	let rollselector_props = {};
@@ -222,9 +275,9 @@ function create_fragment(ctx) {
 			t3 = space();
 			create_component(notification.$$.fragment);
 			attr(div0, "id", "roll-details");
-			attr(div0, "class", "svelte-1d08kzi");
+			attr(div0, "class", "svelte-1s3dlkg");
 			attr(div1, "id", "app");
-			attr(div1, "class", "svelte-1d08kzi");
+			attr(div1, "class", "svelte-1s3dlkg");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -253,6 +306,8 @@ function create_fragment(ctx) {
 
 			if (/*appReady*/ ctx[0]) {
 				if (if_block0) {
+					if_block0.p(ctx, dirty);
+
 					if (dirty & /*appReady*/ 1) {
 						transition_in(if_block0, 1);
 					}
@@ -336,15 +391,36 @@ function create_fragment(ctx) {
 }
 
 function instance($$self, $$props, $$invalidate) {
-	let $currentTick;
 	let $rollMetadata;
-	component_subscribe($$self, currentTick, $$value => $$invalidate(9, $currentTick = $$value));
+	let $currentTick;
 	component_subscribe($$self, rollMetadata, $$value => $$invalidate(10, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(11, $currentTick = $$value));
 	let appReady = false;
 	let mididataReady;
 	let metadataReady;
 	let currentRoll;
 	let previousRoll;
+	let holesByTickInterval = new IntervalTree();
+
+	const buildHolesIntervalTree = holeData => {
+		const scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
+
+		const firstHolePx = scrollDownwards
+		? parseInt($rollMetadata.FIRST_HOLE, 10)
+		: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
+
+		holeData.forEach(hole => {
+			const tickOn = scrollDownwards
+			? hole.ORIGIN_ROW - firstHolePx
+			: firstHolePx - hole.ORIGIN_ROW;
+
+			const tickOff = scrollDownwards
+			? hole.OFF_TIME - firstHolePx
+			: firstHolePx - hole.OFF_TIME;
+
+			holesByTickInterval.insert(tickOn, tickOff, hole);
+		});
+	};
 
 	const playPauseApp = () => {
 		if (midiSamplePlayer.isPlaying()) {
@@ -369,6 +445,7 @@ function instance($$self, $$props, $$invalidate) {
 		stopApp();
 		tempoControl.set(60);
 		volume.set({ master: 1, left: 1, right: 1 });
+		$$invalidate(2, holesByTickInterval = new IntervalTree());
 	};
 
 	const skipToTick = tick => {
@@ -417,8 +494,9 @@ function instance($$self, $$props, $$invalidate) {
 
 		Promise.all([mididataReady, metadataReady, pianoReady]).then(({ 1: metadataJson }) => {
 			set_store_value(rollMetadata, $rollMetadata = { ...$rollMetadata, ...metadataJson }, $rollMetadata);
+			if (metadataJson.holeData) buildHolesIntervalTree(metadataJson.holeData);
 			$$invalidate(0, appReady = true);
-			$$invalidate(8, previousRoll = currentRoll);
+			$$invalidate(9, previousRoll = currentRoll);
 		});
 	};
 
@@ -430,7 +508,7 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 258) {
+		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 514) {
 			$: {
 				if (currentRoll !== previousRoll) {
 					loadRoll(currentRoll);
@@ -438,7 +516,7 @@ function instance($$self, $$props, $$invalidate) {
 			}
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 512) {
+		if ($$self.$$.dirty & /*$currentTick*/ 2048) {
 			$: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 		}
 	};
@@ -446,6 +524,7 @@ function instance($$self, $$props, $$invalidate) {
 	return [
 		appReady,
 		currentRoll,
+		holesByTickInterval,
 		playPauseApp,
 		stopApp,
 		skipToPercentage,
