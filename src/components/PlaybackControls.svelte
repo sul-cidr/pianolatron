@@ -101,7 +101,7 @@
     <RangeSlider
       min="0"
       max="1"
-      step="0.01"
+      step="0.001"
       value={$playbackProgress}
       name="progress"
       on:input={({ target: { value } }) => skipToPercentage(value)}
