@@ -88,9 +88,9 @@
     <span>Tempo:</span>
     <span>{$tempoControl}</span>
     <RangeSlider
-      min="0"
+      min="1"
       max="180"
-      step="10"
+      step="1"
       bind:value={$tempoControl}
       name="tempo"
     />
