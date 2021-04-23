@@ -125,6 +125,44 @@
     return null;
   };
 
+  const createHolesOverlaySvg = () => {
+    const { IMAGE_WIDTH, IMAGE_LENGTH, holeData } = $rollMetadata;
+    const imageWidth = parseInt(IMAGE_WIDTH, 10);
+    const imageLength = parseInt(IMAGE_LENGTH, 10);
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+    const entireViewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
+      0,
+      0,
+      imageWidth,
+      imageLength,
+    );
+
+    svg.setAttribute("width", imageWidth);
+    svg.setAttribute("height", imageLength);
+    svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+    svg.appendChild(g);
+
+    holeData.forEach((hole) => {
+      const rect = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect",
+      );
+      const { ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME } = hole;
+
+      rect.setAttribute("x", ORIGIN_COL);
+      rect.setAttribute("y", ORIGIN_ROW);
+      rect.setAttribute("width", WIDTH_COL);
+      rect.setAttribute("height", OFF_TIME - ORIGIN_ROW);
+
+      g.appendChild(rect);
+    });
+
+    openSeadragon.viewport.viewer.addOverlay(svg, entireViewportRectangle);
+  };
+
   const panViewportToTick = (tick) => {
     if (!openSeadragon) return;
     const { viewport } = openSeadragon;
@@ -189,7 +227,10 @@
       constrainDuringPan: true,
     });
 
-    openSeadragon.addOnceHandler("update-viewport", () => panViewportToTick(0));
+    openSeadragon.addOnceHandler("update-viewport", () => {
+      createHolesOverlaySvg();
+      panViewportToTick(0);
+    });
     openSeadragon.addHandler("canvas-drag", () => (dragging = true));
     openSeadragon.addHandler("canvas-drag-end", () => (dragging = false));
     openSeadragon.open(imageUrl);
