@@ -41,10 +41,13 @@
     }
 
     :global(mark) {
-      animation: mark-recede 0.5s ease-in-out;
-      background-color: $hole-highlight-color;
-      box-shadow: 0 0 5px $hole-highlight-color;
       mix-blend-mode: multiply;
+
+      &.active {
+        animation: mark-recede 0.5s ease-in-out;
+        background-color: $hole-highlight-color;
+        box-shadow: 0 0 5px $hole-highlight-color;
+      }
 
       &:hover {
         background-color: transparent;
@@ -71,6 +74,11 @@
                 $highlight-hover-outline-width);
         }
       }
+    }
+
+    :global(svg rect) {
+      fill: none;
+      pointer-events: all;
     }
   }
 
@@ -125,6 +133,25 @@
     return null;
   };
 
+  const createMark = (hole) => {
+    const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
+    const mark = document.createElement("mark");
+    const noteName = getNoteName(TRACKER_HOLE);
+    if (noteName) mark.dataset.info = noteName;
+    mark.addEventListener("mouseout", () => {
+      if (!marks.map(([_hole]) => _hole).includes(hole))
+        openSeadragon.viewport.viewer.removeOverlay(mark);
+    });
+    const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
+      ORIGIN_COL,
+      ORIGIN_ROW,
+      WIDTH_COL,
+      OFF_TIME - ORIGIN_ROW,
+    );
+    openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
+    return mark;
+  };
+
   const createHolesOverlaySvg = () => {
     const { IMAGE_WIDTH, IMAGE_LENGTH, holeData } = $rollMetadata;
     const imageWidth = parseInt(IMAGE_WIDTH, 10);
@@ -156,6 +183,9 @@
       rect.setAttribute("y", ORIGIN_ROW);
       rect.setAttribute("width", WIDTH_COL);
       rect.setAttribute("height", OFF_TIME - ORIGIN_ROW);
+      rect.addEventListener("mouseover", () => {
+        if (!marks.map(([_hole]) => _hole).includes(hole)) createMark(hole);
+      });
 
       g.appendChild(rect);
     });
@@ -192,25 +222,8 @@
 
     holes.forEach((hole) => {
       if (marks.map(([_hole]) => _hole).includes(hole)) return;
-
-      const {
-        WIDTH_COL,
-        ORIGIN_COL,
-        ORIGIN_ROW,
-        OFF_TIME,
-        TRACKER_HOLE,
-      } = hole;
-      const mark = document.createElement("mark");
-      const noteName = getNoteName(TRACKER_HOLE);
-      if (noteName) mark.dataset.info = noteName;
-      const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
-        ORIGIN_COL,
-        ORIGIN_ROW,
-        WIDTH_COL,
-        OFF_TIME - ORIGIN_ROW,
-      );
-      openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
-
+      const mark = createMark(hole);
+      mark.classList.add("active");
       marks.push([hole, mark]);
     });
   };
