@@ -162,9 +162,9 @@ function create_fragment(ctx) {
 	}
 
 	let rangeslider3_props = {
-		min: "0",
+		min: "1",
 		max: "180",
-		step: "10",
+		step: "1",
 		name: "tempo"
 	};
 
@@ -179,7 +179,7 @@ function create_fragment(ctx) {
 			props: {
 				min: "0",
 				max: "1",
-				step: "0.01",
+				step: "0.001",
 				value: /*$playbackProgress*/ ctx[5],
 				name: "progress",
 				mousewheel: false
@@ -193,7 +193,7 @@ function create_fragment(ctx) {
 			div5 = element("div");
 			div0 = element("div");
 			span0 = element("span");
-			span0.textContent = "Master Volume:";
+			span0.textContent = "Volume:";
 			t1 = space();
 			span1 = element("span");
 			t2 = text(t2_value);
