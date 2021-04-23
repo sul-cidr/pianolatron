@@ -88,7 +88,6 @@
   import { rollMetadata, currentTick } from "../stores";
 
   export let imageUrl;
-  export let holesData;
   export let holesByTickInterval;
 
   const WELTE_MIDI_START = 10;
