@@ -4,6 +4,19 @@
   $highlight-hover-outline-width: 6px;
   $highlight-hover-outline-offset: 8px;
 
+  #roll-viewer-controls {
+    display: none;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+
+    &:hover {
+      display: block;
+    }
+  }
+
   #roll-viewer {
     position: relative;
     height: 100%;
@@ -31,6 +44,10 @@
       position: absolute;
       right: 0;
       top: 0;
+    }
+
+    &:hover + #roll-viewer-controls {
+      display: block;
     }
 
     :global(canvas) {
@@ -266,3 +283,9 @@
 </script>
 
 <div id="roll-viewer" />
+<div id="roll-viewer-controls">
+  <button>1</button>
+  <button>2</button>
+  <button>3</button>
+  <button>4</button>
+</div>
