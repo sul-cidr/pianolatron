@@ -101,7 +101,7 @@
     appReady = false;
     stopApp();
     tempoControl.set(60);
-    volume.set({ master: 1, left: 1, right: 1 });
+    volume.update((val) => ({ ...val, left: 1, right: 1 }));
     holesByTickInterval = new IntervalTree();
   };
 

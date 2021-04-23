@@ -52,7 +52,7 @@
 
 <div id="playback-controls">
   <div class="control">
-    <span>Master Volume:</span>
+    <span>Volume:</span>
     <span>{$volume.master}</span>
     <RangeSlider
       min="0"
@@ -88,9 +88,9 @@
     <span>Tempo:</span>
     <span>{$tempoControl}</span>
     <RangeSlider
-      min="0"
+      min="1"
       max="180"
-      step="10"
+      step="1"
       bind:value={$tempoControl}
       name="tempo"
     />
@@ -101,7 +101,7 @@
     <RangeSlider
       min="0"
       max="1"
-      step="0.01"
+      step="0.001"
       value={$playbackProgress}
       name="progress"
       on:input={({ target: { value } }) => skipToPercentage(value)}

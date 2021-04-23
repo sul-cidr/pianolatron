@@ -107,7 +107,7 @@
         box-shadow: inset 0px -1px 1px rgba(255, 255, 255, 0.4),
           0 1px 0px rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
           0 -1px 0px #000;
-        height: calc(#{$key-width} * 3 + 3px);
+        height: calc(#{$key-width} * 3 + 1px);
       }
 
       :global(:nth-child(2).depressed) {
