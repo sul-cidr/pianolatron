@@ -42,6 +42,7 @@
     }
 
     :global(mark) {
+      background-color: transparent;
       mix-blend-mode: multiply;
 
       &.active {
