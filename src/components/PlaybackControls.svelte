@@ -52,7 +52,7 @@
 
 <div id="playback-controls">
   <div class="control">
-    <span>Master Volume:</span>
+    <span>Volume:</span>
     <span>{$volume.master}</span>
     <RangeSlider
       min="0"
