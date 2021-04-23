@@ -36,6 +36,7 @@
     :global(canvas) {
       background: white !important;
     }
+
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
@@ -106,6 +107,7 @@
   let firstHolePx;
   let dragging;
   let marks = [];
+  let hoveredMark;
 
   const getNoteName = (trackerHole) => {
     const midiNumber = trackerHole + WELTE_MIDI_START;
@@ -140,7 +142,7 @@
     if (noteName) mark.dataset.info = noteName;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
-        openSeadragon.viewport.viewer.removeOverlay(mark);
+        openSeadragon.viewport.viewer.removeOverlay(hoveredMark);
     });
     const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
       ORIGIN_COL,
@@ -184,7 +186,9 @@
       rect.setAttribute("width", WIDTH_COL);
       rect.setAttribute("height", OFF_TIME - ORIGIN_ROW);
       rect.addEventListener("mouseover", () => {
-        if (!marks.map(([_hole]) => _hole).includes(hole)) createMark(hole);
+        if (marks.map(([_hole]) => _hole).includes(hole)) return;
+        openSeadragon.viewport.viewer.removeOverlay(hoveredMark);
+        hoveredMark = createMark(hole);
       });
 
       g.appendChild(rect);
