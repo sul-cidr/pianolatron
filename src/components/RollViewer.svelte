@@ -157,6 +157,8 @@
 
   const createHolesOverlaySvg = () => {
     const { IMAGE_WIDTH, IMAGE_LENGTH, holeData } = $rollMetadata;
+    if (!holeData) return;
+
     const imageWidth = parseInt(IMAGE_WIDTH, 10);
     const imageLength = parseInt(IMAGE_LENGTH, 10);
 
