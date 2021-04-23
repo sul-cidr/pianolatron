@@ -58,6 +58,7 @@
   let currentRoll;
   let previousRoll;
   let holesByTickInterval = new IntervalTree();
+  let holeData;
 
   const buildHolesIntervalTree = (holeData) => {
     const scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
@@ -103,6 +104,7 @@
     tempoControl.set(60);
     volume.update((val) => ({ ...val, left: 1, right: 1 }));
     holesByTickInterval = new IntervalTree();
+    holeData = null;
   };
 
   const skipToTick = (tick) => {
@@ -148,8 +150,10 @@
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ({ 1: metadataJson }) => {
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
-        if (metadataJson.holeData)
-          buildHolesIntervalTree(metadataJson.holeData);
+        if (metadataJson.holeData) {
+          holeData = metadataJson.holeData;
+          buildHolesIntervalTree();
+        }
         appReady = true;
         previousRoll = currentRoll;
       },
@@ -184,7 +188,11 @@
       <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
     </div>
     <div id="roll">
-      <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
+      <RollViewer
+        imageUrl={currentRoll.image_url}
+        {holesByTickInterval}
+        {holeData}
+      />
     </div>
     <div id="keyboard-container">
       <Keyboard keyCount="88" {activeNotes} />
