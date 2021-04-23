@@ -9,6 +9,17 @@
     height: 100%;
     width: 100%;
 
+    p {
+      background: rgba(black, 0.4);
+      border-radius: 4px;
+      color: white;
+      left: 1em;
+      padding: 4px 8px;
+      position: absolute;
+      top: 1em;
+      z-index: 1;
+    }
+
     &::before {
       background: $primary-accent;
       content: "";
@@ -93,6 +104,7 @@
 
 <script>
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
   import { rollMetadata, currentTick } from "../stores";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -111,6 +123,7 @@
   let openSeadragon;
   let firstHolePx;
   let strafing;
+  let rollImageReady;
   let marks = [];
   let hoveredMark;
   let showControls;
@@ -258,6 +271,13 @@
     });
     openSeadragon.addHandler("canvas-drag", () => (strafing = true));
     openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
+    openSeadragon.addHandler("open", () => {
+      const tiledImage = openSeadragon.viewport.viewer.world.getItemAt(0);
+      tiledImage.addOnceHandler(
+        "fully-loaded-change",
+        () => (rollImageReady = true),
+      );
+    });
     openSeadragon.open(imageUrl);
   });
 
@@ -275,6 +295,9 @@
   on:mouseenter={() => (showControls = true)}
   on:mouseleave={() => (showControls = false)}
 >
+  {#if !rollImageReady}
+    <p transition:fade>Downloading roll image...</p>
+  {/if}
   {#if showControls}
     <RollViewerControls
       bind:strafing
