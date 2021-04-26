@@ -99,7 +99,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (169:6) {#if !holesByTickInterval.count}
+// (170:6) {#if !holesByTickInterval.count}
 function create_if_block_3(ctx) {
 	let p;
 
@@ -121,7 +121,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (177:2) {#if appReady}
+// (178:2) {#if appReady}
 function create_if_block_1(ctx) {
 	let div0;
 	let playbackcontrols;
@@ -210,7 +210,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (188:2) {#if !appReady}
+// (189:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -402,21 +402,24 @@ function instance($$self, $$props, $$invalidate) {
 	let previousRoll;
 	let holesByTickInterval = new IntervalTree();
 
-	const buildHolesIntervalTree = holeData => {
-		const scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
+	const buildHolesIntervalTree = () => {
+		const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
+		const scrollDownwards = ROLL_TYPE === "welte-red";
 
 		const firstHolePx = scrollDownwards
-		? parseInt($rollMetadata.FIRST_HOLE, 10)
-		: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
+		? parseInt(FIRST_HOLE, 10)
+		: parseInt(IMAGE_LENGTH, 10) - parseInt(FIRST_HOLE, 10);
 
 		holeData.forEach(hole => {
+			const { ORIGIN_ROW, OFF_TIME } = hole;
+
 			const tickOn = scrollDownwards
-			? hole.ORIGIN_ROW - firstHolePx
-			: firstHolePx - hole.ORIGIN_ROW;
+			? ORIGIN_ROW - firstHolePx
+			: firstHolePx - ORIGIN_ROW;
 
 			const tickOff = scrollDownwards
-			? hole.OFF_TIME - firstHolePx
-			: firstHolePx - hole.OFF_TIME;
+			? OFF_TIME - firstHolePx
+			: firstHolePx - OFF_TIME;
 
 			holesByTickInterval.insert(tickOn, tickOff, hole);
 		});

@@ -23,7 +23,7 @@ function create_fragment(ctx) {
 		c() {
 			div = element("div");
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-a5m2iq");
+			attr(div, "class", "svelte-u57qnd");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -42,16 +42,17 @@ const WELTE_RED_FIRST_NOTE = 24;
 const WELTE_RED_LAST_NOTE = 103;
 
 function instance($$self, $$props, $$invalidate) {
-	let $currentTick;
 	let $rollMetadata;
-	component_subscribe($$self, currentTick, $$value => $$invalidate(7, $currentTick = $$value));
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(8, $rollMetadata = $$value));
+	let $currentTick;
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(7, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(9, $currentTick = $$value));
 	let { imageUrl } = $$props;
 	let { holesByTickInterval } = $$props;
 	let openSeadragon;
 	let firstHolePx;
 	let dragging;
 	let marks = [];
+	let hoveredMark;
 
 	const getNoteName = trackerHole => {
 		const midiNumber = trackerHole + WELTE_MIDI_START;
@@ -63,6 +64,54 @@ function instance($$self, $$props, $$invalidate) {
 		}
 
 		return null;
+	};
+
+	const createMark = hole => {
+		const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
+		const mark = document.createElement("mark");
+		const noteName = getNoteName(TRACKER_HOLE);
+		if (noteName) mark.dataset.info = noteName;
+
+		mark.addEventListener("mouseout", () => {
+			if (!marks.map(([_hole]) => _hole).includes(hole)) openSeadragon.viewport.viewer.removeOverlay(hoveredMark);
+		});
+
+		const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME - ORIGIN_ROW);
+		openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
+		return mark;
+	};
+
+	const createHolesOverlaySvg = () => {
+		const { IMAGE_WIDTH, IMAGE_LENGTH, holeData } = $rollMetadata;
+		if (!holeData) return;
+		const imageWidth = parseInt(IMAGE_WIDTH, 10);
+		const imageLength = parseInt(IMAGE_LENGTH, 10);
+		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+		const entireViewportRectangle = openSeadragon.viewport.imageToViewportRectangle(0, 0, imageWidth, imageLength);
+		svg.setAttribute("width", imageWidth);
+		svg.setAttribute("height", imageLength);
+		svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+		svg.appendChild(g);
+
+		holeData.forEach(hole => {
+			const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+			const { ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME } = hole;
+			rect.setAttribute("x", ORIGIN_COL);
+			rect.setAttribute("y", ORIGIN_ROW);
+			rect.setAttribute("width", WIDTH_COL);
+			rect.setAttribute("height", OFF_TIME - ORIGIN_ROW);
+
+			rect.addEventListener("mouseover", () => {
+				if (marks.map(([_hole]) => _hole).includes(hole)) return;
+				openSeadragon.viewport.viewer.removeOverlay(hoveredMark);
+				hoveredMark = createMark(hole);
+			});
+
+			g.appendChild(rect);
+		});
+
+		openSeadragon.viewport.viewer.addOverlay(svg, entireViewportRectangle);
 	};
 
 	const panViewportToTick = tick => {
@@ -91,12 +140,8 @@ function instance($$self, $$props, $$invalidate) {
 
 		holes.forEach(hole => {
 			if (marks.map(([_hole]) => _hole).includes(hole)) return;
-			const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
-			const mark = document.createElement("mark");
-			const noteName = getNoteName(TRACKER_HOLE);
-			if (noteName) mark.dataset.info = noteName;
-			const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME - ORIGIN_ROW);
-			openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
+			const mark = createMark(hole);
+			mark.classList.add("active");
 			marks.push([hole, mark]);
 		});
 	};
@@ -113,7 +158,11 @@ function instance($$self, $$props, $$invalidate) {
 			constrainDuringPan: true
 		});
 
-		openSeadragon.addOnceHandler("update-viewport", () => panViewportToTick(0));
+		openSeadragon.addOnceHandler("update-viewport", () => {
+			createHolesOverlaySvg();
+			panViewportToTick(0);
+		});
+
 		openSeadragon.addHandler("canvas-drag", () => dragging = true);
 		openSeadragon.addHandler("canvas-drag-end", () => dragging = false);
 		openSeadragon.open(imageUrl);
@@ -127,19 +176,19 @@ function instance($$self, $$props, $$invalidate) {
 	let scrollDownwards;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$currentTick*/ 128) {
+		if ($$self.$$.dirty & /*$currentTick*/ 512) {
 			$: panViewportToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 128) {
+		if ($$self.$$.dirty & /*$currentTick*/ 512) {
 			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 256) {
-			$: $$invalidate(6, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		if ($$self.$$.dirty & /*$rollMetadata*/ 128) {
+			$: $$invalidate(8, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
 		}
 
-		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 320) {
+		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 384) {
 			$: firstHolePx = scrollDownwards
 			? parseInt($rollMetadata.FIRST_HOLE, 10)
 			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
