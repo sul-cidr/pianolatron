@@ -306,14 +306,7 @@
 <div id="roll-viewer" />
 <div id="roll-viewer-controls">
   <button
-    on:click={() => {
-      const { viewport } = openSeadragon;
-      if (viewport.getZoom() * 1.1 >= maxZoomLevel) {
-        viewport.zoomTo(maxZoomLevel);
-      } else {
-        viewport.zoomBy(1.1);
-      }
-    }}
+    on:click={() => openSeadragon.viewport.zoomTo(Math.min(openSeadragon.viewport.getZoom() * 1.1, maxZoomLevel))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -331,14 +324,7 @@
     </svg>
   </button>
   <button
-    on:click={() => {
-      const { viewport } = openSeadragon;
-      if (viewport.getZoom() * 0.9 <= minZoomLevel) {
-        viewport.zoomTo(minZoomLevel);
-      } else {
-        viewport.zoomBy(0.9);
-      }
-    }}
+    on:click={() => openSeadragon.viewport.zoomTo(Math.max(openSeadragon.viewport.getZoom() * 0.9, minZoomLevel))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
