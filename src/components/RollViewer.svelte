@@ -148,6 +148,16 @@
   let marks = [];
   let hoveredMark;
 
+  const centerRoll = () => {
+    const { viewport } = openSeadragon;
+    const viewportBounds = viewport.getBounds();
+    const lineCenter = new OpenSeadragon.Point(
+      0.5,
+      viewportBounds.y + viewportBounds.height / 2,
+    );
+    viewport.panTo(lineCenter);
+  };
+
   const getNoteName = (trackerHole) => {
     const midiNumber = trackerHole + WELTE_MIDI_START;
     if (
@@ -340,7 +350,7 @@
       <line x1="5" y1="12" x2="19" y2="12" />
     </svg>
   </button>
-  <button>
+  <button on:click={centerRoll}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -357,7 +367,12 @@
       <line x1="6" y1="18" x2="18" y2="18" />
     </svg>
   </button>
-  <button>
+  <button
+    on:click={() => {
+      openSeadragon.viewport.zoomTo(1);
+      centerRoll();
+    }}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       height="24"
