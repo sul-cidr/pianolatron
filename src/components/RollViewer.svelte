@@ -259,7 +259,7 @@
       panHorizontal: true,
       visibilityRatio: 1,
       defaultZoomLevel: 1,
-      minZoomLevel: 0.01,
+      minZoomLevel: 0.1,
       maxZoomLevel: 4,
       constrainDuringPan: true,
     });
