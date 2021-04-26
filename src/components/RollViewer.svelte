@@ -7,16 +7,19 @@
   #roll-viewer-controls {
     background: rgba(0, 0, 0, 0.4);
     border-radius: 4px;
-    display: none;
+    opacity: 0;
+    pointer-events: none;
     left: 50%;
     padding: 8px;
     position: absolute;
     top: 8px;
     transform: translateX(-50%);
+    transition: opacity 500ms ease;
     z-index: 25;
 
     &:hover {
-      display: block;
+      opacity: 1;
+      pointer-events: all;
     }
 
     button {
@@ -60,7 +63,8 @@
     }
 
     &:hover + #roll-viewer-controls {
-      display: block;
+      opacity: 1;
+      pointer-events: all;
     }
 
     :global(canvas) {
