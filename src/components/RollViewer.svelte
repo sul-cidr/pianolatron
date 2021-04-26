@@ -138,6 +138,10 @@
   const WELTE_RED_FIRST_NOTE = 24;
   const WELTE_RED_LAST_NOTE = 103;
 
+  const defaultZoomLevel = 1;
+  const minZoomLevel = 0.1;
+  const maxZoomLevel = 4;
+
   let openSeadragon;
   let firstHolePx;
   let dragging;
@@ -275,9 +279,9 @@
       showNavigationControl: false,
       panHorizontal: true,
       visibilityRatio: 1,
-      defaultZoomLevel: 1,
-      minZoomLevel: 0.1,
-      maxZoomLevel: 4,
+      defaultZoomLevel,
+      minZoomLevel,
+      maxZoomLevel,
       constrainDuringPan: true,
     });
 
@@ -303,7 +307,12 @@
 <div id="roll-viewer-controls">
   <button
     on:click={() => {
-      openSeadragon.viewport.zoomBy(1.1);
+      const { viewport } = openSeadragon;
+      if (viewport.getZoom() * 1.1 >= maxZoomLevel) {
+        viewport.zoomTo(maxZoomLevel);
+      } else {
+        viewport.zoomBy(1.1);
+      }
     }}
   >
     <svg
@@ -323,7 +332,12 @@
   </button>
   <button
     on:click={() => {
-      openSeadragon.viewport.zoomBy(0.9);
+      const { viewport } = openSeadragon;
+      if (viewport.getZoom() * 0.9 <= minZoomLevel) {
+        viewport.zoomTo(minZoomLevel);
+      } else {
+        viewport.zoomBy(0.9);
+      }
     }}
   >
     <svg
