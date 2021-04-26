@@ -301,7 +301,11 @@
 
 <div id="roll-viewer" />
 <div id="roll-viewer-controls">
-  <button>
+  <button
+    on:click={() => {
+      openSeadragon.viewport.zoomBy(1.1);
+    }}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -317,7 +321,11 @@
       <line x1="5" y1="12" x2="19" y2="12" />
     </svg>
   </button>
-  <button>
+  <button
+    on:click={() => {
+      openSeadragon.viewport.zoomBy(0.9);
+    }}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
