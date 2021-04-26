@@ -30,6 +30,19 @@
       margin: 0;
       padding: 0.35em 0.8em;
       transition: all 0.2s;
+
+      &:focus,
+      &:active {
+        outline: 0;
+      }
+
+      &:hover {
+        outline: 1px solid white;
+      }
+
+      &:active {
+        color: grey;
+      }
     }
   }
 
