@@ -40,6 +40,7 @@
 
 <script>
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
 
   export let openSeadragon;
@@ -66,7 +67,7 @@
   });
 </script>
 
-<div id="roll-viewer-controls">
+<div id="roll-viewer-controls" transition:fade>
   <button
     disabled={currentZoom >= maxZoomLevel}
     on:click={() => openSeadragon.viewport.zoomTo(Math.min(openSeadragon.viewport.getZoom() * 1.1, maxZoomLevel))}

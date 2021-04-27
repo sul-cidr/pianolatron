@@ -93,7 +93,6 @@
 
 <script>
   import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
   import { rollMetadata, currentTick } from "../stores";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -277,8 +276,6 @@
   on:mouseleave={() => (showControls = false)}
 >
   {#if showControls}
-    <div transition:fade>
-      <RollViewerControls {openSeadragon} {minZoomLevel} {maxZoomLevel} />
-    </div>
+    <RollViewerControls {openSeadragon} {minZoomLevel} {maxZoomLevel} />
   {/if}
 </div>
