@@ -30,16 +30,23 @@
       &:active {
         color: grey;
       }
+
+      &:disabled {
+        color: grey;
+      }
     }
   }
 </style>
 
 <script>
+  import { onMount } from "svelte";
   import OpenSeadragon from "openseadragon";
 
   export let openSeadragon;
   export let maxZoomLevel;
   export let minZoomLevel;
+
+  let currentZoom = openSeadragon.viewport.getZoom();
 
   const centerRoll = () => {
     const { viewport } = openSeadragon;
@@ -50,10 +57,18 @@
     );
     viewport.panTo(lineCenter);
   };
+
+  const onZoom = () => (currentZoom = openSeadragon.viewport.getZoom());
+
+  onMount(() => {
+    openSeadragon.addHandler("zoom", onZoom);
+    return () => openSeadragon.removeHandler("zoom", onZoom);
+  });
 </script>
 
 <div id="roll-viewer-controls">
   <button
+    disabled={currentZoom >= maxZoomLevel}
     on:click={() => openSeadragon.viewport.zoomTo(Math.min(openSeadragon.viewport.getZoom() * 1.1, maxZoomLevel))}
   >
     <svg
@@ -72,6 +87,7 @@
     </svg>
   </button>
   <button
+    disabled={currentZoom <= minZoomLevel}
     on:click={() => openSeadragon.viewport.zoomTo(Math.max(openSeadragon.viewport.getZoom() * 0.9, minZoomLevel))}
   >
     <svg
@@ -106,6 +122,7 @@
     </svg>
   </button>
   <button
+    disabled={currentZoom === 1}
     on:click={() => {
       openSeadragon.viewport.zoomTo(1);
       centerRoll();
