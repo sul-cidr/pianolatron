@@ -33,6 +33,7 @@
 
       &:disabled {
         color: grey;
+        cursor: not-allowed;
       }
     }
   }
