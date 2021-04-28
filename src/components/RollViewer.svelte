@@ -276,6 +276,11 @@
   on:mouseleave={() => (showControls = false)}
 >
   {#if showControls}
-    <RollViewerControls {openSeadragon} {minZoomLevel} {maxZoomLevel} />
+    <RollViewerControls
+      bind:dragging
+      {openSeadragon}
+      {minZoomLevel}
+      {maxZoomLevel}
+    />
   {/if}
 </div>
