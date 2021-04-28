@@ -110,7 +110,7 @@
 
   let openSeadragon;
   let firstHolePx;
-  let dragging;
+  let strafing;
   let marks = [];
   let hoveredMark;
   let showControls;
@@ -205,12 +205,12 @@
     openSeadragon.viewport.viewer.addOverlay(svg, entireViewportRectangle);
   };
 
-  const panViewportToTick = (tick) => {
+  const advanceToTick = (tick) => {
     if (!openSeadragon) return;
     const { viewport } = openSeadragon;
-    // if we're dragging we want the target bounds, if otherwise (and most
-    //   especially if we happen to be zooming) we want the current bounds
-    const viewportBounds = viewport.getBounds(!dragging);
+    // if we're panning horizontally we want the target bounds, if otherwise
+    //  (and most especially if we happen to be zooming) we want the current bounds
+    const viewportBounds = viewport.getBounds(!strafing);
     const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
     const lineCenter = new OpenSeadragon.Point(
@@ -254,14 +254,14 @@
 
     openSeadragon.addOnceHandler("update-viewport", () => {
       createHolesOverlaySvg();
-      panViewportToTick(0);
+      advanceToTick(0);
     });
-    openSeadragon.addHandler("canvas-drag", () => (dragging = true));
-    openSeadragon.addHandler("canvas-drag-end", () => (dragging = false));
+    openSeadragon.addHandler("canvas-drag", () => (strafing = true));
+    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
     openSeadragon.open(imageUrl);
   });
 
-  $: panViewportToTick($currentTick);
+  $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: firstHolePx = scrollDownwards
@@ -277,7 +277,7 @@
 >
   {#if showControls}
     <RollViewerControls
-      bind:dragging
+      bind:strafing
       {openSeadragon}
       {minZoomLevel}
       {maxZoomLevel}

@@ -46,7 +46,7 @@
   export let openSeadragon;
   export let maxZoomLevel;
   export let minZoomLevel;
-  export let dragging;
+  export let strafing;
 
   let currentZoom = openSeadragon.viewport.getZoom();
 
@@ -57,9 +57,9 @@
       0.5,
       viewportBounds.y + viewportBounds.height / 2,
     );
-    dragging = true;
+    strafing = true;
     viewport.panTo(lineCenter);
-    setTimeout(() => (dragging = false), 1000);
+    setTimeout(() => (strafing = false), 1000);
   };
 
   const onZoom = () => (currentZoom = openSeadragon.viewport.getZoom());
