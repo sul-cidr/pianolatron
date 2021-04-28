@@ -1,7 +1,6 @@
 <style lang="scss">
   dl {
     display: block;
-    margin: 1em;
     padding: 0.5em 1em;
   }
 

@@ -12,9 +12,9 @@
   #roll-details {
     grid-area: left;
     max-width: calc(348px + 2em);
+    padding: 1em;
 
     p {
-      margin: 1em;
       opacity: 0.5;
       padding: 0.5em 1em;
     }

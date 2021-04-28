@@ -1,7 +1,7 @@
 <style>
   select {
-    margin: 1em;
     padding: 0.25em 0;
+    width: 100%;
   }
 </style>
 
