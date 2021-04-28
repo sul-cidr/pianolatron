@@ -4,6 +4,48 @@
   $highlight-hover-outline-width: 6px;
   $highlight-hover-outline-offset: 8px;
 
+  #roll-viewer-controls {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    left: 50%;
+    padding: 8px;
+    position: absolute;
+    top: 8px;
+    transform: translateX(-50%);
+    transition: opacity 500ms ease;
+    z-index: 25;
+
+    &:hover {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    button {
+      background: none;
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+      margin: 0;
+      padding: 0.35em 0.8em;
+      transition: all 0.2s;
+
+      &:focus,
+      &:active {
+        outline: 0;
+      }
+
+      &:hover {
+        outline: 1px solid white;
+      }
+
+      &:active {
+        color: grey;
+      }
+    }
+  }
+
   #roll-viewer {
     position: relative;
     height: 100%;
@@ -31,6 +73,11 @@
       position: absolute;
       right: 0;
       top: 0;
+    }
+
+    &:hover + #roll-viewer-controls {
+      opacity: 1;
+      pointer-events: all;
     }
 
     :global(canvas) {
@@ -104,11 +151,25 @@
   const WELTE_RED_FIRST_NOTE = 24;
   const WELTE_RED_LAST_NOTE = 103;
 
+  const defaultZoomLevel = 1;
+  const minZoomLevel = 0.1;
+  const maxZoomLevel = 4;
+
   let openSeadragon;
   let firstHolePx;
   let dragging;
   let marks = [];
   let hoveredMark;
+
+  const centerRoll = () => {
+    const { viewport } = openSeadragon;
+    const viewportBounds = viewport.getBounds();
+    const lineCenter = new OpenSeadragon.Point(
+      0.5,
+      viewportBounds.y + viewportBounds.height / 2,
+    );
+    viewport.panTo(lineCenter);
+  };
 
   const getNoteName = (trackerHole) => {
     const midiNumber = trackerHole + WELTE_MIDI_START;
@@ -241,9 +302,9 @@
       showNavigationControl: false,
       panHorizontal: true,
       visibilityRatio: 1,
-      defaultZoomLevel: 1,
-      minZoomLevel: 0.01,
-      maxZoomLevel: 4,
+      defaultZoomLevel,
+      minZoomLevel,
+      maxZoomLevel,
       constrainDuringPan: true,
     });
 
@@ -266,3 +327,78 @@
 </script>
 
 <div id="roll-viewer" />
+<div id="roll-viewer-controls">
+  <button
+    on:click={() => openSeadragon.viewport.zoomTo(Math.min(openSeadragon.viewport.getZoom() * 1.1, maxZoomLevel))}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  </button>
+  <button
+    on:click={() => openSeadragon.viewport.zoomTo(Math.max(openSeadragon.viewport.getZoom() * 0.9, minZoomLevel))}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  </button>
+  <button on:click={centerRoll}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="8" y1="12" x2="16" y2="12" />
+      <line x1="6" y1="18" x2="18" y2="18" />
+    </svg>
+  </button>
+  <button
+    on:click={() => {
+      openSeadragon.viewport.zoomTo(1);
+      centerRoll();
+    }}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="7 8 3 12 7 16" />
+      <polyline points="17 8 21 12 17 16" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+    </svg>
+  </button>
+</div>

@@ -22,6 +22,7 @@
 
   #roll {
     grid-area: roll;
+    position: relative;
   }
 
   #audio-controls {
