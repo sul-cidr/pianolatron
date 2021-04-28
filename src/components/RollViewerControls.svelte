@@ -124,7 +124,8 @@
     >
       <polyline points="7 8 3 12 7 16" />
       <polyline points="17 8 21 12 17 16" />
-      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="12" x2="9" y2="12" />
+      <line x1="14" y1="12" x2="20" y2="12" />
     </svg>
   </button>
 </div>
