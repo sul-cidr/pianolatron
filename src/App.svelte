@@ -2,7 +2,10 @@
   #app {
     display: grid;
     grid-template-rows: 1fr auto;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: minmax(300px, 400px) minmax(800px, 1fr) minmax(
+        300px,
+        auto
+      );
     grid-template-areas:
       "left roll right"
       "keyboard keyboard keyboard";
@@ -11,7 +14,6 @@
 
   #roll-details {
     grid-area: left;
-    max-width: calc(348px + 2em);
     padding: 1em;
 
     p {
