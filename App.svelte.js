@@ -99,7 +99,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (170:6) {#if !holesByTickInterval.count}
+// (171:6) {#if !holesByTickInterval.count}
 function create_if_block_3(ctx) {
 	let p;
 
@@ -110,7 +110,7 @@ function create_if_block_3(ctx) {
 			p.innerHTML = `Note:<br/>Hole visualization data is not available for this roll at
           this time. Hole highlighting will not be enabled.`;
 
-			attr(p, "class", "svelte-1s3dlkg");
+			attr(p, "class", "svelte-4jntzw");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -121,7 +121,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (178:2) {#if appReady}
+// (179:2) {#if appReady}
 function create_if_block_1(ctx) {
 	let div0;
 	let playbackcontrols;
@@ -161,11 +161,11 @@ function create_if_block_1(ctx) {
 			div2 = element("div");
 			create_component(keyboard.$$.fragment);
 			attr(div0, "id", "audio-controls");
-			attr(div0, "class", "svelte-1s3dlkg");
+			attr(div0, "class", "svelte-4jntzw");
 			attr(div1, "id", "roll");
-			attr(div1, "class", "svelte-1s3dlkg");
+			attr(div1, "class", "svelte-4jntzw");
 			attr(div2, "id", "keyboard-container");
-			attr(div2, "class", "svelte-1s3dlkg");
+			attr(div2, "class", "svelte-4jntzw");
 		},
 		m(target, anchor) {
 			insert(target, div0, anchor);
@@ -210,7 +210,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (189:2) {#if !appReady}
+// (190:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -275,9 +275,9 @@ function create_fragment(ctx) {
 			t3 = space();
 			create_component(notification.$$.fragment);
 			attr(div0, "id", "roll-details");
-			attr(div0, "class", "svelte-1s3dlkg");
+			attr(div0, "class", "svelte-4jntzw");
 			attr(div1, "id", "app");
-			attr(div1, "class", "svelte-1s3dlkg");
+			attr(div1, "class", "svelte-4jntzw");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
