@@ -1,4 +1,5 @@
 function noop() { }
+const identity = x => x;
 function run(fn) {
     return fn();
 }
@@ -32,6 +33,41 @@ function set_store_value(store, ret, value = ret) {
     return ret;
 }
 
+const is_client = typeof window !== 'undefined';
+let now = is_client
+    ? () => window.performance.now()
+    : () => Date.now();
+let raf = is_client ? cb => requestAnimationFrame(cb) : noop;
+
+const tasks = new Set();
+function run_tasks(now) {
+    tasks.forEach(task => {
+        if (!task.c(now)) {
+            tasks.delete(task);
+            task.f();
+        }
+    });
+    if (tasks.size !== 0)
+        raf(run_tasks);
+}
+/**
+ * Creates a new task that runs on each raf frame
+ * until it returns a falsy value or is aborted
+ */
+function loop(callback) {
+    let task;
+    if (tasks.size === 0)
+        raf(run_tasks);
+    return {
+        promise: new Promise(fulfill => {
+            tasks.add(task = { c: callback, f: fulfill });
+        }),
+        abort() {
+            tasks.delete(task);
+        }
+    };
+}
+
 function append(target, node) {
     target.appendChild(node);
 }
@@ -49,6 +85,9 @@ function destroy_each(iterations, detaching) {
 }
 function element(name) {
     return document.createElement(name);
+}
+function svg_element(name) {
+    return document.createElementNS('http://www.w3.org/2000/svg', name);
 }
 function text(data) {
     return document.createTextNode(data);
@@ -102,6 +141,11 @@ function select_value(select) {
 function toggle_class(element, name, toggle) {
     element.classList[toggle ? 'add' : 'remove'](name);
 }
+function custom_event(type, detail) {
+    const e = document.createEvent('CustomEvent');
+    e.initCustomEvent(type, false, false, detail);
+    return e;
+}
 class HtmlTag {
     constructor(anchor = null) {
         this.a = anchor;
@@ -132,6 +176,67 @@ class HtmlTag {
     d() {
         this.n.forEach(detach);
     }
+}
+
+const active_docs = new Set();
+let active = 0;
+// https://github.com/darkskyapp/string-hash/blob/master/index.js
+function hash(str) {
+    let hash = 5381;
+    let i = str.length;
+    while (i--)
+        hash = ((hash << 5) - hash) ^ str.charCodeAt(i);
+    return hash >>> 0;
+}
+function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
+    const step = 16.666 / duration;
+    let keyframes = '{\n';
+    for (let p = 0; p <= 1; p += step) {
+        const t = a + (b - a) * ease(p);
+        keyframes += p * 100 + `%{${fn(t, 1 - t)}}\n`;
+    }
+    const rule = keyframes + `100% {${fn(b, 1 - b)}}\n}`;
+    const name = `__svelte_${hash(rule)}_${uid}`;
+    const doc = node.ownerDocument;
+    active_docs.add(doc);
+    const stylesheet = doc.__svelte_stylesheet || (doc.__svelte_stylesheet = doc.head.appendChild(element('style')).sheet);
+    const current_rules = doc.__svelte_rules || (doc.__svelte_rules = {});
+    if (!current_rules[name]) {
+        current_rules[name] = true;
+        stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
+    }
+    const animation = node.style.animation || '';
+    node.style.animation = `${animation ? `${animation}, ` : ''}${name} ${duration}ms linear ${delay}ms 1 both`;
+    active += 1;
+    return name;
+}
+function delete_rule(node, name) {
+    const previous = (node.style.animation || '').split(', ');
+    const next = previous.filter(name
+        ? anim => anim.indexOf(name) < 0 // remove specific animation
+        : anim => anim.indexOf('__svelte') === -1 // remove all Svelte animations
+    );
+    const deleted = previous.length - next.length;
+    if (deleted) {
+        node.style.animation = next.join(', ');
+        active -= deleted;
+        if (!active)
+            clear_rules();
+    }
+}
+function clear_rules() {
+    raf(() => {
+        if (active)
+            return;
+        active_docs.forEach(doc => {
+            const stylesheet = doc.__svelte_stylesheet;
+            let i = stylesheet.cssRules.length;
+            while (i--)
+                stylesheet.deleteRule(i);
+            doc.__svelte_rules = {};
+        });
+        active_docs.clear();
+    });
 }
 
 let current_component;
@@ -222,6 +327,20 @@ function update($$) {
         $$.after_update.forEach(add_render_callback);
     }
 }
+
+let promise;
+function wait() {
+    if (!promise) {
+        promise = Promise.resolve();
+        promise.then(() => {
+            promise = null;
+        });
+    }
+    return promise;
+}
+function dispatch(node, direction, kind) {
+    node.dispatchEvent(custom_event(`${direction ? 'intro' : 'outro'}${kind}`));
+}
 const outroing = new Set();
 let outros;
 function group_outros() {
@@ -258,6 +377,112 @@ function transition_out(block, local, detach, callback) {
         });
         block.o(local);
     }
+}
+const null_transition = { duration: 0 };
+function create_bidirectional_transition(node, fn, params, intro) {
+    let config = fn(node, params);
+    let t = intro ? 0 : 1;
+    let running_program = null;
+    let pending_program = null;
+    let animation_name = null;
+    function clear_animation() {
+        if (animation_name)
+            delete_rule(node, animation_name);
+    }
+    function init(program, duration) {
+        const d = program.b - t;
+        duration *= Math.abs(d);
+        return {
+            a: t,
+            b: program.b,
+            d,
+            duration,
+            start: program.start,
+            end: program.start + duration,
+            group: program.group
+        };
+    }
+    function go(b) {
+        const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+        const program = {
+            start: now() + delay,
+            b
+        };
+        if (!b) {
+            // @ts-ignore todo: improve typings
+            program.group = outros;
+            outros.r += 1;
+        }
+        if (running_program || pending_program) {
+            pending_program = program;
+        }
+        else {
+            // if this is an intro, and there's a delay, we need to do
+            // an initial tick and/or apply CSS animation immediately
+            if (css) {
+                clear_animation();
+                animation_name = create_rule(node, t, b, duration, delay, easing, css);
+            }
+            if (b)
+                tick(0, 1);
+            running_program = init(program, duration);
+            add_render_callback(() => dispatch(node, b, 'start'));
+            loop(now => {
+                if (pending_program && now > pending_program.start) {
+                    running_program = init(pending_program, duration);
+                    pending_program = null;
+                    dispatch(node, running_program.b, 'start');
+                    if (css) {
+                        clear_animation();
+                        animation_name = create_rule(node, t, running_program.b, running_program.duration, 0, easing, config.css);
+                    }
+                }
+                if (running_program) {
+                    if (now >= running_program.end) {
+                        tick(t = running_program.b, 1 - t);
+                        dispatch(node, running_program.b, 'end');
+                        if (!pending_program) {
+                            // we're done
+                            if (running_program.b) {
+                                // intro — we can tidy up immediately
+                                clear_animation();
+                            }
+                            else {
+                                // outro — needs to be coordinated
+                                if (!--running_program.group.r)
+                                    run_all(running_program.group.c);
+                            }
+                        }
+                        running_program = null;
+                    }
+                    else if (now >= running_program.start) {
+                        const p = now - running_program.start;
+                        t = running_program.a + running_program.d * easing(p / running_program.duration);
+                        tick(t, 1 - t);
+                    }
+                }
+                return !!(running_program || pending_program);
+            });
+        }
+    }
+    return {
+        run(b) {
+            if (is_function(config)) {
+                wait().then(() => {
+                    // @ts-ignore
+                    config = config();
+                    go(b);
+                });
+            }
+            else {
+                go(b);
+            }
+        },
+        end() {
+            clear_animation();
+            running_program = pending_program = null;
+        }
+    };
 }
 
 function bind(component, name, callback) {
@@ -389,4 +614,4 @@ class SvelteComponent {
     }
 }
 
-export { listen as A, run_all as B, set_data as C, set_style as D, text as E, toggle_class as F, add_render_callback as G, HtmlTag as H, select_option as I, select_value as J, bubble as K, set_input_value as L, to_number as M, SvelteComponent as S, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, empty as l, group_outros as m, init as n, onMount as o, insert as p, mount_component as q, set_store_value as r, safe_not_equal as s, space as t, transition_in as u, transition_out as v, destroy_each as w, noop as x, subscribe as y, is_function as z };
+export { listen as A, run_all as B, set_data as C, set_style as D, text as E, toggle_class as F, add_render_callback as G, HtmlTag as H, select_option as I, select_value as J, create_bidirectional_transition as K, svg_element as L, bubble as M, set_input_value as N, to_number as O, identity as P, SvelteComponent as S, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, empty as l, group_outros as m, init as n, onMount as o, insert as p, mount_component as q, set_store_value as r, safe_not_equal as s, space as t, transition_in as u, transition_out as v, destroy_each as w, noop as x, subscribe as y, is_function as z };
