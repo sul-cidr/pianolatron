@@ -8,6 +8,7 @@
 
     > div {
       margin-top: -1em;
+      padding: 0.5em;
     }
 
     &:hover {
@@ -80,13 +81,14 @@
 </script>
 
 <div
+  {id}
   class={`flex-collapsible ${position}`}
   class:hidden
   style={`width: ${hidden ? 0 : width};`}
 >
   <input type="checkbox" id={`${id}_collapse`} bind:checked={hidden} />
   <label for={`${id}_collapse`} />
-  <div {id} style={`width: ${width};`}>
+  <div style={`width: ${width};`}>
     <slot />
   </div>
 </div>

@@ -1,6 +1,6 @@
 <style lang="scss">
   #playback-controls {
-    margin: 6em 2em 0 2em;
+    margin: 0 0.5em;
   }
   .control {
     align-items: center;

@@ -11,12 +11,12 @@
       display: grid;
       grid-template-rows: 1fr;
       grid-template-columns: auto 1fr auto;
-      grid-template-areas: "left roll right";
+      grid-template-areas: "left center right";
     }
   }
 
   :global(#roll-details) {
-    padding: 0.5em;
+    grid-area: left;
 
     p {
       opacity: 0.5;
@@ -27,9 +27,11 @@
   #roll {
     position: relative;
     flex: 1 0 auto;
+    grid-area: center;
   }
 
-  #audio-controls {
+  :global(#audio-controls) {
+    grid-area: right;
   }
 
   #keyboard-container {
