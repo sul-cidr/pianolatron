@@ -1,21 +1,19 @@
 <style lang="scss">
   #app {
-    display: grid;
-    grid-template-rows: 1fr auto;
-    grid-template-columns: minmax(300px, 400px) minmax(800px, 1fr) minmax(
-        300px,
-        auto
-      );
-    grid-template-areas:
-      "left roll right"
-      "keyboard keyboard keyboard";
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    > div:first-child {
+      display: flex;
+      flex: 1 0 auto;
+      position: relative;
+    }
   }
 
-  #roll-details {
-    grid-area: left;
-    padding: 1em;
-
+  :global(#roll-details) {
+    padding: 0.5em;
     p {
       opacity: 0.5;
       padding: 0.5em 1em;
@@ -23,16 +21,15 @@
   }
 
   #roll {
-    grid-area: roll;
     position: relative;
+    flex: 1 0 auto;
   }
 
   #audio-controls {
-    grid-area: right;
   }
 
   #keyboard-container {
-    grid-area: keyboard;
+    flex: 0 1 auto;
   }
 </style>
 
@@ -54,6 +51,7 @@
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
+  import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
   let appReady = false;
   let mididataReady;
@@ -171,29 +169,31 @@
 </script>
 
 <div id="app">
-  <div id="roll-details">
-    <RollSelector bind:currentRoll />
-    {#if appReady}
-      <RollDetails />
-      {#if !holesByTickInterval.count}
-        <p>
-          Note:<br />Hole visualization data is not available for this roll at
-          this time. Hole highlighting will not be enabled.
-        </p>
+  <div>
+    <FlexCollapsible id="roll-details" width="20vw">
+      <RollSelector bind:currentRoll />
+      {#if appReady}
+        <RollDetails />
+        {#if !holesByTickInterval.count}
+          <p>
+            Note:<br />Hole visualization data is not available for this roll at
+            this time. Hole highlighting will not be enabled.
+          </p>
+        {/if}
       {/if}
+    </FlexCollapsible>
+    {#if appReady}
+      <div id="roll">
+        <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
+      </div>
+      <FlexCollapsible id="audio-controls" width="20vw" position="left">
+        <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
+      </FlexCollapsible>
     {/if}
   </div>
-  {#if appReady}
-    <div id="audio-controls">
-      <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
-    </div>
-    <div id="roll">
-      <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
-    </div>
-    <div id="keyboard-container">
-      <Keyboard keyCount="88" {activeNotes} />
-    </div>
-  {/if}
+  <div id="keyboard-container">
+    <Keyboard keyCount="88" {activeNotes} />
+  </div>
   {#if !appReady}
     <div id="loading">
       <div><span /> <span /> <span /> <span /> <span /></div>
