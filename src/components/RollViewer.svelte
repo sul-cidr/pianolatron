@@ -110,10 +110,26 @@
 
   let openSeadragon;
   let firstHolePx;
-  let strafing;
+  let strafing = false;
   let marks = [];
   let hoveredMark;
   let showControls;
+
+  function debounce(func, wait, immediate) {
+    var timeout;
+    return function () {
+      var context = this,
+        args = arguments;
+      var later = function () {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  }
 
   const getNoteName = (trackerHole) => {
     const midiNumber = trackerHole + WELTE_MIDI_START;
@@ -250,6 +266,7 @@
       minZoomLevel,
       maxZoomLevel,
       constrainDuringPan: true,
+      // preserveImageSizeOnResize: true,
     });
 
     openSeadragon.addOnceHandler("update-viewport", () => {
@@ -258,7 +275,27 @@
     });
     openSeadragon.addHandler("canvas-drag", () => (strafing = true));
     openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
+    // openSeadragon.addHandler("resize", (e) => console.log(e));
     openSeadragon.open(imageUrl);
+  });
+
+  const center = () => {
+    const { viewport } = openSeadragon;
+    const viewportBounds = viewport.getBounds();
+    const lineCenter = new OpenSeadragon.Point(
+      0.5,
+      viewportBounds.y + viewportBounds.height / 2,
+    );
+    strafing = true;
+    viewport.panTo(lineCenter);
+    setTimeout(() => (strafing = false), 1000);
+    viewport.zoomTo(1);
+  };
+
+  onMount(() => {
+    // const resizeObserver = new ResizeObserver(center);
+    // resizeObserver.observe(document.querySelector("#roll-viewer"));
+    // return () => resizeObserver.disconnect();
   });
 
   $: advanceToTick($currentTick);
