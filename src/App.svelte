@@ -6,14 +6,18 @@
     overflow: hidden;
 
     > div:first-child {
-      display: flex;
       flex: 1 0 auto;
       position: relative;
+      display: grid;
+      grid-template-rows: 1fr;
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: "left roll right";
     }
   }
 
   :global(#roll-details) {
     padding: 0.5em;
+
     p {
       opacity: 0.5;
       padding: 0.5em 1em;
