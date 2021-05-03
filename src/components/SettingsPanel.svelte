@@ -24,7 +24,7 @@
       background: $cardinal;
     }
     &.blue {
-      background: cadetblue;
+      background: steelblue;
     }
     &.green {
       background: darkolivegreen;
