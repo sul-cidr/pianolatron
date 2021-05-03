@@ -50,7 +50,11 @@
     currentTick,
     rollMetadata,
   } from "./stores";
-  import { midiSamplePlayer, pianoReady } from "./components/SamplePlayer";
+  import {
+    midiSamplePlayer,
+    pianoReady,
+    stopAllNotes,
+  } from "./components/SamplePlayer";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
@@ -90,6 +94,7 @@
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
+      stopAllNotes();
       activeNotes.reset();
     } else {
       midiSamplePlayer.play();
@@ -98,6 +103,7 @@
 
   const stopApp = () => {
     midiSamplePlayer.stop();
+    stopAllNotes();
     playbackProgress.set(0);
     currentTick.set(0);
     activeNotes.reset();
