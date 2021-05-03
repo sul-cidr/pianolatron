@@ -3,7 +3,7 @@
   // which is, in turn, based on
   // https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
   $track-color: #eaeaea;
-  $thumb-color: $primary-accent;
+  $thumb-color: var(--primary-accent);
 
   $thumb-radius: 12px;
   $thumb-height: 18px;

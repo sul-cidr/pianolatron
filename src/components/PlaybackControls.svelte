@@ -25,12 +25,12 @@
     border-radius: 0.25em;
     color: #ffffff;
     transition: all 0.2s;
-    background-color: $primary-accent;
+    background-color: var(--primary-accent);
 
     &:hover,
     &.pedal-on {
-      color: $primary-accent;
-      border-color: $primary-accent;
+      color: var(--primary-accent);
+      border-color: var(--primary-accent);
       background-color: #ffffff;
     }
 

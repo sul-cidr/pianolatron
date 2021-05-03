@@ -21,7 +21,7 @@
     }
 
     &::before {
-      background: $primary-accent;
+      background: var(--primary-accent);
       content: "";
       display: block;
       height: 1px;
@@ -33,7 +33,7 @@
     }
 
     &::after {
-      background-color: $background-color;
+      background-color: var(--background-color);
       bottom: 0;
       content: " ";
       left: 0;

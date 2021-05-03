@@ -32,10 +32,13 @@ select {
 }
 
 body {
-  background: $background-color;
+  background: var(--background-color);
   font-family: $secondary-typeface;
   min-height: 100vh;
   text-rendering: optimizeSpeed;
+
+  --background-color: #dad7cb; // Stanford's "cloud"
+  --primary-accent: #8c1515; // "cardinal"
 }
 
 a {
