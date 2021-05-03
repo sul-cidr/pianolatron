@@ -37,6 +37,11 @@
   #keyboard-container {
     flex: 0 1 auto;
   }
+
+  #right-panel-wrapper {
+    position: relative;
+    margin-top: 1em;
+  }
 </style>
 
 <script>
@@ -58,6 +63,7 @@
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import PlaybackControls from "./components/PlaybackControls.svelte";
+  import SettingsPanel from "./components/SettingsPanel.svelte";
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
@@ -69,6 +75,7 @@
   let currentRoll;
   let previousRoll;
   let holesByTickInterval = new IntervalTree();
+  let showSettings = false;
 
   const buildHolesIntervalTree = () => {
     const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
@@ -199,7 +206,15 @@
         <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
       </div>
       <FlexCollapsible id="audio-controls" width="20vw" position="left">
-        <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
+        <button
+          on:click={() => (showSettings = !showSettings)}
+        >settings</button>
+        <div id="right-panel-wrapper">
+          <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
+          {#if showSettings}
+            <SettingsPanel {showSettings} />
+          {/if}
+        </div>
       </FlexCollapsible>
     {/if}
   </div>

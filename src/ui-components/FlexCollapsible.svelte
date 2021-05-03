@@ -7,8 +7,12 @@
     transition: all 0.3s ease;
 
     > div {
-      margin-top: -1em;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
       padding: 0.5em;
+      position: absolute;
+      top: 0;
     }
 
     &:hover {
