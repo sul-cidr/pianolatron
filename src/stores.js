@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import watchMedia from "./mq-store";
 
 const createStore = (defaultValue) => {
   const { set, subscribe, update } = writable(defaultValue);
@@ -41,4 +42,11 @@ export const activeNotes = createSetStore();
 export const userSettings = createStore({
   theme: "cardinal",
   activeNoteDetails: false,
+});
+
+export const media = watchMedia({
+  narrow: "(max-width: 849px)",
+  normal: "(min-width: 850px)",
+  wide: "(min-width: 1400px)",
+  hover: "(hover: hover)",
 });
