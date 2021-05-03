@@ -23,11 +23,17 @@
     &.cardinal {
       background: $cardinal;
     }
+
     &.blue {
       background: steelblue;
     }
+
     &.green {
       background: darkolivegreen;
+    }
+
+    &.grey {
+      background: darkslategrey;
     }
   }
 </style>
@@ -38,7 +44,7 @@
   let el;
   let currentColor = document.body.className || "cardinal";
 
-  const colors = ["cardinal", "blue", "green"];
+  const colors = ["cardinal", "blue", "green", "grey"];
 </script>
 
 <div

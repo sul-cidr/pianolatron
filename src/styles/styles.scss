@@ -49,6 +49,11 @@ body {
   &.green {
     --primary-accent: darkolivegreen;
   }
+
+  &.grey {
+    --background-color: gainsboro;
+    --primary-accent: darkslategrey;
+  }
 }
 
 a {
