@@ -36,9 +36,10 @@ body {
   font-family: $secondary-typeface;
   min-height: 100vh;
   text-rendering: optimizeSpeed;
+  transition: background 0.2s ease;
 
-  --background-color: #dad7cb; // Stanford's "cloud"
-  --primary-accent: #8c1515; // "cardinal"
+  --background-color: #{$cloud};
+  --primary-accent: #{$cardinal};
 
   &.blue {
     --background-color: azure;
