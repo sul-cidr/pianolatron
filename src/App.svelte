@@ -37,11 +37,6 @@
   #keyboard-container {
     flex: 0 1 auto;
   }
-
-  #right-panel-wrapper {
-    position: relative;
-    margin-top: 1em;
-  }
 </style>
 
 <script>
@@ -62,10 +57,9 @@
   } from "./components/SamplePlayer";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
-  import PlaybackControls from "./components/PlaybackControls.svelte";
-  import SettingsPanel from "./components/SettingsPanel.svelte";
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
+  import TabbedPanel from "./components/TabbedPanel.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
@@ -75,7 +69,6 @@
   let currentRoll;
   let previousRoll;
   let holesByTickInterval = new IntervalTree();
-  let showSettings = false;
 
   const buildHolesIntervalTree = () => {
     const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
@@ -206,15 +199,7 @@
         <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
       </div>
       <FlexCollapsible id="audio-controls" width="20vw" position="left">
-        <button
-          on:click={() => (showSettings = !showSettings)}
-        >settings</button>
-        <div id="right-panel-wrapper">
-          <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
-          {#if showSettings}
-            <SettingsPanel {showSettings} />
-          {/if}
-        </div>
+        <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
       </FlexCollapsible>
     {/if}
   </div>
