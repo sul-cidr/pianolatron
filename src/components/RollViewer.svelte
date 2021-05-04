@@ -263,6 +263,7 @@
       minZoomLevel,
       maxZoomLevel,
       constrainDuringPan: true,
+      preserveImageSizeOnResize: true,
     });
 
     openSeadragon.addOnceHandler("update-viewport", () => {
