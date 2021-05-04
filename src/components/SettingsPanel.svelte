@@ -40,11 +40,12 @@
 
 <script>
   import { fly } from "svelte/transition";
+  import { userSettings } from "../stores";
 
   let el;
-  let currentColor = document.body.className || "cardinal";
+  const themes = ["cardinal", "blue", "green", "grey"];
 
-  const colors = ["cardinal", "blue", "green", "grey"];
+  $: document.body.className = $userSettings.theme;
 </script>
 
 <div
@@ -54,14 +55,14 @@
 >
   <div>
     Theme:
-    {#each colors as color}
+    {#each themes as theme}
       <button
-        class={color}
-        class:active={currentColor === color}
-        on:click={() => {
-          currentColor = color;
-          document.body.className = color;
-        }}
+        class={theme}
+        class:active={$userSettings.theme === theme}
+        on:click={() => userSettings.update((settings) => ({
+            ...settings,
+            theme,
+          }))}
       />
     {/each}
   </div>
