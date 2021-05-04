@@ -26,4 +26,7 @@ export const activeNotes = (() => {
   };
 })();
 
-export const userSettings = writable({ theme: "cardinal" });
+export const userSettings = writable({
+  theme: "cardinal",
+  activeNoteDetails: false,
+});

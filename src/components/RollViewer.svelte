@@ -59,21 +59,6 @@
         animation: mark-recede 0.5s ease-in-out;
         background-color: $hole-highlight-color;
         box-shadow: 0 0 5px $hole-highlight-color;
-
-        &[data-info]::after {
-          background-color: none;
-          color: white;
-          content: attr(data-info);
-          display: block;
-          font-weight: bold;
-          left: 50%;
-          padding: 8px 4px;
-          position: absolute;
-          text-shadow: 0px 0px 8px black;
-          top: 0;
-          mix-blend-mode: normal;
-          transform: translate(-50%, -100%);
-        }
       }
 
       &:hover {
@@ -108,6 +93,23 @@
       fill: none;
       pointer-events: all;
     }
+
+    &.active-note-details {
+      :global(mark.active[data-info]::after) {
+        background-color: none;
+        color: white;
+        content: attr(data-info);
+        display: block;
+        font-weight: bold;
+        left: 50%;
+        padding: 8px 4px;
+        position: absolute;
+        text-shadow: 0px 0px 8px black;
+        top: 0;
+        mix-blend-mode: normal;
+        transform: translate(-50%, -100%);
+      }
+    }
   }
 
   @keyframes mark-recede {
@@ -122,7 +124,7 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
-  import { rollMetadata, currentTick } from "../stores";
+  import { rollMetadata, currentTick, userSettings } from "../stores";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
@@ -311,6 +313,7 @@
   id="roll-viewer"
   on:mouseenter={() => (showControls = true)}
   on:mouseleave={() => (showControls = false)}
+  class:active-note-details={$userSettings.activeNoteDetails}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
