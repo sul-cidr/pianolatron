@@ -122,7 +122,7 @@
 
   let openSeadragon;
   let firstHolePx;
-  let strafing;
+  let strafing = false;
   let rollImageReady;
   let marks = [];
   let hoveredMark;
