@@ -1,5 +1,11 @@
 function noop() { }
 const identity = x => x;
+function assign(tar, src) {
+    // @ts-ignore
+    for (const k in src)
+        tar[k] = src[k];
+    return tar;
+}
 function run(fn) {
     return fn();
 }
@@ -27,6 +33,45 @@ function subscribe(store, ...callbacks) {
 }
 function component_subscribe(component, store, callback) {
     component.$$.on_destroy.push(subscribe(store, callback));
+}
+function create_slot(definition, ctx, $$scope, fn) {
+    if (definition) {
+        const slot_ctx = get_slot_context(definition, ctx, $$scope, fn);
+        return definition[0](slot_ctx);
+    }
+}
+function get_slot_context(definition, ctx, $$scope, fn) {
+    return definition[1] && fn
+        ? assign($$scope.ctx.slice(), definition[1](fn(ctx)))
+        : $$scope.ctx;
+}
+function get_slot_changes(definition, $$scope, dirty, fn) {
+    if (definition[2] && fn) {
+        const lets = definition[2](fn(dirty));
+        if ($$scope.dirty === undefined) {
+            return lets;
+        }
+        if (typeof lets === 'object') {
+            const merged = [];
+            const len = Math.max($$scope.dirty.length, lets.length);
+            for (let i = 0; i < len; i += 1) {
+                merged[i] = $$scope.dirty[i] | lets[i];
+            }
+            return merged;
+        }
+        return $$scope.dirty | lets;
+    }
+    return $$scope.dirty;
+}
+function update_slot(slot, slot_definition, ctx, $$scope, dirty, get_slot_changes_fn, get_slot_context_fn) {
+    const slot_changes = get_slot_changes(slot_definition, $$scope, dirty, get_slot_changes_fn);
+    if (slot_changes) {
+        const slot_context = get_slot_context(slot_definition, ctx, $$scope, get_slot_context_fn);
+        slot.p(slot_context, slot_changes);
+    }
+}
+function null_to_empty(value) {
+    return value == null ? '' : value;
 }
 function set_store_value(store, ret, value = ret) {
     store.set(value);
@@ -614,4 +659,4 @@ class SvelteComponent {
     }
 }
 
-export { listen as A, run_all as B, set_data as C, set_style as D, text as E, toggle_class as F, add_render_callback as G, HtmlTag as H, select_option as I, select_value as J, create_bidirectional_transition as K, svg_element as L, bubble as M, set_input_value as N, to_number as O, identity as P, SvelteComponent as S, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, empty as l, group_outros as m, init as n, onMount as o, insert as p, mount_component as q, set_store_value as r, safe_not_equal as s, space as t, transition_in as u, transition_out as v, destroy_each as w, noop as x, subscribe as y, is_function as z };
+export { listen as A, run_all as B, set_data as C, set_style as D, text as E, toggle_class as F, add_render_callback as G, HtmlTag as H, select_option as I, select_value as J, create_bidirectional_transition as K, svg_element as L, create_slot as M, null_to_empty as N, update_slot as O, bubble as P, set_input_value as Q, to_number as R, SvelteComponent as S, identity as T, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, empty as l, group_outros as m, init as n, onMount as o, insert as p, mount_component as q, noop as r, safe_not_equal as s, set_store_value as t, space as u, transition_in as v, transition_out as w, destroy_each as x, subscribe as y, is_function as z };

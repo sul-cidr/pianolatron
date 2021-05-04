@@ -70,7 +70,7 @@ function create_fragment(ctx) {
 				each_blocks[i].c();
 			}
 
-			attr(select, "class", "svelte-9htvim");
+			attr(select, "class", "svelte-kz3kt");
 			if (/*currentRoll*/ ctx[0] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[1].call(select));
 		},
 		m(target, anchor) {
