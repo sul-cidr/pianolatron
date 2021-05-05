@@ -154,17 +154,6 @@
       keyNumber += 1;
     }
   }
-
-  $: {
-    document
-      .querySelectorAll(".depressed")
-      .forEach((el) => el.classList.remove("depressed"));
-    $activeNotes.forEach((note) =>
-      document
-        .querySelector(`[data-key="${note}"]`)
-        ?.classList.add("depressed"),
-    );
-  }
 </script>
 
 <div id="keyboard">
@@ -172,7 +161,11 @@
     {#each keys as key}
       <div>
         {#each key as _key}
-          <span title={_key.title} data-key={_key['data-key']} />
+          <span
+            title={_key.title}
+            data-key={_key['data-key']}
+            class:depressed={$activeNotes.has(_key['data-key'])}
+          />
         {/each}
       </div>
     {/each}
