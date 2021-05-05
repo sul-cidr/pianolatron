@@ -1,6 +1,7 @@
 import MidiPlayer from "midi-player-js";
 import { Piano } from "@tonejs/piano";
 
+import { get } from "svelte/store";
 import {
   rollMetadata,
   pedalling,
@@ -116,6 +117,11 @@ const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
 
 const stopNote = (noteNumber) => piano.keyUp({ midi: noteNumber });
 
+const stopAllNotes = () => {
+  piano.pedalUp();
+  get(activeNotes).forEach((note) => stopNote(note));
+};
+
 midiSamplePlayer.on("playing", ({ tick }) => {
   if (tick <= midiSamplePlayer.totalTicks) currentTick.set(tick);
 });
@@ -156,4 +162,4 @@ midiSamplePlayer.on(
   },
 );
 
-export { midiSamplePlayer, pianoReady };
+export { midiSamplePlayer, pianoReady, stopAllNotes };
