@@ -50,7 +50,7 @@
 <div
   id="settings-panel"
   bind:this={el}
-  transition:fly={{ delay: 0, duration: 300, x: parseInt(window.getComputedStyle(el).width, 10), y: 0, opacity: 1 }}
+  transition:fly|local={{ delay: 0, duration: 300, x: parseInt(window.getComputedStyle(el).width, 10), y: 0, opacity: 1 }}
 >
   <div>
     Theme:
