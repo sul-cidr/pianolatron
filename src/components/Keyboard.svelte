@@ -1,21 +1,18 @@
 <style lang="scss">
-  $key-width: 1.8vw;
   $active-key-highlight: #b5e2ff;
-  $felt-strip-height: 2px;
+  $felt-strip-height: 2%;
 
   #keyboard {
     display: flow-root;
-    margin: 1em auto;
-    position: relative;
-    width: max-content;
+    margin: 1em;
+    aspect-ratio: 10 / 1;
   }
 
   div#keys {
-    display: block;
-    height: calc(#{$key-width} * 6);
-    margin-top: $felt-strip-height;
+    position: relative;
+    display: flex;
     padding: 0;
-    width: 100%;
+    height: 100%;
 
     &::before {
       background-color: var(--primary-accent);
@@ -26,57 +23,51 @@
       height: $felt-strip-height;
       left: 0;
       right: 0;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7), 1px 0px 1px rgba(0, 0, 0, 0.7),
-        -1px 0px 1px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7), 1px 0 1px rgba(0, 0, 0, 0.7),
+        -1px 0 1px rgba(0, 0, 0, 0.7);
       z-index: 3;
     }
 
     div {
-      float: left;
       position: relative;
-      width: $key-width;
+      flex: 1 0 auto;
 
       // White Keys
       :first-child {
         background: linear-gradient(-30deg, #f5f5f5, #fff);
-        border-radius: 0 0 3px 3px;
+        border-radius: 0 0 4% 4%;
         border: 1px solid #ccc;
-        box-shadow: inset 0 1px 0px #fff, inset 0 -1px 0px #fff,
-          inset 1px 0px 0px #fff, inset -1px 0px 0px #fff,
-          0 4px 3px rgba(0, 0, 0, 0.7);
+        box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 #fff, inset 1px 0 0 #fff,
+          inset -1px 0 0 #fff, 0 4px 3px rgba(0, 0, 0, 0.7);
         display: block;
-        height: calc(#{$key-width} * 6 - 20px);
+        height: 100%;
       }
 
       :first-child:active,
       :global(:first-child.depressed) {
         box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
-        height: calc(#{$key-width} * 6 - 24px);
+        height: 98%;
         position: relative;
         top: 2px;
 
         &:before {
-          border-color: transparent transparent transparent rgba(0, 0, 0, 0.1);
-          border-style: solid;
-          border-width: calc(#{$key-width} * 6 - 24px) 5px 0px;
+          background: rgba(0, 0, 0, 0.1);
           content: "";
-          height: 0px;
-          left: 0px;
+          bottom: 0;
           position: absolute;
-          top: 0px;
-          width: 0px;
+          left: 0;
+          top: 0;
+          width: 10%;
         }
 
         &:after {
-          border-color: transparent rgba(0, 0, 0, 0.1) transparent transparent;
-          border-style: solid;
-          border-width: calc(#{$key-width} * 6 - 24px) 5px 0px;
+          background: rgba(0, 0, 0, 0.1);
           content: "";
-          height: 0px;
+          bottom: 0;
           position: absolute;
-          right: 0px;
-          top: 0px;
-          width: 0px;
+          right: 0;
+          top: 0;
+          width: 10%;
         }
       }
 
@@ -88,26 +79,27 @@
       :nth-child(2) {
         background: linear-gradient(-20deg, #333, #000, #333);
         border-color: #666 #222 #111 #555;
-        border-radius: 0 0 2px 2px;
+        border-radius: 0 0 3% 3%;
         border-style: solid;
         border-width: 1px 2px 7px;
-        box-shadow: inset 0px -1px 2px rgba(255, 255, 255, 0.4),
+        box-shadow: inset 0 -1px 2px rgba(255, 255, 255, 0.4),
           0 2px 3px rgba(0, 0, 0, 0.4);
-        height: calc(#{$key-width} * 3);
-        left: calc(#{$key-width} - 2px - #{$key-width / 4});
+        height: 56%;
+        left: 100%;
         position: absolute;
-        top: 0px;
-        width: $key-width / 2;
+        top: $felt-strip-height;
+        width: 50%;
         z-index: 10;
+        transform: translateX(-50%);
       }
 
       :nth-child(2):active,
       :global(:nth-child(2).depressed) {
         border-bottom-width: 2px;
-        box-shadow: inset 0px -1px 1px rgba(255, 255, 255, 0.4),
-          0 1px 0px rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
-          0 -1px 0px #000;
-        height: calc(#{$key-width} * 3 + 1px);
+        box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.4),
+          0 1px 0 rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
+          0 -1px 0 #000;
+        height: 57%;
       }
 
       :global(:nth-child(2).depressed) {
