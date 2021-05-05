@@ -53,22 +53,33 @@
 
     :global(mark) {
       background-color: transparent;
-      mix-blend-mode: multiply;
 
       &.active {
-        animation: mark-recede 0.5s ease-in-out;
-        background-color: $hole-highlight-color;
-        box-shadow: 0 0 5px $hole-highlight-color;
+        &::before {
+          position: absolute;
+          content: "";
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          mix-blend-mode: multiply;
+          animation: mark-recede 0.5s ease-in-out;
+          background-color: $hole-highlight-color;
+          box-shadow: 0 0 5px $hole-highlight-color;
+        }
       }
 
       &:hover {
         background-color: transparent;
         box-shadow: none;
-        mix-blend-mode: normal;
         outline: $highlight-hover-outline-width solid
           $highlight-hover-outline-color;
         outline-offset: $highlight-hover-outline-offset;
-        z-index: 4;
+        z-index: 1;
+
+        &::before {
+          position: relative;
+        }
 
         &[data-info]::after {
           background-color: $highlight-hover-outline-color;
