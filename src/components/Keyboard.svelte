@@ -8,6 +8,26 @@
     aspect-ratio: 10 / 1;
   }
 
+  @supports not (aspect-ratio: 10 / 1) {
+    #keyboard {
+      height: 100%;
+      margin: 0;
+      padding: 1em;
+
+      &::before {
+        content: "";
+        float: left;
+        padding-top: 10%;
+      }
+
+      &::after {
+        clear: both;
+        content: "";
+        display: block;
+      }
+    }
+  }
+
   div#keys {
     position: relative;
     display: flex;
