@@ -5,7 +5,7 @@
   height: 100vh;
   width: 100vw;
   text-align: center;
-  color: #8c1515;
+  color: var(--primary-accent);
   font-size: 1.4em;
   text-shadow: 1px 2px white;
 }
@@ -17,7 +17,7 @@
   margin: 10px auto;
 }
 #loading div span {
-  background-color: #8c1515;
+  background-color: var(--primary-accent);
   height: 100%;
   width: 12px;
   display: inline-block;

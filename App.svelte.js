@@ -38,7 +38,12 @@ import {
 	rollMetadata
 } from "./stores.js";
 
-import { midiSamplePlayer, pianoReady } from "./components/SamplePlayer.js";
+import {
+	midiSamplePlayer,
+	pianoReady,
+	stopAllNotes
+} from "./components/SamplePlayer.js";
+
 import RollSelector from "./components/RollSelector.svelte.js";
 import RollDetails from "./components/RollDetails.svelte.js";
 import PlaybackControls from "./components/PlaybackControls.svelte.js";
@@ -101,7 +106,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (179:8) {#if !holesByTickInterval.count}
+// (185:8) {#if !holesByTickInterval.count}
 function create_if_block_3(ctx) {
 	let p;
 
@@ -123,7 +128,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (175:4) <FlexCollapsible id="roll-details" width="20vw">
+// (181:4) <FlexCollapsible id="roll-details" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -213,7 +218,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (187:4) {#if appReady}
+// (193:4) {#if appReady}
 function create_if_block_1(ctx) {
 	let div;
 	let rollviewer;
@@ -287,7 +292,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (191:6) <FlexCollapsible id="audio-controls" width="20vw" position="left">
+// (197:6) <FlexCollapsible id="audio-controls" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let playbackcontrols;
 	let current;
@@ -324,7 +329,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (199:2) {#if !appReady}
+// (205:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -519,6 +524,7 @@ function instance($$self, $$props, $$invalidate) {
 	const playPauseApp = () => {
 		if (midiSamplePlayer.isPlaying()) {
 			midiSamplePlayer.pause();
+			stopAllNotes();
 			activeNotes.reset();
 		} else {
 			midiSamplePlayer.play();
@@ -527,6 +533,7 @@ function instance($$self, $$props, $$invalidate) {
 
 	const stopApp = () => {
 		midiSamplePlayer.stop();
+		stopAllNotes();
 		playbackProgress.set(0);
 		currentTick.set(0);
 		activeNotes.reset();

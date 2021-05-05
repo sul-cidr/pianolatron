@@ -31,6 +31,11 @@ function subscribe(store, ...callbacks) {
     const unsub = store.subscribe(...callbacks);
     return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
 }
+function get_store_value(store) {
+    let value;
+    subscribe(store, _ => value = _)();
+    return value;
+}
 function component_subscribe(component, store, callback) {
     component.$$.on_destroy.push(subscribe(store, callback));
 }
@@ -659,4 +664,4 @@ class SvelteComponent {
     }
 }
 
-export { listen as A, run_all as B, set_data as C, set_style as D, text as E, toggle_class as F, add_render_callback as G, HtmlTag as H, select_option as I, select_value as J, create_bidirectional_transition as K, svg_element as L, create_slot as M, null_to_empty as N, update_slot as O, bubble as P, set_input_value as Q, to_number as R, SvelteComponent as S, identity as T, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, empty as l, group_outros as m, init as n, onMount as o, insert as p, mount_component as q, noop as r, safe_not_equal as s, set_store_value as t, space as u, transition_in as v, transition_out as w, destroy_each as x, subscribe as y, is_function as z };
+export { listen as A, run_all as B, set_data as C, set_style as D, text as E, toggle_class as F, add_render_callback as G, HtmlTag as H, select_option as I, select_value as J, create_bidirectional_transition as K, svg_element as L, create_slot as M, null_to_empty as N, update_slot as O, bubble as P, set_input_value as Q, to_number as R, SvelteComponent as S, get_store_value as T, identity as U, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, empty as l, group_outros as m, init as n, onMount as o, insert as p, mount_component as q, noop as r, safe_not_equal as s, set_store_value as t, space as u, transition_in as v, transition_out as w, destroy_each as x, subscribe as y, is_function as z };

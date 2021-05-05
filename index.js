@@ -1,6 +1,6 @@
 import App from "./App.svelte.js";
 
-document.body.innerHTML = "";
+document.getElementById("loading").remove();
 const app = new App({ target: document.body });
 
 export default app;
