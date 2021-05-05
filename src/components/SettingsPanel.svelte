@@ -6,6 +6,10 @@
     position: absolute;
     top: 0;
     width: 100%;
+
+    div {
+      margin: 1em 0;
+    }
   }
 
   button {
@@ -65,5 +69,9 @@
           }))}
       />
     {/each}
+  </div>
+  <div>
+    Show details for Active Notes:
+    <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
   </div>
 </div>
