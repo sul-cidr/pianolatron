@@ -109,6 +109,14 @@
         mix-blend-mode: normal;
         transform: translate(-50%, -100%);
       }
+
+      :global(mark.active[data-info]:hover::after) {
+        left: calc(
+          100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+        );
+        top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
+        transform: none;
+      }
     }
   }
 
