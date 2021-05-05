@@ -131,6 +131,8 @@
 
 <script>
   export let keyCount = 88;
+  export let startNote;
+  export let stopNote;
   export let activeNotes;
   const notes = [
     "A",
@@ -177,6 +179,8 @@
             title={_key.title}
             data-key={_key['data-key']}
             class:depressed={$activeNotes.has(_key['data-key'])}
+            on:mousedown={() => startNote(_key['data-key'])}
+            on:mouseup={() => stopNote(_key['data-key'])}
           />
         {/each}
       </div>

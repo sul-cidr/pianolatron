@@ -53,6 +53,8 @@
   import {
     midiSamplePlayer,
     pianoReady,
+    startNote,
+    stopNote,
     stopAllNotes,
   } from "./components/SamplePlayer";
   import RollSelector from "./components/RollSelector.svelte";
@@ -204,7 +206,7 @@
     {/if}
   </div>
   <div id="keyboard-container">
-    <Keyboard keyCount="88" {activeNotes} />
+    <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
   </div>
   {#if !appReady}
     <div id="loading">
