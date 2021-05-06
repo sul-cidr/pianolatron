@@ -76,24 +76,24 @@ function create_fragment(ctx) {
 			dt5 = element("dt");
 			dt5.textContent = "Call No";
 			dd5 = element("dd");
-			attr(dt0, "class", "svelte-hdqs3f");
+			attr(dt0, "class", "svelte-m7danx");
 			html_tag = new HtmlTag(t1);
-			attr(dd0, "class", "svelte-hdqs3f");
-			attr(dt1, "class", "svelte-hdqs3f");
+			attr(dd0, "class", "svelte-m7danx");
+			attr(dt1, "class", "svelte-m7danx");
 			html_tag_1 = new HtmlTag(t3);
-			attr(dd1, "class", "svelte-hdqs3f");
-			attr(dt2, "class", "svelte-hdqs3f");
+			attr(dd1, "class", "svelte-m7danx");
+			attr(dt2, "class", "svelte-m7danx");
 			html_tag_2 = new HtmlTag(t5);
-			attr(dd2, "class", "svelte-hdqs3f");
-			attr(dt3, "class", "svelte-hdqs3f");
+			attr(dd2, "class", "svelte-m7danx");
+			attr(dt3, "class", "svelte-m7danx");
 			html_tag_3 = new HtmlTag(t7);
-			attr(dd3, "class", "svelte-hdqs3f");
-			attr(dt4, "class", "svelte-hdqs3f");
+			attr(dd3, "class", "svelte-m7danx");
+			attr(dt4, "class", "svelte-m7danx");
 			attr(a, "href", a_href_value = /*$rollMetadata*/ ctx[0].PURL);
-			attr(dd4, "class", "svelte-hdqs3f");
-			attr(dt5, "class", "svelte-hdqs3f");
-			attr(dd5, "class", "svelte-hdqs3f");
-			attr(dl, "class", "svelte-hdqs3f");
+			attr(dd4, "class", "svelte-m7danx");
+			attr(dt5, "class", "svelte-m7danx");
+			attr(dd5, "class", "svelte-m7danx");
+			attr(dl, "class", "svelte-m7danx");
 		},
 		m(target, anchor) {
 			insert(target, dl, anchor);

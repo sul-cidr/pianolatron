@@ -22,34 +22,35 @@ import {
 	transition_out
 } from "../_snowpack/pkg/svelte/internal.js";
 
-import PlaybackControls from "./PlaybackControls.svelte.js";
-import SettingsPanel from "./SettingsPanel.svelte.js";
 import PanelSwitcher from "./PanelSwitcher.svelte.js";
+import PlaybackControls from "./PlaybackControls.svelte.js";
+import PlaybackSettings from "./PlaybackSettings.svelte.js";
+import VisualizationSettings from "./VisualizationSettings.svelte.js";
 
 function create_if_block(ctx) {
-	let settingspanel;
+	let visualizationsettings;
 	let current;
-	settingspanel = new SettingsPanel({});
+	visualizationsettings = new VisualizationSettings({});
 
 	return {
 		c() {
-			create_component(settingspanel.$$.fragment);
+			create_component(visualizationsettings.$$.fragment);
 		},
 		m(target, anchor) {
-			mount_component(settingspanel, target, anchor);
+			mount_component(visualizationsettings, target, anchor);
 			current = true;
 		},
 		i(local) {
 			if (current) return;
-			transition_in(settingspanel.$$.fragment, local);
+			transition_in(visualizationsettings.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
-			transition_out(settingspanel.$$.fragment, local);
+			transition_out(visualizationsettings.$$.fragment, local);
 			current = false;
 		},
 		d(detaching) {
-			destroy_component(settingspanel, detaching);
+			destroy_component(visualizationsettings, detaching);
 		}
 	};
 }
@@ -59,8 +60,10 @@ function create_fragment(ctx) {
 	let updating_selectedPanel;
 	let t0;
 	let div;
-	let playbackcontrols;
+	let playbacksettings;
 	let t1;
+	let t2;
+	let playbackcontrols;
 	let current;
 
 	function panelswitcher_selectedPanel_binding(value) {
@@ -76,33 +79,42 @@ function create_fragment(ctx) {
 	panelswitcher = new PanelSwitcher({ props: panelswitcher_props });
 	binding_callbacks.push(() => bind(panelswitcher, "selectedPanel", panelswitcher_selectedPanel_binding));
 
-	playbackcontrols = new PlaybackControls({
+	playbacksettings = new PlaybackSettings({
 			props: {
-				playPauseApp: /*playPauseApp*/ ctx[0],
-				stopApp: /*stopApp*/ ctx[1],
-				skipToPercentage: /*skipToPercentage*/ ctx[2]
+				skipToPercentage: /*skipToPercentage*/ ctx[1]
 			}
 		});
 
 	let if_block = /*selectedPanel*/ ctx[3] === "settings" && create_if_block(ctx);
+
+	playbackcontrols = new PlaybackControls({
+			props: {
+				playPauseApp: /*playPauseApp*/ ctx[0],
+				stopApp: /*stopApp*/ ctx[2]
+			}
+		});
 
 	return {
 		c() {
 			create_component(panelswitcher.$$.fragment);
 			t0 = space();
 			div = element("div");
-			create_component(playbackcontrols.$$.fragment);
+			create_component(playbacksettings.$$.fragment);
 			t1 = space();
 			if (if_block) if_block.c();
-			attr(div, "class", "svelte-1yq9q7q");
+			t2 = space();
+			create_component(playbackcontrols.$$.fragment);
+			attr(div, "class", "svelte-1hzo31a");
 		},
 		m(target, anchor) {
 			mount_component(panelswitcher, target, anchor);
 			insert(target, t0, anchor);
 			insert(target, div, anchor);
-			mount_component(playbackcontrols, div, null);
+			mount_component(playbacksettings, div, null);
 			append(div, t1);
 			if (if_block) if_block.m(div, null);
+			insert(target, t2, anchor);
+			mount_component(playbackcontrols, target, anchor);
 			current = true;
 		},
 		p(ctx, [dirty]) {
@@ -115,11 +127,9 @@ function create_fragment(ctx) {
 			}
 
 			panelswitcher.$set(panelswitcher_changes);
-			const playbackcontrols_changes = {};
-			if (dirty & /*playPauseApp*/ 1) playbackcontrols_changes.playPauseApp = /*playPauseApp*/ ctx[0];
-			if (dirty & /*stopApp*/ 2) playbackcontrols_changes.stopApp = /*stopApp*/ ctx[1];
-			if (dirty & /*skipToPercentage*/ 4) playbackcontrols_changes.skipToPercentage = /*skipToPercentage*/ ctx[2];
-			playbackcontrols.$set(playbackcontrols_changes);
+			const playbacksettings_changes = {};
+			if (dirty & /*skipToPercentage*/ 2) playbacksettings_changes.skipToPercentage = /*skipToPercentage*/ ctx[1];
+			playbacksettings.$set(playbacksettings_changes);
 
 			if (/*selectedPanel*/ ctx[3] === "settings") {
 				if (if_block) {
@@ -141,34 +151,43 @@ function create_fragment(ctx) {
 
 				check_outros();
 			}
+
+			const playbackcontrols_changes = {};
+			if (dirty & /*playPauseApp*/ 1) playbackcontrols_changes.playPauseApp = /*playPauseApp*/ ctx[0];
+			if (dirty & /*stopApp*/ 4) playbackcontrols_changes.stopApp = /*stopApp*/ ctx[2];
+			playbackcontrols.$set(playbackcontrols_changes);
 		},
 		i(local) {
 			if (current) return;
 			transition_in(panelswitcher.$$.fragment, local);
-			transition_in(playbackcontrols.$$.fragment, local);
+			transition_in(playbacksettings.$$.fragment, local);
 			transition_in(if_block);
+			transition_in(playbackcontrols.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
 			transition_out(panelswitcher.$$.fragment, local);
-			transition_out(playbackcontrols.$$.fragment, local);
+			transition_out(playbacksettings.$$.fragment, local);
 			transition_out(if_block);
+			transition_out(playbackcontrols.$$.fragment, local);
 			current = false;
 		},
 		d(detaching) {
 			destroy_component(panelswitcher, detaching);
 			if (detaching) detach(t0);
 			if (detaching) detach(div);
-			destroy_component(playbackcontrols);
+			destroy_component(playbacksettings);
 			if (if_block) if_block.d();
+			if (detaching) detach(t2);
+			destroy_component(playbackcontrols, detaching);
 		}
 	};
 }
 
 function instance($$self, $$props, $$invalidate) {
 	let { playPauseApp } = $$props;
-	let { stopApp } = $$props;
 	let { skipToPercentage } = $$props;
+	let { stopApp } = $$props;
 	let selectedPanel = "controls";
 
 	function panelswitcher_selectedPanel_binding(value) {
@@ -178,14 +197,14 @@ function instance($$self, $$props, $$invalidate) {
 
 	$$self.$$set = $$props => {
 		if ("playPauseApp" in $$props) $$invalidate(0, playPauseApp = $$props.playPauseApp);
-		if ("stopApp" in $$props) $$invalidate(1, stopApp = $$props.stopApp);
-		if ("skipToPercentage" in $$props) $$invalidate(2, skipToPercentage = $$props.skipToPercentage);
+		if ("skipToPercentage" in $$props) $$invalidate(1, skipToPercentage = $$props.skipToPercentage);
+		if ("stopApp" in $$props) $$invalidate(2, stopApp = $$props.stopApp);
 	};
 
 	return [
 		playPauseApp,
-		stopApp,
 		skipToPercentage,
+		stopApp,
 		selectedPanel,
 		panelswitcher_selectedPanel_binding
 	];
@@ -197,8 +216,8 @@ class TabbedPanel extends SvelteComponent {
 
 		init(this, options, instance, create_fragment, safe_not_equal, {
 			playPauseApp: 0,
-			stopApp: 1,
-			skipToPercentage: 2
+			skipToPercentage: 1,
+			stopApp: 2
 		});
 	}
 }

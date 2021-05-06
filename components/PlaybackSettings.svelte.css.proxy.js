@@ -1,6 +1,6 @@
 // [snowpack] add styles to the page (skip if no document exists)
 if (typeof document !== 'undefined') {
-  const code = "dl.svelte-m7danx{display:block;overflow:auto;padding:0.5em 1em}dt.svelte-m7danx{font-family:serif;font-size:1.4em;margin-top:0.5em;margin-bottom:0.2em}dd.svelte-m7danx:not(:has(a)){text-transform:capitalize}dd.svelte-m7danx span{opacity:0.5}";
+  const code = "#playback-settings.svelte-1cq4iz3{overflow-y:auto}.control.svelte-1cq4iz3{align-items:center;display:grid;gap:0.5em;padding:0.5em;grid:\"title value\" auto \"slider slider\" auto/1fr auto}.control.svelte-1cq4iz3 input[type=\"range\"]{grid-area:slider;width:100%}";
 
   const styleEl = document.createElement("style");
   const codeEl = document.createTextNode(code);
