@@ -157,11 +157,11 @@
       if (keyNumber > keyCount) break;
       if (note.endsWith("#")) {
         keys[keys.length - 1].push({
-          "data-key": keyNumber + 20,
+          note: keyNumber + 20,
           title: `${note}${octave}`,
         });
       } else {
-        keys.push([{ "data-key": keyNumber + 20, title: `${note}${octave}` }]);
+        keys.push([{ note: keyNumber + 20, title: `${note}${octave}` }]);
       }
       keyNumber += 1;
     }
@@ -203,11 +203,11 @@
   >
     {#each keys as key}
       <div>
-        {#each key as _key}
+        {#each key as { title, note }}
           <span
-            title={_key.title}
-            data-key={_key['data-key']}
-            class:depressed={$activeNotes.has(_key['data-key']) || playing.has(_key['data-key'])}
+            {title}
+            data-key={note}
+            class:depressed={$activeNotes.has(note) || playing.has(note)}
           />
         {/each}
       </div>
