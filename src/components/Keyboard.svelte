@@ -168,10 +168,10 @@
   }
 
   let mouseDown = false;
-  let playing;
+  let playing = new Set();
   const stopPlaying = () => {
-    stopNote(playing);
-    playing = null;
+    playing.forEach((note) => stopNote(note));
+    playing = new Set();
   };
 </script>
 
@@ -180,23 +180,22 @@
     id="keys"
     on:mousedown|preventDefault={({ target }) => {
       const note = parseInt(target.dataset.key, 10);
-      if (!note) return;
       mouseDown = true;
-      playing = note;
+      playing = playing.add(note);
       startNote(note);
     }}
     on:mouseup|preventDefault={({ target }) => {
       const note = parseInt(target.dataset.key, 10);
+      playing.delete(note);
+      playing = playing;
       stopNote(note);
-      playing = null;
     }}
     on:mousemove|preventDefault={({ target }) => {
       if (mouseDown) {
         const note = parseInt(target.dataset.key, 10);
-        if (!note) return;
-        if (playing !== note) {
+        if (!playing.has(note)) {
           stopPlaying();
-          playing = note;
+          playing = playing.add(note);
           startNote(note);
         }
       }
@@ -208,7 +207,7 @@
           <span
             title={_key.title}
             data-key={_key['data-key']}
-            class:depressed={$activeNotes.has(_key['data-key']) || playing === _key['data-key']}
+            class:depressed={$activeNotes.has(_key['data-key']) || playing.has(_key['data-key'])}
           />
         {/each}
       </div>
