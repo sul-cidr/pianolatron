@@ -1,5 +1,5 @@
 <style lang="scss">
-  #playback-controls {
+  #playback-settings {
     margin: 0 0.5em;
   }
   .control {
@@ -50,7 +50,7 @@
   export let skipToPercentage;
 </script>
 
-<div id="playback-controls">
+<div id="playback-settings">
   <div class="control">
     <span>Volume:</span>
     <span>{$volume.master}</span>
