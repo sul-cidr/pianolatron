@@ -15,7 +15,7 @@
     }
   }
 
-  :global(#roll-details) {
+  :global(#left-sidebar) {
     grid-area: left;
 
     p {
@@ -30,7 +30,7 @@
     grid-area: center;
   }
 
-  :global(#audio-controls) {
+  :global(#right-sidebar) {
     grid-area: right;
   }
 
@@ -182,7 +182,7 @@
 
 <div id="app">
   <div>
-    <FlexCollapsible id="roll-details" width="20vw">
+    <FlexCollapsible id="left-sidebar" width="20vw">
       <RollSelector bind:currentRoll />
       {#if appReady}
         <RollDetails />
@@ -198,7 +198,7 @@
       <div id="roll">
         <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
       </div>
-      <FlexCollapsible id="audio-controls" width="20vw" position="left">
+      <FlexCollapsible id="right-sidebar" width="20vw" position="left">
         <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
       </FlexCollapsible>
     {/if}
