@@ -25,3 +25,8 @@ export const activeNotes = (() => {
     reset: () => set(new Set()),
   };
 })();
+
+export const userSettings = writable({
+  theme: "cardinal",
+  activeNoteDetails: false,
+});

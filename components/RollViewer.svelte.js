@@ -23,6 +23,7 @@ import {
 	run_all,
 	safe_not_equal,
 	space,
+	toggle_class,
 	transition_in,
 	transition_out
 } from "../_snowpack/pkg/svelte/internal.js";
@@ -30,7 +31,7 @@ import {
 import { onMount } from "../_snowpack/pkg/svelte.js";
 import { fade } from "../_snowpack/pkg/svelte/transition.js";
 import OpenSeadragon from "../_snowpack/pkg/openseadragon.js";
-import { rollMetadata, currentTick } from "../stores.js";
+import { rollMetadata, currentTick, userSettings } from "../stores.js";
 import RollViewerControls from "./RollViewerControls.svelte.js";
 
 function create_if_block_1(ctx) {
@@ -42,7 +43,7 @@ function create_if_block_1(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Downloading roll image...";
-			attr(p, "class", "svelte-1kgp2k2");
+			attr(p, "class", "svelte-1pt7pyv");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -70,14 +71,14 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (282:2) {#if showControls}
+// (311:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
 	let current;
 
 	function rollviewercontrols_strafing_binding(value) {
-		/*rollviewercontrols_strafing_binding*/ ctx[6].call(null, value);
+		/*rollviewercontrols_strafing_binding*/ ctx[7].call(null, value);
 	}
 
 	let rollviewercontrols_props = {
@@ -144,7 +145,8 @@ function create_fragment(ctx) {
 			t = space();
 			if (if_block1) if_block1.c();
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-1kgp2k2");
+			attr(div, "class", "svelte-1pt7pyv");
+			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -155,8 +157,8 @@ function create_fragment(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(div, "mouseenter", /*mouseenter_handler*/ ctx[7]),
-					listen(div, "mouseleave", /*mouseleave_handler*/ ctx[8])
+					listen(div, "mouseenter", /*mouseenter_handler*/ ctx[8]),
+					listen(div, "mouseleave", /*mouseleave_handler*/ ctx[9])
 				];
 
 				mounted = true;
@@ -206,6 +208,10 @@ function create_fragment(ctx) {
 
 				check_outros();
 			}
+
+			if (dirty & /*$userSettings*/ 16) {
+				toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
+			}
 		},
 		i(local) {
 			if (current) return;
@@ -238,8 +244,10 @@ const maxZoomLevel = 4;
 function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(12, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(14, $currentTick = $$value));
+	let $userSettings;
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(13, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(15, $currentTick = $$value));
+	component_subscribe($$self, userSettings, $$value => $$invalidate(4, $userSettings = $$value));
 	let { imageUrl } = $$props;
 	let { holesByTickInterval } = $$props;
 	let openSeadragon;
@@ -380,26 +388,26 @@ function instance($$self, $$props, $$invalidate) {
 	const mouseleave_handler = () => $$invalidate(3, showControls = false);
 
 	$$self.$$set = $$props => {
-		if ("imageUrl" in $$props) $$invalidate(4, imageUrl = $$props.imageUrl);
-		if ("holesByTickInterval" in $$props) $$invalidate(5, holesByTickInterval = $$props.holesByTickInterval);
+		if ("imageUrl" in $$props) $$invalidate(5, imageUrl = $$props.imageUrl);
+		if ("holesByTickInterval" in $$props) $$invalidate(6, holesByTickInterval = $$props.holesByTickInterval);
 	};
 
 	let scrollDownwards;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$currentTick*/ 16384) {
+		if ($$self.$$.dirty & /*$currentTick*/ 32768) {
 			$: advanceToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 16384) {
+		if ($$self.$$.dirty & /*$currentTick*/ 32768) {
 			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 4096) {
-			$: $$invalidate(13, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		if ($$self.$$.dirty & /*$rollMetadata*/ 8192) {
+			$: $$invalidate(14, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
 		}
 
-		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 12288) {
+		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 24576) {
 			$: firstHolePx = scrollDownwards
 			? parseInt($rollMetadata.FIRST_HOLE, 10)
 			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
@@ -411,6 +419,7 @@ function instance($$self, $$props, $$invalidate) {
 		strafing,
 		rollImageReady,
 		showControls,
+		$userSettings,
 		imageUrl,
 		holesByTickInterval,
 		rollviewercontrols_strafing_binding,
@@ -422,7 +431,7 @@ function instance($$self, $$props, $$invalidate) {
 class RollViewer extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { imageUrl: 4, holesByTickInterval: 5 });
+		init(this, options, instance, create_fragment, safe_not_equal, { imageUrl: 5, holesByTickInterval: 6 });
 	}
 }
 

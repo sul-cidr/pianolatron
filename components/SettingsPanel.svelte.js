@@ -6,6 +6,7 @@ import {
 	append,
 	attr,
 	binding_callbacks,
+	component_subscribe,
 	create_bidirectional_transition,
 	destroy_each,
 	detach,
@@ -15,19 +16,21 @@ import {
 	listen,
 	null_to_empty,
 	safe_not_equal,
+	space,
 	text,
 	toggle_class
 } from "../_snowpack/pkg/svelte/internal.js";
 
 import { fly } from "../_snowpack/pkg/svelte/transition.js";
+import { userSettings } from "../stores.js";
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[5] = list[i];
+	child_ctx[6] = list[i];
 	return child_ctx;
 }
 
-// (50:4) {#each colors as color}
+// (54:4) {#each themes as theme}
 function create_each_block(ctx) {
 	let button;
 	let button_class_value;
@@ -35,14 +38,14 @@ function create_each_block(ctx) {
 	let dispose;
 
 	function click_handler(...args) {
-		return /*click_handler*/ ctx[3](/*color*/ ctx[5], ...args);
+		return /*click_handler*/ ctx[3](/*theme*/ ctx[6], ...args);
 	}
 
 	return {
 		c() {
 			button = element("button");
-			attr(button, "class", button_class_value = "" + (null_to_empty(/*color*/ ctx[5]) + " svelte-war1os"));
-			toggle_class(button, "active", /*currentColor*/ ctx[1] === /*color*/ ctx[5]);
+			attr(button, "class", button_class_value = "" + (null_to_empty(/*theme*/ ctx[6]) + " svelte-r56iil"));
+			toggle_class(button, "active", /*$userSettings*/ ctx[1].theme === /*theme*/ ctx[6]);
 		},
 		m(target, anchor) {
 			insert(target, button, anchor);
@@ -55,8 +58,8 @@ function create_each_block(ctx) {
 		p(new_ctx, dirty) {
 			ctx = new_ctx;
 
-			if (dirty & /*currentColor, colors*/ 6) {
-				toggle_class(button, "active", /*currentColor*/ ctx[1] === /*color*/ ctx[5]);
+			if (dirty & /*$userSettings, themes*/ 6) {
+				toggle_class(button, "active", /*$userSettings*/ ctx[1].theme === /*theme*/ ctx[6]);
 			}
 		},
 		d(detaching) {
@@ -68,12 +71,18 @@ function create_each_block(ctx) {
 }
 
 function create_fragment(ctx) {
-	let div1;
+	let div2;
 	let div0;
-	let t;
-	let div1_transition;
+	let t0;
+	let t1;
+	let div1;
+	let t2;
+	let input;
+	let div2_transition;
 	let current;
-	let each_value = /*colors*/ ctx[2];
+	let mounted;
+	let dispose;
+	let each_value = /*themes*/ ctx[2];
 	let each_blocks = [];
 
 	for (let i = 0; i < each_value.length; i += 1) {
@@ -82,34 +91,51 @@ function create_fragment(ctx) {
 
 	return {
 		c() {
-			div1 = element("div");
+			div2 = element("div");
 			div0 = element("div");
-			t = text("Theme:\n    ");
+			t0 = text("Theme:\n    ");
 
 			for (let i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
 			}
 
-			attr(div1, "id", "settings-panel");
-			attr(div1, "class", "svelte-war1os");
+			t1 = space();
+			div1 = element("div");
+			t2 = text("Show details for Active Notes:\n    ");
+			input = element("input");
+			attr(div0, "class", "svelte-r56iil");
+			attr(input, "type", "checkbox");
+			attr(div1, "class", "svelte-r56iil");
+			attr(div2, "id", "settings-panel");
+			attr(div2, "class", "svelte-r56iil");
 		},
 		m(target, anchor) {
-			insert(target, div1, anchor);
-			append(div1, div0);
-			append(div0, t);
+			insert(target, div2, anchor);
+			append(div2, div0);
+			append(div0, t0);
 
 			for (let i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].m(div0, null);
 			}
 
-			/*div1_binding*/ ctx[4](div1);
+			append(div2, t1);
+			append(div2, div1);
+			append(div1, t2);
+			append(div1, input);
+			input.checked = /*$userSettings*/ ctx[1].activeNoteDetails;
+			/*div2_binding*/ ctx[5](div2);
 			current = true;
+
+			if (!mounted) {
+				dispose = listen(input, "change", /*input_change_handler*/ ctx[4]);
+				mounted = true;
+			}
 		},
 		p(new_ctx, [dirty]) {
 			ctx = new_ctx;
 
-			if (dirty & /*colors, currentColor, document*/ 6) {
-				each_value = /*colors*/ ctx[2];
+			if (dirty & /*themes, $userSettings, userSettings*/ 6) {
+				each_value = /*themes*/ ctx[2];
 				let i;
 
 				for (i = 0; i < each_value.length; i += 1) {
@@ -130,14 +156,18 @@ function create_fragment(ctx) {
 
 				each_blocks.length = each_value.length;
 			}
+
+			if (dirty & /*$userSettings*/ 2) {
+				input.checked = /*$userSettings*/ ctx[1].activeNoteDetails;
+			}
 		},
 		i(local) {
 			if (current) return;
 
 			if (local) {
 				add_render_callback(() => {
-					if (!div1_transition) div1_transition = create_bidirectional_transition(
-						div1,
+					if (!div2_transition) div2_transition = create_bidirectional_transition(
+						div2,
 						fly,
 						{
 							delay: 0,
@@ -149,7 +179,7 @@ function create_fragment(ctx) {
 						true
 					);
 
-					div1_transition.run(1);
+					div2_transition.run(1);
 				});
 			}
 
@@ -157,8 +187,8 @@ function create_fragment(ctx) {
 		},
 		o(local) {
 			if (local) {
-				if (!div1_transition) div1_transition = create_bidirectional_transition(
-					div1,
+				if (!div2_transition) div2_transition = create_bidirectional_transition(
+					div2,
 					fly,
 					{
 						delay: 0,
@@ -170,38 +200,48 @@ function create_fragment(ctx) {
 					false
 				);
 
-				div1_transition.run(0);
+				div2_transition.run(0);
 			}
 
 			current = false;
 		},
 		d(detaching) {
-			if (detaching) detach(div1);
+			if (detaching) detach(div2);
 			destroy_each(each_blocks, detaching);
-			/*div1_binding*/ ctx[4](null);
-			if (detaching && div1_transition) div1_transition.end();
+			/*div2_binding*/ ctx[5](null);
+			if (detaching && div2_transition) div2_transition.end();
+			mounted = false;
+			dispose();
 		}
 	};
 }
 
 function instance($$self, $$props, $$invalidate) {
+	let $userSettings;
+	component_subscribe($$self, userSettings, $$value => $$invalidate(1, $userSettings = $$value));
 	let el;
-	let currentColor = document.body.className || "cardinal";
-	const colors = ["cardinal", "blue", "green", "grey"];
+	const themes = ["cardinal", "blue", "green", "grey"];
+	const click_handler = theme => userSettings.update(settings => ({ ...settings, theme }));
 
-	const click_handler = color => {
-		$$invalidate(1, currentColor = color);
-		document.body.className = color;
-	};
+	function input_change_handler() {
+		$userSettings.activeNoteDetails = this.checked;
+		userSettings.set($userSettings);
+	}
 
-	function div1_binding($$value) {
+	function div2_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			el = $$value;
 			$$invalidate(0, el);
 		});
 	}
 
-	return [el, currentColor, colors, click_handler, div1_binding];
+	$$self.$$.update = () => {
+		if ($$self.$$.dirty & /*$userSettings*/ 2) {
+			$: document.body.className = $userSettings.theme;
+		}
+	};
+
+	return [el, $userSettings, themes, click_handler, input_change_handler, div2_binding];
 }
 
 class SettingsPanel extends SvelteComponent {
