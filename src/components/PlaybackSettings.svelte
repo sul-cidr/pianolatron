@@ -1,12 +1,12 @@
 <style lang="scss">
   #playback-settings {
-    margin: 0 0.5em;
+    overflow-y: auto;
   }
   .control {
     align-items: center;
     display: grid;
     gap: 0.5em;
-    padding: 0.5em 0;
+    padding: 0.5em;
     grid:
       "title value" auto
       "slider slider" auto / 1fr auto;

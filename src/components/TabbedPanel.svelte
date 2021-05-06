@@ -1,7 +1,10 @@
 <style>
   div {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    overflow: hidden;
     position: relative;
-    margin-top: 1em;
   }
 </style>
 
