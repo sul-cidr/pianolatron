@@ -46,9 +46,9 @@ import {
 
 import RollSelector from "./components/RollSelector.svelte.js";
 import RollDetails from "./components/RollDetails.svelte.js";
-import PlaybackControls from "./components/PlaybackControls.svelte.js";
 import RollViewer from "./components/RollViewer.svelte.js";
 import Keyboard from "./components/Keyboard.svelte.js";
+import TabbedPanel from "./components/TabbedPanel.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
 import FlexCollapsible from "./ui-components/FlexCollapsible.svelte.js";
 
@@ -294,10 +294,10 @@ function create_if_block_1(ctx) {
 
 // (197:6) <FlexCollapsible id="audio-controls" width="20vw" position="left">
 function create_default_slot(ctx) {
-	let playbackcontrols;
+	let tabbedpanel;
 	let current;
 
-	playbackcontrols = new PlaybackControls({
+	tabbedpanel = new TabbedPanel({
 			props: {
 				playPauseApp: /*playPauseApp*/ ctx[3],
 				stopApp: /*stopApp*/ ctx[4],
@@ -307,24 +307,24 @@ function create_default_slot(ctx) {
 
 	return {
 		c() {
-			create_component(playbackcontrols.$$.fragment);
+			create_component(tabbedpanel.$$.fragment);
 		},
 		m(target, anchor) {
-			mount_component(playbackcontrols, target, anchor);
+			mount_component(tabbedpanel, target, anchor);
 			current = true;
 		},
 		p: noop,
 		i(local) {
 			if (current) return;
-			transition_in(playbackcontrols.$$.fragment, local);
+			transition_in(tabbedpanel.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
-			transition_out(playbackcontrols.$$.fragment, local);
+			transition_out(tabbedpanel.$$.fragment, local);
 			current = false;
 		},
 		d(detaching) {
-			destroy_component(playbackcontrols, detaching);
+			destroy_component(tabbedpanel, detaching);
 		}
 	};
 }

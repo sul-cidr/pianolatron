@@ -81,15 +81,20 @@ body {
   font-family: sans-serif;
   min-height: 100vh;
   text-rendering: optimizeSpeed;
+  transition: background 0.2s ease;
   --background-color: #dad7cb;
   --primary-accent: #8c1515;
 }
 body.blue {
-  --background-color: azure;
-  --primary-accent: cadetblue;
+  --background-color: aliceblue;
+  --primary-accent: steelblue;
 }
 body.green {
   --primary-accent: darkolivegreen;
+}
+body.grey {
+  --background-color: gainsboro;
+  --primary-accent: darkslategrey;
 }
 
 a {
