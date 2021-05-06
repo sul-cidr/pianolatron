@@ -57,9 +57,9 @@
   } from "./components/SamplePlayer";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
-  import PlaybackControls from "./components/PlaybackControls.svelte";
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
+  import TabbedPanel from "./components/TabbedPanel.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
@@ -199,7 +199,7 @@
         <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
       </div>
       <FlexCollapsible id="audio-controls" width="20vw" position="left">
-        <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
+        <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
       </FlexCollapsible>
     {/if}
   </div>
