@@ -63,7 +63,6 @@
         height: 100%;
       }
 
-      :first-child:active,
       :global(:first-child.depressed) {
         box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
         height: 98%;
@@ -113,7 +112,6 @@
         transform: translateX(-50%);
       }
 
-      :nth-child(2):active,
       :global(:nth-child(2).depressed) {
         border-bottom-width: 2px;
         box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.4),
@@ -168,22 +166,58 @@
       keyNumber += 1;
     }
   }
+
+  let mouseDown = false;
+  let playing;
+  const stopPlaying = () => {
+    stopNote(playing);
+    playing = null;
+  };
 </script>
 
 <div id="keyboard">
-  <div id="keys">
+  <div
+    id="keys"
+    on:mousedown|preventDefault={({ target }) => {
+      const note = parseInt(target.dataset.key, 10);
+      if (!note) return;
+      mouseDown = true;
+      playing = note;
+      startNote(note);
+    }}
+    on:mouseup|preventDefault={({ target }) => {
+      const note = parseInt(target.dataset.key, 10);
+      stopNote(note);
+      playing = null;
+    }}
+    on:mousemove|preventDefault={({ target }) => {
+      if (mouseDown) {
+        const note = parseInt(target.dataset.key, 10);
+        if (!note) return;
+        if (playing !== note) {
+          stopPlaying();
+          playing = note;
+          startNote(note);
+        }
+      }
+    }}
+  >
     {#each keys as key}
       <div>
         {#each key as _key}
           <span
             title={_key.title}
             data-key={_key['data-key']}
-            class:depressed={$activeNotes.has(_key['data-key'])}
-            on:mousedown={() => startNote(_key['data-key'])}
-            on:mouseup={() => stopNote(_key['data-key'])}
+            class:depressed={$activeNotes.has(_key['data-key']) || playing === _key['data-key']}
           />
         {/each}
       </div>
     {/each}
   </div>
 </div>
+<svelte:window
+  on:mouseup={() => {
+    stopPlaying();
+    mouseDown = false;
+  }}
+/>
