@@ -148,6 +148,7 @@
 
   export let imageUrl;
   export let holesByTickInterval;
+  export let skipToTick;
 
   const WELTE_MIDI_START = 10;
   const WELTE_RED_FIRST_NOTE = 24;
@@ -308,7 +309,15 @@
       advanceToTick(0);
     });
     openSeadragon.addHandler("canvas-drag", () => (strafing = true));
-    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
+    openSeadragon.addHandler("canvas-drag-end", () => {
+      const { viewport } = openSeadragon;
+      const viewportCenter = viewport.getCenter(false);
+      const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
+      skipToTick(
+        scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
+      );
+      strafing = false;
+    });
     openSeadragon.addHandler("open", () => {
       const tiledImage = openSeadragon.viewport.viewer.world.getItemAt(0);
       tiledImage.addOnceHandler(
