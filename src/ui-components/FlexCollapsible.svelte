@@ -7,9 +7,11 @@
     transition: all 0.3s ease;
 
     > div {
+      bottom: 0;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      gap: 0.5em;
+      overflow: hidden;
       padding: 0.5em;
       position: absolute;
       top: 0;

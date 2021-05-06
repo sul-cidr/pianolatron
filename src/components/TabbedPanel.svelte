@@ -1,26 +1,31 @@
 <style>
   div {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    overflow: hidden;
     position: relative;
-    margin-top: 1em;
   }
 </style>
 
 <script>
-  import PlaybackControls from "./PlaybackControls.svelte";
-  import SettingsPanel from "./SettingsPanel.svelte";
   import PanelSwitcher from "./PanelSwitcher.svelte";
+  import PlaybackControls from "./PlaybackControls.svelte";
+  import PlaybackSettings from "./PlaybackSettings.svelte";
+  import VisualizationSettings from "./VisualizationSettings.svelte";
 
   export let playPauseApp;
-  export let stopApp;
   export let skipToPercentage;
+  export let stopApp;
 
   let selectedPanel = "controls";
 </script>
 
 <PanelSwitcher bind:selectedPanel />
 <div>
-  <PlaybackControls {playPauseApp} {stopApp} {skipToPercentage} />
+  <PlaybackSettings {skipToPercentage} />
   {#if selectedPanel === 'settings'}
-    <SettingsPanel />
+    <VisualizationSettings />
   {/if}
 </div>
+<PlaybackControls {playPauseApp} {stopApp} />

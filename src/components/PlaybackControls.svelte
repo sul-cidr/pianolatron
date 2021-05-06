@@ -2,20 +2,6 @@
   #playback-controls {
     margin: 0 0.5em;
   }
-  .control {
-    align-items: center;
-    display: grid;
-    gap: 0.5em;
-    padding: 0.5em 0;
-    grid:
-      "title value" auto
-      "slider slider" auto / 1fr auto;
-
-    :global(input[type="range"]) {
-      grid-area: slider;
-      width: 100%;
-    }
-  }
 
   button {
     display: inline-block;
@@ -41,74 +27,13 @@
 </style>
 
 <script>
-  import { pedalling, volume, tempoControl, playbackProgress } from "../stores";
-
-  import RangeSlider from "../ui-components/RangeSlider.svelte";
+  import { pedalling } from "../stores";
 
   export let playPauseApp;
   export let stopApp;
-  export let skipToPercentage;
 </script>
 
 <div id="playback-controls">
-  <div class="control">
-    <span>Volume:</span>
-    <span>{$volume.master}</span>
-    <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
-      bind:value={$volume.master}
-      name="volume"
-    />
-  </div>
-  <div class="control">
-    <span>Bass Volume:</span>
-    <span>{$volume.left}</span>
-    <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
-      bind:value={$volume.left}
-      name="volume"
-    />
-  </div>
-  <div class="control">
-    <span>Treble Volume:</span>
-    <span>{$volume.right}</span>
-    <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
-      bind:value={$volume.right}
-      name="volume"
-    />
-  </div>
-  <div class="control">
-    <span>Tempo:</span>
-    <span>{$tempoControl}</span>
-    <RangeSlider
-      min="1"
-      max="180"
-      step="1"
-      bind:value={$tempoControl}
-      name="tempo"
-    />
-  </div>
-  <div class="control">
-    <span>Progress:</span>
-    <span>{($playbackProgress * 100).toFixed(2)}%</span>
-    <RangeSlider
-      min="0"
-      max="1"
-      step="0.001"
-      value={$playbackProgress}
-      name="progress"
-      on:input={({ target: { value } }) => skipToPercentage(value)}
-      mousewheel={false}
-    />
-  </div>
-
   <button type="button" on:click={playPauseApp}>Play/Pause</button>
   <button type="button" on:click={stopApp}>Stop</button>
   <button
