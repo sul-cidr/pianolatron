@@ -53,22 +53,33 @@
 
     :global(mark) {
       background-color: transparent;
-      mix-blend-mode: multiply;
 
       &.active {
-        animation: mark-recede 0.5s ease-in-out;
-        background-color: $hole-highlight-color;
-        box-shadow: 0 0 5px $hole-highlight-color;
+        &::before {
+          position: absolute;
+          content: "";
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          mix-blend-mode: multiply;
+          animation: mark-recede 0.5s ease-in-out;
+          background-color: $hole-highlight-color;
+          box-shadow: 0 0 5px $hole-highlight-color;
+        }
       }
 
       &:hover {
         background-color: transparent;
         box-shadow: none;
-        mix-blend-mode: normal;
         outline: $highlight-hover-outline-width solid
           $highlight-hover-outline-color;
         outline-offset: $highlight-hover-outline-offset;
-        z-index: 4;
+        z-index: 1;
+
+        &::before {
+          position: relative;
+        }
 
         &[data-info]::after {
           background-color: $highlight-hover-outline-color;
@@ -84,6 +95,7 @@
           text-shadow: 0px 0px 8px black;
           top: -($highlight-hover-outline-offset +
                 $highlight-hover-outline-width);
+          transform: none;
         }
       }
     }
@@ -91,6 +103,31 @@
     :global(svg rect) {
       fill: none;
       pointer-events: all;
+    }
+
+    &.active-note-details {
+      :global(mark.active[data-info]::after) {
+        background-color: none;
+        color: white;
+        content: attr(data-info);
+        display: block;
+        font-weight: bold;
+        left: 50%;
+        padding: 8px 4px;
+        position: absolute;
+        text-shadow: 0px 0px 8px black;
+        top: 0;
+        mix-blend-mode: normal;
+        transform: translate(-50%, -100%);
+      }
+
+      :global(mark.active[data-info]:hover::after) {
+        left: calc(
+          100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+        );
+        top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
+        transform: none;
+      }
     }
   }
 
@@ -106,7 +143,7 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
-  import { rollMetadata, currentTick } from "../stores";
+  import { rollMetadata, currentTick, userSettings } from "../stores";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
@@ -295,6 +332,7 @@
   id="roll-viewer"
   on:mouseenter={() => (showControls = true)}
   on:mouseleave={() => (showControls = false)}
+  class:active-note-details={$userSettings.activeNoteDetails}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
