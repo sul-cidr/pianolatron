@@ -9,14 +9,14 @@
 </style>
 
 <script>
-  import PlaybackSettings from "./PlaybackSettings.svelte";
-  import PlaybackControls from "./PlaybackControls.svelte";
-  import SettingsPanel from "./SettingsPanel.svelte";
   import PanelSwitcher from "./PanelSwitcher.svelte";
+  import PlaybackControls from "./PlaybackControls.svelte";
+  import PlaybackSettings from "./PlaybackSettings.svelte";
+  import VisualizationSettings from "./VisualizationSettings.svelte";
 
   export let playPauseApp;
-  export let stopApp;
   export let skipToPercentage;
+  export let stopApp;
 
   let selectedPanel = "controls";
 </script>
@@ -25,7 +25,7 @@
 <div>
   <PlaybackSettings {skipToPercentage} />
   {#if selectedPanel === 'settings'}
-    <SettingsPanel />
+    <VisualizationSettings />
   {/if}
 </div>
 <PlaybackControls {playPauseApp} {stopApp} />
