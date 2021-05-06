@@ -308,16 +308,17 @@
       createHolesOverlaySvg();
       advanceToTick(0);
     });
-    openSeadragon.addHandler("canvas-drag", () => (strafing = true));
-    openSeadragon.addHandler("canvas-drag-end", () => {
+    openSeadragon.addHandler("canvas-drag", () => {
       const { viewport } = openSeadragon;
       const viewportCenter = viewport.getCenter(false);
       const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
       skipToTick(
         scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
       );
-      strafing = false;
+
+      strafing = true;
     });
+    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
     openSeadragon.addHandler("open", () => {
       const tiledImage = openSeadragon.viewport.viewer.world.getItemAt(0);
       tiledImage.addOnceHandler(
