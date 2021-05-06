@@ -10,6 +10,8 @@
       bottom: 0;
       display: flex;
       flex-direction: column;
+      gap: 0.5em;
+      overflow: hidden;
       padding: 0.5em;
       position: absolute;
       top: 0;
