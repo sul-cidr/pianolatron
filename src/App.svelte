@@ -119,6 +119,7 @@
         : firstHolePx - OFF_TIME;
 
       hole.tick = tickOn;
+      hole.tickDuration = tickOff - tickOn;
       holesByTickInterval.insert(tickOn, tickOff, hole);
     });
   };

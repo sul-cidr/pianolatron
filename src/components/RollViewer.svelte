@@ -211,12 +211,13 @@
       OFF_TIME,
       TRACKER_HOLE,
       tick,
+      tickDuration,
     } = hole;
     const mark = document.createElement("mark");
     const noteName = getNoteName(TRACKER_HOLE);
     const midiNumber = TRACKER_HOLE + WELTE_MIDI_START;
     mark.dataset.info = noteName ? `N: ${noteName}\n` : "";
-    mark.dataset.info += `H: ${TRACKER_HOLE}\nM: ${midiNumber}\nT: ${tick}`;
+    mark.dataset.info += `H: ${TRACKER_HOLE}\nM: ${midiNumber}\nT: ${tick}\nTD: ${tickDuration}`;
     if (noteName) mark.dataset.noteName = noteName;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
