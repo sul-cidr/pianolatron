@@ -84,10 +84,10 @@
           position: relative;
         }
 
-        &[data-info]::after {
+        &[data-note-name]::after {
           background-color: $highlight-hover-outline-color;
           color: white;
-          content: attr(data-info);
+          content: attr(data-note-name);
           display: block;
           font-weight: bold;
           left: calc(
@@ -131,6 +131,12 @@
         );
         top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
         transform: none;
+      }
+    }
+
+    &.show-extra-details {
+      :global(mark[data-info]:hover::after) {
+        content: attr(data-info);
       }
     }
   }
@@ -376,6 +382,7 @@
     }
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
+  class:show-extra-details={$userSettings.showExtraDetails}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
