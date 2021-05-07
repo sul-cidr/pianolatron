@@ -19,6 +19,7 @@ module.exports = {
   rules: {
     "no-underscore-dangle": "off",
     "no-return-assign": ["error", "except-parens"],
+    "no-param-reassign": ["error", { props: false }],
     "jsx-a11y/label-has-for": [
       "error",
       {
