@@ -50,6 +50,7 @@ export const overlayKeyboard = createStore(false);
 export const userSettings = createStore({
   theme: "cardinal",
   activeNoteDetails: false,
+  showExtraDetails: false,
 });
 
 // Browser State

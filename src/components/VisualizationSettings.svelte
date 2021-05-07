@@ -74,4 +74,8 @@
     Show details for Active Notes:
     <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
   </div>
+  <div>
+    Show extra details on hover:
+    <input type="checkbox" bind:checked={$userSettings.showExtraDetails} />
+  </div>
 </div>
