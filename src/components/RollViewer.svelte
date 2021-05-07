@@ -342,6 +342,12 @@
   id="roll-viewer"
   on:mouseenter={() => (showControls = true)}
   on:mouseleave={() => (showControls = false)}
+  on:wheel|capture|preventDefault={(event) => {
+    if (event.ctrlKey) {
+      skipToTick($currentTick + (event.deltaY > 0 ? 150 : -150));
+      event.stopPropagation();
+    }
+  }}
   class:active-note-details={$userSettings.activeNoteDetails}
 >
   {#if !rollImageReady}
