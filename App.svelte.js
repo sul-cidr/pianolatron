@@ -41,6 +41,8 @@ import {
 import {
 	midiSamplePlayer,
 	pianoReady,
+	startNote,
+	stopNote,
 	stopAllNotes
 } from "./components/SamplePlayer.js";
 
@@ -106,7 +108,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (185:8) {#if !holesByTickInterval.count}
+// (187:8) {#if !holesByTickInterval.count}
 function create_if_block_3(ctx) {
 	let p;
 
@@ -128,7 +130,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (181:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (183:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -218,7 +220,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (193:4) {#if appReady}
+// (195:4) {#if appReady}
 function create_if_block_1(ctx) {
 	let div;
 	let rollviewer;
@@ -292,7 +294,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (197:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (199:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -329,7 +331,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (205:2) {#if !appReady}
+// (207:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -375,7 +377,16 @@ function create_fragment(ctx) {
 		});
 
 	let if_block0 = /*appReady*/ ctx[0] && create_if_block_1(ctx);
-	keyboard = new Keyboard({ props: { keyCount: "88", activeNotes } });
+
+	keyboard = new Keyboard({
+			props: {
+				keyCount: "88",
+				activeNotes,
+				startNote,
+				stopNote
+			}
+		});
+
 	let if_block1 = !/*appReady*/ ctx[0] && create_if_block(ctx);
 	notification = new Notification({});
 

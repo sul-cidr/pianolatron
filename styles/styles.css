@@ -112,13 +112,18 @@ footer {
   justify-content: space-between;
   left: 0;
   opacity: 0.2;
-  padding: 0.25em 1em;
+  padding: 0.4em 1em;
   position: absolute;
   transition: all 0.3s ease;
   width: 100vw;
+  z-index: 1;
 }
 footer:hover {
+  background-color: rgba(0, 0, 0, 0.7);
   opacity: 1;
+}
+footer:hover a {
+  color: white;
 }
 footer a {
   display: flex;
@@ -129,6 +134,9 @@ footer a {
   align-items: center;
   line-height: 25px;
   gap: 0.25em;
+}
+footer a:hover {
+  text-decoration: underline;
 }
 footer img {
   margin-top: -8px;

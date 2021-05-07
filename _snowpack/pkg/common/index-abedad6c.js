@@ -152,6 +152,13 @@ function listen(node, event, handler, options) {
     node.addEventListener(event, handler, options);
     return () => node.removeEventListener(event, handler, options);
 }
+function prevent_default(fn) {
+    return function (event) {
+        event.preventDefault();
+        // @ts-ignore
+        return fn.call(this, event);
+    };
+}
 function attr(node, attribute, value) {
     if (value == null)
         node.removeAttribute(attribute);
@@ -664,4 +671,4 @@ class SvelteComponent {
     }
 }
 
-export { svg_element as A, is_function as B, run_all as C, set_style as D, text as E, toggle_class as F, set_data as G, HtmlTag as H, add_render_callback as I, select_option as J, select_value as K, create_bidirectional_transition as L, null_to_empty as M, create_slot as N, update_slot as O, bubble as P, set_input_value as Q, to_number as R, SvelteComponent as S, get_store_value as T, identity as U, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, empty as l, group_outros as m, init as n, onMount as o, insert as p, mount_component as q, noop as r, safe_not_equal as s, set_store_value as t, space as u, transition_in as v, transition_out as w, destroy_each as x, subscribe as y, listen as z };
+export { run_all as A, subscribe as B, toggle_class as C, svg_element as D, is_function as E, set_style as F, text as G, set_data as H, HtmlTag as I, add_render_callback as J, select_option as K, select_value as L, create_bidirectional_transition as M, null_to_empty as N, create_slot as O, update_slot as P, bubble as Q, set_input_value as R, SvelteComponent as S, to_number as T, get_store_value as U, identity as V, add_flush_callback as a, append as b, attr as c, bind as d, binding_callbacks as e, check_outros as f, component_subscribe as g, create_component as h, destroy_component as i, detach as j, element as k, empty as l, group_outros as m, init as n, onMount as o, insert as p, mount_component as q, noop as r, safe_not_equal as s, set_store_value as t, space as u, transition_in as v, transition_out as w, destroy_each as x, listen as y, prevent_default as z };

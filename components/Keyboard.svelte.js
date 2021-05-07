@@ -9,25 +9,30 @@ import {
 	element,
 	init,
 	insert,
+	listen,
 	noop,
+	prevent_default,
+	run_all,
 	safe_not_equal,
 	space,
-	subscribe
+	subscribe,
+	toggle_class
 } from "../_snowpack/pkg/svelte/internal.js";
 
 function get_each_context_1(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[10] = list[i];
+	child_ctx[19] = list[i].title;
+	child_ctx[20] = list[i].note;
 	return child_ctx;
 }
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[7] = list[i];
+	child_ctx[16] = list[i];
 	return child_ctx;
 }
 
-// (152:8) {#each key as _key}
+// (181:8) {#each key as { title, note }}
 function create_each_block_1(ctx) {
 	let span;
 	let span_title_value;
@@ -36,25 +41,30 @@ function create_each_block_1(ctx) {
 	return {
 		c() {
 			span = element("span");
-			attr(span, "title", span_title_value = /*_key*/ ctx[10].title);
-			attr(span, "data-key", span_data_key_value = /*_key*/ ctx[10]["data-key"]);
-			attr(span, "class", "svelte-ymcpgy");
+			attr(span, "title", span_title_value = /*title*/ ctx[19]);
+			attr(span, "data-key", span_data_key_value = /*note*/ ctx[20]);
+			attr(span, "class", "svelte-w5nq4k");
+			toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[20]) || /*playing*/ ctx[4].has(/*note*/ ctx[20]));
 		},
 		m(target, anchor) {
 			insert(target, span, anchor);
 		},
-		p: noop,
+		p(ctx, dirty) {
+			if (dirty & /*$activeNotes, keys, playing*/ 112) {
+				toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[20]) || /*playing*/ ctx[4].has(/*note*/ ctx[20]));
+			}
+		},
 		d(detaching) {
 			if (detaching) detach(span);
 		}
 	};
 }
 
-// (150:4) {#each keys as key}
+// (179:4) {#each keys as key}
 function create_each_block(ctx) {
 	let div;
 	let t;
-	let each_value_1 = /*key*/ ctx[7];
+	let each_value_1 = /*key*/ ctx[16];
 	let each_blocks = [];
 
 	for (let i = 0; i < each_value_1.length; i += 1) {
@@ -70,7 +80,7 @@ function create_each_block(ctx) {
 			}
 
 			t = space();
-			attr(div, "class", "svelte-ymcpgy");
+			attr(div, "class", "svelte-w5nq4k");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -82,8 +92,8 @@ function create_each_block(ctx) {
 			append(div, t);
 		},
 		p(ctx, dirty) {
-			if (dirty & /*keys*/ 2) {
-				each_value_1 = /*key*/ ctx[7];
+			if (dirty & /*keys, $activeNotes, playing*/ 112) {
+				each_value_1 = /*key*/ ctx[16];
 				let i;
 
 				for (i = 0; i < each_value_1.length; i += 1) {
@@ -115,7 +125,9 @@ function create_each_block(ctx) {
 function create_fragment(ctx) {
 	let div1;
 	let div0;
-	let each_value = /*keys*/ ctx[1];
+	let mounted;
+	let dispose;
+	let each_value = /*keys*/ ctx[6];
 	let each_blocks = [];
 
 	for (let i = 0; i < each_value.length; i += 1) {
@@ -132,9 +144,9 @@ function create_fragment(ctx) {
 			}
 
 			attr(div0, "id", "keys");
-			attr(div0, "class", "svelte-ymcpgy");
+			attr(div0, "class", "svelte-w5nq4k");
 			attr(div1, "id", "keyboard");
-			attr(div1, "class", "svelte-ymcpgy");
+			attr(div1, "class", "svelte-w5nq4k");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -143,10 +155,21 @@ function create_fragment(ctx) {
 			for (let i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].m(div0, null);
 			}
+
+			if (!mounted) {
+				dispose = [
+					listen(window, "mouseup", /*mouseup_handler*/ ctx[9]),
+					listen(div0, "mousedown", prevent_default(/*mousedown_handler*/ ctx[10])),
+					listen(div0, "mouseup", prevent_default(/*mouseup_handler_1*/ ctx[11])),
+					listen(div0, "mousemove", prevent_default(/*mousemove_handler*/ ctx[12]))
+				];
+
+				mounted = true;
+			}
 		},
 		p(ctx, [dirty]) {
-			if (dirty & /*keys*/ 2) {
-				each_value = /*keys*/ ctx[1];
+			if (dirty & /*keys, $activeNotes, playing*/ 112) {
+				each_value = /*keys*/ ctx[6];
 				let i;
 
 				for (i = 0; i < each_value.length; i += 1) {
@@ -173,6 +196,8 @@ function create_fragment(ctx) {
 		d(detaching) {
 			if (detaching) detach(div1);
 			destroy_each(each_blocks, detaching);
+			mounted = false;
+			run_all(dispose);
 		}
 	};
 }
@@ -184,6 +209,8 @@ function instance($$self, $$props, $$invalidate) {
 
 	$$self.$$.on_destroy.push(() => $$unsubscribe_activeNotes());
 	let { keyCount = 88 } = $$props;
+	let { startNote } = $$props;
+	let { stopNote } = $$props;
 	let { activeNotes } = $$props;
 	$$subscribe_activeNotes();
 	const notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
@@ -199,13 +226,13 @@ function instance($$self, $$props, $$invalidate) {
 
 			if (note.endsWith("#")) {
 				keys[keys.length - 1].push({
-					"data-key": keyNumber + 20,
+					note: keyNumber + 20,
 					title: `${note}${octave}`
 				});
 			} else {
 				keys.push([
 					{
-						"data-key": keyNumber + 20,
+						note: keyNumber + 20,
 						title: `${note}${octave}`
 					}
 				]);
@@ -215,27 +242,79 @@ function instance($$self, $$props, $$invalidate) {
 		}
 	}
 
-	$$self.$$set = $$props => {
-		if ("keyCount" in $$props) $$invalidate(2, keyCount = $$props.keyCount);
-		if ("activeNotes" in $$props) $$subscribe_activeNotes($$invalidate(0, activeNotes = $$props.activeNotes));
+	let mouseDown = false;
+	let playing = new Set();
+
+	const stopPlaying = () => {
+		playing.forEach(note => stopNote(note));
+		$$invalidate(4, playing = new Set());
 	};
 
-	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$activeNotes*/ 32) {
-			$: {
-				document.querySelectorAll(".depressed").forEach(el => el.classList.remove("depressed"));
-				$activeNotes.forEach(note => document.querySelector(`[data-key="${note}"]`)?.classList.add("depressed"));
+	const mouseup_handler = () => {
+		stopPlaying();
+		$$invalidate(3, mouseDown = false);
+	};
+
+	const mousedown_handler = ({ target }) => {
+		const note = parseInt(target.dataset.key, 10);
+		$$invalidate(3, mouseDown = true);
+		$$invalidate(4, playing = playing.add(note));
+		startNote(note);
+	};
+
+	const mouseup_handler_1 = ({ target }) => {
+		const note = parseInt(target.dataset.key, 10);
+		playing.delete(note);
+		$$invalidate(4, playing);
+		stopNote(note);
+	};
+
+	const mousemove_handler = ({ target }) => {
+		if (mouseDown) {
+			const note = parseInt(target.dataset.key, 10);
+
+			if (note && !playing.has(note)) {
+				stopPlaying();
+				$$invalidate(4, playing = playing.add(note));
+				startNote(note);
 			}
 		}
 	};
 
-	return [activeNotes, keys, keyCount];
+	$$self.$$set = $$props => {
+		if ("keyCount" in $$props) $$invalidate(8, keyCount = $$props.keyCount);
+		if ("startNote" in $$props) $$invalidate(0, startNote = $$props.startNote);
+		if ("stopNote" in $$props) $$invalidate(1, stopNote = $$props.stopNote);
+		if ("activeNotes" in $$props) $$subscribe_activeNotes($$invalidate(2, activeNotes = $$props.activeNotes));
+	};
+
+	return [
+		startNote,
+		stopNote,
+		activeNotes,
+		mouseDown,
+		playing,
+		$activeNotes,
+		keys,
+		stopPlaying,
+		keyCount,
+		mouseup_handler,
+		mousedown_handler,
+		mouseup_handler_1,
+		mousemove_handler
+	];
 }
 
 class Keyboard extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { keyCount: 2, activeNotes: 0 });
+
+		init(this, options, instance, create_fragment, safe_not_equal, {
+			keyCount: 8,
+			startNote: 0,
+			stopNote: 1,
+			activeNotes: 2
+		});
 	}
 }
 
