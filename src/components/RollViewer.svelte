@@ -67,6 +67,7 @@
           animation: mark-recede 0.5s ease-in-out;
           background-color: $hole-highlight-color;
           box-shadow: 0 0 5px $hole-highlight-color;
+          display: inline-block;
         }
       }
 
@@ -79,6 +80,7 @@
         z-index: 1;
 
         &::before {
+          height: 0;
           position: relative;
         }
 
