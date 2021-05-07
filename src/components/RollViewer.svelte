@@ -99,6 +99,7 @@
           top: -($highlight-hover-outline-offset +
                 $highlight-hover-outline-width);
           transform: none;
+          white-space: pre;
         }
       }
     }
@@ -197,10 +198,19 @@
   };
 
   const createMark = (hole) => {
-    const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
+    const {
+      WIDTH_COL,
+      ORIGIN_COL,
+      ORIGIN_ROW,
+      OFF_TIME,
+      TRACKER_HOLE,
+      tick,
+    } = hole;
     const mark = document.createElement("mark");
     const noteName = getNoteName(TRACKER_HOLE);
-    if (noteName) mark.dataset.info = noteName;
+    const midiNumber = TRACKER_HOLE + WELTE_MIDI_START;
+    mark.dataset.info = noteName ? `N: ${noteName}\n` : "";
+    mark.dataset.info += `H: ${TRACKER_HOLE}\nM: ${midiNumber}\nT: ${tick}`;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);
