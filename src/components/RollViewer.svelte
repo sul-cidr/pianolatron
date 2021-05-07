@@ -345,12 +345,11 @@
   on:wheel|capture|preventDefault={(event) => {
     if (event.ctrlKey) {
       const { viewport } = openSeadragon;
-      const bounds = viewport.getBounds();
-      const delta = new OpenSeadragon.Point(0, event.deltaY > 0 ? bounds.height / 10 : -bounds.height / 10);
-      viewport.panBy(delta);
-      const center = viewport.getCenter(false);
-      const centerCoords = viewport.viewportToImageCoordinates(center);
-      skipToTick(scrollDownwards ? centerCoords.y - firstHolePx : firstHolePx - centerCoords.y);
+      const viewportBounds = viewport.getBounds();
+      const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
+      const delta = event.deltaY > 0 ? imgBounds.height / 10 : -imgBounds.height / 10;
+      const centerY = imgBounds.y + imgBounds.height / 2;
+      skipToTick(scrollDownwards ? centerY + delta - firstHolePx : firstHolePx - centerY + delta);
       event.stopPropagation();
     }
   }}
