@@ -162,4 +162,4 @@ midiSamplePlayer.on(
   },
 );
 
-export { midiSamplePlayer, pianoReady, stopAllNotes };
+export { midiSamplePlayer, pianoReady, startNote, stopNote, stopAllNotes };

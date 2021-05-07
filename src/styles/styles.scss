@@ -71,17 +71,22 @@ footer {
   justify-content: space-between;
   left: 0;
   opacity: 0.2;
-  padding: 0.25em 1em;
+  padding: 0.4em 1em;
   position: absolute;
   transition: all 0.3s ease;
   width: 100vw;
+  z-index: 1;
 
   &:hover {
+    background-color: rgba(0, 0, 0, 0.7);
     opacity: 1;
+
+    a {
+      color: white;
+    }
   }
 
   a {
-    // border-bottom: 1px solid transparent;
     display: flex;
     vertical-align: bottom;
     width: fit-content;
@@ -90,6 +95,10 @@ footer {
     align-items: center;
     line-height: 25px;
     gap: 0.25em;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   img {
