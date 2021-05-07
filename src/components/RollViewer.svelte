@@ -110,10 +110,10 @@
     }
 
     &.active-note-details {
-      :global(mark.active[data-info]::after) {
+      :global(mark.active[data-note-name]::after) {
         background-color: none;
         color: white;
-        content: attr(data-info);
+        content: attr(data-note-name);
         display: block;
         font-weight: bold;
         left: 50%;
@@ -211,6 +211,7 @@
     const midiNumber = TRACKER_HOLE + WELTE_MIDI_START;
     mark.dataset.info = noteName ? `N: ${noteName}\n` : "";
     mark.dataset.info += `H: ${TRACKER_HOLE}\nM: ${midiNumber}\nT: ${tick}`;
+    if (noteName) mark.dataset.noteName = noteName;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);
