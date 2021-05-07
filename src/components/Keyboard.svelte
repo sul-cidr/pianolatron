@@ -193,7 +193,7 @@
     on:mousemove|preventDefault={({ target }) => {
       if (mouseDown) {
         const note = parseInt(target.dataset.key, 10);
-        if (!playing.has(note)) {
+        if (note && !playing.has(note)) {
           stopPlaying();
           playing = playing.add(note);
           startNote(note);
