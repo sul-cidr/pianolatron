@@ -1,16 +1,27 @@
 import { writable } from "svelte/store";
 
-export const tempoControl = writable(60);
-export const rollMetadata = writable({});
-export const pedalling = writable({
+const createStore = (defaultValue) => {
+  const { set, subscribe, update } = writable(defaultValue);
+
+  return {
+    reset: () => set(defaultValue),
+    set,
+    subscribe,
+    update,
+  };
+};
+
+export const tempoControl = createStore(60);
+export const rollMetadata = createStore({});
+export const pedalling = createStore({
   soft: false,
   sustain: false,
   accent: false,
 });
-export const volume = writable({ master: 1, left: 1, right: 1 });
+export const volume = createStore({ master: 1, left: 1, right: 1 });
 
-export const playbackProgress = writable(0);
-export const currentTick = writable(0);
+export const playbackProgress = createStore(0);
+export const currentTick = createStore(0);
 
 export const activeNotes = (() => {
   const { subscribe, update, set } = writable(new Set());
@@ -26,7 +37,7 @@ export const activeNotes = (() => {
   };
 })();
 
-export const userSettings = writable({
+export const userSettings = createStore({
   theme: "cardinal",
   activeNoteDetails: false,
 });
