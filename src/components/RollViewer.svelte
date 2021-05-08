@@ -84,10 +84,9 @@
           position: relative;
         }
 
-        &[data-note-name]::after {
+        &::after {
           background-color: $highlight-hover-outline-color;
           color: white;
-          content: attr(data-note-name);
           display: block;
           font-weight: bold;
           left: calc(
@@ -100,6 +99,10 @@
                 $highlight-hover-outline-width);
           transform: none;
           white-space: pre;
+        }
+
+        &[data-note-name]::after {
+          content: attr(data-note-name);
         }
       }
     }
