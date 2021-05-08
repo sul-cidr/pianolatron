@@ -219,6 +219,9 @@
     mark.dataset.info = noteName ? `N: ${noteName}\n` : "";
     mark.dataset.info += `H: ${TRACKER_HOLE}\nM: ${midiNumber}\nT: ${tick}\nTD: ${tickDuration}`;
     if (noteName) mark.dataset.noteName = noteName;
+    if (hole.noteName) mark.dataset.info += `\nN2:${hole.noteName}`;
+    if (hole.noteNumber) mark.dataset.info += `\nM2:${hole.noteNumber}`;
+    if (hole.velocity) mark.dataset.info += `\nV:${hole.velocity}`;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);

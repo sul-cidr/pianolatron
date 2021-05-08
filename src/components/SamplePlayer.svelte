@@ -122,6 +122,20 @@
           _tempoMap.push([tick, data]);
         return _tempoMap;
       }, []);
+
+    const notesTrack = midiSamplePlayer.events[1];
+    const notes = notesTrack
+      .filter((event) => event.name === "Note on")
+      .reduce((_notes, event) => {
+        if (!_notes[event.tick]) {
+          _notes[event.tick] = [event];
+        } else {
+          _notes[event.tick].push(event);
+        }
+        return _notes;
+      }, {});
+
+    rollMetadata.update((v) => ({ ...v, notes }));
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {

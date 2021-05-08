@@ -76,6 +76,8 @@
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
+  const WELTE_MIDI_START = 10;
+
   let appReady = false;
   let mididataReady;
   let metadataReady;
@@ -102,14 +104,20 @@
   };
 
   const buildHolesIntervalTree = () => {
-    const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
+    const {
+      ROLL_TYPE,
+      FIRST_HOLE,
+      IMAGE_LENGTH,
+      holeData,
+      notes,
+    } = $rollMetadata;
     const scrollDownwards = ROLL_TYPE === "welte-red";
     const firstHolePx = scrollDownwards
       ? parseInt(FIRST_HOLE, 10)
       : parseInt(IMAGE_LENGTH, 10) - parseInt(FIRST_HOLE, 10);
 
     holeData.forEach((hole) => {
-      const { ORIGIN_ROW, OFF_TIME } = hole;
+      const { ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
       const tickOn = scrollDownwards
         ? ORIGIN_ROW - firstHolePx
         : firstHolePx - ORIGIN_ROW;
@@ -120,6 +128,26 @@
 
       hole.tick = tickOn;
       hole.tickDuration = tickOff - tickOn;
+
+      if (notes[tickOn]?.length === 1) {
+        hole.noteName = notes[tickOn][0].noteName;
+        hole.noteNumber = notes[tickOn][0].noteNumber;
+        hole.velocity = notes[tickOn][0].velocity;
+      }
+
+      if (notes[tickOn]?.length > 1) {
+        const note = notes[tickOn].filter(
+          (n) => n.noteNumber === TRACKER_HOLE + WELTE_MIDI_START,
+        )[0];
+        if (note) {
+          hole.noteName = note.noteName;
+          hole.noteNumber = note.noteNumber;
+          hole.velocity = note.velocity;
+        } else {
+          console.log(hole, notes[tickOn]);
+        }
+      }
+
       holesByTickInterval.insert(tickOn, tickOff, hole);
     });
   };
