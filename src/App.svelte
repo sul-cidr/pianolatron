@@ -77,6 +77,8 @@
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
   const WELTE_MIDI_START = 10;
+  const WELTE_RED_FIRST_NOTE = 24;
+  const WELTE_RED_LAST_NOTE = 103;
 
   let appReady = false;
   let mididataReady;
@@ -93,6 +95,32 @@
   let startNote;
   let stopNote;
   let stopAllNotes;
+
+  const getNoteName = (trackerHole) => {
+    const midiNumber = trackerHole + WELTE_MIDI_START;
+    if (
+      midiNumber >= WELTE_RED_FIRST_NOTE &&
+      midiNumber <= WELTE_RED_LAST_NOTE
+    ) {
+      const octave = parseInt(midiNumber / 12, 10) - 1;
+      const name = [
+        "A",
+        "A#",
+        "B",
+        "C",
+        "C#",
+        "D",
+        "D#",
+        "E",
+        "F",
+        "F#",
+        "G",
+        "G#",
+      ][(midiNumber - 21) % 12];
+      return `${name}${octave}`;
+    }
+    return null;
+  };
 
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
@@ -144,7 +172,7 @@
           hole.noteNumber = note.noteNumber;
           hole.velocity = note.velocity;
         } else {
-          console.log(hole, notes[tickOn]);
+          console.log(hole, notes[tickOn], getNoteName(TRACKER_HOLE));
         }
       }
 
