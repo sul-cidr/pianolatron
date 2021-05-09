@@ -1,25 +1,32 @@
 <style lang="scss">
+  svg {
+    position: absolute;
+    top: 0;
+    height: 6em;
+  }
   .circle {
-    background-color: #9b59b6;
+    // border-color: var(--primary-accent);
     border-radius: 50%;
     width: 6em;
     height: 6em;
-    transform: translate3d(-50%, -50%, 0);
-    left: 50%;
-    top: 50%;
-    box-shadow: 0 0 10px rgba(#000, 0.5);
+    // box-shadow: 0 0 10px rgba(#000, 0.5);
     position: relative;
+    // border-style: solid;
+    border-width: 4px;
+    background: transparent;
+
+    transform: rotate(-90deg);
 
     &:before {
       content: "";
       position: absolute;
-      width: 90%;
-      height: 90%;
+      width: 80%;
+      height: 80%;
       background-color: #ecf0f1;
       border-radius: 50%;
-      top: 5%;
-      left: 5%;
-      box-shadow: inset 0 0 10px rgba(#000, 0.5);
+      top: 10%;
+      left: 10%;
+      // box-shadow: inset 0 0 10px rgba(#000, 0.5);
     }
 
     .dot {
@@ -35,20 +42,23 @@
       &:before {
         content: "";
         position: absolute;
-        background-color: #fff;
-        box-shadow: 0 0 10px #000;
-        width: 200%;
-        transform: translate3d(-25%, -25%, 0);
-        height: 0;
-        padding-bottom: 200%;
-        border-radius: 50%;
+        background-color: orange;
+        // box-shadow: 0 0 10px #000;
+        // width: 200%;
+        // transform: translate3d(-25%, -25%, 0);
+        height: 1.5em;
+        width: 4px;
+        top: 8px;
+        // padding-bottom: 200%;
+        // border-radius: 50%;
         cursor: pointer;
+        //transform: translate3d(10px, 10px, 0);
       }
     }
   }
 
   .debug {
-    color: #9b59b6;
+    color: var(--primary-accent);
     font-family: monospace;
     user-select: none;
   }
@@ -65,6 +75,7 @@
   let centerY;
 
   let angle = 0;
+  let perc = 0;
 
   onMount(async () => {
     const circleBounds = circle.getBoundingClientRect();
@@ -81,9 +92,24 @@
     angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Calculate Angle between circle center and mouse pos
     angle -= 90;
     angle = Math.round((angle + 360) % 360);
+    perc = (2 * Math.PI) / (360 / angle);
   };
+
+  // $: console.log(perc);
 </script>
 
+<svg viewBox="-2 -2 4 4">
+  <circle
+    cx="0"
+    cy="0"
+    r="1"
+    transform="rotate(180)"
+    stroke-width="2"
+    stroke-dasharray={`${perc}, ${2 * Math.PI - perc}`}
+    stroke="green"
+    fill="none"
+  />
+</svg>
 <div
   class="circle"
   bind:this={circle}
