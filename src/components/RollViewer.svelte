@@ -148,6 +148,7 @@
 
   export let imageUrl;
   export let holesByTickInterval;
+  export let skipToTick;
 
   const WELTE_MIDI_START = 10;
   const WELTE_RED_FIRST_NOTE = 24;
@@ -307,7 +308,16 @@
       createHolesOverlaySvg();
       advanceToTick(0);
     });
-    openSeadragon.addHandler("canvas-drag", () => (strafing = true));
+    openSeadragon.addHandler("canvas-drag", () => {
+      const { viewport } = openSeadragon;
+      const viewportCenter = viewport.getCenter(false);
+      const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
+      skipToTick(
+        scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
+      );
+
+      strafing = true;
+    });
     openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
     openSeadragon.addHandler("open", () => {
       const tiledImage = openSeadragon.viewport.viewer.world.getItemAt(0);
@@ -332,6 +342,17 @@
   id="roll-viewer"
   on:mouseenter={() => (showControls = true)}
   on:mouseleave={() => (showControls = false)}
+  on:wheel|capture|preventDefault={(event) => {
+    if (event.ctrlKey) {
+      const { viewport } = openSeadragon;
+      const viewportBounds = viewport.getBounds();
+      const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
+      const delta = event.deltaY > 0 ? imgBounds.height / 10 : -imgBounds.height / 10;
+      const centerY = imgBounds.y + imgBounds.height / 2;
+      skipToTick(scrollDownwards ? centerY + delta - firstHolePx : firstHolePx - centerY + delta);
+      event.stopPropagation();
+    }
+  }}
   class:active-note-details={$userSettings.activeNoteDetails}
 >
   {#if !rollImageReady}

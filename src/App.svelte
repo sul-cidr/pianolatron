@@ -198,7 +198,11 @@
     </FlexCollapsible>
     {#if appReady}
       <div id="roll">
-        <RollViewer imageUrl={currentRoll.image_url} {holesByTickInterval} />
+        <RollViewer
+          imageUrl={currentRoll.image_url}
+          {holesByTickInterval}
+          {skipToTick}
+        />
       </div>
       <FlexCollapsible id="right-sidebar" width="20vw" position="left">
         <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
