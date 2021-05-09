@@ -139,7 +139,7 @@ function create_default_slot_1(ctx) {
 	let current;
 
 	function rollselector_currentRoll_binding(value) {
-		/*rollselector_currentRoll_binding*/ ctx[6].call(null, value);
+		/*rollselector_currentRoll_binding*/ ctx[7].call(null, value);
 	}
 
 	let rollselector_props = {};
@@ -231,7 +231,8 @@ function create_if_block_1(ctx) {
 	rollviewer = new RollViewer({
 			props: {
 				imageUrl: /*currentRoll*/ ctx[1].image_url,
-				holesByTickInterval: /*holesByTickInterval*/ ctx[2]
+				holesByTickInterval: /*holesByTickInterval*/ ctx[2],
+				skipToTick: /*skipToTick*/ ctx[5]
 			}
 		});
 
@@ -294,7 +295,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (199:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (203:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -303,7 +304,7 @@ function create_default_slot(ctx) {
 			props: {
 				playPauseApp: /*playPauseApp*/ ctx[3],
 				stopApp: /*stopApp*/ ctx[4],
-				skipToPercentage: /*skipToPercentage*/ ctx[5]
+				skipToPercentage: /*skipToPercentage*/ ctx[6]
 			}
 		});
 
@@ -331,7 +332,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (207:2) {#if !appReady}
+// (211:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -500,8 +501,8 @@ function create_fragment(ctx) {
 function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(10, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(11, $currentTick = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(11, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(12, $currentTick = $$value));
 	let appReady = false;
 	let mididataReady;
 	let metadataReady;
@@ -608,7 +609,7 @@ function instance($$self, $$props, $$invalidate) {
 			set_store_value(rollMetadata, $rollMetadata = { ...$rollMetadata, ...metadataJson }, $rollMetadata);
 			if (metadataJson.holeData) buildHolesIntervalTree(metadataJson.holeData);
 			$$invalidate(0, appReady = true);
-			$$invalidate(9, previousRoll = currentRoll);
+			$$invalidate(10, previousRoll = currentRoll);
 		});
 	};
 
@@ -620,7 +621,7 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 514) {
+		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 1026) {
 			$: {
 				if (currentRoll !== previousRoll) {
 					loadRoll(currentRoll);
@@ -628,7 +629,7 @@ function instance($$self, $$props, $$invalidate) {
 			}
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 2048) {
+		if ($$self.$$.dirty & /*$currentTick*/ 4096) {
 			$: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 		}
 	};
@@ -639,6 +640,7 @@ function instance($$self, $$props, $$invalidate) {
 		holesByTickInterval,
 		playPauseApp,
 		stopApp,
+		skipToTick,
 		skipToPercentage,
 		rollselector_currentRoll_binding
 	];

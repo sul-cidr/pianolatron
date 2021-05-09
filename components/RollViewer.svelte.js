@@ -20,6 +20,7 @@ import {
 	insert,
 	listen,
 	mount_component,
+	prevent_default,
 	run_all,
 	safe_not_equal,
 	space,
@@ -71,24 +72,24 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (311:2) {#if showControls}
+// (332:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
 	let current;
 
 	function rollviewercontrols_strafing_binding(value) {
-		/*rollviewercontrols_strafing_binding*/ ctx[7].call(null, value);
+		/*rollviewercontrols_strafing_binding*/ ctx[10].call(null, value);
 	}
 
 	let rollviewercontrols_props = {
-		openSeadragon: /*openSeadragon*/ ctx[0],
+		openSeadragon: /*openSeadragon*/ ctx[1],
 		minZoomLevel,
 		maxZoomLevel
 	};
 
-	if (/*strafing*/ ctx[1] !== void 0) {
-		rollviewercontrols_props.strafing = /*strafing*/ ctx[1];
+	if (/*strafing*/ ctx[3] !== void 0) {
+		rollviewercontrols_props.strafing = /*strafing*/ ctx[3];
 	}
 
 	rollviewercontrols = new RollViewerControls({ props: rollviewercontrols_props });
@@ -104,11 +105,11 @@ function create_if_block(ctx) {
 		},
 		p(ctx, dirty) {
 			const rollviewercontrols_changes = {};
-			if (dirty & /*openSeadragon*/ 1) rollviewercontrols_changes.openSeadragon = /*openSeadragon*/ ctx[0];
+			if (dirty & /*openSeadragon*/ 2) rollviewercontrols_changes.openSeadragon = /*openSeadragon*/ ctx[1];
 
-			if (!updating_strafing && dirty & /*strafing*/ 2) {
+			if (!updating_strafing && dirty & /*strafing*/ 8) {
 				updating_strafing = true;
-				rollviewercontrols_changes.strafing = /*strafing*/ ctx[1];
+				rollviewercontrols_changes.strafing = /*strafing*/ ctx[3];
 				add_flush_callback(() => updating_strafing = false);
 			}
 
@@ -135,8 +136,8 @@ function create_fragment(ctx) {
 	let current;
 	let mounted;
 	let dispose;
-	let if_block0 = !/*rollImageReady*/ ctx[2] && create_if_block_1(ctx);
-	let if_block1 = /*showControls*/ ctx[3] && create_if_block(ctx);
+	let if_block0 = !/*rollImageReady*/ ctx[4] && create_if_block_1(ctx);
+	let if_block1 = /*showControls*/ ctx[5] && create_if_block(ctx);
 
 	return {
 		c() {
@@ -146,7 +147,7 @@ function create_fragment(ctx) {
 			if (if_block1) if_block1.c();
 			attr(div, "id", "roll-viewer");
 			attr(div, "class", "svelte-1pt7pyv");
-			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
+			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[7].activeNoteDetails);
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -157,17 +158,18 @@ function create_fragment(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(div, "mouseenter", /*mouseenter_handler*/ ctx[8]),
-					listen(div, "mouseleave", /*mouseleave_handler*/ ctx[9])
+					listen(div, "mouseenter", /*mouseenter_handler*/ ctx[11]),
+					listen(div, "mouseleave", /*mouseleave_handler*/ ctx[12]),
+					listen(div, "wheel", prevent_default(/*wheel_handler*/ ctx[13]), true)
 				];
 
 				mounted = true;
 			}
 		},
 		p(ctx, [dirty]) {
-			if (!/*rollImageReady*/ ctx[2]) {
+			if (!/*rollImageReady*/ ctx[4]) {
 				if (if_block0) {
-					if (dirty & /*rollImageReady*/ 4) {
+					if (dirty & /*rollImageReady*/ 16) {
 						transition_in(if_block0, 1);
 					}
 				} else {
@@ -186,11 +188,11 @@ function create_fragment(ctx) {
 				check_outros();
 			}
 
-			if (/*showControls*/ ctx[3]) {
+			if (/*showControls*/ ctx[5]) {
 				if (if_block1) {
 					if_block1.p(ctx, dirty);
 
-					if (dirty & /*showControls*/ 8) {
+					if (dirty & /*showControls*/ 32) {
 						transition_in(if_block1, 1);
 					}
 				} else {
@@ -209,8 +211,8 @@ function create_fragment(ctx) {
 				check_outros();
 			}
 
-			if (dirty & /*$userSettings*/ 16) {
-				toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
+			if (dirty & /*$userSettings*/ 128) {
+				toggle_class(div, "active-note-details", /*$userSettings*/ ctx[7].activeNoteDetails);
 			}
 		},
 		i(local) {
@@ -245,11 +247,12 @@ function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
 	let $userSettings;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(13, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(15, $currentTick = $$value));
-	component_subscribe($$self, userSettings, $$value => $$invalidate(4, $userSettings = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(16, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(17, $currentTick = $$value));
+	component_subscribe($$self, userSettings, $$value => $$invalidate(7, $userSettings = $$value));
 	let { imageUrl } = $$props;
 	let { holesByTickInterval } = $$props;
+	let { skipToTick } = $$props;
 	let openSeadragon;
 	let firstHolePx;
 	let strafing = false;
@@ -351,7 +354,7 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	onMount(async () => {
-		$$invalidate(0, openSeadragon = OpenSeadragon({
+		$$invalidate(1, openSeadragon = OpenSeadragon({
 			id: "roll-viewer",
 			showNavigationControl: false,
 			panHorizontal: true,
@@ -368,12 +371,23 @@ function instance($$self, $$props, $$invalidate) {
 			advanceToTick(0);
 		});
 
-		openSeadragon.addHandler("canvas-drag", () => $$invalidate(1, strafing = true));
-		openSeadragon.addHandler("canvas-drag-end", () => $$invalidate(1, strafing = false));
+		openSeadragon.addHandler("canvas-drag", () => {
+			const { viewport } = openSeadragon;
+			const viewportCenter = viewport.getCenter(false);
+			const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
+
+			skipToTick(scrollDownwards
+			? imgCenter.y - firstHolePx
+			: firstHolePx - imgCenter.y);
+
+			$$invalidate(3, strafing = true);
+		});
+
+		openSeadragon.addHandler("canvas-drag-end", () => $$invalidate(3, strafing = false));
 
 		openSeadragon.addHandler("open", () => {
 			const tiledImage = openSeadragon.viewport.viewer.world.getItemAt(0);
-			tiledImage.addOnceHandler("fully-loaded-change", () => $$invalidate(2, rollImageReady = true));
+			tiledImage.addOnceHandler("fully-loaded-change", () => $$invalidate(4, rollImageReady = true));
 		});
 
 		openSeadragon.open(imageUrl);
@@ -381,57 +395,87 @@ function instance($$self, $$props, $$invalidate) {
 
 	function rollviewercontrols_strafing_binding(value) {
 		strafing = value;
-		$$invalidate(1, strafing);
+		$$invalidate(3, strafing);
 	}
 
-	const mouseenter_handler = () => $$invalidate(3, showControls = true);
-	const mouseleave_handler = () => $$invalidate(3, showControls = false);
+	const mouseenter_handler = () => $$invalidate(5, showControls = true);
+	const mouseleave_handler = () => $$invalidate(5, showControls = false);
+
+	const wheel_handler = event => {
+		if (event.ctrlKey) {
+			const { viewport } = openSeadragon;
+			const viewportBounds = viewport.getBounds();
+			const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
+
+			const delta = event.deltaY > 0
+			? imgBounds.height / 10
+			: -imgBounds.height / 10;
+
+			const centerY = imgBounds.y + imgBounds.height / 2;
+
+			skipToTick(scrollDownwards
+			? centerY + delta - firstHolePx
+			: firstHolePx - centerY + delta);
+
+			event.stopPropagation();
+		}
+	};
 
 	$$self.$$set = $$props => {
-		if ("imageUrl" in $$props) $$invalidate(5, imageUrl = $$props.imageUrl);
-		if ("holesByTickInterval" in $$props) $$invalidate(6, holesByTickInterval = $$props.holesByTickInterval);
+		if ("imageUrl" in $$props) $$invalidate(8, imageUrl = $$props.imageUrl);
+		if ("holesByTickInterval" in $$props) $$invalidate(9, holesByTickInterval = $$props.holesByTickInterval);
+		if ("skipToTick" in $$props) $$invalidate(0, skipToTick = $$props.skipToTick);
 	};
 
 	let scrollDownwards;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$currentTick*/ 32768) {
+		if ($$self.$$.dirty & /*$currentTick*/ 131072) {
 			$: advanceToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 32768) {
+		if ($$self.$$.dirty & /*$currentTick*/ 131072) {
 			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 8192) {
-			$: $$invalidate(14, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		if ($$self.$$.dirty & /*$rollMetadata*/ 65536) {
+			$: $$invalidate(6, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
 		}
 
-		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 24576) {
-			$: firstHolePx = scrollDownwards
+		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 65600) {
+			$: $$invalidate(2, firstHolePx = scrollDownwards
 			? parseInt($rollMetadata.FIRST_HOLE, 10)
-			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
+			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10));
 		}
 	};
 
 	return [
+		skipToTick,
 		openSeadragon,
+		firstHolePx,
 		strafing,
 		rollImageReady,
 		showControls,
+		scrollDownwards,
 		$userSettings,
 		imageUrl,
 		holesByTickInterval,
 		rollviewercontrols_strafing_binding,
 		mouseenter_handler,
-		mouseleave_handler
+		mouseleave_handler,
+		wheel_handler
 	];
 }
 
 class RollViewer extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { imageUrl: 5, holesByTickInterval: 6 });
+
+		init(this, options, instance, create_fragment, safe_not_equal, {
+			imageUrl: 8,
+			holesByTickInterval: 9,
+			skipToTick: 0
+		});
 	}
 }
 
