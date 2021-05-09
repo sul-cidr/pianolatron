@@ -1,12 +1,18 @@
 <style lang="scss">
+  svg {
+    position: absolute;
+    top: 0;
+    height: 6em;
+  }
+
   .circle {
     background-color: #9b59b6;
     border-radius: 50%;
     width: 6em;
     height: 6em;
-    transform: translate3d(-50%, -50%, 0);
-    left: 50%;
-    top: 50%;
+    // transform: translate3d(-50%, -50%, 0);
+    // left: 50%;
+    // top: 50%;
     box-shadow: 0 0 10px rgba(#000, 0.5);
     position: relative;
 
@@ -65,6 +71,7 @@
   let centerY;
 
   let angle = 0;
+  let perc = 0;
 
   onMount(async () => {
     const circleBounds = circle.getBoundingClientRect();
@@ -81,9 +88,22 @@
     angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Calculate Angle between circle center and mouse pos
     angle -= 90;
     angle = Math.round((angle + 360) % 360);
+    perc = (2 * Math.PI) / (360 / angle);
   };
 </script>
 
+<svg viewBox="-2 -2 4 4">
+  <circle
+    cx="0"
+    cy="0"
+    r="1"
+    transform="rotate(180)"
+    stroke-width="2"
+    stroke-dasharray={`${perc}, ${2 * Math.PI - perc}`}
+    stroke="green"
+    fill="none"
+  />
+</svg>
 <div
   class="circle"
   bind:this={circle}
