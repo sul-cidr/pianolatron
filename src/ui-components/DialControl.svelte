@@ -3,29 +3,35 @@
     position: absolute;
     top: 0;
     height: 6em;
+    // transform: rotate(90deg);
+    // z-index: 4;
+    outline: 1px solid red;
   }
 
   .circle {
-    background-color: #9b59b6;
+    // background-color: #9b59b6;
     border-radius: 50%;
     width: 6em;
     height: 6em;
     // transform: translate3d(-50%, -50%, 0);
     // left: 50%;
     // top: 50%;
-    box-shadow: 0 0 10px rgba(#000, 0.5);
+    // box-shadow: 0 0 10px rgba(#000, 0.5);
     position: relative;
+    transform: rotate(-90deg);
+    // border-width: 8px;
+    // border-color: transparent;
 
     &:before {
       content: "";
       position: absolute;
-      width: 90%;
-      height: 90%;
+      width: 80%;
+      height: 80%;
       background-color: #ecf0f1;
       border-radius: 50%;
-      top: 5%;
-      left: 5%;
-      box-shadow: inset 0 0 10px rgba(#000, 0.5);
+      top: 10%;
+      left: 10%;
+      // box-shadow: inset 0 0 10px rgba(#000, 0.5);
     }
 
     .dot {
@@ -35,19 +41,19 @@
       height: 50%;
       left: 47.5%;
       top: 0;
-      transform: rotate(0deg);
       transform-origin: center bottom;
 
       &:before {
         content: "";
         position: absolute;
-        background-color: #fff;
-        box-shadow: 0 0 10px #000;
-        width: 200%;
+        background-color: orange;
+        // box-shadow: 0 0 10px #000;
+        top: 16px;
+        width: 4px;
         transform: translate3d(-25%, -25%, 0);
-        height: 0;
-        padding-bottom: 200%;
-        border-radius: 50%;
+        height: 18px;
+        // padding-bottom: 200%;
+        // border-radius: 50%;
         cursor: pointer;
       }
     }
@@ -55,7 +61,6 @@
 
   .debug {
     color: #9b59b6;
-    font-family: monospace;
     user-select: none;
   }
 </style>
@@ -86,7 +91,7 @@
     const deltaY = centerY - (event.pageY || touch.pageY);
 
     angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Calculate Angle between circle center and mouse pos
-    angle -= 90;
+    // angle -= 90;
     angle = Math.round((angle + 360) % 360);
     perc = (2 * Math.PI) / (360 / angle);
   };
