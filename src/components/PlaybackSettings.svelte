@@ -21,6 +21,7 @@
 <script>
   import { volume, tempoControl, playbackProgress } from "../stores";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
+  import DialControl from "../ui-components/DialControl.svelte";
 
   export let skipToPercentage;
 </script>
@@ -82,5 +83,8 @@
       on:input={({ target: { value } }) => skipToPercentage(value)}
       mousewheel={false}
     />
+  </div>
+  <div style="margin: 2em 0; position: relative;height: 8em;">
+    <DialControl />
   </div>
 </div>
