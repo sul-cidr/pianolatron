@@ -330,6 +330,18 @@
     openSeadragon.open(imageUrl);
   });
 
+  const panByIncrement = (down = true) => {
+    const viewportBounds = viewport.getBounds();
+    const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
+    const delta = down ? imgBounds.height / 10 : -imgBounds.height / 10;
+    const centerY = imgBounds.y + imgBounds.height / 2;
+    skipToTick(
+      scrollDownwards
+        ? centerY + delta - firstHolePx
+        : firstHolePx - centerY + delta,
+    );
+  };
+
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
@@ -345,11 +357,7 @@
   on:mouseleave={() => (showControls = false)}
   on:wheel|capture|preventDefault={(event) => {
     if (event.ctrlKey) {
-      const viewportBounds = viewport.getBounds();
-      const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
-      const delta = event.deltaY > 0 ? imgBounds.height / 10 : -imgBounds.height / 10;
-      const centerY = imgBounds.y + imgBounds.height / 2;
-      skipToTick(scrollDownwards ? centerY + delta - firstHolePx : firstHolePx - centerY + delta);
+      panByIncrement(event.deltaY > 0);
       event.stopPropagation();
     }
   }}
@@ -364,6 +372,7 @@
       {openSeadragon}
       {minZoomLevel}
       {maxZoomLevel}
+      {panByIncrement}
     />
   {/if}
 </div>

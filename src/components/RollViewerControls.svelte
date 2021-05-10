@@ -62,6 +62,7 @@
   export let maxZoomLevel;
   export let minZoomLevel;
   export let strafing;
+  export let panByIncrement;
 
   const { viewport } = openSeadragon;
   let currentZoom = viewport.getZoom();
@@ -148,7 +149,7 @@
   </button>
 </div>
 <div id="pan-controls" transition:fade>
-  <button disabled={false} on:click={() => {}}>
+  <button disabled={false} on:click={() => panByIncrement(true)}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -165,7 +166,7 @@
       <line x1="8" y1="9" x2="12" y2="5" />
     </svg>
   </button>
-  <button disabled={false} on:click={() => {}}>
+  <button disabled={false} on:click={() => panByIncrement(false)}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
