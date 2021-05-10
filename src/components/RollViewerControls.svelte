@@ -49,10 +49,10 @@
   export let minZoomLevel;
   export let strafing;
 
-  let currentZoom = openSeadragon.viewport.getZoom();
+  const { viewport } = openSeadragon;
+  let currentZoom = viewport.getZoom();
 
   const centerRoll = () => {
-    const { viewport } = openSeadragon;
     const viewportBounds = viewport.getBounds();
     const lineCenter = new OpenSeadragon.Point(
       0.5,
@@ -63,7 +63,7 @@
     setTimeout(() => (strafing = false), 1000);
   };
 
-  const onZoom = () => (currentZoom = openSeadragon.viewport.getZoom());
+  const onZoom = () => (currentZoom = viewport.getZoom());
 
   onMount(() => {
     openSeadragon.addHandler("zoom", onZoom);
@@ -74,7 +74,7 @@
 <div id="roll-viewer-controls" transition:fade>
   <button
     disabled={currentZoom >= maxZoomLevel}
-    on:click={() => openSeadragon.viewport.zoomTo(Math.min(openSeadragon.viewport.getZoom() * 1.1, maxZoomLevel))}
+    on:click={() => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +93,7 @@
   </button>
   <button
     disabled={currentZoom <= minZoomLevel}
-    on:click={() => openSeadragon.viewport.zoomTo(Math.max(openSeadragon.viewport.getZoom() * 0.9, minZoomLevel))}
+    on:click={() => viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +112,7 @@
   <button
     disabled={currentZoom === 1}
     on:click={() => {
-      openSeadragon.viewport.zoomTo(1);
+      viewport.zoomTo(1);
       centerRoll();
     }}
   >
