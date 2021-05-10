@@ -1,12 +1,9 @@
 <style lang="scss">
-  #roll-viewer-controls {
+  div {
     background: rgba(0, 0, 0, 0.4);
     border-radius: 4px;
-    left: 50%;
     padding: 8px;
     position: absolute;
-    top: 8px;
-    transform: translateX(-50%);
     z-index: 25;
 
     button {
@@ -35,6 +32,23 @@
         color: grey;
         cursor: not-allowed;
       }
+    }
+  }
+
+  #roll-viewer-controls {
+    left: 50%;
+    top: 8px;
+    transform: translateX(-50%);
+  }
+  #pan-controls {
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+
+    button {
+      padding: 0.8em 0.35em;
     }
   }
 </style>
@@ -130,6 +144,42 @@
       <polyline points="17 8 21 12 17 16" />
       <line x1="3" y1="12" x2="9" y2="12" />
       <line x1="14" y1="12" x2="20" y2="12" />
+    </svg>
+  </button>
+</div>
+<div id="pan-controls" transition:fade>
+  <button disabled={false} on:click={() => {}}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="16" y1="9" x2="12" y2="5" />
+      <line x1="8" y1="9" x2="12" y2="5" />
+    </svg>
+  </button>
+  <button disabled={false} on:click={() => {}}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="16" y1="15" x2="12" y2="19" />
+      <line x1="8" y1="15" x2="12" y2="19" />
     </svg>
   </button>
 </div>
