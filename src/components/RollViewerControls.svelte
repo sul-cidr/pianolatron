@@ -1,12 +1,9 @@
 <style lang="scss">
-  #roll-viewer-controls {
+  div {
     background: rgba(0, 0, 0, 0.4);
     border-radius: 4px;
-    left: 50%;
     padding: 8px;
     position: absolute;
-    top: 8px;
-    transform: translateX(-50%);
     z-index: 25;
 
     button {
@@ -37,6 +34,23 @@
       }
     }
   }
+
+  #roll-viewer-controls {
+    left: 50%;
+    top: 8px;
+    transform: translateX(-50%);
+  }
+  #pan-controls {
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+
+    button {
+      padding: 0.8em 0.35em;
+    }
+  }
 </style>
 
 <script>
@@ -48,11 +62,13 @@
   export let maxZoomLevel;
   export let minZoomLevel;
   export let strafing;
+  export let panByIncrement;
+  export let panInterval;
 
-  let currentZoom = openSeadragon.viewport.getZoom();
+  const { viewport } = openSeadragon;
+  let currentZoom = viewport.getZoom();
 
   const centerRoll = () => {
-    const { viewport } = openSeadragon;
     const viewportBounds = viewport.getBounds();
     const lineCenter = new OpenSeadragon.Point(
       0.5,
@@ -63,7 +79,7 @@
     setTimeout(() => (strafing = false), 1000);
   };
 
-  const onZoom = () => (currentZoom = openSeadragon.viewport.getZoom());
+  const onZoom = () => (currentZoom = viewport.getZoom());
 
   onMount(() => {
     openSeadragon.addHandler("zoom", onZoom);
@@ -74,7 +90,7 @@
 <div id="roll-viewer-controls" transition:fade>
   <button
     disabled={currentZoom >= maxZoomLevel}
-    on:click={() => openSeadragon.viewport.zoomTo(Math.min(openSeadragon.viewport.getZoom() * 1.1, maxZoomLevel))}
+    on:click={() => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +109,7 @@
   </button>
   <button
     disabled={currentZoom <= minZoomLevel}
-    on:click={() => openSeadragon.viewport.zoomTo(Math.max(openSeadragon.viewport.getZoom() * 0.9, minZoomLevel))}
+    on:click={() => viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +128,7 @@
   <button
     disabled={currentZoom === 1}
     on:click={() => {
-      openSeadragon.viewport.zoomTo(1);
+      viewport.zoomTo(1);
       centerRoll();
     }}
   >
@@ -133,3 +149,52 @@
     </svg>
   </button>
 </div>
+<div id="pan-controls" transition:fade>
+  <button
+    disabled={false}
+    on:mousedown={() => {
+      panByIncrement(false);
+      panInterval = setInterval(() => panByIncrement(false), 100);
+    }}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="16" y1="9" x2="12" y2="5" />
+      <line x1="8" y1="9" x2="12" y2="5" />
+    </svg>
+  </button>
+  <button
+    disabled={false}
+    on:mousedown={() => {
+      panByIncrement(true);
+      panInterval = setInterval(() => panByIncrement(true), 100);
+    }}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="16" y1="15" x2="12" y2="19" />
+      <line x1="8" y1="15" x2="12" y2="19" />
+    </svg>
+  </button>
+</div>
+<svelte:window on:mouseup={() => clearInterval(panInterval)} />

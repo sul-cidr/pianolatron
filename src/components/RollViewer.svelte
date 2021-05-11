@@ -159,6 +159,7 @@
   const maxZoomLevel = 4;
 
   let openSeadragon;
+  let viewport;
   let firstHolePx;
   let strafing = false;
   let rollImageReady;
@@ -199,15 +200,15 @@
     if (noteName) mark.dataset.info = noteName;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
-        openSeadragon.viewport.viewer.removeOverlay(hoveredMark);
+        viewport.viewer.removeOverlay(hoveredMark);
     });
-    const viewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
+    const viewportRectangle = viewport.imageToViewportRectangle(
       ORIGIN_COL,
       ORIGIN_ROW,
       WIDTH_COL,
       OFF_TIME - ORIGIN_ROW,
     );
-    openSeadragon.viewport.viewer.addOverlay(mark, viewportRectangle);
+    viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
   };
 
@@ -221,7 +222,7 @@
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
-    const entireViewportRectangle = openSeadragon.viewport.imageToViewportRectangle(
+    const entireViewportRectangle = viewport.imageToViewportRectangle(
       0,
       0,
       imageWidth,
@@ -246,19 +247,18 @@
       rect.setAttribute("height", OFF_TIME - ORIGIN_ROW);
       rect.addEventListener("mouseover", () => {
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
-        openSeadragon.viewport.viewer.removeOverlay(hoveredMark);
+        viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
 
       g.appendChild(rect);
     });
 
-    openSeadragon.viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    viewport.viewer.addOverlay(svg, entireViewportRectangle);
   };
 
   const advanceToTick = (tick) => {
     if (!openSeadragon) return;
-    const { viewport } = openSeadragon;
     // if we're panning horizontally we want the target bounds, if otherwise
     //  (and most especially if we happen to be zooming) we want the current bounds
     const viewportBounds = viewport.getBounds(!strafing);
@@ -279,7 +279,7 @@
 
     marks = marks.filter(([hole, elem]) => {
       if (holes.includes(hole)) return true;
-      openSeadragon.viewport.viewer.removeOverlay(elem);
+      viewport.viewer.removeOverlay(elem);
       return false;
     });
 
@@ -304,12 +304,13 @@
       preserveImageSizeOnResize: true,
     });
 
+    ({ viewport } = openSeadragon);
+
     openSeadragon.addOnceHandler("update-viewport", () => {
       createHolesOverlaySvg();
       advanceToTick(0);
     });
     openSeadragon.addHandler("canvas-drag", () => {
-      const { viewport } = openSeadragon;
       const viewportCenter = viewport.getCenter(false);
       const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
       skipToTick(
@@ -320,7 +321,7 @@
     });
     openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
     openSeadragon.addHandler("open", () => {
-      const tiledImage = openSeadragon.viewport.viewer.world.getItemAt(0);
+      const tiledImage = viewport.viewer.world.getItemAt(0);
       tiledImage.addOnceHandler(
         "fully-loaded-change",
         () => (rollImageReady = true),
@@ -328,6 +329,18 @@
     });
     openSeadragon.open(imageUrl);
   });
+
+  const panByIncrement = (up = true) => {
+    const viewportBounds = viewport.getBounds();
+    const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
+    const delta = up ? imgBounds.height / 10 : -imgBounds.height / 10;
+    const centerY = imgBounds.y + imgBounds.height / 2;
+    skipToTick(
+      scrollDownwards
+        ? centerY + delta - firstHolePx
+        : firstHolePx - centerY - delta,
+    );
+  };
 
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
@@ -344,12 +357,7 @@
   on:mouseleave={() => (showControls = false)}
   on:wheel|capture|preventDefault={(event) => {
     if (event.ctrlKey) {
-      const { viewport } = openSeadragon;
-      const viewportBounds = viewport.getBounds();
-      const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
-      const delta = event.deltaY > 0 ? imgBounds.height / 10 : -imgBounds.height / 10;
-      const centerY = imgBounds.y + imgBounds.height / 2;
-      skipToTick(scrollDownwards ? centerY + delta - firstHolePx : firstHolePx - centerY + delta);
+      panByIncrement(event.deltaY > 0);
       event.stopPropagation();
     }
   }}
@@ -364,6 +372,7 @@
       {openSeadragon}
       {minZoomLevel}
       {maxZoomLevel}
+      {panByIncrement}
     />
   {/if}
 </div>
