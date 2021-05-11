@@ -22,7 +22,7 @@ import { fade } from "../_snowpack/pkg/svelte/transition.js";
 import OpenSeadragon from "../_snowpack/pkg/openseadragon.js";
 
 function create_fragment(ctx) {
-	let div;
+	let div0;
 	let button0;
 	let svg0;
 	let line0;
@@ -41,14 +41,22 @@ function create_fragment(ctx) {
 	let line3;
 	let line4;
 	let button2_disabled_value;
-	let div_transition;
+	let div0_transition;
+	let t2;
+	let div1;
+	let button3;
+	let button3_disabled_value;
+	let t3;
+	let button4;
+	let button4_disabled_value;
+	let div1_transition;
 	let current;
 	let mounted;
 	let dispose;
 
 	return {
 		c() {
-			div = element("div");
+			div0 = element("div");
 			button0 = element("button");
 			svg0 = svg_element("svg");
 			line0 = svg_element("line");
@@ -64,6 +72,13 @@ function create_fragment(ctx) {
 			polyline1 = svg_element("polyline");
 			line3 = svg_element("line");
 			line4 = svg_element("line");
+			t2 = space();
+			div1 = element("div");
+			button3 = element("button");
+			button3.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="16" y1="9" x2="12" y2="5"></line><line x1="8" y1="9" x2="12" y2="5"></line></svg>`;
+			t3 = space();
+			button4 = element("button");
+			button4.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="16" y1="15" x2="12" y2="19"></line><line x1="8" y1="15" x2="12" y2="19"></line></svg>`;
 			attr(line0, "x1", "12");
 			attr(line0, "y1", "5");
 			attr(line0, "x2", "12");
@@ -81,8 +96,8 @@ function create_fragment(ctx) {
 			attr(svg0, "fill", "none");
 			attr(svg0, "stroke-linecap", "round");
 			attr(svg0, "stroke-linejoin", "round");
-			button0.disabled = button0_disabled_value = /*currentZoom*/ ctx[3] >= /*maxZoomLevel*/ ctx[1];
-			attr(button0, "class", "svelte-10hyfa4");
+			button0.disabled = button0_disabled_value = /*currentZoom*/ ctx[4] >= /*maxZoomLevel*/ ctx[1];
+			attr(button0, "class", "svelte-paudf8");
 			attr(line2, "x1", "5");
 			attr(line2, "y1", "12");
 			attr(line2, "x2", "19");
@@ -96,8 +111,8 @@ function create_fragment(ctx) {
 			attr(svg1, "fill", "none");
 			attr(svg1, "stroke-linecap", "round");
 			attr(svg1, "stroke-linejoin", "round");
-			button1.disabled = button1_disabled_value = /*currentZoom*/ ctx[3] <= /*minZoomLevel*/ ctx[2];
-			attr(button1, "class", "svelte-10hyfa4");
+			button1.disabled = button1_disabled_value = /*currentZoom*/ ctx[4] <= /*minZoomLevel*/ ctx[2];
+			attr(button1, "class", "svelte-paudf8");
 			attr(polyline0, "points", "7 8 3 12 7 16");
 			attr(polyline1, "points", "17 8 21 12 17 16");
 			attr(line3, "x1", "3");
@@ -116,50 +131,64 @@ function create_fragment(ctx) {
 			attr(svg2, "fill", "none");
 			attr(svg2, "stroke-linecap", "round");
 			attr(svg2, "stroke-linejoin", "round");
-			button2.disabled = button2_disabled_value = /*currentZoom*/ ctx[3] === 1;
-			attr(button2, "class", "svelte-10hyfa4");
-			attr(div, "id", "roll-viewer-controls");
-			attr(div, "class", "svelte-10hyfa4");
+			button2.disabled = button2_disabled_value = /*currentZoom*/ ctx[4] === 1;
+			attr(button2, "class", "svelte-paudf8");
+			attr(div0, "id", "roll-viewer-controls");
+			attr(div0, "class", "svelte-paudf8");
+			button3.disabled = button3_disabled_value = false;
+			attr(button3, "class", "svelte-paudf8");
+			button4.disabled = button4_disabled_value = false;
+			attr(button4, "class", "svelte-paudf8");
+			attr(div1, "id", "pan-controls");
+			attr(div1, "class", "svelte-paudf8");
 		},
 		m(target, anchor) {
-			insert(target, div, anchor);
-			append(div, button0);
+			insert(target, div0, anchor);
+			append(div0, button0);
 			append(button0, svg0);
 			append(svg0, line0);
 			append(svg0, line1);
-			append(div, t0);
-			append(div, button1);
+			append(div0, t0);
+			append(div0, button1);
 			append(button1, svg1);
 			append(svg1, line2);
-			append(div, t1);
-			append(div, button2);
+			append(div0, t1);
+			append(div0, button2);
 			append(button2, svg2);
 			append(svg2, polyline0);
 			append(svg2, polyline1);
 			append(svg2, line3);
 			append(svg2, line4);
+			insert(target, t2, anchor);
+			insert(target, div1, anchor);
+			append(div1, button3);
+			append(div1, t3);
+			append(div1, button4);
 			current = true;
 
 			if (!mounted) {
 				dispose = [
-					listen(button0, "click", /*click_handler*/ ctx[6]),
-					listen(button1, "click", /*click_handler_1*/ ctx[7]),
-					listen(button2, "click", /*click_handler_2*/ ctx[8])
+					listen(window, "mouseup", /*mouseup_handler*/ ctx[9]),
+					listen(button0, "click", /*click_handler*/ ctx[10]),
+					listen(button1, "click", /*click_handler_1*/ ctx[11]),
+					listen(button2, "click", /*click_handler_2*/ ctx[12]),
+					listen(button3, "mousedown", /*mousedown_handler*/ ctx[13]),
+					listen(button4, "mousedown", /*mousedown_handler_1*/ ctx[14])
 				];
 
 				mounted = true;
 			}
 		},
 		p(ctx, [dirty]) {
-			if (!current || dirty & /*currentZoom, maxZoomLevel*/ 10 && button0_disabled_value !== (button0_disabled_value = /*currentZoom*/ ctx[3] >= /*maxZoomLevel*/ ctx[1])) {
+			if (!current || dirty & /*currentZoom, maxZoomLevel*/ 18 && button0_disabled_value !== (button0_disabled_value = /*currentZoom*/ ctx[4] >= /*maxZoomLevel*/ ctx[1])) {
 				button0.disabled = button0_disabled_value;
 			}
 
-			if (!current || dirty & /*currentZoom, minZoomLevel*/ 12 && button1_disabled_value !== (button1_disabled_value = /*currentZoom*/ ctx[3] <= /*minZoomLevel*/ ctx[2])) {
+			if (!current || dirty & /*currentZoom, minZoomLevel*/ 20 && button1_disabled_value !== (button1_disabled_value = /*currentZoom*/ ctx[4] <= /*minZoomLevel*/ ctx[2])) {
 				button1.disabled = button1_disabled_value;
 			}
 
-			if (!current || dirty & /*currentZoom*/ 8 && button2_disabled_value !== (button2_disabled_value = /*currentZoom*/ ctx[3] === 1)) {
+			if (!current || dirty & /*currentZoom*/ 16 && button2_disabled_value !== (button2_disabled_value = /*currentZoom*/ ctx[4] === 1)) {
 				button2.disabled = button2_disabled_value;
 			}
 		},
@@ -167,20 +196,30 @@ function create_fragment(ctx) {
 			if (current) return;
 
 			add_render_callback(() => {
-				if (!div_transition) div_transition = create_bidirectional_transition(div, fade, {}, true);
-				div_transition.run(1);
+				if (!div0_transition) div0_transition = create_bidirectional_transition(div0, fade, {}, true);
+				div0_transition.run(1);
+			});
+
+			add_render_callback(() => {
+				if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, {}, true);
+				div1_transition.run(1);
 			});
 
 			current = true;
 		},
 		o(local) {
-			if (!div_transition) div_transition = create_bidirectional_transition(div, fade, {}, false);
-			div_transition.run(0);
+			if (!div0_transition) div0_transition = create_bidirectional_transition(div0, fade, {}, false);
+			div0_transition.run(0);
+			if (!div1_transition) div1_transition = create_bidirectional_transition(div1, fade, {}, false);
+			div1_transition.run(0);
 			current = false;
 		},
 		d(detaching) {
-			if (detaching) detach(div);
-			if (detaching && div_transition) div_transition.end();
+			if (detaching) detach(div0);
+			if (detaching && div0_transition) div0_transition.end();
+			if (detaching) detach(t2);
+			if (detaching) detach(div1);
+			if (detaching && div1_transition) div1_transition.end();
 			mounted = false;
 			run_all(dispose);
 		}
@@ -192,49 +231,70 @@ function instance($$self, $$props, $$invalidate) {
 	let { maxZoomLevel } = $$props;
 	let { minZoomLevel } = $$props;
 	let { strafing } = $$props;
-	let currentZoom = openSeadragon.viewport.getZoom();
+	let { panByIncrement } = $$props;
+	let { panInterval } = $$props;
+	const { viewport } = openSeadragon;
+	let currentZoom = viewport.getZoom();
 
 	const centerRoll = () => {
-		const { viewport } = openSeadragon;
 		const viewportBounds = viewport.getBounds();
 		const lineCenter = new OpenSeadragon.Point(0.5, viewportBounds.y + viewportBounds.height / 2);
-		$$invalidate(5, strafing = true);
+		$$invalidate(7, strafing = true);
 		viewport.panTo(lineCenter);
-		setTimeout(() => $$invalidate(5, strafing = false), 1000);
+		setTimeout(() => $$invalidate(7, strafing = false), 1000);
 	};
 
-	const onZoom = () => $$invalidate(3, currentZoom = openSeadragon.viewport.getZoom());
+	const onZoom = () => $$invalidate(4, currentZoom = viewport.getZoom());
 
 	onMount(() => {
 		openSeadragon.addHandler("zoom", onZoom);
 		return () => openSeadragon.removeHandler("zoom", onZoom);
 	});
 
-	const click_handler = () => openSeadragon.viewport.zoomTo(Math.min(openSeadragon.viewport.getZoom() * 1.1, maxZoomLevel));
-	const click_handler_1 = () => openSeadragon.viewport.zoomTo(Math.max(openSeadragon.viewport.getZoom() * 0.9, minZoomLevel));
+	const mouseup_handler = () => clearInterval(panInterval);
+	const click_handler = () => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel));
+	const click_handler_1 = () => viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel));
 
 	const click_handler_2 = () => {
-		openSeadragon.viewport.zoomTo(1);
+		viewport.zoomTo(1);
 		centerRoll();
 	};
 
+	const mousedown_handler = () => {
+		panByIncrement(false);
+		$$invalidate(0, panInterval = setInterval(() => panByIncrement(false), 100));
+	};
+
+	const mousedown_handler_1 = () => {
+		panByIncrement(true);
+		$$invalidate(0, panInterval = setInterval(() => panByIncrement(true), 100));
+	};
+
 	$$self.$$set = $$props => {
-		if ("openSeadragon" in $$props) $$invalidate(0, openSeadragon = $$props.openSeadragon);
+		if ("openSeadragon" in $$props) $$invalidate(8, openSeadragon = $$props.openSeadragon);
 		if ("maxZoomLevel" in $$props) $$invalidate(1, maxZoomLevel = $$props.maxZoomLevel);
 		if ("minZoomLevel" in $$props) $$invalidate(2, minZoomLevel = $$props.minZoomLevel);
-		if ("strafing" in $$props) $$invalidate(5, strafing = $$props.strafing);
+		if ("strafing" in $$props) $$invalidate(7, strafing = $$props.strafing);
+		if ("panByIncrement" in $$props) $$invalidate(3, panByIncrement = $$props.panByIncrement);
+		if ("panInterval" in $$props) $$invalidate(0, panInterval = $$props.panInterval);
 	};
 
 	return [
-		openSeadragon,
+		panInterval,
 		maxZoomLevel,
 		minZoomLevel,
+		panByIncrement,
 		currentZoom,
+		viewport,
 		centerRoll,
 		strafing,
+		openSeadragon,
+		mouseup_handler,
 		click_handler,
 		click_handler_1,
-		click_handler_2
+		click_handler_2,
+		mousedown_handler,
+		mousedown_handler_1
 	];
 }
 
@@ -243,10 +303,12 @@ class RollViewerControls extends SvelteComponent {
 		super();
 
 		init(this, options, instance, create_fragment, safe_not_equal, {
-			openSeadragon: 0,
+			openSeadragon: 8,
 			maxZoomLevel: 1,
 			minZoomLevel: 2,
-			strafing: 5
+			strafing: 7,
+			panByIncrement: 3,
+			panInterval: 0
 		});
 	}
 }
