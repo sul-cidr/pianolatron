@@ -63,6 +63,7 @@
   export let minZoomLevel;
   export let strafing;
   export let panByIncrement;
+  export let panInterval;
 
   const { viewport } = openSeadragon;
   let currentZoom = viewport.getZoom();
@@ -149,7 +150,13 @@
   </button>
 </div>
 <div id="pan-controls" transition:fade>
-  <button disabled={false} on:click={() => panByIncrement(false)}>
+  <button
+    disabled={false}
+    on:mousedown={() => {
+      panByIncrement(false);
+      panInterval = setInterval(() => panByIncrement(false), 100);
+    }}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -166,7 +173,13 @@
       <line x1="8" y1="9" x2="12" y2="5" />
     </svg>
   </button>
-  <button disabled={false} on:click={() => panByIncrement(true)}>
+  <button
+    disabled={false}
+    on:mousedown={() => {
+      panByIncrement(true);
+      panInterval = setInterval(() => panByIncrement(true), 100);
+    }}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -184,3 +197,4 @@
     </svg>
   </button>
 </div>
+<svelte:window on:mouseup={() => clearInterval(panInterval)} />
