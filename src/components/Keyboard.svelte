@@ -4,7 +4,7 @@
 
   #keyboard {
     display: flow-root;
-    margin: 1em;
+    margin: 1vh 1vw;
     aspect-ratio: 10 / 1;
     z-index: 2;
     position: relative;
@@ -14,7 +14,7 @@
     #keyboard {
       height: 100%;
       margin: 0;
-      padding: 1em;
+      padding: 1vh 1vw;
 
       &::before {
         content: "";
@@ -128,19 +128,19 @@
     }
   }
   #pedals {
-    margin-top: -30px;
     text-align: center;
 
     svg {
-      transform: rotate3d(1, 0, 0, 30deg) scaleX(2);
-      transform-origin: top;
       filter: drop-shadow(0px 8px 3px black) saturate(0.4);
+      margin: 0 2vw;
+      transform: rotate3d(1, 0, 0, 30deg) scaleX(2) translateY(-50%);
+      transform-origin: top;
       transition: all 0.1s ease;
-      margin: 0 40px;
+      width: 2vw;
 
       &.depressed {
         filter: drop-shadow(0px 4px 2px black) saturate(0.6);
-        transform: rotate3d(0, 0, 0, 0) scaleX(2);
+        transform: rotate3d(0, 0, 0, 0) scaleX(2) translateY(-50%);
       }
     }
   }
