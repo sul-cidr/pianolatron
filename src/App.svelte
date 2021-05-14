@@ -49,6 +49,7 @@
 </style>
 
 <script>
+  import { quartInOut } from "svelte/easing";
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
@@ -82,6 +83,15 @@
   let previousRoll;
   let holesByTickInterval = new IntervalTree();
   let overlayKeyboard = false;
+
+  const slide = (node, { delay = 0, duration = 300 }) => {
+    const o = parseInt(getComputedStyle(node).height, 10);
+    return {
+      delay,
+      duration,
+      css: (t) => `height: ${quartInOut(t) * o}px`,
+    };
+  };
 
   const buildHolesIntervalTree = () => {
     const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
@@ -229,7 +239,7 @@
     {/if}
   </div>
   {#if !overlayKeyboard}
-    <div id="keyboard-container">
+    <div id="keyboard-container" transition:slide>
       <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
     </div>
   {/if}
