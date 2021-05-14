@@ -129,12 +129,12 @@
   }
   svg.pedal {
     filter: drop-shadow(0px 8px 3px black) saturate(0.4);
-    margin: 0 2vw;
+    margin: 0 2%;
     transform: rotate3d(1, 0, 0, 30deg) scaleX(2);
     transform-origin: top;
     transition: all 0.1s ease;
-    width: 2vw;
-    left: calc(50% - 6vw);
+    width: 2%;
+    left: 44%;
     position: relative;
     margin-top: -30px;
 
