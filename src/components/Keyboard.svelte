@@ -137,7 +137,7 @@
       filter: drop-shadow(0px 8px 3px black) saturate(0.4);
       transition: all 0.1s ease;
 
-      &:hover {
+      &.depressed {
         filter: drop-shadow(0px 4px 2px black) saturate(0.6);
         transform: rotate3d(0, 0, 0, 0) scaleX(2);
       }
@@ -146,6 +146,8 @@
 </style>
 
 <script>
+  import { pedalling } from "../stores";
+
   export let keyCount = 88;
   export let startNote;
   export let stopNote;
@@ -245,6 +247,9 @@
     width="23.4"
     height="61.6"
     viewBox="0 0 6.2 16.3"
+    on:mousedown={() => ($pedalling.sustain = true)}
+    on:mouseup={() => ($pedalling.sustain = false)}
+    class:depressed={$pedalling.sustain}
   >
     <path
       d="M0 0v-16.2c0-2.5.5-6.1 1.5-9.9 1-4 2-9.3 2-12.2 0-3.6-2.7-8-8.8-8-6.2 0-8.8 4.4-8.8 8 0 3 .9 8.2 2 12.2a40 40 0 0 1 1.5 9.9V0z"
