@@ -38,6 +38,14 @@
     flex: 0 1 auto;
     user-select: none;
   }
+
+  #keyboard-overlay {
+    position: absolute;
+    z-index: 23;
+    bottom: 0;
+    width: 100%;
+    opacity: 0.5;
+  }
 </style>
 
 <script>
@@ -72,6 +80,7 @@
   let currentRoll;
   let previousRoll;
   let holesByTickInterval = new IntervalTree();
+  let overlayKeyboard = false;
 
   const buildHolesIntervalTree = () => {
     const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
@@ -195,6 +204,9 @@
             this time. Hole highlighting will not be enabled.
           </p>
         {/if}
+        <button
+          on:click={() => (overlayKeyboard = !overlayKeyboard)}
+        >kb</button>
       {/if}
     </FlexCollapsible>
     {#if appReady}
@@ -204,15 +216,22 @@
           {holesByTickInterval}
           {skipToTick}
         />
+        {#if overlayKeyboard}
+          <div id="keyboard-overlay">
+            <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
+          </div>
+        {/if}
       </div>
       <FlexCollapsible id="right-sidebar" width="20vw" position="left">
         <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
       </FlexCollapsible>
     {/if}
   </div>
-  <div id="keyboard-container">
-    <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
-  </div>
+  {#if !overlayKeyboard}
+    <div id="keyboard-container">
+      <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
+    </div>
+  {/if}
   {#if !appReady}
     <div id="loading">
       <div><span /> <span /> <span /> <span /> <span /></div>
