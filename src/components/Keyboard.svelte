@@ -136,6 +136,7 @@
       transform-origin: top;
       filter: drop-shadow(0px 8px 3px black) saturate(0.4);
       transition: all 0.1s ease;
+      margin: 0 40px;
 
       &.depressed {
         filter: drop-shadow(0px 4px 2px black) saturate(0.6);
@@ -241,16 +242,8 @@
   }}
 />
 
-<div id="pedals">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="23.4"
-    height="61.6"
-    viewBox="0 0 6.2 16.3"
-    on:mousedown={() => ($pedalling.sustain = true)}
-    on:mouseup={() => ($pedalling.sustain = false)}
-    class:depressed={$pedalling.sustain}
-  >
+<svg style="display: none">
+  <symbol id="pedal" viewBox="0 0 6.2 16.3">
     <path
       d="M0 0v-16.2c0-2.5.5-6.1 1.5-9.9 1-4 2-9.3 2-12.2 0-3.6-2.7-8-8.8-8-6.2 0-8.8 4.4-8.8 8 0 3 .9 8.2 2 12.2a40 40 0 0 1 1.5 9.9V0z"
       style="fill:#996a01"
@@ -276,5 +269,28 @@
       style="fill:#fff"
       transform="matrix(.35278 0 0 -.35278 3.1 15.2)"
     />
+  </symbol>
+</svg>
+
+<div id="pedals">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="23.4"
+    height="61.6"
+    on:mousedown={() => ($pedalling.soft = true)}
+    on:mouseup={() => ($pedalling.soft = false)}
+    class:depressed={$pedalling.soft}
+  >
+    <use href="#pedal" />
+  </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="23.4"
+    height="61.6"
+    on:mousedown={() => ($pedalling.sustain = true)}
+    on:mouseup={() => ($pedalling.sustain = false)}
+    class:depressed={$pedalling.sustain}
+  >
+    <use href="#pedal" />
   </svg>
 </div>
