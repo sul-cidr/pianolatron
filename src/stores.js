@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
 import watchMedia from "./mq-store";
 
 const createStore = (defaultValue) => {
@@ -32,6 +32,8 @@ export const pedalling = createStore({
   sustain: false,
   accent: false,
 });
+export const sustain = derived(pedalling, ($pedalling) => $pedalling.sustain);
+
 export const volume = createStore({ master: 1, left: 1, right: 1 });
 
 export const playbackProgress = createStore(0);
