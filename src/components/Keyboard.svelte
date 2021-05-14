@@ -127,21 +127,20 @@
       }
     }
   }
-  #pedals {
-    text-align: center;
+  svg.pedal {
+    filter: drop-shadow(0px 8px 3px black) saturate(0.4);
+    margin: 0 2vw;
+    transform: rotate3d(1, 0, 0, 30deg) scaleX(2);
+    transform-origin: top;
+    transition: all 0.1s ease;
+    width: 2vw;
+    left: calc(50% - 6vw);
+    position: relative;
+    margin-top: -30px;
 
-    svg {
-      filter: drop-shadow(0px 8px 3px black) saturate(0.4);
-      margin: 0 2vw;
-      transform: rotate3d(1, 0, 0, 30deg) scaleX(2) translateY(-50%);
-      transform-origin: top;
-      transition: all 0.1s ease;
-      width: 2vw;
-
-      &.depressed {
-        filter: drop-shadow(0px 4px 2px black) saturate(0.6);
-        transform: rotate3d(0, 0, 0, 0) scaleX(2) translateY(-50%);
-      }
+    &.depressed {
+      filter: drop-shadow(0px 4px 2px black) saturate(0.6);
+      transform: rotate3d(0, 0, 0, 0) scaleX(2);
     }
   }
 </style>
@@ -272,25 +271,25 @@
   </symbol>
 </svg>
 
-<div id="pedals">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="23.4"
-    height="61.6"
-    on:mousedown={() => ($pedalling.soft = true)}
-    on:mouseup={() => ($pedalling.soft = false)}
-    class:depressed={$pedalling.soft}
-  >
-    <use href="#pedal" />
-  </svg>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="23.4"
-    height="61.6"
-    on:mousedown={() => ($pedalling.sustain = true)}
-    on:mouseup={() => ($pedalling.sustain = false)}
-    class:depressed={$pedalling.sustain}
-  >
-    <use href="#pedal" />
-  </svg>
-</div>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="23.4"
+  height="61.6"
+  class="pedal"
+  on:mousedown={() => ($pedalling.soft = true)}
+  on:mouseup={() => ($pedalling.soft = false)}
+  class:depressed={$pedalling.soft}
+>
+  <use href="#pedal" />
+</svg>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="23.4"
+  height="61.6"
+  class="pedal"
+  on:mousedown={() => ($pedalling.sustain = true)}
+  on:mouseup={() => ($pedalling.sustain = false)}
+  class:depressed={$pedalling.sustain}
+>
+  <use href="#pedal" />
+</svg>
