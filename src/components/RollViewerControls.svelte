@@ -63,7 +63,7 @@
   export let minZoomLevel;
   export let strafing;
   export let panByIncrement;
-  export let panInterval;
+  let panInterval;
 
   const { viewport } = openSeadragon;
   let currentZoom = viewport.getZoom();
