@@ -278,6 +278,7 @@
   class="pedal"
   on:mousedown={() => ($pedalling.soft = true)}
   on:mouseup={() => ($pedalling.soft = false)}
+  on:mouseout={() => ($pedalling.soft = false)}
   class:depressed={$pedalling.soft}
 >
   <use href="#pedal" />
@@ -289,6 +290,7 @@
   class="pedal"
   on:mousedown={() => ($pedalling.sustain = true)}
   on:mouseup={() => ($pedalling.sustain = false)}
+  on:mouseout={() => ($pedalling.sustain = false)}
   class:depressed={$pedalling.sustain}
 >
   <use href="#pedal" />
