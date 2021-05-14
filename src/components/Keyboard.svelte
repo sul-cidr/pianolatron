@@ -6,6 +6,8 @@
     display: flow-root;
     margin: 1em;
     aspect-ratio: 10 / 1;
+    z-index: 2;
+    position: relative;
   }
 
   @supports not (aspect-ratio: 10 / 1) {
@@ -125,6 +127,22 @@
       }
     }
   }
+  #pedals {
+    margin-top: -30px;
+    text-align: center;
+
+    svg {
+      transform: rotate3d(1, 0, 0, 30deg) scaleX(2);
+      transform-origin: top;
+      filter: drop-shadow(0px 8px 3px black) saturate(0.4);
+      transition: all 0.1s ease;
+
+      &:hover {
+        filter: drop-shadow(0px 4px 2px black) saturate(0.6);
+        transform: rotate3d(0, 0, 0, 0) scaleX(2);
+      }
+    }
+  }
 </style>
 
 <script>
@@ -220,3 +238,38 @@
     mouseDown = false;
   }}
 />
+
+<div id="pedals">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="23.4"
+    height="61.6"
+    viewBox="0 0 6.2 16.3"
+  >
+    <path
+      d="M0 0v-16.2c0-2.5.5-6.1 1.5-9.9 1-4 2-9.3 2-12.2 0-3.6-2.7-8-8.8-8-6.2 0-8.8 4.4-8.8 8 0 3 .9 8.2 2 12.2a40 40 0 0 1 1.5 9.9V0z"
+      style="fill:#996a01"
+      transform="matrix(.35278 0 0 -.35278 5 0)"
+    />
+    <path
+      d="M0 0c-.4 1.7-.9 3.3-1.1 4.8-.3 2-.3 3.7-.3 5v15.7h-9.8V9.9c0-1.4 0-3.2-.3-5-.2-1.6-.7-3.2-1.1-4.9a61 61 0 0 1-1.8-12.2c0-3.6 2.4-8.2 8-8.2 5.8 0 8.2 4.6 8.2 8.2C1.8-9.2 1-4 0 0"
+      style="fill:#eed072"
+      transform="matrix(.35278 0 0 -.35278 5.3 9)"
+    />
+    <path
+      d="M0 0v-14.9c0-3-.1-7 1-11.4 1-4 1.6-9.3 1.6-12 0-2.2-1.4-6.8-6.8-6.8s-6.8 4.6-6.8 6.8c0 2.7.6 8 1.6 12 1 4.4 1 8.5 1 11.4V0z"
+      style="fill:#d7a735"
+      transform="matrix(.35278 0 0 -.35278 4.6 0)"
+    />
+    <path
+      d="M0 0v1.7c-.2 1.6-.6 1-.8 0-.2-1-1.5-5.3-5.4-5.3-4 0-5.2 4.3-5.5 5.3-.2 1-.6 1.6-.7 0V0c0-2 1.2-6.3 6.2-6.3C-1.3-6.3 0-2 0 0"
+      style="fill:#eed072"
+      transform="matrix(.35278 0 0 -.35278 5.3 13.5)"
+    />
+    <path
+      d="M0 0c.7 0 1.8.2 2.4.5.7.2 1.3.3.8-.4A4.4 4.4 0 0 0 0-1.2c-1.3 0-2.6.6-3.2 1.3-.5.7.1.6.8.4C-1.8.2-.7 0 0 0"
+      style="fill:#fff"
+      transform="matrix(.35278 0 0 -.35278 3.1 15.2)"
+    />
+  </svg>
+</div>
