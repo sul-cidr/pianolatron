@@ -49,6 +49,7 @@
 </style>
 
 <script>
+  import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
     pedalling,
@@ -217,7 +218,7 @@
           {skipToTick}
         />
         {#if overlayKeyboard}
-          <div id="keyboard-overlay">
+          <div id="keyboard-overlay" transition:fade>
             <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
           </div>
         {/if}
