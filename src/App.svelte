@@ -60,6 +60,7 @@
     activeNotes,
     currentTick,
     rollMetadata,
+    overlayKeyboard,
   } from "./stores";
   import {
     midiSamplePlayer,
@@ -82,7 +83,6 @@
   let currentRoll;
   let previousRoll;
   let holesByTickInterval = new IntervalTree();
-  let overlayKeyboard = false;
 
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
@@ -216,7 +216,7 @@
           </p>
         {/if}
         <button
-          on:click={() => (overlayKeyboard = !overlayKeyboard)}
+          on:click={() => ($overlayKeyboard = !$overlayKeyboard)}
         >kb</button>
       {/if}
     </FlexCollapsible>
@@ -227,7 +227,7 @@
           {holesByTickInterval}
           {skipToTick}
         />
-        {#if overlayKeyboard}
+        {#if $overlayKeyboard}
           <div id="keyboard-overlay" transition:fade>
             <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
           </div>
@@ -238,7 +238,7 @@
       </FlexCollapsible>
     {/if}
   </div>
-  {#if !overlayKeyboard}
+  {#if !$overlayKeyboard}
     <div id="keyboard-container" transition:slide>
       <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
     </div>
