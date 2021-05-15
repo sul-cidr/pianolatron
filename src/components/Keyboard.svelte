@@ -136,11 +136,15 @@
 
 <script>
   import { pedalling } from "../stores";
+  import KeyboardControls from "./KeyboardControls.svelte";
 
   export let keyCount = 88;
   export let startNote;
   export let stopNote;
   export let activeNotes;
+
+  let showControls;
+
   const notes = [
     "A",
     "A#",
@@ -184,7 +188,11 @@
   };
 </script>
 
-<div id="keyboard">
+<div
+  id="keyboard"
+  on:mouseenter={() => (showControls = true)}
+  on:mouseleave={() => (showControls = false)}
+>
   <div
     id="keys"
     on:mousedown|preventDefault={({ target }) => {
@@ -222,7 +230,11 @@
       </div>
     {/each}
   </div>
+  {#if showControls}
+    <KeyboardControls />
+  {/if}
 </div>
+
 <svelte:window
   on:mouseup={() => {
     stopPlaying();

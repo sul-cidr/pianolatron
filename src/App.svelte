@@ -215,9 +215,6 @@
             this time. Hole highlighting will not be enabled.
           </p>
         {/if}
-        <button
-          on:click={() => ($overlayKeyboard = !$overlayKeyboard)}
-        >kb</button>
       {/if}
     </FlexCollapsible>
     {#if appReady}
