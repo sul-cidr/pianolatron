@@ -12,5 +12,5 @@
   @return null;
 }
 
-$main-context: base, keyboard, sidebars, sidebar-collapse-labels, footer,
-  overlay-buttons, notifications;
+$main-context: base, keyboard, sidebars, sidebar-collapse-labels,
+  keyboard-overlay, footer, overlay-buttons, notifications;

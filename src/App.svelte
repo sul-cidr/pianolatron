@@ -41,10 +41,10 @@
 
   #keyboard-overlay {
     position: absolute;
-    z-index: 23;
     bottom: 0;
     width: 100%;
     opacity: 0.5;
+    z-index: z($main-context, keyboard-overlay);
   }
 </style>
 
