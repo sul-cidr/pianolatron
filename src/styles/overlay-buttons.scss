@@ -1,0 +1,53 @@
+.overlay-buttons {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  padding: 8px;
+  position: absolute;
+  z-index: 2;
+
+  button {
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0;
+    padding: 0.35em 0.8em;
+    transition: all 0.2s;
+
+    &:focus,
+    &:active {
+      outline: 0;
+    }
+
+    &:hover {
+      outline: 1px solid white;
+    }
+
+    &:active {
+      color: grey;
+    }
+
+    &:disabled {
+      color: grey;
+      cursor: not-allowed;
+    }
+  }
+
+  &.top-center {
+    left: 50%;
+    top: 8px;
+    transform: translateX(-50%);
+  }
+
+  &.middle-right {
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+
+    button {
+      padding: 0.8em 0.35em;
+    }
+  }
+}
