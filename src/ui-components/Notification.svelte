@@ -9,7 +9,7 @@
     position: absolute;
     top: 20%;
     transform: translate(-50%);
-    z-index: 1000;
+    z-index: z($main-context, notifications);
 
     &.error {
       background: rgb(255, 72, 72);

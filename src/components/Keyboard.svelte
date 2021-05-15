@@ -6,7 +6,7 @@
     display: flow-root;
     margin: 1vh 1vw;
     aspect-ratio: 10 / 1;
-    z-index: 2;
+    z-index: z($main-context, keyboard);
     position: relative;
   }
 
@@ -35,7 +35,7 @@
       right: 0;
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7), 1px 0 1px rgba(0, 0, 0, 0.7),
         -1px 0 1px rgba(0, 0, 0, 0.7);
-      z-index: 3;
+      z-index: 1;
     }
 
     div {
@@ -98,7 +98,7 @@
         position: absolute;
         top: $felt-strip-height;
         width: 50%;
-        z-index: 10;
+        z-index: 1;
         transform: translateX(-50%);
       }
 

@@ -29,7 +29,7 @@
       position: absolute;
       top: 50%;
       width: 100%;
-      z-index: 3;
+      z-index: 1;
     }
 
     &::after {
@@ -43,6 +43,7 @@
       right: 0;
       top: 0;
     }
+
     :global(canvas) {
       background: white !important;
     }

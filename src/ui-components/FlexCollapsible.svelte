@@ -20,7 +20,7 @@
     &:hover {
       &:not(.hidden) {
         box-shadow: 2px -3px 3px rgba(0, 0, 0, 0.4);
-        z-index: 99;
+        z-index: z($main-context, sidebars);
 
         &.left {
           box-shadow: -2px -3px 3px rgba(0, 0, 0, 0.4);
@@ -71,7 +71,7 @@
     top: 1em;
     transition: all 0.3s ease;
     width: 40px;
-    z-index: 99;
+    z-index: z($main-context, sidebar-collapse-labels);
 
     &::after {
       content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="white" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="12" x2="20" y2="12" /><line x1="10" y1="12" x2="14" y2="16" /><line x1="10" y1="12" x2="14" y2="8" /><line x1="4" y1="4" x2="4" y2="20" /></svg>');
