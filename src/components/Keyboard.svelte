@@ -12,21 +12,9 @@
 
   @supports not (aspect-ratio: 10 / 1) {
     #keyboard {
-      height: 100%;
+      height: 10vw;
       margin: 0;
       padding: 1vh 1vw;
-
-      &::before {
-        content: "";
-        float: left;
-        padding-top: 10%;
-      }
-
-      &::after {
-        clear: both;
-        content: "";
-        display: block;
-      }
     }
   }
 
