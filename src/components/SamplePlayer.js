@@ -14,16 +14,6 @@ import {
 
 const midiSamplePlayer = new MidiPlayer.Player();
 
-const updatePlayer = (fn) => {
-  if (midiSamplePlayer.isPlaying()) {
-    midiSamplePlayer.pause();
-    fn();
-    midiSamplePlayer.play();
-    return;
-  }
-  fn();
-};
-
 let softPedalOn;
 let accentOn;
 
@@ -37,11 +27,34 @@ volume.subscribe(({ master, right, left }) => {
 });
 
 let tempoMap;
-let currentTempo;
-let tempoRatio;
-tempoControl.subscribe((_tempoRatio) => {
-  tempoRatio = _tempoRatio;
-  updatePlayer(() => midiSamplePlayer.setTempo(currentTempo * tempoRatio));
+let tempoRatio = 1.0;
+
+const getTempoAtTick = (tick) => {
+  if (!tempoMap) return 60;
+  let tempo;
+  let i = 0;
+  while (tempoMap[i][0] <= tick) {
+    [, tempo] = tempoMap[i];
+    i += 1;
+  }
+  return tempo;
+};
+
+const updatePlayer = (fn = () => {}) => {
+  if (midiSamplePlayer.isPlaying()) {
+    midiSamplePlayer.pause();
+    fn();
+    midiSamplePlayer.setTempo(getTempoAtTick(get(currentTick)) * tempoRatio);
+    midiSamplePlayer.play();
+    return;
+  }
+  fn();
+  midiSamplePlayer.setTempo(getTempoAtTick(get(currentTick)) * tempoRatio);
+};
+
+tempoControl.subscribe((newTempo) => {
+  tempoRatio = newTempo;
+  updatePlayer();
 });
 
 const decodeHtmlEntities = (string) =>
@@ -69,8 +82,6 @@ midiSamplePlayer.on("fileLoaded", () => {
   tempoMap = metadataTrack
     .filter((event) => event.name === "Set Tempo")
     .map(({ tick, data }) => [tick, data]);
-
-  [[, currentTempo]] = tempoMap;
 });
 
 const controllerChange = Object.freeze({
@@ -166,7 +177,6 @@ midiSamplePlayer.on(
         }));
       }
     } else if (name === "Set Tempo") {
-      currentTempo = data;
       midiSamplePlayer.setTempo(data * tempoRatio);
     }
   },
