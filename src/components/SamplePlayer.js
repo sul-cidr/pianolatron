@@ -81,7 +81,11 @@ midiSamplePlayer.on("fileLoaded", () => {
 
   tempoMap = metadataTrack
     .filter((event) => event.name === "Set Tempo")
-    .map(({ tick, data }) => [tick, data]);
+    .reduce((_tempoMap, { tick, data }) => {
+      if (!_tempoMap.map(([, _data]) => _data).includes(data))
+        _tempoMap.push([tick, data]);
+      return _tempoMap;
+    }, []);
 });
 
 const controllerChange = Object.freeze({
