@@ -4,27 +4,17 @@
 
   #keyboard {
     display: flow-root;
-    margin: 1em;
+    margin: 1vh 1vw;
     aspect-ratio: 10 / 1;
+    z-index: 2;
+    position: relative;
   }
 
   @supports not (aspect-ratio: 10 / 1) {
     #keyboard {
-      height: 100%;
+      height: 10vw;
       margin: 0;
-      padding: 1em;
-
-      &::before {
-        content: "";
-        float: left;
-        padding-top: 10%;
-      }
-
-      &::after {
-        clear: both;
-        content: "";
-        display: block;
-      }
+      padding: 1vh 1vw;
     }
   }
 
@@ -125,9 +115,27 @@
       }
     }
   }
+  svg.pedal {
+    filter: drop-shadow(0px 8px 3px black) saturate(0.4);
+    margin: 0 4%;
+    transform: rotate3d(1, 0, 0, 30deg);
+    transform-origin: top;
+    transition: all 0.1s ease;
+    left: 38%;
+    position: relative;
+    margin-top: -25px;
+    cursor: pointer;
+
+    &.depressed {
+      filter: drop-shadow(0px 4px 2px black) saturate(0.6);
+      transform: rotate3d(0, 0, 0, 0);
+    }
+  }
 </style>
 
 <script>
+  import { pedalling } from "../stores";
+
   export let keyCount = 88;
   export let startNote;
   export let stopNote;
@@ -220,3 +228,53 @@
     mouseDown = false;
   }}
 />
+
+<svg style="display: none">
+  <symbol id="pedal" viewBox="0 0 12.4 16.3">
+    <path
+      d="M10 0v5.7c0 .9.3 2.2 1 3.5.7 1.4 1.4 3.3 1.4 4.3 0 1.3-1.9 2.8-6.2 2.8-4.4 0-6.2-1.5-6.2-2.8 0-1 .6-2.9 1.4-4.3a28.2 14.1 0 0 0 1-3.5V0z"
+      style="fill:#996a01"
+    />
+    <path
+      d="m10.5 9-.7-1.7c-.2-.7-.2-1.3-.2-1.8V0h-7v5.5c0 .5 0 1.1-.2 1.8L1.7 9a43 21.5 0 0 0-1.3 4.3c0 1.3 1.7 2.9 5.6 2.9 4.1 0 5.8-1.6 5.8-3 0-1-.5-2.8-1.3-4.2"
+      style="fill:#eed072"
+    />
+    <path
+      d="M9.1 0v5.2a8 8 0 0 0 .8 4c.7 1.5 1 3.3 1 4.3 0 .8-.9 2.4-4.7 2.4-3.8 0-4.8-1.6-4.8-2.4 0-1 .4-2.8 1.1-4.2.7-1.6.7-3 .7-4V0z"
+      style="fill:#d7a735"
+    />
+    <path
+      d="M10.5 13.5v-.6c0-.6-.4-.4-.5 0-.2.3-1 1.9-3.8 1.9s-3.7-1.6-4-2c0-.3-.3-.5-.4 0v.7c0 .7.8 2.2 4.4 2.2 3.4 0 4.3-1.5 4.3-2.2"
+      style="fill:#eed072"
+    />
+    <path
+      d="M6.1 15.2c.5 0 1.3 0 1.7-.2.5 0 1 0 .6.2a3.1 1.6 0 0 1-2.3.4c-.9 0-1.8-.2-2.2-.4-.4-.3 0-.3.6-.2l1.6.2"
+      style="fill:#fff"
+    />
+  </symbol>
+</svg>
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="46.9"
+  height="61.6"
+  class="pedal"
+  on:mousedown={() => ($pedalling.soft = true)}
+  on:mouseup={() => ($pedalling.soft = false)}
+  on:mouseout={() => ($pedalling.soft = false)}
+  class:depressed={$pedalling.soft}
+>
+  <use href="#pedal" />
+</svg>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="46.9"
+  height="61.6"
+  class="pedal"
+  on:mousedown={() => ($pedalling.sustain = true)}
+  on:mouseup={() => ($pedalling.sustain = false)}
+  on:mouseout={() => ($pedalling.sustain = false)}
+  class:depressed={$pedalling.sustain}
+>
+  <use href="#pedal" />
+</svg>
