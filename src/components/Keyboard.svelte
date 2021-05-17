@@ -125,6 +125,7 @@
     position: relative;
     margin-top: -25px;
     cursor: pointer;
+    width: 3%;
 
     &.depressed {
       filter: drop-shadow(0px 4px 2px black) saturate(0.6);
