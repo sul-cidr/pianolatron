@@ -37,11 +37,11 @@ volume.subscribe(({ master, right, left }) => {
 });
 
 let tempoMap;
-let tempoRatio = 1.0;
-let tempoControlValue;
-tempoControl.subscribe((newTempo) => {
-  tempoControlValue = newTempo;
-  updatePlayer(() => midiSamplePlayer.setTempo(tempoControlValue * tempoRatio));
+let currentTempo;
+let tempoRatio;
+tempoControl.subscribe((_tempoRatio) => {
+  tempoRatio = _tempoRatio;
+  updatePlayer(() => midiSamplePlayer.setTempo(currentTempo * tempoRatio));
 });
 
 const decodeHtmlEntities = (string) =>
@@ -69,6 +69,8 @@ midiSamplePlayer.on("fileLoaded", () => {
   tempoMap = metadataTrack
     .filter((event) => event.name === "Set Tempo")
     .map(({ tick, data }) => [tick, data]);
+
+  [[, currentTempo]] = tempoMap;
 });
 
 const controllerChange = Object.freeze({
@@ -164,8 +166,8 @@ midiSamplePlayer.on(
         }));
       }
     } else if (name === "Set Tempo") {
-      tempoRatio = 1.0 + (data - tempoMap[0][1]) / tempoMap[0][1];
-      midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
+      currentTempo = data;
+      midiSamplePlayer.setTempo(data * tempoRatio);
     }
   },
 );

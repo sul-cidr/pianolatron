@@ -61,11 +61,11 @@
   </div>
   <div class="control">
     <span>Tempo:</span>
-    <span>{$tempoControl}</span>
+    <span>{($tempoControl * 100).toFixed(0)}%</span>
     <RangeSlider
-      min="1"
-      max="180"
-      step="1"
+      min="0.1"
+      max="4"
+      step=".001"
       bind:value={$tempoControl}
       name="tempo"
     />
