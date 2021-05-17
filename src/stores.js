@@ -1,32 +1,54 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
+import watchMedia from "./mq-store";
 
-export const tempoControl = writable(60);
-export const rollMetadata = writable({});
-export const pedalling = writable({
+const createStore = (defaultValue) => {
+  const { set, subscribe, update } = writable(defaultValue);
+  return {
+    reset: () => set(defaultValue),
+    set,
+    subscribe,
+    update,
+  };
+};
+
+const createSetStore = () => {
+  const { subscribe, update, set } = writable(new Set());
+  return {
+    subscribe,
+    add: (el) => update((wrappedSet) => wrappedSet.add(el)),
+    delete: (el) =>
+      update((wrappedSet) => {
+        wrappedSet.delete(el);
+        return wrappedSet;
+      }),
+    reset: () => set(new Set()),
+  };
+};
+
+export const tempoControl = createStore(60);
+export const rollMetadata = createStore({});
+export const pedalling = createStore({
   soft: false,
   sustain: false,
   accent: false,
 });
-export const volume = writable({ master: 1, left: 1, right: 1 });
+export const sustain = derived(pedalling, ($pedalling) => $pedalling.sustain);
 
-export const playbackProgress = writable(0);
-export const currentTick = writable(0);
+export const volume = createStore({ master: 1, left: 1, right: 1 });
 
-export const activeNotes = (() => {
-  const { subscribe, update, set } = writable(new Set());
-  return {
-    subscribe,
-    add: (el) => update((_activeNotes) => _activeNotes.add(el)),
-    delete: (el) =>
-      update((_activeNotes) => {
-        _activeNotes.delete(el);
-        return _activeNotes;
-      }),
-    reset: () => set(new Set()),
-  };
-})();
+export const playbackProgress = createStore(0);
+export const currentTick = createStore(0);
 
-export const userSettings = writable({
+export const activeNotes = createSetStore();
+
+export const userSettings = createStore({
   theme: "cardinal",
   activeNoteDetails: false,
+});
+
+export const media = watchMedia({
+  narrow: "(max-width: 849px)",
+  normal: "(min-width: 850px)",
+  wide: "(min-width: 1400px)",
+  hover: "(hover: hover)",
 });
