@@ -121,7 +121,6 @@
     transform: rotate3d(1, 0, 0, 30deg);
     transform-origin: top;
     transition: all 0.1s ease;
-    width: 2%;
     left: 38%;
     position: relative;
     margin-top: -30px;
