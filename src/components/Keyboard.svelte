@@ -123,7 +123,7 @@
     transition: all 0.1s ease;
     left: 38%;
     position: relative;
-    margin-top: -30px;
+    margin-top: -25px;
     cursor: pointer;
 
     &.depressed {
