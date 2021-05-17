@@ -36,6 +36,7 @@
 
   #keyboard-container {
     flex: 0 1 auto;
+    user-select: none;
   }
 </style>
 
