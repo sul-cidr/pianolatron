@@ -96,7 +96,7 @@ function create_fragment(ctx) {
 			attr(svg0, "fill", "none");
 			attr(svg0, "stroke-linecap", "round");
 			attr(svg0, "stroke-linejoin", "round");
-			button0.disabled = button0_disabled_value = /*currentZoom*/ ctx[4] >= /*maxZoomLevel*/ ctx[1];
+			button0.disabled = button0_disabled_value = /*currentZoom*/ ctx[4] >= /*maxZoomLevel*/ ctx[0];
 			attr(button0, "class", "svelte-paudf8");
 			attr(line2, "x1", "5");
 			attr(line2, "y1", "12");
@@ -111,7 +111,7 @@ function create_fragment(ctx) {
 			attr(svg1, "fill", "none");
 			attr(svg1, "stroke-linecap", "round");
 			attr(svg1, "stroke-linejoin", "round");
-			button1.disabled = button1_disabled_value = /*currentZoom*/ ctx[4] <= /*minZoomLevel*/ ctx[2];
+			button1.disabled = button1_disabled_value = /*currentZoom*/ ctx[4] <= /*minZoomLevel*/ ctx[1];
 			attr(button1, "class", "svelte-paudf8");
 			attr(polyline0, "points", "7 8 3 12 7 16");
 			attr(polyline1, "points", "17 8 21 12 17 16");
@@ -180,11 +180,11 @@ function create_fragment(ctx) {
 			}
 		},
 		p(ctx, [dirty]) {
-			if (!current || dirty & /*currentZoom, maxZoomLevel*/ 18 && button0_disabled_value !== (button0_disabled_value = /*currentZoom*/ ctx[4] >= /*maxZoomLevel*/ ctx[1])) {
+			if (!current || dirty & /*currentZoom, maxZoomLevel*/ 17 && button0_disabled_value !== (button0_disabled_value = /*currentZoom*/ ctx[4] >= /*maxZoomLevel*/ ctx[0])) {
 				button0.disabled = button0_disabled_value;
 			}
 
-			if (!current || dirty & /*currentZoom, minZoomLevel*/ 20 && button1_disabled_value !== (button1_disabled_value = /*currentZoom*/ ctx[4] <= /*minZoomLevel*/ ctx[2])) {
+			if (!current || dirty & /*currentZoom, minZoomLevel*/ 18 && button1_disabled_value !== (button1_disabled_value = /*currentZoom*/ ctx[4] <= /*minZoomLevel*/ ctx[1])) {
 				button1.disabled = button1_disabled_value;
 			}
 
@@ -232,7 +232,7 @@ function instance($$self, $$props, $$invalidate) {
 	let { minZoomLevel } = $$props;
 	let { strafing } = $$props;
 	let { panByIncrement } = $$props;
-	let { panInterval } = $$props;
+	let panInterval;
 	const { viewport } = openSeadragon;
 	let currentZoom = viewport.getZoom();
 
@@ -262,28 +262,27 @@ function instance($$self, $$props, $$invalidate) {
 
 	const mousedown_handler = () => {
 		panByIncrement(false);
-		$$invalidate(0, panInterval = setInterval(() => panByIncrement(false), 100));
+		$$invalidate(3, panInterval = setInterval(() => panByIncrement(false), 100));
 	};
 
 	const mousedown_handler_1 = () => {
 		panByIncrement(true);
-		$$invalidate(0, panInterval = setInterval(() => panByIncrement(true), 100));
+		$$invalidate(3, panInterval = setInterval(() => panByIncrement(true), 100));
 	};
 
 	$$self.$$set = $$props => {
 		if ("openSeadragon" in $$props) $$invalidate(8, openSeadragon = $$props.openSeadragon);
-		if ("maxZoomLevel" in $$props) $$invalidate(1, maxZoomLevel = $$props.maxZoomLevel);
-		if ("minZoomLevel" in $$props) $$invalidate(2, minZoomLevel = $$props.minZoomLevel);
+		if ("maxZoomLevel" in $$props) $$invalidate(0, maxZoomLevel = $$props.maxZoomLevel);
+		if ("minZoomLevel" in $$props) $$invalidate(1, minZoomLevel = $$props.minZoomLevel);
 		if ("strafing" in $$props) $$invalidate(7, strafing = $$props.strafing);
-		if ("panByIncrement" in $$props) $$invalidate(3, panByIncrement = $$props.panByIncrement);
-		if ("panInterval" in $$props) $$invalidate(0, panInterval = $$props.panInterval);
+		if ("panByIncrement" in $$props) $$invalidate(2, panByIncrement = $$props.panByIncrement);
 	};
 
 	return [
-		panInterval,
 		maxZoomLevel,
 		minZoomLevel,
 		panByIncrement,
+		panInterval,
 		currentZoom,
 		viewport,
 		centerRoll,
@@ -304,11 +303,10 @@ class RollViewerControls extends SvelteComponent {
 
 		init(this, options, instance, create_fragment, safe_not_equal, {
 			openSeadragon: 8,
-			maxZoomLevel: 1,
-			minZoomLevel: 2,
+			maxZoomLevel: 0,
+			minZoomLevel: 1,
 			strafing: 7,
-			panByIncrement: 3,
-			panInterval: 0
+			panByIncrement: 2
 		});
 	}
 }

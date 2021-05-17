@@ -546,17 +546,17 @@ function instance($$self, $$props, $$invalidate) {
 	const stopApp = () => {
 		midiSamplePlayer.stop();
 		stopAllNotes();
-		playbackProgress.set(0);
-		currentTick.set(0);
+		playbackProgress.reset();
+		currentTick.reset();
 		activeNotes.reset();
-		pedalling.set({ soft: false, sustain: false });
+		pedalling.reset();
 	};
 
 	const resetApp = () => {
 		mididataReady = false;
 		$$invalidate(0, appReady = false);
 		stopApp();
-		tempoControl.set(60);
+		tempoControl.reset();
 		volume.update(val => ({ ...val, left: 1, right: 1 }));
 		$$invalidate(2, holesByTickInterval = new IntervalTree());
 	};
