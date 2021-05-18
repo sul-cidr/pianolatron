@@ -31,7 +31,7 @@ select {
 }
 
 body {
-  background: var(--background-color);
+  @include background;
   font-family: $secondary-typeface;
   min-height: 100vh;
   text-rendering: optimizeSpeed;
@@ -39,6 +39,7 @@ body {
 
   --background-color: #{$cloud};
   --primary-accent: #{$cardinal};
+  --background-texture: url(#{$texture-url});
 
   &.blue {
     --background-color: aliceblue;

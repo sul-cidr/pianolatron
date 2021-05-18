@@ -33,7 +33,7 @@
     }
 
     &::after {
-      background-color: var(--background-color);
+      @include background;
       bottom: 0;
       content: " ";
       left: 0;

@@ -4,4 +4,12 @@ $secondary-typeface: sans-serif;
 $cloud: #dad7cb; // Stanford's "cloud"
 $cardinal: #8c1515; // "cardinal"
 
+$texture-url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAMAAAAocOYLAAAANlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC3dmhyAAAAEnRSTlMYFxkWGhUbExQcHRIeER8PIA73vaSEAAAB3ElEQVQoFQXBh4HkOBAEsHJtSEmz9/kn+wAauv2O+gq9Hz4OB1tEAAnncPWe9g1P4WFs1BRhi8Lv8AqWSddDcecTz3NHryy0oijmf2CtjjwFl9QRJKSu74Fgl/0ExpjYbp+8wCtCjvtzk64+roqUH8oDfAgbYBlboqb+ctNJIx0Cmj8sgRhTBXwEGej2uXxw6Keqy3KVxmwfxgJCV8CHSD46NNbaSscJzVQTsKEqrtlSd0pvn7e7vCAB6LAi5jKv7gkVFjMrP0ZRlg+6VYcvQjeePxcAZ1DU9MEVcCDxhI2akZGawkfIbrwBncABsb1VU7BBvH1eFtL66eEGi60hVM98ODr5OVe3y3A1xqky58uMYEo83EtCKdqAA3sJyAj6x3suNSbpsrDd0ZAlI67GLftT1VL9QDWW1LoJeNr8yAuqVBcAJhH7WincMrw9T2Ecl9Th/ZdOp7NAIo+xPnA9S7N4Ql0wNyiK0mwKy4g5GKeBHPUIBBvbRNWWpHvUuiCaQz2o0RIbbBdPGq1F3sYcpQZZ1tTag9t9CrjZF4yrHga1XZ/Ke/7dVz1unm16WQEIuBKyeU13OR2sJzOIm/h4haPJi1Bx6QN2fauKFcQ3Hb+I5Y96ahWh9YcnnP8BI+wQR1WzuvYAAAAASUVORK5CYII=";
+
 @import "./z-index";
+
+@mixin background {
+  background: var(--background-color);
+  background-image: var(--background-texture);
+  background-attachment: fixed;
+}
