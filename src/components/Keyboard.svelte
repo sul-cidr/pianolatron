@@ -9,15 +9,6 @@
     z-index: z($main-context, keyboard);
     position: relative;
 
-    :global(.overlay-buttons) {
-      opacity: 0;
-      transition: all 0.3s ease;
-
-      &:hover {
-        opacity: 1;
-      }
-    }
-
     &:hover :global(.overlay-buttons) {
       opacity: 1;
     }
