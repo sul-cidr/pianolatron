@@ -16,15 +16,19 @@
 
   @supports not (aspect-ratio: 10 / 1) {
     #keyboard {
-      height: 10vw;
+      padding-top: 10%;
+    }
+    div#keys {
+      top: 0;
     }
   }
 
   div#keys {
-    position: relative;
+    position: absolute;
     display: flex;
     padding: 0;
     height: 100%;
+    width: 100%;
 
     &::before {
       background-color: var(--primary-accent);
