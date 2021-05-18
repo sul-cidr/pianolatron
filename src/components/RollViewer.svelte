@@ -29,7 +29,7 @@
       position: absolute;
       top: 50%;
       width: 100%;
-      z-index: 3;
+      z-index: 1;
     }
 
     &::after {
@@ -43,6 +43,7 @@
       right: 0;
       top: 0;
     }
+
     :global(canvas) {
       background: white !important;
     }
@@ -66,6 +67,7 @@
           animation: mark-recede 0.5s ease-in-out;
           background-color: $hole-highlight-color;
           box-shadow: 0 0 5px $hole-highlight-color;
+          display: inline-block;
         }
       }
 
@@ -78,6 +80,7 @@
         z-index: 1;
 
         &::before {
+          height: 0;
           position: relative;
         }
 

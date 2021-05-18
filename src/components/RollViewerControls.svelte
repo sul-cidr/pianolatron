@@ -1,58 +1,3 @@
-<style lang="scss">
-  div {
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 4px;
-    padding: 8px;
-    position: absolute;
-    z-index: 25;
-
-    button {
-      background: none;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      margin: 0;
-      padding: 0.35em 0.8em;
-      transition: all 0.2s;
-
-      &:focus,
-      &:active {
-        outline: 0;
-      }
-
-      &:hover {
-        outline: 1px solid white;
-      }
-
-      &:active {
-        color: grey;
-      }
-
-      &:disabled {
-        color: grey;
-        cursor: not-allowed;
-      }
-    }
-  }
-
-  #roll-viewer-controls {
-    left: 50%;
-    top: 8px;
-    transform: translateX(-50%);
-  }
-  #pan-controls {
-    top: 50%;
-    right: 8px;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-
-    button {
-      padding: 0.8em 0.35em;
-    }
-  }
-</style>
-
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
@@ -87,7 +32,7 @@
   });
 </script>
 
-<div id="roll-viewer-controls" transition:fade>
+<div class="overlay-buttons top-center" transition:fade>
   <button
     disabled={currentZoom >= maxZoomLevel}
     on:click={() => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel))}
@@ -149,7 +94,7 @@
     </svg>
   </button>
 </div>
-<div id="pan-controls" transition:fade>
+<div class="overlay-buttons middle-right" transition:fade>
   <button
     disabled={false}
     on:mousedown={() => {

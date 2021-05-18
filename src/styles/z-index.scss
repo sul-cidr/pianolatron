@@ -1,0 +1,16 @@
+// Based on an idea from:
+// https://www.smashingmagazine.com/2014/06/sassy-z-index-management-for-complex-layouts/
+
+@function z($list, $element) {
+  $z-index: index($list, $element);
+
+  @if $z-index {
+    @return $z-index;
+  }
+
+  @warn 'There is no item "#{$element}" in this list; choose one of: #{$list}';
+  @return null;
+}
+
+$main-context: base, keyboard, sidebars, sidebar-collapse-labels, footer,
+  overlay-buttons, notifications;
