@@ -38,7 +38,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (191:8) {#each key as { title, note }}
+// (192:8) {#each key as { title, note }}
 function create_each_block_1(ctx) {
 	let span;
 	let span_title_value;
@@ -49,7 +49,7 @@ function create_each_block_1(ctx) {
 			span = element("span");
 			attr(span, "title", span_title_value = /*title*/ ctx[26]);
 			attr(span, "data-key", span_data_key_value = /*note*/ ctx[27]);
-			attr(span, "class", "svelte-1skmtfb");
+			attr(span, "class", "svelte-1kxl7ga");
 			toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[27]) || /*playing*/ ctx[4].has(/*note*/ ctx[27]));
 		},
 		m(target, anchor) {
@@ -66,7 +66,7 @@ function create_each_block_1(ctx) {
 	};
 }
 
-// (189:4) {#each keys as key}
+// (190:4) {#each keys as key}
 function create_each_block(ctx) {
 	let div;
 	let t;
@@ -86,7 +86,7 @@ function create_each_block(ctx) {
 			}
 
 			t = space();
-			attr(div, "class", "svelte-1skmtfb");
+			attr(div, "class", "svelte-1kxl7ga");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -178,9 +178,9 @@ function create_fragment(ctx) {
 			svg2 = svg_element("svg");
 			use1 = svg_element("use");
 			attr(div0, "id", "keys");
-			attr(div0, "class", "svelte-1skmtfb");
+			attr(div0, "class", "svelte-1kxl7ga");
 			attr(div1, "id", "keyboard");
-			attr(div1, "class", "svelte-1skmtfb");
+			attr(div1, "class", "svelte-1kxl7ga");
 			attr(path0, "d", "M10 0v5.7c0 .9.3 2.2 1 3.5.7 1.4 1.4 3.3 1.4 4.3 0 1.3-1.9 2.8-6.2 2.8-4.4 0-6.2-1.5-6.2-2.8 0-1 .6-2.9 1.4-4.3a28.2 14.1 0 0 0 1-3.5V0z");
 			set_style(path0, "fill", "#996a01");
 			attr(path1, "d", "m10.5 9-.7-1.7c-.2-.7-.2-1.3-.2-1.8V0h-7v5.5c0 .5 0 1.1-.2 1.8L1.7 9a43 21.5 0 0 0-1.3 4.3c0 1.3 1.7 2.9 5.6 2.9 4.1 0 5.8-1.6 5.8-3 0-1-.5-2.8-1.3-4.2");
@@ -198,13 +198,13 @@ function create_fragment(ctx) {
 			attr(svg1, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg1, "width", "46.9");
 			attr(svg1, "height", "61.6");
-			attr(svg1, "class", "pedal svelte-1skmtfb");
+			attr(svg1, "class", "pedal svelte-1kxl7ga");
 			toggle_class(svg1, "depressed", /*$pedalling*/ ctx[6].soft);
 			attr(use1, "href", "#pedal");
 			attr(svg2, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg2, "width", "46.9");
 			attr(svg2, "height", "61.6");
-			attr(svg2, "class", "pedal svelte-1skmtfb");
+			attr(svg2, "class", "pedal svelte-1kxl7ga");
 			toggle_class(svg2, "depressed", /*$pedalling*/ ctx[6].sustain);
 		},
 		m(target, anchor) {
