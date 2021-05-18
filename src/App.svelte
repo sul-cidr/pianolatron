@@ -189,7 +189,7 @@
       });
 
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
-      ({ 1: metadataJson }) => {
+      ([, metadataJson]) => {
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
         if (metadataJson.holeData)
           buildHolesIntervalTree(metadataJson.holeData);
