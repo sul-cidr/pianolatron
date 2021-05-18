@@ -5,6 +5,7 @@ import { get } from "../_snowpack/pkg/svelte/store.js";
 import {
   rollMetadata,
   pedalling,
+  sustain,
   volume,
   tempoControl,
   activeNotes,
@@ -25,10 +26,6 @@ const updatePlayer = (fn) => {
 
 let softPedalOn;
 let accentOn;
-pedalling.subscribe(({ soft, accent }) => {
-  softPedalOn = soft;
-  accentOn = accent;
-});
 
 let masterVolumeRatio;
 let leftVolumeRatio;
@@ -100,6 +97,19 @@ const piano = new Piano({
 
 const pianoReady = piano.load();
 
+sustain.subscribe((_sustain) => {
+  if (_sustain) {
+    piano.pedalDown();
+  } else {
+    piano.pedalUp();
+  }
+});
+
+pedalling.subscribe(({ soft, accent }) => {
+  softPedalOn = soft;
+  accentOn = accent;
+});
+
 const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
   const modifiedVelocity =
     (velocity / 128) *
@@ -119,6 +129,7 @@ const stopNote = (noteNumber) => piano.keyUp({ midi: noteNumber });
 
 const stopAllNotes = () => {
   piano.pedalUp();
+  if (get(sustain)) piano.pedalDown();
   get(activeNotes).forEach((note) => stopNote(note));
 };
 

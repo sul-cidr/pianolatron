@@ -108,7 +108,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (187:8) {#if !holesByTickInterval.count}
+// (188:8) {#if !holesByTickInterval.count}
 function create_if_block_3(ctx) {
 	let p;
 
@@ -119,7 +119,7 @@ function create_if_block_3(ctx) {
 			p.innerHTML = `Note:<br/>Hole visualization data is not available for this roll at
             this time. Hole highlighting will not be enabled.`;
 
-			attr(p, "class", "svelte-naqm83");
+			attr(p, "class", "svelte-1uyotfa");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -130,7 +130,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (183:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (184:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -220,7 +220,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (195:4) {#if appReady}
+// (196:4) {#if appReady}
 function create_if_block_1(ctx) {
 	let div;
 	let rollviewer;
@@ -253,7 +253,7 @@ function create_if_block_1(ctx) {
 			t = space();
 			create_component(flexcollapsible.$$.fragment);
 			attr(div, "id", "roll");
-			attr(div, "class", "svelte-naqm83");
+			attr(div, "class", "svelte-1uyotfa");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -295,7 +295,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (203:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (204:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -332,7 +332,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (211:2) {#if !appReady}
+// (212:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -344,7 +344,7 @@ function create_if_block(ctx) {
       Loading resources...`;
 
 			attr(div1, "id", "loading");
-			attr(div1, "class", "svelte-naqm83");
+			attr(div1, "class", "svelte-1uyotfa");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -405,11 +405,11 @@ function create_fragment(ctx) {
 			if (if_block1) if_block1.c();
 			t3 = space();
 			create_component(notification.$$.fragment);
-			attr(div0, "class", "svelte-naqm83");
+			attr(div0, "class", "svelte-1uyotfa");
 			attr(div1, "id", "keyboard-container");
-			attr(div1, "class", "svelte-naqm83");
+			attr(div1, "class", "svelte-1uyotfa");
 			attr(div2, "id", "app");
-			attr(div2, "class", "svelte-naqm83");
+			attr(div2, "class", "svelte-1uyotfa");
 		},
 		m(target, anchor) {
 			insert(target, div2, anchor);

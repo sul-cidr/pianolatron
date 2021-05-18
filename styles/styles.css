@@ -113,6 +113,7 @@ footer {
   left: 0;
   opacity: 0.2;
   padding: 0.4em 1em;
+  pointer-events: none;
   position: absolute;
   transition: all 0.3s ease;
   width: 100vw;
@@ -134,6 +135,7 @@ footer a {
   align-items: center;
   line-height: 25px;
   gap: 0.25em;
+  pointer-events: auto;
 }
 footer a:hover {
   text-decoration: underline;
