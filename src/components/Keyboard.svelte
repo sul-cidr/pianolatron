@@ -17,8 +17,6 @@
   @supports not (aspect-ratio: 10 / 1) {
     #keyboard {
       height: 10vw;
-      margin: 0;
-      padding: 1vh 1vw;
     }
   }
 
