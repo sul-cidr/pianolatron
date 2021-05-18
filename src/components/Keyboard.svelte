@@ -8,6 +8,19 @@
     aspect-ratio: 10 / 1;
     z-index: z($main-context, keyboard);
     position: relative;
+
+    :global(.overlay-buttons) {
+      opacity: 0;
+      transition: all 0.3s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &:hover :global(.overlay-buttons) {
+      opacity: 1;
+    }
   }
 
   @supports not (aspect-ratio: 10 / 1) {
@@ -143,8 +156,6 @@
   export let stopNote;
   export let activeNotes;
 
-  let showControls;
-
   const notes = [
     "A",
     "A#",
@@ -188,11 +199,7 @@
   };
 </script>
 
-<div
-  id="keyboard"
-  on:mouseenter={() => (showControls = true)}
-  on:mouseleave={() => (showControls = false)}
->
+<div id="keyboard">
   <div
     id="keys"
     on:mousedown|preventDefault={({ target }) => {
@@ -230,9 +237,7 @@
       </div>
     {/each}
   </div>
-  {#if showControls}
-    <KeyboardControls />
-  {/if}
+  <KeyboardControls />
 </div>
 
 <svelte:window
