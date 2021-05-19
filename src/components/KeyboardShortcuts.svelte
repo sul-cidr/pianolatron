@@ -21,11 +21,11 @@
         break;
 
       case keyMap.VOLUME_UP:
-        $volume.master += 0.1;
+        $volume.master = Math.round(($volume.master + 0.1) * 10) / 10;
         break;
 
       case keyMap.VOLUME_DOWN:
-        $volume.master -= 0.1;
+        $volume.master = Math.round(($volume.master - 0.1) * 10) / 10;
         break;
 
       // no default
