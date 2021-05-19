@@ -54,7 +54,8 @@
   import IntervalTree from "node-interval-tree";
   import {
     pedalling,
-    volume,
+    bassVolume,
+    trebleVolume,
     tempoControl,
     playbackProgress,
     activeNotes,
@@ -140,7 +141,8 @@
     appReady = false;
     stopApp();
     tempoControl.reset();
-    volume.update((val) => ({ ...val, left: 1, right: 1 }));
+    bassVolume.reset();
+    trebleVolume.reset();
     holesByTickInterval = new IntervalTree();
   };
 

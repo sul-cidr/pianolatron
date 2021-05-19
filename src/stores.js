@@ -34,7 +34,9 @@ export const pedalling = createStore({
 });
 export const sustain = derived(pedalling, ($pedalling) => $pedalling.sustain);
 
-export const volume = createStore({ master: 1, left: 1, right: 1 });
+export const volume = createStore(1);
+export const bassVolume = createStore(1);
+export const trebleVolume = createStore(1);
 
 export const playbackProgress = createStore(0);
 export const currentTick = createStore(0);

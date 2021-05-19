@@ -36,11 +36,11 @@
         break;
 
       case keyMap.VOLUME_UP:
-        $volume.master = enforcePrecision(clamp($volume.master + 0.1, VOLUME_MIN, VOLUME_MAX), 1);
+        $volume = enforcePrecision(clamp($volume + 0.1, VOLUME_MIN, VOLUME_MAX), 1);
         break;
 
       case keyMap.VOLUME_DOWN:
-        $volume.master = enforcePrecision(clamp($volume.master - 0.1, VOLUME_MIN, VOLUME_MAX), 1);
+        $volume = enforcePrecision(clamp($volume - 0.1, VOLUME_MIN, VOLUME_MAX), 1);
         break;
 
       case keyMap.TEMPO_UP:
