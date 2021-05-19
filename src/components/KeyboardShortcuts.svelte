@@ -59,26 +59,32 @@
   on:keydown={(event) => {
     switch (event.code) {
       case keyMap.SOFT:
+        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         $pedalling.soft = true;
         break;
 
       case keyMap.SUSTAIN:
+        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         $pedalling.sustain = true;
         break;
 
       case keyMap.VOLUME_UP:
+        event.preventDefault();
         increment(config.volume, event);
         break;
 
       case keyMap.VOLUME_DOWN:
+        event.preventDefault();
         decrement(config.volume, event);
         break;
 
       case keyMap.TEMPO_UP:
+        event.preventDefault();
         increment(config.tempo, event);
         break;
 
       case keyMap.TEMPO_DOWN:
+        event.preventDefault();
         decrement(config.tempo, event);
         break;
 
