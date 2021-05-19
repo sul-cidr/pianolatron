@@ -1,4 +1,5 @@
 <script>
+  import { get } from "svelte/store";
   import { pedalling, volume, tempoControl } from "../stores";
 
   const keyMap = Object.freeze({
@@ -10,11 +11,26 @@
     TEMPO_DOWN: "KeyW",
   });
 
-  const VOLUME_MIN = 0;
-  const VOLUME_MAX = 4;
-
-  const TEMPO_MIN = 0.1;
-  const TEMPO_MAX = 4;
+  const config = {
+    volume: {
+      store: volume,
+      min: 0,
+      max: 4,
+      delta: 0.1,
+      shiftDelta: 0.4,
+      ctrlDelta: 0.05,
+      precision: 1,
+    },
+    tempo: {
+      store: tempoControl,
+      min: 0.1,
+      max: 4,
+      delta: 0.05,
+      shiftDelta: 0.1,
+      ctrlDelta: 0.01,
+      precision: 2,
+    },
+  };
 
   const enforcePrecision = (value, precision) => {
     const multiplier = 10 ** (precision || 0);
@@ -22,11 +38,26 @@
   };
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  const updateStore = (
+    { store, min, max, delta, shiftDelta, ctrlDelta, precision },
+    { shiftKey, ctrlKey },
+    increment,
+  ) => {
+    const d =
+      (increment ? 1 : -1) *
+      ((shiftKey && shiftDelta) || (ctrlKey && ctrlDelta) || delta);
+
+    store.set(enforcePrecision(clamp(get(store) + d, min, max), precision));
+  };
+
+  const increment = (...args) => updateStore(...args, true);
+  const decrement = (...args) => updateStore(...args, false);
 </script>
 
 <svelte:window
-  on:keydown={({ code }) => {
-    switch (code) {
+  on:keydown={(event) => {
+    switch (event.code) {
       case keyMap.SOFT:
         $pedalling.soft = true;
         break;
@@ -36,19 +67,19 @@
         break;
 
       case keyMap.VOLUME_UP:
-        $volume = enforcePrecision(clamp($volume + 0.1, VOLUME_MIN, VOLUME_MAX), 1);
+        increment(config.volume, event);
         break;
 
       case keyMap.VOLUME_DOWN:
-        $volume = enforcePrecision(clamp($volume - 0.1, VOLUME_MIN, VOLUME_MAX), 1);
+        decrement(config.volume, event);
         break;
 
       case keyMap.TEMPO_UP:
-        $tempoControl = enforcePrecision(clamp($tempoControl + 0.01, TEMPO_MIN, TEMPO_MAX), 2);
+        increment(config.tempo, event);
         break;
 
       case keyMap.TEMPO_DOWN:
-        $tempoControl = enforcePrecision(clamp($tempoControl - 0.01, TEMPO_MIN, TEMPO_MAX), 2);
+        decrement(config.tempo, event);
         break;
 
       // no default
