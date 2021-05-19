@@ -74,6 +74,7 @@
   import RollDetails from "./components/RollDetails.svelte";
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
+  import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
@@ -242,4 +243,5 @@
     </div>
   {/if}
 </div>
+<KeyboardShortcuts />
 <Notification />
