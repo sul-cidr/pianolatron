@@ -9,6 +9,11 @@
     TEMPO_UP: "KeyE",
     TEMPO_DOWN: "KeyW",
   });
+
+  const enforcePrecision = (value, precision) => {
+    const multiplier = 10 ** (precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+  };
 </script>
 
 <svelte:window
@@ -23,19 +28,19 @@
         break;
 
       case keyMap.VOLUME_UP:
-        $volume.master = Math.round(($volume.master + 0.1) * 10) / 10;
+        $volume.master = enforcePrecision($volume.master + 0.1, 1);
         break;
 
       case keyMap.VOLUME_DOWN:
-        $volume.master = Math.round(($volume.master - 0.1) * 10) / 10;
+        $volume.master = enforcePrecision($volume.master - 0.1, 1);
         break;
 
       case keyMap.TEMPO_UP:
-        $tempoControl = Math.round(($tempoControl + 0.01) * 100) / 100;
+        $tempoControl = enforcePrecision($tempoControl + 0.01, 2);
         break;
 
       case keyMap.TEMPO_DOWN:
-        $tempoControl = Math.round(($tempoControl - 0.01) * 100) / 100;
+        $tempoControl = enforcePrecision($tempoControl - 0.01, 2);
         break;
 
       // no default
