@@ -1,9 +1,11 @@
 <script>
-  import { pedalling } from "../stores";
+  import { pedalling, volume } from "../stores";
 
   const keyMap = Object.freeze({
     SOFT: "KeyQ",
     SUSTAIN: "KeyC",
+    VOLUME_UP: "BracketRight",
+    VOLUME_DOWN: "BracketLeft",
   });
 </script>
 
@@ -16,6 +18,14 @@
 
       case keyMap.SUSTAIN:
         $pedalling.sustain = true;
+        break;
+
+      case keyMap.VOLUME_UP:
+        $volume.master += 0.1;
+        break;
+
+      case keyMap.VOLUME_DOWN:
+        $volume.master -= 0.1;
         break;
 
       // no default
