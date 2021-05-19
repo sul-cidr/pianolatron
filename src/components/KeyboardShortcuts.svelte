@@ -10,10 +10,18 @@
     TEMPO_DOWN: "KeyW",
   });
 
+  const VOLUME_MIN = 0;
+  const VOLUME_MAX = 4;
+
+  const TEMPO_MIN = 0.1;
+  const TEMPO_MAX = 4;
+
   const enforcePrecision = (value, precision) => {
     const multiplier = 10 ** (precision || 0);
     return Math.round(value * multiplier) / multiplier;
   };
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 </script>
 
 <svelte:window
@@ -28,19 +36,19 @@
         break;
 
       case keyMap.VOLUME_UP:
-        $volume.master = enforcePrecision($volume.master + 0.1, 1);
+        $volume.master = enforcePrecision(clamp($volume.master + 0.1, VOLUME_MIN, VOLUME_MAX), 1);
         break;
 
       case keyMap.VOLUME_DOWN:
-        $volume.master = enforcePrecision($volume.master - 0.1, 1);
+        $volume.master = enforcePrecision(clamp($volume.master - 0.1, VOLUME_MIN, VOLUME_MAX), 1);
         break;
 
       case keyMap.TEMPO_UP:
-        $tempoControl = enforcePrecision($tempoControl + 0.01, 2);
+        $tempoControl = enforcePrecision(clamp($tempoControl + 0.01, TEMPO_MIN, TEMPO_MAX), 2);
         break;
 
       case keyMap.TEMPO_DOWN:
-        $tempoControl = enforcePrecision($tempoControl - 0.01, 2);
+        $tempoControl = enforcePrecision(clamp($tempoControl - 0.01, TEMPO_MIN, TEMPO_MAX), 2);
         break;
 
       // no default
