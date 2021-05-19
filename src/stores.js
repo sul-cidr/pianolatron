@@ -41,6 +41,8 @@ export const currentTick = createStore(0);
 
 export const activeNotes = createSetStore();
 
+export const overlayKeyboard = createStore(false);
+
 export const userSettings = createStore({
   theme: "cardinal",
   activeNoteDetails: false,

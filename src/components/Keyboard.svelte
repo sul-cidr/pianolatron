@@ -8,21 +8,27 @@
     aspect-ratio: 10 / 1;
     z-index: z($main-context, keyboard);
     position: relative;
+
+    &:hover :global(.overlay-buttons) {
+      opacity: 1;
+    }
   }
 
   @supports not (aspect-ratio: 10 / 1) {
     #keyboard {
-      height: 10vw;
-      margin: 0;
-      padding: 1vh 1vw;
+      padding-top: 10%;
+    }
+    div#keys {
+      top: 0;
     }
   }
 
   div#keys {
-    position: relative;
+    position: absolute;
     display: flex;
     padding: 0;
     height: 100%;
+    width: 100%;
 
     &::before {
       background-color: var(--primary-accent);
@@ -136,11 +142,13 @@
 
 <script>
   import { pedalling } from "../stores";
+  import KeyboardControls from "./KeyboardControls.svelte";
 
   export let keyCount = 88;
   export let startNote;
   export let stopNote;
   export let activeNotes;
+
   const notes = [
     "A",
     "A#",
@@ -222,7 +230,9 @@
       </div>
     {/each}
   </div>
+  <KeyboardControls />
 </div>
+
 <svelte:window
   on:mouseup={() => {
     stopPlaying();

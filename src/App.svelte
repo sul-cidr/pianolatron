@@ -38,9 +38,19 @@
     flex: 0 1 auto;
     user-select: none;
   }
+
+  #keyboard-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    opacity: 0.5;
+    z-index: z($main-context, keyboard-overlay);
+  }
 </style>
 
 <script>
+  import { quartInOut } from "svelte/easing";
+  import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
     pedalling,
@@ -50,6 +60,7 @@
     activeNotes,
     currentTick,
     rollMetadata,
+    overlayKeyboard,
   } from "./stores";
   import {
     midiSamplePlayer,
@@ -72,6 +83,15 @@
   let currentRoll;
   let previousRoll;
   let holesByTickInterval = new IntervalTree();
+
+  const slide = (node, { delay = 0, duration = 300 }) => {
+    const o = parseInt(getComputedStyle(node).height, 10);
+    return {
+      delay,
+      duration,
+      css: (t) => `height: ${quartInOut(t) * o}px`,
+    };
+  };
 
   const buildHolesIntervalTree = () => {
     const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
@@ -204,15 +224,22 @@
           {holesByTickInterval}
           {skipToTick}
         />
+        {#if $overlayKeyboard}
+          <div id="keyboard-overlay" transition:fade>
+            <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
+          </div>
+        {/if}
       </div>
       <FlexCollapsible id="right-sidebar" width="20vw" position="left">
         <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
       </FlexCollapsible>
     {/if}
   </div>
-  <div id="keyboard-container">
-    <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
-  </div>
+  {#if !$overlayKeyboard}
+    <div id="keyboard-container" transition:slide>
+      <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
+    </div>
+  {/if}
   {#if !appReady}
     <div id="loading">
       <div><span /> <span /> <span /> <span /> <span /></div>
