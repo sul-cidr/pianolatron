@@ -36,6 +36,7 @@ const getTempoAtTick = (tick) => {
   while (tempoMap[i][0] <= tick) {
     [, tempo] = tempoMap[i];
     i += 1;
+    if (i >= tempoMap.length) break;
   }
   return tempo;
 };
