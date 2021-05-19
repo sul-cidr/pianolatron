@@ -1,11 +1,13 @@
 <script>
-  import { pedalling, volume } from "../stores";
+  import { pedalling, volume, tempoControl } from "../stores";
 
   const keyMap = Object.freeze({
     SOFT: "KeyQ",
     SUSTAIN: "KeyC",
     VOLUME_UP: "BracketRight",
     VOLUME_DOWN: "BracketLeft",
+    TEMPO_UP: "KeyE",
+    TEMPO_DOWN: "KeyW",
   });
 </script>
 
@@ -26,6 +28,14 @@
 
       case keyMap.VOLUME_DOWN:
         $volume.master = Math.round(($volume.master - 0.1) * 10) / 10;
+        break;
+
+      case keyMap.TEMPO_UP:
+        $tempoControl = Math.round(($tempoControl + 0.01) * 100) / 100;
+        break;
+
+      case keyMap.TEMPO_DOWN:
+        $tempoControl = Math.round(($tempoControl - 0.01) * 100) / 100;
         break;
 
       // no default
