@@ -5,6 +5,7 @@
     "node-interval-tree": "./node-interval-tree.js",
     "openseadragon": "./openseadragon.js",
     "svelte": "./svelte.js",
+    "svelte/easing": "./svelte/easing.js",
     "svelte/internal": "./svelte/internal.js",
     "svelte/store": "./svelte/store.js",
     "svelte/transition": "./svelte/transition.js"

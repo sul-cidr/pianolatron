@@ -5,12 +5,15 @@ import {
 	append,
 	attr,
 	component_subscribe,
+	create_component,
+	destroy_component,
 	destroy_each,
 	detach,
 	element,
 	init,
 	insert,
 	listen,
+	mount_component,
 	noop,
 	prevent_default,
 	run_all,
@@ -20,10 +23,13 @@ import {
 	space,
 	subscribe,
 	svg_element,
-	toggle_class
+	toggle_class,
+	transition_in,
+	transition_out
 } from "../_snowpack/pkg/svelte/internal.js";
 
 import { pedalling } from "../stores.js";
+import KeyboardControls from "./KeyboardControls.svelte.js";
 
 function get_each_context_1(ctx, list, i) {
 	const child_ctx = ctx.slice();
@@ -38,7 +44,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (192:8) {#each key as { title, note }}
+// (200:8) {#each key as { title, note }}
 function create_each_block_1(ctx) {
 	let span;
 	let span_title_value;
@@ -49,7 +55,7 @@ function create_each_block_1(ctx) {
 			span = element("span");
 			attr(span, "title", span_title_value = /*title*/ ctx[26]);
 			attr(span, "data-key", span_data_key_value = /*note*/ ctx[27]);
-			attr(span, "class", "svelte-1kxl7ga");
+			attr(span, "class", "svelte-1d68rqw");
 			toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[27]) || /*playing*/ ctx[4].has(/*note*/ ctx[27]));
 		},
 		m(target, anchor) {
@@ -66,7 +72,7 @@ function create_each_block_1(ctx) {
 	};
 }
 
-// (190:4) {#each keys as key}
+// (198:4) {#each keys as key}
 function create_each_block(ctx) {
 	let div;
 	let t;
@@ -86,7 +92,7 @@ function create_each_block(ctx) {
 			}
 
 			t = space();
-			attr(div, "class", "svelte-1kxl7ga");
+			attr(div, "class", "svelte-1d68rqw");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -132,6 +138,8 @@ function create_fragment(ctx) {
 	let div1;
 	let div0;
 	let t0;
+	let keyboardcontrols;
+	let t1;
 	let svg0;
 	let symbol;
 	let path0;
@@ -139,12 +147,13 @@ function create_fragment(ctx) {
 	let path2;
 	let path3;
 	let path4;
-	let t1;
+	let t2;
 	let svg1;
 	let use0;
-	let t2;
+	let t3;
 	let svg2;
 	let use1;
+	let current;
 	let mounted;
 	let dispose;
 	let each_value = /*keys*/ ctx[7];
@@ -153,6 +162,8 @@ function create_fragment(ctx) {
 	for (let i = 0; i < each_value.length; i += 1) {
 		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
 	}
+
+	keyboardcontrols = new KeyboardControls({});
 
 	return {
 		c() {
@@ -164,6 +175,8 @@ function create_fragment(ctx) {
 			}
 
 			t0 = space();
+			create_component(keyboardcontrols.$$.fragment);
+			t1 = space();
 			svg0 = svg_element("svg");
 			symbol = svg_element("symbol");
 			path0 = svg_element("path");
@@ -171,16 +184,16 @@ function create_fragment(ctx) {
 			path2 = svg_element("path");
 			path3 = svg_element("path");
 			path4 = svg_element("path");
-			t1 = space();
+			t2 = space();
 			svg1 = svg_element("svg");
 			use0 = svg_element("use");
-			t2 = space();
+			t3 = space();
 			svg2 = svg_element("svg");
 			use1 = svg_element("use");
 			attr(div0, "id", "keys");
-			attr(div0, "class", "svelte-1kxl7ga");
+			attr(div0, "class", "svelte-1d68rqw");
 			attr(div1, "id", "keyboard");
-			attr(div1, "class", "svelte-1kxl7ga");
+			attr(div1, "class", "svelte-1d68rqw");
 			attr(path0, "d", "M10 0v5.7c0 .9.3 2.2 1 3.5.7 1.4 1.4 3.3 1.4 4.3 0 1.3-1.9 2.8-6.2 2.8-4.4 0-6.2-1.5-6.2-2.8 0-1 .6-2.9 1.4-4.3a28.2 14.1 0 0 0 1-3.5V0z");
 			set_style(path0, "fill", "#996a01");
 			attr(path1, "d", "m10.5 9-.7-1.7c-.2-.7-.2-1.3-.2-1.8V0h-7v5.5c0 .5 0 1.1-.2 1.8L1.7 9a43 21.5 0 0 0-1.3 4.3c0 1.3 1.7 2.9 5.6 2.9 4.1 0 5.8-1.6 5.8-3 0-1-.5-2.8-1.3-4.2");
@@ -198,13 +211,13 @@ function create_fragment(ctx) {
 			attr(svg1, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg1, "width", "46.9");
 			attr(svg1, "height", "61.6");
-			attr(svg1, "class", "pedal svelte-1kxl7ga");
+			attr(svg1, "class", "pedal svelte-1d68rqw");
 			toggle_class(svg1, "depressed", /*$pedalling*/ ctx[6].soft);
 			attr(use1, "href", "#pedal");
 			attr(svg2, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg2, "width", "46.9");
 			attr(svg2, "height", "61.6");
-			attr(svg2, "class", "pedal svelte-1kxl7ga");
+			attr(svg2, "class", "pedal svelte-1d68rqw");
 			toggle_class(svg2, "depressed", /*$pedalling*/ ctx[6].sustain);
 		},
 		m(target, anchor) {
@@ -215,7 +228,9 @@ function create_fragment(ctx) {
 				each_blocks[i].m(div0, null);
 			}
 
-			insert(target, t0, anchor);
+			append(div1, t0);
+			mount_component(keyboardcontrols, div1, null);
+			insert(target, t1, anchor);
 			insert(target, svg0, anchor);
 			append(svg0, symbol);
 			append(symbol, path0);
@@ -223,12 +238,13 @@ function create_fragment(ctx) {
 			append(symbol, path2);
 			append(symbol, path3);
 			append(symbol, path4);
-			insert(target, t1, anchor);
+			insert(target, t2, anchor);
 			insert(target, svg1, anchor);
 			append(svg1, use0);
-			insert(target, t2, anchor);
+			insert(target, t3, anchor);
 			insert(target, svg2, anchor);
 			append(svg2, use1);
+			current = true;
 
 			if (!mounted) {
 				dispose = [
@@ -279,16 +295,24 @@ function create_fragment(ctx) {
 				toggle_class(svg2, "depressed", /*$pedalling*/ ctx[6].sustain);
 			}
 		},
-		i: noop,
-		o: noop,
+		i(local) {
+			if (current) return;
+			transition_in(keyboardcontrols.$$.fragment, local);
+			current = true;
+		},
+		o(local) {
+			transition_out(keyboardcontrols.$$.fragment, local);
+			current = false;
+		},
 		d(detaching) {
 			if (detaching) detach(div1);
 			destroy_each(each_blocks, detaching);
-			if (detaching) detach(t0);
-			if (detaching) detach(svg0);
+			destroy_component(keyboardcontrols);
 			if (detaching) detach(t1);
-			if (detaching) detach(svg1);
+			if (detaching) detach(svg0);
 			if (detaching) detach(t2);
+			if (detaching) detach(svg1);
+			if (detaching) detach(t3);
 			if (detaching) detach(svg2);
 			mounted = false;
 			run_all(dispose);

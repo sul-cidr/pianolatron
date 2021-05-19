@@ -3,12 +3,14 @@ import './App.svelte.css.proxy.js';
 import {
 	SvelteComponent,
 	add_flush_callback,
+	add_render_callback,
 	append,
 	attr,
 	bind,
 	binding_callbacks,
 	check_outros,
 	component_subscribe,
+	create_bidirectional_transition,
 	create_component,
 	destroy_component,
 	detach,
@@ -26,6 +28,8 @@ import {
 	transition_out
 } from "./_snowpack/pkg/svelte/internal.js";
 
+import { quartInOut } from "./_snowpack/pkg/svelte/easing.js";
+import { fade } from "./_snowpack/pkg/svelte/transition.js";
 import IntervalTree from "./_snowpack/pkg/node-interval-tree.js";
 
 import {
@@ -35,7 +39,8 @@ import {
 	playbackProgress,
 	activeNotes,
 	currentTick,
-	rollMetadata
+	rollMetadata,
+	overlayKeyboard
 } from "./stores.js";
 
 import {
@@ -54,13 +59,13 @@ import TabbedPanel from "./components/TabbedPanel.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
 import FlexCollapsible from "./ui-components/FlexCollapsible.svelte.js";
 
-function create_if_block_2(ctx) {
+function create_if_block_4(ctx) {
 	let rolldetails;
 	let t;
 	let if_block_anchor;
 	let current;
 	rolldetails = new RollDetails({});
-	let if_block = !/*holesByTickInterval*/ ctx[2].count && create_if_block_3(ctx);
+	let if_block = !/*holesByTickInterval*/ ctx[2].count && create_if_block_5(ctx);
 
 	return {
 		c() {
@@ -81,7 +86,7 @@ function create_if_block_2(ctx) {
 				if (if_block) {
 					
 				} else {
-					if_block = create_if_block_3(ctx);
+					if_block = create_if_block_5(ctx);
 					if_block.c();
 					if_block.m(if_block_anchor.parentNode, if_block_anchor);
 				}
@@ -108,8 +113,8 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (188:8) {#if !holesByTickInterval.count}
-function create_if_block_3(ctx) {
+// (208:8) {#if !holesByTickInterval.count}
+function create_if_block_5(ctx) {
 	let p;
 
 	return {
@@ -119,7 +124,7 @@ function create_if_block_3(ctx) {
 			p.innerHTML = `Note:<br/>Hole visualization data is not available for this roll at
             this time. Hole highlighting will not be enabled.`;
 
-			attr(p, "class", "svelte-1uyotfa");
+			attr(p, "class", "svelte-54l61l");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -130,7 +135,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (184:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (204:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -139,7 +144,7 @@ function create_default_slot_1(ctx) {
 	let current;
 
 	function rollselector_currentRoll_binding(value) {
-		/*rollselector_currentRoll_binding*/ ctx[7].call(null, value);
+		/*rollselector_currentRoll_binding*/ ctx[9].call(null, value);
 	}
 
 	let rollselector_props = {};
@@ -150,7 +155,7 @@ function create_default_slot_1(ctx) {
 
 	rollselector = new RollSelector({ props: rollselector_props });
 	binding_callbacks.push(() => bind(rollselector, "currentRoll", rollselector_currentRoll_binding));
-	let if_block = /*appReady*/ ctx[0] && create_if_block_2(ctx);
+	let if_block = /*appReady*/ ctx[0] && create_if_block_4(ctx);
 
 	return {
 		c() {
@@ -185,7 +190,7 @@ function create_default_slot_1(ctx) {
 						transition_in(if_block, 1);
 					}
 				} else {
-					if_block = create_if_block_2(ctx);
+					if_block = create_if_block_4(ctx);
 					if_block.c();
 					transition_in(if_block, 1);
 					if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -220,11 +225,12 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (196:4) {#if appReady}
-function create_if_block_1(ctx) {
+// (216:4) {#if appReady}
+function create_if_block_2(ctx) {
 	let div;
 	let rollviewer;
-	let t;
+	let t0;
+	let t1;
 	let flexcollapsible;
 	let current;
 
@@ -232,9 +238,11 @@ function create_if_block_1(ctx) {
 			props: {
 				imageUrl: /*currentRoll*/ ctx[1].image_url,
 				holesByTickInterval: /*holesByTickInterval*/ ctx[2],
-				skipToTick: /*skipToTick*/ ctx[5]
+				skipToTick: /*skipToTick*/ ctx[7]
 			}
 		});
+
+	let if_block = /*$overlayKeyboard*/ ctx[3] && create_if_block_3(ctx);
 
 	flexcollapsible = new FlexCollapsible({
 			props: {
@@ -250,15 +258,19 @@ function create_if_block_1(ctx) {
 		c() {
 			div = element("div");
 			create_component(rollviewer.$$.fragment);
-			t = space();
+			t0 = space();
+			if (if_block) if_block.c();
+			t1 = space();
 			create_component(flexcollapsible.$$.fragment);
 			attr(div, "id", "roll");
-			attr(div, "class", "svelte-1uyotfa");
+			attr(div, "class", "svelte-54l61l");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
 			mount_component(rollviewer, div, null);
-			insert(target, t, anchor);
+			append(div, t0);
+			if (if_block) if_block.m(div, null);
+			insert(target, t1, anchor);
 			mount_component(flexcollapsible, target, anchor);
 			current = true;
 		},
@@ -267,9 +279,33 @@ function create_if_block_1(ctx) {
 			if (dirty & /*currentRoll*/ 2) rollviewer_changes.imageUrl = /*currentRoll*/ ctx[1].image_url;
 			if (dirty & /*holesByTickInterval*/ 4) rollviewer_changes.holesByTickInterval = /*holesByTickInterval*/ ctx[2];
 			rollviewer.$set(rollviewer_changes);
+
+			if (/*$overlayKeyboard*/ ctx[3]) {
+				if (if_block) {
+					if_block.p(ctx, dirty);
+
+					if (dirty & /*$overlayKeyboard*/ 8) {
+						transition_in(if_block, 1);
+					}
+				} else {
+					if_block = create_if_block_3(ctx);
+					if_block.c();
+					transition_in(if_block, 1);
+					if_block.m(div, null);
+				}
+			} else if (if_block) {
+				group_outros();
+
+				transition_out(if_block, 1, 1, () => {
+					if_block = null;
+				});
+
+				check_outros();
+			}
+
 			const flexcollapsible_changes = {};
 
-			if (dirty & /*$$scope*/ 65536) {
+			if (dirty & /*$$scope*/ 262144) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -278,33 +314,90 @@ function create_if_block_1(ctx) {
 		i(local) {
 			if (current) return;
 			transition_in(rollviewer.$$.fragment, local);
+			transition_in(if_block);
 			transition_in(flexcollapsible.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
 			transition_out(rollviewer.$$.fragment, local);
+			transition_out(if_block);
 			transition_out(flexcollapsible.$$.fragment, local);
 			current = false;
 		},
 		d(detaching) {
 			if (detaching) detach(div);
 			destroy_component(rollviewer);
-			if (detaching) detach(t);
+			if (if_block) if_block.d();
+			if (detaching) detach(t1);
 			destroy_component(flexcollapsible, detaching);
 		}
 	};
 }
 
-// (204:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (223:8) {#if $overlayKeyboard}
+function create_if_block_3(ctx) {
+	let div;
+	let keyboard;
+	let div_transition;
+	let current;
+
+	keyboard = new Keyboard({
+			props: {
+				keyCount: "88",
+				activeNotes,
+				startNote,
+				stopNote
+			}
+		});
+
+	return {
+		c() {
+			div = element("div");
+			create_component(keyboard.$$.fragment);
+			attr(div, "id", "keyboard-overlay");
+			attr(div, "class", "svelte-54l61l");
+		},
+		m(target, anchor) {
+			insert(target, div, anchor);
+			mount_component(keyboard, div, null);
+			current = true;
+		},
+		p: noop,
+		i(local) {
+			if (current) return;
+			transition_in(keyboard.$$.fragment, local);
+
+			add_render_callback(() => {
+				if (!div_transition) div_transition = create_bidirectional_transition(div, fade, {}, true);
+				div_transition.run(1);
+			});
+
+			current = true;
+		},
+		o(local) {
+			transition_out(keyboard.$$.fragment, local);
+			if (!div_transition) div_transition = create_bidirectional_transition(div, fade, {}, false);
+			div_transition.run(0);
+			current = false;
+		},
+		d(detaching) {
+			if (detaching) detach(div);
+			destroy_component(keyboard);
+			if (detaching && div_transition) div_transition.end();
+		}
+	};
+}
+
+// (229:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
 
 	tabbedpanel = new TabbedPanel({
 			props: {
-				playPauseApp: /*playPauseApp*/ ctx[3],
-				stopApp: /*stopApp*/ ctx[4],
-				skipToPercentage: /*skipToPercentage*/ ctx[6]
+				playPauseApp: /*playPauseApp*/ ctx[5],
+				stopApp: /*stopApp*/ ctx[6],
+				skipToPercentage: /*skipToPercentage*/ ctx[8]
 			}
 		});
 
@@ -332,7 +425,61 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (212:2) {#if !appReady}
+// (234:2) {#if !$overlayKeyboard}
+function create_if_block_1(ctx) {
+	let div;
+	let keyboard;
+	let div_transition;
+	let current;
+
+	keyboard = new Keyboard({
+			props: {
+				keyCount: "88",
+				activeNotes,
+				startNote,
+				stopNote
+			}
+		});
+
+	return {
+		c() {
+			div = element("div");
+			create_component(keyboard.$$.fragment);
+			attr(div, "id", "keyboard-container");
+			attr(div, "class", "svelte-54l61l");
+		},
+		m(target, anchor) {
+			insert(target, div, anchor);
+			mount_component(keyboard, div, null);
+			current = true;
+		},
+		p: noop,
+		i(local) {
+			if (current) return;
+			transition_in(keyboard.$$.fragment, local);
+
+			add_render_callback(() => {
+				if (!div_transition) div_transition = create_bidirectional_transition(div, /*slide*/ ctx[4], {}, true);
+				div_transition.run(1);
+			});
+
+			current = true;
+		},
+		o(local) {
+			transition_out(keyboard.$$.fragment, local);
+			if (!div_transition) div_transition = create_bidirectional_transition(div, /*slide*/ ctx[4], {}, false);
+			div_transition.run(0);
+			current = false;
+		},
+		d(detaching) {
+			if (detaching) detach(div);
+			destroy_component(keyboard);
+			if (detaching && div_transition) div_transition.end();
+		}
+	};
+}
+
+// (239:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -344,7 +491,7 @@ function create_if_block(ctx) {
       Loading resources...`;
 
 			attr(div1, "id", "loading");
-			attr(div1, "class", "svelte-1uyotfa");
+			attr(div1, "class", "svelte-54l61l");
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -356,13 +503,11 @@ function create_if_block(ctx) {
 }
 
 function create_fragment(ctx) {
-	let div2;
+	let div1;
 	let div0;
 	let flexcollapsible;
 	let t0;
 	let t1;
-	let div1;
-	let keyboard;
 	let t2;
 	let t3;
 	let notification;
@@ -377,51 +522,38 @@ function create_fragment(ctx) {
 			}
 		});
 
-	let if_block0 = /*appReady*/ ctx[0] && create_if_block_1(ctx);
-
-	keyboard = new Keyboard({
-			props: {
-				keyCount: "88",
-				activeNotes,
-				startNote,
-				stopNote
-			}
-		});
-
-	let if_block1 = !/*appReady*/ ctx[0] && create_if_block(ctx);
+	let if_block0 = /*appReady*/ ctx[0] && create_if_block_2(ctx);
+	let if_block1 = !/*$overlayKeyboard*/ ctx[3] && create_if_block_1(ctx);
+	let if_block2 = !/*appReady*/ ctx[0] && create_if_block(ctx);
 	notification = new Notification({});
 
 	return {
 		c() {
-			div2 = element("div");
+			div1 = element("div");
 			div0 = element("div");
 			create_component(flexcollapsible.$$.fragment);
 			t0 = space();
 			if (if_block0) if_block0.c();
 			t1 = space();
-			div1 = element("div");
-			create_component(keyboard.$$.fragment);
-			t2 = space();
 			if (if_block1) if_block1.c();
+			t2 = space();
+			if (if_block2) if_block2.c();
 			t3 = space();
 			create_component(notification.$$.fragment);
-			attr(div0, "class", "svelte-1uyotfa");
-			attr(div1, "id", "keyboard-container");
-			attr(div1, "class", "svelte-1uyotfa");
-			attr(div2, "id", "app");
-			attr(div2, "class", "svelte-1uyotfa");
+			attr(div0, "class", "svelte-54l61l");
+			attr(div1, "id", "app");
+			attr(div1, "class", "svelte-54l61l");
 		},
 		m(target, anchor) {
-			insert(target, div2, anchor);
-			append(div2, div0);
+			insert(target, div1, anchor);
+			append(div1, div0);
 			mount_component(flexcollapsible, div0, null);
 			append(div0, t0);
 			if (if_block0) if_block0.m(div0, null);
-			append(div2, t1);
-			append(div2, div1);
-			mount_component(keyboard, div1, null);
-			append(div2, t2);
-			if (if_block1) if_block1.m(div2, null);
+			append(div1, t1);
+			if (if_block1) if_block1.m(div1, null);
+			append(div1, t2);
+			if (if_block2) if_block2.m(div1, null);
 			insert(target, t3, anchor);
 			mount_component(notification, target, anchor);
 			current = true;
@@ -429,7 +561,7 @@ function create_fragment(ctx) {
 		p(ctx, [dirty]) {
 			const flexcollapsible_changes = {};
 
-			if (dirty & /*$$scope, holesByTickInterval, appReady, currentRoll*/ 65543) {
+			if (dirty & /*$$scope, holesByTickInterval, appReady, currentRoll*/ 262151) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -443,7 +575,7 @@ function create_fragment(ctx) {
 						transition_in(if_block0, 1);
 					}
 				} else {
-					if_block0 = create_if_block_1(ctx);
+					if_block0 = create_if_block_2(ctx);
 					if_block0.c();
 					transition_in(if_block0, 1);
 					if_block0.m(div0, null);
@@ -458,40 +590,63 @@ function create_fragment(ctx) {
 				check_outros();
 			}
 
-			if (!/*appReady*/ ctx[0]) {
+			if (!/*$overlayKeyboard*/ ctx[3]) {
 				if (if_block1) {
-					
+					if_block1.p(ctx, dirty);
+
+					if (dirty & /*$overlayKeyboard*/ 8) {
+						transition_in(if_block1, 1);
+					}
 				} else {
-					if_block1 = create_if_block(ctx);
+					if_block1 = create_if_block_1(ctx);
 					if_block1.c();
-					if_block1.m(div2, null);
+					transition_in(if_block1, 1);
+					if_block1.m(div1, t2);
 				}
 			} else if (if_block1) {
-				if_block1.d(1);
-				if_block1 = null;
+				group_outros();
+
+				transition_out(if_block1, 1, 1, () => {
+					if_block1 = null;
+				});
+
+				check_outros();
+			}
+
+			if (!/*appReady*/ ctx[0]) {
+				if (if_block2) {
+					
+				} else {
+					if_block2 = create_if_block(ctx);
+					if_block2.c();
+					if_block2.m(div1, null);
+				}
+			} else if (if_block2) {
+				if_block2.d(1);
+				if_block2 = null;
 			}
 		},
 		i(local) {
 			if (current) return;
 			transition_in(flexcollapsible.$$.fragment, local);
 			transition_in(if_block0);
-			transition_in(keyboard.$$.fragment, local);
+			transition_in(if_block1);
 			transition_in(notification.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
 			transition_out(flexcollapsible.$$.fragment, local);
 			transition_out(if_block0);
-			transition_out(keyboard.$$.fragment, local);
+			transition_out(if_block1);
 			transition_out(notification.$$.fragment, local);
 			current = false;
 		},
 		d(detaching) {
-			if (detaching) detach(div2);
+			if (detaching) detach(div1);
 			destroy_component(flexcollapsible);
 			if (if_block0) if_block0.d();
-			destroy_component(keyboard);
 			if (if_block1) if_block1.d();
+			if (if_block2) if_block2.d();
 			if (detaching) detach(t3);
 			destroy_component(notification, detaching);
 		}
@@ -501,14 +656,26 @@ function create_fragment(ctx) {
 function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(11, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(12, $currentTick = $$value));
+	let $overlayKeyboard;
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(13, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(14, $currentTick = $$value));
+	component_subscribe($$self, overlayKeyboard, $$value => $$invalidate(3, $overlayKeyboard = $$value));
 	let appReady = false;
 	let mididataReady;
 	let metadataReady;
 	let currentRoll;
 	let previousRoll;
 	let holesByTickInterval = new IntervalTree();
+
+	const slide = (node, { delay = 0, duration = 300 }) => {
+		const o = parseInt(getComputedStyle(node).height, 10);
+
+		return {
+			delay,
+			duration,
+			css: t => `height: ${quartInOut(t) * o}px`
+		};
+	};
 
 	const buildHolesIntervalTree = () => {
 		const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
@@ -609,7 +776,7 @@ function instance($$self, $$props, $$invalidate) {
 			set_store_value(rollMetadata, $rollMetadata = { ...$rollMetadata, ...metadataJson }, $rollMetadata);
 			if (metadataJson.holeData) buildHolesIntervalTree(metadataJson.holeData);
 			$$invalidate(0, appReady = true);
-			$$invalidate(10, previousRoll = currentRoll);
+			$$invalidate(12, previousRoll = currentRoll);
 		});
 	};
 
@@ -621,7 +788,7 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 1026) {
+		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 4098) {
 			$: {
 				if (currentRoll !== previousRoll) {
 					loadRoll(currentRoll);
@@ -629,7 +796,7 @@ function instance($$self, $$props, $$invalidate) {
 			}
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 4096) {
+		if ($$self.$$.dirty & /*$currentTick*/ 16384) {
 			$: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
 		}
 	};
@@ -638,6 +805,8 @@ function instance($$self, $$props, $$invalidate) {
 		appReady,
 		currentRoll,
 		holesByTickInterval,
+		$overlayKeyboard,
+		slide,
 		playPauseApp,
 		stopApp,
 		skipToTick,
