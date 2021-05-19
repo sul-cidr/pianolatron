@@ -6,8 +6,8 @@
   $thumb-color: var(--primary-accent);
 
   $thumb-radius: 12px;
-  $thumb-height: 18px;
-  $thumb-width: 24px;
+  $thumb-height: 28px;
+  $thumb-width: 12px;
   $thumb-shadow-size: 2px;
   $thumb-shadow-blur: 4px;
   $thumb-shadow-color: rgba(0, 0, 0, 0.2);
