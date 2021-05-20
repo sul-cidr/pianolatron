@@ -33,7 +33,7 @@ export const sustainOnOff = createStore(false);
 export const accentOnOff = createStore(false);
 
 export const volumeCoefficient = createStore(1);
-export const bassVolume = createStore(1);
+export const bassVolumeCoefficient = createStore(1);
 export const trebleVolume = createStore(1);
 
 export const playbackProgress = createStore(0);

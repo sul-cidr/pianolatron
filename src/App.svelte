@@ -57,7 +57,7 @@
     softOnOff,
     sustainOnOff,
     accentOnOff,
-    bassVolume,
+    bassVolumeCoefficient,
     trebleVolume,
     tempoCoefficient,
     playbackProgress,
@@ -148,7 +148,7 @@
     appReady = false;
     stopApp();
     tempoCoefficient.reset();
-    bassVolume.reset();
+    bassVolumeCoefficient.reset();
     trebleVolume.reset();
     holesByTickInterval = new IntervalTree();
   };

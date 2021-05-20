@@ -8,7 +8,7 @@
     sustainOnOff,
     accentOnOff,
     volumeCoefficient,
-    bassVolume,
+    bassVolumeCoefficient,
     trebleVolume,
     tempoCoefficient,
     activeNotes,
@@ -108,7 +108,7 @@
       (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
       (($accentOnOff && ACCENT_BUMP) || 1) *
       $volumeCoefficient *
-      (noteNumber < panBoundary ? $bassVolume : $trebleVolume);
+      (noteNumber < panBoundary ? $bassVolumeCoefficient : $trebleVolume);
     if (modifiedVelocity) {
       piano.keyDown({
         midi: noteNumber,
