@@ -29,7 +29,7 @@ export const tempoControl = createStore(1);
 export const rollMetadata = createStore({});
 
 export const softOnOff = createStore(false);
-export const sustain = createStore(false);
+export const sustainOnOff = createStore(false);
 export const accent = createStore(false);
 
 export const volume = createStore(1);

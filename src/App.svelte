@@ -55,7 +55,7 @@
   import IntervalTree from "node-interval-tree";
   import {
     softOnOff,
-    sustain,
+    sustainOnOff,
     accent,
     bassVolume,
     trebleVolume,
@@ -139,7 +139,7 @@
     currentTick.reset();
     activeNotes.reset();
     softOnOff.reset();
-    sustain.reset();
+    sustainOnOff.reset();
     accent.reset();
   };
 

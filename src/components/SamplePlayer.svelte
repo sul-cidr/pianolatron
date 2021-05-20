@@ -5,7 +5,7 @@
   import {
     rollMetadata,
     softOnOff,
-    sustain,
+    sustainOnOff,
     accent,
     volume,
     bassVolume,
@@ -100,7 +100,7 @@
 
   const pianoReady = piano.load();
 
-  $: $sustain ? piano.pedalDown() : piano.pedalUp();
+  $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
 
   const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
     const modifiedVelocity =
@@ -121,7 +121,7 @@
 
   const stopAllNotes = () => {
     piano.pedalUp();
-    if ($sustain) piano.pedalDown();
+    if ($sustainOnOff) piano.pedalDown();
     $activeNotes.forEach((note) => stopNote(note));
   };
 
@@ -146,10 +146,10 @@
         if (number === controllerChange.SUSTAIN_PEDAL) {
           if (value === controllerChange.PEDAL_ON) {
             piano.pedalDown();
-            sustain.set(true);
+            sustainOnOff.set(true);
           } else {
             piano.pedalUp();
-            sustain.set(false);
+            sustainOnOff.set(false);
           }
         } else if (number === controllerChange.SOFT_PEDAL) {
           softOnOff.set(value === controllerChange.PEDAL_ON);
