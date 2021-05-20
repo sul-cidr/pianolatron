@@ -14,16 +14,6 @@ import {
 
 const midiSamplePlayer = new MidiPlayer.Player();
 
-const updatePlayer = (fn) => {
-  if (midiSamplePlayer.isPlaying()) {
-    midiSamplePlayer.pause();
-    fn();
-    midiSamplePlayer.play();
-    return;
-  }
-  fn();
-};
-
 let softPedalOn;
 let accentOn;
 
@@ -36,12 +26,36 @@ volume.subscribe(({ master, right, left }) => {
   leftVolumeRatio = left;
 });
 
-let baseTempo;
+let tempoMap;
 let tempoRatio = 1.0;
-let tempoControlValue;
+
+const getTempoAtTick = (tick) => {
+  if (!tempoMap) return 60;
+  let tempo;
+  let i = 0;
+  while (tempoMap[i][0] <= tick) {
+    [, tempo] = tempoMap[i];
+    i += 1;
+    if (i >= tempoMap.length) break;
+  }
+  return tempo;
+};
+
+const updatePlayer = (fn = () => {}) => {
+  if (midiSamplePlayer.isPlaying()) {
+    midiSamplePlayer.pause();
+    fn();
+    midiSamplePlayer.setTempo(getTempoAtTick(get(currentTick)) * tempoRatio);
+    midiSamplePlayer.play();
+    return;
+  }
+  fn();
+  midiSamplePlayer.setTempo(getTempoAtTick(get(currentTick)) * tempoRatio);
+};
+
 tempoControl.subscribe((newTempo) => {
-  tempoControlValue = newTempo;
-  updatePlayer(() => midiSamplePlayer.setTempo(tempoControlValue * tempoRatio));
+  tempoRatio = newTempo;
+  updatePlayer();
 });
 
 const decodeHtmlEntities = (string) =>
@@ -66,11 +80,13 @@ midiSamplePlayer.on("fileLoaded", () => {
     ),
   );
 
-  baseTempo = metadataTrack
+  tempoMap = metadataTrack
     .filter((event) => event.name === "Set Tempo")
-    .reduce((prevEvent, event) =>
-      event.tick < prevEvent.tick ? event : prevEvent,
-    ).data;
+    .reduce((_tempoMap, { tick, data }) => {
+      if (!_tempoMap.map(([, _data]) => _data).includes(data))
+        _tempoMap.push([tick, data]);
+      return _tempoMap;
+    }, []);
 });
 
 const controllerChange = Object.freeze({
@@ -166,11 +182,16 @@ midiSamplePlayer.on(
         }));
       }
     } else if (name === "Set Tempo") {
-      const midiTempo = parseFloat(data);
-      tempoRatio = 1.0 + (midiTempo - baseTempo) / baseTempo;
-      midiSamplePlayer.setTempo(tempoControlValue * tempoRatio);
+      midiSamplePlayer.setTempo(data * tempoRatio);
     }
   },
 );
 
-export { midiSamplePlayer, pianoReady, startNote, stopNote, stopAllNotes };
+export {
+  midiSamplePlayer,
+  pianoReady,
+  updatePlayer,
+  startNote,
+  stopNote,
+  stopAllNotes,
+};

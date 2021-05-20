@@ -62,19 +62,21 @@ function create_fragment(ctx) {
 	let span6;
 	let t16;
 	let span7;
+	let t17_value = (/*$tempoControl*/ ctx[2] * 100).toFixed(0) + "";
 	let t17;
 	let t18;
+	let t19;
 	let rangeslider3;
 	let updating_value_3;
-	let t19;
+	let t20;
 	let div4;
 	let span8;
-	let t21;
-	let span9;
-	let t22_value = (/*$playbackProgress*/ ctx[3] * 100).toFixed(2) + "";
 	let t22;
+	let span9;
+	let t23_value = (/*$playbackProgress*/ ctx[3] * 100).toFixed(2) + "";
 	let t23;
 	let t24;
+	let t25;
 	let rangeslider4;
 	let current;
 
@@ -137,9 +139,9 @@ function create_fragment(ctx) {
 	}
 
 	let rangeslider3_props = {
-		min: "1",
-		max: "180",
-		step: "1",
+		min: "0.1",
+		max: "4",
+		step: ".001",
 		name: "tempo"
 	};
 
@@ -198,18 +200,19 @@ function create_fragment(ctx) {
 			span6.textContent = "Tempo:";
 			t16 = space();
 			span7 = element("span");
-			t17 = text(/*$tempoControl*/ ctx[2]);
-			t18 = space();
-			create_component(rangeslider3.$$.fragment);
+			t17 = text(t17_value);
+			t18 = text("%");
 			t19 = space();
+			create_component(rangeslider3.$$.fragment);
+			t20 = space();
 			div4 = element("div");
 			span8 = element("span");
 			span8.textContent = "Progress:";
-			t21 = space();
+			t22 = space();
 			span9 = element("span");
-			t22 = text(t22_value);
-			t23 = text("%");
-			t24 = space();
+			t23 = text(t23_value);
+			t24 = text("%");
+			t25 = space();
 			create_component(rangeslider4.$$.fragment);
 			attr(div0, "class", "control svelte-1cq4iz3");
 			attr(div1, "class", "control svelte-1cq4iz3");
@@ -250,16 +253,17 @@ function create_fragment(ctx) {
 			append(div3, t16);
 			append(div3, span7);
 			append(span7, t17);
-			append(div3, t18);
+			append(span7, t18);
+			append(div3, t19);
 			mount_component(rangeslider3, div3, null);
-			append(div5, t19);
+			append(div5, t20);
 			append(div5, div4);
 			append(div4, span8);
-			append(div4, t21);
+			append(div4, t22);
 			append(div4, span9);
-			append(span9, t22);
 			append(span9, t23);
-			append(div4, t24);
+			append(span9, t24);
+			append(div4, t25);
 			mount_component(rangeslider4, div4, null);
 			current = true;
 		},
@@ -294,7 +298,7 @@ function create_fragment(ctx) {
 			}
 
 			rangeslider2.$set(rangeslider2_changes);
-			if (!current || dirty & /*$tempoControl*/ 4) set_data(t17, /*$tempoControl*/ ctx[2]);
+			if ((!current || dirty & /*$tempoControl*/ 4) && t17_value !== (t17_value = (/*$tempoControl*/ ctx[2] * 100).toFixed(0) + "")) set_data(t17, t17_value);
 			const rangeslider3_changes = {};
 
 			if (!updating_value_3 && dirty & /*$tempoControl*/ 4) {
@@ -304,7 +308,7 @@ function create_fragment(ctx) {
 			}
 
 			rangeslider3.$set(rangeslider3_changes);
-			if ((!current || dirty & /*$playbackProgress*/ 8) && t22_value !== (t22_value = (/*$playbackProgress*/ ctx[3] * 100).toFixed(2) + "")) set_data(t22, t22_value);
+			if ((!current || dirty & /*$playbackProgress*/ 8) && t23_value !== (t23_value = (/*$playbackProgress*/ ctx[3] * 100).toFixed(2) + "")) set_data(t23, t23_value);
 			const rangeslider4_changes = {};
 			if (dirty & /*$playbackProgress*/ 8) rangeslider4_changes.value = /*$playbackProgress*/ ctx[3];
 			rangeslider4.$set(rangeslider4_changes);

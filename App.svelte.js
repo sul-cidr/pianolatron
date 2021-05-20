@@ -46,6 +46,7 @@ import {
 import {
 	midiSamplePlayer,
 	pianoReady,
+	updatePlayer,
 	startNote,
 	stopNote,
 	stopAllNotes
@@ -113,7 +114,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (208:8) {#if !holesByTickInterval.count}
+// (203:8) {#if !holesByTickInterval.count}
 function create_if_block_5(ctx) {
 	let p;
 
@@ -135,7 +136,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (204:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (199:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -225,7 +226,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (216:4) {#if appReady}
+// (211:4) {#if appReady}
 function create_if_block_2(ctx) {
 	let div;
 	let rollviewer;
@@ -334,7 +335,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (223:8) {#if $overlayKeyboard}
+// (218:8) {#if $overlayKeyboard}
 function create_if_block_3(ctx) {
 	let div;
 	let keyboard;
@@ -388,7 +389,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (229:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (224:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -425,7 +426,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (234:2) {#if !$overlayKeyboard}
+// (229:2) {#if !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -479,7 +480,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (239:2) {#if !appReady}
+// (234:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -730,14 +731,7 @@ function instance($$self, $$props, $$invalidate) {
 
 	const skipToTick = tick => {
 		set_store_value(currentTick, $currentTick = tick, $currentTick);
-
-		if (midiSamplePlayer.isPlaying()) {
-			midiSamplePlayer.pause();
-			midiSamplePlayer.skipToTick($currentTick);
-			midiSamplePlayer.play();
-		} else {
-			midiSamplePlayer.skipToTick($currentTick);
-		}
+		updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
 	};
 
 	const skipToPercentage = percentage => skipToTick(midiSamplePlayer.totalTicks * percentage);
