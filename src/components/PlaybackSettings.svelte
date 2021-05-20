@@ -27,7 +27,7 @@
   import {
     volumeCoefficient,
     bassVolumeCoefficient,
-    trebleVolume,
+    trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
   } from "../stores";
@@ -55,13 +55,13 @@
   </div>
   <div class="control">
     <span>Treble Volume:</span>
-    <span>{$trebleVolume}</span>
+    <span>{$trebleVolumeCoefficient}</span>
     <RangeSlider
       min="0"
       max="4"
       step=".1"
-      bind:value={$trebleVolume}
-      name="trebleVolume"
+      bind:value={$trebleVolumeCoefficient}
+      name="treble-volume"
     />
   </div>
   <div class="control">
