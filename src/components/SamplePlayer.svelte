@@ -7,7 +7,7 @@
     softOnOff,
     sustainOnOff,
     accentOnOff,
-    volume,
+    volumeCoefficient,
     bassVolume,
     trebleVolume,
     tempoCoefficient,
@@ -107,7 +107,7 @@
       (velocity / 128) *
       (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
       (($accentOnOff && ACCENT_BUMP) || 1) *
-      $volume *
+      $volumeCoefficient *
       (noteNumber < panBoundary ? $bassVolume : $trebleVolume);
     if (modifiedVelocity) {
       piano.keyDown({

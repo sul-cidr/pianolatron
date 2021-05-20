@@ -25,7 +25,7 @@
 
 <script>
   import {
-    volume,
+    volumeCoefficient,
     bassVolume,
     trebleVolume,
     tempoCoefficient,
@@ -39,8 +39,8 @@
 <div id="playback-settings">
   <div class="control">
     <span>Volume: <kbd>[</kbd>↓ <kbd>]</kbd>↑</span>
-    <span>{$volume}</span>
-    <RangeSlider min="0" max="4" step=".1" bind:value={$volume} name="volume" />
+    <span>{$volumeCoefficient}</span>
+    <RangeSlider min="0" max="4" step=".1" bind:value={$volumeCoefficient} name="volume" />
   </div>
   <div class="control">
     <span>Bass Volume:</span>
