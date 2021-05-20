@@ -35,7 +35,9 @@
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       fn();
-      midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoCoefficient);
+      midiSamplePlayer.setTempo(
+        getTempoAtTick($currentTick) * $tempoCoefficient,
+      );
       midiSamplePlayer.play();
       return;
     }
@@ -108,7 +110,9 @@
       (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
       (($accentOnOff && ACCENT_BUMP) || 1) *
       $volumeCoefficient *
-      (noteNumber < panBoundary ? $bassVolumeCoefficient : $trebleVolumeCoefficient);
+      (noteNumber < panBoundary
+        ? $bassVolumeCoefficient
+        : $trebleVolumeCoefficient);
     if (modifiedVelocity) {
       piano.keyDown({
         midi: noteNumber,

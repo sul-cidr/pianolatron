@@ -1,6 +1,12 @@
 <script>
   import { get } from "svelte/store";
-  import { softOnOff, sustainOnOff, accentOnOff, volumeCoefficient, tempoCoefficient } from "../stores";
+  import {
+    softOnOff,
+    sustainOnOff,
+    accentOnOff,
+    volumeCoefficient,
+    tempoCoefficient,
+  } from "../stores";
 
   const keyMap = Object.freeze({
     SOFT: "KeyQ",

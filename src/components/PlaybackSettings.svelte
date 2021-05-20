@@ -40,7 +40,13 @@
   <div class="control">
     <span>Volume: <kbd>[</kbd>↓ <kbd>]</kbd>↑</span>
     <span>{$volumeCoefficient}</span>
-    <RangeSlider min="0" max="4" step=".1" bind:value={$volumeCoefficient} name="volume" />
+    <RangeSlider
+      min="0"
+      max="4"
+      step=".1"
+      bind:value={$volumeCoefficient}
+      name="volume"
+    />
   </div>
   <div class="control">
     <span>Bass Volume:</span>
