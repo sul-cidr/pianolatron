@@ -25,29 +25,34 @@ const createSetStore = () => {
   };
 };
 
-export const tempoCoefficient = createStore(1);
+// Metadata
 export const rollMetadata = createStore({});
 
+// Pedalling
 export const softOnOff = createStore(false);
 export const sustainOnOff = createStore(false);
 export const accentOnOff = createStore(false);
 
+// Playback Settings
 export const volumeCoefficient = createStore(1);
 export const bassVolumeCoefficient = createStore(1);
 export const trebleVolumeCoefficient = createStore(1);
 
-export const playbackProgress = createStore(0);
-export const currentTick = createStore(0);
+export const tempoCoefficient = createStore(1);
 
+// Playback State
+export const currentTick = createStore(0);
+export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
 
+// User Settings
 export const overlayKeyboard = createStore(false);
-
 export const userSettings = createStore({
   theme: "cardinal",
   activeNoteDetails: false,
 });
 
+// Browser State
 export const media = watchMedia({
   narrow: "(max-width: 849px)",
   normal: "(min-width: 850px)",
