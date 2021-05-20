@@ -2,7 +2,6 @@
   import MidiPlayer from "midi-player-js";
   import { Piano } from "@tonejs/piano";
 
-  import { get } from "svelte/store";
   import {
     rollMetadata,
     soft,
@@ -36,14 +35,12 @@
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       fn();
-      midiSamplePlayer.setTempo(
-        getTempoAtTick(get(currentTick)) * $tempoControl,
-      );
+      midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoControl);
       midiSamplePlayer.play();
       return;
     }
     fn();
-    midiSamplePlayer.setTempo(getTempoAtTick(get(currentTick)) * $tempoControl);
+    midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoControl);
   };
 
   $: $tempoControl, updatePlayer();
@@ -110,8 +107,8 @@
       (velocity / 128) *
       (($soft && SOFT_PEDAL_RATIO) || 1) *
       (($accent && ACCENT_BUMP) || 1) *
-      get(volume) *
-      (noteNumber < panBoundary ? get(bassVolume) : get(trebleVolume));
+      $volume *
+      (noteNumber < panBoundary ? $bassVolume : $trebleVolume);
     if (modifiedVelocity) {
       piano.keyDown({
         midi: noteNumber,
@@ -124,8 +121,8 @@
 
   const stopAllNotes = () => {
     piano.pedalUp();
-    if (get(sustain)) piano.pedalDown();
-    get(activeNotes).forEach((note) => stopNote(note));
+    if ($sustain) piano.pedalDown();
+    $activeNotes.forEach((note) => stopNote(note));
   };
 
   midiSamplePlayer.on("playing", ({ tick }) => {
