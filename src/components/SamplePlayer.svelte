@@ -18,11 +18,7 @@
 
   const midiSamplePlayer = new MidiPlayer.Player();
 
-  let softPedalOn;
-  let accentOn;
-
   let tempoMap;
-  let tempoRatio = 1.0;
 
   const getTempoAtTick = (tick) => {
     if (!tempoMap) return 60;
@@ -40,18 +36,17 @@
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       fn();
-      midiSamplePlayer.setTempo(getTempoAtTick(get(currentTick)) * tempoRatio);
+      midiSamplePlayer.setTempo(
+        getTempoAtTick(get(currentTick)) * $tempoControl,
+      );
       midiSamplePlayer.play();
       return;
     }
     fn();
-    midiSamplePlayer.setTempo(getTempoAtTick(get(currentTick)) * tempoRatio);
+    midiSamplePlayer.setTempo(getTempoAtTick(get(currentTick)) * $tempoControl);
   };
 
-  tempoControl.subscribe((newTempo) => {
-    tempoRatio = newTempo;
-    updatePlayer();
-  });
+  $: $tempoControl, updatePlayer();
 
   const decodeHtmlEntities = (string) =>
     string
@@ -108,27 +103,13 @@
 
   const pianoReady = piano.load();
 
-  sustain.subscribe((_sustain) => {
-    if (_sustain) {
-      piano.pedalDown();
-    } else {
-      piano.pedalUp();
-    }
-  });
-
-  soft.subscribe((_soft) => {
-    softPedalOn = _soft;
-  });
-
-  accent.subscribe((_accent) => {
-    accentOn = _accent;
-  });
+  $: $sustain ? piano.pedalDown() : piano.pedalUp();
 
   const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
     const modifiedVelocity =
       (velocity / 128) *
-      ((softPedalOn && SOFT_PEDAL_RATIO) || 1) *
-      ((accentOn && ACCENT_BUMP) || 1) *
+      (($soft && SOFT_PEDAL_RATIO) || 1) *
+      (($accent && ACCENT_BUMP) || 1) *
       get(volume) *
       (noteNumber < panBoundary ? get(bassVolume) : get(trebleVolume));
     if (modifiedVelocity) {
@@ -177,7 +158,7 @@
           soft.set(value === controllerChange.PEDAL_ON);
         }
       } else if (name === "Set Tempo") {
-        midiSamplePlayer.setTempo(data * tempoRatio);
+        midiSamplePlayer.setTempo(data * $tempoControl);
       }
     },
   );
