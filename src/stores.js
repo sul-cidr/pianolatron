@@ -25,7 +25,7 @@ const createSetStore = () => {
   };
 };
 
-export const tempoControl = createStore(1);
+export const tempoCoefficient = createStore(1);
 export const rollMetadata = createStore({});
 
 export const softOnOff = createStore(false);

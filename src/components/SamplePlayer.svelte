@@ -10,7 +10,7 @@
     volume,
     bassVolume,
     trebleVolume,
-    tempoControl,
+    tempoCoefficient,
     activeNotes,
     currentTick,
   } from "../stores";
@@ -35,15 +35,15 @@
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       fn();
-      midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoControl);
+      midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoCoefficient);
       midiSamplePlayer.play();
       return;
     }
     fn();
-    midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoControl);
+    midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoCoefficient);
   };
 
-  $: $tempoControl, updatePlayer();
+  $: $tempoCoefficient, updatePlayer();
 
   const decodeHtmlEntities = (string) =>
     string
@@ -155,7 +155,7 @@
           softOnOff.set(value === controllerChange.PEDAL_ON);
         }
       } else if (name === "Set Tempo") {
-        midiSamplePlayer.setTempo(data * $tempoControl);
+        midiSamplePlayer.setTempo(data * $tempoCoefficient);
       }
     },
   );

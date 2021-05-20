@@ -28,7 +28,7 @@
     volume,
     bassVolume,
     trebleVolume,
-    tempoControl,
+    tempoCoefficient,
     playbackProgress,
   } from "../stores";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
@@ -66,12 +66,12 @@
   </div>
   <div class="control">
     <span>Tempo: <kbd>w</kbd>↓ <kbd>e</kbd>↑</span>
-    <span>{($tempoControl * 100).toFixed(0)}%</span>
+    <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider
       min="0.1"
       max="4"
       step=".001"
-      bind:value={$tempoControl}
+      bind:value={$tempoCoefficient}
       name="tempo"
     />
   </div>

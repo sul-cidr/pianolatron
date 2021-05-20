@@ -59,7 +59,7 @@
     accentOnOff,
     bassVolume,
     trebleVolume,
-    tempoControl,
+    tempoCoefficient,
     playbackProgress,
     activeNotes,
     currentTick,
@@ -147,7 +147,7 @@
     mididataReady = false;
     appReady = false;
     stopApp();
-    tempoControl.reset();
+    tempoCoefficient.reset();
     bassVolume.reset();
     trebleVolume.reset();
     holesByTickInterval = new IntervalTree();
