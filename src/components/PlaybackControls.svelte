@@ -41,7 +41,8 @@
     class:pedal-on={$pedalling.soft}
     aria-pressed={$pedalling.soft}
     on:click={() => pedalling.update((val) => ({ ...val, soft: !val.soft }))}
-  >Soft</button>
+  >Soft
+    <kbd>q</kbd></button>
   <button
     type="button"
     class:pedal-on={$pedalling.sustain}
@@ -50,7 +51,8 @@
         ...val,
         sustain: !val.sustain,
       }))}
-  >Sustain</button>
+  >Sustain
+    <kbd>c</kbd></button>
   <br />
   <button
     type="button"

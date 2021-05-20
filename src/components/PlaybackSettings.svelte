@@ -16,6 +16,11 @@
       width: 100%;
     }
   }
+
+  kbd {
+    display: inline-block;
+    padding: 5px 5px;
+  }
 </style>
 
 <script>
@@ -33,7 +38,7 @@
 
 <div id="playback-settings">
   <div class="control">
-    <span>Volume:</span>
+    <span>Volume: <kbd>[</kbd>↓ <kbd>]</kbd>↑</span>
     <span>{$volume}</span>
     <RangeSlider min="0" max="4" step=".1" bind:value={$volume} name="volume" />
   </div>
@@ -60,7 +65,7 @@
     />
   </div>
   <div class="control">
-    <span>Tempo:</span>
+    <span>Tempo: <kbd>w</kbd>↓ <kbd>e</kbd>↑</span>
     <span>{($tempoControl * 100).toFixed(0)}%</span>
     <RangeSlider
       min="0.1"
