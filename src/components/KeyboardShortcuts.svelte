@@ -1,6 +1,6 @@
 <script>
   import { get } from "svelte/store";
-  import { pedalling, volume, tempoControl } from "../stores";
+  import { soft, sustain, accent, volume, tempoControl } from "../stores";
 
   const keyMap = Object.freeze({
     SOFT: "KeyQ",
@@ -61,17 +61,17 @@
     switch (event.code) {
       case keyMap.SOFT:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $pedalling.soft = true;
+        $soft = true;
         break;
 
       case keyMap.SUSTAIN:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $pedalling.sustain = true;
+        $sustain = true;
         break;
 
       case keyMap.ACCENT:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $pedalling.accent = true;
+        $accent = true;
         break;
 
       case keyMap.VOLUME_UP:
@@ -100,15 +100,15 @@
   on:keyup={({ code }) => {
     switch (code) {
       case keyMap.SOFT:
-        $pedalling.soft = false;
+        $soft = false;
         break;
 
       case keyMap.SUSTAIN:
-        $pedalling.sustain = false;
+        $sustain = false;
         break;
 
       case keyMap.ACCENT:
-        $pedalling.accent = false;
+        $accent = false;
         break;
 
       // no default

@@ -27,7 +27,7 @@
 </style>
 
 <script>
-  import { pedalling } from "../stores";
+  import { soft, sustain, accent } from "../stores";
 
   export let playPauseApp;
   export let stopApp;
@@ -38,31 +38,26 @@
   <button type="button" on:click={stopApp}>Stop</button>
   <button
     type="button"
-    class:pedal-on={$pedalling.soft}
-    aria-pressed={$pedalling.soft}
-    on:click={() => pedalling.update((val) => ({ ...val, soft: !val.soft }))}
+    class:pedal-on={$soft}
+    aria-pressed={$soft}
+    on:click={() => ($soft = !$soft)}
   >Soft
     <kbd>q</kbd></button>
   <button
     type="button"
-    class:pedal-on={$pedalling.sustain}
-    aria-pressed={$pedalling.sustain}
-    on:click={() => pedalling.update((val) => ({
-        ...val,
-        sustain: !val.sustain,
-      }))}
+    class:pedal-on={$sustain}
+    aria-pressed={$sustain}
+    on:click={() => ($sustain = !$sustain)}
   >Sustain
     <kbd>c</kbd></button>
   <br />
   <button
     type="button"
     style="width:100%"
-    class:pedal-on={$pedalling.accent}
-    aria-pressed={$pedalling.accent}
-    on:mousedown={() => pedalling.update((val) => ({ ...val, accent: true }))}
+    class:pedal-on={$accent}
+    aria-pressed={$accent}
+    on:mousedown={() => ($accent = true)}
   >Accent
     <kbd>,</kbd></button>
 </div>
-<svelte:window
-  on:mouseup={() => pedalling.update((val) => ({ ...val, accent: false }))}
-/>
+<svelte:window on:mouseup={() => ($accent = false)} />

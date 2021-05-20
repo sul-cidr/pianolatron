@@ -4,8 +4,9 @@ import { Piano } from "@tonejs/piano";
 import { get } from "svelte/store";
 import {
   rollMetadata,
-  pedalling,
+  soft,
   sustain,
+  accent,
   volume,
   bassVolume,
   trebleVolume,
@@ -114,9 +115,12 @@ sustain.subscribe((_sustain) => {
   }
 });
 
-pedalling.subscribe(({ soft, accent }) => {
-  softPedalOn = soft;
-  accentOn = accent;
+soft.subscribe((_soft) => {
+  softPedalOn = _soft;
+});
+
+accent.subscribe((_accent) => {
+  accentOn = _accent;
 });
 
 const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
@@ -163,16 +167,13 @@ midiSamplePlayer.on(
       if (number === controllerChange.SUSTAIN_PEDAL) {
         if (value === controllerChange.PEDAL_ON) {
           piano.pedalDown();
-          pedalling.update((val) => ({ ...val, sustain: true }));
+          sustain.set(true);
         } else {
           piano.pedalUp();
-          pedalling.update((val) => ({ ...val, sustain: false }));
+          sustain.set(false);
         }
       } else if (number === controllerChange.SOFT_PEDAL) {
-        pedalling.update((val) => ({
-          ...val,
-          soft: value === controllerChange.PEDAL_ON,
-        }));
+        soft.set(value === controllerChange.PEDAL_ON);
       }
     } else if (name === "Set Tempo") {
       midiSamplePlayer.setTempo(data * tempoRatio);

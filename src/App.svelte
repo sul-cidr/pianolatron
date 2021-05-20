@@ -53,7 +53,9 @@
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
-    pedalling,
+    soft,
+    sustain,
+    accent,
     bassVolume,
     trebleVolume,
     tempoControl,
@@ -133,7 +135,9 @@
     playbackProgress.reset();
     currentTick.reset();
     activeNotes.reset();
-    pedalling.reset();
+    soft.reset();
+    sustain.reset();
+    accent.reset();
   };
 
   const resetApp = () => {
