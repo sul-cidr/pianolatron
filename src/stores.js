@@ -28,7 +28,7 @@ const createSetStore = () => {
 export const tempoControl = createStore(1);
 export const rollMetadata = createStore({});
 
-export const soft = createStore(false);
+export const softOnOff = createStore(false);
 export const sustain = createStore(false);
 export const accent = createStore(false);
 

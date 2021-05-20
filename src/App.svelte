@@ -54,7 +54,7 @@
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
-    soft,
+    softOnOff,
     sustain,
     accent,
     bassVolume,
@@ -138,7 +138,7 @@
     playbackProgress.reset();
     currentTick.reset();
     activeNotes.reset();
-    soft.reset();
+    softOnOff.reset();
     sustain.reset();
     accent.reset();
   };

@@ -141,7 +141,7 @@
 </style>
 
 <script>
-  import { soft, sustain } from "../stores";
+  import { softOnOff, sustain } from "../stores";
   import KeyboardControls from "./KeyboardControls.svelte";
 
   export let keyCount = 88;
@@ -270,10 +270,10 @@
   width="46.9"
   height="61.6"
   class="pedal"
-  on:mousedown={() => ($soft = true)}
-  on:mouseup={() => ($soft = false)}
-  on:mouseout={() => ($soft = false)}
-  class:depressed={$soft}
+  on:mousedown={() => ($softOnOff = true)}
+  on:mouseup={() => ($softOnOff = false)}
+  on:mouseout={() => ($softOnOff = false)}
+  class:depressed={$softOnOff}
 >
   <use href="#pedal" />
 </svg>

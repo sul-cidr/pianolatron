@@ -27,7 +27,7 @@
 </style>
 
 <script>
-  import { soft, sustain, accent } from "../stores";
+  import { softOnOff, sustain, accent } from "../stores";
 
   export let playPauseApp;
   export let stopApp;
@@ -38,9 +38,9 @@
   <button type="button" on:click={stopApp}>Stop</button>
   <button
     type="button"
-    class:pedal-on={$soft}
-    aria-pressed={$soft}
-    on:click={() => ($soft = !$soft)}
+    class:pedal-on={$softOnOff}
+    aria-pressed={$softOnOff}
+    on:click={() => ($softOnOff = !$softOnOff)}
   >Soft
     <kbd>q</kbd></button>
   <button

@@ -4,7 +4,7 @@
 
   import {
     rollMetadata,
-    soft,
+    softOnOff,
     sustain,
     accent,
     volume,
@@ -105,7 +105,7 @@
   const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
     const modifiedVelocity =
       (velocity / 128) *
-      (($soft && SOFT_PEDAL_RATIO) || 1) *
+      (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
       (($accent && ACCENT_BUMP) || 1) *
       $volume *
       (noteNumber < panBoundary ? $bassVolume : $trebleVolume);
@@ -152,7 +152,7 @@
             sustain.set(false);
           }
         } else if (number === controllerChange.SOFT_PEDAL) {
-          soft.set(value === controllerChange.PEDAL_ON);
+          softOnOff.set(value === controllerChange.PEDAL_ON);
         }
       } else if (name === "Set Tempo") {
         midiSamplePlayer.setTempo(data * $tempoControl);
