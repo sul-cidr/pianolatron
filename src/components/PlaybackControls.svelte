@@ -60,7 +60,8 @@
     class:pedal-on={$pedalling.accent}
     aria-pressed={$pedalling.accent}
     on:mousedown={() => pedalling.update((val) => ({ ...val, accent: true }))}
-  >Accent</button>
+  >Accent
+    <kbd>,</kbd></button>
 </div>
 <svelte:window
   on:mouseup={() => pedalling.update((val) => ({ ...val, accent: false }))}

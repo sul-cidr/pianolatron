@@ -5,6 +5,7 @@
   const keyMap = Object.freeze({
     SOFT: "KeyQ",
     SUSTAIN: "KeyC",
+    ACCENT: "Comma",
     VOLUME_UP: "BracketRight",
     VOLUME_DOWN: "BracketLeft",
     TEMPO_UP: "KeyE",
@@ -68,6 +69,11 @@
         $pedalling.sustain = true;
         break;
 
+      case keyMap.ACCENT:
+        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
+        $pedalling.accent = true;
+        break;
+
       case keyMap.VOLUME_UP:
         event.preventDefault();
         increment(config.volume, event);
@@ -99,6 +105,10 @@
 
       case keyMap.SUSTAIN:
         $pedalling.sustain = false;
+        break;
+
+      case keyMap.ACCENT:
+        $pedalling.accent = false;
         break;
 
       // no default
