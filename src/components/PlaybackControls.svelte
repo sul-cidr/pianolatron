@@ -27,7 +27,7 @@
 </style>
 
 <script>
-  import { softOnOff, sustainOnOff, accent } from "../stores";
+  import { softOnOff, sustainOnOff, accentOnOff } from "../stores";
 
   export let playPauseApp;
   export let stopApp;
@@ -54,10 +54,10 @@
   <button
     type="button"
     style="width:100%"
-    class:pedal-on={$accent}
-    aria-pressed={$accent}
-    on:mousedown={() => ($accent = true)}
+    class:pedal-on={$accentOnOff}
+    aria-pressed={$accentOnOff}
+    on:mousedown={() => ($accentOnOff = true)}
   >Accent
     <kbd>,</kbd></button>
 </div>
-<svelte:window on:mouseup={() => ($accent = false)} />
+<svelte:window on:mouseup={() => ($accentOnOff = false)} />

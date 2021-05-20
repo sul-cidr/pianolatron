@@ -56,7 +56,7 @@
   import {
     softOnOff,
     sustainOnOff,
-    accent,
+    accentOnOff,
     bassVolume,
     trebleVolume,
     tempoControl,
@@ -140,7 +140,7 @@
     activeNotes.reset();
     softOnOff.reset();
     sustainOnOff.reset();
-    accent.reset();
+    accentOnOff.reset();
   };
 
   const resetApp = () => {

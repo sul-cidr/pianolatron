@@ -1,6 +1,6 @@
 <script>
   import { get } from "svelte/store";
-  import { softOnOff, sustainOnOff, accent, volume, tempoControl } from "../stores";
+  import { softOnOff, sustainOnOff, accentOnOff, volume, tempoControl } from "../stores";
 
   const keyMap = Object.freeze({
     SOFT: "KeyQ",
@@ -71,7 +71,7 @@
 
       case keyMap.ACCENT:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        accent.set(true);
+        accentOnOff.set(true);
         break;
 
       case keyMap.VOLUME_UP:
@@ -108,7 +108,7 @@
         break;
 
       case keyMap.ACCENT:
-        accent.set(false);
+        accentOnOff.set(false);
         break;
 
       // no default

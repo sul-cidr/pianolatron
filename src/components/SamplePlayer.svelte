@@ -6,7 +6,7 @@
     rollMetadata,
     softOnOff,
     sustainOnOff,
-    accent,
+    accentOnOff,
     volume,
     bassVolume,
     trebleVolume,
@@ -106,7 +106,7 @@
     const modifiedVelocity =
       (velocity / 128) *
       (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
-      (($accent && ACCENT_BUMP) || 1) *
+      (($accentOnOff && ACCENT_BUMP) || 1) *
       $volume *
       (noteNumber < panBoundary ? $bassVolume : $trebleVolume);
     if (modifiedVelocity) {
