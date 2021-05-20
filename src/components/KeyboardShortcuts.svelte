@@ -19,7 +19,7 @@
       delta: 0.1,
       shiftDelta: 0.4,
       ctrlDelta: 0.05,
-      precision: 1,
+      precision: 2,
     },
     tempo: {
       store: tempoControl,
