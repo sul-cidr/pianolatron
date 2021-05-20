@@ -61,17 +61,17 @@
     switch (event.code) {
       case keyMap.SOFT:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $soft = true;
+        soft.set(true);
         break;
 
       case keyMap.SUSTAIN:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $sustain = true;
+        sustain.set(true);
         break;
 
       case keyMap.ACCENT:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $accent = true;
+        accent.set(true);
         break;
 
       case keyMap.VOLUME_UP:
@@ -100,15 +100,15 @@
   on:keyup={({ code }) => {
     switch (code) {
       case keyMap.SOFT:
-        $soft = false;
+        soft.set(false);
         break;
 
       case keyMap.SUSTAIN:
-        $sustain = false;
+        sustain.set(false);
         break;
 
       case keyMap.ACCENT:
-        $accent = false;
+        accent.set(false);
         break;
 
       // no default
