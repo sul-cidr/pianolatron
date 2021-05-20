@@ -157,6 +157,7 @@
     },
   );
 
+  /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
   $: $tempoCoefficient, updatePlayer();
 
