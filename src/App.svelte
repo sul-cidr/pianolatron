@@ -72,7 +72,7 @@
     startNote,
     stopNote,
     stopAllNotes,
-  } from "./components/SamplePlayer";
+  } from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import RollViewer from "./components/RollViewer.svelte";
