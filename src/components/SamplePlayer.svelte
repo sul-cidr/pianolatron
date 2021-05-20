@@ -1,4 +1,4 @@
-<script context="module">
+<script>
   import MidiPlayer from "midi-player-js";
   import { Piano } from "@tonejs/piano";
 
