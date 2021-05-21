@@ -208,15 +208,10 @@
       stopNote,
       stopAllNotes,
     } = samplePlayer);
-    midiSamplePlayer.on("endOfFile", () => stopApp());
+    midiSamplePlayer.on("endOfFile", stopApp);
   });
 
-  $: {
-    if (currentRoll !== previousRoll) {
-      loadRoll(currentRoll);
-    }
-  }
-
+  $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
   $: playbackProgress.update(() => $currentTick / midiSamplePlayer?.totalTicks);
   $: if ($rollPedalingOnOff) {
     // TODO: set roll pedalling according to (as yet unavailable) pedalMap
