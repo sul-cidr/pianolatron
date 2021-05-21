@@ -64,6 +64,7 @@
     activeNotes,
     currentTick,
     rollMetadata,
+    rollPedalingOnOff,
     overlayKeyboard,
   } from "./stores";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -217,6 +218,12 @@
   }
 
   $: playbackProgress.update(() => $currentTick / midiSamplePlayer?.totalTicks);
+  $: if ($rollPedalingOnOff) {
+    // TODO: set roll pedalling according to (as yet unavailable) pedalMap
+  } else {
+    sustainOnOff.set(false);
+    softOnOff.set(false);
+  }
 </script>
 
 <div id="app">
