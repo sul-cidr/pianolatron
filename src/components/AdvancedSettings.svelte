@@ -44,7 +44,7 @@
 
 <script>
   import { fly } from "svelte/transition";
-  import { userSettings } from "../stores";
+  import { playExpressionsOnOff, userSettings } from "../stores";
 
   let el;
   const themes = ["cardinal", "blue", "green", "grey"];
@@ -73,5 +73,9 @@
   <div>
     Show details for Active Notes:
     <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
+  </div>
+  <div>
+    Play Expressions:
+    <input type="checkbox" bind:checked={$playExpressionsOnOff} />
   </div>
 </div>

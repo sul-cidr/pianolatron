@@ -11,6 +11,7 @@
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
+    playExpressionsOnOff,
     activeNotes,
     currentTick,
   } from "../stores";
@@ -67,9 +68,9 @@
     midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoCoefficient);
   };
 
-  const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
+  const startNote = (noteNumber, velocity) => {
     const modifiedVelocity =
-      (velocity / 128) *
+      ((($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 128) *
       (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
       (($accentOnOff && ACCENT_BUMP) || 1) *
       $volumeCoefficient *

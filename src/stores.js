@@ -40,6 +40,8 @@ export const trebleVolumeCoefficient = createStore(1);
 
 export const tempoCoefficient = createStore(1);
 
+export const playExpressionsOnOff = createStore(true);
+
 // Playback State
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
