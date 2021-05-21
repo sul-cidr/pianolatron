@@ -16,10 +16,21 @@
       width: 100%;
     }
   }
+
+  kbd {
+    display: inline-block;
+    padding: 5px 5px;
+  }
 </style>
 
 <script>
-  import { volume, tempoControl, playbackProgress } from "../stores";
+  import {
+    volume,
+    bassVolume,
+    trebleVolume,
+    tempoControl,
+    playbackProgress,
+  } from "../stores";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
   export let skipToPercentage;
@@ -27,40 +38,34 @@
 
 <div id="playback-settings">
   <div class="control">
-    <span>Volume:</span>
-    <span>{$volume.master}</span>
-    <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
-      bind:value={$volume.master}
-      name="volume"
-    />
+    <span>Volume: <kbd>[</kbd>↓ <kbd>]</kbd>↑</span>
+    <span>{$volume}</span>
+    <RangeSlider min="0" max="4" step=".1" bind:value={$volume} name="volume" />
   </div>
   <div class="control">
     <span>Bass Volume:</span>
-    <span>{$volume.left}</span>
+    <span>{$bassVolume}</span>
     <RangeSlider
       min="0"
       max="4"
       step=".1"
-      bind:value={$volume.left}
-      name="volume"
+      bind:value={$bassVolume}
+      name="bassVolume"
     />
   </div>
   <div class="control">
     <span>Treble Volume:</span>
-    <span>{$volume.right}</span>
+    <span>{$trebleVolume}</span>
     <RangeSlider
       min="0"
       max="4"
       step=".1"
-      bind:value={$volume.right}
-      name="volume"
+      bind:value={$trebleVolume}
+      name="trebleVolume"
     />
   </div>
   <div class="control">
-    <span>Tempo:</span>
+    <span>Tempo: <kbd>w</kbd>↓ <kbd>e</kbd>↑</span>
     <span>{($tempoControl * 100).toFixed(0)}%</span>
     <RangeSlider
       min="0.1"
