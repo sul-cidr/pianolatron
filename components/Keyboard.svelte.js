@@ -28,19 +28,19 @@ import {
 	transition_out
 } from "../_snowpack/pkg/svelte/internal.js";
 
-import { pedalling } from "../stores.js";
+import { softOnOff, sustainOnOff } from "../stores.js";
 import KeyboardControls from "./KeyboardControls.svelte.js";
 
 function get_each_context_1(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[26] = list[i].title;
-	child_ctx[27] = list[i].note;
+	child_ctx[27] = list[i].title;
+	child_ctx[28] = list[i].note;
 	return child_ctx;
 }
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[23] = list[i];
+	child_ctx[24] = list[i];
 	return child_ctx;
 }
 
@@ -53,17 +53,17 @@ function create_each_block_1(ctx) {
 	return {
 		c() {
 			span = element("span");
-			attr(span, "title", span_title_value = /*title*/ ctx[26]);
-			attr(span, "data-key", span_data_key_value = /*note*/ ctx[27]);
+			attr(span, "title", span_title_value = /*title*/ ctx[27]);
+			attr(span, "data-key", span_data_key_value = /*note*/ ctx[28]);
 			attr(span, "class", "svelte-1d68rqw");
-			toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[27]) || /*playing*/ ctx[4].has(/*note*/ ctx[27]));
+			toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[28]) || /*playing*/ ctx[4].has(/*note*/ ctx[28]));
 		},
 		m(target, anchor) {
 			insert(target, span, anchor);
 		},
 		p(ctx, dirty) {
-			if (dirty & /*$activeNotes, keys, playing*/ 176) {
-				toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[27]) || /*playing*/ ctx[4].has(/*note*/ ctx[27]));
+			if (dirty & /*$activeNotes, keys, playing*/ 304) {
+				toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[28]) || /*playing*/ ctx[4].has(/*note*/ ctx[28]));
 			}
 		},
 		d(detaching) {
@@ -76,7 +76,7 @@ function create_each_block_1(ctx) {
 function create_each_block(ctx) {
 	let div;
 	let t;
-	let each_value_1 = /*key*/ ctx[23];
+	let each_value_1 = /*key*/ ctx[24];
 	let each_blocks = [];
 
 	for (let i = 0; i < each_value_1.length; i += 1) {
@@ -104,8 +104,8 @@ function create_each_block(ctx) {
 			append(div, t);
 		},
 		p(ctx, dirty) {
-			if (dirty & /*keys, $activeNotes, playing*/ 176) {
-				each_value_1 = /*key*/ ctx[23];
+			if (dirty & /*keys, $activeNotes, playing*/ 304) {
+				each_value_1 = /*key*/ ctx[24];
 				let i;
 
 				for (i = 0; i < each_value_1.length; i += 1) {
@@ -156,7 +156,7 @@ function create_fragment(ctx) {
 	let current;
 	let mounted;
 	let dispose;
-	let each_value = /*keys*/ ctx[7];
+	let each_value = /*keys*/ ctx[8];
 	let each_blocks = [];
 
 	for (let i = 0; i < each_value.length; i += 1) {
@@ -212,13 +212,13 @@ function create_fragment(ctx) {
 			attr(svg1, "width", "46.9");
 			attr(svg1, "height", "61.6");
 			attr(svg1, "class", "pedal svelte-1d68rqw");
-			toggle_class(svg1, "depressed", /*$pedalling*/ ctx[6].soft);
+			toggle_class(svg1, "depressed", /*$softOnOff*/ ctx[6]);
 			attr(use1, "href", "#pedal");
 			attr(svg2, "xmlns", "http://www.w3.org/2000/svg");
 			attr(svg2, "width", "46.9");
 			attr(svg2, "height", "61.6");
 			attr(svg2, "class", "pedal svelte-1d68rqw");
-			toggle_class(svg2, "depressed", /*$pedalling*/ ctx[6].sustain);
+			toggle_class(svg2, "depressed", /*$sustainOnOff*/ ctx[7]);
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -248,24 +248,24 @@ function create_fragment(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(window, "mouseup", /*mouseup_handler*/ ctx[10]),
-					listen(div0, "mousedown", prevent_default(/*mousedown_handler*/ ctx[11])),
-					listen(div0, "mouseup", prevent_default(/*mouseup_handler_1*/ ctx[12])),
-					listen(div0, "mousemove", prevent_default(/*mousemove_handler*/ ctx[13])),
-					listen(svg1, "mousedown", /*mousedown_handler_1*/ ctx[14]),
-					listen(svg1, "mouseup", /*mouseup_handler_2*/ ctx[15]),
-					listen(svg1, "mouseout", /*mouseout_handler*/ ctx[16]),
-					listen(svg2, "mousedown", /*mousedown_handler_2*/ ctx[17]),
-					listen(svg2, "mouseup", /*mouseup_handler_3*/ ctx[18]),
-					listen(svg2, "mouseout", /*mouseout_handler_1*/ ctx[19])
+					listen(window, "mouseup", /*mouseup_handler*/ ctx[11]),
+					listen(div0, "mousedown", prevent_default(/*mousedown_handler*/ ctx[12])),
+					listen(div0, "mouseup", prevent_default(/*mouseup_handler_1*/ ctx[13])),
+					listen(div0, "mousemove", prevent_default(/*mousemove_handler*/ ctx[14])),
+					listen(svg1, "mousedown", /*mousedown_handler_1*/ ctx[15]),
+					listen(svg1, "mouseup", /*mouseup_handler_2*/ ctx[16]),
+					listen(svg1, "mouseout", /*mouseout_handler*/ ctx[17]),
+					listen(svg2, "mousedown", /*mousedown_handler_2*/ ctx[18]),
+					listen(svg2, "mouseup", /*mouseup_handler_3*/ ctx[19]),
+					listen(svg2, "mouseout", /*mouseout_handler_1*/ ctx[20])
 				];
 
 				mounted = true;
 			}
 		},
 		p(ctx, [dirty]) {
-			if (dirty & /*keys, $activeNotes, playing*/ 176) {
-				each_value = /*keys*/ ctx[7];
+			if (dirty & /*keys, $activeNotes, playing*/ 304) {
+				each_value = /*keys*/ ctx[8];
 				let i;
 
 				for (i = 0; i < each_value.length; i += 1) {
@@ -287,12 +287,12 @@ function create_fragment(ctx) {
 				each_blocks.length = each_value.length;
 			}
 
-			if (dirty & /*$pedalling*/ 64) {
-				toggle_class(svg1, "depressed", /*$pedalling*/ ctx[6].soft);
+			if (dirty & /*$softOnOff*/ 64) {
+				toggle_class(svg1, "depressed", /*$softOnOff*/ ctx[6]);
 			}
 
-			if (dirty & /*$pedalling*/ 64) {
-				toggle_class(svg2, "depressed", /*$pedalling*/ ctx[6].sustain);
+			if (dirty & /*$sustainOnOff*/ 128) {
+				toggle_class(svg2, "depressed", /*$sustainOnOff*/ ctx[7]);
 			}
 		},
 		i(local) {
@@ -325,8 +325,10 @@ function instance($$self, $$props, $$invalidate) {
 		$$unsubscribe_activeNotes = noop,
 		$$subscribe_activeNotes = () => ($$unsubscribe_activeNotes(), $$unsubscribe_activeNotes = subscribe(activeNotes, $$value => $$invalidate(5, $activeNotes = $$value)), activeNotes);
 
-	let $pedalling;
-	component_subscribe($$self, pedalling, $$value => $$invalidate(6, $pedalling = $$value));
+	let $softOnOff;
+	let $sustainOnOff;
+	component_subscribe($$self, softOnOff, $$value => $$invalidate(6, $softOnOff = $$value));
+	component_subscribe($$self, sustainOnOff, $$value => $$invalidate(7, $sustainOnOff = $$value));
 	$$self.$$.on_destroy.push(() => $$unsubscribe_activeNotes());
 	let { keyCount = 88 } = $$props;
 	let { startNote } = $$props;
@@ -401,15 +403,15 @@ function instance($$self, $$props, $$invalidate) {
 		}
 	};
 
-	const mousedown_handler_1 = () => set_store_value(pedalling, $pedalling.soft = true, $pedalling);
-	const mouseup_handler_2 = () => set_store_value(pedalling, $pedalling.soft = false, $pedalling);
-	const mouseout_handler = () => set_store_value(pedalling, $pedalling.soft = false, $pedalling);
-	const mousedown_handler_2 = () => set_store_value(pedalling, $pedalling.sustain = true, $pedalling);
-	const mouseup_handler_3 = () => set_store_value(pedalling, $pedalling.sustain = false, $pedalling);
-	const mouseout_handler_1 = () => set_store_value(pedalling, $pedalling.sustain = false, $pedalling);
+	const mousedown_handler_1 = () => set_store_value(softOnOff, $softOnOff = true, $softOnOff);
+	const mouseup_handler_2 = () => set_store_value(softOnOff, $softOnOff = false, $softOnOff);
+	const mouseout_handler = () => set_store_value(softOnOff, $softOnOff = false, $softOnOff);
+	const mousedown_handler_2 = () => set_store_value(sustainOnOff, $sustainOnOff = true, $sustainOnOff);
+	const mouseup_handler_3 = () => set_store_value(sustainOnOff, $sustainOnOff = false, $sustainOnOff);
+	const mouseout_handler_1 = () => set_store_value(sustainOnOff, $sustainOnOff = false, $sustainOnOff);
 
 	$$self.$$set = $$props => {
-		if ("keyCount" in $$props) $$invalidate(9, keyCount = $$props.keyCount);
+		if ("keyCount" in $$props) $$invalidate(10, keyCount = $$props.keyCount);
 		if ("startNote" in $$props) $$invalidate(0, startNote = $$props.startNote);
 		if ("stopNote" in $$props) $$invalidate(1, stopNote = $$props.stopNote);
 		if ("activeNotes" in $$props) $$subscribe_activeNotes($$invalidate(2, activeNotes = $$props.activeNotes));
@@ -422,7 +424,8 @@ function instance($$self, $$props, $$invalidate) {
 		mouseDown,
 		playing,
 		$activeNotes,
-		$pedalling,
+		$softOnOff,
+		$sustainOnOff,
 		keys,
 		stopPlaying,
 		keyCount,
@@ -444,7 +447,7 @@ class Keyboard extends SvelteComponent {
 		super();
 
 		init(this, options, instance, create_fragment, safe_not_equal, {
-			keyCount: 9,
+			keyCount: 10,
 			startNote: 0,
 			stopNote: 1,
 			activeNotes: 2

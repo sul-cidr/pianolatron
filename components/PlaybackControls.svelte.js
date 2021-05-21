@@ -14,13 +14,14 @@ import {
 	noop,
 	run_all,
 	safe_not_equal,
+	set_store_value,
 	set_style,
 	space,
 	text,
 	toggle_class
 } from "../_snowpack/pkg/svelte/internal.js";
 
-import { pedalling } from "../stores.js";
+import { softOnOff, sustainOnOff, accentOnOff } from "../stores.js";
 
 function create_fragment(ctx) {
 	let div;
@@ -31,19 +32,16 @@ function create_fragment(ctx) {
 	let button2;
 	let t4;
 	let kbd0;
-	let button2_aria_pressed_value;
 	let t6;
 	let button3;
 	let t7;
 	let kbd1;
-	let button3_aria_pressed_value;
 	let t9;
 	let br;
 	let t10;
 	let button4;
 	let t11;
 	let kbd2;
-	let button4_aria_pressed_value;
 	let mounted;
 	let dispose;
 
@@ -77,18 +75,18 @@ function create_fragment(ctx) {
 			attr(button1, "type", "button");
 			attr(button1, "class", "svelte-maddbr");
 			attr(button2, "type", "button");
-			attr(button2, "aria-pressed", button2_aria_pressed_value = /*$pedalling*/ ctx[2].soft);
+			attr(button2, "aria-pressed", /*$softOnOff*/ ctx[2]);
 			attr(button2, "class", "svelte-maddbr");
-			toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[2].soft);
+			toggle_class(button2, "pedal-on", /*$softOnOff*/ ctx[2]);
 			attr(button3, "type", "button");
-			attr(button3, "aria-pressed", button3_aria_pressed_value = /*$pedalling*/ ctx[2].sustain);
+			attr(button3, "aria-pressed", /*$sustainOnOff*/ ctx[3]);
 			attr(button3, "class", "svelte-maddbr");
-			toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[2].sustain);
+			toggle_class(button3, "pedal-on", /*$sustainOnOff*/ ctx[3]);
 			attr(button4, "type", "button");
 			set_style(button4, "width", "100%");
-			attr(button4, "aria-pressed", button4_aria_pressed_value = /*$pedalling*/ ctx[2].accent);
+			attr(button4, "aria-pressed", /*$accentOnOff*/ ctx[4]);
 			attr(button4, "class", "svelte-maddbr");
-			toggle_class(button4, "pedal-on", /*$pedalling*/ ctx[2].accent);
+			toggle_class(button4, "pedal-on", /*$accentOnOff*/ ctx[4]);
 			attr(div, "id", "playback-controls");
 			attr(div, "class", "svelte-maddbr");
 		},
@@ -114,16 +112,16 @@ function create_fragment(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(window, "mouseup", /*mouseup_handler*/ ctx[3]),
+					listen(window, "mouseup", /*mouseup_handler*/ ctx[5]),
 					listen(button0, "click", function () {
 						if (is_function(/*playPauseApp*/ ctx[0])) /*playPauseApp*/ ctx[0].apply(this, arguments);
 					}),
 					listen(button1, "click", function () {
 						if (is_function(/*stopApp*/ ctx[1])) /*stopApp*/ ctx[1].apply(this, arguments);
 					}),
-					listen(button2, "click", /*click_handler*/ ctx[4]),
-					listen(button3, "click", /*click_handler_1*/ ctx[5]),
-					listen(button4, "mousedown", /*mousedown_handler*/ ctx[6])
+					listen(button2, "click", /*click_handler*/ ctx[6]),
+					listen(button3, "click", /*click_handler_1*/ ctx[7]),
+					listen(button4, "mousedown", /*mousedown_handler*/ ctx[8])
 				];
 
 				mounted = true;
@@ -132,28 +130,28 @@ function create_fragment(ctx) {
 		p(new_ctx, [dirty]) {
 			ctx = new_ctx;
 
-			if (dirty & /*$pedalling*/ 4 && button2_aria_pressed_value !== (button2_aria_pressed_value = /*$pedalling*/ ctx[2].soft)) {
-				attr(button2, "aria-pressed", button2_aria_pressed_value);
+			if (dirty & /*$softOnOff*/ 4) {
+				attr(button2, "aria-pressed", /*$softOnOff*/ ctx[2]);
 			}
 
-			if (dirty & /*$pedalling*/ 4) {
-				toggle_class(button2, "pedal-on", /*$pedalling*/ ctx[2].soft);
+			if (dirty & /*$softOnOff*/ 4) {
+				toggle_class(button2, "pedal-on", /*$softOnOff*/ ctx[2]);
 			}
 
-			if (dirty & /*$pedalling*/ 4 && button3_aria_pressed_value !== (button3_aria_pressed_value = /*$pedalling*/ ctx[2].sustain)) {
-				attr(button3, "aria-pressed", button3_aria_pressed_value);
+			if (dirty & /*$sustainOnOff*/ 8) {
+				attr(button3, "aria-pressed", /*$sustainOnOff*/ ctx[3]);
 			}
 
-			if (dirty & /*$pedalling*/ 4) {
-				toggle_class(button3, "pedal-on", /*$pedalling*/ ctx[2].sustain);
+			if (dirty & /*$sustainOnOff*/ 8) {
+				toggle_class(button3, "pedal-on", /*$sustainOnOff*/ ctx[3]);
 			}
 
-			if (dirty & /*$pedalling*/ 4 && button4_aria_pressed_value !== (button4_aria_pressed_value = /*$pedalling*/ ctx[2].accent)) {
-				attr(button4, "aria-pressed", button4_aria_pressed_value);
+			if (dirty & /*$accentOnOff*/ 16) {
+				attr(button4, "aria-pressed", /*$accentOnOff*/ ctx[4]);
 			}
 
-			if (dirty & /*$pedalling*/ 4) {
-				toggle_class(button4, "pedal-on", /*$pedalling*/ ctx[2].accent);
+			if (dirty & /*$accentOnOff*/ 16) {
+				toggle_class(button4, "pedal-on", /*$accentOnOff*/ ctx[4]);
 			}
 		},
 		i: noop,
@@ -167,14 +165,18 @@ function create_fragment(ctx) {
 }
 
 function instance($$self, $$props, $$invalidate) {
-	let $pedalling;
-	component_subscribe($$self, pedalling, $$value => $$invalidate(2, $pedalling = $$value));
+	let $softOnOff;
+	let $sustainOnOff;
+	let $accentOnOff;
+	component_subscribe($$self, softOnOff, $$value => $$invalidate(2, $softOnOff = $$value));
+	component_subscribe($$self, sustainOnOff, $$value => $$invalidate(3, $sustainOnOff = $$value));
+	component_subscribe($$self, accentOnOff, $$value => $$invalidate(4, $accentOnOff = $$value));
 	let { playPauseApp } = $$props;
 	let { stopApp } = $$props;
-	const mouseup_handler = () => pedalling.update(val => ({ ...val, accent: false }));
-	const click_handler = () => pedalling.update(val => ({ ...val, soft: !val.soft }));
-	const click_handler_1 = () => pedalling.update(val => ({ ...val, sustain: !val.sustain }));
-	const mousedown_handler = () => pedalling.update(val => ({ ...val, accent: true }));
+	const mouseup_handler = () => set_store_value(accentOnOff, $accentOnOff = false, $accentOnOff);
+	const click_handler = () => set_store_value(softOnOff, $softOnOff = !$softOnOff, $softOnOff);
+	const click_handler_1 = () => set_store_value(sustainOnOff, $sustainOnOff = !$sustainOnOff, $sustainOnOff);
+	const mousedown_handler = () => set_store_value(accentOnOff, $accentOnOff = true, $accentOnOff);
 
 	$$self.$$set = $$props => {
 		if ("playPauseApp" in $$props) $$invalidate(0, playPauseApp = $$props.playPauseApp);
@@ -184,7 +186,9 @@ function instance($$self, $$props, $$invalidate) {
 	return [
 		playPauseApp,
 		stopApp,
-		$pedalling,
+		$softOnOff,
+		$sustainOnOff,
+		$accentOnOff,
 		mouseup_handler,
 		click_handler,
 		click_handler_1,
