@@ -23,65 +23,69 @@ import {
 	transition_out
 } from "../_snowpack/pkg/svelte/internal.js";
 
-import { volume, tempoControl, playbackProgress } from "../stores.js";
+import {
+	volume,
+	bassVolume,
+	trebleVolume,
+	tempoControl,
+	playbackProgress
+} from "../stores.js";
+
 import RangeSlider from "../ui-components/RangeSlider.svelte.js";
 
 function create_fragment(ctx) {
 	let div5;
 	let div0;
 	let span0;
-	let t1;
+	let t5;
 	let span1;
-	let t2_value = /*$volume*/ ctx[1].master + "";
-	let t2;
-	let t3;
+	let t6;
+	let t7;
 	let rangeslider0;
 	let updating_value;
-	let t4;
+	let t8;
 	let div1;
 	let span2;
-	let t6;
+	let t10;
 	let span3;
-	let t7_value = /*$volume*/ ctx[1].left + "";
-	let t7;
-	let t8;
+	let t11;
+	let t12;
 	let rangeslider1;
 	let updating_value_1;
-	let t9;
+	let t13;
 	let div2;
 	let span4;
-	let t11;
+	let t15;
 	let span5;
-	let t12_value = /*$volume*/ ctx[1].right + "";
-	let t12;
-	let t13;
+	let t16;
+	let t17;
 	let rangeslider2;
 	let updating_value_2;
-	let t14;
+	let t18;
 	let div3;
 	let span6;
-	let t16;
+	let t24;
 	let span7;
-	let t17_value = (/*$tempoControl*/ ctx[2] * 100).toFixed(0) + "";
-	let t17;
-	let t18;
-	let t19;
+	let t25_value = (/*$tempoControl*/ ctx[4] * 100).toFixed(0) + "";
+	let t25;
+	let t26;
+	let t27;
 	let rangeslider3;
 	let updating_value_3;
-	let t20;
+	let t28;
 	let div4;
 	let span8;
-	let t22;
+	let t30;
 	let span9;
-	let t23_value = (/*$playbackProgress*/ ctx[3] * 100).toFixed(2) + "";
-	let t23;
-	let t24;
-	let t25;
+	let t31_value = (/*$playbackProgress*/ ctx[5] * 100).toFixed(2) + "";
+	let t31;
+	let t32;
+	let t33;
 	let rangeslider4;
 	let current;
 
 	function rangeslider0_value_binding(value) {
-		/*rangeslider0_value_binding*/ ctx[4].call(null, value);
+		/*rangeslider0_value_binding*/ ctx[6].call(null, value);
 	}
 
 	let rangeslider0_props = {
@@ -91,51 +95,51 @@ function create_fragment(ctx) {
 		name: "volume"
 	};
 
-	if (/*$volume*/ ctx[1].master !== void 0) {
-		rangeslider0_props.value = /*$volume*/ ctx[1].master;
+	if (/*$volume*/ ctx[1] !== void 0) {
+		rangeslider0_props.value = /*$volume*/ ctx[1];
 	}
 
 	rangeslider0 = new RangeSlider({ props: rangeslider0_props });
 	binding_callbacks.push(() => bind(rangeslider0, "value", rangeslider0_value_binding));
 
 	function rangeslider1_value_binding(value) {
-		/*rangeslider1_value_binding*/ ctx[5].call(null, value);
+		/*rangeslider1_value_binding*/ ctx[7].call(null, value);
 	}
 
 	let rangeslider1_props = {
 		min: "0",
 		max: "4",
 		step: ".1",
-		name: "volume"
+		name: "bassVolume"
 	};
 
-	if (/*$volume*/ ctx[1].left !== void 0) {
-		rangeslider1_props.value = /*$volume*/ ctx[1].left;
+	if (/*$bassVolume*/ ctx[2] !== void 0) {
+		rangeslider1_props.value = /*$bassVolume*/ ctx[2];
 	}
 
 	rangeslider1 = new RangeSlider({ props: rangeslider1_props });
 	binding_callbacks.push(() => bind(rangeslider1, "value", rangeslider1_value_binding));
 
 	function rangeslider2_value_binding(value) {
-		/*rangeslider2_value_binding*/ ctx[6].call(null, value);
+		/*rangeslider2_value_binding*/ ctx[8].call(null, value);
 	}
 
 	let rangeslider2_props = {
 		min: "0",
 		max: "4",
 		step: ".1",
-		name: "volume"
+		name: "trebleVolume"
 	};
 
-	if (/*$volume*/ ctx[1].right !== void 0) {
-		rangeslider2_props.value = /*$volume*/ ctx[1].right;
+	if (/*$trebleVolume*/ ctx[3] !== void 0) {
+		rangeslider2_props.value = /*$trebleVolume*/ ctx[3];
 	}
 
 	rangeslider2 = new RangeSlider({ props: rangeslider2_props });
 	binding_callbacks.push(() => bind(rangeslider2, "value", rangeslider2_value_binding));
 
 	function rangeslider3_value_binding(value) {
-		/*rangeslider3_value_binding*/ ctx[7].call(null, value);
+		/*rangeslider3_value_binding*/ ctx[9].call(null, value);
 	}
 
 	let rangeslider3_props = {
@@ -145,8 +149,8 @@ function create_fragment(ctx) {
 		name: "tempo"
 	};
 
-	if (/*$tempoControl*/ ctx[2] !== void 0) {
-		rangeslider3_props.value = /*$tempoControl*/ ctx[2];
+	if (/*$tempoControl*/ ctx[4] !== void 0) {
+		rangeslider3_props.value = /*$tempoControl*/ ctx[4];
 	}
 
 	rangeslider3 = new RangeSlider({ props: rangeslider3_props });
@@ -157,160 +161,160 @@ function create_fragment(ctx) {
 				min: "0",
 				max: "1",
 				step: "0.001",
-				value: /*$playbackProgress*/ ctx[3],
+				value: /*$playbackProgress*/ ctx[5],
 				name: "progress",
 				mousewheel: false
 			}
 		});
 
-	rangeslider4.$on("input", /*input_handler*/ ctx[8]);
+	rangeslider4.$on("input", /*input_handler*/ ctx[10]);
 
 	return {
 		c() {
 			div5 = element("div");
 			div0 = element("div");
 			span0 = element("span");
-			span0.textContent = "Volume:";
-			t1 = space();
+			span0.innerHTML = `Volume: <kbd class="svelte-1ms9wt8">[</kbd>↓ <kbd class="svelte-1ms9wt8">]</kbd>↑`;
+			t5 = space();
 			span1 = element("span");
-			t2 = text(t2_value);
-			t3 = space();
+			t6 = text(/*$volume*/ ctx[1]);
+			t7 = space();
 			create_component(rangeslider0.$$.fragment);
-			t4 = space();
+			t8 = space();
 			div1 = element("div");
 			span2 = element("span");
 			span2.textContent = "Bass Volume:";
-			t6 = space();
+			t10 = space();
 			span3 = element("span");
-			t7 = text(t7_value);
-			t8 = space();
+			t11 = text(/*$bassVolume*/ ctx[2]);
+			t12 = space();
 			create_component(rangeslider1.$$.fragment);
-			t9 = space();
+			t13 = space();
 			div2 = element("div");
 			span4 = element("span");
 			span4.textContent = "Treble Volume:";
-			t11 = space();
+			t15 = space();
 			span5 = element("span");
-			t12 = text(t12_value);
-			t13 = space();
+			t16 = text(/*$trebleVolume*/ ctx[3]);
+			t17 = space();
 			create_component(rangeslider2.$$.fragment);
-			t14 = space();
+			t18 = space();
 			div3 = element("div");
 			span6 = element("span");
-			span6.textContent = "Tempo:";
-			t16 = space();
+			span6.innerHTML = `Tempo: <kbd class="svelte-1ms9wt8">w</kbd>↓ <kbd class="svelte-1ms9wt8">e</kbd>↑`;
+			t24 = space();
 			span7 = element("span");
-			t17 = text(t17_value);
-			t18 = text("%");
-			t19 = space();
+			t25 = text(t25_value);
+			t26 = text("%");
+			t27 = space();
 			create_component(rangeslider3.$$.fragment);
-			t20 = space();
+			t28 = space();
 			div4 = element("div");
 			span8 = element("span");
 			span8.textContent = "Progress:";
-			t22 = space();
+			t30 = space();
 			span9 = element("span");
-			t23 = text(t23_value);
-			t24 = text("%");
-			t25 = space();
+			t31 = text(t31_value);
+			t32 = text("%");
+			t33 = space();
 			create_component(rangeslider4.$$.fragment);
-			attr(div0, "class", "control svelte-1cq4iz3");
-			attr(div1, "class", "control svelte-1cq4iz3");
-			attr(div2, "class", "control svelte-1cq4iz3");
-			attr(div3, "class", "control svelte-1cq4iz3");
-			attr(div4, "class", "control svelte-1cq4iz3");
+			attr(div0, "class", "control svelte-1ms9wt8");
+			attr(div1, "class", "control svelte-1ms9wt8");
+			attr(div2, "class", "control svelte-1ms9wt8");
+			attr(div3, "class", "control svelte-1ms9wt8");
+			attr(div4, "class", "control svelte-1ms9wt8");
 			attr(div5, "id", "playback-settings");
-			attr(div5, "class", "svelte-1cq4iz3");
+			attr(div5, "class", "svelte-1ms9wt8");
 		},
 		m(target, anchor) {
 			insert(target, div5, anchor);
 			append(div5, div0);
 			append(div0, span0);
-			append(div0, t1);
+			append(div0, t5);
 			append(div0, span1);
-			append(span1, t2);
-			append(div0, t3);
+			append(span1, t6);
+			append(div0, t7);
 			mount_component(rangeslider0, div0, null);
-			append(div5, t4);
+			append(div5, t8);
 			append(div5, div1);
 			append(div1, span2);
-			append(div1, t6);
+			append(div1, t10);
 			append(div1, span3);
-			append(span3, t7);
-			append(div1, t8);
+			append(span3, t11);
+			append(div1, t12);
 			mount_component(rangeslider1, div1, null);
-			append(div5, t9);
+			append(div5, t13);
 			append(div5, div2);
 			append(div2, span4);
-			append(div2, t11);
+			append(div2, t15);
 			append(div2, span5);
-			append(span5, t12);
-			append(div2, t13);
+			append(span5, t16);
+			append(div2, t17);
 			mount_component(rangeslider2, div2, null);
-			append(div5, t14);
+			append(div5, t18);
 			append(div5, div3);
 			append(div3, span6);
-			append(div3, t16);
+			append(div3, t24);
 			append(div3, span7);
-			append(span7, t17);
-			append(span7, t18);
-			append(div3, t19);
+			append(span7, t25);
+			append(span7, t26);
+			append(div3, t27);
 			mount_component(rangeslider3, div3, null);
-			append(div5, t20);
+			append(div5, t28);
 			append(div5, div4);
 			append(div4, span8);
-			append(div4, t22);
+			append(div4, t30);
 			append(div4, span9);
-			append(span9, t23);
-			append(span9, t24);
-			append(div4, t25);
+			append(span9, t31);
+			append(span9, t32);
+			append(div4, t33);
 			mount_component(rangeslider4, div4, null);
 			current = true;
 		},
 		p(ctx, [dirty]) {
-			if ((!current || dirty & /*$volume*/ 2) && t2_value !== (t2_value = /*$volume*/ ctx[1].master + "")) set_data(t2, t2_value);
+			if (!current || dirty & /*$volume*/ 2) set_data(t6, /*$volume*/ ctx[1]);
 			const rangeslider0_changes = {};
 
 			if (!updating_value && dirty & /*$volume*/ 2) {
 				updating_value = true;
-				rangeslider0_changes.value = /*$volume*/ ctx[1].master;
+				rangeslider0_changes.value = /*$volume*/ ctx[1];
 				add_flush_callback(() => updating_value = false);
 			}
 
 			rangeslider0.$set(rangeslider0_changes);
-			if ((!current || dirty & /*$volume*/ 2) && t7_value !== (t7_value = /*$volume*/ ctx[1].left + "")) set_data(t7, t7_value);
+			if (!current || dirty & /*$bassVolume*/ 4) set_data(t11, /*$bassVolume*/ ctx[2]);
 			const rangeslider1_changes = {};
 
-			if (!updating_value_1 && dirty & /*$volume*/ 2) {
+			if (!updating_value_1 && dirty & /*$bassVolume*/ 4) {
 				updating_value_1 = true;
-				rangeslider1_changes.value = /*$volume*/ ctx[1].left;
+				rangeslider1_changes.value = /*$bassVolume*/ ctx[2];
 				add_flush_callback(() => updating_value_1 = false);
 			}
 
 			rangeslider1.$set(rangeslider1_changes);
-			if ((!current || dirty & /*$volume*/ 2) && t12_value !== (t12_value = /*$volume*/ ctx[1].right + "")) set_data(t12, t12_value);
+			if (!current || dirty & /*$trebleVolume*/ 8) set_data(t16, /*$trebleVolume*/ ctx[3]);
 			const rangeslider2_changes = {};
 
-			if (!updating_value_2 && dirty & /*$volume*/ 2) {
+			if (!updating_value_2 && dirty & /*$trebleVolume*/ 8) {
 				updating_value_2 = true;
-				rangeslider2_changes.value = /*$volume*/ ctx[1].right;
+				rangeslider2_changes.value = /*$trebleVolume*/ ctx[3];
 				add_flush_callback(() => updating_value_2 = false);
 			}
 
 			rangeslider2.$set(rangeslider2_changes);
-			if ((!current || dirty & /*$tempoControl*/ 4) && t17_value !== (t17_value = (/*$tempoControl*/ ctx[2] * 100).toFixed(0) + "")) set_data(t17, t17_value);
+			if ((!current || dirty & /*$tempoControl*/ 16) && t25_value !== (t25_value = (/*$tempoControl*/ ctx[4] * 100).toFixed(0) + "")) set_data(t25, t25_value);
 			const rangeslider3_changes = {};
 
-			if (!updating_value_3 && dirty & /*$tempoControl*/ 4) {
+			if (!updating_value_3 && dirty & /*$tempoControl*/ 16) {
 				updating_value_3 = true;
-				rangeslider3_changes.value = /*$tempoControl*/ ctx[2];
+				rangeslider3_changes.value = /*$tempoControl*/ ctx[4];
 				add_flush_callback(() => updating_value_3 = false);
 			}
 
 			rangeslider3.$set(rangeslider3_changes);
-			if ((!current || dirty & /*$playbackProgress*/ 8) && t23_value !== (t23_value = (/*$playbackProgress*/ ctx[3] * 100).toFixed(2) + "")) set_data(t23, t23_value);
+			if ((!current || dirty & /*$playbackProgress*/ 32) && t31_value !== (t31_value = (/*$playbackProgress*/ ctx[5] * 100).toFixed(2) + "")) set_data(t31, t31_value);
 			const rangeslider4_changes = {};
-			if (dirty & /*$playbackProgress*/ 8) rangeslider4_changes.value = /*$playbackProgress*/ ctx[3];
+			if (dirty & /*$playbackProgress*/ 32) rangeslider4_changes.value = /*$playbackProgress*/ ctx[5];
 			rangeslider4.$set(rangeslider4_changes);
 		},
 		i(local) {
@@ -343,26 +347,30 @@ function create_fragment(ctx) {
 
 function instance($$self, $$props, $$invalidate) {
 	let $volume;
+	let $bassVolume;
+	let $trebleVolume;
 	let $tempoControl;
 	let $playbackProgress;
 	component_subscribe($$self, volume, $$value => $$invalidate(1, $volume = $$value));
-	component_subscribe($$self, tempoControl, $$value => $$invalidate(2, $tempoControl = $$value));
-	component_subscribe($$self, playbackProgress, $$value => $$invalidate(3, $playbackProgress = $$value));
+	component_subscribe($$self, bassVolume, $$value => $$invalidate(2, $bassVolume = $$value));
+	component_subscribe($$self, trebleVolume, $$value => $$invalidate(3, $trebleVolume = $$value));
+	component_subscribe($$self, tempoControl, $$value => $$invalidate(4, $tempoControl = $$value));
+	component_subscribe($$self, playbackProgress, $$value => $$invalidate(5, $playbackProgress = $$value));
 	let { skipToPercentage } = $$props;
 
 	function rangeslider0_value_binding(value) {
-		$volume.master = value;
+		$volume = value;
 		volume.set($volume);
 	}
 
 	function rangeslider1_value_binding(value) {
-		$volume.left = value;
-		volume.set($volume);
+		$bassVolume = value;
+		bassVolume.set($bassVolume);
 	}
 
 	function rangeslider2_value_binding(value) {
-		$volume.right = value;
-		volume.set($volume);
+		$trebleVolume = value;
+		trebleVolume.set($trebleVolume);
 	}
 
 	function rangeslider3_value_binding(value) {
@@ -379,6 +387,8 @@ function instance($$self, $$props, $$invalidate) {
 	return [
 		skipToPercentage,
 		$volume,
+		$bassVolume,
+		$trebleVolume,
 		$tempoControl,
 		$playbackProgress,
 		rangeslider0_value_binding,

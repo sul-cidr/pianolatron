@@ -34,7 +34,8 @@ import IntervalTree from "./_snowpack/pkg/node-interval-tree.js";
 
 import {
 	pedalling,
-	volume,
+	bassVolume,
+	trebleVolume,
 	tempoControl,
 	playbackProgress,
 	activeNotes,
@@ -56,6 +57,7 @@ import RollSelector from "./components/RollSelector.svelte.js";
 import RollDetails from "./components/RollDetails.svelte.js";
 import RollViewer from "./components/RollViewer.svelte.js";
 import Keyboard from "./components/Keyboard.svelte.js";
+import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte.js";
 import TabbedPanel from "./components/TabbedPanel.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
 import FlexCollapsible from "./ui-components/FlexCollapsible.svelte.js";
@@ -114,7 +116,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (203:8) {#if !holesByTickInterval.count}
+// (206:8) {#if !holesByTickInterval.count}
 function create_if_block_5(ctx) {
 	let p;
 
@@ -136,7 +138,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (199:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (202:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -226,7 +228,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (211:4) {#if appReady}
+// (214:4) {#if appReady}
 function create_if_block_2(ctx) {
 	let div;
 	let rollviewer;
@@ -335,7 +337,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (218:8) {#if $overlayKeyboard}
+// (221:8) {#if $overlayKeyboard}
 function create_if_block_3(ctx) {
 	let div;
 	let keyboard;
@@ -389,7 +391,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (224:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (227:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -426,7 +428,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (229:2) {#if !$overlayKeyboard}
+// (232:2) {#if !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -480,7 +482,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (234:2) {#if !appReady}
+// (237:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -511,6 +513,8 @@ function create_fragment(ctx) {
 	let t1;
 	let t2;
 	let t3;
+	let keyboardshortcuts;
+	let t4;
 	let notification;
 	let current;
 
@@ -526,6 +530,7 @@ function create_fragment(ctx) {
 	let if_block0 = /*appReady*/ ctx[0] && create_if_block_2(ctx);
 	let if_block1 = !/*$overlayKeyboard*/ ctx[3] && create_if_block_1(ctx);
 	let if_block2 = !/*appReady*/ ctx[0] && create_if_block(ctx);
+	keyboardshortcuts = new KeyboardShortcuts({});
 	notification = new Notification({});
 
 	return {
@@ -540,6 +545,8 @@ function create_fragment(ctx) {
 			t2 = space();
 			if (if_block2) if_block2.c();
 			t3 = space();
+			create_component(keyboardshortcuts.$$.fragment);
+			t4 = space();
 			create_component(notification.$$.fragment);
 			attr(div0, "class", "svelte-54l61l");
 			attr(div1, "id", "app");
@@ -556,6 +563,8 @@ function create_fragment(ctx) {
 			append(div1, t2);
 			if (if_block2) if_block2.m(div1, null);
 			insert(target, t3, anchor);
+			mount_component(keyboardshortcuts, target, anchor);
+			insert(target, t4, anchor);
 			mount_component(notification, target, anchor);
 			current = true;
 		},
@@ -632,6 +641,7 @@ function create_fragment(ctx) {
 			transition_in(flexcollapsible.$$.fragment, local);
 			transition_in(if_block0);
 			transition_in(if_block1);
+			transition_in(keyboardshortcuts.$$.fragment, local);
 			transition_in(notification.$$.fragment, local);
 			current = true;
 		},
@@ -639,6 +649,7 @@ function create_fragment(ctx) {
 			transition_out(flexcollapsible.$$.fragment, local);
 			transition_out(if_block0);
 			transition_out(if_block1);
+			transition_out(keyboardshortcuts.$$.fragment, local);
 			transition_out(notification.$$.fragment, local);
 			current = false;
 		},
@@ -649,6 +660,8 @@ function create_fragment(ctx) {
 			if (if_block1) if_block1.d();
 			if (if_block2) if_block2.d();
 			if (detaching) detach(t3);
+			destroy_component(keyboardshortcuts, detaching);
+			if (detaching) detach(t4);
 			destroy_component(notification, detaching);
 		}
 	};
@@ -725,7 +738,8 @@ function instance($$self, $$props, $$invalidate) {
 		$$invalidate(0, appReady = false);
 		stopApp();
 		tempoControl.reset();
-		volume.update(val => ({ ...val, left: 1, right: 1 }));
+		bassVolume.reset();
+		trebleVolume.reset();
 		$$invalidate(2, holesByTickInterval = new IntervalTree());
 	};
 

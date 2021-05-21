@@ -7,6 +7,8 @@ import {
   pedalling,
   sustain,
   volume,
+  bassVolume,
+  trebleVolume,
   tempoControl,
   activeNotes,
   currentTick,
@@ -16,15 +18,6 @@ const midiSamplePlayer = new MidiPlayer.Player();
 
 let softPedalOn;
 let accentOn;
-
-let masterVolumeRatio;
-let leftVolumeRatio;
-let rightVolumeRatio;
-volume.subscribe(({ master, right, left }) => {
-  masterVolumeRatio = master;
-  rightVolumeRatio = right;
-  leftVolumeRatio = left;
-});
 
 let tempoMap;
 let tempoRatio = 1.0;
@@ -131,8 +124,8 @@ const startNote = (noteNumber, velocity = DEFAULT_NOTE_VELOCITY) => {
     (velocity / 128) *
     ((softPedalOn && SOFT_PEDAL_RATIO) || 1) *
     ((accentOn && ACCENT_BUMP) || 1) *
-    masterVolumeRatio *
-    (noteNumber < panBoundary ? leftVolumeRatio : rightVolumeRatio);
+    get(volume) *
+    (noteNumber < panBoundary ? get(bassVolume) : get(trebleVolume));
   if (modifiedVelocity) {
     piano.keyDown({
       midi: noteNumber,
