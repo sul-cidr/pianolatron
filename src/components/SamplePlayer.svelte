@@ -27,7 +27,7 @@
     PANNING_POSITION: 10,
   });
 
-  const DEFAULT_NOTE_VELOCITY = 33.0;
+  const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
   const SOFT_PEDAL_RATIO = 0.67;
   const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
@@ -73,7 +73,7 @@
 
   const startNote = (noteNumber, velocity) => {
     const modifiedVelocity =
-      ((($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 128) *
+      ((($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100) *
       (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
       (($accentOnOff && ACCENT_BUMP) || 1) *
       $volumeCoefficient *
