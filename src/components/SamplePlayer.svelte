@@ -40,6 +40,12 @@
     release: true,
     pedal: true,
     maxPolyphony: 64,
+    volume: {
+      strings: -15,
+      harmonics: -10,
+      pedal: -10,
+      keybed: -10,
+    },
   }).toDestination();
 
   const pianoReady = piano.load();
