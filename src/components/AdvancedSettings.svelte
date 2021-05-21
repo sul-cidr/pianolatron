@@ -7,9 +7,24 @@
     top: 0;
     width: 100%;
 
-    div {
-      margin: 1em 0;
+    div + div {
+      margin-top: 1em;
     }
+  }
+
+  fieldset {
+    margin: 2em 0;
+    padding: 1em 0.75em;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  legend {
+    font-family: $primary-typeface;
+    font-size: 1.4em;
   }
 
   button {
@@ -44,7 +59,13 @@
 
 <script>
   import { fly } from "svelte/transition";
-  import { userSettings } from "../stores";
+  import {
+    rollHasExpressions,
+    playExpressionsOnOff,
+    rollPedalingOnOff,
+    useMidiTempoEventsOnOff,
+    userSettings,
+  } from "../stores";
 
   let el;
   const themes = ["cardinal", "blue", "green", "grey"];
@@ -57,6 +78,38 @@
   bind:this={el}
   transition:fly|local={{ delay: 0, duration: 300, x: parseInt(window.getComputedStyle(el).width, 10), y: 0, opacity: 1 }}
 >
+  <fieldset>
+    <legend>Visualization Settings</legend>
+    <div>
+      Show details for Active Notes:
+      <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Roll Emulation Settings</legend>
+    <div>
+      Play Expressions:
+      <input
+        type="checkbox"
+        bind:checked={$playExpressionsOnOff}
+        disabled={!$rollHasExpressions}
+      />
+    </div>
+    <div>
+      Use Roll Pedaling:
+      <input
+        type="checkbox"
+        bind:checked={$rollPedalingOnOff}
+        disabled={!$rollHasExpressions}
+      />
+    </div>
+    <div>
+      Emulate Roll Acceleration:
+      <input type="checkbox" bind:checked={$useMidiTempoEventsOnOff} />
+    </div>
+  </fieldset>
+
   <div>
     Theme:
     {#each themes as theme}
@@ -69,9 +122,5 @@
           }))}
       />
     {/each}
-  </div>
-  <div>
-    Show details for Active Notes:
-    <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
   </div>
 </div>

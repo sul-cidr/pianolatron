@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
 import watchMedia from "./mq-store";
 
 const createStore = (defaultValue) => {
@@ -27,8 +27,12 @@ const createSetStore = () => {
 
 // Metadata
 export const rollMetadata = createStore({});
+export const rollHasExpressions = derived(
+  rollMetadata,
+  ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
+);
 
-// Pedalling
+// Pedaling
 export const softOnOff = createStore(false);
 export const sustainOnOff = createStore(false);
 export const accentOnOff = createStore(false);
@@ -39,6 +43,10 @@ export const bassVolumeCoefficient = createStore(1);
 export const trebleVolumeCoefficient = createStore(1);
 
 export const tempoCoefficient = createStore(1);
+
+export const playExpressionsOnOff = createStore(true);
+export const rollPedalingOnOff = createStore(true);
+export const useMidiTempoEventsOnOff = createStore(true);
 
 // Playback State
 export const currentTick = createStore(0);
