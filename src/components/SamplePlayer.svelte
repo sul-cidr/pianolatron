@@ -13,6 +13,7 @@
     tempoCoefficient,
     playExpressionsOnOff,
     rollPedalingOnOff,
+    useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
   } from "../stores";
@@ -27,6 +28,7 @@
   });
 
   const DEFAULT_NOTE_VELOCITY = 33.0;
+  const DEFAULT_TEMPO = 60;
   const SOFT_PEDAL_RATIO = 0.67;
   const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
   const ACCENT_BUMP = 1.5;
@@ -44,7 +46,7 @@
   const pianoReady = piano.load();
 
   const getTempoAtTick = (tick) => {
-    if (!tempoMap) return 60;
+    if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
     let tempo;
     let i = 0;
     while (tempoMap[i][0] <= tick) {
@@ -153,7 +155,7 @@
         } else if (number === controllerChange.SOFT_PEDAL) {
           softOnOff.set(value === controllerChange.PEDAL_ON);
         }
-      } else if (name === "Set Tempo") {
+      } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
         midiSamplePlayer.setTempo(data * $tempoCoefficient);
       }
     },
@@ -162,6 +164,7 @@
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
   $: $tempoCoefficient, updatePlayer();
+  $: $useMidiTempoEventsOnOff, updatePlayer();
 
   export {
     midiSamplePlayer,

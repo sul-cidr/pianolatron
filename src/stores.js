@@ -46,6 +46,7 @@ export const tempoCoefficient = createStore(1);
 
 export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
+export const useMidiTempoEventsOnOff = createStore(true);
 
 // Playback State
 export const currentTick = createStore(0);

@@ -48,6 +48,7 @@
     rollHasExpressions,
     playExpressionsOnOff,
     rollPedalingOnOff,
+    useMidiTempoEventsOnOff,
     userSettings,
   } from "../stores";
 
@@ -94,5 +95,9 @@
       bind:checked={$rollPedalingOnOff}
       disabled={!$rollHasExpressions}
     />
+  </div>
+  <div>
+    Emulate Roll Acceleration:
+    <input type="checkbox" bind:checked={$useMidiTempoEventsOnOff} />
   </div>
 </div>
