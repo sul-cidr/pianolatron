@@ -36,7 +36,7 @@
 
   const piano = new Piano({
     url: "assets/samples/",
-    velocities: 2,
+    velocities: 4,
     release: true,
     pedal: true,
     maxPolyphony: 64,
