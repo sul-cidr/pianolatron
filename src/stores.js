@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
 import watchMedia from "./mq-store";
 
 const createStore = (defaultValue) => {
@@ -27,6 +27,10 @@ const createSetStore = () => {
 
 // Metadata
 export const rollMetadata = createStore({});
+export const rollHasExpressions = derived(
+  rollMetadata,
+  ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
+);
 
 // Pedaling
 export const softOnOff = createStore(false);
