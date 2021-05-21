@@ -38,11 +38,13 @@ body {
   transition: background 0.2s ease;
 
   --background-color: #{$cloud};
+  --background-darker: #{darken($cloud, 15%)};
   --primary-accent: #{$cardinal};
-  --background-texture: url(#{$texture-url});
+  --background-angle: 75deg;
 
   &.blue {
     --background-color: aliceblue;
+    --background-darker: hsl(208, 100%, 90%);
     --primary-accent: steelblue;
   }
 
@@ -52,6 +54,7 @@ body {
 
   &.grey {
     --background-color: gainsboro;
+    --background-darker: hsl(0, 0%, 71%);
     --primary-accent: darkslategrey;
   }
 }
