@@ -12,7 +12,7 @@
     trebleVolumeCoefficient,
     tempoCoefficient,
     playExpressionsOnOff,
-    rollPedallingOnOff,
+    rollPedalingOnOff,
     activeNotes,
     currentTick,
   } from "../stores";
@@ -141,7 +141,7 @@
           startNote(noteNumber, velocity);
           activeNotes.add(noteNumber);
         }
-      } else if (name === "Controller Change" && $rollPedallingOnOff) {
+      } else if (name === "Controller Change" && $rollPedalingOnOff) {
         if (number === controllerChange.SUSTAIN_PEDAL) {
           if (value === controllerChange.PEDAL_ON) {
             piano.pedalDown();

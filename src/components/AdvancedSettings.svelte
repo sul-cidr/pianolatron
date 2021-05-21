@@ -46,7 +46,7 @@
   import { fly } from "svelte/transition";
   import {
     playExpressionsOnOff,
-    rollPedallingOnOff,
+    rollPedalingOnOff,
     userSettings,
   } from "../stores";
 
@@ -83,7 +83,7 @@
     <input type="checkbox" bind:checked={$playExpressionsOnOff} />
   </div>
   <div>
-    Use Roll Pedalling:
-    <input type="checkbox" bind:checked={$rollPedallingOnOff} />
+    Use Roll Pedaling:
+    <input type="checkbox" bind:checked={$rollPedalingOnOff} />
   </div>
 </div>

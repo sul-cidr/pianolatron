@@ -28,7 +28,7 @@ const createSetStore = () => {
 // Metadata
 export const rollMetadata = createStore({});
 
-// Pedalling
+// Pedaling
 export const softOnOff = createStore(false);
 export const sustainOnOff = createStore(false);
 export const accentOnOff = createStore(false);
@@ -41,7 +41,7 @@ export const trebleVolumeCoefficient = createStore(1);
 export const tempoCoefficient = createStore(1);
 
 export const playExpressionsOnOff = createStore(true);
-export const rollPedallingOnOff = createStore(true);
+export const rollPedalingOnOff = createStore(true);
 
 // Playback State
 export const currentTick = createStore(0);
