@@ -1,7 +1,17 @@
-import { t as noop, u as safe_not_equal } from '../common/index-305cc9b4.js';
-export { U as get } from '../common/index-305cc9b4.js';
+import { t as noop, I as subscribe, C as run_all, u as safe_not_equal, K as is_function } from '../common/index-7cda7336.js';
+export { U as get } from '../common/index-7cda7336.js';
 
 const subscriber_queue = [];
+/**
+ * Creates a `Readable` store that allows reading by subscription.
+ * @param value initial value
+ * @param {StartStopNotifier}start start and stop notifications for subscriptions
+ */
+function readable(value, start) {
+    return {
+        subscribe: writable(value, start).subscribe
+    };
+}
 /**
  * Create a `Writable` store that allows both updating and reading by subscription.
  * @param {*=}value initial value
@@ -52,5 +62,46 @@ function writable(value, start = noop) {
     }
     return { set, update, subscribe };
 }
+function derived(stores, fn, initial_value) {
+    const single = !Array.isArray(stores);
+    const stores_array = single
+        ? [stores]
+        : stores;
+    const auto = fn.length < 2;
+    return readable(initial_value, (set) => {
+        let inited = false;
+        const values = [];
+        let pending = 0;
+        let cleanup = noop;
+        const sync = () => {
+            if (pending) {
+                return;
+            }
+            cleanup();
+            const result = fn(single ? values[0] : values, set);
+            if (auto) {
+                set(result);
+            }
+            else {
+                cleanup = is_function(result) ? result : noop;
+            }
+        };
+        const unsubscribers = stores_array.map((store, i) => subscribe(store, (value) => {
+            values[i] = value;
+            pending &= ~(1 << i);
+            if (inited) {
+                sync();
+            }
+        }, () => {
+            pending |= (1 << i);
+        }));
+        inited = true;
+        sync();
+        return function stop() {
+            run_all(unsubscribers);
+            cleanup();
+        };
+    });
+}
 
-export { writable };
+export { derived, writable };

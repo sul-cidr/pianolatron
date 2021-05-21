@@ -24,33 +24,33 @@ import {
 
 import PanelSwitcher from "./PanelSwitcher.svelte.js";
 import PlaybackControls from "./PlaybackControls.svelte.js";
-import PlaybackSettings from "./PlaybackSettings.svelte.js";
-import VisualizationSettings from "./VisualizationSettings.svelte.js";
+import BasicSettings from "./BasicSettings.svelte.js";
+import AdvancedSettings from "./AdvancedSettings.svelte.js";
 
 function create_if_block(ctx) {
-	let visualizationsettings;
+	let advancedsettings;
 	let current;
-	visualizationsettings = new VisualizationSettings({});
+	advancedsettings = new AdvancedSettings({});
 
 	return {
 		c() {
-			create_component(visualizationsettings.$$.fragment);
+			create_component(advancedsettings.$$.fragment);
 		},
 		m(target, anchor) {
-			mount_component(visualizationsettings, target, anchor);
+			mount_component(advancedsettings, target, anchor);
 			current = true;
 		},
 		i(local) {
 			if (current) return;
-			transition_in(visualizationsettings.$$.fragment, local);
+			transition_in(advancedsettings.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
-			transition_out(visualizationsettings.$$.fragment, local);
+			transition_out(advancedsettings.$$.fragment, local);
 			current = false;
 		},
 		d(detaching) {
-			destroy_component(visualizationsettings, detaching);
+			destroy_component(advancedsettings, detaching);
 		}
 	};
 }
@@ -60,7 +60,7 @@ function create_fragment(ctx) {
 	let updating_selectedPanel;
 	let t0;
 	let div;
-	let playbacksettings;
+	let basicsettings;
 	let t1;
 	let t2;
 	let playbackcontrols;
@@ -79,7 +79,7 @@ function create_fragment(ctx) {
 	panelswitcher = new PanelSwitcher({ props: panelswitcher_props });
 	binding_callbacks.push(() => bind(panelswitcher, "selectedPanel", panelswitcher_selectedPanel_binding));
 
-	playbacksettings = new PlaybackSettings({
+	basicsettings = new BasicSettings({
 			props: {
 				skipToPercentage: /*skipToPercentage*/ ctx[1]
 			}
@@ -99,7 +99,7 @@ function create_fragment(ctx) {
 			create_component(panelswitcher.$$.fragment);
 			t0 = space();
 			div = element("div");
-			create_component(playbacksettings.$$.fragment);
+			create_component(basicsettings.$$.fragment);
 			t1 = space();
 			if (if_block) if_block.c();
 			t2 = space();
@@ -110,7 +110,7 @@ function create_fragment(ctx) {
 			mount_component(panelswitcher, target, anchor);
 			insert(target, t0, anchor);
 			insert(target, div, anchor);
-			mount_component(playbacksettings, div, null);
+			mount_component(basicsettings, div, null);
 			append(div, t1);
 			if (if_block) if_block.m(div, null);
 			insert(target, t2, anchor);
@@ -127,9 +127,9 @@ function create_fragment(ctx) {
 			}
 
 			panelswitcher.$set(panelswitcher_changes);
-			const playbacksettings_changes = {};
-			if (dirty & /*skipToPercentage*/ 2) playbacksettings_changes.skipToPercentage = /*skipToPercentage*/ ctx[1];
-			playbacksettings.$set(playbacksettings_changes);
+			const basicsettings_changes = {};
+			if (dirty & /*skipToPercentage*/ 2) basicsettings_changes.skipToPercentage = /*skipToPercentage*/ ctx[1];
+			basicsettings.$set(basicsettings_changes);
 
 			if (/*selectedPanel*/ ctx[3] === "settings") {
 				if (if_block) {
@@ -160,14 +160,14 @@ function create_fragment(ctx) {
 		i(local) {
 			if (current) return;
 			transition_in(panelswitcher.$$.fragment, local);
-			transition_in(playbacksettings.$$.fragment, local);
+			transition_in(basicsettings.$$.fragment, local);
 			transition_in(if_block);
 			transition_in(playbackcontrols.$$.fragment, local);
 			current = true;
 		},
 		o(local) {
 			transition_out(panelswitcher.$$.fragment, local);
-			transition_out(playbacksettings.$$.fragment, local);
+			transition_out(basicsettings.$$.fragment, local);
 			transition_out(if_block);
 			transition_out(playbackcontrols.$$.fragment, local);
 			current = false;
@@ -176,7 +176,7 @@ function create_fragment(ctx) {
 			destroy_component(panelswitcher, detaching);
 			if (detaching) detach(t0);
 			if (detaching) detach(div);
-			destroy_component(playbacksettings);
+			destroy_component(basicsettings);
 			if (if_block) if_block.d();
 			if (detaching) detach(t2);
 			destroy_component(playbackcontrols, detaching);

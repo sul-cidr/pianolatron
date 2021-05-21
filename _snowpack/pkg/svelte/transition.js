@@ -1,4 +1,4 @@
-import { V as identity } from '../common/index-305cc9b4.js';
+import { V as identity } from '../common/index-7cda7336.js';
 import { c as cubicOut } from '../common/index-98507607.js';
 
 function fade(node, { delay = 0, duration = 400, easing = identity }) {

@@ -44,6 +44,7 @@ import {
 	activeNotes,
 	currentTick,
 	rollMetadata,
+	rollPedalingOnOff,
 	overlayKeyboard
 } from "./stores.js";
 
@@ -111,7 +112,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (224:8) {#if !holesByTickInterval.count}
+// (231:8) {#if !holesByTickInterval.count}
 function create_if_block_5(ctx) {
 	let p;
 
@@ -133,7 +134,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (220:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (227:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -223,7 +224,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (232:4) {#if appReady}
+// (239:4) {#if appReady}
 function create_if_block_2(ctx) {
 	let div;
 	let rollviewer;
@@ -303,7 +304,7 @@ function create_if_block_2(ctx) {
 
 			const flexcollapsible_changes = {};
 
-			if (dirty & /*$$scope*/ 67108864) {
+			if (dirty & /*$$scope*/ 134217728) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -332,7 +333,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (239:8) {#if $overlayKeyboard}
+// (246:8) {#if $overlayKeyboard}
 function create_if_block_3(ctx) {
 	let div;
 	let keyboard;
@@ -391,7 +392,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (245:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (252:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -428,7 +429,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (250:2) {#if !$overlayKeyboard}
+// (257:2) {#if !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -487,7 +488,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (255:2) {#if !appReady}
+// (262:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -585,7 +586,7 @@ function create_fragment(ctx) {
 		p(ctx, [dirty]) {
 			const flexcollapsible_changes = {};
 
-			if (dirty & /*$$scope, holesByTickInterval, appReady, currentRoll*/ 67108871) {
+			if (dirty & /*$$scope, holesByTickInterval, appReady, currentRoll*/ 134217735) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -692,9 +693,11 @@ function create_fragment(ctx) {
 function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
+	let $rollPedalingOnOff;
 	let $overlayKeyboard;
 	component_subscribe($$self, rollMetadata, $$value => $$invalidate(21, $rollMetadata = $$value));
 	component_subscribe($$self, currentTick, $$value => $$invalidate(22, $currentTick = $$value));
+	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(23, $rollPedalingOnOff = $$value));
 	component_subscribe($$self, overlayKeyboard, $$value => $$invalidate(6, $overlayKeyboard = $$value));
 	let appReady = false;
 	let mididataReady;
@@ -847,6 +850,15 @@ function instance($$self, $$props, $$invalidate) {
 
 		if ($$self.$$.dirty & /*$currentTick, midiSamplePlayer*/ 4325376) {
 			$: playbackProgress.update(() => $currentTick / midiSamplePlayer?.totalTicks);
+		}
+
+		if ($$self.$$.dirty & /*$rollPedalingOnOff*/ 8388608) {
+			$: if ($rollPedalingOnOff) {
+				
+			} else {
+				sustainOnOff.set(false); // TODO: set roll pedalling according to (as yet unavailable) pedalMap
+				softOnOff.set(false);
+			}
 		}
 	};
 
