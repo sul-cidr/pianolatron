@@ -44,7 +44,11 @@
 
 <script>
   import { fly } from "svelte/transition";
-  import { playExpressionsOnOff, userSettings } from "../stores";
+  import {
+    playExpressionsOnOff,
+    rollPedallingOnOff,
+    userSettings,
+  } from "../stores";
 
   let el;
   const themes = ["cardinal", "blue", "green", "grey"];
@@ -77,5 +81,9 @@
   <div>
     Play Expressions:
     <input type="checkbox" bind:checked={$playExpressionsOnOff} />
+  </div>
+  <div>
+    Use Roll Pedalling:
+    <input type="checkbox" bind:checked={$rollPedallingOnOff} />
   </div>
 </div>

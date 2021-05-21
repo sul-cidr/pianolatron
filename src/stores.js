@@ -41,6 +41,7 @@ export const trebleVolumeCoefficient = createStore(1);
 export const tempoCoefficient = createStore(1);
 
 export const playExpressionsOnOff = createStore(true);
+export const rollPedallingOnOff = createStore(true);
 
 // Playback State
 export const currentTick = createStore(0);
