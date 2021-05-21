@@ -49,28 +49,24 @@
 </style>
 
 <script>
+  import { onMount } from "svelte";
   import { quartInOut } from "svelte/easing";
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
-    pedalling,
-    bassVolume,
-    trebleVolume,
-    tempoControl,
+    softOnOff,
+    sustainOnOff,
+    accentOnOff,
+    bassVolumeCoefficient,
+    trebleVolumeCoefficient,
+    tempoCoefficient,
     playbackProgress,
     activeNotes,
     currentTick,
     rollMetadata,
     overlayKeyboard,
   } from "./stores";
-  import {
-    midiSamplePlayer,
-    pianoReady,
-    updatePlayer,
-    startNote,
-    stopNote,
-    stopAllNotes,
-  } from "./components/SamplePlayer";
+  import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import RollViewer from "./components/RollViewer.svelte";
@@ -86,6 +82,15 @@
   let currentRoll;
   let previousRoll;
   let holesByTickInterval = new IntervalTree();
+
+  let samplePlayer;
+
+  let midiSamplePlayer;
+  let pianoReady;
+  let updatePlayer;
+  let startNote;
+  let stopNote;
+  let stopAllNotes;
 
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
@@ -133,16 +138,18 @@
     playbackProgress.reset();
     currentTick.reset();
     activeNotes.reset();
-    pedalling.reset();
+    softOnOff.reset();
+    sustainOnOff.reset();
+    accentOnOff.reset();
   };
 
   const resetApp = () => {
     mididataReady = false;
     appReady = false;
     stopApp();
-    tempoControl.reset();
-    bassVolume.reset();
-    trebleVolume.reset();
+    tempoCoefficient.reset();
+    bassVolumeCoefficient.reset();
+    trebleVolumeCoefficient.reset();
     holesByTickInterval = new IntervalTree();
   };
 
@@ -191,14 +198,25 @@
     );
   };
 
+  onMount(async () => {
+    ({
+      midiSamplePlayer,
+      pianoReady,
+      updatePlayer,
+      startNote,
+      stopNote,
+      stopAllNotes,
+    } = samplePlayer);
+    midiSamplePlayer.on("endOfFile", () => stopApp());
+  });
+
   $: {
     if (currentRoll !== previousRoll) {
       loadRoll(currentRoll);
     }
   }
 
-  midiSamplePlayer.on("endOfFile", () => stopApp());
-  $: playbackProgress.update(() => $currentTick / midiSamplePlayer.totalTicks);
+  $: playbackProgress.update(() => $currentTick / midiSamplePlayer?.totalTicks);
 </script>
 
 <div id="app">
@@ -245,5 +263,6 @@
     </div>
   {/if}
 </div>
+<SamplePlayer bind:this={samplePlayer} />
 <KeyboardShortcuts />
 <Notification />

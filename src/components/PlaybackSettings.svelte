@@ -25,10 +25,10 @@
 
 <script>
   import {
-    volume,
-    bassVolume,
-    trebleVolume,
-    tempoControl,
+    volumeCoefficient,
+    bassVolumeCoefficient,
+    trebleVolumeCoefficient,
+    tempoCoefficient,
     playbackProgress,
   } from "../stores";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
@@ -39,39 +39,45 @@
 <div id="playback-settings">
   <div class="control">
     <span>Volume: <kbd>[</kbd>↓ <kbd>]</kbd>↑</span>
-    <span>{$volume}</span>
-    <RangeSlider min="0" max="4" step=".1" bind:value={$volume} name="volume" />
-  </div>
-  <div class="control">
-    <span>Bass Volume:</span>
-    <span>{$bassVolume}</span>
+    <span>{$volumeCoefficient}</span>
     <RangeSlider
       min="0"
       max="4"
       step=".1"
-      bind:value={$bassVolume}
-      name="bassVolume"
+      bind:value={$volumeCoefficient}
+      name="volume"
+    />
+  </div>
+  <div class="control">
+    <span>Bass Volume:</span>
+    <span>{$bassVolumeCoefficient}</span>
+    <RangeSlider
+      min="0"
+      max="4"
+      step=".1"
+      bind:value={$bassVolumeCoefficient}
+      name="bass-volume"
     />
   </div>
   <div class="control">
     <span>Treble Volume:</span>
-    <span>{$trebleVolume}</span>
+    <span>{$trebleVolumeCoefficient}</span>
     <RangeSlider
       min="0"
       max="4"
       step=".1"
-      bind:value={$trebleVolume}
-      name="trebleVolume"
+      bind:value={$trebleVolumeCoefficient}
+      name="treble-volume"
     />
   </div>
   <div class="control">
     <span>Tempo: <kbd>w</kbd>↓ <kbd>e</kbd>↑</span>
-    <span>{($tempoControl * 100).toFixed(0)}%</span>
+    <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider
       min="0.1"
       max="4"
       step=".001"
-      bind:value={$tempoControl}
+      bind:value={$tempoCoefficient}
       name="tempo"
     />
   </div>
