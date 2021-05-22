@@ -16,11 +16,6 @@
       width: 100%;
     }
   }
-
-  kbd {
-    display: inline-block;
-    padding: 5px 5px;
-  }
 </style>
 
 <script>

@@ -23,6 +23,10 @@
     &.pedal-on {
       background-color: yellow;
     }
+
+    kbd {
+      margin: 0 -0.4em 0 0.4em;
+    }
   }
 </style>
 
