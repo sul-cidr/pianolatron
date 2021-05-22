@@ -211,7 +211,6 @@
       stopNote,
       stopAllNotes,
     } = samplePlayer);
-    midiSamplePlayer.on("endOfFile", stopApp);
   });
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
