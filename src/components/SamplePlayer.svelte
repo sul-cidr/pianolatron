@@ -161,6 +161,12 @@
     },
   );
 
+  midiSamplePlayer.on("endOfFile", () => {
+    softOnOff.reset();
+    sustainOnOff.reset();
+    activeNotes.reset();
+  });
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
   $: $tempoCoefficient, updatePlayer();
