@@ -147,6 +147,7 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
   import { rollMetadata, currentTick, userSettings } from "../stores";
+  import { clamp } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
@@ -319,7 +320,6 @@
       skipToTick(
         scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
       );
-
       strafing = true;
     });
     openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
@@ -335,13 +335,22 @@
 
   const panByIncrement = (up = true) => {
     const viewportBounds = viewport.getBounds();
+    const imgHeight = viewport.viewer.world.getItemAt(0).getContentSize().y;
     const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
     const delta = up ? imgBounds.height / 10 : -imgBounds.height / 10;
     const centerY = imgBounds.y + imgBounds.height / 2;
     skipToTick(
       scrollDownwards
-        ? centerY + delta - firstHolePx
-        : firstHolePx - centerY - delta,
+        ? clamp(
+            centerY + delta - firstHolePx,
+            -firstHolePx,
+            imgHeight - firstHolePx,
+          )
+        : clamp(
+            firstHolePx - centerY - delta,
+            -firstHolePx,
+            imgHeight - firstHolePx,
+          ),
     );
   };
 
