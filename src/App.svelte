@@ -125,6 +125,7 @@
   };
 
   const skipToTick = (tick) => {
+    if (tick < 0) playPauseApp();
     $currentTick = tick;
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
@@ -133,13 +134,12 @@
     skipToTick(midiSamplePlayer.totalTicks * percentage);
 
   const playPauseApp = () => {
-    if ($currentTick < 0) skipToTick(0);
-
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       stopAllNotes();
       activeNotes.reset();
     } else {
+      if ($currentTick < 0) skipToTick(0);
       midiSamplePlayer.play();
     }
   };
