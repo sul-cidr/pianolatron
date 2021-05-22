@@ -170,6 +170,7 @@
   let marks = [];
   let hoveredMark;
   let showControls;
+  let rollLength;
 
   const getNoteName = (trackerHole) => {
     const midiNumber = trackerHole + WELTE_MIDI_START;
@@ -335,7 +336,6 @@
 
   const panByIncrement = (up = true) => {
     const viewportBounds = viewport.getBounds();
-    const imgHeight = viewport.viewer.world.getItemAt(0).getContentSize().y;
     const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
     const delta = up ? imgBounds.height / 10 : -imgBounds.height / 10;
     const centerY = imgBounds.y + imgBounds.height / 2;
@@ -344,12 +344,12 @@
         ? clamp(
             centerY + delta - firstHolePx,
             -firstHolePx,
-            imgHeight - firstHolePx,
+            rollLength - firstHolePx,
           )
         : clamp(
             firstHolePx - centerY - delta,
             -firstHolePx,
-            imgHeight - firstHolePx,
+            rollLength - firstHolePx,
           ),
     );
   };
@@ -357,6 +357,7 @@
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
+  $: rollLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: firstHolePx = scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
