@@ -124,7 +124,17 @@
     });
   };
 
+  const skipToTick = (tick) => {
+    $currentTick = tick;
+    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
+  };
+
+  const skipToPercentage = (percentage) =>
+    skipToTick(midiSamplePlayer.totalTicks * percentage);
+
   const playPauseApp = () => {
+    if ($currentTick < 0) skipToTick(0);
+
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       stopAllNotes();
@@ -154,14 +164,6 @@
     trebleVolumeCoefficient.reset();
     holesByTickInterval = new IntervalTree();
   };
-
-  const skipToTick = (tick) => {
-    $currentTick = tick;
-    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
-  };
-
-  const skipToPercentage = (percentage) =>
-    skipToTick(midiSamplePlayer.totalTicks * percentage);
 
   const loadRoll = (roll) => {
     mididataReady = fetch(`./assets/midi/${roll.druid}.mid`)
