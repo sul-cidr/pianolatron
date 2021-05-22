@@ -67,6 +67,7 @@
     rollPedalingOnOff,
     overlayKeyboard,
   } from "./stores";
+  import { clamp } from "./utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -212,7 +213,9 @@
   });
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
-  $: playbackProgress.update(() => $currentTick / midiSamplePlayer?.totalTicks);
+  $: playbackProgress.update(() =>
+    clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1),
+  );
   $: if ($rollPedalingOnOff) {
     // TODO: set roll pedalling according to (as yet unavailable) pedalMap
   } else {
