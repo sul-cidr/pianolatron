@@ -54,8 +54,6 @@
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
-    softOnOff,
-    sustainOnOff,
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
@@ -63,7 +61,6 @@
     activeNotes,
     currentTick,
     rollMetadata,
-    rollPedalingOnOff,
     overlayKeyboard,
   } from "./stores";
   import { clamp } from "./utils";
@@ -213,12 +210,6 @@
   $: playbackProgress.update(() =>
     clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1),
   );
-  $: if ($rollPedalingOnOff) {
-    // TODO: set roll pedalling according to (as yet unavailable) pedalMap
-  } else {
-    sustainOnOff.set(false);
-    softOnOff.set(false);
-  }
 </script>
 
 <div id="app">
