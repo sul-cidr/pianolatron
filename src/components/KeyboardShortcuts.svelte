@@ -6,6 +6,7 @@
     accentOnOff,
     volumeCoefficient,
     tempoCoefficient,
+    activeShortcutKeys,
   } from "../stores";
   import { clamp, enforcePrecision } from "../utils";
 
@@ -52,8 +53,8 @@
     store.set(enforcePrecision(clamp(get(store) + d, min, max), precision));
   };
 
-  const increment = (...args) => updateStore(...args, true);
-  const decrement = (...args) => updateStore(...args, false);
+  const increment = (...args) => updateStore(...args, /* increment = */ true);
+  const decrement = (...args) => updateStore(...args, /* increment = */ false);
 </script>
 
 <svelte:window
@@ -76,21 +77,25 @@
 
       case keyMap.VOLUME_UP:
         event.preventDefault();
+        $activeShortcutKeys.volumeUp = true;
         increment(config.volume, event);
         break;
 
       case keyMap.VOLUME_DOWN:
         event.preventDefault();
+        $activeShortcutKeys.volumeDown = true;
         decrement(config.volume, event);
         break;
 
       case keyMap.TEMPO_UP:
         event.preventDefault();
+        $activeShortcutKeys.tempoUp = true;
         increment(config.tempo, event);
         break;
 
       case keyMap.TEMPO_DOWN:
         event.preventDefault();
+        $activeShortcutKeys.tempoDown = true;
         decrement(config.tempo, event);
         break;
 
@@ -109,6 +114,22 @@
 
       case keyMap.ACCENT:
         accentOnOff.set(false);
+        break;
+
+      case keyMap.VOLUME_UP:
+        $activeShortcutKeys.volumeUp = false;
+        break;
+
+      case keyMap.VOLUME_DOWN:
+        $activeShortcutKeys.volumeDown = false;
+        break;
+
+      case keyMap.TEMPO_UP:
+        $activeShortcutKeys.tempoUp = false;
+        break;
+
+      case keyMap.TEMPO_DOWN:
+        $activeShortcutKeys.tempoDown = false;
         break;
 
       // no default
