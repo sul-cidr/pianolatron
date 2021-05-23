@@ -96,6 +96,26 @@
     $activeNotes.forEach(stopNote);
   };
 
+  const resetPlayback = () => {
+    currentTick.reset();
+    midiSamplePlayer.stop();
+  };
+
+  const pausePlayback = () => {
+    midiSamplePlayer.pause();
+    stopAllNotes();
+    activeNotes.reset();
+    softOnOff.reset();
+    sustainOnOff.reset();
+    accentOnOff.reset();
+  };
+
+  const startPlayback = () => {
+    if ($currentTick < 0) resetPlayback();
+    updatePlayer();
+    midiSamplePlayer.play();
+  };
+
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -161,11 +181,7 @@
     },
   );
 
-  midiSamplePlayer.on("endOfFile", () => {
-    softOnOff.reset();
-    sustainOnOff.reset();
-    activeNotes.reset();
-  });
+  midiSamplePlayer.on("endOfFile", pausePlayback);
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
@@ -178,6 +194,8 @@
     updatePlayer,
     startNote,
     stopNote,
-    stopAllNotes,
+    pausePlayback,
+    startPlayback,
+    resetPlayback,
   };
 </script>

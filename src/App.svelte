@@ -56,7 +56,6 @@
   import {
     softOnOff,
     sustainOnOff,
-    accentOnOff,
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
@@ -92,7 +91,9 @@
   let updatePlayer;
   let startNote;
   let stopNote;
-  let stopAllNotes;
+  let pausePlayback;
+  let startPlayback;
+  let resetPlayback;
 
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
@@ -125,7 +126,7 @@
   };
 
   const skipToTick = (tick) => {
-    if (tick < 0) playPauseApp();
+    if (tick < 0) pausePlayback();
     $currentTick = tick;
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
@@ -135,30 +136,23 @@
 
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
-      midiSamplePlayer.pause();
-      stopAllNotes();
-      activeNotes.reset();
+      pausePlayback();
     } else {
-      if ($currentTick < 0) skipToTick(0);
-      midiSamplePlayer.play();
+      startPlayback();
     }
   };
 
   const stopApp = () => {
-    midiSamplePlayer.stop();
-    stopAllNotes();
-    playbackProgress.reset();
-    currentTick.reset();
-    activeNotes.reset();
-    softOnOff.reset();
-    sustainOnOff.reset();
-    accentOnOff.reset();
+    pausePlayback();
+    resetPlayback();
   };
 
   const resetApp = () => {
     mididataReady = false;
     appReady = false;
-    stopApp();
+    pausePlayback();
+    resetPlayback();
+    playbackProgress.reset();
     tempoCoefficient.reset();
     bassVolumeCoefficient.reset();
     trebleVolumeCoefficient.reset();
@@ -209,7 +203,9 @@
       updatePlayer,
       startNote,
       stopNote,
-      stopAllNotes,
+      pausePlayback,
+      startPlayback,
+      resetPlayback,
     } = samplePlayer);
   });
 
