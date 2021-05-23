@@ -24,7 +24,6 @@
     SUSTAIN_PEDAL: 64,
     SOFT_PEDAL: 67, // (una corda)
     PEDAL_ON: 127,
-    PANNING_POSITION: 10,
   });
 
   const DEFAULT_NOTE_VELOCITY = 50.0;
