@@ -18,6 +18,8 @@ import {
 	tempoCoefficient
 } from "../stores.js";
 
+import { clamp, enforcePrecision } from "../utils.js";
+
 function create_fragment(ctx) {
 	let mounted;
 	let dispose;
@@ -75,13 +77,6 @@ function instance($$self) {
 			precision: 2
 		}
 	};
-
-	const enforcePrecision = (value, precision) => {
-		const multiplier = 10 ** (precision || 0);
-		return Math.round(value * multiplier) / multiplier;
-	};
-
-	const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 	const updateStore = ({ store, min, max, delta, shiftDelta, ctrlDelta, precision }, { shiftKey, ctrlKey }, increment) => {
 		const d = (increment ? 1 : -1) * (shiftKey && shiftDelta || ctrlKey && ctrlDelta || delta);

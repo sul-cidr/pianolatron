@@ -34,9 +34,6 @@ import { fade } from "./_snowpack/pkg/svelte/transition.js";
 import IntervalTree from "./_snowpack/pkg/node-interval-tree.js";
 
 import {
-	softOnOff,
-	sustainOnOff,
-	accentOnOff,
 	bassVolumeCoefficient,
 	trebleVolumeCoefficient,
 	tempoCoefficient,
@@ -44,10 +41,10 @@ import {
 	activeNotes,
 	currentTick,
 	rollMetadata,
-	rollPedalingOnOff,
 	overlayKeyboard
 } from "./stores.js";
 
+import { clamp } from "./utils.js";
 import SamplePlayer from "./components/SamplePlayer.svelte.js";
 import RollSelector from "./components/RollSelector.svelte.js";
 import RollDetails from "./components/RollDetails.svelte.js";
@@ -112,7 +109,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (231:8) {#if !holesByTickInterval.count}
+// (217:8) {#if !holesByTickInterval.count}
 function create_if_block_5(ctx) {
 	let p;
 
@@ -134,7 +131,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (227:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (213:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -224,7 +221,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (239:4) {#if appReady}
+// (225:4) {#if appReady}
 function create_if_block_2(ctx) {
 	let div;
 	let rollviewer;
@@ -237,7 +234,7 @@ function create_if_block_2(ctx) {
 			props: {
 				imageUrl: /*currentRoll*/ ctx[1].image_url,
 				holesByTickInterval: /*holesByTickInterval*/ ctx[2],
-				skipToTick: /*skipToTick*/ ctx[10]
+				skipToTick: /*skipToTick*/ ctx[8]
 			}
 		});
 
@@ -304,7 +301,7 @@ function create_if_block_2(ctx) {
 
 			const flexcollapsible_changes = {};
 
-			if (dirty & /*$$scope*/ 134217728) {
+			if (dirty & /*$$scope*/ 268435456) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -333,7 +330,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (246:8) {#if $overlayKeyboard}
+// (232:8) {#if $overlayKeyboard}
 function create_if_block_3(ctx) {
 	let div;
 	let keyboard;
@@ -392,16 +389,16 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (252:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (238:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
 
 	tabbedpanel = new TabbedPanel({
 			props: {
-				playPauseApp: /*playPauseApp*/ ctx[8],
-				stopApp: /*stopApp*/ ctx[9],
-				skipToPercentage: /*skipToPercentage*/ ctx[11]
+				playPauseApp: /*playPauseApp*/ ctx[10],
+				stopApp: /*stopApp*/ ctx[11],
+				skipToPercentage: /*skipToPercentage*/ ctx[9]
 			}
 		});
 
@@ -429,7 +426,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (257:2) {#if !$overlayKeyboard}
+// (243:2) {#if !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -488,7 +485,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (262:2) {#if !appReady}
+// (248:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -586,7 +583,7 @@ function create_fragment(ctx) {
 		p(ctx, [dirty]) {
 			const flexcollapsible_changes = {};
 
-			if (dirty & /*$$scope, holesByTickInterval, appReady, currentRoll*/ 134217735) {
+			if (dirty & /*$$scope, holesByTickInterval, appReady, currentRoll*/ 268435463) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -693,11 +690,9 @@ function create_fragment(ctx) {
 function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
-	let $rollPedalingOnOff;
 	let $overlayKeyboard;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(21, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(22, $currentTick = $$value));
-	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(23, $rollPedalingOnOff = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(23, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(24, $currentTick = $$value));
 	component_subscribe($$self, overlayKeyboard, $$value => $$invalidate(6, $overlayKeyboard = $$value));
 	let appReady = false;
 	let mididataReady;
@@ -711,7 +706,9 @@ function instance($$self, $$props, $$invalidate) {
 	let updatePlayer;
 	let startNote;
 	let stopNote;
-	let stopAllNotes;
+	let pausePlayback;
+	let startPlayback;
+	let resetPlayback;
 
 	const slide = (node, { delay = 0, duration = 300 }) => {
 		const o = parseInt(getComputedStyle(node).height, 10);
@@ -746,43 +743,38 @@ function instance($$self, $$props, $$invalidate) {
 		});
 	};
 
-	const playPauseApp = () => {
-		if (midiSamplePlayer.isPlaying()) {
-			midiSamplePlayer.pause();
-			stopAllNotes();
-			activeNotes.reset();
-		} else {
-			midiSamplePlayer.play();
-		}
-	};
-
-	const stopApp = () => {
-		midiSamplePlayer.stop();
-		stopAllNotes();
-		playbackProgress.reset();
-		currentTick.reset();
-		activeNotes.reset();
-		softOnOff.reset();
-		sustainOnOff.reset();
-		accentOnOff.reset();
-	};
-
-	const resetApp = () => {
-		mididataReady = false;
-		$$invalidate(0, appReady = false);
-		stopApp();
-		tempoCoefficient.reset();
-		bassVolumeCoefficient.reset();
-		trebleVolumeCoefficient.reset();
-		$$invalidate(2, holesByTickInterval = new IntervalTree());
-	};
-
 	const skipToTick = tick => {
+		if (tick < 0) pausePlayback();
 		set_store_value(currentTick, $currentTick = tick, $currentTick);
 		updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
 	};
 
 	const skipToPercentage = percentage => skipToTick(midiSamplePlayer.totalTicks * percentage);
+
+	const playPauseApp = () => {
+		if (midiSamplePlayer.isPlaying()) {
+			pausePlayback();
+		} else {
+			startPlayback();
+		}
+	};
+
+	const stopApp = () => {
+		pausePlayback();
+		resetPlayback();
+	};
+
+	const resetApp = () => {
+		mididataReady = false;
+		$$invalidate(0, appReady = false);
+		pausePlayback();
+		resetPlayback();
+		playbackProgress.reset();
+		tempoCoefficient.reset();
+		bassVolumeCoefficient.reset();
+		trebleVolumeCoefficient.reset();
+		$$invalidate(2, holesByTickInterval = new IntervalTree());
+	};
 
 	const loadRoll = roll => {
 		mididataReady = fetch(`./assets/midi/${roll.druid}.mid`).then(mididataResponse => {
@@ -814,7 +806,7 @@ function instance($$self, $$props, $$invalidate) {
 			$$invalidate(1, currentRoll = previousRoll);
 		});
 
-		Promise.all([mididataReady, metadataReady, pianoReady]).then(({ 1: metadataJson }) => {
+		Promise.all([mididataReady, metadataReady, pianoReady]).then(([,metadataJson]) => {
 			set_store_value(rollMetadata, $rollMetadata = { ...$rollMetadata, ...metadataJson }, $rollMetadata);
 			if (metadataJson.holeData) buildHolesIntervalTree(metadataJson.holeData);
 			$$invalidate(0, appReady = true);
@@ -823,8 +815,7 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	onMount(async () => {
-		$$invalidate(17, { midiSamplePlayer, pianoReady, updatePlayer, startNote, stopNote, stopAllNotes } = samplePlayer, midiSamplePlayer, $$invalidate(4, startNote), $$invalidate(5, stopNote));
-		midiSamplePlayer.on("endOfFile", () => stopApp());
+		$$invalidate(17, { midiSamplePlayer, pianoReady, updatePlayer, startNote, stopNote, pausePlayback, startPlayback, resetPlayback } = samplePlayer, midiSamplePlayer, $$invalidate(4, startNote), $$invalidate(5, stopNote));
 	});
 
 	function rollselector_currentRoll_binding(value) {
@@ -841,24 +832,11 @@ function instance($$self, $$props, $$invalidate) {
 
 	$$self.$$.update = () => {
 		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 65538) {
-			$: {
-				if (currentRoll !== previousRoll) {
-					loadRoll(currentRoll);
-				}
-			}
+			$: if (currentRoll !== previousRoll) loadRoll(currentRoll);
 		}
 
-		if ($$self.$$.dirty & /*$currentTick, midiSamplePlayer*/ 4325376) {
-			$: playbackProgress.update(() => $currentTick / midiSamplePlayer?.totalTicks);
-		}
-
-		if ($$self.$$.dirty & /*$rollPedalingOnOff*/ 8388608) {
-			$: if ($rollPedalingOnOff) {
-				
-			} else {
-				sustainOnOff.set(false); // TODO: set roll pedalling according to (as yet unavailable) pedalMap
-				softOnOff.set(false);
-			}
+		if ($$self.$$.dirty & /*$currentTick, midiSamplePlayer*/ 16908288) {
+			$: playbackProgress.update(() => clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1));
 		}
 	};
 
@@ -871,10 +849,10 @@ function instance($$self, $$props, $$invalidate) {
 		stopNote,
 		$overlayKeyboard,
 		slide,
-		playPauseApp,
-		stopApp,
 		skipToTick,
 		skipToPercentage,
+		playPauseApp,
+		stopApp,
 		rollselector_currentRoll_binding,
 		sampleplayer_binding
 	];

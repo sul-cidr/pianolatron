@@ -33,6 +33,7 @@ import { onMount } from "../_snowpack/pkg/svelte.js";
 import { fade } from "../_snowpack/pkg/svelte/transition.js";
 import OpenSeadragon from "../_snowpack/pkg/openseadragon.js";
 import { rollMetadata, currentTick, userSettings } from "../stores.js";
+import { clamp } from "../utils.js";
 import RollViewerControls from "./RollViewerControls.svelte.js";
 
 function create_if_block_1(ctx) {
@@ -72,7 +73,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (342:2) {#if showControls}
+// (352:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
@@ -248,8 +249,8 @@ function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
 	let $userSettings;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(17, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(19, $currentTick = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(18, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(20, $currentTick = $$value));
 	component_subscribe($$self, userSettings, $$value => $$invalidate(4, $userSettings = $$value));
 	let { imageUrl } = $$props;
 	let { holesByTickInterval } = $$props;
@@ -262,6 +263,7 @@ function instance($$self, $$props, $$invalidate) {
 	let marks = [];
 	let hoveredMark;
 	let showControls;
+	let rollLength;
 
 	const getNoteName = trackerHole => {
 		const midiNumber = trackerHole + WELTE_MIDI_START;
@@ -402,8 +404,8 @@ function instance($$self, $$props, $$invalidate) {
 		const centerY = imgBounds.y + imgBounds.height / 2;
 
 		skipToTick(scrollDownwards
-		? centerY + delta - firstHolePx
-		: firstHolePx - centerY - delta);
+		? clamp(centerY + delta - firstHolePx, -firstHolePx, rollLength - firstHolePx)
+		: clamp(firstHolePx - centerY - delta, -firstHolePx, rollLength - firstHolePx));
 	};
 
 	function rollviewercontrols_strafing_binding(value) {
@@ -430,19 +432,23 @@ function instance($$self, $$props, $$invalidate) {
 	let scrollDownwards;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$currentTick*/ 524288) {
+		if ($$self.$$.dirty & /*$currentTick*/ 1048576) {
 			$: advanceToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 524288) {
+		if ($$self.$$.dirty & /*$currentTick*/ 1048576) {
 			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 131072) {
-			$: $$invalidate(18, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		if ($$self.$$.dirty & /*$rollMetadata*/ 262144) {
+			$: $$invalidate(19, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
 		}
 
-		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 393216) {
+		if ($$self.$$.dirty & /*$rollMetadata*/ 262144) {
+			$: rollLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
+		}
+
+		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 786432) {
 			$: firstHolePx = scrollDownwards
 			? parseInt($rollMetadata.FIRST_HOLE, 10)
 			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);

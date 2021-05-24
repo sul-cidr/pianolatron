@@ -25,7 +25,7 @@ import {
 	currentTick
 } from "../stores.js";
 
-const DEFAULT_NOTE_VELOCITY = 33;
+const DEFAULT_NOTE_VELOCITY = 50;
 const DEFAULT_TEMPO = 60;
 const SOFT_PEDAL_RATIO = 0.67;
 const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
@@ -44,25 +44,24 @@ function instance($$self, $$props, $$invalidate) {
 	let $sustainOnOff;
 	let $activeNotes;
 	let $rollPedalingOnOff;
-	component_subscribe($$self, useMidiTempoEventsOnOff, $$value => $$invalidate(7, $useMidiTempoEventsOnOff = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(8, $currentTick = $$value));
-	component_subscribe($$self, tempoCoefficient, $$value => $$invalidate(9, $tempoCoefficient = $$value));
-	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(10, $playExpressionsOnOff = $$value));
-	component_subscribe($$self, softOnOff, $$value => $$invalidate(11, $softOnOff = $$value));
-	component_subscribe($$self, accentOnOff, $$value => $$invalidate(12, $accentOnOff = $$value));
-	component_subscribe($$self, volumeCoefficient, $$value => $$invalidate(13, $volumeCoefficient = $$value));
-	component_subscribe($$self, bassVolumeCoefficient, $$value => $$invalidate(14, $bassVolumeCoefficient = $$value));
-	component_subscribe($$self, trebleVolumeCoefficient, $$value => $$invalidate(15, $trebleVolumeCoefficient = $$value));
-	component_subscribe($$self, sustainOnOff, $$value => $$invalidate(16, $sustainOnOff = $$value));
-	component_subscribe($$self, activeNotes, $$value => $$invalidate(17, $activeNotes = $$value));
-	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(18, $rollPedalingOnOff = $$value));
+	component_subscribe($$self, useMidiTempoEventsOnOff, $$value => $$invalidate(9, $useMidiTempoEventsOnOff = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(10, $currentTick = $$value));
+	component_subscribe($$self, tempoCoefficient, $$value => $$invalidate(11, $tempoCoefficient = $$value));
+	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(12, $playExpressionsOnOff = $$value));
+	component_subscribe($$self, softOnOff, $$value => $$invalidate(13, $softOnOff = $$value));
+	component_subscribe($$self, accentOnOff, $$value => $$invalidate(14, $accentOnOff = $$value));
+	component_subscribe($$self, volumeCoefficient, $$value => $$invalidate(15, $volumeCoefficient = $$value));
+	component_subscribe($$self, bassVolumeCoefficient, $$value => $$invalidate(16, $bassVolumeCoefficient = $$value));
+	component_subscribe($$self, trebleVolumeCoefficient, $$value => $$invalidate(17, $trebleVolumeCoefficient = $$value));
+	component_subscribe($$self, sustainOnOff, $$value => $$invalidate(18, $sustainOnOff = $$value));
+	component_subscribe($$self, activeNotes, $$value => $$invalidate(19, $activeNotes = $$value));
+	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(20, $rollPedalingOnOff = $$value));
 	let tempoMap;
 
 	const controllerChange = Object.freeze({
 		SUSTAIN_PEDAL: 64,
 		SOFT_PEDAL: 67, // (una corda)
-		PEDAL_ON: 127,
-		PANNING_POSITION: 10
+		PEDAL_ON: 127
 	});
 
 	const midiSamplePlayer = new MidiPlayer.Player();
@@ -107,7 +106,7 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const startNote = (noteNumber, velocity) => {
-		const modifiedVelocity = ($playExpressionsOnOff && velocity || DEFAULT_NOTE_VELOCITY) / 128 * ($softOnOff && SOFT_PEDAL_RATIO || 1) * ($accentOnOff && ACCENT_BUMP || 1) * $volumeCoefficient * (noteNumber < HALF_BOUNDARY
+		const modifiedVelocity = ($playExpressionsOnOff && velocity || DEFAULT_NOTE_VELOCITY) / 100 * ($softOnOff && SOFT_PEDAL_RATIO || 1) * ($accentOnOff && ACCENT_BUMP || 1) * $volumeCoefficient * (noteNumber < HALF_BOUNDARY
 		? $bassVolumeCoefficient
 		: $trebleVolumeCoefficient);
 
@@ -125,6 +124,26 @@ function instance($$self, $$props, $$invalidate) {
 		piano.pedalUp();
 		if ($sustainOnOff) piano.pedalDown();
 		$activeNotes.forEach(stopNote);
+	};
+
+	const resetPlayback = () => {
+		currentTick.reset();
+		midiSamplePlayer.stop();
+	};
+
+	const pausePlayback = () => {
+		midiSamplePlayer.pause();
+		stopAllNotes();
+		activeNotes.reset();
+		softOnOff.reset();
+		sustainOnOff.reset();
+		accentOnOff.reset();
+	};
+
+	const startPlayback = () => {
+		if ($currentTick < 0) resetPlayback();
+		updatePlayer();
+		midiSamplePlayer.play();
 	};
 
 	midiSamplePlayer.on("fileLoaded", () => {
@@ -171,22 +190,42 @@ function instance($$self, $$props, $$invalidate) {
 		}
 	});
 
+	midiSamplePlayer.on("endOfFile", pausePlayback);
+
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$sustainOnOff*/ 65536) {
+		if ($$self.$$.dirty & /*$sustainOnOff*/ 262144) {
 			/* eslint-disable no-unused-expressions, no-sequences */
 			$: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
 		}
 
-		if ($$self.$$.dirty & /*$tempoCoefficient*/ 512) {
+		if ($$self.$$.dirty & /*$tempoCoefficient*/ 2048) {
 			$: ($tempoCoefficient, updatePlayer());
 		}
 
-		if ($$self.$$.dirty & /*$useMidiTempoEventsOnOff*/ 128) {
+		if ($$self.$$.dirty & /*$useMidiTempoEventsOnOff*/ 512) {
 			$: ($useMidiTempoEventsOnOff, updatePlayer());
+		}
+
+		if ($$self.$$.dirty & /*$rollPedalingOnOff*/ 1048576) {
+			$: if ($rollPedalingOnOff) {
+				
+			} else {
+				sustainOnOff.set(false); // TODO: set roll pedalling according to (as yet unavailable) pedalMap
+				softOnOff.set(false);
+			}
 		}
 	};
 
-	return [midiSamplePlayer, pianoReady, updatePlayer, startNote, stopNote, stopAllNotes];
+	return [
+		midiSamplePlayer,
+		pianoReady,
+		updatePlayer,
+		startNote,
+		stopNote,
+		resetPlayback,
+		pausePlayback,
+		startPlayback
+	];
 }
 
 class SamplePlayer extends SvelteComponent {
@@ -199,7 +238,9 @@ class SamplePlayer extends SvelteComponent {
 			updatePlayer: 2,
 			startNote: 3,
 			stopNote: 4,
-			stopAllNotes: 5
+			resetPlayback: 5,
+			pausePlayback: 6,
+			startPlayback: 7
 		});
 	}
 
@@ -223,8 +264,16 @@ class SamplePlayer extends SvelteComponent {
 		return this.$$.ctx[4];
 	}
 
-	get stopAllNotes() {
+	get resetPlayback() {
 		return this.$$.ctx[5];
+	}
+
+	get pausePlayback() {
+		return this.$$.ctx[6];
+	}
+
+	get startPlayback() {
+		return this.$$.ctx[7];
 	}
 }
 
