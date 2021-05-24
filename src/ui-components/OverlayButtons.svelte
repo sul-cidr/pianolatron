@@ -40,6 +40,16 @@
       transform: translateX(-50%);
     }
 
+    &.top-left {
+      left: 1em;
+      top: 0;
+      transform: translateY(-100%);
+      border-radius: 4px 4px 0 0;
+      padding: 0;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
     &.middle-right {
       top: 50%;
       right: 8px;

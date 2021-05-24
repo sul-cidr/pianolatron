@@ -1,29 +1,9 @@
-<style lang="scss">
-  div {
-    left: 1em;
-    top: 0;
-    transform: translateY(-100%);
-    border-radius: 4px 4px 0 0;
-    padding: 0;
-    opacity: 0;
-    transition: all 0.3s ease;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  button {
-    border-radius: 4px 4px 0 0;
-  }
-</style>
-
 <script>
-  import { fade } from "svelte/transition";
   import { overlayKeyboard } from "../stores";
+  import OverlayButtons from "../ui-components/OverlayButtons.svelte";
 </script>
 
-<div class="overlay-buttons" transition:fade>
+<OverlayButtons position="top-left" outside>
   <button on:click={() => ($overlayKeyboard = !$overlayKeyboard)}>
     {#if $overlayKeyboard}
       <svg
@@ -65,4 +45,4 @@
       </svg>
     {/if}
   </button>
-</div>
+</OverlayButtons>
