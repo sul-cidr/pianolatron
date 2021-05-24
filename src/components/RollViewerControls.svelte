@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
+  import OverlayButtons from "../ui-components/OverlayButtons.svelte";
 
   export let openSeadragon;
   export let maxZoomLevel;
@@ -32,7 +32,7 @@
   });
 </script>
 
-<div class="overlay-buttons top-center" transition:fade>
+<OverlayButtons position="top-center">
   <button
     disabled={currentZoom >= maxZoomLevel}
     on:click={() => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel))}
@@ -93,8 +93,9 @@
       <line x1="14" y1="12" x2="20" y2="12" />
     </svg>
   </button>
-</div>
-<div class="overlay-buttons middle-right" transition:fade>
+</OverlayButtons>
+
+<OverlayButtons position="middle-right">
   <button
     disabled={false}
     on:mousedown={() => {
@@ -141,5 +142,5 @@
       <line x1="8" y1="15" x2="12" y2="19" />
     </svg>
   </button>
-</div>
+</OverlayButtons>
 <svelte:window on:mouseup={() => clearInterval(panInterval)} />
