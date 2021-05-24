@@ -7,6 +7,7 @@
     volumeCoefficient,
     tempoCoefficient,
   } from "../stores";
+  import { clamp, enforcePrecision } from "../utils";
 
   const keyMap = Object.freeze({
     SOFT: "KeyQ",
@@ -38,13 +39,6 @@
       precision: 2,
     },
   };
-
-  const enforcePrecision = (value, precision) => {
-    const multiplier = 10 ** (precision || 0);
-    return Math.round(value * multiplier) / multiplier;
-  };
-
-  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   const updateStore = (
     { store, min, max, delta, shiftDelta, ctrlDelta, precision },

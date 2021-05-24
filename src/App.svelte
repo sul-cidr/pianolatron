@@ -54,9 +54,6 @@
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
-    softOnOff,
-    sustainOnOff,
-    accentOnOff,
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
@@ -64,9 +61,9 @@
     activeNotes,
     currentTick,
     rollMetadata,
-    rollPedalingOnOff,
     overlayKeyboard,
   } from "./stores";
+  import { clamp } from "./utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -91,7 +88,9 @@
   let updatePlayer;
   let startNote;
   let stopNote;
-  let stopAllNotes;
+  let pausePlayback;
+  let startPlayback;
+  let resetPlayback;
 
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
@@ -123,44 +122,39 @@
     });
   };
 
-  const playPauseApp = () => {
-    if (midiSamplePlayer.isPlaying()) {
-      midiSamplePlayer.pause();
-      stopAllNotes();
-      activeNotes.reset();
-    } else {
-      midiSamplePlayer.play();
-    }
-  };
-
-  const stopApp = () => {
-    midiSamplePlayer.stop();
-    stopAllNotes();
-    playbackProgress.reset();
-    currentTick.reset();
-    activeNotes.reset();
-    softOnOff.reset();
-    sustainOnOff.reset();
-    accentOnOff.reset();
-  };
-
-  const resetApp = () => {
-    mididataReady = false;
-    appReady = false;
-    stopApp();
-    tempoCoefficient.reset();
-    bassVolumeCoefficient.reset();
-    trebleVolumeCoefficient.reset();
-    holesByTickInterval = new IntervalTree();
-  };
-
   const skipToTick = (tick) => {
+    if (tick < 0) pausePlayback();
     $currentTick = tick;
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 
   const skipToPercentage = (percentage) =>
     skipToTick(midiSamplePlayer.totalTicks * percentage);
+
+  const playPauseApp = () => {
+    if (midiSamplePlayer.isPlaying()) {
+      pausePlayback();
+    } else {
+      startPlayback();
+    }
+  };
+
+  const stopApp = () => {
+    pausePlayback();
+    resetPlayback();
+  };
+
+  const resetApp = () => {
+    mididataReady = false;
+    appReady = false;
+    pausePlayback();
+    resetPlayback();
+    playbackProgress.reset();
+    tempoCoefficient.reset();
+    bassVolumeCoefficient.reset();
+    trebleVolumeCoefficient.reset();
+    holesByTickInterval = new IntervalTree();
+  };
 
   const loadRoll = (roll) => {
     mididataReady = fetch(`./assets/midi/${roll.druid}.mid`)
@@ -189,7 +183,7 @@
       });
 
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
-      ({ 1: metadataJson }) => {
+      ([, metadataJson]) => {
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
         if (metadataJson.holeData)
           buildHolesIntervalTree(metadataJson.holeData);
@@ -206,24 +200,16 @@
       updatePlayer,
       startNote,
       stopNote,
-      stopAllNotes,
+      pausePlayback,
+      startPlayback,
+      resetPlayback,
     } = samplePlayer);
-    midiSamplePlayer.on("endOfFile", () => stopApp());
   });
 
-  $: {
-    if (currentRoll !== previousRoll) {
-      loadRoll(currentRoll);
-    }
-  }
-
-  $: playbackProgress.update(() => $currentTick / midiSamplePlayer?.totalTicks);
-  $: if ($rollPedalingOnOff) {
-    // TODO: set roll pedalling according to (as yet unavailable) pedalMap
-  } else {
-    sustainOnOff.set(false);
-    softOnOff.set(false);
-  }
+  $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
+  $: playbackProgress.update(() =>
+    clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1),
+  );
 </script>
 
 <div id="app">

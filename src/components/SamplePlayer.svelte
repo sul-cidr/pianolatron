@@ -24,10 +24,9 @@
     SUSTAIN_PEDAL: 64,
     SOFT_PEDAL: 67, // (una corda)
     PEDAL_ON: 127,
-    PANNING_POSITION: 10,
   });
 
-  const DEFAULT_NOTE_VELOCITY = 33.0;
+  const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
   const SOFT_PEDAL_RATIO = 0.67;
   const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
@@ -73,7 +72,7 @@
 
   const startNote = (noteNumber, velocity) => {
     const modifiedVelocity =
-      ((($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 128) *
+      ((($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100) *
       (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
       (($accentOnOff && ACCENT_BUMP) || 1) *
       $volumeCoefficient *
@@ -94,6 +93,26 @@
     piano.pedalUp();
     if ($sustainOnOff) piano.pedalDown();
     $activeNotes.forEach(stopNote);
+  };
+
+  const resetPlayback = () => {
+    currentTick.reset();
+    midiSamplePlayer.stop();
+  };
+
+  const pausePlayback = () => {
+    midiSamplePlayer.pause();
+    stopAllNotes();
+    activeNotes.reset();
+    softOnOff.reset();
+    sustainOnOff.reset();
+    accentOnOff.reset();
+  };
+
+  const startPlayback = () => {
+    if ($currentTick < 0) resetPlayback();
+    updatePlayer();
+    midiSamplePlayer.play();
   };
 
   midiSamplePlayer.on("fileLoaded", () => {
@@ -161,10 +180,18 @@
     },
   );
 
+  midiSamplePlayer.on("endOfFile", pausePlayback);
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
+  $: if ($rollPedalingOnOff) {
+    // TODO: set roll pedalling according to (as yet unavailable) pedalMap
+  } else {
+    sustainOnOff.set(false);
+    softOnOff.set(false);
+  }
 
   export {
     midiSamplePlayer,
@@ -172,6 +199,8 @@
     updatePlayer,
     startNote,
     stopNote,
-    stopAllNotes,
+    pausePlayback,
+    startPlayback,
+    resetPlayback,
   };
 </script>

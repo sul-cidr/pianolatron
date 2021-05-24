@@ -147,6 +147,7 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
   import { rollMetadata, currentTick, userSettings } from "../stores";
+  import { clamp } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
@@ -169,6 +170,7 @@
   let marks = [];
   let hoveredMark;
   let showControls;
+  let rollLength;
 
   const getNoteName = (trackerHole) => {
     const midiNumber = trackerHole + WELTE_MIDI_START;
@@ -319,7 +321,6 @@
       skipToTick(
         scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
       );
-
       strafing = true;
     });
     openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
@@ -340,14 +341,23 @@
     const centerY = imgBounds.y + imgBounds.height / 2;
     skipToTick(
       scrollDownwards
-        ? centerY + delta - firstHolePx
-        : firstHolePx - centerY - delta,
+        ? clamp(
+            centerY + delta - firstHolePx,
+            -firstHolePx,
+            rollLength - firstHolePx,
+          )
+        : clamp(
+            firstHolePx - centerY - delta,
+            -firstHolePx,
+            rollLength - firstHolePx,
+          ),
     );
   };
 
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
+  $: rollLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: firstHolePx = scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
