@@ -36,10 +36,16 @@
 
   const piano = new Piano({
     url: "assets/samples/",
-    velocities: 2,
+    velocities: 4,
     release: true,
     pedal: true,
     maxPolyphony: 64,
+    volume: {
+      strings: -15,
+      harmonics: -10,
+      pedal: -10,
+      keybed: -10,
+    },
   }).toDestination();
 
   const pianoReady = piano.load();
