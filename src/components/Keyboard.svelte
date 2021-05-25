@@ -109,15 +109,12 @@
       }
 
       :global(:nth-child(2).depressed) {
+        background: $active-key-highlight;
         border-bottom-width: 2px;
         box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.4),
           0 1px 0 rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
           0 -1px 0 #000;
         height: 57%;
-      }
-
-      :global(:nth-child(2).depressed) {
-        background: $active-key-highlight;
       }
     }
   }
@@ -187,7 +184,7 @@
   let mouseDown = false;
   let playing = new Set();
   const stopPlaying = () => {
-    playing.forEach((note) => stopNote(note));
+    playing.forEach(stopNote);
     playing = new Set();
   };
 </script>
