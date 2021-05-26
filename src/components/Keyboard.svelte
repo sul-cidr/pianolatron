@@ -109,19 +109,18 @@
       }
 
       :global(:nth-child(2).depressed) {
+        background: $active-key-highlight;
         border-bottom-width: 2px;
         box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.4),
           0 1px 0 rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
           0 -1px 0 #000;
         height: 57%;
       }
-
-      :global(:nth-child(2).depressed) {
-        background: $active-key-highlight;
-      }
     }
   }
-  svg.pedal {
+  div.pedal {
+    // SVG pedals are wrapped in <div/> tags because SVG animation performance sucks
+    //  so badly on Chromium-based browsers on Mac OS that the whole app suffers.
     filter: drop-shadow(0px 8px 3px black) saturate(0.4);
     margin: 0 4%;
     transform: rotate3d(1, 0, 0, 30deg);
@@ -132,10 +131,15 @@
     margin-top: -25px;
     cursor: pointer;
     width: 3%;
+    display: inline-block;
 
     &.depressed {
       filter: drop-shadow(0px 4px 2px black) saturate(0.6);
       transform: rotate3d(0, 0, 0, 0);
+    }
+
+    svg {
+      width: 100%;
     }
   }
 </style>
@@ -187,7 +191,7 @@
   let mouseDown = false;
   let playing = new Set();
   const stopPlaying = () => {
-    playing.forEach((note) => stopNote(note));
+    playing.forEach(stopNote);
     playing = new Set();
   };
 </script>
@@ -265,27 +269,26 @@
   </symbol>
 </svg>
 
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="46.9"
-  height="61.6"
+<div
   class="pedal"
   on:mousedown={() => ($softOnOff = true)}
   on:mouseup={() => ($softOnOff = false)}
   on:mouseout={() => ($softOnOff = false)}
   class:depressed={$softOnOff}
 >
-  <use href="#pedal" />
-</svg>
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="46.9"
-  height="61.6"
+  <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
+    <use href="#pedal" />
+  </svg>
+</div>
+
+<div
   class="pedal"
   on:mousedown={() => ($sustainOnOff = true)}
   on:mouseup={() => ($sustainOnOff = false)}
   on:mouseout={() => ($sustainOnOff = false)}
   class:depressed={$sustainOnOff}
 >
-  <use href="#pedal" />
-</svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
+    <use href="#pedal" />
+  </svg>
+</div>
