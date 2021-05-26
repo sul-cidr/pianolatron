@@ -109,7 +109,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (217:8) {#if !holesByTickInterval.count}
+// (218:8) {#if !holesByTickInterval.count}
 function create_if_block_5(ctx) {
 	let p;
 
@@ -131,7 +131,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (213:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (214:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -221,7 +221,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (225:4) {#if appReady}
+// (226:4) {#if appReady}
 function create_if_block_2(ctx) {
 	let div;
 	let rollviewer;
@@ -330,7 +330,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (232:8) {#if $overlayKeyboard}
+// (233:8) {#if $overlayKeyboard}
 function create_if_block_3(ctx) {
 	let div;
 	let keyboard;
@@ -389,7 +389,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (238:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (239:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -426,7 +426,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (243:2) {#if !$overlayKeyboard}
+// (244:2) {#if !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -485,7 +485,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (248:2) {#if !appReady}
+// (249:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -746,6 +746,7 @@ function instance($$self, $$props, $$invalidate) {
 	const skipToTick = tick => {
 		if (tick < 0) pausePlayback();
 		set_store_value(currentTick, $currentTick = tick, $currentTick);
+		activeNotes.reset();
 		updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
 	};
 

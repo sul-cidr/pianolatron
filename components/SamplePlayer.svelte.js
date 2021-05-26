@@ -130,6 +130,7 @@ function instance($$self, $$props, $$invalidate) {
 		piano.pedalUp();
 		if ($sustainOnOff) piano.pedalDown();
 		$activeNotes.forEach(stopNote);
+		activeNotes.reset();
 	};
 
 	const resetPlayback = () => {
@@ -181,13 +182,7 @@ function instance($$self, $$props, $$invalidate) {
 			}
 		} else if (name === "Controller Change" && $rollPedalingOnOff) {
 			if (number === controllerChange.SUSTAIN_PEDAL) {
-				if (value === controllerChange.PEDAL_ON) {
-					piano.pedalDown();
-					sustainOnOff.set(true);
-				} else {
-					piano.pedalUp();
-					sustainOnOff.set(false);
-				}
+				sustainOnOff.set(value === controllerChange.PEDAL_ON);
 			} else if (number === controllerChange.SOFT_PEDAL) {
 				softOnOff.set(value === controllerChange.PEDAL_ON);
 			}

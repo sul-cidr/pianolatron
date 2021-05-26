@@ -44,7 +44,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (200:8) {#each key as { title, note }}
+// (202:8) {#each key as { title, note }}
 function create_each_block_1(ctx) {
 	let span;
 	let span_title_value;
@@ -55,7 +55,7 @@ function create_each_block_1(ctx) {
 			span = element("span");
 			attr(span, "title", span_title_value = /*title*/ ctx[27]);
 			attr(span, "data-key", span_data_key_value = /*note*/ ctx[28]);
-			attr(span, "class", "svelte-1d68rqw");
+			attr(span, "class", "svelte-1lm3ox6");
 			toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[28]) || /*playing*/ ctx[4].has(/*note*/ ctx[28]));
 		},
 		m(target, anchor) {
@@ -72,7 +72,7 @@ function create_each_block_1(ctx) {
 	};
 }
 
-// (198:4) {#each keys as key}
+// (200:4) {#each keys as key}
 function create_each_block(ctx) {
 	let div;
 	let t;
@@ -92,7 +92,7 @@ function create_each_block(ctx) {
 			}
 
 			t = space();
-			attr(div, "class", "svelte-1d68rqw");
+			attr(div, "class", "svelte-1lm3ox6");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -148,11 +148,9 @@ function create_fragment(ctx) {
 	let path3;
 	let path4;
 	let t2;
-	let svg1;
-	let use0;
+	let div2;
 	let t3;
-	let svg2;
-	let use1;
+	let div3;
 	let current;
 	let mounted;
 	let dispose;
@@ -185,15 +183,15 @@ function create_fragment(ctx) {
 			path3 = svg_element("path");
 			path4 = svg_element("path");
 			t2 = space();
-			svg1 = svg_element("svg");
-			use0 = svg_element("use");
+			div2 = element("div");
+			div2.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6" class="svelte-1lm3ox6"><use href="#pedal" class="svelte-1lm3ox6"></use></svg>`;
 			t3 = space();
-			svg2 = svg_element("svg");
-			use1 = svg_element("use");
+			div3 = element("div");
+			div3.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6" class="svelte-1lm3ox6"><use href="#pedal" class="svelte-1lm3ox6"></use></svg>`;
 			attr(div0, "id", "keys");
-			attr(div0, "class", "svelte-1d68rqw");
+			attr(div0, "class", "svelte-1lm3ox6");
 			attr(div1, "id", "keyboard");
-			attr(div1, "class", "svelte-1d68rqw");
+			attr(div1, "class", "svelte-1lm3ox6");
 			attr(path0, "d", "M10 0v5.7c0 .9.3 2.2 1 3.5.7 1.4 1.4 3.3 1.4 4.3 0 1.3-1.9 2.8-6.2 2.8-4.4 0-6.2-1.5-6.2-2.8 0-1 .6-2.9 1.4-4.3a28.2 14.1 0 0 0 1-3.5V0z");
 			set_style(path0, "fill", "#996a01");
 			attr(path1, "d", "m10.5 9-.7-1.7c-.2-.7-.2-1.3-.2-1.8V0h-7v5.5c0 .5 0 1.1-.2 1.8L1.7 9a43 21.5 0 0 0-1.3 4.3c0 1.3 1.7 2.9 5.6 2.9 4.1 0 5.8-1.6 5.8-3 0-1-.5-2.8-1.3-4.2");
@@ -207,18 +205,10 @@ function create_fragment(ctx) {
 			attr(symbol, "id", "pedal");
 			attr(symbol, "viewBox", "0 0 12.4 16.3");
 			set_style(svg0, "display", "none");
-			attr(use0, "href", "#pedal");
-			attr(svg1, "xmlns", "http://www.w3.org/2000/svg");
-			attr(svg1, "width", "46.9");
-			attr(svg1, "height", "61.6");
-			attr(svg1, "class", "pedal svelte-1d68rqw");
-			toggle_class(svg1, "depressed", /*$softOnOff*/ ctx[6]);
-			attr(use1, "href", "#pedal");
-			attr(svg2, "xmlns", "http://www.w3.org/2000/svg");
-			attr(svg2, "width", "46.9");
-			attr(svg2, "height", "61.6");
-			attr(svg2, "class", "pedal svelte-1d68rqw");
-			toggle_class(svg2, "depressed", /*$sustainOnOff*/ ctx[7]);
+			attr(div2, "class", "pedal svelte-1lm3ox6");
+			toggle_class(div2, "depressed", /*$softOnOff*/ ctx[6]);
+			attr(div3, "class", "pedal svelte-1lm3ox6");
+			toggle_class(div3, "depressed", /*$sustainOnOff*/ ctx[7]);
 		},
 		m(target, anchor) {
 			insert(target, div1, anchor);
@@ -239,11 +229,9 @@ function create_fragment(ctx) {
 			append(symbol, path3);
 			append(symbol, path4);
 			insert(target, t2, anchor);
-			insert(target, svg1, anchor);
-			append(svg1, use0);
+			insert(target, div2, anchor);
 			insert(target, t3, anchor);
-			insert(target, svg2, anchor);
-			append(svg2, use1);
+			insert(target, div3, anchor);
 			current = true;
 
 			if (!mounted) {
@@ -252,12 +240,12 @@ function create_fragment(ctx) {
 					listen(div0, "mousedown", prevent_default(/*mousedown_handler*/ ctx[12])),
 					listen(div0, "mouseup", prevent_default(/*mouseup_handler_1*/ ctx[13])),
 					listen(div0, "mousemove", prevent_default(/*mousemove_handler*/ ctx[14])),
-					listen(svg1, "mousedown", /*mousedown_handler_1*/ ctx[15]),
-					listen(svg1, "mouseup", /*mouseup_handler_2*/ ctx[16]),
-					listen(svg1, "mouseout", /*mouseout_handler*/ ctx[17]),
-					listen(svg2, "mousedown", /*mousedown_handler_2*/ ctx[18]),
-					listen(svg2, "mouseup", /*mouseup_handler_3*/ ctx[19]),
-					listen(svg2, "mouseout", /*mouseout_handler_1*/ ctx[20])
+					listen(div2, "mousedown", /*mousedown_handler_1*/ ctx[15]),
+					listen(div2, "mouseup", /*mouseup_handler_2*/ ctx[16]),
+					listen(div2, "mouseout", /*mouseout_handler*/ ctx[17]),
+					listen(div3, "mousedown", /*mousedown_handler_2*/ ctx[18]),
+					listen(div3, "mouseup", /*mouseup_handler_3*/ ctx[19]),
+					listen(div3, "mouseout", /*mouseout_handler_1*/ ctx[20])
 				];
 
 				mounted = true;
@@ -288,11 +276,11 @@ function create_fragment(ctx) {
 			}
 
 			if (dirty & /*$softOnOff*/ 64) {
-				toggle_class(svg1, "depressed", /*$softOnOff*/ ctx[6]);
+				toggle_class(div2, "depressed", /*$softOnOff*/ ctx[6]);
 			}
 
 			if (dirty & /*$sustainOnOff*/ 128) {
-				toggle_class(svg2, "depressed", /*$sustainOnOff*/ ctx[7]);
+				toggle_class(div3, "depressed", /*$sustainOnOff*/ ctx[7]);
 			}
 		},
 		i(local) {
@@ -311,9 +299,9 @@ function create_fragment(ctx) {
 			if (detaching) detach(t1);
 			if (detaching) detach(svg0);
 			if (detaching) detach(t2);
-			if (detaching) detach(svg1);
+			if (detaching) detach(div2);
 			if (detaching) detach(t3);
-			if (detaching) detach(svg2);
+			if (detaching) detach(div3);
 			mounted = false;
 			run_all(dispose);
 		}
@@ -368,7 +356,7 @@ function instance($$self, $$props, $$invalidate) {
 	let playing = new Set();
 
 	const stopPlaying = () => {
-		playing.forEach(note => stopNote(note));
+		playing.forEach(stopNote);
 		$$invalidate(4, playing = new Set());
 	};
 
