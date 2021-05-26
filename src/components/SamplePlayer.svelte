@@ -99,6 +99,7 @@
     piano.pedalUp();
     if ($sustainOnOff) piano.pedalDown();
     $activeNotes.forEach(stopNote);
+    activeNotes.reset();
   };
 
   const resetPlayback = () => {
