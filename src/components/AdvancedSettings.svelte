@@ -64,6 +64,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     useMidiTempoEventsOnOff,
+    pianoKeyboardOnOff,
     userSettings,
   } from "../stores";
 
@@ -83,6 +84,10 @@
     <div>
       Show details for Active Notes:
       <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
+    </div>
+    <div>
+      Display Piano Keyboard:
+      <input type="checkbox" bind:checked={$pianoKeyboardOnOff} />
     </div>
   </fieldset>
 

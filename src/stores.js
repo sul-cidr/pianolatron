@@ -54,6 +54,7 @@ export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
 
 // User Settings
+export const pianoKeyboardOnOff = createStore(true);
 export const overlayKeyboard = createStore(false);
 export const userSettings = createStore({
   theme: "cardinal",

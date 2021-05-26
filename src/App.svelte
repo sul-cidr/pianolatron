@@ -61,6 +61,7 @@
     activeNotes,
     currentTick,
     rollMetadata,
+    pianoKeyboardOnOff,
     overlayKeyboard,
   } from "./stores";
   import { clamp } from "./utils";
@@ -234,7 +235,7 @@
           {holesByTickInterval}
           {skipToTick}
         />
-        {#if $overlayKeyboard}
+        {#if $pianoKeyboardOnOff && $overlayKeyboard}
           <div id="keyboard-overlay" transition:fade>
             <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
           </div>
@@ -245,7 +246,7 @@
       </FlexCollapsible>
     {/if}
   </div>
-  {#if !$overlayKeyboard}
+  {#if $pianoKeyboardOnOff && !$overlayKeyboard}
     <div id="keyboard-container" transition:slide>
       <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
     </div>
