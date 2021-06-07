@@ -38,7 +38,7 @@ function get_each_context(ctx, list, i) {
 	return child_ctx;
 }
 
-// (106:4) {#each themes as theme}
+// (108:4) {#each themes as theme}
 function create_each_block(ctx) {
 	let button;
 	let button_class_value;
@@ -52,7 +52,7 @@ function create_each_block(ctx) {
 	return {
 		c() {
 			button = element("button");
-			attr(button, "class", button_class_value = "" + (null_to_empty(/*theme*/ ctx[13]) + " svelte-oulsvg"));
+			attr(button, "class", button_class_value = "" + (null_to_empty(/*theme*/ ctx[13]) + " svelte-3yrbwy"));
 			toggle_class(button, "active", /*$userSettings*/ ctx[1].theme === /*theme*/ ctx[13]);
 		},
 		m(target, anchor) {
@@ -151,22 +151,22 @@ function create_fragment(ctx) {
 				each_blocks[i].c();
 			}
 
-			attr(legend0, "class", "svelte-oulsvg");
+			attr(legend0, "class", "svelte-3yrbwy");
 			attr(input0, "type", "checkbox");
-			attr(div0, "class", "svelte-oulsvg");
-			attr(fieldset0, "class", "svelte-oulsvg");
-			attr(legend1, "class", "svelte-oulsvg");
+			attr(div0, "class", "svelte-3yrbwy");
+			attr(fieldset0, "class", "svelte-3yrbwy");
+			attr(legend1, "class", "svelte-3yrbwy");
 			attr(input1, "type", "checkbox");
 			input1.disabled = input1_disabled_value = !/*$rollHasExpressions*/ ctx[2];
-			attr(div1, "class", "svelte-oulsvg");
+			attr(div1, "class", "svelte-3yrbwy");
 			attr(input2, "type", "checkbox");
 			input2.disabled = input2_disabled_value = !/*$rollHasExpressions*/ ctx[2];
-			attr(div2, "class", "svelte-oulsvg");
+			attr(div2, "class", "svelte-3yrbwy");
 			attr(input3, "type", "checkbox");
-			attr(div3, "class", "svelte-oulsvg");
-			attr(fieldset1, "class", "svelte-oulsvg");
+			attr(div3, "class", "svelte-3yrbwy");
+			attr(fieldset1, "class", "svelte-3yrbwy");
 			attr(div5, "id", "settings-panel");
-			attr(div5, "class", "svelte-oulsvg");
+			attr(div5, "class", "svelte-3yrbwy");
 		},
 		m(target, anchor) {
 			insert(target, div5, anchor);

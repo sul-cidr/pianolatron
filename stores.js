@@ -48,6 +48,14 @@ export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
 
+//
+export const activeShortcutKeys = createStore({
+  volumeUp: false,
+  volumeDown: false,
+  tempoUp: false,
+  tempoDown: false,
+});
+
 // Playback State
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);

@@ -30,7 +30,7 @@ function create_fragment(ctx) {
 			attr(input, "max", /*max*/ ctx[2]);
 			attr(input, "step", /*step*/ ctx[3]);
 			attr(input, "name", /*name*/ ctx[4]);
-			attr(input, "class", "svelte-1it89df");
+			attr(input, "class", "svelte-qjpnyx");
 		},
 		m(target, anchor) {
 			insert(target, input, anchor);

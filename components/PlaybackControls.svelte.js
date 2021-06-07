@@ -71,24 +71,30 @@ function create_fragment(ctx) {
 			kbd2 = element("kbd");
 			kbd2.textContent = ",";
 			attr(button0, "type", "button");
-			attr(button0, "class", "svelte-maddbr");
+			attr(button0, "class", "svelte-1qx6it8");
 			attr(button1, "type", "button");
-			attr(button1, "class", "svelte-maddbr");
+			attr(button1, "class", "svelte-1qx6it8");
+			attr(kbd0, "class", "svelte-1qx6it8");
+			toggle_class(kbd0, "depressed", /*$softOnOff*/ ctx[2]);
 			attr(button2, "type", "button");
 			attr(button2, "aria-pressed", /*$softOnOff*/ ctx[2]);
-			attr(button2, "class", "svelte-maddbr");
+			attr(button2, "class", "svelte-1qx6it8");
 			toggle_class(button2, "pedal-on", /*$softOnOff*/ ctx[2]);
+			attr(kbd1, "class", "svelte-1qx6it8");
+			toggle_class(kbd1, "depressed", /*$sustainOnOff*/ ctx[3]);
 			attr(button3, "type", "button");
 			attr(button3, "aria-pressed", /*$sustainOnOff*/ ctx[3]);
-			attr(button3, "class", "svelte-maddbr");
+			attr(button3, "class", "svelte-1qx6it8");
 			toggle_class(button3, "pedal-on", /*$sustainOnOff*/ ctx[3]);
+			attr(kbd2, "class", "svelte-1qx6it8");
+			toggle_class(kbd2, "depressed", /*$accentOnOff*/ ctx[4]);
 			attr(button4, "type", "button");
 			set_style(button4, "width", "100%");
 			attr(button4, "aria-pressed", /*$accentOnOff*/ ctx[4]);
-			attr(button4, "class", "svelte-maddbr");
+			attr(button4, "class", "svelte-1qx6it8");
 			toggle_class(button4, "pedal-on", /*$accentOnOff*/ ctx[4]);
 			attr(div, "id", "playback-controls");
-			attr(div, "class", "svelte-maddbr");
+			attr(div, "class", "svelte-1qx6it8");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -131,6 +137,10 @@ function create_fragment(ctx) {
 			ctx = new_ctx;
 
 			if (dirty & /*$softOnOff*/ 4) {
+				toggle_class(kbd0, "depressed", /*$softOnOff*/ ctx[2]);
+			}
+
+			if (dirty & /*$softOnOff*/ 4) {
 				attr(button2, "aria-pressed", /*$softOnOff*/ ctx[2]);
 			}
 
@@ -139,11 +149,19 @@ function create_fragment(ctx) {
 			}
 
 			if (dirty & /*$sustainOnOff*/ 8) {
+				toggle_class(kbd1, "depressed", /*$sustainOnOff*/ ctx[3]);
+			}
+
+			if (dirty & /*$sustainOnOff*/ 8) {
 				attr(button3, "aria-pressed", /*$sustainOnOff*/ ctx[3]);
 			}
 
 			if (dirty & /*$sustainOnOff*/ 8) {
 				toggle_class(button3, "pedal-on", /*$sustainOnOff*/ ctx[3]);
+			}
+
+			if (dirty & /*$accentOnOff*/ 16) {
+				toggle_class(kbd2, "depressed", /*$accentOnOff*/ ctx[4]);
 			}
 
 			if (dirty & /*$accentOnOff*/ 16) {

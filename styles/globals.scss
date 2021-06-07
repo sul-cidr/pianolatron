@@ -5,3 +5,15 @@ $cloud: #dad7cb; // Stanford's "cloud"
 $cardinal: #8c1515; // "cardinal"
 
 @import "./z-index";
+
+@mixin background {
+  background: linear-gradient(
+    var(--background-angle),
+    var(--background-darker) 0%,
+    var(--background-color) 25%,
+    var(--background-color) 75%,
+    var(--background-darker) 100%
+  );
+  background-attachment: fixed;
+  background-position: center;
+}
