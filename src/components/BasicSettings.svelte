@@ -6,7 +6,7 @@
     align-items: center;
     display: grid;
     gap: 0.5em;
-    padding: 0.5em;
+    padding: 0 0.5em 0.5em;
     grid:
       "title value" auto
       "slider slider" auto / 1fr auto;
@@ -15,11 +15,6 @@
       grid-area: slider;
       width: 100%;
     }
-  }
-
-  kbd {
-    display: inline-block;
-    padding: 5px 5px;
   }
 </style>
 
@@ -30,6 +25,7 @@
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
+    activeShortcutKeys,
   } from "../stores";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
@@ -38,7 +34,9 @@
 
 <div id="playback-settings">
   <div class="control">
-    <span>Volume: <kbd>[</kbd>↓ <kbd>]</kbd>↑</span>
+    <span>Volume:
+      <kbd class:depressed={$activeShortcutKeys.volumeDown}>[</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.volumeUp}>]</kbd>↑</span>
     <span>{$volumeCoefficient}</span>
     <RangeSlider
       min="0"
@@ -71,7 +69,9 @@
     />
   </div>
   <div class="control">
-    <span>Tempo: <kbd>w</kbd>↓ <kbd>e</kbd>↑</span>
+    <span>Tempo:
+      <kbd class:depressed={$activeShortcutKeys.tempoDown}>w</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.tempoUp}>e</kbd>↑</span>
     <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider
       min="0.1"

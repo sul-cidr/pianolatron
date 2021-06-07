@@ -1,6 +1,6 @@
 <style lang="scss">
   div#settings-panel {
-    background: var(--background-color);
+    @include background;
     height: 100%;
     left: 0;
     position: absolute;

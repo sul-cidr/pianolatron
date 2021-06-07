@@ -23,6 +23,10 @@
     &.pedal-on {
       background-color: yellow;
     }
+
+    kbd {
+      margin: 0 -0.4em 0 0.4em;
+    }
   }
 </style>
 
@@ -42,14 +46,14 @@
     aria-pressed={$softOnOff}
     on:click={() => ($softOnOff = !$softOnOff)}
   >Soft
-    <kbd>q</kbd></button>
+    <kbd class:depressed={$softOnOff}>q</kbd></button>
   <button
     type="button"
     class:pedal-on={$sustainOnOff}
     aria-pressed={$sustainOnOff}
     on:click={() => ($sustainOnOff = !$sustainOnOff)}
   >Sustain
-    <kbd>c</kbd></button>
+    <kbd class:depressed={$sustainOnOff}>c</kbd></button>
   <br />
   <button
     type="button"
@@ -58,6 +62,6 @@
     aria-pressed={$accentOnOff}
     on:mousedown={() => ($accentOnOff = true)}
   >Accent
-    <kbd>,</kbd></button>
+    <kbd class:depressed={$accentOnOff}>,</kbd></button>
 </div>
 <svelte:window on:mouseup={() => ($accentOnOff = false)} />
