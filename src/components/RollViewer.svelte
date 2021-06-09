@@ -154,7 +154,6 @@
   export let holesByTickInterval;
   export let skipToTick;
 
-  const WELTE_MIDI_START = 10;
   const WELTE_RED_FIRST_NOTE = 24;
   const WELTE_RED_LAST_NOTE = 103;
 
@@ -170,10 +169,9 @@
   let marks = [];
   let hoveredMark;
   let showControls;
-  let rollLength;
+  let imageLength;
 
-  const getNoteName = (trackerHole) => {
-    const midiNumber = trackerHole + WELTE_MIDI_START;
+  const getNoteName = (midiNumber) => {
     if (
       midiNumber >= WELTE_RED_FIRST_NOTE &&
       midiNumber <= WELTE_RED_LAST_NOTE
@@ -199,30 +197,29 @@
   };
 
   const createMark = (hole) => {
-    const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
+    const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, MIDI_KEY, TRACKER_HOLE } = hole;
     const mark = document.createElement("mark");
-    const noteName = getNoteName(TRACKER_HOLE);
+    const noteName = getNoteName(MIDI_KEY);
     if (noteName) mark.dataset.info = noteName;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);
     });
     const viewportRectangle = viewport.imageToViewportRectangle(
-      ORIGIN_COL,
-      ORIGIN_ROW,
-      WIDTH_COL,
-      OFF_TIME - ORIGIN_ROW,
-    );
+        ORIGIN_COL,
+        scrollDownwards ? ORIGIN_ROW : imageLength - OFF_TIME,
+        WIDTH_COL,
+        OFF_TIME - ORIGIN_ROW,
+      );
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
   };
 
   const createHolesOverlaySvg = () => {
-    const { IMAGE_WIDTH, IMAGE_LENGTH, holeData } = $rollMetadata;
+    const { IMAGE_WIDTH, holeData } = $rollMetadata;
     if (!holeData) return;
 
     const imageWidth = parseInt(IMAGE_WIDTH, 10);
-    const imageLength = parseInt(IMAGE_LENGTH, 10);
 
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -247,7 +244,7 @@
       const { ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME } = hole;
 
       rect.setAttribute("x", ORIGIN_COL);
-      rect.setAttribute("y", ORIGIN_ROW);
+      rect.setAttribute("y", scrollDownwards ? ORIGIN_ROW : imageLength - OFF_TIME);
       rect.setAttribute("width", WIDTH_COL);
       rect.setAttribute("height", OFF_TIME - ORIGIN_ROW);
       rect.addEventListener("mouseover", () => {
@@ -344,12 +341,12 @@
         ? clamp(
             centerY + delta - firstHolePx,
             -firstHolePx,
-            rollLength - firstHolePx,
+            imageLength - firstHolePx,
           )
         : clamp(
             firstHolePx - centerY - delta,
             -firstHolePx,
-            rollLength - firstHolePx,
+            imageLength - firstHolePx,
           ),
     );
   };
@@ -357,7 +354,7 @@
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
-  $: rollLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
+  $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: firstHolePx = scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
