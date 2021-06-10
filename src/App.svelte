@@ -61,6 +61,7 @@
     activeNotes,
     currentTick,
     rollMetadata,
+    showKeyboard,
     overlayKeyboard,
   } from "./stores";
   import { clamp } from "./utils";
@@ -69,6 +70,7 @@
   import RollDetails from "./components/RollDetails.svelte";
   import RollViewer from "./components/RollViewer.svelte";
   import Keyboard from "./components/Keyboard.svelte";
+  import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
@@ -234,7 +236,7 @@
           {holesByTickInterval}
           {skipToTick}
         />
-        {#if $overlayKeyboard}
+        {#if $showKeyboard && $overlayKeyboard}
           <div id="keyboard-overlay" transition:fade>
             <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
           </div>
@@ -245,10 +247,12 @@
       </FlexCollapsible>
     {/if}
   </div>
-  {#if !$overlayKeyboard}
+  {#if $showKeyboard && !$overlayKeyboard}
     <div id="keyboard-container" transition:slide>
       <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
     </div>
+  {:else if !$showKeyboard}
+    <KeyboardControls outside />
   {/if}
   {#if !appReady}
     <div id="loading">
