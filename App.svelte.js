@@ -41,6 +41,7 @@ import {
 	activeNotes,
 	currentTick,
 	rollMetadata,
+	showKeyboard,
 	overlayKeyboard
 } from "./stores.js";
 
@@ -50,18 +51,19 @@ import RollSelector from "./components/RollSelector.svelte.js";
 import RollDetails from "./components/RollDetails.svelte.js";
 import RollViewer from "./components/RollViewer.svelte.js";
 import Keyboard from "./components/Keyboard.svelte.js";
+import KeyboardControls from "./components/KeyboardControls.svelte.js";
 import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte.js";
 import TabbedPanel from "./components/TabbedPanel.svelte.js";
 import Notification, { notify } from "./ui-components/Notification.svelte.js";
 import FlexCollapsible from "./ui-components/FlexCollapsible.svelte.js";
 
-function create_if_block_4(ctx) {
+function create_if_block_5(ctx) {
 	let rolldetails;
 	let t;
 	let if_block_anchor;
 	let current;
 	rolldetails = new RollDetails({});
-	let if_block = !/*holesByTickInterval*/ ctx[2].count && create_if_block_5(ctx);
+	let if_block = !/*holesByTickInterval*/ ctx[2].count && create_if_block_6(ctx);
 
 	return {
 		c() {
@@ -82,7 +84,7 @@ function create_if_block_4(ctx) {
 				if (if_block) {
 					
 				} else {
-					if_block = create_if_block_5(ctx);
+					if_block = create_if_block_6(ctx);
 					if_block.c();
 					if_block.m(if_block_anchor.parentNode, if_block_anchor);
 				}
@@ -109,8 +111,8 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (218:8) {#if !holesByTickInterval.count}
-function create_if_block_5(ctx) {
+// (220:8) {#if !holesByTickInterval.count}
+function create_if_block_6(ctx) {
 	let p;
 
 	return {
@@ -131,7 +133,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (214:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (216:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -140,7 +142,7 @@ function create_default_slot_1(ctx) {
 	let current;
 
 	function rollselector_currentRoll_binding(value) {
-		/*rollselector_currentRoll_binding*/ ctx[12].call(null, value);
+		/*rollselector_currentRoll_binding*/ ctx[13].call(null, value);
 	}
 
 	let rollselector_props = {};
@@ -151,7 +153,7 @@ function create_default_slot_1(ctx) {
 
 	rollselector = new RollSelector({ props: rollselector_props });
 	binding_callbacks.push(() => bind(rollselector, "currentRoll", rollselector_currentRoll_binding));
-	let if_block = /*appReady*/ ctx[0] && create_if_block_4(ctx);
+	let if_block = /*appReady*/ ctx[0] && create_if_block_5(ctx);
 
 	return {
 		c() {
@@ -186,7 +188,7 @@ function create_default_slot_1(ctx) {
 						transition_in(if_block, 1);
 					}
 				} else {
-					if_block = create_if_block_4(ctx);
+					if_block = create_if_block_5(ctx);
 					if_block.c();
 					transition_in(if_block, 1);
 					if_block.m(if_block_anchor.parentNode, if_block_anchor);
@@ -221,8 +223,8 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (226:4) {#if appReady}
-function create_if_block_2(ctx) {
+// (228:4) {#if appReady}
+function create_if_block_3(ctx) {
 	let div;
 	let rollviewer;
 	let t0;
@@ -234,11 +236,11 @@ function create_if_block_2(ctx) {
 			props: {
 				imageUrl: /*currentRoll*/ ctx[1].image_url,
 				holesByTickInterval: /*holesByTickInterval*/ ctx[2],
-				skipToTick: /*skipToTick*/ ctx[8]
+				skipToTick: /*skipToTick*/ ctx[9]
 			}
 		});
 
-	let if_block = /*$overlayKeyboard*/ ctx[6] && create_if_block_3(ctx);
+	let if_block = /*$showKeyboard*/ ctx[6] && /*$overlayKeyboard*/ ctx[7] && create_if_block_4(ctx);
 
 	flexcollapsible = new FlexCollapsible({
 			props: {
@@ -276,15 +278,15 @@ function create_if_block_2(ctx) {
 			if (dirty & /*holesByTickInterval*/ 4) rollviewer_changes.holesByTickInterval = /*holesByTickInterval*/ ctx[2];
 			rollviewer.$set(rollviewer_changes);
 
-			if (/*$overlayKeyboard*/ ctx[6]) {
+			if (/*$showKeyboard*/ ctx[6] && /*$overlayKeyboard*/ ctx[7]) {
 				if (if_block) {
 					if_block.p(ctx, dirty);
 
-					if (dirty & /*$overlayKeyboard*/ 64) {
+					if (dirty & /*$showKeyboard, $overlayKeyboard*/ 192) {
 						transition_in(if_block, 1);
 					}
 				} else {
-					if_block = create_if_block_3(ctx);
+					if_block = create_if_block_4(ctx);
 					if_block.c();
 					transition_in(if_block, 1);
 					if_block.m(div, null);
@@ -301,7 +303,7 @@ function create_if_block_2(ctx) {
 
 			const flexcollapsible_changes = {};
 
-			if (dirty & /*$$scope*/ 268435456) {
+			if (dirty & /*$$scope*/ 536870912) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -330,8 +332,8 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (233:8) {#if $overlayKeyboard}
-function create_if_block_3(ctx) {
+// (235:8) {#if $showKeyboard && $overlayKeyboard}
+function create_if_block_4(ctx) {
 	let div;
 	let keyboard;
 	let div_transition;
@@ -389,16 +391,16 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (239:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (241:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
 
 	tabbedpanel = new TabbedPanel({
 			props: {
-				playPauseApp: /*playPauseApp*/ ctx[10],
-				stopApp: /*stopApp*/ ctx[11],
-				skipToPercentage: /*skipToPercentage*/ ctx[9]
+				playPauseApp: /*playPauseApp*/ ctx[11],
+				stopApp: /*stopApp*/ ctx[12],
+				skipToPercentage: /*skipToPercentage*/ ctx[10]
 			}
 		});
 
@@ -426,7 +428,37 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (244:2) {#if !$overlayKeyboard}
+// (250:27) 
+function create_if_block_2(ctx) {
+	let keyboardcontrols;
+	let current;
+	keyboardcontrols = new KeyboardControls({ props: { outside: true } });
+
+	return {
+		c() {
+			create_component(keyboardcontrols.$$.fragment);
+		},
+		m(target, anchor) {
+			mount_component(keyboardcontrols, target, anchor);
+			current = true;
+		},
+		p: noop,
+		i(local) {
+			if (current) return;
+			transition_in(keyboardcontrols.$$.fragment, local);
+			current = true;
+		},
+		o(local) {
+			transition_out(keyboardcontrols.$$.fragment, local);
+			current = false;
+		},
+		d(detaching) {
+			destroy_component(keyboardcontrols, detaching);
+		}
+	};
+}
+
+// (246:2) {#if $showKeyboard && !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -465,7 +497,7 @@ function create_if_block_1(ctx) {
 			transition_in(keyboard.$$.fragment, local);
 
 			add_render_callback(() => {
-				if (!div_transition) div_transition = create_bidirectional_transition(div, /*slide*/ ctx[7], {}, true);
+				if (!div_transition) div_transition = create_bidirectional_transition(div, /*slide*/ ctx[8], {}, true);
 				div_transition.run(1);
 			});
 
@@ -473,7 +505,7 @@ function create_if_block_1(ctx) {
 		},
 		o(local) {
 			transition_out(keyboard.$$.fragment, local);
-			if (!div_transition) div_transition = create_bidirectional_transition(div, /*slide*/ ctx[7], {}, false);
+			if (!div_transition) div_transition = create_bidirectional_transition(div, /*slide*/ ctx[8], {}, false);
 			div_transition.run(0);
 			current = false;
 		},
@@ -485,7 +517,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (249:2) {#if !appReady}
+// (253:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -514,6 +546,8 @@ function create_fragment(ctx) {
 	let flexcollapsible;
 	let t0;
 	let t1;
+	let current_block_type_index;
+	let if_block1;
 	let t2;
 	let t3;
 	let sampleplayer;
@@ -532,12 +566,24 @@ function create_fragment(ctx) {
 			}
 		});
 
-	let if_block0 = /*appReady*/ ctx[0] && create_if_block_2(ctx);
-	let if_block1 = !/*$overlayKeyboard*/ ctx[6] && create_if_block_1(ctx);
+	let if_block0 = /*appReady*/ ctx[0] && create_if_block_3(ctx);
+	const if_block_creators = [create_if_block_1, create_if_block_2];
+	const if_blocks = [];
+
+	function select_block_type(ctx, dirty) {
+		if (/*$showKeyboard*/ ctx[6] && !/*$overlayKeyboard*/ ctx[7]) return 0;
+		if (!/*$showKeyboard*/ ctx[6]) return 1;
+		return -1;
+	}
+
+	if (~(current_block_type_index = select_block_type(ctx, -1))) {
+		if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+	}
+
 	let if_block2 = !/*appReady*/ ctx[0] && create_if_block(ctx);
 	let sampleplayer_props = {};
 	sampleplayer = new SamplePlayer({ props: sampleplayer_props });
-	/*sampleplayer_binding*/ ctx[13](sampleplayer);
+	/*sampleplayer_binding*/ ctx[14](sampleplayer);
 	keyboardshortcuts = new KeyboardShortcuts({});
 	notification = new Notification({});
 
@@ -569,7 +615,11 @@ function create_fragment(ctx) {
 			append(div0, t0);
 			if (if_block0) if_block0.m(div0, null);
 			append(div1, t1);
-			if (if_block1) if_block1.m(div1, null);
+
+			if (~current_block_type_index) {
+				if_blocks[current_block_type_index].m(div1, null);
+			}
+
 			append(div1, t2);
 			if (if_block2) if_block2.m(div1, null);
 			insert(target, t3, anchor);
@@ -583,7 +633,7 @@ function create_fragment(ctx) {
 		p(ctx, [dirty]) {
 			const flexcollapsible_changes = {};
 
-			if (dirty & /*$$scope, holesByTickInterval, appReady, currentRoll*/ 268435463) {
+			if (dirty & /*$$scope, holesByTickInterval, appReady, currentRoll*/ 536870919) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -597,7 +647,7 @@ function create_fragment(ctx) {
 						transition_in(if_block0, 1);
 					}
 				} else {
-					if_block0 = create_if_block_2(ctx);
+					if_block0 = create_if_block_3(ctx);
 					if_block0.c();
 					transition_in(if_block0, 1);
 					if_block0.m(div0, null);
@@ -612,27 +662,37 @@ function create_fragment(ctx) {
 				check_outros();
 			}
 
-			if (!/*$overlayKeyboard*/ ctx[6]) {
-				if (if_block1) {
-					if_block1.p(ctx, dirty);
+			let previous_block_index = current_block_type_index;
+			current_block_type_index = select_block_type(ctx, dirty);
 
-					if (dirty & /*$overlayKeyboard*/ 64) {
-						transition_in(if_block1, 1);
+			if (current_block_type_index === previous_block_index) {
+				if (~current_block_type_index) {
+					if_blocks[current_block_type_index].p(ctx, dirty);
+				}
+			} else {
+				if (if_block1) {
+					group_outros();
+
+					transition_out(if_blocks[previous_block_index], 1, 1, () => {
+						if_blocks[previous_block_index] = null;
+					});
+
+					check_outros();
+				}
+
+				if (~current_block_type_index) {
+					if_block1 = if_blocks[current_block_type_index];
+
+					if (!if_block1) {
+						if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+						if_block1.c();
 					}
-				} else {
-					if_block1 = create_if_block_1(ctx);
-					if_block1.c();
+
 					transition_in(if_block1, 1);
 					if_block1.m(div1, t2);
-				}
-			} else if (if_block1) {
-				group_outros();
-
-				transition_out(if_block1, 1, 1, () => {
+				} else {
 					if_block1 = null;
-				});
-
-				check_outros();
+				}
 			}
 
 			if (!/*appReady*/ ctx[0]) {
@@ -674,10 +734,14 @@ function create_fragment(ctx) {
 			if (detaching) detach(div1);
 			destroy_component(flexcollapsible);
 			if (if_block0) if_block0.d();
-			if (if_block1) if_block1.d();
+
+			if (~current_block_type_index) {
+				if_blocks[current_block_type_index].d();
+			}
+
 			if (if_block2) if_block2.d();
 			if (detaching) detach(t3);
-			/*sampleplayer_binding*/ ctx[13](null);
+			/*sampleplayer_binding*/ ctx[14](null);
 			destroy_component(sampleplayer, detaching);
 			if (detaching) detach(t4);
 			destroy_component(keyboardshortcuts, detaching);
@@ -690,10 +754,12 @@ function create_fragment(ctx) {
 function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
+	let $showKeyboard;
 	let $overlayKeyboard;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(23, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(24, $currentTick = $$value));
-	component_subscribe($$self, overlayKeyboard, $$value => $$invalidate(6, $overlayKeyboard = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(24, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(25, $currentTick = $$value));
+	component_subscribe($$self, showKeyboard, $$value => $$invalidate(6, $showKeyboard = $$value));
+	component_subscribe($$self, overlayKeyboard, $$value => $$invalidate(7, $overlayKeyboard = $$value));
 	let appReady = false;
 	let mididataReady;
 	let metadataReady;
@@ -811,12 +877,12 @@ function instance($$self, $$props, $$invalidate) {
 			set_store_value(rollMetadata, $rollMetadata = { ...$rollMetadata, ...metadataJson }, $rollMetadata);
 			if (metadataJson.holeData) buildHolesIntervalTree(metadataJson.holeData);
 			$$invalidate(0, appReady = true);
-			$$invalidate(16, previousRoll = currentRoll);
+			$$invalidate(17, previousRoll = currentRoll);
 		});
 	};
 
 	onMount(async () => {
-		$$invalidate(17, { midiSamplePlayer, pianoReady, updatePlayer, startNote, stopNote, pausePlayback, startPlayback, resetPlayback } = samplePlayer, midiSamplePlayer, $$invalidate(4, startNote), $$invalidate(5, stopNote));
+		$$invalidate(18, { midiSamplePlayer, pianoReady, updatePlayer, startNote, stopNote, pausePlayback, startPlayback, resetPlayback } = samplePlayer, midiSamplePlayer, $$invalidate(4, startNote), $$invalidate(5, stopNote));
 	});
 
 	function rollselector_currentRoll_binding(value) {
@@ -832,11 +898,11 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 65538) {
+		if ($$self.$$.dirty & /*currentRoll, previousRoll*/ 131074) {
 			$: if (currentRoll !== previousRoll) loadRoll(currentRoll);
 		}
 
-		if ($$self.$$.dirty & /*$currentTick, midiSamplePlayer*/ 16908288) {
+		if ($$self.$$.dirty & /*$currentTick, midiSamplePlayer*/ 33816576) {
 			$: playbackProgress.update(() => clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1));
 		}
 	};
@@ -848,6 +914,7 @@ function instance($$self, $$props, $$invalidate) {
 		samplePlayer,
 		startNote,
 		stopNote,
+		$showKeyboard,
 		$overlayKeyboard,
 		slide,
 		skipToTick,
