@@ -172,11 +172,12 @@
   let showControls;
   let rollLength;
 
-  const getNoteName = (trackerHole) => {
-    const midiNumber = trackerHole + WELTE_MIDI_START;
+  const getNoteName = (midiNumber) => {
+    // Not all roll types use the full piano keyboard range (midi 21-108),
+    // but we'll include the note names for the full range anyway, for now.
     if (
-      midiNumber >= WELTE_RED_FIRST_NOTE &&
-      midiNumber <= WELTE_RED_LAST_NOTE
+      midiNumber >= 21 &&
+      midiNumber <= 108 
     ) {
       const octave = parseInt(midiNumber / 12, 10) - 1;
       const name = [
@@ -201,7 +202,7 @@
   const createMark = (hole) => {
     const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, MIDI_KEY, TRACKER_HOLE } = hole;
     const mark = document.createElement("mark");
-    const noteName = getNoteName(TRACKER_HOLE);
+    const noteName = getNoteName(MIDI_KEY);
     if (noteName) mark.dataset.info = noteName;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
