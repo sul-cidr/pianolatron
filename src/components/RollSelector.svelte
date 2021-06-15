@@ -10,6 +10,7 @@
   import catalog from "../assets/catalog.json";
 
   export let currentRoll = catalog[Math.floor(Math.random() * catalog.length)];
+
 </script>
 
 <select bind:value={currentRoll}>
