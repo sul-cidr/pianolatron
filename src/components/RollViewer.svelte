@@ -197,14 +197,7 @@
   };
 
   const createMark = (hole) => {
-    const {
-      WIDTH_COL,
-      ORIGIN_COL,
-      ORIGIN_ROW,
-      OFF_TIME,
-      MIDI_KEY,
-      TRACKER_HOLE,
-    } = hole;
+    const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, MIDI_KEY } = hole;
     const mark = document.createElement("mark");
     const noteName = getNoteName(MIDI_KEY);
     if (noteName) mark.dataset.info = noteName;
