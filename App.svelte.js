@@ -111,7 +111,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (220:8) {#if !holesByTickInterval.count}
+// (213:8) {#if !holesByTickInterval.count}
 function create_if_block_6(ctx) {
 	let p;
 
@@ -133,7 +133,7 @@ function create_if_block_6(ctx) {
 	};
 }
 
-// (216:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (209:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -223,7 +223,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (228:4) {#if appReady}
+// (221:4) {#if appReady}
 function create_if_block_3(ctx) {
 	let div;
 	let rollviewer;
@@ -332,7 +332,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (235:8) {#if $showKeyboard && $overlayKeyboard}
+// (228:8) {#if $showKeyboard && $overlayKeyboard}
 function create_if_block_4(ctx) {
 	let div;
 	let keyboard;
@@ -391,7 +391,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (241:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (234:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -428,7 +428,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (250:27) 
+// (243:27) 
 function create_if_block_2(ctx) {
 	let keyboardcontrols;
 	let current;
@@ -458,7 +458,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (246:2) {#if $showKeyboard && !$overlayKeyboard}
+// (239:2) {#if $showKeyboard && !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -517,7 +517,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (253:2) {#if !appReady}
+// (246:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -787,24 +787,13 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const buildHolesIntervalTree = () => {
-		const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
-		const scrollDownwards = ROLL_TYPE === "welte-red";
-
-		const firstHolePx = scrollDownwards
-		? parseInt(FIRST_HOLE, 10)
-		: parseInt(IMAGE_LENGTH, 10) - parseInt(FIRST_HOLE, 10);
+		const { FIRST_HOLE, holeData } = $rollMetadata;
+		const firstHolePx = parseInt(FIRST_HOLE, 10);
 
 		holeData.forEach(hole => {
-			const { ORIGIN_ROW, OFF_TIME } = hole;
-
-			const tickOn = scrollDownwards
-			? ORIGIN_ROW - firstHolePx
-			: firstHolePx - ORIGIN_ROW;
-
-			const tickOff = scrollDownwards
-			? OFF_TIME - firstHolePx
-			: firstHolePx - OFF_TIME;
-
+			const { y: offsetY, h: height } = hole;
+			const tickOn = offsetY - firstHolePx;
+			const tickOff = offsetY + height - firstHolePx;
 			holesByTickInterval.insert(tickOn, tickOff, hole);
 		});
 	};

@@ -238,7 +238,6 @@ function create_fragment(ctx) {
 	};
 }
 
-const WELTE_MIDI_START = 10;
 const WELTE_RED_FIRST_NOTE = 24;
 const WELTE_RED_LAST_NOTE = 103;
 const defaultZoomLevel = 1;
@@ -249,8 +248,8 @@ function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
 	let $userSettings;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(18, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(20, $currentTick = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(20, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(21, $currentTick = $$value));
 	component_subscribe($$self, userSettings, $$value => $$invalidate(4, $userSettings = $$value));
 	let { imageUrl } = $$props;
 	let { holesByTickInterval } = $$props;
@@ -263,11 +262,10 @@ function instance($$self, $$props, $$invalidate) {
 	let marks = [];
 	let hoveredMark;
 	let showControls;
-	let rollLength;
+	let imageLength;
+	let imageWidth;
 
-	const getNoteName = trackerHole => {
-		const midiNumber = trackerHole + WELTE_MIDI_START;
-
+	const getNoteName = midiNumber => {
 		if (midiNumber >= WELTE_RED_FIRST_NOTE && midiNumber <= WELTE_RED_LAST_NOTE) {
 			const octave = parseInt(midiNumber / 12, 10) - 1;
 			const name = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"][(midiNumber - 21) % 12];
@@ -278,25 +276,31 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const createMark = hole => {
-		const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, TRACKER_HOLE } = hole;
+		const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey } = hole;
 		const mark = document.createElement("mark");
-		const noteName = getNoteName(TRACKER_HOLE);
+		const noteName = getNoteName(midiKey);
 		if (noteName) mark.dataset.info = noteName;
 
 		mark.addEventListener("mouseout", () => {
 			if (!marks.map(([_hole]) => _hole).includes(hole)) viewport.viewer.removeOverlay(hoveredMark);
 		});
 
-		const viewportRectangle = viewport.imageToViewportRectangle(ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME - ORIGIN_ROW);
+		const viewportRectangle = viewport.imageToViewportRectangle(
+			offsetX,
+			scrollDownwards
+			? offsetY
+			: imageLength - offsetY - height,
+			width,
+			height
+		);
+
 		viewport.viewer.addOverlay(mark, viewportRectangle);
 		return mark;
 	};
 
 	const createHolesOverlaySvg = () => {
-		const { IMAGE_WIDTH, IMAGE_LENGTH, holeData } = $rollMetadata;
+		const { holeData } = $rollMetadata;
 		if (!holeData) return;
-		const imageWidth = parseInt(IMAGE_WIDTH, 10);
-		const imageLength = parseInt(IMAGE_LENGTH, 10);
 		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 		const entireViewportRectangle = viewport.imageToViewportRectangle(0, 0, imageWidth, imageLength);
@@ -307,11 +311,15 @@ function instance($$self, $$props, $$invalidate) {
 
 		holeData.forEach(hole => {
 			const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-			const { ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME } = hole;
-			rect.setAttribute("x", ORIGIN_COL);
-			rect.setAttribute("y", ORIGIN_ROW);
-			rect.setAttribute("width", WIDTH_COL);
-			rect.setAttribute("height", OFF_TIME - ORIGIN_ROW);
+			const { x: offsetX, y: offsetY, w: width, h: height } = hole;
+			rect.setAttribute("x", offsetX);
+
+			rect.setAttribute("y", scrollDownwards
+			? offsetY
+			: imageLength - offsetY - height);
+
+			rect.setAttribute("width", width);
+			rect.setAttribute("height", height);
 
 			rect.addEventListener("mouseover", () => {
 				if (marks.map(([_hole]) => _hole).includes(hole)) return;
@@ -404,8 +412,8 @@ function instance($$self, $$props, $$invalidate) {
 		const centerY = imgBounds.y + imgBounds.height / 2;
 
 		skipToTick(scrollDownwards
-		? clamp(centerY + delta - firstHolePx, -firstHolePx, rollLength - firstHolePx)
-		: clamp(firstHolePx - centerY - delta, -firstHolePx, rollLength - firstHolePx));
+		? clamp(centerY + delta - firstHolePx, -firstHolePx, imageLength - firstHolePx)
+		: clamp(firstHolePx - centerY - delta, -firstHolePx, imageLength - firstHolePx));
 	};
 
 	function rollviewercontrols_strafing_binding(value) {
@@ -432,23 +440,27 @@ function instance($$self, $$props, $$invalidate) {
 	let scrollDownwards;
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$currentTick*/ 1048576) {
+		if ($$self.$$.dirty & /*$currentTick*/ 2097152) {
 			$: advanceToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 1048576) {
+		if ($$self.$$.dirty & /*$currentTick*/ 2097152) {
 			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 262144) {
+		if ($$self.$$.dirty & /*$rollMetadata*/ 1048576) {
 			$: $$invalidate(19, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 262144) {
-			$: rollLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
+		if ($$self.$$.dirty & /*$rollMetadata*/ 1048576) {
+			$: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
 		}
 
-		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 786432) {
+		if ($$self.$$.dirty & /*$rollMetadata*/ 1048576) {
+			$: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
+		}
+
+		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 1572864) {
 			$: firstHolePx = scrollDownwards
 			? parseInt($rollMetadata.FIRST_HOLE, 10)
 			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
