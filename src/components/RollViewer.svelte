@@ -197,7 +197,14 @@
   };
 
   const createMark = (hole) => {
-    const { WIDTH_COL, ORIGIN_COL, ORIGIN_ROW, OFF_TIME, MIDI_KEY, TRACKER_HOLE } = hole;
+    const {
+      WIDTH_COL,
+      ORIGIN_COL,
+      ORIGIN_ROW,
+      OFF_TIME,
+      MIDI_KEY,
+      TRACKER_HOLE,
+    } = hole;
     const mark = document.createElement("mark");
     const noteName = getNoteName(MIDI_KEY);
     if (noteName) mark.dataset.info = noteName;
@@ -206,11 +213,11 @@
         viewport.viewer.removeOverlay(hoveredMark);
     });
     const viewportRectangle = viewport.imageToViewportRectangle(
-        ORIGIN_COL,
-        scrollDownwards ? ORIGIN_ROW : imageLength - OFF_TIME,
-        WIDTH_COL,
-        OFF_TIME - ORIGIN_ROW,
-      );
+      ORIGIN_COL,
+      scrollDownwards ? ORIGIN_ROW : imageLength - OFF_TIME,
+      WIDTH_COL,
+      OFF_TIME - ORIGIN_ROW,
+    );
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
   };
@@ -244,7 +251,10 @@
       const { ORIGIN_COL, ORIGIN_ROW, WIDTH_COL, OFF_TIME } = hole;
 
       rect.setAttribute("x", ORIGIN_COL);
-      rect.setAttribute("y", scrollDownwards ? ORIGIN_ROW : imageLength - OFF_TIME);
+      rect.setAttribute(
+        "y",
+        scrollDownwards ? ORIGIN_ROW : imageLength - OFF_TIME,
+      );
       rect.setAttribute("width", WIDTH_COL);
       rect.setAttribute("height", OFF_TIME - ORIGIN_ROW);
       rect.addEventListener("mouseover", () => {
