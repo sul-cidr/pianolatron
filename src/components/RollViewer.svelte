@@ -170,6 +170,7 @@
   let hoveredMark;
   let showControls;
   let imageLength;
+  let imageWidth;
 
   const getNoteName = (midiNumber) => {
     if (
@@ -216,10 +217,8 @@
   };
 
   const createHolesOverlaySvg = () => {
-    const { IMAGE_WIDTH, holeData } = $rollMetadata;
+    const { holeData } = $rollMetadata;
     if (!holeData) return;
-
-    const imageWidth = parseInt(IMAGE_WIDTH, 10);
 
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -358,6 +357,7 @@
   $: highlightHoles($currentTick);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
+  $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: firstHolePx = scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
