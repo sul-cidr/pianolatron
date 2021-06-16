@@ -20,11 +20,8 @@
 
   let tempoMap;
 
-  const controllerChange = Object.freeze({
-    SUSTAIN_PEDAL: 64,
-    SOFT_PEDAL: 67, // (una corda)
-    PEDAL_ON: 127,
-  });
+  const SOFT_PEDAL = 67;
+  const SUSTAIN_PEDAL = 64;
 
   const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
@@ -170,10 +167,10 @@
           activeNotes.add(noteNumber);
         }
       } else if (name === "Controller Change" && $rollPedalingOnOff) {
-        if (number === controllerChange.SUSTAIN_PEDAL) {
-          sustainOnOff.set(value === controllerChange.PEDAL_ON);
-        } else if (number === controllerChange.SOFT_PEDAL) {
-          softOnOff.set(value === controllerChange.PEDAL_ON);
+        if (number === SUSTAIN_PEDAL) {
+          sustainOnOff.set(!!value);
+        } else if (number === SOFT_PEDAL) {
+          softOnOff.set(!!value);
         }
       } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
         midiSamplePlayer.setTempo(data * $tempoCoefficient);
