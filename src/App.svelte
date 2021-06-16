@@ -104,21 +104,14 @@
   };
 
   const buildHolesIntervalTree = () => {
-    const { ROLL_TYPE, FIRST_HOLE, IMAGE_LENGTH, holeData } = $rollMetadata;
-    const scrollDownwards = ROLL_TYPE === "welte-red";
-    const firstHolePx = scrollDownwards
-      ? parseInt(FIRST_HOLE, 10)
-      : parseInt(IMAGE_LENGTH, 10) - parseInt(FIRST_HOLE, 10);
+    const { FIRST_HOLE, holeData } = $rollMetadata;
+
+    const firstHolePx = parseInt(FIRST_HOLE, 10);
 
     holeData.forEach((hole) => {
-      const { ORIGIN_ROW, OFF_TIME } = hole;
-      const tickOn = scrollDownwards
-        ? ORIGIN_ROW - firstHolePx
-        : firstHolePx - ORIGIN_ROW;
-
-      const tickOff = scrollDownwards
-        ? OFF_TIME - firstHolePx
-        : firstHolePx - OFF_TIME;
+      const { x, y, h } = hole;
+      const tickOn = y - firstHolePx;
+      const tickOff = y + h - firstHolePx;
 
       holesByTickInterval.insert(tickOn, tickOff, hole);
     });
