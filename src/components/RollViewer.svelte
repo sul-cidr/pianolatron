@@ -198,19 +198,19 @@
   };
 
   const createMark = (hole) => {
-    const { x, y, w, h, m } = hole;
+    const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey } = hole;
     const mark = document.createElement("mark");
-    const noteName = getNoteName(m);
+    const noteName = getNoteName(midiKey);
     if (noteName) mark.dataset.info = noteName;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);
     });
     const viewportRectangle = viewport.imageToViewportRectangle(
-      x,
-      scrollDownwards ? y : imageLength - y - h,
-      w,
-      h,
+      offsetX,
+      scrollDownwards ? offsetY : imageLength - offsetY - height,
+      width,
+      height,
     );
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
@@ -240,15 +240,15 @@
         "http://www.w3.org/2000/svg",
         "rect",
       );
-      const { x, y, w, h } = hole;
+      const { x: offsetX, y: offsetY, w: width, h: height } = hole;
 
-      rect.setAttribute("x", x);
+      rect.setAttribute("x", offsetX);
       rect.setAttribute(
         "y",
-        scrollDownwards ? y : imageLength - y - h,
+        scrollDownwards ? offsetY : imageLength - offsetY - height,
       );
-      rect.setAttribute("width", w);
-      rect.setAttribute("height", h);
+      rect.setAttribute("width", width);
+      rect.setAttribute("height", height);
       rect.addEventListener("mouseover", () => {
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);

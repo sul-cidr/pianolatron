@@ -109,9 +109,9 @@
     const firstHolePx = parseInt(FIRST_HOLE, 10);
 
     holeData.forEach((hole) => {
-      const { y, h } = hole;
-      const tickOn = y - firstHolePx;
-      const tickOff = y + h - firstHolePx;
+      const { y: offsetY, h: height } = hole;
+      const tickOn = offsetY - firstHolePx;
+      const tickOff = offsetY + height - firstHolePx;
 
       holesByTickInterval.insert(tickOn, tickOff, hole);
     });
