@@ -109,7 +109,7 @@
     const firstHolePx = parseInt(FIRST_HOLE, 10);
 
     holeData.forEach((hole) => {
-      const { x, y, h } = hole;
+      const { y, h } = hole;
       const tickOn = y - firstHolePx;
       const tickOff = y + h - firstHolePx;
 
