@@ -63,6 +63,16 @@
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
     midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
+
+    if (pedallingMap && $rollPedalingOnOff) {
+      const pedals = pedallingMap.search($currentTick, $currentTick);
+      sustainOnOff.set(pedals.includes("SUSTAIN"));
+      softOnOff.set(pedals.includes("SOFT"));
+    } else {
+      sustainOnOff.set(false);
+      piano.pedalUp();
+      softOnOff.set(false);
+    }
   };
 
   const updatePlayer = (fn = () => {}) => {
