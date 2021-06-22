@@ -63,6 +63,16 @@
     &.selected {
       background-color: var(--primary-accent);
       color: #fff;
+
+      :global(mark) {
+        color: #fff;
+      }
+    }
+
+    :global(mark) {
+      background-color: unset;
+      color: green;
+      font-weight: 700;
     }
   }
 </style>
@@ -148,7 +158,7 @@
           searchParts.forEach((searchPart) => {
             newItem.markedUp = newItem.markedUp.replace(
               new RegExp(searchPart, "ig"),
-              "<b>$&</b>",
+              "<mark>$&</mark>",
             );
           });
           return newItem;
