@@ -20,7 +20,7 @@
   } from "../stores";
 
   let tempoMap;
-  let pedallingMap;
+  let pedalingMap;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -64,8 +64,8 @@
   const setPlayerStateAtTick = (tick = $currentTick) => {
     midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
 
-    if (pedallingMap && $rollPedalingOnOff) {
-      const pedals = pedallingMap.search($currentTick, $currentTick);
+    if (pedalingMap && $rollPedalingOnOff) {
+      const pedals = pedalingMap.search($currentTick, $currentTick);
       sustainOnOff.set(pedals.includes("SUSTAIN"));
       softOnOff.set(pedals.includes("SOFT"));
     } else {
@@ -142,8 +142,8 @@
       }, []);
   };
 
-  const buildPedallingMap = (eventsTrack) => {
-    const _pedallingMap = new IntervalTree();
+  const buildPedalingMap = (eventsTrack) => {
+    const _pedalingMap = new IntervalTree();
     const controllerEvents = eventsTrack.filter(
       (event) => event.name === "Controller Change",
     );
@@ -154,7 +154,7 @@
         .filter(({ number }) => number === eventNumber)
         .forEach(({ value, tick }) => {
           if (value === 0) {
-            if (tickOn) _pedallingMap.insert(tickOn, tick, eventName);
+            if (tickOn) _pedalingMap.insert(tickOn, tick, eventName);
             tickOn = false;
           } else if (value === 127) {
             if (!tickOn) tickOn = tick;
@@ -165,11 +165,11 @@
     enterEvents(SOFT_PEDAL, "SOFT");
     enterEvents(SUSTAIN_PEDAL, "SUSTAIN");
 
-    return _pedallingMap;
+    return _pedalingMap;
   };
 
   midiSamplePlayer.on("fileLoaded", () => {
-    pedallingMap = new IntervalTree();
+    pedalingMap = new IntervalTree();
     const decodeHtmlEntities = (string) =>
       string
         .replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num))
@@ -193,7 +193,7 @@
     );
 
     tempoMap = buildTempoMap(metadataTrack);
-    pedallingMap = buildPedallingMap(midiSamplePlayer.events[1]);
+    pedalingMap = buildPedalingMap(midiSamplePlayer.events[1]);
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
