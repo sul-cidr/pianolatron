@@ -1,6 +1,7 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import { Piano } from "@tonejs/piano";
+  import IntervalTree from "node-interval-tree";
 
   import {
     rollMetadata,
@@ -19,6 +20,7 @@
   } from "../stores";
 
   let tempoMap;
+  let pedallingMap;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -121,6 +123,7 @@
   };
 
   midiSamplePlayer.on("fileLoaded", () => {
+    pedallingMap = new IntervalTree();
     const decodeHtmlEntities = (string) =>
       string
         .replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num))
@@ -150,6 +153,34 @@
           _tempoMap.push([tick, data]);
         return _tempoMap;
       }, []);
+
+    const controllerEvents = midiSamplePlayer.events[1].filter(
+      (event) => event.name === "Controller Change",
+    );
+
+    let tickOn = false;
+    controllerEvents
+      .filter((event) => event.number === SOFT_PEDAL)
+      .forEach((event) => {
+        if (event.value === 0) {
+          if (tickOn) pedallingMap.insert(tickOn, event.tick, "SOFT");
+          tickOn = false;
+        } else if (event.value === 127) {
+          if (!tickOn) tickOn = event.tick;
+        }
+      });
+
+    tickOn = false;
+    controllerEvents
+      .filter((event) => event.number === SUSTAIN_PEDAL)
+      .forEach((event) => {
+        if (event.value === 0) {
+          if (tickOn) pedallingMap.insert(tickOn, event.tick, "SUSTAIN");
+          tickOn = false;
+        } else if (event.value === 127) {
+          if (!tickOn) tickOn = event.tick;
+        }
+      });
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
