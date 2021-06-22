@@ -159,6 +159,13 @@ function prevent_default(fn) {
         return fn.call(this, event);
     };
 }
+function stop_propagation(fn) {
+    return function (event) {
+        event.stopPropagation();
+        // @ts-ignore
+        return fn.call(this, event);
+    };
+}
 function attr(node, attribute, value) {
     if (value == null)
         node.removeAttribute(attribute);
@@ -181,19 +188,6 @@ function set_input_value(input, value) {
 }
 function set_style(node, key, value, important) {
     node.style.setProperty(key, value, important ? 'important' : '');
-}
-function select_option(select, value) {
-    for (let i = 0; i < select.options.length; i += 1) {
-        const option = select.options[i];
-        if (option.__value === value) {
-            option.selected = true;
-            return;
-        }
-    }
-}
-function select_value(select) {
-    const selected_option = select.querySelector(':checked') || select.options[0];
-    return selected_option && selected_option.__value;
 }
 function toggle_class(element, name, toggle) {
     element.classList[toggle ? 'add' : 'remove'](name);
@@ -329,6 +323,10 @@ function schedule_update() {
         update_scheduled = true;
         resolved_promise.then(flush);
     }
+}
+function tick() {
+    schedule_update();
+    return resolved_promise;
 }
 function add_render_callback(fn) {
     render_callbacks.push(fn);
@@ -671,4 +669,4 @@ class SvelteComponent {
     }
 }
 
-export { listen as A, null_to_empty as B, run_all as C, text as D, toggle_class as E, set_data as F, prevent_default as G, set_style as H, subscribe as I, svg_element as J, is_function as K, HtmlTag as L, select_option as M, select_value as N, create_slot as O, update_slot as P, bubble as Q, set_input_value as R, SvelteComponent as S, to_number as T, get_store_value as U, identity as V, add_flush_callback as a, add_render_callback as b, append as c, attr as d, bind as e, binding_callbacks as f, check_outros as g, component_subscribe as h, create_bidirectional_transition as i, create_component as j, destroy_component as k, detach as l, element as m, empty as n, onMount as o, group_outros as p, init as q, insert as r, mount_component as s, noop as t, safe_not_equal as u, set_store_value as v, space as w, transition_in as x, transition_out as y, destroy_each as z };
+export { destroy_each as A, listen as B, null_to_empty as C, run_all as D, text as E, toggle_class as F, set_data as G, prevent_default as H, set_style as I, subscribe as J, svg_element as K, is_function as L, HtmlTag as M, set_input_value as N, stop_propagation as O, create_slot as P, update_slot as Q, bubble as R, SvelteComponent as S, to_number as T, get_store_value as U, identity as V, add_flush_callback as a, add_render_callback as b, append as c, attr as d, bind as e, binding_callbacks as f, check_outros as g, component_subscribe as h, create_bidirectional_transition as i, create_component as j, destroy_component as k, detach as l, element as m, empty as n, onMount as o, group_outros as p, init as q, insert as r, mount_component as s, tick as t, noop as u, safe_not_equal as v, set_store_value as w, space as x, transition_in as y, transition_out as z };
