@@ -44,7 +44,7 @@
     position: relative;
     top: 0px;
     user-select: none;
-    width: fit-content;
+    width: max-content;
     z-index: 99;
 
     &.open {
