@@ -29,6 +29,7 @@
     font: inherit;
     height: 100%;
     padding: 5px 2.5em 5px 11px;
+    text-overflow: ellipsis;
     width: 100%;
   }
 
