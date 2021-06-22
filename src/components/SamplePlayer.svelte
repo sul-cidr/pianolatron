@@ -96,21 +96,20 @@
     piano.pedalUp();
     if ($sustainOnOff) piano.pedalDown();
     $activeNotes.forEach(stopNote);
-    activeNotes.reset();
   };
 
   const resetPlayback = () => {
     currentTick.reset();
     midiSamplePlayer.stop();
+    activeNotes.reset();
+    softOnOff.reset();
+    sustainOnOff.reset();
+    accentOnOff.reset();
   };
 
   const pausePlayback = () => {
     midiSamplePlayer.pause();
     stopAllNotes();
-    activeNotes.reset();
-    softOnOff.reset();
-    sustainOnOff.reset();
-    accentOnOff.reset();
   };
 
   const startPlayback = () => {
