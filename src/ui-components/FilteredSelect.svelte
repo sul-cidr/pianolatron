@@ -102,7 +102,7 @@
   };
 
   const activate = () => {
-    input.setSelectionRange(0, input.value.length);
+    input.value = "";
     filteredListItems = listItems;
     open = true;
     highlight(items.indexOf(selectedItem));
@@ -172,12 +172,12 @@
     on:keydown|stopPropagation={({ key }) => {
       switch (key) {
         case 'ArrowDown':
-          open = true;
+          if (!open) activate();
           highlight(highlightedIndex + 1);
           break;
 
         case 'ArrowUp':
-          open = true;
+          if (!open) activate();
           highlight(highlightedIndex - 1);
           break;
 
