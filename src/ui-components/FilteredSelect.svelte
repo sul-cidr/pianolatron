@@ -172,7 +172,7 @@
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: items, prepareListItems();
-  $: open, onSelectedItemChanged();
+  $: selectedItem, onSelectedItemChanged();
 </script>
 
 <div class="filtered-select">
@@ -207,6 +207,7 @@
 
         case 'Escape':
           if (open) open = false;
+          onSelectedItemChanged();
           break;
 
         case 'Enter':
@@ -236,6 +237,9 @@
 
 <svelte:window
   on:click={({ target, defaultPrevented }) => {
-    if (!(list.contains(target) || input.contains(target)) && !defaultPrevented) open = false;
+    if (!(list.contains(target) || input.contains(target)) && !defaultPrevented) {
+      open = false;
+      onSelectedItemChanged();
+    }
   }}
 />
