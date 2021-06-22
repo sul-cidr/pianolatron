@@ -68,6 +68,7 @@
 </style>
 
 <script>
+  import { tick } from "svelte";
   import { clamp } from "../utils";
 
   export let items = [];
@@ -93,13 +94,22 @@
     open = false;
   };
 
-  const activateListItem = (index) => {
+  const activateListItem = async (index) => {
     activeListItemIndex = clamp(index, 0, filteredListItems.length - 1);
-    const el = list.querySelector(".selected");
-    if (el) {
-      if (typeof el.scrollIntoViewIfNeeded === "function") {
-        el.scrollIntoViewIfNeeded();
-      }
+
+    await tick();
+
+    const activeListItem = list.querySelector(".selected");
+
+    if (activeListItem) {
+      const {
+        top: listItemTop,
+        bottom: listItemBottom,
+      } = activeListItem.getBoundingClientRect();
+      const { top: listTop, bottom: listBottom } = list.getBoundingClientRect();
+
+      if (listItemBottom > listBottom) activeListItem.scrollIntoView(false);
+      if (listItemTop < listTop) activeListItem.scrollIntoView();
     }
   };
 
