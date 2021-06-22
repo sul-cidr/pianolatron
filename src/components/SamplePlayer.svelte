@@ -229,12 +229,7 @@
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
-  $: if ($rollPedalingOnOff) {
-    // TODO: set roll pedalling according to (as yet unavailable) pedalMap
-  } else {
-    sustainOnOff.set(false);
-    softOnOff.set(false);
-  }
+  $: $rollPedalingOnOff, updatePlayer();
 
   export {
     midiSamplePlayer,
