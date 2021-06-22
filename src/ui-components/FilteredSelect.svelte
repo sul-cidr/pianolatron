@@ -188,6 +188,10 @@
 <div class="filtered-select">
   <input
     type="text"
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="off"
+    spellcheck="false"
     bind:this={input}
     bind:value={text}
     on:input={search}
