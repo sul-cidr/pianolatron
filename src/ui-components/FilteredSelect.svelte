@@ -113,10 +113,12 @@
     }
   };
 
-  const activateDropdown = () => {
-    input.value = "";
-    filteredListItems = listItems;
+  const activateDropdown = async () => {
+    if (open) return;
     open = true;
+    await tick();
+    text = "";
+    filteredListItems = listItems;
     activateListItem(items.indexOf(selectedItem));
   };
 
@@ -184,22 +186,22 @@
     on:keydown|stopPropagation={({ key }) => {
       switch (key) {
         case 'ArrowDown':
-          if (!open) activateDropdown();
+          activateDropdown();
           activateListItem(activeListItemIndex + 1);
           break;
 
         case 'ArrowUp':
-          if (!open) activateDropdown();
+          activateDropdown();
           activateListItem(activeListItemIndex - 1);
           break;
 
         case 'PageDown':
-          if (!open) activateDropdown();
+          activateDropdown();
           activateListItem(activeListItemIndex + 15);
           break;
 
         case 'PageUp':
-          if (!open) activateDropdown();
+          activateDropdown();
           activateListItem(activeListItemIndex - 15);
           break;
 
