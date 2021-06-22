@@ -183,6 +183,16 @@
           activateListItem(activeListItemIndex - 1);
           break;
 
+        case 'PageDown':
+          if (!open) activateDropdown();
+          activateListItem(activeListItemIndex + 15);
+          break;
+
+        case 'PageUp':
+          if (!open) activateDropdown();
+          activateListItem(activeListItemIndex - 15);
+          break;
+
         case 'Escape':
           if (open) open = false;
           break;
