@@ -59,18 +59,20 @@
     return tempo;
   };
 
+  const setPlayerStateAtTick = (tick = $currentTick) => {
+    midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
+  };
+
   const updatePlayer = (fn = () => {}) => {
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       fn();
-      midiSamplePlayer.setTempo(
-        getTempoAtTick($currentTick) * $tempoCoefficient,
-      );
+      setPlayerStateAtTick($currentTick);
       midiSamplePlayer.play();
       return;
     }
     fn();
-    midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoCoefficient);
+    setPlayerStateAtTick($currentTick);
   };
 
   const startNote = (noteNumber, velocity) => {
