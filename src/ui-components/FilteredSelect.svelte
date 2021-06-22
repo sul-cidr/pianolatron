@@ -81,18 +81,20 @@
   let filteredListItems;
 
   let open = false;
-  let highlightedIndex = -1;
+  let activeListItemIndex = -1;
 
   let input;
   let list;
 
-  const selectListItem = (listItem = filteredListItems[highlightedIndex]) => {
+  const selectListItem = (
+    listItem = filteredListItems[activeListItemIndex],
+  ) => {
     selectedItem = listItem.item;
     open = false;
   };
 
-  const highlight = (index) => {
-    highlightedIndex = clamp(index, 0, filteredListItems.length - 1);
+  const activateListItem = (index) => {
+    activeListItemIndex = clamp(index, 0, filteredListItems.length - 1);
     const el = list.querySelector(".selected");
     if (el) {
       if (typeof el.scrollIntoViewIfNeeded === "function") {
@@ -101,17 +103,17 @@
     }
   };
 
-  const activate = () => {
+  const activateDropdown = () => {
     input.value = "";
     filteredListItems = listItems;
     open = true;
-    highlight(items.indexOf(selectedItem));
+    activateListItem(items.indexOf(selectedItem));
   };
 
   const search = async () => {
     open = true;
     filteredListItems = listItems;
-    highlightedIndex = 0;
+    activeListItemIndex = 0;
 
     if (!text) return;
     const filteredText = text
@@ -167,18 +169,18 @@
     bind:this={input}
     bind:value={text}
     on:input={search}
-    on:focus={activate}
-    on:click={activate}
+    on:focus={activateDropdown}
+    on:click={activateDropdown}
     on:keydown|stopPropagation={({ key }) => {
       switch (key) {
         case 'ArrowDown':
-          if (!open) activate();
-          highlight(highlightedIndex + 1);
+          if (!open) activateDropdown();
+          activateListItem(activeListItemIndex + 1);
           break;
 
         case 'ArrowUp':
-          if (!open) activate();
-          highlight(highlightedIndex - 1);
+          if (!open) activateDropdown();
+          activateListItem(activeListItemIndex - 1);
           break;
 
         case 'Escape':
@@ -197,9 +199,9 @@
     {#if filteredListItems?.length}
       {#each filteredListItems as listItem, i}
         <li
-          class:selected={i === highlightedIndex}
+          class:selected={i === activeListItemIndex}
           on:click={() => selectListItem(listItem)}
-          on:pointerenter={() => (highlightedIndex = i)}
+          on:pointerenter={() => (activeListItemIndex = i)}
         >
           {@html listItem.markedUp || listItem.label}
         </li>
