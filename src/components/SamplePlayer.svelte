@@ -66,8 +66,8 @@
 
     if (pedalingMap && $rollPedalingOnOff) {
       const pedals = pedalingMap.search($currentTick, $currentTick);
-      sustainOnOff.set(pedals.includes("SUSTAIN"));
-      softOnOff.set(pedals.includes("SOFT"));
+      sustainOnOff.set(pedals.includes(SUSTAIN_PEDAL));
+      softOnOff.set(pedals.includes(SOFT_PEDAL));
     } else {
       sustainOnOff.set(false);
       piano.pedalUp();
@@ -148,13 +148,13 @@
       (event) => event.name === "Controller Change",
     );
 
-    const enterEvents = (eventNumber, eventName) => {
+    const enterEvents = (eventNumber) => {
       let tickOn = false;
       controllerEvents
         .filter(({ number }) => number === eventNumber)
         .forEach(({ value, tick }) => {
           if (value === 0) {
-            if (tickOn) _pedalingMap.insert(tickOn, tick, eventName);
+            if (tickOn) _pedalingMap.insert(tickOn, tick, eventNumber);
             tickOn = false;
           } else if (value === 127) {
             if (!tickOn) tickOn = tick;
@@ -162,8 +162,8 @@
         });
     };
 
-    enterEvents(SOFT_PEDAL, "SOFT");
-    enterEvents(SUSTAIN_PEDAL, "SUSTAIN");
+    enterEvents(SOFT_PEDAL);
+    enterEvents(SUSTAIN_PEDAL);
 
     return _pedalingMap;
   };
