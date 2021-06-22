@@ -11,7 +11,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.5em;
-      overflow: hidden;
+      overflow: visible;
       padding: 0.5em;
       position: absolute;
       top: 0;

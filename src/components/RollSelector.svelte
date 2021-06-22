@@ -1,19 +1,13 @@
-<style>
-  select {
-    padding: 0.25em 0;
-    width: 100%;
-  }
-</style>
-
 <script>
-  // bundling this, for now at least
+  import FilteredSelect from "../ui-components/FilteredSelect.svelte";
   import catalog from "../assets/catalog.json";
 
   export let currentRoll = catalog[Math.floor(Math.random() * catalog.length)];
 </script>
 
-<select bind:value={currentRoll}>
-  {#each catalog as roll}
-    <option value={roll}>{roll.title}</option>
-  {/each}
-</select>
+<FilteredSelect
+  items={catalog}
+  bind:selectedItem={currentRoll}
+  labelFieldName="title"
+  searchFieldName="title"
+/>
