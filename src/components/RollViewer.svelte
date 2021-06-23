@@ -132,6 +132,14 @@
         transform: none;
       }
     }
+
+    &.show-all-holes {
+      :global(svg rect) {
+        fill: rgba(green, 0.4);
+        stroke: rgba(green, 0.5);
+        stroke-width: 10;
+      }
+    }
   }
 
   @keyframes mark-recede {
@@ -380,6 +388,7 @@
     }
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
+  class:show-all-holes={$userSettings.showAllHoles}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
