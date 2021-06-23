@@ -39,7 +39,7 @@
 
 <div id="playback-controls">
   <button type="button" on:click={playPauseApp}>Play/Pause</button>
-  <button type="button" on:click={stopApp}>Stop</button>
+  <button type="button" on:click={stopApp}>Rewind</button>
   <button
     type="button"
     class:pedal-on={$softOnOff}
