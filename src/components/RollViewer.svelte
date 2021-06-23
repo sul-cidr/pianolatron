@@ -252,6 +252,8 @@
       );
       rect.setAttribute("width", width + padding * 2);
       rect.setAttribute("height", height + padding * 2);
+      rect.setAttribute("rx", 10);
+      rect.setAttribute("ry", 10);
       rect.addEventListener("mouseover", () => {
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);
