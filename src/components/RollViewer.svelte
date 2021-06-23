@@ -241,14 +241,17 @@
         "rect",
       );
       const { x: offsetX, y: offsetY, w: width, h: height } = hole;
+      const padding = 10;
 
-      rect.setAttribute("x", offsetX);
+      rect.setAttribute("x", offsetX - padding);
       rect.setAttribute(
         "y",
-        scrollDownwards ? offsetY : imageLength - offsetY - height,
+        scrollDownwards
+          ? offsetY - padding
+          : imageLength - offsetY - height - padding,
       );
-      rect.setAttribute("width", width);
-      rect.setAttribute("height", height);
+      rect.setAttribute("width", width + padding * 2);
+      rect.setAttribute("height", height + padding * 2);
       rect.addEventListener("mouseover", () => {
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);
