@@ -57,7 +57,7 @@
   [type="range"] {
     -webkit-appearance: none;
     background: transparent;
-    margin: $thumb-height / 2 0;
+    margin: math.div($thumb-height, 2) 0;
     width: $track-width;
 
     &::-moz-focus-outer {
@@ -96,7 +96,8 @@
       @include thumb;
       -webkit-appearance: none;
       margin-top: (
-        (-$track-border-width * 2 + $track-height) / 2 - $thumb-height / 2
+        math.div((-$track-border-width * 2 + $track-height), 2) -
+          math.div($thumb-height, 2)
       );
     }
 
@@ -110,7 +111,7 @@
       background: $track-color;
       border: $track-border-width solid $track-border-color;
       border-radius: $track-radius;
-      height: $track-height / 2;
+      height: math.div($track-height, 2);
     }
 
     &::-moz-range-thumb {
@@ -121,7 +122,7 @@
       @include track;
       background: transparent;
       border-color: transparent;
-      border-width: ($thumb-height / 2) 0;
+      border-width: math.div($thumb-height, 2) 0;
       color: transparent;
     }
 
@@ -149,7 +150,7 @@
 
     &::-ms-thumb {
       @include thumb;
-      margin-top: $track-height / 4;
+      margin-top: math.div($track-height, 4);
     }
 
     &:disabled {
