@@ -1,6 +1,8 @@
+<svelte:options accessors />
+
 <script>
+  import { onMount } from "svelte";
   import MidiPlayer from "midi-player-js";
-  import { Piano } from "@tonejs/piano";
 
   import {
     rollMetadata,
@@ -20,6 +22,9 @@
 
   let tempoMap;
 
+  let piano = { pedalUp: () => {}, pedalDown: () => {} };
+  let pianoReady;
+
   const controllerChange = Object.freeze({
     SUSTAIN_PEDAL: 64,
     SOFT_PEDAL: 67, // (una corda)
@@ -33,22 +38,6 @@
   const ACCENT_BUMP = 1.5;
 
   const midiSamplePlayer = new MidiPlayer.Player();
-
-  const piano = new Piano({
-    url: "data/samples/",
-    velocities: 4,
-    release: true,
-    pedal: true,
-    maxPolyphony: 64,
-    volume: {
-      strings: -15,
-      harmonics: -10,
-      pedal: -10,
-      keybed: -10,
-    },
-  }).toDestination();
-
-  const pianoReady = piano.load();
 
   const getTempoAtTick = (tick) => {
     if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
@@ -182,6 +171,27 @@
   );
 
   midiSamplePlayer.on("endOfFile", pausePlayback);
+
+  onMount(async () => {
+    const module = await import("@tonejs/piano");
+    const Piano = module.Piano;
+
+    piano = new Piano({
+      url: "data/samples/",
+      velocities: 4,
+      release: true,
+      pedal: true,
+      maxPolyphony: 64,
+      volume: {
+        strings: -15,
+        harmonics: -10,
+        pedal: -10,
+        keybed: -10,
+      },
+    }).toDestination();
+
+    pianoReady = piano.load();
+  });
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
