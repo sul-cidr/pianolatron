@@ -5,6 +5,10 @@ import sveltePreprocess from "svelte-preprocess";
 const config = {
   kit: {
     target: "body",
+    paths: {
+      assets: "assets",
+      base: "",
+    },
   },
   preprocess: sveltePreprocess({
     scss: {
