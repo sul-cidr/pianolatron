@@ -153,7 +153,7 @@
   };
 
   const loadRoll = (roll) => {
-    mididataReady = fetch(`./assets/midi/${roll.druid}.mid`)
+    mididataReady = fetch(`data/midi/${roll.druid}.mid`)
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
@@ -168,7 +168,7 @@
         currentRoll = previousRoll;
       });
 
-    metadataReady = fetch(`./assets/json/${roll.druid}.json`)
+    metadataReady = fetch(`data/json/${roll.druid}.json`)
       .then((metadataResponse) => {
         if (metadataResponse.status === 200) return metadataResponse.json();
         throw new Error("Error fetching metadata file! (Operation cancelled)");

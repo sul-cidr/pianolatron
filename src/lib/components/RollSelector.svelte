@@ -1,6 +1,6 @@
 <script>
   import FilteredSelect from "../ui-components/FilteredSelect.svelte";
-  import catalog from "../assets/catalog.json";
+  import catalog from "/data/catalog.json";
 
   export let currentRoll = catalog[Math.floor(Math.random() * catalog.length)];
 </script>
