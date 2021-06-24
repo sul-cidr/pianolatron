@@ -11,7 +11,7 @@ const config = {
   },
   preprocess: sveltePreprocess({
     scss: {
-      prependData: `@use "sass:math";@import 'src/styles/globals.scss';`,
+      prependData: `@use "sass:math";@import 'src/lib/styles/globals.scss';`,
     },
   }),
 };
