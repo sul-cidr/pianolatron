@@ -1,6 +1,7 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import { Piano } from "@tonejs/piano";
+  import IntervalTree from "node-interval-tree";
 
   import {
     rollMetadata,
@@ -19,12 +20,10 @@
   } from "../stores";
 
   let tempoMap;
+  let pedalingMap;
 
-  const controllerChange = Object.freeze({
-    SUSTAIN_PEDAL: 64,
-    SOFT_PEDAL: 67, // (una corda)
-    PEDAL_ON: 127,
-  });
+  const SOFT_PEDAL = 67;
+  const SUSTAIN_PEDAL = 64;
 
   const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
@@ -62,18 +61,30 @@
     return tempo;
   };
 
+  const setPlayerStateAtTick = (tick = $currentTick) => {
+    midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
+
+    if (pedalingMap && $rollPedalingOnOff) {
+      const pedals = pedalingMap.search($currentTick, $currentTick);
+      sustainOnOff.set(pedals.includes(SUSTAIN_PEDAL));
+      softOnOff.set(pedals.includes(SOFT_PEDAL));
+    } else {
+      sustainOnOff.set(false);
+      piano.pedalUp();
+      softOnOff.set(false);
+    }
+  };
+
   const updatePlayer = (fn = () => {}) => {
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
       fn();
-      midiSamplePlayer.setTempo(
-        getTempoAtTick($currentTick) * $tempoCoefficient,
-      );
+      setPlayerStateAtTick($currentTick);
       midiSamplePlayer.play();
       return;
     }
     fn();
-    midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoCoefficient);
+    setPlayerStateAtTick($currentTick);
   };
 
   const startNote = (noteNumber, velocity) => {
@@ -99,21 +110,20 @@
     piano.pedalUp();
     if ($sustainOnOff) piano.pedalDown();
     $activeNotes.forEach(stopNote);
-    activeNotes.reset();
   };
 
   const resetPlayback = () => {
     currentTick.reset();
     midiSamplePlayer.stop();
+    activeNotes.reset();
+    softOnOff.reset();
+    sustainOnOff.reset();
+    accentOnOff.reset();
   };
 
   const pausePlayback = () => {
     midiSamplePlayer.pause();
     stopAllNotes();
-    activeNotes.reset();
-    softOnOff.reset();
-    sustainOnOff.reset();
-    accentOnOff.reset();
   };
 
   const startPlayback = () => {
@@ -122,7 +132,44 @@
     midiSamplePlayer.play();
   };
 
+  const buildTempoMap = (metadataTrack) => {
+    return metadataTrack
+      .filter((event) => event.name === "Set Tempo")
+      .reduce((_tempoMap, { tick, data }) => {
+        if (!_tempoMap.map(([, _data]) => _data).includes(data))
+          _tempoMap.push([tick, data]);
+        return _tempoMap;
+      }, []);
+  };
+
+  const buildPedalingMap = (eventsTrack) => {
+    const _pedalingMap = new IntervalTree();
+    const controllerEvents = eventsTrack.filter(
+      (event) => event.name === "Controller Change",
+    );
+
+    const enterEvents = (eventNumber) => {
+      let tickOn = false;
+      controllerEvents
+        .filter(({ number }) => number === eventNumber)
+        .forEach(({ value, tick }) => {
+          if (value === 0) {
+            if (tickOn) _pedalingMap.insert(tickOn, tick, eventNumber);
+            tickOn = false;
+          } else if (value === 127) {
+            if (!tickOn) tickOn = tick;
+          }
+        });
+    };
+
+    enterEvents(SOFT_PEDAL);
+    enterEvents(SUSTAIN_PEDAL);
+
+    return _pedalingMap;
+  };
+
   midiSamplePlayer.on("fileLoaded", () => {
+    pedalingMap = new IntervalTree();
     const decodeHtmlEntities = (string) =>
       string
         .replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num))
@@ -145,13 +192,8 @@
       ),
     );
 
-    tempoMap = metadataTrack
-      .filter((event) => event.name === "Set Tempo")
-      .reduce((_tempoMap, { tick, data }) => {
-        if (!_tempoMap.map(([, _data]) => _data).includes(data))
-          _tempoMap.push([tick, data]);
-        return _tempoMap;
-      }, []);
+    tempoMap = buildTempoMap(metadataTrack);
+    pedalingMap = buildPedalingMap(midiSamplePlayer.events[1]);
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
@@ -170,10 +212,10 @@
           activeNotes.add(noteNumber);
         }
       } else if (name === "Controller Change" && $rollPedalingOnOff) {
-        if (number === controllerChange.SUSTAIN_PEDAL) {
-          sustainOnOff.set(value === controllerChange.PEDAL_ON);
-        } else if (number === controllerChange.SOFT_PEDAL) {
-          softOnOff.set(value === controllerChange.PEDAL_ON);
+        if (number === SUSTAIN_PEDAL) {
+          sustainOnOff.set(!!value);
+        } else if (number === SOFT_PEDAL) {
+          softOnOff.set(!!value);
         }
       } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
         midiSamplePlayer.setTempo(data * $tempoCoefficient);
@@ -187,12 +229,7 @@
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
-  $: if ($rollPedalingOnOff) {
-    // TODO: set roll pedalling according to (as yet unavailable) pedalMap
-  } else {
-    sustainOnOff.set(false);
-    softOnOff.set(false);
-  }
+  $: $rollPedalingOnOff, updatePlayer();
 
   export {
     midiSamplePlayer,
