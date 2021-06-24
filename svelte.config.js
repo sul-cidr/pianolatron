@@ -6,7 +6,6 @@ const config = {
   kit: {
     target: "body",
     paths: {
-      assets: "assets",
       base: "",
     },
   },
