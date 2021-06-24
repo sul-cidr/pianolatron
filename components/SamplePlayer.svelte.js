@@ -8,6 +8,7 @@ import {
 
 import MidiPlayer from "../_snowpack/pkg/midi-player-js.js";
 import { Piano } from "../_snowpack/pkg/@tonejs/piano.js";
+import IntervalTree from "../_snowpack/pkg/node-interval-tree.js";
 
 import {
 	rollMetadata,
@@ -25,6 +26,8 @@ import {
 	currentTick
 } from "../stores.js";
 
+const SOFT_PEDAL = 67;
+const SUSTAIN_PEDAL = 64;
 const DEFAULT_NOTE_VELOCITY = 50;
 const DEFAULT_TEMPO = 60;
 const SOFT_PEDAL_RATIO = 0.67;
@@ -35,6 +38,7 @@ function instance($$self, $$props, $$invalidate) {
 	let $useMidiTempoEventsOnOff;
 	let $currentTick;
 	let $tempoCoefficient;
+	let $rollPedalingOnOff;
 	let $playExpressionsOnOff;
 	let $softOnOff;
 	let $accentOnOff;
@@ -43,27 +47,20 @@ function instance($$self, $$props, $$invalidate) {
 	let $trebleVolumeCoefficient;
 	let $sustainOnOff;
 	let $activeNotes;
-	let $rollPedalingOnOff;
-	component_subscribe($$self, useMidiTempoEventsOnOff, $$value => $$invalidate(9, $useMidiTempoEventsOnOff = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(10, $currentTick = $$value));
-	component_subscribe($$self, tempoCoefficient, $$value => $$invalidate(11, $tempoCoefficient = $$value));
-	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(12, $playExpressionsOnOff = $$value));
-	component_subscribe($$self, softOnOff, $$value => $$invalidate(13, $softOnOff = $$value));
-	component_subscribe($$self, accentOnOff, $$value => $$invalidate(14, $accentOnOff = $$value));
-	component_subscribe($$self, volumeCoefficient, $$value => $$invalidate(15, $volumeCoefficient = $$value));
-	component_subscribe($$self, bassVolumeCoefficient, $$value => $$invalidate(16, $bassVolumeCoefficient = $$value));
-	component_subscribe($$self, trebleVolumeCoefficient, $$value => $$invalidate(17, $trebleVolumeCoefficient = $$value));
-	component_subscribe($$self, sustainOnOff, $$value => $$invalidate(18, $sustainOnOff = $$value));
-	component_subscribe($$self, activeNotes, $$value => $$invalidate(19, $activeNotes = $$value));
-	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(20, $rollPedalingOnOff = $$value));
+	component_subscribe($$self, useMidiTempoEventsOnOff, $$value => $$invalidate(10, $useMidiTempoEventsOnOff = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(11, $currentTick = $$value));
+	component_subscribe($$self, tempoCoefficient, $$value => $$invalidate(12, $tempoCoefficient = $$value));
+	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(13, $rollPedalingOnOff = $$value));
+	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(14, $playExpressionsOnOff = $$value));
+	component_subscribe($$self, softOnOff, $$value => $$invalidate(15, $softOnOff = $$value));
+	component_subscribe($$self, accentOnOff, $$value => $$invalidate(16, $accentOnOff = $$value));
+	component_subscribe($$self, volumeCoefficient, $$value => $$invalidate(17, $volumeCoefficient = $$value));
+	component_subscribe($$self, bassVolumeCoefficient, $$value => $$invalidate(18, $bassVolumeCoefficient = $$value));
+	component_subscribe($$self, trebleVolumeCoefficient, $$value => $$invalidate(19, $trebleVolumeCoefficient = $$value));
+	component_subscribe($$self, sustainOnOff, $$value => $$invalidate(20, $sustainOnOff = $$value));
+	component_subscribe($$self, activeNotes, $$value => $$invalidate(21, $activeNotes = $$value));
 	let tempoMap;
-
-	const controllerChange = Object.freeze({
-		SUSTAIN_PEDAL: 64,
-		SOFT_PEDAL: 67, // (una corda)
-		PEDAL_ON: 127
-	});
-
+	let pedalingMap;
 	const midiSamplePlayer = new MidiPlayer.Player();
 
 	const piano = new Piano({
@@ -96,19 +93,33 @@ function instance($$self, $$props, $$invalidate) {
 		return tempo;
 	};
 
+	const setPlayerStateAtTick = (tick = $currentTick) => {
+		midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
+
+		if (pedalingMap && $rollPedalingOnOff) {
+			const pedals = pedalingMap.search($currentTick, $currentTick);
+			sustainOnOff.set(pedals.includes(SUSTAIN_PEDAL));
+			softOnOff.set(pedals.includes(SOFT_PEDAL));
+		} else {
+			sustainOnOff.set(false);
+			piano.pedalUp();
+			softOnOff.set(false);
+		}
+	};
+
 	const updatePlayer = (fn = () => {
 			
 		}) => {
 		if (midiSamplePlayer.isPlaying()) {
 			midiSamplePlayer.pause();
 			fn();
-			midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoCoefficient);
+			setPlayerStateAtTick($currentTick);
 			midiSamplePlayer.play();
 			return;
 		}
 
 		fn();
-		midiSamplePlayer.setTempo(getTempoAtTick($currentTick) * $tempoCoefficient);
+		setPlayerStateAtTick($currentTick);
 	};
 
 	const startNote = (noteNumber, velocity) => {
@@ -130,21 +141,20 @@ function instance($$self, $$props, $$invalidate) {
 		piano.pedalUp();
 		if ($sustainOnOff) piano.pedalDown();
 		$activeNotes.forEach(stopNote);
-		activeNotes.reset();
 	};
 
 	const resetPlayback = () => {
 		currentTick.reset();
 		midiSamplePlayer.stop();
+		activeNotes.reset();
+		softOnOff.reset();
+		sustainOnOff.reset();
+		accentOnOff.reset();
 	};
 
 	const pausePlayback = () => {
 		midiSamplePlayer.pause();
 		stopAllNotes();
-		activeNotes.reset();
-		softOnOff.reset();
-		sustainOnOff.reset();
-		accentOnOff.reset();
 	};
 
 	const startPlayback = () => {
@@ -153,18 +163,45 @@ function instance($$self, $$props, $$invalidate) {
 		midiSamplePlayer.play();
 	};
 
-	midiSamplePlayer.on("fileLoaded", () => {
-		const decodeHtmlEntities = string => string.replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num)).replace(/&#x([A-Za-z0-9]+);/g, (match, num) => String.fromCodePoint(parseInt(num, 16)));
-		const metadataTrack = midiSamplePlayer.events[0];
-		rollMetadata.set(Object.fromEntries(metadataTrack.filter(event => event.name === "Text Event").map(event => event.string.match(/^@([^:]*):[\t\s]*(.*)$/).slice(1, 3).map(decodeHtmlEntities))));
-
-		tempoMap = metadataTrack.filter(event => event.name === "Set Tempo").reduce(
+	const buildTempoMap = metadataTrack => {
+		return metadataTrack.filter(event => event.name === "Set Tempo").reduce(
 			(_tempoMap, { tick, data }) => {
 				if (!_tempoMap.map(([,_data]) => _data).includes(data)) _tempoMap.push([tick, data]);
 				return _tempoMap;
 			},
 			[]
 		);
+	};
+
+	const buildPedalingMap = eventsTrack => {
+		const _pedalingMap = new IntervalTree();
+		const controllerEvents = eventsTrack.filter(event => event.name === "Controller Change");
+
+		const enterEvents = eventNumber => {
+			let tickOn = false;
+
+			controllerEvents.filter(({ number }) => number === eventNumber).forEach(({ value, tick }) => {
+				if (value === 0) {
+					if (tickOn) _pedalingMap.insert(tickOn, tick, eventNumber);
+					tickOn = false;
+				} else if (value === 127) {
+					if (!tickOn) tickOn = tick;
+				}
+			});
+		};
+
+		enterEvents(SOFT_PEDAL);
+		enterEvents(SUSTAIN_PEDAL);
+		return _pedalingMap;
+	};
+
+	midiSamplePlayer.on("fileLoaded", () => {
+		pedalingMap = new IntervalTree();
+		const decodeHtmlEntities = string => string.replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num)).replace(/&#x([A-Za-z0-9]+);/g, (match, num) => String.fromCodePoint(parseInt(num, 16)));
+		const metadataTrack = midiSamplePlayer.events[0];
+		rollMetadata.set(Object.fromEntries(metadataTrack.filter(event => event.name === "Text Event").map(event => event.string.match(/^@([^:]*):[\t\s]*(.*)$/).slice(1, 3).map(decodeHtmlEntities))));
+		tempoMap = buildTempoMap(metadataTrack);
+		pedalingMap = buildPedalingMap(midiSamplePlayer.events[1]);
 	});
 
 	midiSamplePlayer.on("playing", ({ tick }) => {
@@ -181,10 +218,10 @@ function instance($$self, $$props, $$invalidate) {
 				activeNotes.add(noteNumber);
 			}
 		} else if (name === "Controller Change" && $rollPedalingOnOff) {
-			if (number === controllerChange.SUSTAIN_PEDAL) {
-				sustainOnOff.set(value === controllerChange.PEDAL_ON);
-			} else if (number === controllerChange.SOFT_PEDAL) {
-				softOnOff.set(value === controllerChange.PEDAL_ON);
+			if (number === SUSTAIN_PEDAL) {
+				sustainOnOff.set(!!value);
+			} else if (number === SOFT_PEDAL) {
+				softOnOff.set(!!value);
 			}
 		} else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
 			midiSamplePlayer.setTempo(data * $tempoCoefficient);
@@ -194,26 +231,21 @@ function instance($$self, $$props, $$invalidate) {
 	midiSamplePlayer.on("endOfFile", pausePlayback);
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$sustainOnOff*/ 262144) {
+		if ($$self.$$.dirty & /*$sustainOnOff*/ 1048576) {
 			/* eslint-disable no-unused-expressions, no-sequences */
 			$: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
 		}
 
-		if ($$self.$$.dirty & /*$tempoCoefficient*/ 2048) {
+		if ($$self.$$.dirty & /*$tempoCoefficient*/ 4096) {
 			$: ($tempoCoefficient, updatePlayer());
 		}
 
-		if ($$self.$$.dirty & /*$useMidiTempoEventsOnOff*/ 512) {
+		if ($$self.$$.dirty & /*$useMidiTempoEventsOnOff*/ 1024) {
 			$: ($useMidiTempoEventsOnOff, updatePlayer());
 		}
 
-		if ($$self.$$.dirty & /*$rollPedalingOnOff*/ 1048576) {
-			$: if ($rollPedalingOnOff) {
-				
-			} else {
-				sustainOnOff.set(false); // TODO: set roll pedalling according to (as yet unavailable) pedalMap
-				softOnOff.set(false);
-			}
+		if ($$self.$$.dirty & /*$rollPedalingOnOff*/ 8192) {
+			$: ($rollPedalingOnOff, updatePlayer());
 		}
 	};
 
