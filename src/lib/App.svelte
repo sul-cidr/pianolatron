@@ -181,7 +181,7 @@
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
-        if (metadataJson.holeData)
+        if (metadataJson?.holeData)
           buildHolesIntervalTree(metadataJson.holeData);
         appReady = true;
         previousRoll = currentRoll;
