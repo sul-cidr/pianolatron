@@ -1,6 +1,5 @@
+.DS_Store
 node_modules
-dist
-.vscode
-.parcel-cache
-coverage
-build
+/.vscode
+/.svelte-kit
+/package
