@@ -1,9 +1,13 @@
-const sveltePreprocess = require("svelte-preprocess");
+/** @type {import('@sveltejs/kit').Config} */
 
-module.exports = {
+import sveltePreprocess from "svelte-preprocess";
+
+const config = {
   preprocess: sveltePreprocess({
     scss: {
       prependData: `@use "sass:math";@import 'src/styles/globals.scss';`,
     },
   }),
 };
+
+export default config;
