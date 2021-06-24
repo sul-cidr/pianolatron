@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte build",
+    "preview": "svelte-kit preview",
     "gh-deploy": "npm run build && bin/gh-deploy.sh",
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --write --plugin-search-dir=. ."
