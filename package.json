@@ -29,7 +29,6 @@
     "svelte-preprocess": "^4.7.3"
   },
   "dependencies": {
-    "@snowpack/plugin-sass": "^1.4.0",
     "@tonejs/piano": "^0.2.1",
     "events": "^3.3.0",
     "midi-player-js": "^2.0.13",
