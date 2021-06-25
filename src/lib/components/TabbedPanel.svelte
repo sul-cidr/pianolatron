@@ -24,7 +24,7 @@
 <PanelSwitcher bind:selectedPanel />
 <div>
   <BasicSettings {skipToPercentage} />
-  {#if selectedPanel === 'settings'}
+  {#if selectedPanel === "settings"}
     <AdvancedSettings />
   {/if}
 </div>

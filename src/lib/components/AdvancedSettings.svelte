@@ -76,7 +76,13 @@
 <div
   id="settings-panel"
   bind:this={el}
-  transition:fly|local={{ delay: 0, duration: 300, x: parseInt(window.getComputedStyle(el).width, 10), y: 0, opacity: 1 }}
+  transition:fly|local={{
+    delay: 0,
+    duration: 300,
+    x: parseInt(window.getComputedStyle(el).width, 10),
+    y: 0,
+    opacity: 1,
+  }}
 >
   <fieldset>
     <legend>Visualization Settings</legend>
@@ -116,7 +122,8 @@
       <button
         class={theme}
         class:active={$userSettings.theme === theme}
-        on:click={() => userSettings.update((settings) => ({
+        on:click={() =>
+          userSettings.update((settings) => ({
             ...settings,
             theme,
           }))}
