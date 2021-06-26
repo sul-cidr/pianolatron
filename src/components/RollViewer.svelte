@@ -347,8 +347,8 @@
           )
         : clamp(
             firstHolePx - centerY - delta,
-            -firstHolePx,
-            imageLength - firstHolePx,
+            firstHolePx - imageLength,
+            firstHolePx,
           ),
     );
   };
