@@ -413,7 +413,7 @@ function instance($$self, $$props, $$invalidate) {
 
 		skipToTick(scrollDownwards
 		? clamp(centerY + delta - firstHolePx, -firstHolePx, imageLength - firstHolePx)
-		: clamp(firstHolePx - centerY - delta, -firstHolePx, imageLength - firstHolePx));
+		: clamp(firstHolePx - centerY - delta, firstHolePx - imageLength, firstHolePx));
 	};
 
 	function rollviewercontrols_strafing_binding(value) {
