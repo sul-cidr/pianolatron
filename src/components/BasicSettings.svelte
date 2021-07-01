@@ -34,9 +34,11 @@
 
 <div id="playback-settings">
   <div class="control">
-    <span>Volume:
+    <span
+      >Volume:
       <kbd class:depressed={$activeShortcutKeys.volumeDown}>[</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.volumeUp}>]</kbd>↑</span>
+      <kbd class:depressed={$activeShortcutKeys.volumeUp}>]</kbd>↑</span
+    >
     <span>{$volumeCoefficient}</span>
     <RangeSlider
       min="0"
@@ -69,9 +71,11 @@
     />
   </div>
   <div class="control">
-    <span>Tempo:
+    <span
+      >Tempo:
       <kbd class:depressed={$activeShortcutKeys.tempoDown}>w</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.tempoUp}>e</kbd>↑</span>
+      <kbd class:depressed={$activeShortcutKeys.tempoUp}>e</kbd>↑</span
+    >
     <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider
       min="0.1"

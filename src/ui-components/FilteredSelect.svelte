@@ -200,32 +200,32 @@
     on:click={activateDropdown}
     on:keydown|stopPropagation={({ key }) => {
       switch (key) {
-        case 'ArrowDown':
+        case "ArrowDown":
           activateDropdown();
           activateListItem(activeListItemIndex + 1);
           break;
 
-        case 'ArrowUp':
+        case "ArrowUp":
           activateDropdown();
           activateListItem(activeListItemIndex - 1);
           break;
 
-        case 'PageDown':
+        case "PageDown":
           activateDropdown();
           activateListItem(activeListItemIndex + 15);
           break;
 
-        case 'PageUp':
+        case "PageUp":
           activateDropdown();
           activateListItem(activeListItemIndex - 15);
           break;
 
-        case 'Escape':
+        case "Escape":
           if (open) open = false;
           onSelectedItemChanged();
           break;
 
-        case 'Enter':
+        case "Enter":
           selectListItem();
           break;
 
@@ -252,7 +252,10 @@
 
 <svelte:window
   on:click={({ target, defaultPrevented }) => {
-    if (!(list.contains(target) || input.contains(target)) && !defaultPrevented) {
+    if (
+      !(list.contains(target) || input.contains(target)) &&
+      !defaultPrevented
+    ) {
       open = false;
       onSelectedItemChanged();
     }

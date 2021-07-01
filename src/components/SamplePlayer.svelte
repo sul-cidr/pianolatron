@@ -132,7 +132,8 @@
     midiSamplePlayer.play();
   };
 
-  const buildTempoMap = (metadataTrack) => metadataTrack
+  const buildTempoMap = (metadataTrack) =>
+    metadataTrack
       .filter((event) => event.name === "Set Tempo")
       .reduce((_tempoMap, { tick, data }) => {
         if (!_tempoMap.map(([, _data]) => _data).includes(data))
