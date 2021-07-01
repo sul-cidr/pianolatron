@@ -109,12 +109,15 @@
         indices.push([idx, idx + searchPart.length]);
     });
 
-    indices.reverse().forEach(([start, end]) => {
-      markedUp = `${markedUp.substring(0, start)}<mark>${markedUp.substring(
-        start,
-        end,
-      )}</mark>${markedUp.substring(end)}`;
-    });
+    indices
+      .sort()
+      .reverse()
+      .forEach(([start, end]) => {
+        markedUp = `${markedUp.substring(0, start)}<mark>${markedUp.substring(
+          start,
+          end,
+        )}</mark>${markedUp.substring(end)}`;
+      });
     return markedUp;
   };
 
