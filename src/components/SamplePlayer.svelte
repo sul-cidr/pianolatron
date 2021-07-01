@@ -132,15 +132,13 @@
     midiSamplePlayer.play();
   };
 
-  const buildTempoMap = (metadataTrack) => {
-    return metadataTrack
+  const buildTempoMap = (metadataTrack) => metadataTrack
       .filter((event) => event.name === "Set Tempo")
       .reduce((_tempoMap, { tick, data }) => {
         if (!_tempoMap.map(([, _data]) => _data).includes(data))
           _tempoMap.push([tick, data]);
         return _tempoMap;
       }, []);
-  };
 
   const buildPedalingMap = (eventsTrack) => {
     const _pedalingMap = new IntervalTree();
