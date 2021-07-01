@@ -98,6 +98,9 @@
   let input;
   let list;
 
+  const stripDiacritics = (str) =>
+    str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
   const selectListItem = (
     listItem = filteredListItems[activeListItemIndex],
   ) => {
@@ -139,7 +142,7 @@
     activeListItemIndex = 0;
 
     if (!text) return;
-    const filteredText = text
+    const filteredText = stripDiacritics(text)
       .replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ")
       .trim()
       .toLowerCase();
@@ -169,9 +172,9 @@
 
   const prepareListItems = () => {
     listItems = items.map((item) => ({
-      searchContent: (searchFieldName ? item[searchFieldName] : item)
-        .toLowerCase()
-        .trim(),
+      searchContent: stripDiacritics(
+        (searchFieldName ? item[searchFieldName] : item).toLowerCase().trim(),
+      ),
       label: labelFieldName ? item[labelFieldName] : item,
       item,
     }));
