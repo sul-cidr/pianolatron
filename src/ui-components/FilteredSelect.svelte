@@ -101,25 +101,25 @@
     str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
   const markupMatches = (label, searchContent, searchParts) => {
-    const indices = [];
-    const mergedIndices = [];
+    const matchExtents = [];
+    const mergedExtents = [];
     let markedUp = label;
 
     searchParts.forEach((searchPart) => {
       let idx = -1;
       while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1)
-        indices.push([idx, idx + searchPart.length]);
+        matchExtents.push([idx, idx + searchPart.length]);
     });
 
-    indices.sort().forEach(([start, end], i) => {
-      if (mergedIndices[i - 1] && mergedIndices[i - 1][1] > start) {
-        mergedIndices[i - 1][1] = Math.max(mergedIndices[i - 1][1], end);
+    matchExtents.sort().forEach(([start, end], i) => {
+      if (mergedExtents[i - 1] && mergedExtents[i - 1][1] > start) {
+        mergedExtents[i - 1][1] = Math.max(mergedExtents[i - 1][1], end);
       } else {
-        mergedIndices.push([start, end]);
+        mergedExtents.push([start, end]);
       }
     });
 
-    mergedIndices
+    mergedExtents
       .sort()
       .reverse()
       .forEach(([start, end]) => {
