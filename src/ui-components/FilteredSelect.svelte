@@ -23,12 +23,16 @@
     }
   }
 
-  input {
+  span.input {
+    background: white;
     cursor: pointer;
-    font: inherit;
+    display: inline-block;
     height: 100%;
+    line-height: calc(2.25em - 10px);
+    overflow: hidden;
     padding: 5px 2.5em 5px 11px;
     text-overflow: ellipsis;
+    white-space: nowrap;
     width: 100%;
   }
 
@@ -89,7 +93,6 @@
 
   export let postMarkup = (str) => str;
 
-  let text;
   let listItems = [];
   let filteredListItems;
 
@@ -204,7 +207,7 @@
     if (open) return;
     open = true;
     await tick();
-    text = "";
+    input.innerHTML = "";
     filteredListItems = listItems;
     activateListItem(items.indexOf(selectedItem));
   };
@@ -214,9 +217,9 @@
     filteredListItems = listItems;
     activeListItemIndex = 0;
 
-    if (!text) return;
+    if (!input.innerHTML) return;
     const filteredText = normalizeText(
-      text.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " "),
+      input.innerHTML.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " "),
     );
 
     if (filteredText) {
@@ -246,7 +249,10 @@
   };
 
   const onSelectedItemChanged = () => {
-    text = labelFieldName ? selectedItem[labelFieldName] : selectedItem;
+    if (input)
+      input.innerHTML = postMarkup(
+        labelFieldName ? selectedItem[labelFieldName] : selectedItem,
+      );
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
@@ -255,14 +261,11 @@
 </script>
 
 <div class="filtered-select">
-  <input
-    type="text"
-    autocomplete="off"
-    autocorrect="off"
-    autocapitalize="off"
+  <span
+    class="input"
     spellcheck="false"
+    contenteditable="true"
     bind:this={input}
-    bind:value={text}
     on:input={search}
     on:focus={activateDropdown}
     on:click={activateDropdown}
@@ -295,6 +298,7 @@
 
         case "Enter":
           selectListItem();
+          input.blur();
           break;
 
         default:
