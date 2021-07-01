@@ -103,24 +103,19 @@
 
   const markupMatches = (label, searchContent, searchParts) => {
     const indices = [];
-    let match;
     let markedUp = label;
     searchParts.forEach((searchPart) => {
-      const re = new RegExp(searchPart, "ig");
-      while ((match = re.exec(searchContent)) != null) {
-        indices.push([match.index, match.index + match[0].length]);
-      }
+      let idx = -1;
+      while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1)
+        indices.push([idx, idx + searchPart.length]);
     });
 
-    for (let i = indices.length - 1; i > -1; i -= 1) {
-      markedUp = `${markedUp.substring(
-        0,
-        indices[i][0],
-      )}<mark>${markedUp.substring(
-        indices[i][0],
-        indices[i][1],
-      )}</mark>${markedUp.substring(indices[i][1])}`;
-    }
+    indices.reverse().forEach(([start, end]) => {
+      markedUp = `${markedUp.substring(0, start)}<mark>${markedUp.substring(
+        start,
+        end,
+      )}</mark>${markedUp.substring(end)}`;
+    });
     return markedUp;
   };
 
