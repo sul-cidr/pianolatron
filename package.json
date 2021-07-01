@@ -10,7 +10,7 @@
     "dev": "snowpack dev --polyfill-node",
     "build": "snowpack build --polyfill-node",
     "gh-deploy": "yarn build && bin/gh-deploy.sh",
-    "lint": "eslint src/ --ext svelte --ext js"
+    "lint": "prettier --check . && eslint src/ --ext svelte --ext js"
   },
   "devDependencies": {
     "@snowpack/plugin-svelte": "^3.5.0",
