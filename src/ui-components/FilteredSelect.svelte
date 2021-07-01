@@ -87,6 +87,8 @@
   export let labelFieldName;
   export let searchFieldName = labelFieldName;
 
+  export let postMarkup = (str) => str;
+
   let text;
   let listItems = [];
   let filteredListItems;
@@ -307,7 +309,7 @@
           on:click={() => selectListItem(listItem)}
           on:pointerenter={() => (activeListItemIndex = i)}
         >
-          {@html listItem.markedUp || listItem.label}
+          {@html postMarkup(listItem.markedUp || listItem.label)}
         </li>
       {/each}
     {:else}
