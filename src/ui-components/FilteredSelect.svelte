@@ -102,14 +102,24 @@
 
   const markupMatches = (label, searchContent, searchParts) => {
     const indices = [];
+    const mergedIndices = [];
     let markedUp = label;
+
     searchParts.forEach((searchPart) => {
       let idx = -1;
       while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1)
         indices.push([idx, idx + searchPart.length]);
     });
 
-    indices
+    indices.sort().forEach(([start, end], i) => {
+      if (mergedIndices[i - 1] && mergedIndices[i - 1][1] > start) {
+        mergedIndices[i - 1][1] = Math.max(mergedIndices[i - 1][1], end);
+      } else {
+        mergedIndices.push([start, end]);
+      }
+    });
+
+    mergedIndices
       .sort()
       .reverse()
       .forEach(([start, end]) => {
