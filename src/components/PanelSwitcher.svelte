@@ -44,7 +44,7 @@
       id={panel}
     />
     <label for={panel}>
-      {#if panel === 'controls'}
+      {#if panel === "controls"}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -66,7 +66,7 @@
           <line x1="4" y1="18" x2="15" y2="18" />
           <line x1="19" y1="18" x2="20" y2="18" />
         </svg>
-      {:else if panel === 'settings'}
+      {:else if panel === "settings"}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

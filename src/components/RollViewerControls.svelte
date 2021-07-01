@@ -35,7 +35,8 @@
 <div class="overlay-buttons top-center" transition:fade>
   <button
     disabled={currentZoom >= maxZoomLevel}
-    on:click={() => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel))}
+    on:click={() =>
+      viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +55,8 @@
   </button>
   <button
     disabled={currentZoom <= minZoomLevel}
-    on:click={() => viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel))}
+    on:click={() =>
+      viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
