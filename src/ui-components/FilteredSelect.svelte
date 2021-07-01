@@ -219,7 +219,7 @@
 
     if (!input.innerHTML) return;
     const filteredText = normalizeText(
-      input.innerHTML.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " "),
+      input.innerHTML.replace(/[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );
 
     if (filteredText) {
