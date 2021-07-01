@@ -97,8 +97,26 @@
   let input;
   let list;
 
+  const unDecomposableMap = {
+    Ł: "L",
+    ł: "l",
+    ß: "ss",
+    Æ: "AE",
+    æ: "ae",
+    Ø: "O",
+    ø: "o",
+  };
+
+  const unDecomposableRegex = new RegExp(
+    Object.keys(unDecomposableMap).join("|"),
+    "g",
+  );
+
   const stripDiacritics = (str) =>
-    str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    str
+      .replace(unDecomposableRegex, (m) => unDecomposableMap[m])
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
 
   const markupMatches = (label, searchContent, searchParts) => {
     const matchExtents = [];
