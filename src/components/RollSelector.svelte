@@ -1,6 +1,10 @@
 <style>
   :global(small) {
     color: grey;
+    display: inline-block;
+    width: 5ch;
+    text-align: right;
+    margin-right: 1ch;
   }
 </style>
 
@@ -10,7 +14,10 @@
 
   const listItems = catalog.map((item) => ({
     ...item,
-    _label: `[${item.label}] ${item.title}`,
+    _label: `${item.label.match(/^\d+/)} ${item.title} [${item.label.replace(
+      /^\d*\s?/,
+      "",
+    )}]`,
   }));
   export let currentRoll =
     listItems[Math.floor(Math.random() * catalog.length)];
@@ -21,5 +28,5 @@
   bind:selectedItem={currentRoll}
   labelFieldName="_label"
   searchFieldName="_label"
-  postMarkup={(str) => str.replace(/^\[[^\]]+\]/, "<small>$&</small>")}
+  postMarkup={(str) => str.replace(/^\d+|\[[^\]]+\]$/g, "<small>$&</small>")}
 />
