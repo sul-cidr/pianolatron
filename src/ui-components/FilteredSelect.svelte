@@ -112,8 +112,9 @@
     });
 
     matchExtents.sort().forEach(([start, end], i) => {
-      if (mergedExtents[i - 1] && mergedExtents[i - 1][1] > start) {
-        mergedExtents[i - 1][1] = Math.max(mergedExtents[i - 1][1], end);
+      const previousExtent = mergedExtents[i - 1];
+      if (previousExtent && previousExtent[1] > start) {
+        previousExtent[1] = Math.max(previousExtent[1], end);
       } else {
         mergedExtents.push([start, end]);
       }
