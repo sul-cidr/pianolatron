@@ -20,7 +20,6 @@
       transform: rotate(-45deg);
       transform-origin: center;
       width: 0.625em;
-      z-index: 4;
     }
   }
 
