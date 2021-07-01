@@ -101,6 +101,29 @@
   const stripDiacritics = (str) =>
     str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+  const markupMatches = (label, searchContent, searchParts) => {
+    const indices = [];
+    let match;
+    let markedUp = label;
+    searchParts.forEach((searchPart) => {
+      const re = new RegExp(searchPart, "ig");
+      while ((match = re.exec(searchContent)) != null) {
+        indices.push([match.index, match.index + match[0].length]);
+      }
+    });
+
+    for (let i = indices.length - 1; i > -1; i -= 1) {
+      markedUp = `${markedUp.substring(
+        0,
+        indices[i][0],
+      )}<mark>${markedUp.substring(
+        indices[i][0],
+        indices[i][1],
+      )}</mark>${markedUp.substring(indices[i][1])}`;
+    }
+    return markedUp;
+  };
+
   const selectListItem = (
     listItem = filteredListItems[activeListItemIndex],
   ) => {
@@ -156,17 +179,10 @@
             listItem.searchContent.includes(searchPart),
           ),
         )
-        .map((item) => {
-          const newItem = { ...item };
-          newItem.markedUp = item.label;
-          searchParts.forEach((searchPart) => {
-            newItem.markedUp = newItem.markedUp.replace(
-              new RegExp(searchPart, "ig"),
-              "<mark>$&</mark>",
-            );
-          });
-          return newItem;
-        });
+        .map((item) => ({
+          ...item,
+          markedUp: markupMatches(item.label, item.searchContent, searchParts),
+        }));
     }
   };
 
