@@ -129,18 +129,19 @@
         matchExtents.push([idx, idx + searchPart.length]);
     });
 
-    matchExtents.sort().forEach(([start, end], i) => {
-      const previousExtent = mergedExtents[i - 1];
-      if (previousExtent && previousExtent[1] > start) {
-        previousExtent[1] = Math.max(previousExtent[1], end);
-      } else {
-        mergedExtents.push([start, end]);
-      }
-    });
+    matchExtents
+      .sort((a, b) => a[0] - b[0])
+      .forEach(([start, end], i) => {
+        const previousExtent = mergedExtents[i - 1];
+        if (previousExtent && previousExtent[1] >= start) {
+          previousExtent[1] = Math.max(previousExtent[1], end);
+        } else {
+          mergedExtents.push([start, end]);
+        }
+      });
 
     mergedExtents
-      .sort()
-      .reverse()
+      .sort((a, b) => b[0] - a[0])
       .forEach(([start, end]) => {
         markedUp = `${markedUp.substring(0, start)}<mark>${markedUp.substring(
           start,
