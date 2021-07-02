@@ -109,11 +109,13 @@
     "g",
   );
 
-  const stripDiacritics = (str) =>
+  const normalizeText = (str) =>
     str
+      .toLowerCase()
       .replace(unDecomposableRegex, (m) => unDecomposableMap[m])
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
 
   const markupMatches = (label, searchContent, searchParts) => {
     const matchExtents = [];
@@ -189,9 +191,9 @@
     activeListItemIndex = 0;
 
     if (!text) return;
-    const filteredText = stripDiacritics(text.toLowerCase())
-      .replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ")
-      .trim();
+    const filteredText = normalizeText(
+      text.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " "),
+    );
 
     if (filteredText) {
       const searchParts = filteredText.split(" ");
@@ -211,9 +213,9 @@
 
   const prepareListItems = () => {
     listItems = items.map((item) => ({
-      searchContent: stripDiacritics(
-        (searchFieldName ? item[searchFieldName] : item).toLowerCase(),
-      ).trim(),
+      searchContent: normalizeText(
+        searchFieldName ? item[searchFieldName] : item,
+      ),
       label: labelFieldName ? item[labelFieldName] : item,
       item,
     }));
