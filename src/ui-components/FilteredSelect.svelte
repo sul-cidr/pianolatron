@@ -98,12 +98,9 @@
   let list;
 
   const unDecomposableMap = {
-    Ł: "L",
     ł: "l",
     ß: "ss",
-    Æ: "AE",
     æ: "ae",
-    Ø: "O",
     ø: "o",
   };
 
