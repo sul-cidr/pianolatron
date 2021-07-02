@@ -189,10 +189,9 @@
     activeListItemIndex = 0;
 
     if (!text) return;
-    const filteredText = stripDiacritics(text)
+    const filteredText = stripDiacritics(text.toLowerCase())
       .replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ")
-      .trim()
-      .toLowerCase();
+      .trim();
 
     if (filteredText) {
       const searchParts = filteredText.split(" ");
@@ -213,8 +212,8 @@
   const prepareListItems = () => {
     listItems = items.map((item) => ({
       searchContent: stripDiacritics(
-        (searchFieldName ? item[searchFieldName] : item).toLowerCase().trim(),
-      ),
+        (searchFieldName ? item[searchFieldName] : item).toLowerCase(),
+      ).trim(),
       label: labelFieldName ? item[labelFieldName] : item,
       item,
     }));
