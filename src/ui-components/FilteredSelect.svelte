@@ -49,9 +49,28 @@
     }
   }
 
-  div.dropdown > div {
+  div.facets {
     text-align: right;
     padding: 5px 15px;
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+
+    ul {
+      flex: 1 0 auto;
+      margin: 0;
+      text-align: left;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      border-radius: 100px;
+      background-color: grey; // var(--primary-accent);
+      color: white;
+      padding: 1px 8px;
+      margin: 0 4px;
+    }
   }
 
   ul.items {
@@ -100,11 +119,13 @@
 
   export let labelFieldName;
   export let searchFieldName = labelFieldName;
+  export let facetFieldName;
 
   export let postMarkup = (str) => str;
 
   let listItems = [];
   let filteredListItems;
+  let facets;
 
   let open = false;
   let activeListItemIndex = -1;
@@ -258,6 +279,8 @@
       label: labelFieldName ? item[labelFieldName] : item,
       item,
     }));
+    if (facetFieldName)
+      facets = [...new Set(items.map((item) => item[facetFieldName]))];
   };
 
   const onSelectedItemChanged = () => {
@@ -318,7 +341,14 @@
     }}
   />
   <div class="dropdown" class:open bind:this={dropdown}>
-    <div>
+    <div class="facets">
+      {#if facets}
+        <ul>
+          {#each facets as facet}
+            <li>{facet}</li>
+          {/each}
+        </ul>
+      {/if}
       Filtered: {filteredListItems?.length} / {listItems.length}
     </div>
     <ul class="items" class:open bind:this={list}>
