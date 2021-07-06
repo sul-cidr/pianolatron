@@ -20,7 +20,6 @@
     &:hover {
       &:not(.hidden) {
         box-shadow: 2px -3px 3px rgba(0, 0, 0, 0.4);
-        z-index: z($main-context, sidebars);
 
         &.left {
           box-shadow: -2px -3px 3px rgba(0, 0, 0, 0.4);
