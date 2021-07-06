@@ -367,7 +367,10 @@
           {#each facets as facet}
             <li
               class:active={facet === activeFacet}
-              on:click={() => setActiveFacet(facet)}
+              on:click={() => {
+                setActiveFacet(facet);
+                input.focus();
+              }}
             >
               {facet}
             </li>
