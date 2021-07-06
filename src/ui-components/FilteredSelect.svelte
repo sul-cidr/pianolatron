@@ -65,11 +65,13 @@
 
     li {
       display: inline-block;
-      border-radius: 100px;
+      border-radius: 6px;
       background-color: grey; // var(--primary-accent);
       color: white;
       padding: 1px 8px;
       margin: 0 4px;
+      cursor: pointer;
+
       &.active {
         background-color: var(--primary-accent);
       }
