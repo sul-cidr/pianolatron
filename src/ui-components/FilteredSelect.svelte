@@ -70,6 +70,9 @@
       color: white;
       padding: 1px 8px;
       margin: 0 4px;
+      &.active {
+        background-color: var(--primary-accent);
+      }
     }
   }
 
@@ -129,6 +132,7 @@
 
   let open = false;
   let activeListItemIndex = -1;
+  let activeFacet;
 
   let input;
   let dropdown;
@@ -250,7 +254,15 @@
     filteredListItems = listItems;
     activeListItemIndex = 0;
 
+    filteredListItems = listItems;
+
+    if (activeFacet)
+      filteredListItems = listItems.filter(
+        (listItem) => listItem.item[facetFieldName] === activeFacet,
+      );
+
     if (!input.innerHTML) return;
+
     const filteredText = normalizeText(
       input.innerHTML.replace(/[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );
@@ -258,7 +270,7 @@
     if (filteredText) {
       const searchParts = filteredText.split(" ").slice(0, 8);
 
-      filteredListItems = listItems
+      filteredListItems = filteredListItems
         .filter((listItem) =>
           searchParts.every((searchPart) =>
             listItem.searchContent.includes(searchPart),
@@ -269,6 +281,11 @@
           markedUp: markupMatches(item.label, item.searchContent, searchParts),
         }));
     }
+  };
+
+  const setActiveFacet = async (facet) => {
+    activeFacet = facet === activeFacet ? undefined : facet;
+    search();
   };
 
   const prepareListItems = () => {
@@ -345,7 +362,12 @@
       {#if facets}
         <ul>
           {#each facets as facet}
-            <li>{facet}</li>
+            <li
+              class:active={facet === activeFacet}
+              on:click={() => setActiveFacet(facet)}
+            >
+              {facet}
+            </li>
           {/each}
         </ul>
       {/if}
