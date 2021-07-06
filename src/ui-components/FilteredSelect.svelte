@@ -36,10 +36,25 @@
     width: 100%;
   }
 
-  ul {
+  div.dropdown {
+    display: none;
     background: #fff;
     border: 1px solid #999;
-    display: none;
+    position: relative;
+    width: max-content;
+    z-index: z($main-context, roll-selector-dropdown);
+
+    &.open {
+      display: block;
+    }
+  }
+
+  div.dropdown > div {
+    text-align: right;
+    padding: 5px 15px;
+  }
+
+  ul.items {
     margin: 0;
     max-height: calc(15 * (1rem + 10px) + 15px);
     min-width: 100%;
@@ -48,35 +63,30 @@
     position: relative;
     top: 0px;
     user-select: none;
-    width: max-content;
     z-index: 99;
 
-    &.open {
-      display: block;
-    }
-  }
+    li {
+      color: #333;
+      cursor: pointer;
+      line-height: 1;
+      padding: 5px 15px;
+      white-space: nowrap;
+      width: 100%;
 
-  li {
-    color: #333;
-    cursor: pointer;
-    line-height: 1;
-    padding: 5px 15px;
-    white-space: nowrap;
-    width: 100%;
+      &.selected {
+        background-color: var(--primary-accent);
+        color: #fff;
 
-    &.selected {
-      background-color: var(--primary-accent);
-      color: #fff;
+        :global(mark) {
+          color: #fff;
+        }
+      }
 
       :global(mark) {
-        color: #fff;
+        background-color: unset;
+        color: green;
+        font-weight: 700;
       }
-    }
-
-    :global(mark) {
-      background-color: unset;
-      color: green;
-      font-weight: 700;
     }
   }
 </style>
@@ -100,6 +110,7 @@
   let activeListItemIndex = -1;
 
   let input;
+  let dropdown;
   let list;
 
   const unDecomposableMap = {
@@ -306,27 +317,32 @@
       }
     }}
   />
-  <ul class:open bind:this={list}>
-    {#if filteredListItems?.length}
-      {#each filteredListItems as listItem, i}
-        <li
-          class:selected={i === activeListItemIndex}
-          on:click={() => selectListItem(listItem)}
-          on:pointerenter={() => (activeListItemIndex = i)}
-        >
-          {@html postMarkup(listItem.markedUp || listItem.label)}
-        </li>
-      {/each}
-    {:else}
-      <li>No results found</li>
-    {/if}
-  </ul>
+  <div class="dropdown" class:open bind:this={dropdown}>
+    <div>
+      Filtered: {filteredListItems?.length} / {listItems.length}
+    </div>
+    <ul class="items" class:open bind:this={list}>
+      {#if filteredListItems?.length}
+        {#each filteredListItems as listItem, i}
+          <li
+            class:selected={i === activeListItemIndex}
+            on:click={() => selectListItem(listItem)}
+            on:pointerenter={() => (activeListItemIndex = i)}
+          >
+            {@html postMarkup(listItem.markedUp || listItem.label)}
+          </li>
+        {/each}
+      {:else}
+        <li>No results found</li>
+      {/if}
+    </ul>
+  </div>
 </div>
 
 <svelte:window
   on:click={({ target, defaultPrevented }) => {
     if (
-      !(list.contains(target) || input.contains(target)) &&
+      !(dropdown.contains(target) || input.contains(target)) &&
       !defaultPrevented
     ) {
       open = false;
