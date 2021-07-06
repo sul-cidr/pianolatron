@@ -245,6 +245,7 @@
     open = true;
     await tick();
     input.innerHTML = "";
+    activeFacet = undefined;
     filteredListItems = listItems;
     activateListItem(items.indexOf(selectedItem));
   };
