@@ -124,9 +124,14 @@
       .replace(/[\u0300-\u036f]/g, "")
       .trim();
 
-  const idxAdjustment = (str, idx) =>
+  const startIdxAdjustment = (str, idx) =>
     (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || [])
       .length;
+
+  const endIdxAdjustment = (str, idx) =>
+    (
+      str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || []
+    ).reduce((adj, m) => adj + (unDecomposableMap[m].length - m.length), 0);
 
   const markupMatches = (label, searchContent, searchParts) => {
     const matchExtents = [];
@@ -136,11 +141,11 @@
     searchParts.forEach((searchPart) => {
       let idx = -1;
       while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1) {
-        const _idx = idx - idxAdjustment(label, idx - 1);
+        const _idx = idx - startIdxAdjustment(label, idx - 1);
         const _idxEnd =
           idx +
           searchPart.length -
-          idxAdjustment(label, _idx + searchPart.length - 1);
+          endIdxAdjustment(label, _idx + searchPart.length - 1);
         matchExtents.push([_idx, _idxEnd]);
       }
     });
