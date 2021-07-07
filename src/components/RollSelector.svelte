@@ -1,5 +1,5 @@
 <style lang="scss">
-  :global(small) {
+  :global(.filtered-select small) {
     color: grey;
     display: inline-block;
     text-align: right;
