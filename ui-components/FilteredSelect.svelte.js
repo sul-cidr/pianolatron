@@ -27,12 +27,12 @@ import { clamp } from "../utils.js";
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[24] = list[i];
-	child_ctx[26] = i;
+	child_ctx[31] = list[i];
+	child_ctx[33] = i;
 	return child_ctx;
 }
 
-// (240:4) {:else}
+// (306:4) {:else}
 function create_else_block(ctx) {
 	let li;
 
@@ -40,7 +40,7 @@ function create_else_block(ctx) {
 		c() {
 			li = element("li");
 			li.textContent = "No results found";
-			attr(li, "class", "svelte-15r1855");
+			attr(li, "class", "svelte-1n7a0r3");
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -52,7 +52,7 @@ function create_else_block(ctx) {
 	};
 }
 
-// (230:4) {#if filteredListItems?.length}
+// (296:4) {#if filteredListItems?.length}
 function create_if_block(ctx) {
 	let each_1_anchor;
 	let each_value = /*filteredListItems*/ ctx[1];
@@ -78,7 +78,7 @@ function create_if_block(ctx) {
 			insert(target, each_1_anchor, anchor);
 		},
 		p(ctx, dirty) {
-			if (dirty & /*activeListItemIndex, selectListItem, filteredListItems*/ 74) {
+			if (dirty[0] & /*activeListItemIndex, selectListItem, filteredListItems*/ 74) {
 				each_value = /*filteredListItems*/ ctx[1];
 				let i;
 
@@ -108,21 +108,21 @@ function create_if_block(ctx) {
 	};
 }
 
-// (231:6) {#each filteredListItems as listItem, i}
+// (297:6) {#each filteredListItems as listItem, i}
 function create_each_block(ctx) {
 	let li;
 	let html_tag;
-	let raw_value = (/*listItem*/ ctx[24].markedUp || /*listItem*/ ctx[24].label) + "";
+	let raw_value = (/*listItem*/ ctx[31].markedUp || /*listItem*/ ctx[31].label) + "";
 	let t;
 	let mounted;
 	let dispose;
 
 	function click_handler_1() {
-		return /*click_handler_1*/ ctx[19](/*listItem*/ ctx[24]);
+		return /*click_handler_1*/ ctx[19](/*listItem*/ ctx[31]);
 	}
 
 	function pointerenter_handler() {
-		return /*pointerenter_handler*/ ctx[20](/*i*/ ctx[26]);
+		return /*pointerenter_handler*/ ctx[20](/*i*/ ctx[33]);
 	}
 
 	return {
@@ -131,8 +131,8 @@ function create_each_block(ctx) {
 			html_tag = new HtmlTag();
 			t = space();
 			html_tag.a = t;
-			attr(li, "class", "svelte-15r1855");
-			toggle_class(li, "selected", /*i*/ ctx[26] === /*activeListItemIndex*/ ctx[3]);
+			attr(li, "class", "svelte-1n7a0r3");
+			toggle_class(li, "selected", /*i*/ ctx[33] === /*activeListItemIndex*/ ctx[3]);
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -150,10 +150,10 @@ function create_each_block(ctx) {
 		},
 		p(new_ctx, dirty) {
 			ctx = new_ctx;
-			if (dirty & /*filteredListItems*/ 2 && raw_value !== (raw_value = (/*listItem*/ ctx[24].markedUp || /*listItem*/ ctx[24].label) + "")) html_tag.p(raw_value);
+			if (dirty[0] & /*filteredListItems*/ 2 && raw_value !== (raw_value = (/*listItem*/ ctx[31].markedUp || /*listItem*/ ctx[31].label) + "")) html_tag.p(raw_value);
 
-			if (dirty & /*activeListItemIndex*/ 8) {
-				toggle_class(li, "selected", /*i*/ ctx[26] === /*activeListItemIndex*/ ctx[3]);
+			if (dirty[0] & /*activeListItemIndex*/ 8) {
+				toggle_class(li, "selected", /*i*/ ctx[33] === /*activeListItemIndex*/ ctx[3]);
 			}
 		},
 		d(detaching) {
@@ -177,7 +177,7 @@ function create_fragment(ctx) {
 		return create_else_block;
 	}
 
-	let current_block_type = select_block_type(ctx, -1);
+	let current_block_type = select_block_type(ctx, [-1, -1]);
 	let if_block = current_block_type(ctx);
 
 	return {
@@ -192,10 +192,10 @@ function create_fragment(ctx) {
 			attr(input_1, "autocorrect", "off");
 			attr(input_1, "autocapitalize", "off");
 			attr(input_1, "spellcheck", "false");
-			attr(input_1, "class", "svelte-15r1855");
-			attr(ul, "class", "svelte-15r1855");
+			attr(input_1, "class", "svelte-1n7a0r3");
+			attr(ul, "class", "svelte-1n7a0r3");
 			toggle_class(ul, "open", /*open*/ ctx[2]);
-			attr(div, "class", "filtered-select svelte-15r1855");
+			attr(div, "class", "filtered-select svelte-1n7a0r3");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -220,8 +220,8 @@ function create_fragment(ctx) {
 				mounted = true;
 			}
 		},
-		p(ctx, [dirty]) {
-			if (dirty & /*text*/ 1 && input_1.value !== /*text*/ ctx[0]) {
+		p(ctx, dirty) {
+			if (dirty[0] & /*text*/ 1 && input_1.value !== /*text*/ ctx[0]) {
 				set_input_value(input_1, /*text*/ ctx[0]);
 			}
 
@@ -237,7 +237,7 @@ function create_fragment(ctx) {
 				}
 			}
 
-			if (dirty & /*open*/ 4) {
+			if (dirty[0] & /*open*/ 4) {
 				toggle_class(ul, "open", /*open*/ ctx[2]);
 			}
 		},
@@ -266,6 +266,44 @@ function instance($$self, $$props, $$invalidate) {
 	let activeListItemIndex = -1;
 	let input;
 	let list;
+	const unDecomposableMap = { ł: "l", ß: "ss", æ: "ae", ø: "o" };
+	const unDecomposableRegex = new RegExp(Object.keys(unDecomposableMap).join("|"), "g");
+	const longSubstitutionsRegex = new RegExp(Object.keys(unDecomposableMap).filter(k => unDecomposableMap[k].length > 1).join("|"), "gi");
+	const normalizeText = str => str.toLowerCase().replace(unDecomposableRegex, m => unDecomposableMap[m]).normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+	const startIdxAdjustment = (str, idx) => (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || []).length;
+	const endIdxAdjustment = (str, idx) => (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || []).reduce((adj, m) => adj + (unDecomposableMap[m].length - m.length), 0);
+
+	const markupMatches = (label, searchContent, searchParts) => {
+		const matchExtents = [];
+		const mergedExtents = [];
+		let markedUp = label;
+
+		searchParts.forEach(searchPart => {
+			let idx = -1;
+
+			while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1) {
+				const _idx = idx - startIdxAdjustment(label, idx - 1);
+				const _idxEnd = idx + searchPart.length - endIdxAdjustment(label, _idx + searchPart.length - 1);
+				matchExtents.push([_idx, _idxEnd]);
+			}
+		});
+
+		matchExtents.sort((a, b) => a[0] - b[0]).forEach(([start, end]) => {
+			const previousExtent = mergedExtents[mergedExtents.length - 1];
+
+			if (previousExtent && previousExtent[1] >= start) {
+				previousExtent[1] = Math.max(previousExtent[1], end);
+			} else {
+				mergedExtents.push([start, end]);
+			}
+		});
+
+		mergedExtents.sort((a, b) => b[0] - a[0]).forEach(([start, end]) => {
+			markedUp = `${markedUp.substring(0, start)}<mark>${markedUp.substring(start, end)}</mark>${markedUp.substring(end)}`;
+		});
+
+		return markedUp;
+	};
 
 	const selectListItem = (listItem = filteredListItems[activeListItemIndex]) => {
 		$$invalidate(11, selectedItem = listItem.item);
@@ -299,27 +337,21 @@ function instance($$self, $$props, $$invalidate) {
 		$$invalidate(1, filteredListItems = listItems);
 		$$invalidate(3, activeListItemIndex = 0);
 		if (!text) return;
-		const filteredText = text.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ").trim().toLowerCase();
+		const filteredText = normalizeText(text.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " "));
 
 		if (filteredText) {
 			const searchParts = filteredText.split(" ");
 
-			$$invalidate(1, filteredListItems = listItems.filter(listItem => searchParts.every(searchPart => listItem.searchContent.includes(searchPart))).map(item => {
-				const newItem = { ...item };
-				newItem.markedUp = item.label;
-
-				searchParts.forEach(searchPart => {
-					newItem.markedUp = newItem.markedUp.replace(new RegExp(searchPart, "ig"), "<mark>$&</mark>");
-				});
-
-				return newItem;
-			}));
+			$$invalidate(1, filteredListItems = listItems.filter(listItem => searchParts.every(searchPart => listItem.searchContent.includes(searchPart))).map(item => ({
+				...item,
+				markedUp: markupMatches(item.label, item.searchContent, searchParts)
+			})));
 		}
 	};
 
 	const prepareListItems = () => {
 		listItems = items.map(item => ({
-			searchContent: (searchFieldName ? item[searchFieldName] : item).toLowerCase().trim(),
+			searchContent: normalizeText(searchFieldName ? item[searchFieldName] : item),
 			label: labelFieldName ? item[labelFieldName] : item,
 			item
 		}));
@@ -397,12 +429,12 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*items*/ 4096) {
+		if ($$self.$$.dirty[0] & /*items*/ 4096) {
 			/* eslint-disable no-unused-expressions, no-sequences */
 			$: (items, prepareListItems());
 		}
 
-		if ($$self.$$.dirty & /*selectedItem*/ 2048) {
+		if ($$self.$$.dirty[0] & /*selectedItem*/ 2048) {
 			$: (selectedItem, onSelectedItemChanged());
 		}
 	};
@@ -437,12 +469,20 @@ class FilteredSelect extends SvelteComponent {
 	constructor(options) {
 		super();
 
-		init(this, options, instance, create_fragment, safe_not_equal, {
-			items: 12,
-			selectedItem: 11,
-			labelFieldName: 13,
-			searchFieldName: 14
-		});
+		init(
+			this,
+			options,
+			instance,
+			create_fragment,
+			safe_not_equal,
+			{
+				items: 12,
+				selectedItem: 11,
+				labelFieldName: 13,
+				searchFieldName: 14
+			},
+			[-1, -1]
+		);
 	}
 }
 
