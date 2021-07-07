@@ -20,7 +20,6 @@
       transform: rotate(-45deg);
       transform-origin: center;
       width: 0.625em;
-      z-index: 4;
     }
   }
 
@@ -98,6 +97,81 @@
   let input;
   let list;
 
+  const unDecomposableMap = {
+    ł: "l",
+    ß: "ss",
+    æ: "ae",
+    ø: "o",
+  };
+
+  const unDecomposableRegex = new RegExp(
+    Object.keys(unDecomposableMap).join("|"),
+    "g",
+  );
+
+  const longSubstitutionsRegex = new RegExp(
+    Object.keys(unDecomposableMap)
+      .filter((k) => unDecomposableMap[k].length > 1)
+      .join("|"),
+    "gi",
+  );
+
+  const normalizeText = (str) =>
+    str
+      .toLowerCase()
+      .replace(unDecomposableRegex, (m) => unDecomposableMap[m])
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+
+  const startIdxAdjustment = (str, idx) =>
+    (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || [])
+      .length;
+
+  const endIdxAdjustment = (str, idx) =>
+    (
+      str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || []
+    ).reduce((adj, m) => adj + (unDecomposableMap[m].length - m.length), 0);
+
+  const markupMatches = (label, searchContent, searchParts) => {
+    const matchExtents = [];
+    const mergedExtents = [];
+    let markedUp = label;
+
+    searchParts.forEach((searchPart) => {
+      let idx = -1;
+      while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1) {
+        const _idx = idx - startIdxAdjustment(label, idx - 1);
+        const _idxEnd =
+          idx +
+          searchPart.length -
+          endIdxAdjustment(label, _idx + searchPart.length - 1);
+        matchExtents.push([_idx, _idxEnd]);
+      }
+    });
+
+    matchExtents
+      .sort((a, b) => a[0] - b[0])
+      .forEach(([start, end]) => {
+        const previousExtent = mergedExtents[mergedExtents.length - 1];
+        if (previousExtent && previousExtent[1] >= start) {
+          previousExtent[1] = Math.max(previousExtent[1], end);
+        } else {
+          mergedExtents.push([start, end]);
+        }
+      });
+
+    mergedExtents
+      .sort((a, b) => b[0] - a[0])
+      .forEach(([start, end]) => {
+        markedUp = `${markedUp.substring(0, start)}<mark>${markedUp.substring(
+          start,
+          end,
+        )}</mark>${markedUp.substring(end)}`;
+      });
+    return markedUp;
+  };
+
   const selectListItem = (
     listItem = filteredListItems[activeListItemIndex],
   ) => {
@@ -139,10 +213,9 @@
     activeListItemIndex = 0;
 
     if (!text) return;
-    const filteredText = text
-      .replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " ")
-      .trim()
-      .toLowerCase();
+    const filteredText = normalizeText(
+      text.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " "),
+    );
 
     if (filteredText) {
       const searchParts = filteredText.split(" ");
@@ -153,25 +226,18 @@
             listItem.searchContent.includes(searchPart),
           ),
         )
-        .map((item) => {
-          const newItem = { ...item };
-          newItem.markedUp = item.label;
-          searchParts.forEach((searchPart) => {
-            newItem.markedUp = newItem.markedUp.replace(
-              new RegExp(searchPart, "ig"),
-              "<mark>$&</mark>",
-            );
-          });
-          return newItem;
-        });
+        .map((item) => ({
+          ...item,
+          markedUp: markupMatches(item.label, item.searchContent, searchParts),
+        }));
     }
   };
 
   const prepareListItems = () => {
     listItems = items.map((item) => ({
-      searchContent: (searchFieldName ? item[searchFieldName] : item)
-        .toLowerCase()
-        .trim(),
+      searchContent: normalizeText(
+        searchFieldName ? item[searchFieldName] : item,
+      ),
       label: labelFieldName ? item[labelFieldName] : item,
       item,
     }));
