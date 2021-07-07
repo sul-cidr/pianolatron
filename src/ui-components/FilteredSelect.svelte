@@ -224,7 +224,7 @@
     );
 
     if (filteredText) {
-      const searchParts = filteredText.split(" ");
+      const searchParts = filteredText.split(" ").slice(0, 8);
 
       filteredListItems = listItems
         .filter((listItem) =>
