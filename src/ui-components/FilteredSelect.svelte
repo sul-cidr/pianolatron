@@ -124,6 +124,7 @@
   const normalizeText = (str) =>
     str
       .toLowerCase()
+      .replace(/\s+/g, " ")
       .replace(unDecomposableRegex, (m) => unDecomposableMap[m])
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
