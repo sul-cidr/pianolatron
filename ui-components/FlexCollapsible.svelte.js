@@ -48,13 +48,13 @@ function create_fragment(ctx) {
 			if (default_slot) default_slot.c();
 			attr(input, "type", "checkbox");
 			attr(input, "id", input_id_value = `${/*id*/ ctx[0]}_collapse`);
-			attr(input, "class", "svelte-1t6yjzx");
+			attr(input, "class", "svelte-v0giq5");
 			attr(label, "for", label_for_value = `${/*id*/ ctx[0]}_collapse`);
-			attr(label, "class", "svelte-1t6yjzx");
+			attr(label, "class", "svelte-v0giq5");
 			attr(div0, "style", div0_style_value = `width: ${/*width*/ ctx[1]};`);
-			attr(div0, "class", "svelte-1t6yjzx");
+			attr(div0, "class", "svelte-v0giq5");
 			attr(div1, "id", /*id*/ ctx[0]);
-			attr(div1, "class", div1_class_value = "" + (null_to_empty(`flex-collapsible ${/*position*/ ctx[2]}`) + " svelte-1t6yjzx"));
+			attr(div1, "class", div1_class_value = "" + (null_to_empty(`flex-collapsible ${/*position*/ ctx[2]}`) + " svelte-v0giq5"));
 			attr(div1, "style", div1_style_value = `width: ${/*hidden*/ ctx[3] ? 0 : /*width*/ ctx[1]};`);
 			toggle_class(div1, "hidden", /*hidden*/ ctx[3]);
 		},
@@ -105,7 +105,7 @@ function create_fragment(ctx) {
 				attr(div1, "id", /*id*/ ctx[0]);
 			}
 
-			if (!current || dirty & /*position*/ 4 && div1_class_value !== (div1_class_value = "" + (null_to_empty(`flex-collapsible ${/*position*/ ctx[2]}`) + " svelte-1t6yjzx"))) {
+			if (!current || dirty & /*position*/ 4 && div1_class_value !== (div1_class_value = "" + (null_to_empty(`flex-collapsible ${/*position*/ ctx[2]}`) + " svelte-v0giq5"))) {
 				attr(div1, "class", div1_class_value);
 			}
 

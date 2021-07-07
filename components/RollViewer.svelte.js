@@ -45,7 +45,7 @@ function create_if_block_1(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Downloading roll image...";
-			attr(p, "class", "svelte-1d56u5j");
+			attr(p, "class", "svelte-e6s52x");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -73,7 +73,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (361:2) {#if showControls}
+// (354:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
@@ -148,7 +148,7 @@ function create_fragment(ctx) {
 			t = space();
 			if (if_block1) if_block1.c();
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-1d56u5j");
+			attr(div, "class", "svelte-e6s52x");
 			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
 		},
 		m(target, anchor) {

@@ -16,7 +16,6 @@ import {
 	noop,
 	run_all,
 	safe_not_equal,
-	set_input_value,
 	space,
 	stop_propagation,
 	toggle_class
@@ -27,12 +26,12 @@ import { clamp } from "../utils.js";
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[31] = list[i];
-	child_ctx[33] = i;
+	child_ctx[30] = list[i];
+	child_ctx[32] = i;
 	return child_ctx;
 }
 
-// (306:4) {:else}
+// (313:4) {:else}
 function create_else_block(ctx) {
 	let li;
 
@@ -40,7 +39,7 @@ function create_else_block(ctx) {
 		c() {
 			li = element("li");
 			li.textContent = "No results found";
-			attr(li, "class", "svelte-1n7a0r3");
+			attr(li, "class", "svelte-18jy66v");
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -52,7 +51,7 @@ function create_else_block(ctx) {
 	};
 }
 
-// (296:4) {#if filteredListItems?.length}
+// (303:4) {#if filteredListItems?.length}
 function create_if_block(ctx) {
 	let each_1_anchor;
 	let each_value = /*filteredListItems*/ ctx[1];
@@ -78,7 +77,7 @@ function create_if_block(ctx) {
 			insert(target, each_1_anchor, anchor);
 		},
 		p(ctx, dirty) {
-			if (dirty[0] & /*activeListItemIndex, selectListItem, filteredListItems*/ 74) {
+			if (dirty[0] & /*activeListItemIndex, selectListItem, filteredListItems, postMarkup*/ 75) {
 				each_value = /*filteredListItems*/ ctx[1];
 				let i;
 
@@ -108,21 +107,21 @@ function create_if_block(ctx) {
 	};
 }
 
-// (297:6) {#each filteredListItems as listItem, i}
+// (304:6) {#each filteredListItems as listItem, i}
 function create_each_block(ctx) {
 	let li;
 	let html_tag;
-	let raw_value = (/*listItem*/ ctx[31].markedUp || /*listItem*/ ctx[31].label) + "";
+	let raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[30].markedUp || /*listItem*/ ctx[30].label) + "";
 	let t;
 	let mounted;
 	let dispose;
 
 	function click_handler_1() {
-		return /*click_handler_1*/ ctx[19](/*listItem*/ ctx[31]);
+		return /*click_handler_1*/ ctx[18](/*listItem*/ ctx[30]);
 	}
 
 	function pointerenter_handler() {
-		return /*pointerenter_handler*/ ctx[20](/*i*/ ctx[33]);
+		return /*pointerenter_handler*/ ctx[19](/*i*/ ctx[32]);
 	}
 
 	return {
@@ -131,8 +130,8 @@ function create_each_block(ctx) {
 			html_tag = new HtmlTag();
 			t = space();
 			html_tag.a = t;
-			attr(li, "class", "svelte-1n7a0r3");
-			toggle_class(li, "selected", /*i*/ ctx[33] === /*activeListItemIndex*/ ctx[3]);
+			attr(li, "class", "svelte-18jy66v");
+			toggle_class(li, "selected", /*i*/ ctx[32] === /*activeListItemIndex*/ ctx[3]);
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -150,10 +149,10 @@ function create_each_block(ctx) {
 		},
 		p(new_ctx, dirty) {
 			ctx = new_ctx;
-			if (dirty[0] & /*filteredListItems*/ 2 && raw_value !== (raw_value = (/*listItem*/ ctx[31].markedUp || /*listItem*/ ctx[31].label) + "")) html_tag.p(raw_value);
+			if (dirty[0] & /*postMarkup, filteredListItems*/ 3 && raw_value !== (raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[30].markedUp || /*listItem*/ ctx[30].label) + "")) html_tag.p(raw_value);
 
 			if (dirty[0] & /*activeListItemIndex*/ 8) {
-				toggle_class(li, "selected", /*i*/ ctx[33] === /*activeListItemIndex*/ ctx[3]);
+				toggle_class(li, "selected", /*i*/ ctx[32] === /*activeListItemIndex*/ ctx[3]);
 			}
 		},
 		d(detaching) {
@@ -166,7 +165,7 @@ function create_each_block(ctx) {
 
 function create_fragment(ctx) {
 	let div;
-	let input_1;
+	let span;
 	let t;
 	let ul;
 	let mounted;
@@ -183,48 +182,39 @@ function create_fragment(ctx) {
 	return {
 		c() {
 			div = element("div");
-			input_1 = element("input");
+			span = element("span");
 			t = space();
 			ul = element("ul");
 			if_block.c();
-			attr(input_1, "type", "text");
-			attr(input_1, "autocomplete", "off");
-			attr(input_1, "autocorrect", "off");
-			attr(input_1, "autocapitalize", "off");
-			attr(input_1, "spellcheck", "false");
-			attr(input_1, "class", "svelte-1n7a0r3");
-			attr(ul, "class", "svelte-1n7a0r3");
+			attr(span, "class", "input svelte-18jy66v");
+			attr(span, "spellcheck", "false");
+			attr(span, "contenteditable", "true");
+			attr(ul, "class", "svelte-18jy66v");
 			toggle_class(ul, "open", /*open*/ ctx[2]);
-			attr(div, "class", "filtered-select svelte-1n7a0r3");
+			attr(div, "class", "filtered-select svelte-18jy66v");
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
-			append(div, input_1);
-			/*input_1_binding*/ ctx[16](input_1);
-			set_input_value(input_1, /*text*/ ctx[0]);
+			append(div, span);
+			/*span_binding*/ ctx[16](span);
 			append(div, t);
 			append(div, ul);
 			if_block.m(ul, null);
-			/*ul_binding*/ ctx[21](ul);
+			/*ul_binding*/ ctx[20](ul);
 
 			if (!mounted) {
 				dispose = [
 					listen(window, "click", /*click_handler*/ ctx[15]),
-					listen(input_1, "input", /*input_1_input_handler*/ ctx[17]),
-					listen(input_1, "input", /*search*/ ctx[9]),
-					listen(input_1, "focus", /*activateDropdown*/ ctx[8]),
-					listen(input_1, "click", /*activateDropdown*/ ctx[8]),
-					listen(input_1, "keydown", stop_propagation(/*keydown_handler*/ ctx[18]))
+					listen(span, "input", /*search*/ ctx[9]),
+					listen(span, "focus", /*activateDropdown*/ ctx[8]),
+					listen(span, "click", /*activateDropdown*/ ctx[8]),
+					listen(span, "keydown", stop_propagation(/*keydown_handler*/ ctx[17]))
 				];
 
 				mounted = true;
 			}
 		},
 		p(ctx, dirty) {
-			if (dirty[0] & /*text*/ 1 && input_1.value !== /*text*/ ctx[0]) {
-				set_input_value(input_1, /*text*/ ctx[0]);
-			}
-
 			if (current_block_type === (current_block_type = select_block_type(ctx, dirty)) && if_block) {
 				if_block.p(ctx, dirty);
 			} else {
@@ -245,9 +235,9 @@ function create_fragment(ctx) {
 		o: noop,
 		d(detaching) {
 			if (detaching) detach(div);
-			/*input_1_binding*/ ctx[16](null);
+			/*span_binding*/ ctx[16](null);
 			if_block.d();
-			/*ul_binding*/ ctx[21](null);
+			/*ul_binding*/ ctx[20](null);
 			mounted = false;
 			run_all(dispose);
 		}
@@ -259,7 +249,7 @@ function instance($$self, $$props, $$invalidate) {
 	let { selectedItem } = $$props;
 	let { labelFieldName } = $$props;
 	let { searchFieldName = labelFieldName } = $$props;
-	let text;
+	let { postMarkup = str => str } = $$props;
 	let listItems = [];
 	let filteredListItems;
 	let open = false;
@@ -269,7 +259,7 @@ function instance($$self, $$props, $$invalidate) {
 	const unDecomposableMap = { ł: "l", ß: "ss", æ: "ae", ø: "o" };
 	const unDecomposableRegex = new RegExp(Object.keys(unDecomposableMap).join("|"), "g");
 	const longSubstitutionsRegex = new RegExp(Object.keys(unDecomposableMap).filter(k => unDecomposableMap[k].length > 1).join("|"), "gi");
-	const normalizeText = str => str.toLowerCase().replace(unDecomposableRegex, m => unDecomposableMap[m]).normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+	const normalizeText = str => str.toLowerCase().replace(/\s+/g, " ").replace(unDecomposableRegex, m => unDecomposableMap[m]).normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 	const startIdxAdjustment = (str, idx) => (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || []).length;
 	const endIdxAdjustment = (str, idx) => (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || []).reduce((adj, m) => adj + (unDecomposableMap[m].length - m.length), 0);
 
@@ -327,7 +317,7 @@ function instance($$self, $$props, $$invalidate) {
 		if (open) return;
 		$$invalidate(2, open = true);
 		await tick();
-		$$invalidate(0, text = "");
+		$$invalidate(4, input.innerHTML = "", input);
 		$$invalidate(1, filteredListItems = listItems);
 		activateListItem(items.indexOf(selectedItem));
 	};
@@ -336,11 +326,11 @@ function instance($$self, $$props, $$invalidate) {
 		$$invalidate(2, open = true);
 		$$invalidate(1, filteredListItems = listItems);
 		$$invalidate(3, activeListItemIndex = 0);
-		if (!text) return;
-		const filteredText = normalizeText(text.replace(/[&/\\#,+()$~%.'":*?<>{}]/g, " "));
+		if (!input.innerHTML) return;
+		const filteredText = normalizeText(input.innerHTML.replace(/[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "));
 
 		if (filteredText) {
-			const searchParts = filteredText.split(" ");
+			const searchParts = filteredText.split(" ").slice(0, 8);
 
 			$$invalidate(1, filteredListItems = listItems.filter(listItem => searchParts.every(searchPart => listItem.searchContent.includes(searchPart))).map(item => ({
 				...item,
@@ -358,9 +348,13 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const onSelectedItemChanged = () => {
-		$$invalidate(0, text = labelFieldName
-		? selectedItem[labelFieldName]
-		: selectedItem);
+		if (input) $$invalidate(
+			4,
+			input.innerHTML = postMarkup(labelFieldName
+			? selectedItem[labelFieldName]
+			: selectedItem),
+			input
+		);
 	};
 
 	const click_handler = ({ target, defaultPrevented }) => {
@@ -370,16 +364,11 @@ function instance($$self, $$props, $$invalidate) {
 		}
 	};
 
-	function input_1_binding($$value) {
+	function span_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			input = $$value;
 			$$invalidate(4, input);
 		});
-	}
-
-	function input_1_input_handler() {
-		text = this.value;
-		$$invalidate(0, text);
 	}
 
 	const keydown_handler = ({ key }) => {
@@ -406,6 +395,7 @@ function instance($$self, $$props, $$invalidate) {
 				break;
 			case "Enter":
 				selectListItem();
+				input.blur();
 				break;
 			default:
 		}
@@ -426,6 +416,7 @@ function instance($$self, $$props, $$invalidate) {
 		if ("selectedItem" in $$props) $$invalidate(11, selectedItem = $$props.selectedItem);
 		if ("labelFieldName" in $$props) $$invalidate(13, labelFieldName = $$props.labelFieldName);
 		if ("searchFieldName" in $$props) $$invalidate(14, searchFieldName = $$props.searchFieldName);
+		if ("postMarkup" in $$props) $$invalidate(0, postMarkup = $$props.postMarkup);
 	};
 
 	$$self.$$.update = () => {
@@ -440,7 +431,7 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	return [
-		text,
+		postMarkup,
 		filteredListItems,
 		open,
 		activeListItemIndex,
@@ -456,8 +447,7 @@ function instance($$self, $$props, $$invalidate) {
 		labelFieldName,
 		searchFieldName,
 		click_handler,
-		input_1_binding,
-		input_1_input_handler,
+		span_binding,
 		keydown_handler,
 		click_handler_1,
 		pointerenter_handler,
@@ -479,7 +469,8 @@ class FilteredSelect extends SvelteComponent {
 				items: 12,
 				selectedItem: 11,
 				labelFieldName: 13,
-				searchFieldName: 14
+				searchFieldName: 14,
+				postMarkup: 0
 			},
 			[-1, -1]
 		);
