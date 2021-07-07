@@ -1,13 +1,35 @@
+<style lang="scss">
+  :global(.filtered-select small) {
+    color: grey;
+    display: inline-block;
+    text-align: right;
+    margin-right: 1ch;
+
+    &:first-child {
+      width: 5ch;
+    }
+  }
+</style>
+
 <script>
   import FilteredSelect from "../ui-components/FilteredSelect.svelte";
   import catalog from "../assets/catalog.json";
 
-  export let currentRoll = catalog[Math.floor(Math.random() * catalog.length)];
+  const listItems = catalog.map((item) => ({
+    ...item,
+    _label: `${item.label.match(/^\d+/)} ${item.title} [${item.label.replace(
+      /^\d*\s?/,
+      "",
+    )}]`,
+  }));
+  export let currentRoll =
+    listItems[Math.floor(Math.random() * catalog.length)];
 </script>
 
 <FilteredSelect
-  items={catalog}
+  items={listItems}
   bind:selectedItem={currentRoll}
-  labelFieldName="title"
-  searchFieldName="title"
+  labelFieldName="_label"
+  searchFieldName="_label"
+  postMarkup={(str) => str.replace(/^\d+|\[[^\]]+\]$/g, "<small>$&</small>")}
 />
