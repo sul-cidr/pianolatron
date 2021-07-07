@@ -1,10 +1,13 @@
-<style>
+<style lang="scss">
   :global(small) {
     color: grey;
     display: inline-block;
-    width: 5ch;
     text-align: right;
     margin-right: 1ch;
+
+    &:first-child {
+      width: 5ch;
+    }
   }
 </style>
 
