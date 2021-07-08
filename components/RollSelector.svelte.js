@@ -30,6 +30,7 @@ function create_fragment(ctx) {
 		items: /*listItems*/ ctx[1],
 		labelFieldName: "_label",
 		searchFieldName: "_label",
+		facetFieldName: "type",
 		postMarkup: func
 	};
 

@@ -3,7 +3,7 @@
   border-radius: 4px;
   padding: 8px;
   position: absolute;
-  z-index: 7;
+  z-index: 8;
 }
 .overlay-buttons button {
   background: none;

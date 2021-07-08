@@ -16,8 +16,10 @@ import {
 	noop,
 	run_all,
 	safe_not_equal,
+	set_data,
 	space,
 	stop_propagation,
+	text,
 	toggle_class
 } from "../_snowpack/pkg/svelte/internal.js";
 
@@ -26,12 +28,123 @@ import { clamp } from "../utils.js";
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[30] = list[i];
-	child_ctx[32] = i;
+	child_ctx[37] = list[i];
+	child_ctx[39] = i;
 	return child_ctx;
 }
 
-// (313:4) {:else}
+function get_each_context_1(ctx, list, i) {
+	const child_ctx = ctx.slice();
+	child_ctx[40] = list[i];
+	return child_ctx;
+}
+
+// (354:6) {#if facets}
+function create_if_block_1(ctx) {
+	let ul;
+	let each_value_1 = /*facets*/ ctx[3];
+	let each_blocks = [];
+
+	for (let i = 0; i < each_value_1.length; i += 1) {
+		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+	}
+
+	return {
+		c() {
+			ul = element("ul");
+
+			for (let i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			attr(ul, "class", "svelte-1jalys9");
+		},
+		m(target, anchor) {
+			insert(target, ul, anchor);
+
+			for (let i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(ul, null);
+			}
+		},
+		p(ctx, dirty) {
+			if (dirty[0] & /*facets, activeFacet, setActiveFacet, input*/ 16584) {
+				each_value_1 = /*facets*/ ctx[3];
+				let i;
+
+				for (i = 0; i < each_value_1.length; i += 1) {
+					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+					if (each_blocks[i]) {
+						each_blocks[i].p(child_ctx, dirty);
+					} else {
+						each_blocks[i] = create_each_block_1(child_ctx);
+						each_blocks[i].c();
+						each_blocks[i].m(ul, null);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].d(1);
+				}
+
+				each_blocks.length = each_value_1.length;
+			}
+		},
+		d(detaching) {
+			if (detaching) detach(ul);
+			destroy_each(each_blocks, detaching);
+		}
+	};
+}
+
+// (356:10) {#each facets as facet}
+function create_each_block_1(ctx) {
+	let li;
+	let t0_value = /*facet*/ ctx[40] + "";
+	let t0;
+	let t1;
+	let mounted;
+	let dispose;
+
+	function click_handler_1() {
+		return /*click_handler_1*/ ctx[24](/*facet*/ ctx[40]);
+	}
+
+	return {
+		c() {
+			li = element("li");
+			t0 = text(t0_value);
+			t1 = space();
+			attr(li, "class", "svelte-1jalys9");
+			toggle_class(li, "active", /*facet*/ ctx[40] === /*activeFacet*/ ctx[6]);
+		},
+		m(target, anchor) {
+			insert(target, li, anchor);
+			append(li, t0);
+			append(li, t1);
+
+			if (!mounted) {
+				dispose = listen(li, "click", click_handler_1);
+				mounted = true;
+			}
+		},
+		p(new_ctx, dirty) {
+			ctx = new_ctx;
+			if (dirty[0] & /*facets*/ 8 && t0_value !== (t0_value = /*facet*/ ctx[40] + "")) set_data(t0, t0_value);
+
+			if (dirty[0] & /*facets, activeFacet*/ 72) {
+				toggle_class(li, "active", /*facet*/ ctx[40] === /*activeFacet*/ ctx[6]);
+			}
+		},
+		d(detaching) {
+			if (detaching) detach(li);
+			mounted = false;
+			dispose();
+		}
+	};
+}
+
+// (382:6) {:else}
 function create_else_block(ctx) {
 	let li;
 
@@ -39,7 +152,7 @@ function create_else_block(ctx) {
 		c() {
 			li = element("li");
 			li.textContent = "No results found";
-			attr(li, "class", "svelte-18jy66v");
+			attr(li, "class", "svelte-1jalys9");
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -51,10 +164,10 @@ function create_else_block(ctx) {
 	};
 }
 
-// (303:4) {#if filteredListItems?.length}
+// (372:6) {#if filteredListItems?.length}
 function create_if_block(ctx) {
 	let each_1_anchor;
-	let each_value = /*filteredListItems*/ ctx[1];
+	let each_value = /*filteredListItems*/ ctx[2];
 	let each_blocks = [];
 
 	for (let i = 0; i < each_value.length; i += 1) {
@@ -77,8 +190,8 @@ function create_if_block(ctx) {
 			insert(target, each_1_anchor, anchor);
 		},
 		p(ctx, dirty) {
-			if (dirty[0] & /*activeListItemIndex, selectListItem, filteredListItems, postMarkup*/ 75) {
-				each_value = /*filteredListItems*/ ctx[1];
+			if (dirty[0] & /*activeListItemIndex, selectListItem, filteredListItems, postMarkup*/ 1061) {
+				each_value = /*filteredListItems*/ ctx[2];
 				let i;
 
 				for (i = 0; i < each_value.length; i += 1) {
@@ -107,21 +220,21 @@ function create_if_block(ctx) {
 	};
 }
 
-// (304:6) {#each filteredListItems as listItem, i}
+// (373:8) {#each filteredListItems as listItem, i}
 function create_each_block(ctx) {
 	let li;
 	let html_tag;
-	let raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[30].markedUp || /*listItem*/ ctx[30].label) + "";
+	let raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[37].markedUp || /*listItem*/ ctx[37].label) + "";
 	let t;
 	let mounted;
 	let dispose;
 
-	function click_handler_1() {
-		return /*click_handler_1*/ ctx[18](/*listItem*/ ctx[30]);
+	function click_handler_2() {
+		return /*click_handler_2*/ ctx[25](/*listItem*/ ctx[37]);
 	}
 
 	function pointerenter_handler() {
-		return /*pointerenter_handler*/ ctx[19](/*i*/ ctx[32]);
+		return /*pointerenter_handler*/ ctx[26](/*i*/ ctx[39]);
 	}
 
 	return {
@@ -130,8 +243,8 @@ function create_each_block(ctx) {
 			html_tag = new HtmlTag();
 			t = space();
 			html_tag.a = t;
-			attr(li, "class", "svelte-18jy66v");
-			toggle_class(li, "selected", /*i*/ ctx[32] === /*activeListItemIndex*/ ctx[3]);
+			attr(li, "class", "svelte-1jalys9");
+			toggle_class(li, "selected", /*i*/ ctx[39] === /*activeListItemIndex*/ ctx[5]);
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -140,7 +253,7 @@ function create_each_block(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(li, "click", click_handler_1),
+					listen(li, "click", click_handler_2),
 					listen(li, "pointerenter", pointerenter_handler)
 				];
 
@@ -149,10 +262,10 @@ function create_each_block(ctx) {
 		},
 		p(new_ctx, dirty) {
 			ctx = new_ctx;
-			if (dirty[0] & /*postMarkup, filteredListItems*/ 3 && raw_value !== (raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[30].markedUp || /*listItem*/ ctx[30].label) + "")) html_tag.p(raw_value);
+			if (dirty[0] & /*postMarkup, filteredListItems*/ 5 && raw_value !== (raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[37].markedUp || /*listItem*/ ctx[37].label) + "")) html_tag.p(raw_value);
 
-			if (dirty[0] & /*activeListItemIndex*/ 8) {
-				toggle_class(li, "selected", /*i*/ ctx[32] === /*activeListItemIndex*/ ctx[3]);
+			if (dirty[0] & /*activeListItemIndex*/ 32) {
+				toggle_class(li, "selected", /*i*/ ctx[39] === /*activeListItemIndex*/ ctx[5]);
 			}
 		},
 		d(detaching) {
@@ -164,80 +277,132 @@ function create_each_block(ctx) {
 }
 
 function create_fragment(ctx) {
-	let div;
+	let div2;
 	let span;
-	let t;
+	let t0;
+	let div1;
+	let div0;
+	let t1;
+	let t2_value = /*filteredListItems*/ ctx[2]?.length + "";
+	let t2;
+	let t3;
+	let t4_value = /*listItems*/ ctx[1].length + "";
+	let t4;
+	let t5;
 	let ul;
 	let mounted;
 	let dispose;
+	let if_block0 = /*facets*/ ctx[3] && create_if_block_1(ctx);
 
 	function select_block_type(ctx, dirty) {
-		if (/*filteredListItems*/ ctx[1]?.length) return create_if_block;
+		if (/*filteredListItems*/ ctx[2]?.length) return create_if_block;
 		return create_else_block;
 	}
 
 	let current_block_type = select_block_type(ctx, [-1, -1]);
-	let if_block = current_block_type(ctx);
+	let if_block1 = current_block_type(ctx);
 
 	return {
 		c() {
-			div = element("div");
+			div2 = element("div");
 			span = element("span");
-			t = space();
+			t0 = space();
+			div1 = element("div");
+			div0 = element("div");
+			if (if_block0) if_block0.c();
+			t1 = text("\n      Filtered: ");
+			t2 = text(t2_value);
+			t3 = text(" / ");
+			t4 = text(t4_value);
+			t5 = space();
 			ul = element("ul");
-			if_block.c();
-			attr(span, "class", "input svelte-18jy66v");
+			if_block1.c();
+			attr(span, "class", "input svelte-1jalys9");
 			attr(span, "spellcheck", "false");
 			attr(span, "contenteditable", "true");
-			attr(ul, "class", "svelte-18jy66v");
-			toggle_class(ul, "open", /*open*/ ctx[2]);
-			attr(div, "class", "filtered-select svelte-18jy66v");
+			attr(div0, "class", "facets svelte-1jalys9");
+			attr(ul, "class", "items svelte-1jalys9");
+			toggle_class(ul, "open", /*open*/ ctx[4]);
+			attr(div1, "class", "dropdown svelte-1jalys9");
+			toggle_class(div1, "open", /*open*/ ctx[4]);
+			attr(div2, "class", "filtered-select svelte-1jalys9");
 		},
 		m(target, anchor) {
-			insert(target, div, anchor);
-			append(div, span);
-			/*span_binding*/ ctx[16](span);
-			append(div, t);
-			append(div, ul);
-			if_block.m(ul, null);
-			/*ul_binding*/ ctx[20](ul);
+			insert(target, div2, anchor);
+			append(div2, span);
+			/*span_binding*/ ctx[22](span);
+			append(div2, t0);
+			append(div2, div1);
+			append(div1, div0);
+			if (if_block0) if_block0.m(div0, null);
+			append(div0, t1);
+			append(div0, t2);
+			append(div0, t3);
+			append(div0, t4);
+			append(div1, t5);
+			append(div1, ul);
+			if_block1.m(ul, null);
+			/*ul_binding*/ ctx[27](ul);
+			/*div1_binding*/ ctx[28](div1);
 
 			if (!mounted) {
 				dispose = [
-					listen(window, "click", /*click_handler*/ ctx[15]),
-					listen(span, "input", /*search*/ ctx[9]),
-					listen(span, "focus", /*activateDropdown*/ ctx[8]),
-					listen(span, "click", /*activateDropdown*/ ctx[8]),
-					listen(span, "keydown", stop_propagation(/*keydown_handler*/ ctx[17]))
+					listen(window, "click", /*click_handler*/ ctx[21]),
+					listen(span, "input", /*search*/ ctx[13]),
+					listen(span, "focus", /*activateDropdown*/ ctx[12]),
+					listen(span, "click", /*activateDropdown*/ ctx[12]),
+					listen(span, "keydown", stop_propagation(/*keydown_handler*/ ctx[23]))
 				];
 
 				mounted = true;
 			}
 		},
 		p(ctx, dirty) {
-			if (current_block_type === (current_block_type = select_block_type(ctx, dirty)) && if_block) {
-				if_block.p(ctx, dirty);
-			} else {
-				if_block.d(1);
-				if_block = current_block_type(ctx);
+			if (/*facets*/ ctx[3]) {
+				if (if_block0) {
+					if_block0.p(ctx, dirty);
+				} else {
+					if_block0 = create_if_block_1(ctx);
+					if_block0.c();
+					if_block0.m(div0, t1);
+				}
+			} else if (if_block0) {
+				if_block0.d(1);
+				if_block0 = null;
+			}
 
-				if (if_block) {
-					if_block.c();
-					if_block.m(ul, null);
+			if (dirty[0] & /*filteredListItems*/ 4 && t2_value !== (t2_value = /*filteredListItems*/ ctx[2]?.length + "")) set_data(t2, t2_value);
+			if (dirty[0] & /*listItems*/ 2 && t4_value !== (t4_value = /*listItems*/ ctx[1].length + "")) set_data(t4, t4_value);
+
+			if (current_block_type === (current_block_type = select_block_type(ctx, dirty)) && if_block1) {
+				if_block1.p(ctx, dirty);
+			} else {
+				if_block1.d(1);
+				if_block1 = current_block_type(ctx);
+
+				if (if_block1) {
+					if_block1.c();
+					if_block1.m(ul, null);
 				}
 			}
 
-			if (dirty[0] & /*open*/ 4) {
-				toggle_class(ul, "open", /*open*/ ctx[2]);
+			if (dirty[0] & /*open*/ 16) {
+				toggle_class(ul, "open", /*open*/ ctx[4]);
+			}
+
+			if (dirty[0] & /*open*/ 16) {
+				toggle_class(div1, "open", /*open*/ ctx[4]);
 			}
 		},
 		i: noop,
 		o: noop,
 		d(detaching) {
-			if (detaching) detach(div);
-			/*span_binding*/ ctx[16](null);
-			if_block.d();
-			/*ul_binding*/ ctx[20](null);
+			if (detaching) detach(div2);
+			/*span_binding*/ ctx[22](null);
+			if (if_block0) if_block0.d();
+			if_block1.d();
+			/*ul_binding*/ ctx[27](null);
+			/*div1_binding*/ ctx[28](null);
 			mounted = false;
 			run_all(dispose);
 		}
@@ -249,12 +414,16 @@ function instance($$self, $$props, $$invalidate) {
 	let { selectedItem } = $$props;
 	let { labelFieldName } = $$props;
 	let { searchFieldName = labelFieldName } = $$props;
+	let { facetFieldName } = $$props;
 	let { postMarkup = str => str } = $$props;
 	let listItems = [];
 	let filteredListItems;
+	let facets;
 	let open = false;
 	let activeListItemIndex = -1;
+	let activeFacet;
 	let input;
+	let dropdown;
 	let list;
 	const unDecomposableMap = { ł: "l", ß: "ss", æ: "ae", ø: "o" };
 	const unDecomposableRegex = new RegExp(Object.keys(unDecomposableMap).join("|"), "g");
@@ -296,12 +465,12 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const selectListItem = (listItem = filteredListItems[activeListItemIndex]) => {
-		$$invalidate(11, selectedItem = listItem.item);
-		$$invalidate(2, open = false);
+		$$invalidate(16, selectedItem = listItem.item);
+		$$invalidate(4, open = false);
 	};
 
 	const activateListItem = async index => {
-		$$invalidate(3, activeListItemIndex = clamp(index, 0, filteredListItems.length - 1));
+		$$invalidate(5, activeListItemIndex = clamp(index, 0, filteredListItems.length - 1));
 		await tick();
 		const activeListItem = list.querySelector(".selected");
 
@@ -315,41 +484,51 @@ function instance($$self, $$props, $$invalidate) {
 
 	const activateDropdown = async () => {
 		if (open) return;
-		$$invalidate(2, open = true);
+		$$invalidate(4, open = true);
 		await tick();
-		$$invalidate(4, input.innerHTML = "", input);
-		$$invalidate(1, filteredListItems = listItems);
+		$$invalidate(7, input.innerHTML = "", input);
+		$$invalidate(6, activeFacet = undefined);
+		$$invalidate(2, filteredListItems = listItems);
 		activateListItem(items.indexOf(selectedItem));
 	};
 
 	const search = async () => {
-		$$invalidate(2, open = true);
-		$$invalidate(1, filteredListItems = listItems);
-		$$invalidate(3, activeListItemIndex = 0);
+		$$invalidate(4, open = true);
+		$$invalidate(2, filteredListItems = listItems);
+		$$invalidate(5, activeListItemIndex = 0);
+		$$invalidate(2, filteredListItems = listItems);
+		if (activeFacet) $$invalidate(2, filteredListItems = listItems.filter(listItem => listItem.item[facetFieldName] === activeFacet));
 		if (!input.innerHTML) return;
 		const filteredText = normalizeText(input.innerHTML.replace(/[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "));
 
 		if (filteredText) {
 			const searchParts = filteredText.split(" ").slice(0, 8);
 
-			$$invalidate(1, filteredListItems = listItems.filter(listItem => searchParts.every(searchPart => listItem.searchContent.includes(searchPart))).map(item => ({
+			$$invalidate(2, filteredListItems = filteredListItems.filter(listItem => searchParts.every(searchPart => listItem.searchContent.includes(searchPart))).map(item => ({
 				...item,
 				markedUp: markupMatches(item.label, item.searchContent, searchParts)
 			})));
 		}
 	};
 
+	const setActiveFacet = async facet => {
+		$$invalidate(6, activeFacet = facet === activeFacet ? undefined : facet);
+		search();
+	};
+
 	const prepareListItems = () => {
-		listItems = items.map(item => ({
+		$$invalidate(1, listItems = items.map(item => ({
 			searchContent: normalizeText(searchFieldName ? item[searchFieldName] : item),
 			label: labelFieldName ? item[labelFieldName] : item,
 			item
-		}));
+		})));
+
+		if (facetFieldName) $$invalidate(3, facets = [...new Set(items.map(item => item[facetFieldName]))]);
 	};
 
 	const onSelectedItemChanged = () => {
 		if (input) $$invalidate(
-			4,
+			7,
 			input.innerHTML = postMarkup(labelFieldName
 			? selectedItem[labelFieldName]
 			: selectedItem),
@@ -358,8 +537,8 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const click_handler = ({ target, defaultPrevented }) => {
-		if (!(list.contains(target) || input.contains(target)) && !defaultPrevented) {
-			$$invalidate(2, open = false);
+		if (!(dropdown.contains(target) || input.contains(target)) && !defaultPrevented) {
+			$$invalidate(4, open = false);
 			onSelectedItemChanged();
 		}
 	};
@@ -367,7 +546,7 @@ function instance($$self, $$props, $$invalidate) {
 	function span_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			input = $$value;
-			$$invalidate(4, input);
+			$$invalidate(7, input);
 		});
 	}
 
@@ -390,7 +569,7 @@ function instance($$self, $$props, $$invalidate) {
 				activateListItem(activeListItemIndex - 15);
 				break;
 			case "Escape":
-				if (open) $$invalidate(2, open = false);
+				if (open) $$invalidate(4, open = false);
 				onSelectedItemChanged();
 				break;
 			case "Enter":
@@ -401,57 +580,78 @@ function instance($$self, $$props, $$invalidate) {
 		}
 	};
 
-	const click_handler_1 = listItem => selectListItem(listItem);
-	const pointerenter_handler = i => $$invalidate(3, activeListItemIndex = i);
+	const click_handler_1 = facet => {
+		setActiveFacet(facet);
+		input.focus();
+	};
+
+	const click_handler_2 = listItem => selectListItem(listItem);
+	const pointerenter_handler = i => $$invalidate(5, activeListItemIndex = i);
 
 	function ul_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			list = $$value;
-			$$invalidate(5, list);
+			$$invalidate(9, list);
+		});
+	}
+
+	function div1_binding($$value) {
+		binding_callbacks[$$value ? "unshift" : "push"](() => {
+			dropdown = $$value;
+			$$invalidate(8, dropdown);
 		});
 	}
 
 	$$self.$$set = $$props => {
-		if ("items" in $$props) $$invalidate(12, items = $$props.items);
-		if ("selectedItem" in $$props) $$invalidate(11, selectedItem = $$props.selectedItem);
-		if ("labelFieldName" in $$props) $$invalidate(13, labelFieldName = $$props.labelFieldName);
-		if ("searchFieldName" in $$props) $$invalidate(14, searchFieldName = $$props.searchFieldName);
+		if ("items" in $$props) $$invalidate(17, items = $$props.items);
+		if ("selectedItem" in $$props) $$invalidate(16, selectedItem = $$props.selectedItem);
+		if ("labelFieldName" in $$props) $$invalidate(18, labelFieldName = $$props.labelFieldName);
+		if ("searchFieldName" in $$props) $$invalidate(19, searchFieldName = $$props.searchFieldName);
+		if ("facetFieldName" in $$props) $$invalidate(20, facetFieldName = $$props.facetFieldName);
 		if ("postMarkup" in $$props) $$invalidate(0, postMarkup = $$props.postMarkup);
 	};
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty[0] & /*items*/ 4096) {
+		if ($$self.$$.dirty[0] & /*items*/ 131072) {
 			/* eslint-disable no-unused-expressions, no-sequences */
 			$: (items, prepareListItems());
 		}
 
-		if ($$self.$$.dirty[0] & /*selectedItem*/ 2048) {
+		if ($$self.$$.dirty[0] & /*selectedItem*/ 65536) {
 			$: (selectedItem, onSelectedItemChanged());
 		}
 	};
 
 	return [
 		postMarkup,
+		listItems,
 		filteredListItems,
+		facets,
 		open,
 		activeListItemIndex,
+		activeFacet,
 		input,
+		dropdown,
 		list,
 		selectListItem,
 		activateListItem,
 		activateDropdown,
 		search,
+		setActiveFacet,
 		onSelectedItemChanged,
 		selectedItem,
 		items,
 		labelFieldName,
 		searchFieldName,
+		facetFieldName,
 		click_handler,
 		span_binding,
 		keydown_handler,
 		click_handler_1,
+		click_handler_2,
 		pointerenter_handler,
-		ul_binding
+		ul_binding,
+		div1_binding
 	];
 }
 
@@ -466,10 +666,11 @@ class FilteredSelect extends SvelteComponent {
 			create_fragment,
 			safe_not_equal,
 			{
-				items: 12,
-				selectedItem: 11,
-				labelFieldName: 13,
-				searchFieldName: 14,
+				items: 17,
+				selectedItem: 16,
+				labelFieldName: 18,
+				searchFieldName: 19,
+				facetFieldName: 20,
 				postMarkup: 0
 			},
 			[-1, -1]
