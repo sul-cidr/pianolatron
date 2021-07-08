@@ -143,15 +143,12 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
   import { rollMetadata, currentTick, userSettings } from "../stores";
-  import { clamp } from "../utils";
+  import { clamp, getNoteName } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
   export let holesByTickInterval;
   export let skipToTick;
-
-  const WELTE_RED_FIRST_NOTE = 24;
-  const WELTE_RED_LAST_NOTE = 103;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -167,31 +164,6 @@
   let showControls;
   let imageLength;
   let imageWidth;
-
-  const getNoteName = (midiNumber) => {
-    if (
-      midiNumber >= WELTE_RED_FIRST_NOTE &&
-      midiNumber <= WELTE_RED_LAST_NOTE
-    ) {
-      const octave = parseInt(midiNumber / 12, 10) - 1;
-      const name = [
-        "A",
-        "A#",
-        "B",
-        "C",
-        "C#",
-        "D",
-        "D#",
-        "E",
-        "F",
-        "F#",
-        "G",
-        "G#",
-      ][(midiNumber - 21) % 12];
-      return `${name}${octave}`;
-    }
-    return null;
-  };
 
   const createMark = (hole) => {
     const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey } = hole;
