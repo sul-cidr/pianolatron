@@ -177,7 +177,7 @@
           String.fromCodePoint(parseInt(num, 16)),
         );
 
-    const metadataTrack = midiSamplePlayer.events[0];
+    const [metadataTrack, ...musicTracks] = midiSamplePlayer.events;
 
     rollMetadata.set(
       Object.fromEntries(
@@ -193,7 +193,9 @@
     );
 
     tempoMap = buildTempoMap(metadataTrack);
-    pedalingMap = buildPedalingMap(midiSamplePlayer.events[1]);
+    // where two or more "music tracks" exist, pedal events are expected to have
+    //  been duplicated across tracks, so we read only from the first one.
+    pedalingMap = buildPedalingMap(musicTracks[0]);
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
