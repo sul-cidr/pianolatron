@@ -31,5 +31,6 @@
   bind:selectedItem={currentRoll}
   labelFieldName="_label"
   searchFieldName="_label"
+  facetFieldName="type"
   postMarkup={(str) => str.replace(/^\d+|\[[^\]]+\]$/g, "<small>$&</small>")}
 />

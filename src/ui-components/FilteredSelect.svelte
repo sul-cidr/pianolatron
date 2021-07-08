@@ -36,10 +36,49 @@
     width: 100%;
   }
 
-  ul {
+  div.dropdown {
+    display: none;
     background: #fff;
     border: 1px solid #999;
-    display: none;
+    position: relative;
+    width: max-content;
+    z-index: z($main-context, roll-selector-dropdown);
+
+    &.open {
+      display: block;
+    }
+  }
+
+  div.facets {
+    text-align: right;
+    padding: 5px 15px;
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+
+    ul {
+      flex: 1 0 auto;
+      margin: 0;
+      text-align: left;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      border-radius: 6px;
+      background-color: grey; // var(--primary-accent);
+      color: white;
+      padding: 1px 8px;
+      margin: 0 4px;
+      cursor: pointer;
+
+      &.active {
+        background-color: var(--primary-accent);
+      }
+    }
+  }
+
+  ul.items {
     margin: 0;
     max-height: calc(15 * (1rem + 10px) + 15px);
     min-width: 100%;
@@ -48,35 +87,30 @@
     position: relative;
     top: 0px;
     user-select: none;
-    width: max-content;
     z-index: 99;
 
-    &.open {
-      display: block;
-    }
-  }
+    li {
+      color: #333;
+      cursor: pointer;
+      line-height: 1;
+      padding: 5px 15px;
+      white-space: nowrap;
+      width: 100%;
 
-  li {
-    color: #333;
-    cursor: pointer;
-    line-height: 1;
-    padding: 5px 15px;
-    white-space: nowrap;
-    width: 100%;
+      &.selected {
+        background-color: var(--primary-accent);
+        color: #fff;
 
-    &.selected {
-      background-color: var(--primary-accent);
-      color: #fff;
+        :global(mark) {
+          color: #fff;
+        }
+      }
 
       :global(mark) {
-        color: #fff;
+        background-color: unset;
+        color: green;
+        font-weight: 700;
       }
-    }
-
-    :global(mark) {
-      background-color: unset;
-      color: green;
-      font-weight: 700;
     }
   }
 </style>
@@ -90,16 +124,20 @@
 
   export let labelFieldName;
   export let searchFieldName = labelFieldName;
+  export let facetFieldName;
 
   export let postMarkup = (str) => str;
 
   let listItems = [];
   let filteredListItems;
+  let facets;
 
   let open = false;
   let activeListItemIndex = -1;
+  let activeFacet;
 
   let input;
+  let dropdown;
   let list;
 
   const unDecomposableMap = {
@@ -209,6 +247,7 @@
     open = true;
     await tick();
     input.innerHTML = "";
+    activeFacet = undefined;
     filteredListItems = listItems;
     activateListItem(items.indexOf(selectedItem));
   };
@@ -218,7 +257,15 @@
     filteredListItems = listItems;
     activeListItemIndex = 0;
 
+    filteredListItems = listItems;
+
+    if (activeFacet)
+      filteredListItems = listItems.filter(
+        (listItem) => listItem.item[facetFieldName] === activeFacet,
+      );
+
     if (!input.innerHTML) return;
+
     const filteredText = normalizeText(
       input.innerHTML.replace(/[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );
@@ -226,7 +273,7 @@
     if (filteredText) {
       const searchParts = filteredText.split(" ").slice(0, 8);
 
-      filteredListItems = listItems
+      filteredListItems = filteredListItems
         .filter((listItem) =>
           searchParts.every((searchPart) =>
             listItem.searchContent.includes(searchPart),
@@ -239,6 +286,11 @@
     }
   };
 
+  const setActiveFacet = async (facet) => {
+    activeFacet = facet === activeFacet ? undefined : facet;
+    search();
+  };
+
   const prepareListItems = () => {
     listItems = items.map((item) => ({
       searchContent: normalizeText(
@@ -247,6 +299,8 @@
       label: labelFieldName ? item[labelFieldName] : item,
       item,
     }));
+    if (facetFieldName)
+      facets = [...new Set(items.map((item) => item[facetFieldName]))];
   };
 
   const onSelectedItemChanged = () => {
@@ -306,27 +360,47 @@
       }
     }}
   />
-  <ul class:open bind:this={list}>
-    {#if filteredListItems?.length}
-      {#each filteredListItems as listItem, i}
-        <li
-          class:selected={i === activeListItemIndex}
-          on:click={() => selectListItem(listItem)}
-          on:pointerenter={() => (activeListItemIndex = i)}
-        >
-          {@html postMarkup(listItem.markedUp || listItem.label)}
-        </li>
-      {/each}
-    {:else}
-      <li>No results found</li>
-    {/if}
-  </ul>
+  <div class="dropdown" class:open bind:this={dropdown}>
+    <div class="facets">
+      {#if facets}
+        <ul>
+          {#each facets as facet}
+            <li
+              class:active={facet === activeFacet}
+              on:click={() => {
+                setActiveFacet(facet);
+                input.focus();
+              }}
+            >
+              {facet}
+            </li>
+          {/each}
+        </ul>
+      {/if}
+      Filtered: {filteredListItems?.length} / {listItems.length}
+    </div>
+    <ul class="items" class:open bind:this={list}>
+      {#if filteredListItems?.length}
+        {#each filteredListItems as listItem, i}
+          <li
+            class:selected={i === activeListItemIndex}
+            on:click={() => selectListItem(listItem)}
+            on:pointerenter={() => (activeListItemIndex = i)}
+          >
+            {@html postMarkup(listItem.markedUp || listItem.label)}
+          </li>
+        {/each}
+      {:else}
+        <li>No results found</li>
+      {/if}
+    </ul>
+  </div>
 </div>
 
 <svelte:window
   on:click={({ target, defaultPrevented }) => {
     if (
-      !(list.contains(target) || input.contains(target)) &&
+      !(dropdown.contains(target) || input.contains(target)) &&
       !defaultPrevented
     ) {
       open = false;
