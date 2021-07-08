@@ -216,13 +216,6 @@
     return markedUp;
   };
 
-  const selectListItem = (
-    listItem = filteredListItems[activeListItemIndex],
-  ) => {
-    selectedItem = listItem.item;
-    open = false;
-  };
-
   const activateListItem = async (index) => {
     activeListItemIndex = clamp(index, 0, filteredListItems.length - 1);
 
@@ -240,16 +233,6 @@
       if (listItemBottom > listBottom) activeListItem.scrollIntoView(false);
       if (listItemTop < listTop) activeListItem.scrollIntoView();
     }
-  };
-
-  const activateDropdown = async () => {
-    if (open) return;
-    open = true;
-    await tick();
-    input.innerHTML = "";
-    activeFacet = undefined;
-    filteredListItems = listItems;
-    activateListItem(items.indexOf(selectedItem));
   };
 
   const search = async () => {
@@ -310,6 +293,32 @@
       );
   };
 
+  const activateDropdown = async () => {
+    if (open) return;
+    open = true;
+    await tick();
+    input.innerHTML = "";
+    activeFacet = undefined;
+    filteredListItems = listItems;
+    activateListItem(items.indexOf(selectedItem));
+    input.focus();
+  };
+
+  const closeDropdown = () => {
+    open = false;
+    onSelectedItemChanged();
+    input.blur();
+  };
+
+  const toggleDropdown = () => (open ? closeDropdown() : activateDropdown());
+
+  const selectListItem = (
+    listItem = filteredListItems[activeListItemIndex],
+  ) => {
+    selectedItem = listItem.item;
+    closeDropdown();
+  };
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: items, prepareListItems();
   $: selectedItem, onSelectedItemChanged();
@@ -323,7 +332,7 @@
     bind:this={input}
     on:input={search}
     on:focus={activateDropdown}
-    on:click={activateDropdown}
+    on:mousedown|preventDefault={toggleDropdown}
     on:keydown|stopPropagation={({ key }) => {
       switch (key) {
         case "ArrowDown":
@@ -347,13 +356,12 @@
           break;
 
         case "Escape":
-          if (open) open = false;
-          onSelectedItemChanged();
+          closeDropdown();
           break;
 
         case "Enter":
           selectListItem();
-          input.blur();
+          closeDropdown();
           break;
 
         default:
@@ -402,9 +410,7 @@
     if (
       !(dropdown.contains(target) || input.contains(target)) &&
       !defaultPrevented
-    ) {
-      open = false;
-      onSelectedItemChanged();
-    }
+    )
+      closeDropdown();
   }}
 />
