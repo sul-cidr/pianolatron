@@ -168,7 +168,6 @@
   };
 
   midiSamplePlayer.on("fileLoaded", () => {
-    pedalingMap = new IntervalTree();
     const decodeHtmlEntities = (string) =>
       string
         .replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num))
