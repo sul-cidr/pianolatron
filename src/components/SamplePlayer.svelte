@@ -21,6 +21,7 @@
 
   let tempoMap;
   let pedalingMap;
+  let notesMap;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -75,6 +76,7 @@
       piano.pedalUp();
       softOnOff.set(false);
     }
+
   };
 
   const updatePlayer = (fn = () => {}) => {
@@ -169,6 +171,24 @@
     return _pedalingMap;
   };
 
+  const buildNotesMap = (musicTracks) => {
+    const _notesMap = new IntervalTree();
+    musicTracks.forEach((track) => {
+      const tickOn = {};
+      track
+        .filter((event) => event.name === "Note on")
+        .forEach(({ noteNumber, velocity, tick }) => {
+          if (velocity === 0) {
+            if (noteNumber in tickOn) {
+              _notesMap.insert(tickOn[noteNumber], tick, noteNumber);
+              delete tickOn[noteNumber];
+            }
+          } else if (!(noteNumber in tickOn)) tickOn[noteNumber] = tick;
+        });
+    });
+    return _notesMap;
+  };
+
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -193,9 +213,12 @@
     );
 
     tempoMap = buildTempoMap(metadataTrack);
+
     // where two or more "music tracks" exist, pedal events are expected to have
     //  been duplicated across tracks, so we read only from the first one.
     pedalingMap = buildPedalingMap(musicTracks[0]);
+
+    notesMap = buildNotesMap(musicTracks);
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
