@@ -17,8 +17,8 @@
 
   const listItems = catalog.map((item) => ({
     ...item,
-    _label: `${item.label.match(/^\d+/)} ${item.title} [${item.label.replace(
-      /^\d*\s?/,
+    _label: `${item.label.match(/^[\d.]+/)} ${item.title} [${item.label.replace(
+      /^[\d.]+\s?/,
       "",
     )}]`,
   }));
@@ -32,5 +32,5 @@
   labelFieldName="_label"
   searchFieldName="_label"
   facetFieldName="type"
-  postMarkup={(str) => str.replace(/^\d+|\[[^\]]+\]$/g, "<small>$&</small>")}
+  postMarkup={(str) => str.replace(/^[\d.]+|\[[^\]]+\]$/g, "<small>$&</small>")}
 />
