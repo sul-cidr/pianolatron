@@ -21,7 +21,7 @@ const createSetStore = () => {
         wrappedSet.delete(el);
         return wrappedSet;
       }),
-    reset: () => set(new Set()),
+    reset: (newValue) => set(new Set(newValue)),
   };
 };
 
