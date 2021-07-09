@@ -75,6 +75,9 @@
       softOnOff.set(false);
     }
 
+    if (notesMap) {
+      activeNotes.reset(notesMap.search($currentTick, $currentTick));
+    }
   };
 
   const updatePlayer = (fn = () => {}) => {
