@@ -130,7 +130,6 @@
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
     $currentTick = tick;
-    activeNotes.reset();
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 
