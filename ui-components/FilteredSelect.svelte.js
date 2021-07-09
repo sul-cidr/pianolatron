@@ -14,6 +14,7 @@ import {
 	insert,
 	listen,
 	noop,
+	prevent_default,
 	run_all,
 	safe_not_equal,
 	set_data,
@@ -28,18 +29,18 @@ import { clamp } from "../utils.js";
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[37] = list[i];
-	child_ctx[39] = i;
+	child_ctx[39] = list[i];
+	child_ctx[41] = i;
 	return child_ctx;
 }
 
 function get_each_context_1(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[40] = list[i];
+	child_ctx[42] = list[i];
 	return child_ctx;
 }
 
-// (354:6) {#if facets}
+// (362:6) {#if facets}
 function create_if_block_1(ctx) {
 	let ul;
 	let each_value_1 = /*facets*/ ctx[3];
@@ -67,7 +68,7 @@ function create_if_block_1(ctx) {
 			}
 		},
 		p(ctx, dirty) {
-			if (dirty[0] & /*facets, activeFacet, setActiveFacet, input*/ 16584) {
+			if (dirty[0] & /*facets, activeFacet, setActiveFacet, input*/ 4296) {
 				each_value_1 = /*facets*/ ctx[3];
 				let i;
 
@@ -97,17 +98,17 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (356:10) {#each facets as facet}
+// (364:10) {#each facets as facet}
 function create_each_block_1(ctx) {
 	let li;
-	let t0_value = /*facet*/ ctx[40] + "";
+	let t0_value = /*facet*/ ctx[42] + "";
 	let t0;
 	let t1;
 	let mounted;
 	let dispose;
 
 	function click_handler_1() {
-		return /*click_handler_1*/ ctx[24](/*facet*/ ctx[40]);
+		return /*click_handler_1*/ ctx[25](/*facet*/ ctx[42]);
 	}
 
 	return {
@@ -116,7 +117,7 @@ function create_each_block_1(ctx) {
 			t0 = text(t0_value);
 			t1 = space();
 			attr(li, "class", "svelte-1jalys9");
-			toggle_class(li, "active", /*facet*/ ctx[40] === /*activeFacet*/ ctx[6]);
+			toggle_class(li, "active", /*facet*/ ctx[42] === /*activeFacet*/ ctx[6]);
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -130,10 +131,10 @@ function create_each_block_1(ctx) {
 		},
 		p(new_ctx, dirty) {
 			ctx = new_ctx;
-			if (dirty[0] & /*facets*/ 8 && t0_value !== (t0_value = /*facet*/ ctx[40] + "")) set_data(t0, t0_value);
+			if (dirty[0] & /*facets*/ 8 && t0_value !== (t0_value = /*facet*/ ctx[42] + "")) set_data(t0, t0_value);
 
 			if (dirty[0] & /*facets, activeFacet*/ 72) {
-				toggle_class(li, "active", /*facet*/ ctx[40] === /*activeFacet*/ ctx[6]);
+				toggle_class(li, "active", /*facet*/ ctx[42] === /*activeFacet*/ ctx[6]);
 			}
 		},
 		d(detaching) {
@@ -144,7 +145,7 @@ function create_each_block_1(ctx) {
 	};
 }
 
-// (382:6) {:else}
+// (390:6) {:else}
 function create_else_block(ctx) {
 	let li;
 
@@ -164,7 +165,7 @@ function create_else_block(ctx) {
 	};
 }
 
-// (372:6) {#if filteredListItems?.length}
+// (380:6) {#if filteredListItems?.length}
 function create_if_block(ctx) {
 	let each_1_anchor;
 	let each_value = /*filteredListItems*/ ctx[2];
@@ -190,7 +191,7 @@ function create_if_block(ctx) {
 			insert(target, each_1_anchor, anchor);
 		},
 		p(ctx, dirty) {
-			if (dirty[0] & /*activeListItemIndex, selectListItem, filteredListItems, postMarkup*/ 1061) {
+			if (dirty[0] & /*activeListItemIndex, selectListItem, filteredListItems, postMarkup*/ 65573) {
 				each_value = /*filteredListItems*/ ctx[2];
 				let i;
 
@@ -220,21 +221,21 @@ function create_if_block(ctx) {
 	};
 }
 
-// (373:8) {#each filteredListItems as listItem, i}
+// (381:8) {#each filteredListItems as listItem, i}
 function create_each_block(ctx) {
 	let li;
 	let html_tag;
-	let raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[37].markedUp || /*listItem*/ ctx[37].label) + "";
+	let raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[39].markedUp || /*listItem*/ ctx[39].label) + "";
 	let t;
 	let mounted;
 	let dispose;
 
 	function click_handler_2() {
-		return /*click_handler_2*/ ctx[25](/*listItem*/ ctx[37]);
+		return /*click_handler_2*/ ctx[26](/*listItem*/ ctx[39]);
 	}
 
 	function pointerenter_handler() {
-		return /*pointerenter_handler*/ ctx[26](/*i*/ ctx[39]);
+		return /*pointerenter_handler*/ ctx[27](/*i*/ ctx[41]);
 	}
 
 	return {
@@ -244,7 +245,7 @@ function create_each_block(ctx) {
 			t = space();
 			html_tag.a = t;
 			attr(li, "class", "svelte-1jalys9");
-			toggle_class(li, "selected", /*i*/ ctx[39] === /*activeListItemIndex*/ ctx[5]);
+			toggle_class(li, "selected", /*i*/ ctx[41] === /*activeListItemIndex*/ ctx[5]);
 		},
 		m(target, anchor) {
 			insert(target, li, anchor);
@@ -262,10 +263,10 @@ function create_each_block(ctx) {
 		},
 		p(new_ctx, dirty) {
 			ctx = new_ctx;
-			if (dirty[0] & /*postMarkup, filteredListItems*/ 5 && raw_value !== (raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[37].markedUp || /*listItem*/ ctx[37].label) + "")) html_tag.p(raw_value);
+			if (dirty[0] & /*postMarkup, filteredListItems*/ 5 && raw_value !== (raw_value = /*postMarkup*/ ctx[0](/*listItem*/ ctx[39].markedUp || /*listItem*/ ctx[39].label) + "")) html_tag.p(raw_value);
 
 			if (dirty[0] & /*activeListItemIndex*/ 32) {
-				toggle_class(li, "selected", /*i*/ ctx[39] === /*activeListItemIndex*/ ctx[5]);
+				toggle_class(li, "selected", /*i*/ ctx[41] === /*activeListItemIndex*/ ctx[5]);
 			}
 		},
 		d(detaching) {
@@ -330,7 +331,7 @@ function create_fragment(ctx) {
 		m(target, anchor) {
 			insert(target, div2, anchor);
 			append(div2, span);
-			/*span_binding*/ ctx[22](span);
+			/*span_binding*/ ctx[23](span);
 			append(div2, t0);
 			append(div2, div1);
 			append(div1, div0);
@@ -342,16 +343,16 @@ function create_fragment(ctx) {
 			append(div1, t5);
 			append(div1, ul);
 			if_block1.m(ul, null);
-			/*ul_binding*/ ctx[27](ul);
-			/*div1_binding*/ ctx[28](div1);
+			/*ul_binding*/ ctx[28](ul);
+			/*div1_binding*/ ctx[29](div1);
 
 			if (!mounted) {
 				dispose = [
-					listen(window, "click", /*click_handler*/ ctx[21]),
-					listen(span, "input", /*search*/ ctx[13]),
-					listen(span, "focus", /*activateDropdown*/ ctx[12]),
-					listen(span, "click", /*activateDropdown*/ ctx[12]),
-					listen(span, "keydown", stop_propagation(/*keydown_handler*/ ctx[23]))
+					listen(window, "click", /*click_handler*/ ctx[22]),
+					listen(span, "input", /*search*/ ctx[11]),
+					listen(span, "focus", /*activateDropdown*/ ctx[13]),
+					listen(span, "mousedown", prevent_default(/*toggleDropdown*/ ctx[15])),
+					listen(span, "keydown", stop_propagation(/*keydown_handler*/ ctx[24]))
 				];
 
 				mounted = true;
@@ -398,11 +399,11 @@ function create_fragment(ctx) {
 		o: noop,
 		d(detaching) {
 			if (detaching) detach(div2);
-			/*span_binding*/ ctx[22](null);
+			/*span_binding*/ ctx[23](null);
 			if (if_block0) if_block0.d();
 			if_block1.d();
-			/*ul_binding*/ ctx[27](null);
-			/*div1_binding*/ ctx[28](null);
+			/*ul_binding*/ ctx[28](null);
+			/*div1_binding*/ ctx[29](null);
 			mounted = false;
 			run_all(dispose);
 		}
@@ -464,11 +465,6 @@ function instance($$self, $$props, $$invalidate) {
 		return markedUp;
 	};
 
-	const selectListItem = (listItem = filteredListItems[activeListItemIndex]) => {
-		$$invalidate(16, selectedItem = listItem.item);
-		$$invalidate(4, open = false);
-	};
-
 	const activateListItem = async index => {
 		$$invalidate(5, activeListItemIndex = clamp(index, 0, filteredListItems.length - 1));
 		await tick();
@@ -480,16 +476,6 @@ function instance($$self, $$props, $$invalidate) {
 			if (listItemBottom > listBottom) activeListItem.scrollIntoView(false);
 			if (listItemTop < listTop) activeListItem.scrollIntoView();
 		}
-	};
-
-	const activateDropdown = async () => {
-		if (open) return;
-		$$invalidate(4, open = true);
-		await tick();
-		$$invalidate(7, input.innerHTML = "", input);
-		$$invalidate(6, activeFacet = undefined);
-		$$invalidate(2, filteredListItems = listItems);
-		activateListItem(items.indexOf(selectedItem));
 	};
 
 	const search = async () => {
@@ -536,11 +522,32 @@ function instance($$self, $$props, $$invalidate) {
 		);
 	};
 
+	const activateDropdown = async () => {
+		if (open) return;
+		$$invalidate(4, open = true);
+		await tick();
+		$$invalidate(7, input.innerHTML = "", input);
+		$$invalidate(6, activeFacet = undefined);
+		$$invalidate(2, filteredListItems = listItems);
+		activateListItem(items.indexOf(selectedItem));
+		input.focus();
+	};
+
+	const closeDropdown = () => {
+		$$invalidate(4, open = false);
+		onSelectedItemChanged();
+		input.blur();
+	};
+
+	const toggleDropdown = () => open ? closeDropdown() : activateDropdown();
+
+	const selectListItem = (listItem = filteredListItems[activeListItemIndex]) => {
+		$$invalidate(17, selectedItem = listItem.item);
+		closeDropdown();
+	};
+
 	const click_handler = ({ target, defaultPrevented }) => {
-		if (!(dropdown.contains(target) || input.contains(target)) && !defaultPrevented) {
-			$$invalidate(4, open = false);
-			onSelectedItemChanged();
-		}
+		if (!(dropdown.contains(target) || input.contains(target)) && !defaultPrevented) closeDropdown();
 	};
 
 	function span_binding($$value) {
@@ -569,12 +576,11 @@ function instance($$self, $$props, $$invalidate) {
 				activateListItem(activeListItemIndex - 15);
 				break;
 			case "Escape":
-				if (open) $$invalidate(4, open = false);
-				onSelectedItemChanged();
+				closeDropdown();
 				break;
 			case "Enter":
 				selectListItem();
-				input.blur();
+				closeDropdown();
 				break;
 			default:
 		}
@@ -603,21 +609,21 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$set = $$props => {
-		if ("items" in $$props) $$invalidate(17, items = $$props.items);
-		if ("selectedItem" in $$props) $$invalidate(16, selectedItem = $$props.selectedItem);
-		if ("labelFieldName" in $$props) $$invalidate(18, labelFieldName = $$props.labelFieldName);
-		if ("searchFieldName" in $$props) $$invalidate(19, searchFieldName = $$props.searchFieldName);
-		if ("facetFieldName" in $$props) $$invalidate(20, facetFieldName = $$props.facetFieldName);
+		if ("items" in $$props) $$invalidate(18, items = $$props.items);
+		if ("selectedItem" in $$props) $$invalidate(17, selectedItem = $$props.selectedItem);
+		if ("labelFieldName" in $$props) $$invalidate(19, labelFieldName = $$props.labelFieldName);
+		if ("searchFieldName" in $$props) $$invalidate(20, searchFieldName = $$props.searchFieldName);
+		if ("facetFieldName" in $$props) $$invalidate(21, facetFieldName = $$props.facetFieldName);
 		if ("postMarkup" in $$props) $$invalidate(0, postMarkup = $$props.postMarkup);
 	};
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty[0] & /*items*/ 131072) {
+		if ($$self.$$.dirty[0] & /*items*/ 262144) {
 			/* eslint-disable no-unused-expressions, no-sequences */
 			$: (items, prepareListItems());
 		}
 
-		if ($$self.$$.dirty[0] & /*selectedItem*/ 65536) {
+		if ($$self.$$.dirty[0] & /*selectedItem*/ 131072) {
 			$: (selectedItem, onSelectedItemChanged());
 		}
 	};
@@ -633,12 +639,13 @@ function instance($$self, $$props, $$invalidate) {
 		input,
 		dropdown,
 		list,
-		selectListItem,
 		activateListItem,
-		activateDropdown,
 		search,
 		setActiveFacet,
-		onSelectedItemChanged,
+		activateDropdown,
+		closeDropdown,
+		toggleDropdown,
+		selectListItem,
 		selectedItem,
 		items,
 		labelFieldName,
@@ -666,11 +673,11 @@ class FilteredSelect extends SvelteComponent {
 			create_fragment,
 			safe_not_equal,
 			{
-				items: 17,
-				selectedItem: 16,
-				labelFieldName: 18,
-				searchFieldName: 19,
-				facetFieldName: 20,
+				items: 18,
+				selectedItem: 17,
+				labelFieldName: 19,
+				searchFieldName: 20,
+				facetFieldName: 21,
 				postMarkup: 0
 			},
 			[-1, -1]

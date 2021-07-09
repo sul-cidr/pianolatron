@@ -52,7 +52,7 @@ function create_fragment(ctx) {
 			button0.textContent = "Play/Pause";
 			t1 = space();
 			button1 = element("button");
-			button1.textContent = "Stop";
+			button1.textContent = "Rewind";
 			t3 = space();
 			button2 = element("button");
 			t4 = text("Soft\n    ");

@@ -75,12 +75,12 @@ function create_fragment(ctx) {
 	};
 }
 
-const func = str => str.replace(/^\d+|\[[^\]]+\]$/g, "<small>$&</small>");
+const func = str => str.replace(/^[\d.]+|\[[^\]]+\]$/g, "<small>$&</small>");
 
 function instance($$self, $$props, $$invalidate) {
 	const listItems = catalog.map(item => ({
 		...item,
-		_label: `${item.label.match(/^\d+/)} ${item.title} [${item.label.replace(/^\d*\s?/, "")}]`
+		_label: `${item.label.match(/^[\d.]+/)} ${item.title} [${item.label.replace(/^[\d.]+\s?/, "")}]`
 	}));
 
 	let { currentRoll = listItems[Math.floor(Math.random() * catalog.length)] } = $$props;
