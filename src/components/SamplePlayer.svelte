@@ -201,7 +201,7 @@
 
   midiSamplePlayer.on(
     "midiEvent",
-    ({ name, value, number, noteNumber, velocity, data }) => {
+    ({ name, value, number, noteNumber, velocity }) => {
       if (name === "Note on") {
         if (velocity === 0) {
           stopNote(noteNumber);
@@ -216,8 +216,6 @@
         } else if (number === SOFT_PEDAL) {
           softOnOff.set(!!value);
         }
-      } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-        midiSamplePlayer.setTempo(data * $tempoCoefficient);
       }
     },
   );
