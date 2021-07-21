@@ -408,6 +408,7 @@
 <svelte:window
   on:click={({ target, defaultPrevented }) => {
     if (
+      open &&
       !(dropdown.contains(target) || input.contains(target)) &&
       !defaultPrevented
     )
