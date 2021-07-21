@@ -411,4 +411,7 @@
       closeDropdown();
     }
   }}
+  on:keydown|stopPropagation={({ key }) => {
+    if (open && key === "Escape") closeDropdown();
+  }}
 />
