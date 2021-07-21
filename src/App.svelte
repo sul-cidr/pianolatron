@@ -76,6 +76,8 @@
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
+  import catalog from "./assets/catalog.json";
+
   let appReady = false;
   let mididataReady;
   let metadataReady;
@@ -200,6 +202,13 @@
       startPlayback,
       resetPlayback,
     } = samplePlayer);
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("druid")) {
+      const druid = params.get("druid");
+      const roll = catalog.find((r) => r.druid === druid);
+      if (roll !== undefined) currentRoll = roll;
+    }
   });
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
