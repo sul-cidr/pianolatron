@@ -406,12 +406,9 @@
 </div>
 
 <svelte:window
-  on:click={({ target, defaultPrevented }) => {
-    if (
-      open &&
-      !(dropdown.contains(target) || input.contains(target)) &&
-      !defaultPrevented
-    )
+  on:click={({ target }) => {
+    if (open && !(dropdown.contains(target) || input.contains(target))) {
       closeDropdown();
+    }
   }}
 />
