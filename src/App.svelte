@@ -96,6 +96,14 @@
   let startPlayback;
   let resetPlayback;
 
+  const rollListItems = catalog.map((item) => ({
+    ...item,
+    _label: `${item.label.match(/^[\d.]+/)} ${item.title} [${item.label.replace(
+      /^[\d.]+\s?/,
+      "",
+    )}]`,
+  }));
+
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
     return {
@@ -211,8 +219,11 @@
     const params = new URLSearchParams(window.location.search);
     if (params.has("druid")) {
       const druid = params.get("druid");
-      const roll = catalog.find((r) => r.druid === druid);
+      const roll = rollListItems.find((r) => r.druid === druid);
       if (roll !== undefined) currentRoll = roll;
+    } else {
+      currentRoll =
+        rollListItems[Math.floor(Math.random() * rollListItems.length)];
     }
   });
 
@@ -225,7 +236,7 @@
 <div id="app">
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw">
-      <RollSelector bind:currentRoll />
+      <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails />
         {#if !holesByTickInterval.count}
