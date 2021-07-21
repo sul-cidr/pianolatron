@@ -76,6 +76,8 @@
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
+  import catalog from "./assets/catalog.json";
+
   let appReady = false;
   let mididataReady;
   let metadataReady;
@@ -93,6 +95,14 @@
   let pausePlayback;
   let startPlayback;
   let resetPlayback;
+
+  const rollListItems = catalog.map((item) => ({
+    ...item,
+    _label: `${item.label.match(/^[\d.]+/)} ${item.title} [${item.label.replace(
+      /^[\d.]+\s?/,
+      "",
+    )}]`,
+  }));
 
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
@@ -185,6 +195,11 @@
           buildHolesIntervalTree(metadataJson.holeData);
         appReady = true;
         previousRoll = currentRoll;
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
+          params.set("druid", currentRoll.druid);
+          window.location.search = params.toString();
+        }
       },
     );
   };
@@ -200,6 +215,16 @@
       startPlayback,
       resetPlayback,
     } = samplePlayer);
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("druid")) {
+      const druid = params.get("druid");
+      const roll = rollListItems.find((r) => r.druid === druid);
+      if (roll !== undefined) currentRoll = roll;
+    } else {
+      currentRoll =
+        rollListItems[Math.floor(Math.random() * rollListItems.length)];
+    }
   });
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
@@ -211,7 +236,7 @@
 <div id="app">
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw">
-      <RollSelector bind:currentRoll />
+      <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails />
         {#if !holesByTickInterval.count}

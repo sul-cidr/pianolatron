@@ -13,21 +13,13 @@
 
 <script>
   import FilteredSelect from "../ui-components/FilteredSelect.svelte";
-  import catalog from "../assets/catalog.json";
 
-  const listItems = catalog.map((item) => ({
-    ...item,
-    _label: `${item.label.match(/^[\d.]+/)} ${item.title} [${item.label.replace(
-      /^[\d.]+\s?/,
-      "",
-    )}]`,
-  }));
-  export let currentRoll =
-    listItems[Math.floor(Math.random() * catalog.length)];
+  export let rollListItems;
+  export let currentRoll;
 </script>
 
 <FilteredSelect
-  items={listItems}
+  items={rollListItems}
   bind:selectedItem={currentRoll}
   labelFieldName="_label"
   searchFieldName="_label"
