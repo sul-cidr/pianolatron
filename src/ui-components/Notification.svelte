@@ -42,6 +42,7 @@
     margin: 0;
     padding: 0.25em;
   }
+
   .close {
     align-items: center;
     border-left: 1px solid rgba(0, 0, 0, 0.2);
@@ -67,6 +68,8 @@
       {/if}
       <p>{$NotificationStore.message}</p>
     </section>
-    <div class="close" on:click={() => NotificationStore.set()}>&times;</div>
+    {#if $NotificationStore.closable !== false}
+      <div class="close" on:click={() => NotificationStore.set()}>&times;</div>
+    {/if}
   </div>
 {/if}
