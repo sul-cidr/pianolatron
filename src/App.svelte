@@ -197,8 +197,9 @@
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
-          params.set("druid", currentRoll.druid);
-          window.location.search = params.toString();
+          const url = new URL(window.location);
+          url.searchParams.set("druid", currentRoll.druid);
+          window.history.pushState({}, "", url);
         }
       },
     );
