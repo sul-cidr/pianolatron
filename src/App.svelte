@@ -199,24 +199,13 @@
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
           const url = new URL(window.location);
           url.searchParams.set("druid", currentRoll.druid);
-          window.history.pushState({}, "", url);
+          window.history.pushState({ roll: currentRoll }, "", url);
         }
       },
     );
   };
 
-  onMount(async () => {
-    ({
-      midiSamplePlayer,
-      pianoReady,
-      updatePlayer,
-      startNote,
-      stopNote,
-      pausePlayback,
-      startPlayback,
-      resetPlayback,
-    } = samplePlayer);
-
+  const setCurrentRollFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has("druid")) {
       const druid = params.get("druid");
@@ -236,6 +225,21 @@
       currentRoll =
         rollListItems[Math.floor(Math.random() * rollListItems.length)];
     }
+  };
+
+  onMount(async () => {
+    ({
+      midiSamplePlayer,
+      pianoReady,
+      updatePlayer,
+      startNote,
+      stopNote,
+      pausePlayback,
+      startPlayback,
+      resetPlayback,
+    } = samplePlayer);
+
+    setCurrentRollFromUrl();
   });
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
@@ -293,3 +297,8 @@
 <SamplePlayer bind:this={samplePlayer} />
 <KeyboardShortcuts />
 <Notification />
+
+<svelte:window
+  on:popstate={({ state }) =>
+    state?.roll ? (currentRoll = state.roll) : setCurrentRollFromUrl()}
+/>
