@@ -15,7 +15,6 @@ import {
 } from "../_snowpack/pkg/svelte/internal.js";
 
 import FilteredSelect from "../ui-components/FilteredSelect.svelte.js";
-import catalog from "../assets/catalog.json.proxy.js";
 
 function create_fragment(ctx) {
 	let filteredselect;
@@ -27,7 +26,7 @@ function create_fragment(ctx) {
 	}
 
 	let filteredselect_props = {
-		items: /*listItems*/ ctx[1],
+		items: /*rollListItems*/ ctx[1],
 		labelFieldName: "_label",
 		searchFieldName: "_label",
 		facetFieldName: "type",
@@ -51,6 +50,7 @@ function create_fragment(ctx) {
 		},
 		p(ctx, [dirty]) {
 			const filteredselect_changes = {};
+			if (dirty & /*rollListItems*/ 2) filteredselect_changes.items = /*rollListItems*/ ctx[1];
 
 			if (!updating_selectedItem && dirty & /*currentRoll*/ 1) {
 				updating_selectedItem = true;
@@ -78,12 +78,8 @@ function create_fragment(ctx) {
 const func = str => str.replace(/^[\d.]+|\[[^\]]+\]$/g, "<small>$&</small>");
 
 function instance($$self, $$props, $$invalidate) {
-	const listItems = catalog.map(item => ({
-		...item,
-		_label: `${item.label.match(/^[\d.]+/)} ${item.title} [${item.label.replace(/^[\d.]+\s?/, "")}]`
-	}));
-
-	let { currentRoll = listItems[Math.floor(Math.random() * catalog.length)] } = $$props;
+	let { rollListItems } = $$props;
+	let { currentRoll } = $$props;
 
 	function filteredselect_selectedItem_binding(value) {
 		currentRoll = value;
@@ -91,16 +87,17 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$set = $$props => {
+		if ("rollListItems" in $$props) $$invalidate(1, rollListItems = $$props.rollListItems);
 		if ("currentRoll" in $$props) $$invalidate(0, currentRoll = $$props.currentRoll);
 	};
 
-	return [currentRoll, listItems, filteredselect_selectedItem_binding];
+	return [currentRoll, rollListItems, filteredselect_selectedItem_binding];
 }
 
 class RollSelector extends SvelteComponent {
 	constructor(options) {
 		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { currentRoll: 0 });
+		init(this, options, instance, create_fragment, safe_not_equal, { rollListItems: 1, currentRoll: 0 });
 	}
 }
 
