@@ -220,7 +220,17 @@
     if (params.has("druid")) {
       const druid = params.get("druid");
       const roll = rollListItems.find((r) => r.druid === druid);
-      if (roll !== undefined) currentRoll = roll;
+      if (roll !== undefined) {
+        currentRoll = roll;
+      } else {
+        notify({
+          title: "DRUID not found!",
+          message:
+            "Please check the specified DRUID, or <a href='/'>click here to continue</a>.",
+          type: "error",
+          closable: false,
+        });
+      }
     } else {
       currentRoll =
         rollListItems[Math.floor(Math.random() * rollListItems.length)];
