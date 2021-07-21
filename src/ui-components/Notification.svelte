@@ -17,6 +17,11 @@
       border-left-width: 6px;
       color: white;
 
+      :global(a) {
+        color: white;
+        font-weight: bold;
+      }
+
       .close {
         color: white;
         border-left-color: rgba(255, 255, 255, 0.5);
@@ -66,7 +71,7 @@
       {#if $NotificationStore.title}
         <header>{$NotificationStore.title}</header>
       {/if}
-      <p>{$NotificationStore.message}</p>
+      <p>{@html $NotificationStore.message}</p>
     </section>
     {#if $NotificationStore.closable !== false}
       <div class="close" on:click={() => NotificationStore.set()}>&times;</div>
