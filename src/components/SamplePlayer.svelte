@@ -62,6 +62,8 @@
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
+    if (midiSamplePlayer.tracks[0])
+      midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
     midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
 
     if (pedalingMap && $rollPedalingOnOff) {
