@@ -302,6 +302,7 @@
       maxZoomLevel,
       constrainDuringPan: true,
       preserveImageSizeOnResize: true,
+      gestureSettingsMouse: { clickToZoom: false },
     });
 
     ({ viewport } = openSeadragon);

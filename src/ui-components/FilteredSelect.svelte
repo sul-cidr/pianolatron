@@ -406,11 +406,12 @@
 </div>
 
 <svelte:window
-  on:click={({ target, defaultPrevented }) => {
-    if (
-      !(dropdown.contains(target) || input.contains(target)) &&
-      !defaultPrevented
-    )
+  on:click={({ target }) => {
+    if (open && !(dropdown.contains(target) || input.contains(target))) {
       closeDropdown();
+    }
+  }}
+  on:keydown|stopPropagation={({ key }) => {
+    if (open && key === "Escape") closeDropdown();
   }}
 />

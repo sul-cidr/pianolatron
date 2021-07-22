@@ -197,11 +197,34 @@
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
-          params.set("druid", currentRoll.druid);
-          window.location.search = params.toString();
+          const url = new URL(window.location);
+          url.searchParams.set("druid", currentRoll.druid);
+          window.history.pushState({ roll: currentRoll }, "", url);
         }
       },
     );
+  };
+
+  const setCurrentRollFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("druid")) {
+      const druid = params.get("druid");
+      const roll = rollListItems.find((r) => r.druid === druid);
+      if (roll !== undefined) {
+        currentRoll = roll;
+      } else {
+        notify({
+          title: "DRUID not found!",
+          message:
+            "Please check the specified DRUID, or <a href='/'>click here to continue</a>.",
+          type: "error",
+          closable: false,
+        });
+      }
+    } else {
+      currentRoll =
+        rollListItems[Math.floor(Math.random() * rollListItems.length)];
+    }
   };
 
   onMount(async () => {
@@ -216,15 +239,7 @@
       resetPlayback,
     } = samplePlayer);
 
-    const params = new URLSearchParams(window.location.search);
-    if (params.has("druid")) {
-      const druid = params.get("druid");
-      const roll = rollListItems.find((r) => r.druid === druid);
-      if (roll !== undefined) currentRoll = roll;
-    } else {
-      currentRoll =
-        rollListItems[Math.floor(Math.random() * rollListItems.length)];
-    }
+    setCurrentRollFromUrl();
   });
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
@@ -282,3 +297,8 @@
 <SamplePlayer bind:this={samplePlayer} />
 <KeyboardShortcuts />
 <Notification />
+
+<svelte:window
+  on:popstate={({ state }) =>
+    state?.roll ? (currentRoll = state.roll) : setCurrentRollFromUrl()}
+/>
