@@ -654,6 +654,12 @@ function create_bidirectional_transition(node, fn, params, intro) {
     };
 }
 
+const globals = (typeof window !== 'undefined'
+    ? window
+    : typeof globalThis !== 'undefined'
+        ? globalThis
+        : global);
+
 function bind(component, name, callback) {
     const index = component.$$.props[name];
     if (index !== undefined) {
@@ -790,4 +796,4 @@ class SvelteComponent {
     }
 }
 
-export { destroy_each as A, listen as B, null_to_empty as C, run_all as D, text as E, toggle_class as F, set_data as G, prevent_default as H, set_style as I, subscribe as J, svg_element as K, is_function as L, HtmlTag as M, stop_propagation as N, create_slot as O, update_slot as P, bubble as Q, set_input_value as R, SvelteComponent as S, to_number as T, get_store_value as U, identity as V, add_flush_callback as a, add_render_callback as b, append as c, attr as d, bind as e, binding_callbacks as f, check_outros as g, component_subscribe as h, create_bidirectional_transition as i, create_component as j, destroy_component as k, detach as l, element as m, empty as n, onMount as o, group_outros as p, init as q, insert as r, mount_component as s, tick as t, noop as u, safe_not_equal as v, set_store_value as w, space as x, transition_in as y, transition_out as z };
+export { transition_in as A, transition_out as B, destroy_each as C, null_to_empty as D, run_all as E, text as F, toggle_class as G, set_data as H, prevent_default as I, set_style as J, subscribe as K, svg_element as L, is_function as M, HtmlTag as N, stop_propagation as O, create_slot as P, update_slot as Q, bubble as R, SvelteComponent as S, set_input_value as T, to_number as U, get_store_value as V, identity as W, add_flush_callback as a, add_render_callback as b, append as c, attr as d, bind as e, binding_callbacks as f, check_outros as g, component_subscribe as h, create_bidirectional_transition as i, create_component as j, destroy_component as k, detach as l, element as m, empty as n, onMount as o, globals as p, group_outros as q, init as r, insert as s, tick as t, listen as u, mount_component as v, noop as w, safe_not_equal as x, set_store_value as y, space as z };

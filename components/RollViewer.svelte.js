@@ -73,7 +73,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (354:2) {#if showControls}
+// (355:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
@@ -375,7 +375,8 @@ function instance($$self, $$props, $$invalidate) {
 			minZoomLevel,
 			maxZoomLevel,
 			constrainDuringPan: true,
-			preserveImageSizeOnResize: true
+			preserveImageSizeOnResize: true,
+			gestureSettingsMouse: { clickToZoom: false }
 		}));
 
 		({ viewport } = openSeadragon);

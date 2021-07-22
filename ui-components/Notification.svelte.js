@@ -21,81 +21,82 @@ import {
 import { writable } from "../_snowpack/pkg/svelte/store.js";
 
 function create_if_block(ctx) {
-	let div1;
+	let div;
 	let section;
 	let t0;
 	let p;
-	let t1_value = /*$NotificationStore*/ ctx[0].message + "";
+	let raw_value = /*$NotificationStore*/ ctx[0].message + "";
 	let t1;
-	let t2;
-	let div0;
-	let div1_class_value;
-	let mounted;
-	let dispose;
-	let if_block = /*$NotificationStore*/ ctx[0].title && create_if_block_1(ctx);
+	let div_class_value;
+	let if_block0 = /*$NotificationStore*/ ctx[0].title && create_if_block_2(ctx);
+	let if_block1 = /*$NotificationStore*/ ctx[0].closable !== false && create_if_block_1(ctx);
 
 	return {
 		c() {
-			div1 = element("div");
+			div = element("div");
 			section = element("section");
-			if (if_block) if_block.c();
+			if (if_block0) if_block0.c();
 			t0 = space();
 			p = element("p");
-			t1 = text(t1_value);
-			t2 = space();
-			div0 = element("div");
-			div0.textContent = "×";
-			attr(p, "class", "svelte-1uabz64");
-			attr(section, "class", "svelte-1uabz64");
-			attr(div0, "class", "close svelte-1uabz64");
-			attr(div1, "class", div1_class_value = "notification " + (/*$NotificationStore*/ ctx[0].type || "default") + " svelte-1uabz64");
+			t1 = space();
+			if (if_block1) if_block1.c();
+			attr(p, "class", "svelte-1j2pchn");
+			attr(section, "class", "svelte-1j2pchn");
+			attr(div, "class", div_class_value = "notification " + (/*$NotificationStore*/ ctx[0].type || "default") + " svelte-1j2pchn");
 		},
 		m(target, anchor) {
-			insert(target, div1, anchor);
-			append(div1, section);
-			if (if_block) if_block.m(section, null);
+			insert(target, div, anchor);
+			append(div, section);
+			if (if_block0) if_block0.m(section, null);
 			append(section, t0);
 			append(section, p);
-			append(p, t1);
-			append(div1, t2);
-			append(div1, div0);
-
-			if (!mounted) {
-				dispose = listen(div0, "click", /*click_handler*/ ctx[1]);
-				mounted = true;
-			}
+			p.innerHTML = raw_value;
+			append(div, t1);
+			if (if_block1) if_block1.m(div, null);
 		},
 		p(ctx, dirty) {
 			if (/*$NotificationStore*/ ctx[0].title) {
-				if (if_block) {
-					if_block.p(ctx, dirty);
+				if (if_block0) {
+					if_block0.p(ctx, dirty);
 				} else {
-					if_block = create_if_block_1(ctx);
-					if_block.c();
-					if_block.m(section, t0);
+					if_block0 = create_if_block_2(ctx);
+					if_block0.c();
+					if_block0.m(section, t0);
 				}
-			} else if (if_block) {
-				if_block.d(1);
-				if_block = null;
+			} else if (if_block0) {
+				if_block0.d(1);
+				if_block0 = null;
 			}
 
-			if (dirty & /*$NotificationStore*/ 1 && t1_value !== (t1_value = /*$NotificationStore*/ ctx[0].message + "")) set_data(t1, t1_value);
+			if (dirty & /*$NotificationStore*/ 1 && raw_value !== (raw_value = /*$NotificationStore*/ ctx[0].message + "")) p.innerHTML = raw_value;;
 
-			if (dirty & /*$NotificationStore*/ 1 && div1_class_value !== (div1_class_value = "notification " + (/*$NotificationStore*/ ctx[0].type || "default") + " svelte-1uabz64")) {
-				attr(div1, "class", div1_class_value);
+			if (/*$NotificationStore*/ ctx[0].closable !== false) {
+				if (if_block1) {
+					if_block1.p(ctx, dirty);
+				} else {
+					if_block1 = create_if_block_1(ctx);
+					if_block1.c();
+					if_block1.m(div, null);
+				}
+			} else if (if_block1) {
+				if_block1.d(1);
+				if_block1 = null;
+			}
+
+			if (dirty & /*$NotificationStore*/ 1 && div_class_value !== (div_class_value = "notification " + (/*$NotificationStore*/ ctx[0].type || "default") + " svelte-1j2pchn")) {
+				attr(div, "class", div_class_value);
 			}
 		},
 		d(detaching) {
-			if (detaching) detach(div1);
-			if (if_block) if_block.d();
-			mounted = false;
-			dispose();
+			if (detaching) detach(div);
+			if (if_block0) if_block0.d();
+			if (if_block1) if_block1.d();
 		}
 	};
 }
 
-// (62:6) {#if $NotificationStore.title}
-function create_if_block_1(ctx) {
+// (66:6) {#if $NotificationStore.title}
+function create_if_block_2(ctx) {
 	let header;
 	let t_value = /*$NotificationStore*/ ctx[0].title + "";
 	let t;
@@ -104,7 +105,7 @@ function create_if_block_1(ctx) {
 		c() {
 			header = element("header");
 			t = text(t_value);
-			attr(header, "class", "svelte-1uabz64");
+			attr(header, "class", "svelte-1j2pchn");
 		},
 		m(target, anchor) {
 			insert(target, header, anchor);
@@ -115,6 +116,35 @@ function create_if_block_1(ctx) {
 		},
 		d(detaching) {
 			if (detaching) detach(header);
+		}
+	};
+}
+
+// (71:4) {#if $NotificationStore.closable !== false}
+function create_if_block_1(ctx) {
+	let div;
+	let mounted;
+	let dispose;
+
+	return {
+		c() {
+			div = element("div");
+			div.textContent = "×";
+			attr(div, "class", "close svelte-1j2pchn");
+		},
+		m(target, anchor) {
+			insert(target, div, anchor);
+
+			if (!mounted) {
+				dispose = listen(div, "click", /*click_handler*/ ctx[1]);
+				mounted = true;
+			}
+		},
+		p: noop,
+		d(detaching) {
+			if (detaching) detach(div);
+			mounted = false;
+			dispose();
 		}
 	};
 }
