@@ -96,13 +96,13 @@
   let startPlayback;
   let resetPlayback;
 
-  const rollListItems = catalog.map((item) => ({
-    ...item,
-    _label: `${item.label.match(/^[\d.]+/)} ${item.title} [${item.label.replace(
-      /^[\d.]+\s?/,
-      "",
-    )}]`,
-  }));
+  const rollListItems = catalog.map((item) => {
+    const [number, label] = item.label.split(" ");
+    return {
+      ...item,
+      _label: `${number} ${item.title}${label ? ` [${label}]` : ""}`,
+    };
+  });
 
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
