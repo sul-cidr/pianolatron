@@ -30,7 +30,10 @@
 
   onMount(() => {
     openSeadragon.addHandler("zoom", onZoom);
-    return () => openSeadragon.removeHandler("zoom", onZoom);
+    return () => {
+      openSeadragon.removeHandler("zoom", onZoom);
+      panInterval?.clear();
+    };
   });
 </script>
 
