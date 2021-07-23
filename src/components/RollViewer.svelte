@@ -303,6 +303,13 @@
       constrainDuringPan: true,
       preserveImageSizeOnResize: true,
       gestureSettingsMouse: { clickToZoom: false },
+      showNavigator: true,
+      navigatorAutoFade: false,
+      navigatorPosition: "ABSOLUTE",
+      navigatorTop: "0px",
+      navigatorLeft: "calc(100% - 40px)",
+      navigatorHeight: "100%",
+      navigatorWidth: "40px",
     });
 
     ({ viewport } = openSeadragon);
