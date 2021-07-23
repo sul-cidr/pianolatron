@@ -333,7 +333,7 @@
   const panByIncrement = (up = true) => {
     const viewportBounds = viewport.getBounds();
     const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
-    const delta = up ? imgBounds.height / 10 : -imgBounds.height / 10;
+    const delta = up ? imgBounds.height / 100 : -imgBounds.height / 100;
     const centerY = imgBounds.y + imgBounds.height / 2;
     skipToTick(
       scrollDownwards
