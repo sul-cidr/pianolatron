@@ -146,4 +146,4 @@
     </svg>
   </button>
 </div>
-<svelte:window on:mouseup={() => panInterval.clear()} />
+<svelte:window on:mouseup={() => panInterval?.clear()} />
