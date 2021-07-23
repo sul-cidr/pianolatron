@@ -3,6 +3,8 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
 
+  import { easingInterval } from "../utils";
+
   export let openSeadragon;
   export let maxZoomLevel;
   export let minZoomLevel;
@@ -101,7 +103,7 @@
     disabled={false}
     on:mousedown={() => {
       panByIncrement(false);
-      panInterval = setInterval(() => panByIncrement(false), 10);
+      panInterval = easingInterval(200, () => panByIncrement(false));
     }}
   >
     <svg
@@ -124,7 +126,7 @@
     disabled={false}
     on:mousedown={() => {
       panByIncrement(true);
-      panInterval = setInterval(() => panByIncrement(true), 10);
+      panInterval = easingInterval(200, () => panByIncrement(true));
     }}
   >
     <svg
@@ -144,4 +146,4 @@
     </svg>
   </button>
 </div>
-<svelte:window on:mouseup={() => clearInterval(panInterval)} />
+<svelte:window on:mouseup={() => panInterval.clear()} />
