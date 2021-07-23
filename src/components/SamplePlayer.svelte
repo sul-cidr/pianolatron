@@ -62,6 +62,8 @@
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
+    if (midiSamplePlayer.tracks[0])
+      midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
     midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
 
     if (pedalingMap && $rollPedalingOnOff) {
@@ -201,7 +203,7 @@
 
   midiSamplePlayer.on(
     "midiEvent",
-    ({ name, value, number, noteNumber, velocity, data }) => {
+    ({ name, value, number, noteNumber, velocity }) => {
       if (name === "Note on") {
         if (velocity === 0) {
           stopNote(noteNumber);
@@ -216,8 +218,6 @@
         } else if (number === SOFT_PEDAL) {
           softOnOff.set(!!value);
         }
-      } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-        midiSamplePlayer.setTempo(data * $tempoCoefficient);
       }
     },
   );
