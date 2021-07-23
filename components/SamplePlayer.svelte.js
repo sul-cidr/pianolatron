@@ -94,6 +94,7 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const setPlayerStateAtTick = (tick = $currentTick) => {
+		if (midiSamplePlayer.tracks[0]) $$invalidate(0, midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff, midiSamplePlayer);
 		midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
 
 		if (pedalingMap && $rollPedalingOnOff) {
@@ -206,7 +207,7 @@ function instance($$self, $$props, $$invalidate) {
 		if (tick <= midiSamplePlayer.totalTicks) currentTick.set(tick);
 	});
 
-	midiSamplePlayer.on("midiEvent", ({ name, value, number, noteNumber, velocity, data }) => {
+	midiSamplePlayer.on("midiEvent", ({ name, value, number, noteNumber, velocity }) => {
 		if (name === "Note on") {
 			if (velocity === 0) {
 				stopNote(noteNumber);
@@ -221,8 +222,6 @@ function instance($$self, $$props, $$invalidate) {
 			} else if (number === SOFT_PEDAL) {
 				softOnOff.set(!!value);
 			}
-		} else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-			midiSamplePlayer.setTempo(data * $tempoCoefficient);
 		}
 	});
 

@@ -19,6 +19,7 @@ import {
 import { onMount } from "../_snowpack/pkg/svelte.js";
 import { fade } from "../_snowpack/pkg/svelte/transition.js";
 import OpenSeadragon from "../_snowpack/pkg/openseadragon.js";
+import { easingInterval } from "../utils.js";
 
 function create_fragment(ctx) {
 	let div0;
@@ -240,10 +241,14 @@ function instance($$self, $$props, $$invalidate) {
 
 	onMount(() => {
 		openSeadragon.addHandler("zoom", onZoom);
-		return () => openSeadragon.removeHandler("zoom", onZoom);
+
+		return () => {
+			openSeadragon.removeHandler("zoom", onZoom);
+			panInterval?.clear();
+		};
 	});
 
-	const mouseup_handler = () => clearInterval(panInterval);
+	const mouseup_handler = () => panInterval?.clear();
 	const click_handler = () => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel));
 	const click_handler_1 = () => viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel));
 
@@ -254,12 +259,12 @@ function instance($$self, $$props, $$invalidate) {
 
 	const mousedown_handler = () => {
 		panByIncrement(false);
-		$$invalidate(3, panInterval = setInterval(() => panByIncrement(false), 100));
+		$$invalidate(3, panInterval = easingInterval(200, () => panByIncrement(false)));
 	};
 
 	const mousedown_handler_1 = () => {
 		panByIncrement(true);
-		$$invalidate(3, panInterval = setInterval(() => panByIncrement(true), 100));
+		$$invalidate(3, panInterval = easingInterval(200, () => panByIncrement(true)));
 	};
 
 	$$self.$$set = $$props => {
