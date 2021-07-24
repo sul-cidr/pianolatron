@@ -48,19 +48,20 @@ function instance($$self, $$props, $$invalidate) {
 	let $sustainOnOff;
 	let $activeNotes;
 	component_subscribe($$self, useMidiTempoEventsOnOff, $$value => $$invalidate(8, $useMidiTempoEventsOnOff = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(14, $currentTick = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(15, $currentTick = $$value));
 	component_subscribe($$self, tempoCoefficient, $$value => $$invalidate(9, $tempoCoefficient = $$value));
 	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(10, $rollPedalingOnOff = $$value));
-	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(15, $playExpressionsOnOff = $$value));
-	component_subscribe($$self, softOnOff, $$value => $$invalidate(16, $softOnOff = $$value));
-	component_subscribe($$self, accentOnOff, $$value => $$invalidate(17, $accentOnOff = $$value));
-	component_subscribe($$self, volumeCoefficient, $$value => $$invalidate(18, $volumeCoefficient = $$value));
-	component_subscribe($$self, bassVolumeCoefficient, $$value => $$invalidate(19, $bassVolumeCoefficient = $$value));
-	component_subscribe($$self, trebleVolumeCoefficient, $$value => $$invalidate(20, $trebleVolumeCoefficient = $$value));
+	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(16, $playExpressionsOnOff = $$value));
+	component_subscribe($$self, softOnOff, $$value => $$invalidate(17, $softOnOff = $$value));
+	component_subscribe($$self, accentOnOff, $$value => $$invalidate(18, $accentOnOff = $$value));
+	component_subscribe($$self, volumeCoefficient, $$value => $$invalidate(19, $volumeCoefficient = $$value));
+	component_subscribe($$self, bassVolumeCoefficient, $$value => $$invalidate(20, $bassVolumeCoefficient = $$value));
+	component_subscribe($$self, trebleVolumeCoefficient, $$value => $$invalidate(21, $trebleVolumeCoefficient = $$value));
 	component_subscribe($$self, sustainOnOff, $$value => $$invalidate(11, $sustainOnOff = $$value));
-	component_subscribe($$self, activeNotes, $$value => $$invalidate(21, $activeNotes = $$value));
+	component_subscribe($$self, activeNotes, $$value => $$invalidate(22, $activeNotes = $$value));
 	let tempoMap;
 	let pedalingMap;
+	let notesMap;
 	const midiSamplePlayer = new MidiPlayer.Player();
 
 	const piano = new Piano({
@@ -105,6 +106,10 @@ function instance($$self, $$props, $$invalidate) {
 			sustainOnOff.set(false);
 			piano.pedalUp();
 			softOnOff.set(false);
+		}
+
+		if (notesMap) {
+			activeNotes.reset(notesMap.search($currentTick, $currentTick));
 		}
 	};
 
@@ -194,13 +199,36 @@ function instance($$self, $$props, $$invalidate) {
 		return _pedalingMap;
 	};
 
+	const buildNotesMap = musicTracks => {
+		const _notesMap = new IntervalTree();
+
+		musicTracks.forEach(track => {
+			const tickOn = {};
+
+			track.filter(event => event.name === "Note on").forEach(({ noteNumber, velocity, tick }) => {
+				if (velocity === 0) {
+					if (noteNumber in tickOn) {
+						_notesMap.insert(tickOn[noteNumber], tick, noteNumber);
+						delete tickOn[noteNumber];
+					}
+				} else if (!(noteNumber in tickOn)) tickOn[noteNumber] = tick;
+			});
+		});
+
+		return _notesMap;
+	};
+
 	midiSamplePlayer.on("fileLoaded", () => {
-		pedalingMap = new IntervalTree();
 		const decodeHtmlEntities = string => string.replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num)).replace(/&#x([A-Za-z0-9]+);/g, (match, num) => String.fromCodePoint(parseInt(num, 16)));
-		const metadataTrack = midiSamplePlayer.events[0];
+		const [metadataTrack, ...musicTracks] = midiSamplePlayer.events;
 		rollMetadata.set(Object.fromEntries(metadataTrack.filter(event => event.name === "Text Event").map(event => event.string.match(/^@([^:]*):[\t\s]*(.*)$/).slice(1, 3).map(decodeHtmlEntities))));
 		tempoMap = buildTempoMap(metadataTrack);
-		pedalingMap = buildPedalingMap(midiSamplePlayer.events[1]);
+
+		// where two or more "music tracks" exist, pedal events are expected to have
+		//  been duplicated across tracks, so we read only from the first one.
+		pedalingMap = buildPedalingMap(musicTracks[0]);
+
+		notesMap = buildNotesMap(musicTracks);
 	});
 
 	midiSamplePlayer.on("playing", ({ tick }) => {
