@@ -21,6 +21,7 @@
 
   let tempoMap;
   let pedalingMap;
+  let notesMap;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -74,6 +75,10 @@
       sustainOnOff.set(false);
       piano.pedalUp();
       softOnOff.set(false);
+    }
+
+    if (notesMap) {
+      activeNotes.reset(notesMap.search($currentTick, $currentTick));
     }
   };
 
@@ -169,8 +174,25 @@
     return _pedalingMap;
   };
 
+  const buildNotesMap = (musicTracks) => {
+    const _notesMap = new IntervalTree();
+    musicTracks.forEach((track) => {
+      const tickOn = {};
+      track
+        .filter((event) => event.name === "Note on")
+        .forEach(({ noteNumber, velocity, tick }) => {
+          if (velocity === 0) {
+            if (noteNumber in tickOn) {
+              _notesMap.insert(tickOn[noteNumber], tick, noteNumber);
+              delete tickOn[noteNumber];
+            }
+          } else if (!(noteNumber in tickOn)) tickOn[noteNumber] = tick;
+        });
+    });
+    return _notesMap;
+  };
+
   midiSamplePlayer.on("fileLoaded", () => {
-    pedalingMap = new IntervalTree();
     const decodeHtmlEntities = (string) =>
       string
         .replace(/&#(\d+);/g, (match, num) => String.fromCodePoint(num))
@@ -178,7 +200,7 @@
           String.fromCodePoint(parseInt(num, 16)),
         );
 
-    const metadataTrack = midiSamplePlayer.events[0];
+    const [metadataTrack, ...musicTracks] = midiSamplePlayer.events;
 
     rollMetadata.set(
       Object.fromEntries(
@@ -194,7 +216,12 @@
     );
 
     tempoMap = buildTempoMap(metadataTrack);
-    pedalingMap = buildPedalingMap(midiSamplePlayer.events[1]);
+
+    // where two or more "music tracks" exist, pedal events are expected to have
+    //  been duplicated across tracks, so we read only from the first one.
+    pedalingMap = buildPedalingMap(musicTracks[0]);
+
+    notesMap = buildNotesMap(musicTracks);
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
