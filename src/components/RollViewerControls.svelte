@@ -106,7 +106,7 @@
     disabled={false}
     on:mousedown={() => {
       panByIncrement(false);
-      panInterval = easingInterval(() => panByIncrement(false), 200);
+      panInterval = easingInterval(() => panByIncrement(false));
     }}
   >
     <svg
@@ -129,7 +129,7 @@
     disabled={false}
     on:mousedown={() => {
       panByIncrement(true);
-      panInterval = easingInterval(() => panByIncrement(true), 200);
+      panInterval = easingInterval(() => panByIncrement(true));
     }}
   >
     <svg

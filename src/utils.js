@@ -33,8 +33,8 @@ export const getNoteName = (midiNumber) => {
 export const easingInterval = (
   fn,
   startInterval = 200,
-  endInterval = 10,
-  divisor = 1.2,
+  endInterval = 5,
+  divisor = 1.1,
 ) => {
   let timeoutId;
   let interval = startInterval;
