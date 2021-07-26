@@ -28,6 +28,18 @@
     position: relative;
     flex: 1 0 auto;
     grid-area: center;
+    margin-bottom: 2em;
+  }
+
+  #indicators {
+    align-items: center;
+    bottom: 0;
+    display: flex;
+    grid-area: center;
+    height: 2em;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
   }
 
   :global(#right-sidebar) {
@@ -71,6 +83,7 @@
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
   import RollViewer from "./components/RollViewer.svelte";
+  import Indicators from "./components/Indicators.svelte";
   import Keyboard from "./components/Keyboard.svelte";
   import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
@@ -316,6 +329,9 @@
           <Keyboard keyCount="88" {startNote} {stopNote} />
         </div>
       {/if}
+    </div>
+    <div id="indicators">
+      <Indicators />
     </div>
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
       <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
