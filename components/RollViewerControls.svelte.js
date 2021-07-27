@@ -259,12 +259,12 @@ function instance($$self, $$props, $$invalidate) {
 
 	const mousedown_handler = () => {
 		panByIncrement(false);
-		$$invalidate(3, panInterval = easingInterval(200, () => panByIncrement(false)));
+		$$invalidate(3, panInterval = easingInterval(() => panByIncrement(false)));
 	};
 
 	const mousedown_handler_1 = () => {
 		panByIncrement(true);
-		$$invalidate(3, panInterval = easingInterval(200, () => panByIncrement(true)));
+		$$invalidate(3, panInterval = easingInterval(() => panByIncrement(true)));
 	};
 
 	$$self.$$set = $$props => {
