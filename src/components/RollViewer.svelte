@@ -310,9 +310,44 @@
       navigatorLeft: "calc(100% - 40px)",
       navigatorHeight: "100%",
       navigatorWidth: "40px",
+      navigatorDisplayRegionColor: "white",
     });
 
     ({ viewport } = openSeadragon);
+
+    openSeadragon.navigator.update = function navUpdate(mainViewport) {
+      // reimplemented based on
+      // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
+
+      const {
+        viewport: navViewport,
+        displayRegion: { style },
+        world,
+        totalBorderWidths,
+      } = this;
+
+      if (mainViewport && navViewport) {
+        const bounds = viewport.getBoundsNoRotate(true);
+
+        const topleft = navViewport.pixelFromPointNoRotate(
+          bounds.getTopLeft(),
+          false,
+        );
+        const bottomright = navViewport
+          .pixelFromPointNoRotate(bounds.getBottomRight(), false)
+          .minus(totalBorderWidths);
+
+        style.display = world.getItemCount() ? "block" : "none";
+        style.backgroundColor = "rgba(255,255,255,.6)";
+        style.boxShadow = "0 0 4px var(--primary-accent)";
+
+        style.top = `${Math.round(topleft.y)}px`;
+        style.left = "0px";
+
+        style.width = "100%"; // Math.round(Math.max(width, 0)) + "px";
+        style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
+      }
+    };
 
     openSeadragon.addOnceHandler("update-viewport", () => {
       createHolesOverlaySvg();
