@@ -30,13 +30,17 @@ export const getNoteName = (midiNumber) => {
   return null;
 };
 
-export const easingInterval = (interval, fn) => {
+export const easingInterval = (
+  fn,
+  startInterval = 200,
+  endInterval = 5,
+  divisor = 1.1,
+) => {
   let timeoutId;
-
+  let interval = startInterval;
   const wrapped = () => {
     fn();
-    // eslint-disable-next-line no-param-reassign
-    interval = Math.max(Math.floor(interval / 1.2), 10);
+    interval = Math.max(Math.floor(interval / divisor), endInterval);
     timeoutId = setTimeout(wrapped, interval);
   };
 
