@@ -143,7 +143,7 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
   import { rollMetadata, currentTick, userSettings } from "../stores";
-  import { clamp, getNoteName } from "../utils";
+  import { clamp, getNoteLabel } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
@@ -168,8 +168,7 @@
   const createMark = (hole) => {
     const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey } = hole;
     const mark = document.createElement("mark");
-    const noteName = getNoteName(midiKey);
-    if (noteName) mark.dataset.info = noteName;
+    mark.dataset.info = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);

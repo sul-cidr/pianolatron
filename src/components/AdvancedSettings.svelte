@@ -87,7 +87,7 @@
   <fieldset>
     <legend>Visualization Settings</legend>
     <div>
-      Show details for Active Notes:
+      Show Details for Active Notes:
       <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
     </div>
   </fieldset>
