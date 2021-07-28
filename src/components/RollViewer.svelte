@@ -357,15 +357,15 @@
       createHolesOverlaySvg();
       advanceToTick(0);
     });
-    openSeadragon.addHandler("canvas-drag", () => {
+    openSeadragon.addHandler("canvas-drag", () => (strafing = true));
+    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
+    openSeadragon.addHandler("pan", () => {
       const viewportCenter = viewport.getCenter(false);
       const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
       skipToTick(
         scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
       );
-      strafing = true;
     });
-    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
     openSeadragon.addHandler("open", () => {
       const tiledImage = viewport.viewer.world.getItemAt(0);
       tiledImage.addOnceHandler(
