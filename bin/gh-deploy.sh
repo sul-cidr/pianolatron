@@ -28,6 +28,8 @@ git fetch --force origin "$DEPLOY_BRANCH":"$DEPLOY_BRANCH";
 git symbolic-ref HEAD refs/heads/"$DEPLOY_BRANCH";
 touch "$BUILD_FOLDER/.nojekyll";
 
+echo "pianolatron.stanford.edu" > "$BUILD_FOLDER/CNAME";
+
 git --work-tree "$BUILD_FOLDER" reset --mixed --quiet;
 git --work-tree "$BUILD_FOLDER" add --all;
 
