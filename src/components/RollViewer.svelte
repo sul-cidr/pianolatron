@@ -315,6 +315,16 @@
 
     ({ viewport } = openSeadragon);
 
+    // Override some styles that OSD sets directly on the elements
+    openSeadragon.navigator.displayRegion.style.display = "block";
+    openSeadragon.navigator.displayRegion.style.left = "0";
+    openSeadragon.navigator.displayRegion.style.width = "100%";
+
+    openSeadragon.navigator.displayRegion.style.backgroundColor =
+      "rgba(255 255 255 / .6)";
+    openSeadragon.navigator.displayRegion.style.boxShadow =
+      "0 0 4px var(--primary-accent)";
+
     openSeadragon.navigator.update = function navUpdate(mainViewport) {
       // reimplemented based on
       // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
@@ -322,13 +332,11 @@
       const {
         viewport: navViewport,
         displayRegion: { style },
-        world,
         totalBorderWidths,
       } = this;
 
       if (mainViewport && navViewport) {
         const bounds = viewport.getBoundsNoRotate(true);
-
         const topleft = navViewport.pixelFromPointNoRotate(
           bounds.getTopLeft(),
           false,
@@ -337,14 +345,7 @@
           .pixelFromPointNoRotate(bounds.getBottomRight(), false)
           .minus(totalBorderWidths);
 
-        style.display = world.getItemCount() ? "block" : "none";
-        style.backgroundColor = "rgba(255,255,255,.6)";
-        style.boxShadow = "0 0 4px var(--primary-accent)";
-
         style.top = `${Math.round(topleft.y)}px`;
-        style.left = "0px";
-
-        style.width = "100%"; // Math.round(Math.max(width, 0)) + "px";
         style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
       }
     };
