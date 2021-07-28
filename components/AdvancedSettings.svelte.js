@@ -125,7 +125,7 @@ function create_fragment(ctx) {
 			legend0.textContent = "Visualization Settings";
 			t1 = space();
 			div0 = element("div");
-			t2 = text("Show details for Active Notes:\n      ");
+			t2 = text("Show Details for Active Notes:\n      ");
 			input0 = element("input");
 			t3 = space();
 			fieldset1 = element("fieldset");

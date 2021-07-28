@@ -33,7 +33,7 @@ import { onMount } from "../_snowpack/pkg/svelte.js";
 import { fade } from "../_snowpack/pkg/svelte/transition.js";
 import OpenSeadragon from "../_snowpack/pkg/openseadragon.js";
 import { rollMetadata, currentTick, userSettings } from "../stores.js";
-import { clamp, getNoteName } from "../utils.js";
+import { clamp, getNoteLabel } from "../utils.js";
 import RollViewerControls from "./RollViewerControls.svelte.js";
 
 function create_if_block_1(ctx) {
@@ -73,7 +73,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (327:2) {#if showControls}
+// (326:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
@@ -247,7 +247,7 @@ function instance($$self, $$props, $$invalidate) {
 	let $rollMetadata;
 	let $currentTick;
 	let $userSettings;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(10, $rollMetadata = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(9, $rollMetadata = $$value));
 	component_subscribe($$self, currentTick, $$value => $$invalidate(11, $currentTick = $$value));
 	component_subscribe($$self, userSettings, $$value => $$invalidate(4, $userSettings = $$value));
 	let { imageUrl } = $$props;
@@ -267,8 +267,7 @@ function instance($$self, $$props, $$invalidate) {
 	const createMark = hole => {
 		const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey } = hole;
 		const mark = document.createElement("mark");
-		const noteName = getNoteName(midiKey);
-		if (noteName) mark.dataset.info = noteName;
+		mark.dataset.info = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
 
 		mark.addEventListener("mouseout", () => {
 			if (!marks.map(([_hole]) => _hole).includes(hole)) viewport.viewer.removeOverlay(hoveredMark);
@@ -436,15 +435,15 @@ function instance($$self, $$props, $$invalidate) {
 			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
-			$: $$invalidate(9, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		if ($$self.$$.dirty & /*$rollMetadata*/ 512) {
+			$: $$invalidate(10, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
+		if ($$self.$$.dirty & /*$rollMetadata*/ 512) {
 			$: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
+		if ($$self.$$.dirty & /*$rollMetadata*/ 512) {
 			$: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
 		}
 
@@ -465,8 +464,8 @@ function instance($$self, $$props, $$invalidate) {
 		imageUrl,
 		holesByTickInterval,
 		skipToTick,
-		scrollDownwards,
 		$rollMetadata,
+		scrollDownwards,
 		$currentTick,
 		rollviewercontrols_strafing_binding,
 		mouseenter_handler,
