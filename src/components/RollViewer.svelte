@@ -310,12 +310,13 @@
       navigatorLeft: "calc(100% - 40px)",
       navigatorHeight: "100%",
       navigatorWidth: "40px",
-      navigatorDisplayRegionColor: "white",
+      navigatorDisplayRegionColor: "transparent",
     });
 
     ({ viewport } = openSeadragon);
 
     // Override some styles that OSD sets directly on the elements
+    openSeadragon.navigator.element.style.border = "none";
     openSeadragon.navigator.displayRegion.style.display = "block";
     openSeadragon.navigator.displayRegion.style.left = "0";
     openSeadragon.navigator.displayRegion.style.width = "100%";
