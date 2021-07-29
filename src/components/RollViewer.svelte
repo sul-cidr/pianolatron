@@ -63,6 +63,7 @@
     animatePan,
     playExpressionsOnOff,
     rollPedalingOnOff,
+    playbackProgress,
   } from "../stores";
   import {
     clamp,
@@ -157,6 +158,7 @@
       }
     });
   };
+  let osdNavDisplayRegion;
 
   const createMark = (hole) => {
     const {
@@ -270,6 +272,7 @@
     );
 
     viewport.panTo(lineCenter, !$animatePan);
+    osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
   };
 
   const highlightHoles = (tick) => {
@@ -315,11 +318,14 @@
 
     ({ viewport } = openSeadragon);
 
+    osdNavDisplayRegion = openSeadragon.navigator.displayRegion;
+
     // Override some styles that OSD sets directly on the elements
     openSeadragon.navigator.element.style.border = "none";
     openSeadragon.navigator.element.parentElement.style.backgroundColor =
       "#666";
     openSeadragon.navigator.displayRegion.style.display = "block";
+    openSeadragon.navigator.displayRegion.style.overflow = "visible";
     openSeadragon.navigator.displayRegion.style.left = "0";
     openSeadragon.navigator.displayRegion.style.width = "100%";
 
