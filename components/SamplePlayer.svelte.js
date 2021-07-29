@@ -235,7 +235,7 @@ function instance($$self, $$props, $$invalidate) {
 		if (tick <= midiSamplePlayer.totalTicks) currentTick.set(tick);
 	});
 
-	midiSamplePlayer.on("midiEvent", ({ name, value, number, noteNumber, velocity }) => {
+	midiSamplePlayer.on("midiEvent", ({ name, value, number, noteNumber, velocity, data }) => {
 		if (name === "Note on") {
 			if (velocity === 0) {
 				stopNote(noteNumber);
@@ -250,6 +250,8 @@ function instance($$self, $$props, $$invalidate) {
 			} else if (number === SOFT_PEDAL) {
 				softOnOff.set(!!value);
 			}
+		} else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
+			midiSamplePlayer.setTempo(data * $tempoCoefficient);
 		}
 	});
 
