@@ -1970,8 +1970,6 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isFastBuffer(obj.slice(0, 0))
 }
 
-var require$$0 = {};
-
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -2014,7 +2012,7 @@ function _createClass(Constructor, protoProps, staticProps) {
  * Constants used in player.
  */
 var Constants = {
-  VERSION: '2.0.13',
+  VERSION: '2.0.14',
   NOTES: [],
   HEADER_CHUNK_LENGTH: 14,
   CIRCLE_OF_FOURTHS: ['C', 'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb', 'Fb', 'Bbb', 'Ebb', 'Abb'],
@@ -2691,10 +2689,9 @@ var Player = /*#__PURE__*/function () {
   _createClass(Player, [{
     key: "loadFile",
     value: function loadFile(path) {
-      var fs = require$$0;
-
-      this.buffer = fs.readFileSync(path);
-      return this.fileLoaded();
+      {
+        throw 'loadFile is only supported on Node.js';
+      }
     }
     /**
      * Load an array buffer into the player.
@@ -3263,6 +3260,4 @@ var index = {
   Constants: Constants
 };
 
-var build = index;
-
-export default build;
+export default index;

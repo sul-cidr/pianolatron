@@ -1,6 +1,6 @@
 import { c as createCommonjsModule, a as commonjsGlobal } from '../common/_commonjsHelpers-8c19dec8.js';
 
-const version = "14.7.58";
+const version = "14.7.77";
 
 const createExtendedExponentialRampToValueAutomationEvent = (value, endTime, insertTime) => {
     return { endTime, insertTime, type: 'exponentialRampToValue', value };
@@ -214,16 +214,16 @@ class AutomationEventList {
         if (this._automationEvents.length === 0) {
             return this._defaultValue;
         }
-        const lastAutomationEvent = this._automationEvents[this._automationEvents.length - 1];
-        const index = this._automationEvents.findIndex((automationEvent) => getEventTime(automationEvent) > time);
-        const nextAutomationEvent = this._automationEvents[index];
-        const currentAutomationEvent = getEventTime(lastAutomationEvent) <= time ? lastAutomationEvent : this._automationEvents[index - 1];
+        const indexOfNextEvent = this._automationEvents.findIndex((automationEvent) => getEventTime(automationEvent) > time);
+        const nextAutomationEvent = this._automationEvents[indexOfNextEvent];
+        const indexOfCurrentEvent = (indexOfNextEvent === -1 ? this._automationEvents.length : indexOfNextEvent) - 1;
+        const currentAutomationEvent = this._automationEvents[indexOfCurrentEvent];
         if (currentAutomationEvent !== undefined &&
             isSetTargetAutomationEvent(currentAutomationEvent) &&
             (nextAutomationEvent === undefined ||
                 !isAnyRampToValueAutomationEvent(nextAutomationEvent) ||
                 nextAutomationEvent.insertTime > time)) {
-            return getTargetValueAtTime(time, getValueOfAutomationEventAtIndexAtTime(this._automationEvents, index - 2, currentAutomationEvent.startTime, this._defaultValue), currentAutomationEvent);
+            return getTargetValueAtTime(time, getValueOfAutomationEventAtIndexAtTime(this._automationEvents, indexOfCurrentEvent - 1, currentAutomationEvent.startTime, this._defaultValue), currentAutomationEvent);
         }
         if (currentAutomationEvent !== undefined &&
             isSetValueAutomationEvent(currentAutomationEvent) &&
@@ -246,11 +246,11 @@ class AutomationEventList {
             return currentAutomationEvent.value;
         }
         if (nextAutomationEvent !== undefined && isExponentialRampToValueAutomationEvent(nextAutomationEvent)) {
-            const [startTime, value] = getEndTimeAndValueOfPreviousAutomationEvent(this._automationEvents, index - 1, currentAutomationEvent, nextAutomationEvent, this._defaultValue);
+            const [startTime, value] = getEndTimeAndValueOfPreviousAutomationEvent(this._automationEvents, indexOfCurrentEvent, currentAutomationEvent, nextAutomationEvent, this._defaultValue);
             return getExponentialRampValueAtTime(time, startTime, value, nextAutomationEvent);
         }
         if (nextAutomationEvent !== undefined && isLinearRampToValueAutomationEvent(nextAutomationEvent)) {
-            const [startTime, value] = getEndTimeAndValueOfPreviousAutomationEvent(this._automationEvents, index - 1, currentAutomationEvent, nextAutomationEvent, this._defaultValue);
+            const [startTime, value] = getEndTimeAndValueOfPreviousAutomationEvent(this._automationEvents, indexOfCurrentEvent, currentAutomationEvent, nextAutomationEvent, this._defaultValue);
             return getLinearRampValueAtTime(time, startTime, value, nextAutomationEvent);
         }
         return this._defaultValue;
@@ -376,16 +376,79 @@ const verifyProcessorCtor = (processorCtor) => {
         throw new TypeError('The given value for processorCtor should have a prototype.');
     }
 };
-const createAddAudioWorkletModule = (cacheTestResult, createNotSupportedError, evaluateSource, exposeCurrentFrameAndCurrentTime, fetchSource, getNativeContext, getOrCreateBackupOfflineAudioContext, isNativeOfflineAudioContext, ongoingRequests, resolvedRequests, testAudioWorkletProcessorPostMessageSupport, window) => {
+const createAddAudioWorkletModule = (cacheTestResult, createNotSupportedError, evaluateSource, exposeCurrentFrameAndCurrentTime, fetchSource, getNativeContext, getOrCreateBackupOfflineAudioContext, isNativeOfflineAudioContext, nativeAudioWorkletNodeConstructor, ongoingRequests, resolvedRequests, testAudioWorkletProcessorPostMessageSupport, window) => {
+    let index = 0;
     return (context, moduleURL, options = { credentials: 'omit' }) => {
+        const resolvedRequestsOfContext = resolvedRequests.get(context);
+        if (resolvedRequestsOfContext !== undefined && resolvedRequestsOfContext.has(moduleURL)) {
+            return Promise.resolve();
+        }
+        const ongoingRequestsOfContext = ongoingRequests.get(context);
+        if (ongoingRequestsOfContext !== undefined) {
+            const promiseOfOngoingRequest = ongoingRequestsOfContext.get(moduleURL);
+            if (promiseOfOngoingRequest !== undefined) {
+                return promiseOfOngoingRequest;
+            }
+        }
         const nativeContext = getNativeContext(context);
-        const absoluteUrl = new URL(moduleURL, window.location.href).toString();
         // Bug #59: Safari does not implement the audioWorklet property.
-        if (nativeContext.audioWorklet !== undefined) {
-            return Promise.all([
+        const promise = nativeContext.audioWorklet === undefined
+            ? fetchSource(moduleURL)
+                .then(([source, absoluteUrl]) => {
+                const [importStatements, sourceWithoutImportStatements] = splitImportStatements(source, absoluteUrl);
+                /*
+                 * This is the unminified version of the code used below:
+                 *
+                 * ```js
+                 * ${ importStatements };
+                 * ((a, b) => {
+                 *     (a[b] = a[b] || [ ]).push(
+                 *         (AudioWorkletProcessor, global, registerProcessor, sampleRate, self, window) => {
+                 *             ${ sourceWithoutImportStatements }
+                 *         }
+                 *     );
+                 * })(window, '_AWGS');
+                 * ```
+                 */
+                // tslint:disable-next-line:max-line-length
+                const wrappedSource = `${importStatements};((a,b)=>{(a[b]=a[b]||[]).push((AudioWorkletProcessor,global,registerProcessor,sampleRate,self,window)=>{${sourceWithoutImportStatements}
+})})(window,'_AWGS')`;
+                // @todo Evaluating the given source code is a possible security problem.
+                return evaluateSource(wrappedSource);
+            })
+                .then(() => {
+                const evaluateAudioWorkletGlobalScope = window._AWGS.pop();
+                if (evaluateAudioWorkletGlobalScope === undefined) {
+                    // Bug #182 Chrome, Edge and Opera do throw an instance of a SyntaxError instead of a DOMException.
+                    throw new SyntaxError();
+                }
+                exposeCurrentFrameAndCurrentTime(nativeContext.currentTime, nativeContext.sampleRate, () => evaluateAudioWorkletGlobalScope(class AudioWorkletProcessor {
+                }, undefined, (name, processorCtor) => {
+                    if (name.trim() === '') {
+                        throw createNotSupportedError();
+                    }
+                    const nodeNameToProcessorConstructorMap = NODE_NAME_TO_PROCESSOR_CONSTRUCTOR_MAPS.get(nativeContext);
+                    if (nodeNameToProcessorConstructorMap !== undefined) {
+                        if (nodeNameToProcessorConstructorMap.has(name)) {
+                            throw createNotSupportedError();
+                        }
+                        verifyProcessorCtor(processorCtor);
+                        verifyParameterDescriptors(processorCtor.parameterDescriptors);
+                        nodeNameToProcessorConstructorMap.set(name, processorCtor);
+                    }
+                    else {
+                        verifyProcessorCtor(processorCtor);
+                        verifyParameterDescriptors(processorCtor.parameterDescriptors);
+                        NODE_NAME_TO_PROCESSOR_CONSTRUCTOR_MAPS.set(nativeContext, new Map([[name, processorCtor]]));
+                    }
+                }, nativeContext.sampleRate, undefined, undefined));
+            })
+            : Promise.all([
                 fetchSource(moduleURL),
                 Promise.resolve(cacheTestResult(testAudioWorkletProcessorPostMessageSupport, testAudioWorkletProcessorPostMessageSupport))
-            ]).then(([source, isSupportingPostMessage]) => {
+            ]).then(([[source, absoluteUrl], isSupportingPostMessage]) => {
+                const currentIndex = index + 1;
+                index = currentIndex;
                 const [importStatements, sourceWithoutImportStatements] = splitImportStatements(source, absoluteUrl);
                 /*
                  * Bug #179: Firefox does not allow to transfer any buffer which has been passed to the process() method as an argument.
@@ -413,122 +476,85 @@ const createAddAudioWorkletModule = (cacheTestResult, createNotSupportedError, e
                  * }
                  * ```
                  */
-                const patchedSourceWithoutImportStatements = isSupportingPostMessage
-                    ? sourceWithoutImportStatements
-                    : sourceWithoutImportStatements.replace(/\s+extends\s+AudioWorkletProcessor\s*{/, ` extends (class extends AudioWorkletProcessor {__b=new WeakSet();constructor(){super();(p=>p.postMessage=(q=>(m,t)=>q.call(p,m,t?t.filter(u=>!this.__b.has(u)):t))(p.postMessage))(this.port)}}){`);
+                const patchedAudioWorkletProcessor = isSupportingPostMessage
+                    ? 'AudioWorkletProcessor'
+                    : 'class extends AudioWorkletProcessor {__b=new WeakSet();constructor(){super();(p=>p.postMessage=(q=>(m,t)=>q.call(p,m,t?t.filter(u=>!this.__b.has(u)):t))(p.postMessage))(this.port)}}';
                 /*
                  * Bug #170: Chrome and Edge do call process() with an array with empty channelData for each input if no input is connected.
                  *
                  * Bug #179: Firefox does not allow to transfer any buffer which has been passed to the process() method as an argument.
                  *
+                 * Bug #190: Safari doesn't throw an error when loading an unparsable module.
+                 *
                  * This is the unminified version of the code used below:
                  *
                  * ```js
                  * `${ importStatements };
-                 * ((registerProcessor) => {${ sourceWithoutImportStatements }
-                 * })((name, processorCtor) => registerProcessor(name, class extends processorCtor {
+                 * ((AudioWorkletProcessor, registerProcessor) => {${ sourceWithoutImportStatements }
+                 * })(
+                 *     ${ patchedAudioWorkletProcessor },
+                 *     (name, processorCtor) => registerProcessor(name, class extends processorCtor {
                  *
-                 *     __collectBuffers = (array) => {
-                 *         array.forEach((element) => this.__buffers.add(element.buffer));
-                 *     };
+                 *         __collectBuffers = (array) => {
+                 *             array.forEach((element) => this.__buffers.add(element.buffer));
+                 *         };
                  *
-                 *     process (inputs, outputs, parameters) {
-                 *         inputs.forEach(this.__collectBuffers);
-                 *         outputs.forEach(this.__collectBuffers);
-                 *         this.__collectBuffers(Object.values(parameters));
+                 *         process (inputs, outputs, parameters) {
+                 *             inputs.forEach(this.__collectBuffers);
+                 *             outputs.forEach(this.__collectBuffers);
+                 *             this.__collectBuffers(Object.values(parameters));
                  *
-                 *         return super.process(
-                 *             (inputs.map((input) => input.some((channelData) => channelData.length === 0)) ? [ ] : input),
-                 *             outputs,
-                 *             parameters
-                 *         );
+                 *             return super.process(
+                 *                 (inputs.map((input) => input.some((channelData) => channelData.length === 0)) ? [ ] : input),
+                 *                 outputs,
+                 *                 parameters
+                 *             );
+                 *         }
+                 *
+                 *     })
+                 * );
+                 *
+                 * registerProcessor(`__sac${currentIndex}`, class extends AudioWorkletProcessor{
+                 *
+                 *     process () {
+                 *         return false;
                  *     }
                  *
-                 * }))`
+                 * })`
                  * ```
                  */
                 const memberDefinition = isSupportingPostMessage ? '' : '__c = (a) => a.forEach(e=>this.__b.add(e.buffer));';
                 const bufferRegistration = isSupportingPostMessage
                     ? ''
                     : 'i.forEach(this.__c);o.forEach(this.__c);this.__c(Object.values(p));';
-                const wrappedSource = `${importStatements};(registerProcessor=>{${patchedSourceWithoutImportStatements}
-})((n,p)=>registerProcessor(n,class extends p{${memberDefinition}process(i,o,p){${bufferRegistration}return super.process(i.map(j=>j.some(k=>k.length===0)?[]:j),o,p)}}))`;
+                const wrappedSource = `${importStatements};((AudioWorkletProcessor,registerProcessor)=>{${sourceWithoutImportStatements}
+})(${patchedAudioWorkletProcessor},(n,p)=>registerProcessor(n,class extends p{${memberDefinition}process(i,o,p){${bufferRegistration}return super.process(i.map(j=>j.some(k=>k.length===0)?[]:j),o,p)}}));registerProcessor('__sac${currentIndex}',class extends AudioWorkletProcessor{process(){return !1}})`;
                 const blob = new Blob([wrappedSource], { type: 'application/javascript; charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 return nativeContext.audioWorklet
                     .addModule(url, options)
                     .then(() => {
                     if (isNativeOfflineAudioContext(nativeContext)) {
-                        return;
+                        return nativeContext;
                     }
                     // Bug #186: Chrome, Edge and Opera do not allow to create an AudioWorkletNode on a closed AudioContext.
                     const backupOfflineAudioContext = getOrCreateBackupOfflineAudioContext(nativeContext);
-                    return backupOfflineAudioContext.audioWorklet.addModule(url, options);
+                    return backupOfflineAudioContext.audioWorklet.addModule(url, options).then(() => backupOfflineAudioContext);
+                })
+                    .then((nativeContextOrBackupOfflineAudioContext) => {
+                    if (nativeAudioWorkletNodeConstructor === null) {
+                        throw new SyntaxError();
+                    }
+                    try {
+                        // Bug #190: Safari doesn't throw an error when loading an unparsable module.
+                        new nativeAudioWorkletNodeConstructor(nativeContextOrBackupOfflineAudioContext, `__sac${currentIndex}`); // tslint:disable-line:no-unused-expression
+                    }
+                    catch {
+                        throw new SyntaxError();
+                    }
                 })
                     .finally(() => URL.revokeObjectURL(url));
             });
-        }
-        const resolvedRequestsOfContext = resolvedRequests.get(context);
-        if (resolvedRequestsOfContext !== undefined && resolvedRequestsOfContext.has(moduleURL)) {
-            return Promise.resolve();
-        }
-        const ongoingRequestsOfContext = ongoingRequests.get(context);
-        if (ongoingRequestsOfContext !== undefined) {
-            const promiseOfOngoingRequest = ongoingRequestsOfContext.get(moduleURL);
-            if (promiseOfOngoingRequest !== undefined) {
-                return promiseOfOngoingRequest;
-            }
-        }
-        const promise = fetchSource(moduleURL)
-            .then((source) => {
-            const [importStatements, sourceWithoutImportStatements] = splitImportStatements(source, absoluteUrl);
-            /*
-             * This is the unminified version of the code used below:
-             *
-             * ```js
-             * ${ importStatements };
-             * ((a, b) => {
-             *     (a[b] = a[b] || [ ]).push(
-             *         (AudioWorkletProcessor, global, registerProcessor, sampleRate, self, window) => {
-             *             ${ sourceWithoutImportStatements }
-             *         }
-             *     );
-             * })(window, '_AWGS');
-             * ```
-             */
-            // tslint:disable-next-line:max-line-length
-            const wrappedSource = `${importStatements};((a,b)=>{(a[b]=a[b]||[]).push((AudioWorkletProcessor,global,registerProcessor,sampleRate,self,window)=>{${sourceWithoutImportStatements}
-})})(window,'_AWGS')`;
-            // @todo Evaluating the given source code is a possible security problem.
-            return evaluateSource(wrappedSource);
-        })
-            .then(() => {
-            const evaluateAudioWorkletGlobalScope = window._AWGS.pop();
-            if (evaluateAudioWorkletGlobalScope === undefined) {
-                // Bug #182 Chrome, Edge and Opera do throw an instance of a SyntaxError instead of a DOMException.
-                throw new SyntaxError();
-            }
-            exposeCurrentFrameAndCurrentTime(nativeContext.currentTime, nativeContext.sampleRate, () => evaluateAudioWorkletGlobalScope(class AudioWorkletProcessor {
-            }, undefined, (name, processorCtor) => {
-                if (name.trim() === '') {
-                    throw createNotSupportedError();
-                }
-                const nodeNameToProcessorConstructorMap = NODE_NAME_TO_PROCESSOR_CONSTRUCTOR_MAPS.get(nativeContext);
-                if (nodeNameToProcessorConstructorMap !== undefined) {
-                    if (nodeNameToProcessorConstructorMap.has(name)) {
-                        throw createNotSupportedError();
-                    }
-                    verifyProcessorCtor(processorCtor);
-                    verifyParameterDescriptors(processorCtor.parameterDescriptors);
-                    nodeNameToProcessorConstructorMap.set(name, processorCtor);
-                }
-                else {
-                    verifyProcessorCtor(processorCtor);
-                    verifyParameterDescriptors(processorCtor.parameterDescriptors);
-                    NODE_NAME_TO_PROCESSOR_CONSTRUCTOR_MAPS.set(nativeContext, new Map([[name, processorCtor]]));
-                }
-            }, nativeContext.sampleRate, undefined, undefined));
-        });
         if (ongoingRequestsOfContext === undefined) {
             ongoingRequests.set(context, new Map([[moduleURL, promise]]));
         }
@@ -537,18 +563,18 @@ const createAddAudioWorkletModule = (cacheTestResult, createNotSupportedError, e
         }
         promise
             .then(() => {
-            const rslvdRqstsFCntxt = resolvedRequests.get(context);
-            if (rslvdRqstsFCntxt === undefined) {
+            const updatedResolvedRequestsOfContext = resolvedRequests.get(context);
+            if (updatedResolvedRequestsOfContext === undefined) {
                 resolvedRequests.set(context, new Set([moduleURL]));
             }
             else {
-                rslvdRqstsFCntxt.add(moduleURL);
+                updatedResolvedRequestsOfContext.add(moduleURL);
             }
         })
             .finally(() => {
-            const ngngRqstsFCntxt = ongoingRequests.get(context);
-            if (ngngRqstsFCntxt !== undefined) {
-                ngngRqstsFCntxt.delete(moduleURL);
+            const updatedOngoingRequestsOfContext = ongoingRequests.get(context);
+            if (updatedOngoingRequestsOfContext !== undefined) {
+                updatedOngoingRequestsOfContext.delete(moduleURL);
             }
         });
         return promise;
@@ -617,6 +643,7 @@ const setInternalStateToPassiveWhenNecessary = (audioNode, activeInputs) => {
 };
 
 const createAddConnectionToAudioNode = (addActiveInputConnectionToAudioNode, addPassiveInputConnectionToAudioNode, connectNativeAudioNodeToNativeAudioNode, deleteActiveInputConnectionToAudioNode, disconnectNativeAudioNodeFromNativeAudioNode, getAudioNodeConnections, getAudioNodeTailTime, getEventListenersOfAudioNode, getNativeAudioNode, insertElementInSet, isActiveAudioNode, isPartOfACycle, isPassiveAudioNode) => {
+    const tailTimeTimeoutIds = new WeakMap();
     return (source, destination, output, input, isOffline) => {
         const { activeInputs, passiveInputs } = getAudioNodeConnections(destination);
         const { outputs } = getAudioNodeConnections(source);
@@ -647,11 +674,15 @@ const createAddConnectionToAudioNode = (addActiveInputConnectionToAudioNode, add
                     }
                 }
                 else {
-                    setTimeout(() => {
+                    const tailTimeTimeoutId = tailTimeTimeoutIds.get(destination);
+                    if (tailTimeTimeoutId !== undefined) {
+                        clearTimeout(tailTimeTimeoutId);
+                    }
+                    tailTimeTimeoutIds.set(destination, setTimeout(() => {
                         if (isActiveAudioNode(destination)) {
                             setInternalStateToPassiveWhenNecessary(destination, activeInputs);
                         }
-                    }, tailTime * 1000);
+                    }, tailTime * 1000));
                 }
             }
         };
@@ -1145,7 +1176,17 @@ const createAudioContextConstructor = (baseAudioContextConstructor, createInvali
             if (nativeAudioContextConstructor === null) {
                 throw new Error('Missing the native AudioContext constructor.');
             }
-            const nativeAudioContext = new nativeAudioContextConstructor(options);
+            let nativeAudioContext;
+            try {
+                nativeAudioContext = new nativeAudioContextConstructor(options);
+            }
+            catch (err) {
+                // Bug #192 Safari does throw a SyntaxError if the sampleRate is not supported.
+                if (err.code === 12 && err.message === 'sampleRate is not in range') {
+                    throw createNotSupportedError();
+                }
+                throw err;
+            }
             // Bug #131 Safari returns null when there are four other AudioContexts running already.
             if (nativeAudioContext === null) {
                 throw createUnknownError();
@@ -1338,11 +1379,12 @@ const createAudioDestinationNodeRenderer = (renderInputsOfAudioNode) => {
     };
 };
 
-const createAudioListenerFactory = (createAudioParam, createNativeChannelMergerNode, createNativeConstantSourceNode, createNativeScriptProcessorNode, isNativeOfflineAudioContext) => {
+const createAudioListenerFactory = (createAudioParam, createNativeChannelMergerNode, createNativeConstantSourceNode, createNativeScriptProcessorNode, createNotSupportedError, getFirstSample, isNativeOfflineAudioContext, overwriteAccessors) => {
     return (context, nativeContext) => {
         const nativeListener = nativeContext.listener;
         // Bug #117: Only Chrome, Edge & Opera support the new interface already.
         const createFakeAudioParams = () => {
+            const buffer = new Float32Array(1);
             const channelMergerNode = createNativeChannelMergerNode(nativeContext, {
                 channelCount: 1,
                 channelCountMode: 'explicit',
@@ -1350,65 +1392,184 @@ const createAudioListenerFactory = (createAudioParam, createNativeChannelMergerN
                 numberOfInputs: 9
             });
             const isOffline = isNativeOfflineAudioContext(nativeContext);
-            const scriptProcessorNode = createNativeScriptProcessorNode(nativeContext, 256, 9, 0);
-            const createFakeAudioParam = (input, value) => {
+            let isScriptProcessorNodeCreated = false;
+            let lastOrientation = [0, 0, -1, 0, 1, 0];
+            let lastPosition = [0, 0, 0];
+            const createScriptProcessorNode = () => {
+                if (isScriptProcessorNodeCreated) {
+                    return;
+                }
+                isScriptProcessorNodeCreated = true;
+                const scriptProcessorNode = createNativeScriptProcessorNode(nativeContext, 256, 9, 0);
+                // tslint:disable-next-line:deprecation
+                scriptProcessorNode.onaudioprocess = ({ inputBuffer }) => {
+                    const orientation = [
+                        getFirstSample(inputBuffer, buffer, 0),
+                        getFirstSample(inputBuffer, buffer, 1),
+                        getFirstSample(inputBuffer, buffer, 2),
+                        getFirstSample(inputBuffer, buffer, 3),
+                        getFirstSample(inputBuffer, buffer, 4),
+                        getFirstSample(inputBuffer, buffer, 5)
+                    ];
+                    if (orientation.some((value, index) => value !== lastOrientation[index])) {
+                        nativeListener.setOrientation(...orientation); // tslint:disable-line:deprecation
+                        lastOrientation = orientation;
+                    }
+                    const positon = [
+                        getFirstSample(inputBuffer, buffer, 6),
+                        getFirstSample(inputBuffer, buffer, 7),
+                        getFirstSample(inputBuffer, buffer, 8)
+                    ];
+                    if (positon.some((value, index) => value !== lastPosition[index])) {
+                        nativeListener.setPosition(...positon); // tslint:disable-line:deprecation
+                        lastPosition = positon;
+                    }
+                };
+                channelMergerNode.connect(scriptProcessorNode);
+            };
+            const createSetOrientation = (index) => (value) => {
+                if (value !== lastOrientation[index]) {
+                    lastOrientation[index] = value;
+                    nativeListener.setOrientation(...lastOrientation); // tslint:disable-line:deprecation
+                }
+            };
+            const createSetPosition = (index) => (value) => {
+                if (value !== lastPosition[index]) {
+                    lastPosition[index] = value;
+                    nativeListener.setPosition(...lastPosition); // tslint:disable-line:deprecation
+                }
+            };
+            const createFakeAudioParam = (input, initialValue, setValue) => {
                 const constantSourceNode = createNativeConstantSourceNode(nativeContext, {
                     channelCount: 1,
                     channelCountMode: 'explicit',
                     channelInterpretation: 'discrete',
-                    offset: value
+                    offset: initialValue
                 });
                 constantSourceNode.connect(channelMergerNode, 0, input);
                 // @todo This should be stopped when the context is closed.
                 constantSourceNode.start();
                 Object.defineProperty(constantSourceNode.offset, 'defaultValue', {
                     get() {
-                        return value;
+                        return initialValue;
                     }
                 });
                 /*
                  * Bug #62 & #74: Safari does not support ConstantSourceNodes and does not export the correct values for maxValue and
                  * minValue for GainNodes.
                  */
-                return createAudioParam({ context }, isOffline, constantSourceNode.offset, MOST_POSITIVE_SINGLE_FLOAT, MOST_NEGATIVE_SINGLE_FLOAT);
+                const audioParam = createAudioParam({ context }, isOffline, constantSourceNode.offset, MOST_POSITIVE_SINGLE_FLOAT, MOST_NEGATIVE_SINGLE_FLOAT);
+                overwriteAccessors(audioParam, 'value', (get) => () => get.call(audioParam), (set) => (value) => {
+                    try {
+                        set.call(audioParam, value);
+                    }
+                    catch (err) {
+                        if (err.code !== 9) {
+                            throw err;
+                        }
+                    }
+                    createScriptProcessorNode();
+                    if (isOffline) {
+                        // Bug #117: Using setOrientation() and setPosition() doesn't work with an OfflineAudioContext.
+                        setValue(value);
+                    }
+                });
+                audioParam.cancelAndHoldAtTime = ((cancelAndHoldAtTime) => {
+                    if (isOffline) {
+                        return () => {
+                            throw createNotSupportedError();
+                        };
+                    }
+                    return (...args) => {
+                        const value = cancelAndHoldAtTime.apply(audioParam, args);
+                        createScriptProcessorNode();
+                        return value;
+                    };
+                })(audioParam.cancelAndHoldAtTime);
+                audioParam.cancelScheduledValues = ((cancelScheduledValues) => {
+                    if (isOffline) {
+                        return () => {
+                            throw createNotSupportedError();
+                        };
+                    }
+                    return (...args) => {
+                        const value = cancelScheduledValues.apply(audioParam, args);
+                        createScriptProcessorNode();
+                        return value;
+                    };
+                })(audioParam.cancelScheduledValues);
+                audioParam.exponentialRampToValueAtTime = ((exponentialRampToValueAtTime) => {
+                    if (isOffline) {
+                        return () => {
+                            throw createNotSupportedError();
+                        };
+                    }
+                    return (...args) => {
+                        const value = exponentialRampToValueAtTime.apply(audioParam, args);
+                        createScriptProcessorNode();
+                        return value;
+                    };
+                })(audioParam.exponentialRampToValueAtTime);
+                audioParam.linearRampToValueAtTime = ((linearRampToValueAtTime) => {
+                    if (isOffline) {
+                        return () => {
+                            throw createNotSupportedError();
+                        };
+                    }
+                    return (...args) => {
+                        const value = linearRampToValueAtTime.apply(audioParam, args);
+                        createScriptProcessorNode();
+                        return value;
+                    };
+                })(audioParam.linearRampToValueAtTime);
+                audioParam.setTargetAtTime = ((setTargetAtTime) => {
+                    if (isOffline) {
+                        return () => {
+                            throw createNotSupportedError();
+                        };
+                    }
+                    return (...args) => {
+                        const value = setTargetAtTime.apply(audioParam, args);
+                        createScriptProcessorNode();
+                        return value;
+                    };
+                })(audioParam.setTargetAtTime);
+                audioParam.setValueAtTime = ((setValueAtTime) => {
+                    if (isOffline) {
+                        return () => {
+                            throw createNotSupportedError();
+                        };
+                    }
+                    return (...args) => {
+                        const value = setValueAtTime.apply(audioParam, args);
+                        createScriptProcessorNode();
+                        return value;
+                    };
+                })(audioParam.setValueAtTime);
+                audioParam.setValueCurveAtTime = ((setValueCurveAtTime) => {
+                    if (isOffline) {
+                        return () => {
+                            throw createNotSupportedError();
+                        };
+                    }
+                    return (...args) => {
+                        const value = setValueCurveAtTime.apply(audioParam, args);
+                        createScriptProcessorNode();
+                        return value;
+                    };
+                })(audioParam.setValueCurveAtTime);
+                return audioParam;
             };
-            let lastOrientation = [0, 0, -1, 0, 1, 0];
-            let lastPosition = [0, 0, 0];
-            // tslint:disable-next-line:deprecation
-            scriptProcessorNode.onaudioprocess = ({ inputBuffer }) => {
-                const orientation = [
-                    inputBuffer.getChannelData(0)[0],
-                    inputBuffer.getChannelData(1)[0],
-                    inputBuffer.getChannelData(2)[0],
-                    inputBuffer.getChannelData(3)[0],
-                    inputBuffer.getChannelData(4)[0],
-                    inputBuffer.getChannelData(5)[0]
-                ];
-                if (orientation.some((value, index) => value !== lastOrientation[index])) {
-                    nativeListener.setOrientation(...orientation); // tslint:disable-line:deprecation
-                    lastOrientation = orientation;
-                }
-                const positon = [
-                    inputBuffer.getChannelData(6)[0],
-                    inputBuffer.getChannelData(7)[0],
-                    inputBuffer.getChannelData(8)[0]
-                ];
-                if (positon.some((value, index) => value !== lastPosition[index])) {
-                    nativeListener.setPosition(...positon); // tslint:disable-line:deprecation
-                    lastPosition = positon;
-                }
-            };
-            channelMergerNode.connect(scriptProcessorNode);
             return {
-                forwardX: createFakeAudioParam(0, 0),
-                forwardY: createFakeAudioParam(1, 0),
-                forwardZ: createFakeAudioParam(2, -1),
-                positionX: createFakeAudioParam(6, 0),
-                positionY: createFakeAudioParam(7, 0),
-                positionZ: createFakeAudioParam(8, 0),
-                upX: createFakeAudioParam(3, 0),
-                upY: createFakeAudioParam(4, 1),
-                upZ: createFakeAudioParam(5, 0)
+                forwardX: createFakeAudioParam(0, 0, createSetOrientation(0)),
+                forwardY: createFakeAudioParam(1, 0, createSetOrientation(1)),
+                forwardZ: createFakeAudioParam(2, -1, createSetOrientation(2)),
+                positionX: createFakeAudioParam(6, 0, createSetPosition(0)),
+                positionY: createFakeAudioParam(7, 0, createSetPosition(1)),
+                positionZ: createFakeAudioParam(8, 0, createSetPosition(2)),
+                upX: createFakeAudioParam(3, 0, createSetOrientation(3)),
+                upY: createFakeAudioParam(4, 1, createSetOrientation(4)),
+                upZ: createFakeAudioParam(5, 0, createSetOrientation(5))
             };
         };
         const { forwardX, forwardY, forwardZ, positionX, positionY, positionZ, upX, upY, upZ } = nativeListener.forwardX === undefined ? createFakeAudioParams() : nativeListener;
@@ -1875,11 +2036,11 @@ const createAudioNodeConstructor = (addAudioNodeConnections, addConnectionToAudi
             }
             const nativeAudioParam = getNativeAudioParam(destination);
             /*
-             * Bug #147 & #153: Safari does not support to connect an input signal to the playbackRate AudioParam of an
+             * Bug #73, #147 & #153: Safari does not support to connect an input signal to the playbackRate AudioParam of an
              * AudioBufferSourceNode. This can't be easily detected and that's why the outdated name property is used here to identify
-             * Safari.
+             * Safari. In addition to that the maxValue property is used to only detect the affected versions below v14.0.2.
              */
-            if (nativeAudioParam.name === 'playbackRate') {
+            if (nativeAudioParam.name === 'playbackRate' && nativeAudioParam.maxValue === 1024) {
                 throw createNotSupportedError();
             }
             try {
@@ -1889,7 +2050,7 @@ const createAudioNodeConstructor = (addAudioNodeConnections, addConnectionToAudi
                 }
             }
             catch (err) {
-                // Bug #58: Only Firefox does throw an InvalidStateError yet.
+                // Bug #58: Only Firefox does throw an InvalidAccessError yet.
                 if (err.code === 12) {
                     throw createInvalidAccessError();
                 }
@@ -1936,7 +2097,7 @@ const createAudioNodeConstructor = (addAudioNodeConnections, addConnectionToAudi
     };
 };
 
-const createAudioParamFactory = (addAudioParamConnections, audioParamAudioNodeStore, audioParamStore, createAudioParamRenderer, createCancelAndHoldAutomationEvent, createCancelScheduledValuesAutomationEvent, createExponentialRampToValueAutomationEvent, createLinearRampToValueAutomationEvent, createSetTargetAutomationEvent, createSetValueAutomationEvent, createSetValueCurveAutomationEvent, nativeAudioContextConstructor) => {
+const createAudioParamFactory = (addAudioParamConnections, audioParamAudioNodeStore, audioParamStore, createAudioParamRenderer, createCancelAndHoldAutomationEvent, createCancelScheduledValuesAutomationEvent, createExponentialRampToValueAutomationEvent, createLinearRampToValueAutomationEvent, createSetTargetAutomationEvent, createSetValueAutomationEvent, createSetValueCurveAutomationEvent, nativeAudioContextConstructor, setValueAtTimeUntilPossible) => {
     return (audioNode, isAudioParamOfOfflineAudioContext, nativeAudioParam, maxValue = null, minValue = null) => {
         const automationEventList = new AutomationEventList(nativeAudioParam.defaultValue);
         const audioParamRenderer = isAudioParamOfOfflineAudioContext ? createAudioParamRenderer(automationEventList) : null;
@@ -2072,9 +2233,9 @@ const createAudioParamFactory = (addAudioParamConnections, audioParamAudioNodeSt
                     nativeAudioParam.setValueCurveAtTime(interpolatedValues, startTime, duration);
                     const timeOfLastSample = lastSample / sampleRate;
                     if (timeOfLastSample < endTime) {
-                        audioParam.setValueAtTime(interpolatedValues[interpolatedValues.length - 1], timeOfLastSample);
+                        setValueAtTimeUntilPossible(audioParam, interpolatedValues[interpolatedValues.length - 1], timeOfLastSample);
                     }
-                    audioParam.setValueAtTime(convertedValues[convertedValues.length - 1], endTime);
+                    setValueAtTimeUntilPossible(audioParam, convertedValues[convertedValues.length - 1], endTime);
                 }
                 else {
                     if (audioParamRenderer === null) {
@@ -2162,13 +2323,15 @@ const DEFAULT_OPTIONS$3 = {
     parameterData: {},
     processorOptions: {}
 };
-const createAudioWorkletNodeConstructor = (addUnrenderedAudioWorkletNode, audioNodeConstructor, createAudioParam, createAudioWorkletNodeRenderer, createNativeAudioWorkletNode, getAudioNodeConnections, getBackupOfflineAudioContext, getNativeContext, isNativeOfflineAudioContext, nativeAudioWorkletNodeConstructor, sanitizeAudioWorkletNodeOptions, setActiveAudioWorkletNodeInputs, wrapEventListener) => {
+const createAudioWorkletNodeConstructor = (addUnrenderedAudioWorkletNode, audioNodeConstructor, createAudioParam, createAudioWorkletNodeRenderer, createNativeAudioWorkletNode, getAudioNodeConnections, getBackupOfflineAudioContext, getNativeContext, isNativeOfflineAudioContext, nativeAudioWorkletNodeConstructor, sanitizeAudioWorkletNodeOptions, setActiveAudioWorkletNodeInputs, testAudioWorkletNodeOptionsClonability, wrapEventListener) => {
     return class AudioWorkletNode extends audioNodeConstructor {
         constructor(context, name, options) {
             var _a;
             const nativeContext = getNativeContext(context);
             const isOffline = isNativeOfflineAudioContext(nativeContext);
             const mergedOptions = sanitizeAudioWorkletNodeOptions({ ...DEFAULT_OPTIONS$3, ...options });
+            // Bug #191: Safari doesn't throw an error if the options aren't clonable.
+            testAudioWorkletNodeOptionsClonability(mergedOptions);
             const nodeNameToProcessorConstructorMap = NODE_NAME_TO_PROCESSOR_CONSTRUCTOR_MAPS.get(nativeContext);
             const processorConstructor = nodeNameToProcessorConstructorMap === null || nodeNameToProcessorConstructorMap === void 0 ? void 0 : nodeNameToProcessorConstructorMap.get(name);
             // Bug #186: Chrome, Edge and Opera do not allow to create an AudioWorkletNode on a closed AudioContext.
@@ -2587,14 +2750,12 @@ const createBaseAudioContextConstructor = (addAudioWorkletModule, analyserNodeCo
             return new waveShaperNodeConstructor(this);
         }
         decodeAudioData(audioData, successCallback, errorCallback) {
-            return decodeAudioData(this._nativeContext, audioData)
-                .then((audioBuffer) => {
+            return decodeAudioData(this._nativeContext, audioData).then((audioBuffer) => {
                 if (typeof successCallback === 'function') {
                     successCallback(audioBuffer);
                 }
                 return audioBuffer;
-            })
-                .catch((err) => {
+            }, (err) => {
                 if (typeof errorCallback === 'function') {
                     errorCallback(err);
                 }
@@ -2654,7 +2815,16 @@ const createBiquadFilterNodeConstructor = (audioNodeConstructor, createAudioPara
             this._nativeBiquadFilterNode.type = value;
         }
         getFrequencyResponse(frequencyHz, magResponse, phaseResponse) {
-            this._nativeBiquadFilterNode.getFrequencyResponse(frequencyHz, magResponse, phaseResponse);
+            // Bug #189: Safari does throw an InvalidStateError.
+            try {
+                this._nativeBiquadFilterNode.getFrequencyResponse(frequencyHz, magResponse, phaseResponse);
+            }
+            catch (err) {
+                if (err.code === 11) {
+                    throw createInvalidAccessError();
+                }
+                throw err;
+            }
             // Bug #68: Safari does not throw an error if the parameters differ in their length.
             if (frequencyHz.length !== magResponse.length || magResponse.length !== phaseResponse.length) {
                 throw createInvalidAccessError();
@@ -3122,8 +3292,15 @@ const createCreateNativeOfflineAudioContext = (createNotSupportedError, nativeOf
 const createDataCloneError = () => new DOMException('', 'DataCloneError');
 
 const detachArrayBuffer = (arrayBuffer) => {
-    const { port1 } = new MessageChannel();
-    port1.postMessage(arrayBuffer, [arrayBuffer]);
+    const { port1, port2 } = new MessageChannel();
+    return new Promise((resolve) => {
+        port2.onmessage = () => {
+            port1.close();
+            port2.close();
+            resolve();
+        };
+        port1.postMessage(arrayBuffer, [arrayBuffer]);
+    });
 };
 
 const createDecodeAudioData = (audioBufferStore, cacheTestResult, createDataCloneError, createEncodingError, detachedArrayBuffers, getNativeContext, isNativeContext, testAudioBufferCopyChannelMethodsOutOfBoundsSupport, testPromiseSupport, wrapAudioBufferCopyChannelMethods, wrapAudioBufferCopyChannelMethodsOutOfBounds) => {
@@ -3144,6 +3321,10 @@ const createDecodeAudioData = (audioBufferStore, cacheTestResult, createDataClon
         // Bug #21: Safari does not support promises yet.
         if (cacheTestResult(testPromiseSupport, () => testPromiseSupport(nativeContext))) {
             return nativeContext.decodeAudioData(audioData).then((audioBuffer) => {
+                // Bug #133: Safari does neuter the ArrayBuffer.
+                detachArrayBuffer(audioData).catch(() => {
+                    // Ignore errors.
+                });
                 // Bug #157: Firefox does not allow the bufferOffset to be out-of-bounds.
                 if (!cacheTestResult(testAudioBufferCopyChannelMethodsOutOfBoundsSupport, () => testAudioBufferCopyChannelMethodsOutOfBoundsSupport(audioBuffer))) {
                     wrapAudioBufferCopyChannelMethodsOutOfBounds(audioBuffer);
@@ -3154,10 +3335,10 @@ const createDecodeAudioData = (audioBufferStore, cacheTestResult, createDataClon
         }
         // Bug #21: Safari does not return a Promise yet.
         return new Promise((resolve, reject) => {
-            const complete = () => {
+            const complete = async () => {
                 // Bug #133: Safari does neuter the ArrayBuffer.
                 try {
-                    detachArrayBuffer(audioData);
+                    await detachArrayBuffer(audioData);
                 }
                 catch {
                     // Ignore errors.
@@ -3178,8 +3359,7 @@ const createDecodeAudioData = (audioBufferStore, cacheTestResult, createDataClon
                         wrapAudioBufferGetChannelDataMethod(audioBuffer);
                     }
                     audioBufferStore.add(audioBuffer);
-                    complete();
-                    resolve(audioBuffer);
+                    complete().then(() => resolve(audioBuffer));
                 }, (err) => {
                     // Bug #4: Safari returns null instead of an error.
                     if (err === null) {
@@ -3602,7 +3782,7 @@ const createFetchSource = (createAbortError) => {
         try {
             const response = await fetch(url);
             if (response.ok) {
-                return response.text();
+                return [await response.text(), response.url];
             }
         }
         catch {
@@ -3729,7 +3909,8 @@ const createGetOrCreateBackupOfflineAudioContext = (backupOfflineAudioContextSto
         if (nativeOfflineAudioContextConstructor === null) {
             throw new Error('Missing the native OfflineAudioContext constructor.');
         }
-        backupOfflineAudioContext = new nativeOfflineAudioContextConstructor(1, 1, 8000);
+        // Bug #141: Safari does not support creating an OfflineAudioContext with less than 44100 Hz.
+        backupOfflineAudioContext = new nativeOfflineAudioContextConstructor(1, 1, 44100);
         backupOfflineAudioContextStore.set(nativeContext, backupOfflineAudioContext);
         return backupOfflineAudioContext;
     };
@@ -5488,7 +5669,7 @@ const createNativePannerNodeFactory = (createNativePannerNodeFaker) => {
     };
 };
 
-const createNativePannerNodeFakerFactory = (connectNativeAudioNodeToNativeAudioNode, createInvalidStateError, createNativeChannelMergerNode, createNativeGainNode, createNativeScriptProcessorNode, createNativeWaveShaperNode, createNotSupportedError, disconnectNativeAudioNodeFromNativeAudioNode, monitorConnections) => {
+const createNativePannerNodeFakerFactory = (connectNativeAudioNodeToNativeAudioNode, createInvalidStateError, createNativeChannelMergerNode, createNativeGainNode, createNativeScriptProcessorNode, createNativeWaveShaperNode, createNotSupportedError, disconnectNativeAudioNodeFromNativeAudioNode, getFirstSample, monitorConnections) => {
     return (nativeContext, { coneInnerAngle, coneOuterAngle, coneOuterGain, distanceModel, maxDistance, orientationX, orientationY, orientationZ, panningModel, positionX, positionY, positionZ, refDistance, rolloffFactor, ...audioNodeOptions }) => {
         const pannerNode = nativeContext.createPanner();
         // Bug #125: Safari does not throw an error yet.
@@ -5525,21 +5706,22 @@ const createNativePannerNodeFakerFactory = (connectNativeAudioNodeToNativeAudioN
         });
         let lastOrientation = [orientationX, orientationY, orientationZ];
         let lastPosition = [positionX, positionY, positionZ];
+        const buffer = new Float32Array(1);
         // tslint:disable-next-line:deprecation
         scriptProcessorNode.onaudioprocess = ({ inputBuffer }) => {
             const orientation = [
-                inputBuffer.getChannelData(0)[0],
-                inputBuffer.getChannelData(1)[0],
-                inputBuffer.getChannelData(2)[0]
+                getFirstSample(inputBuffer, buffer, 0),
+                getFirstSample(inputBuffer, buffer, 1),
+                getFirstSample(inputBuffer, buffer, 2)
             ];
             if (orientation.some((value, index) => value !== lastOrientation[index])) {
                 pannerNode.setOrientation(...orientation); // tslint:disable-line:deprecation
                 lastOrientation = orientation;
             }
             const positon = [
-                inputBuffer.getChannelData(3)[0],
-                inputBuffer.getChannelData(4)[0],
-                inputBuffer.getChannelData(5)[0]
+                getFirstSample(inputBuffer, buffer, 3),
+                getFirstSample(inputBuffer, buffer, 4),
+                getFirstSample(inputBuffer, buffer, 5)
             ];
             if (positon.some((value, index) => value !== lastPosition[index])) {
                 pannerNode.setPosition(...positon); // tslint:disable-line:deprecation
@@ -5777,7 +5959,7 @@ const createNativePeriodicWaveFactory = (createIndexSizeError) => {
         const convertedImag = imag instanceof Float32Array ? imag : new Float32Array(imag);
         const convertedReal = real instanceof Float32Array ? real : new Float32Array(real);
         const nativePeriodicWave = nativeContext.createPeriodicWave(convertedReal, convertedImag, { disableNormalization });
-        // Bug #181: Only Firefox does throw an IndexSizeError so far if the given arrays have less than two values.
+        // Bug #181: Safari does not throw an IndexSizeError so far if the given arrays have less than two values.
         if (Array.from(imag).length < 2) {
             throw createIndexSizeError();
         }
@@ -5848,11 +6030,11 @@ const createNativeStereoPannerNodeFakerFactory = (createNativeChannelMergerNode,
         return {
             connectGraph() {
                 inputGainNode.connect(leftGainNode);
-                inputGainNode.connect(panWaveShaperNode.inputs[0]);
+                inputGainNode.connect(panWaveShaperNode.inputs === undefined ? panWaveShaperNode : panWaveShaperNode.inputs[0]);
                 inputGainNode.connect(rightGainNode);
                 panWaveShaperNode.connect(panGainNode);
-                panGainNode.connect(leftWaveShaperNode.inputs[0]);
-                panGainNode.connect(rightWaveShaperNode.inputs[0]);
+                panGainNode.connect(leftWaveShaperNode.inputs === undefined ? leftWaveShaperNode : leftWaveShaperNode.inputs[0]);
+                panGainNode.connect(rightWaveShaperNode.inputs === undefined ? rightWaveShaperNode : rightWaveShaperNode.inputs[0]);
                 leftWaveShaperNode.connect(leftGainNode.gain);
                 rightWaveShaperNode.connect(rightGainNode.gain);
                 leftGainNode.connect(channelMergerNode, 0, 0);
@@ -5860,11 +6042,11 @@ const createNativeStereoPannerNodeFakerFactory = (createNativeChannelMergerNode,
             },
             disconnectGraph() {
                 inputGainNode.disconnect(leftGainNode);
-                inputGainNode.disconnect(panWaveShaperNode.inputs[0]);
+                inputGainNode.disconnect(panWaveShaperNode.inputs === undefined ? panWaveShaperNode : panWaveShaperNode.inputs[0]);
                 inputGainNode.disconnect(rightGainNode);
                 panWaveShaperNode.disconnect(panGainNode);
-                panGainNode.disconnect(leftWaveShaperNode.inputs[0]);
-                panGainNode.disconnect(rightWaveShaperNode.inputs[0]);
+                panGainNode.disconnect(leftWaveShaperNode.inputs === undefined ? leftWaveShaperNode : leftWaveShaperNode.inputs[0]);
+                panGainNode.disconnect(rightWaveShaperNode.inputs === undefined ? rightWaveShaperNode : rightWaveShaperNode.inputs[0]);
                 leftWaveShaperNode.disconnect(leftGainNode.gain);
                 rightWaveShaperNode.disconnect(rightGainNode.gain);
                 leftGainNode.disconnect(channelMergerNode, 0, 0);
@@ -5929,16 +6111,24 @@ const createNativeStereoPannerNodeFakerFactory = (createNativeChannelMergerNode,
         return {
             connectGraph() {
                 inputGainNode.connect(channelSplitterNode);
-                inputGainNode.connect(panWaveShaperNode.inputs[0]);
+                inputGainNode.connect(panWaveShaperNode.inputs === undefined ? panWaveShaperNode : panWaveShaperNode.inputs[0]);
                 channelSplitterNode.connect(leftInputForLeftOutputGainNode, 0);
                 channelSplitterNode.connect(leftInputForRightOutputGainNode, 0);
                 channelSplitterNode.connect(rightInputForLeftOutputGainNode, 1);
                 channelSplitterNode.connect(rightInputForRightOutputGainNode, 1);
                 panWaveShaperNode.connect(panGainNode);
-                panGainNode.connect(leftInputForLeftOutputWaveShaperNode.inputs[0]);
-                panGainNode.connect(leftInputForRightOutputWaveShaperNode.inputs[0]);
-                panGainNode.connect(rightInputForLeftOutputWaveShaperNode.inputs[0]);
-                panGainNode.connect(rightInputForRightOutputWaveShaperNode.inputs[0]);
+                panGainNode.connect(leftInputForLeftOutputWaveShaperNode.inputs === undefined
+                    ? leftInputForLeftOutputWaveShaperNode
+                    : leftInputForLeftOutputWaveShaperNode.inputs[0]);
+                panGainNode.connect(leftInputForRightOutputWaveShaperNode.inputs === undefined
+                    ? leftInputForRightOutputWaveShaperNode
+                    : leftInputForRightOutputWaveShaperNode.inputs[0]);
+                panGainNode.connect(rightInputForLeftOutputWaveShaperNode.inputs === undefined
+                    ? rightInputForLeftOutputWaveShaperNode
+                    : rightInputForLeftOutputWaveShaperNode.inputs[0]);
+                panGainNode.connect(rightInputForRightOutputWaveShaperNode.inputs === undefined
+                    ? rightInputForRightOutputWaveShaperNode
+                    : rightInputForRightOutputWaveShaperNode.inputs[0]);
                 leftInputForLeftOutputWaveShaperNode.connect(leftInputForLeftOutputGainNode.gain);
                 leftInputForRightOutputWaveShaperNode.connect(leftInputForRightOutputGainNode.gain);
                 rightInputForLeftOutputWaveShaperNode.connect(rightInputForLeftOutputGainNode.gain);
@@ -5950,16 +6140,24 @@ const createNativeStereoPannerNodeFakerFactory = (createNativeChannelMergerNode,
             },
             disconnectGraph() {
                 inputGainNode.disconnect(channelSplitterNode);
-                inputGainNode.disconnect(panWaveShaperNode.inputs[0]);
+                inputGainNode.disconnect(panWaveShaperNode.inputs === undefined ? panWaveShaperNode : panWaveShaperNode.inputs[0]);
                 channelSplitterNode.disconnect(leftInputForLeftOutputGainNode, 0);
                 channelSplitterNode.disconnect(leftInputForRightOutputGainNode, 0);
                 channelSplitterNode.disconnect(rightInputForLeftOutputGainNode, 1);
                 channelSplitterNode.disconnect(rightInputForRightOutputGainNode, 1);
                 panWaveShaperNode.disconnect(panGainNode);
-                panGainNode.disconnect(leftInputForLeftOutputWaveShaperNode.inputs[0]);
-                panGainNode.disconnect(leftInputForRightOutputWaveShaperNode.inputs[0]);
-                panGainNode.disconnect(rightInputForLeftOutputWaveShaperNode.inputs[0]);
-                panGainNode.disconnect(rightInputForRightOutputWaveShaperNode.inputs[0]);
+                panGainNode.disconnect(leftInputForLeftOutputWaveShaperNode.inputs === undefined
+                    ? leftInputForLeftOutputWaveShaperNode
+                    : leftInputForLeftOutputWaveShaperNode.inputs[0]);
+                panGainNode.disconnect(leftInputForRightOutputWaveShaperNode.inputs === undefined
+                    ? leftInputForRightOutputWaveShaperNode
+                    : leftInputForRightOutputWaveShaperNode.inputs[0]);
+                panGainNode.disconnect(rightInputForLeftOutputWaveShaperNode.inputs === undefined
+                    ? rightInputForLeftOutputWaveShaperNode
+                    : rightInputForLeftOutputWaveShaperNode.inputs[0]);
+                panGainNode.disconnect(rightInputForRightOutputWaveShaperNode.inputs === undefined
+                    ? rightInputForRightOutputWaveShaperNode
+                    : rightInputForRightOutputWaveShaperNode.inputs[0]);
                 leftInputForLeftOutputWaveShaperNode.disconnect(leftInputForLeftOutputGainNode.gain);
                 leftInputForRightOutputWaveShaperNode.disconnect(leftInputForRightOutputGainNode.gain);
                 rightInputForLeftOutputWaveShaperNode.disconnect(rightInputForLeftOutputGainNode.gain);
@@ -5999,6 +6197,7 @@ const createNativeStereoPannerNodeFakerFactory = (createNativeChannelMergerNode,
         });
         let { connectGraph, disconnectGraph } = buildInternalGraph(nativeContext, channelCount, inputGainNode, panGainNode, channelMergerNode);
         Object.defineProperty(panGainNode.gain, 'defaultValue', { get: () => 0 });
+        Object.defineProperty(panGainNode.gain, 'maxValue', { get: () => 1 });
         Object.defineProperty(panGainNode.gain, 'minValue', { get: () => -1 });
         const nativeStereoPannerNodeFakerFactory = {
             get bufferSize() {
@@ -6078,9 +6277,12 @@ const createNativeWaveShaperNodeFactory = (createConnectedNativeAudioBufferSourc
         /*
          * Bug #119: Safari does not correctly map the values.
          * @todo Unfortunately there is no way to test for this behavior in a synchronous fashion which is why testing for the existence of
-         * the webkitAudioContext is used as a workaround here.
+         * the webkitAudioContext is used as a workaround here. Testing for the automationRate property is necessary because this workaround
+         * isn't necessary anymore since v14.0.2 of Safari.
          */
-        if (nativeAudioContextConstructor !== null && nativeAudioContextConstructor.name === 'webkitAudioContext') {
+        if (nativeAudioContextConstructor !== null &&
+            nativeAudioContextConstructor.name === 'webkitAudioContext' &&
+            nativeContext.createGain().gain.automationRate === undefined) {
             return createNativeWaveShaperNodeFaker(nativeContext, options);
         }
         assignNativeAudioNodeOptions(nativeWaveShaperNode, options);
@@ -7018,7 +7220,8 @@ const createTestAudioWorkletProcessorPostMessageSupport = (nativeAudioWorkletNod
         const blob = new Blob(['class A extends AudioWorkletProcessor{process(i){this.port.postMessage(i,[i[0][0].buffer])}}registerProcessor("a",A)'], {
             type: 'application/javascript; charset=utf-8'
         });
-        const offlineAudioContext = new nativeOfflineAudioContextConstructor(1, 128, 8000);
+        // Bug #141: Safari does not support creating an OfflineAudioContext with less than 44100 Hz.
+        const offlineAudioContext = new nativeOfflineAudioContextConstructor(1, 128, 44100);
         const url = URL.createObjectURL(blob);
         let isEmittingMessageEvents = false;
         let isEmittingProcessorErrorEvents = false;
@@ -7029,6 +7232,7 @@ const createTestAudioWorkletProcessorPostMessageSupport = (nativeAudioWorkletNod
             audioWorkletNode.port.onmessage = () => (isEmittingMessageEvents = true);
             audioWorkletNode.onprocessorerror = () => (isEmittingProcessorErrorEvents = true);
             oscillator.connect(audioWorkletNode);
+            oscillator.start(0);
             await offlineAudioContext.startRendering();
         }
         catch {
@@ -7260,6 +7464,15 @@ const createWrapChannelMergerNode = (createInvalidStateError, monitorConnections
     };
 };
 
+const getFirstSample = (audioBuffer, buffer, channelNumber) => {
+    // Bug #5: Safari does not support copyFromChannel() and copyToChannel().
+    if (audioBuffer.copyFromChannel === undefined) {
+        return audioBuffer.getChannelData(channelNumber)[0];
+    }
+    audioBuffer.copyFromChannel(buffer, channelNumber);
+    return buffer[0];
+};
+
 const isDCCurve = (curve) => {
     if (curve === null) {
         return false;
@@ -7272,7 +7485,7 @@ const isDCCurve = (curve) => {
 };
 
 const overwriteAccessors = (object, property, createGetter, createSetter) => {
-    let prototype = Object.getPrototypeOf(object);
+    let prototype = object;
     while (!prototype.hasOwnProperty(property)) {
         prototype = Object.getPrototypeOf(prototype);
     }
@@ -7312,6 +7525,18 @@ const sanitizePeriodicWaveOptions = (options) => {
         return { ...options, imag, real: Array.from(imag, () => 0) };
     }
     return { ...options, imag, real };
+};
+
+const setValueAtTimeUntilPossible = (audioParam, value, startTime) => {
+    try {
+        audioParam.setValueAtTime(value, startTime);
+    }
+    catch (err) {
+        if (err.code !== 9) {
+            throw err;
+        }
+        setValueAtTimeUntilPossible(audioParam, value, startTime + 1e-7);
+    }
 };
 
 const testAudioBufferSourceNodeStartMethodConsecutiveCallsSupport = (nativeContext) => {
@@ -7386,6 +7611,18 @@ const testAudioScheduledSourceNodeStopMethodNegativeParametersSupport = (nativeC
         return err instanceof RangeError;
     }
     return false;
+};
+
+const testAudioWorkletNodeOptionsClonability = (audioWorkletNodeOptions) => {
+    const { port1, port2 } = new MessageChannel();
+    try {
+        // This will throw an error if the audioWorkletNodeOptions are not clonable.
+        port1.postMessage(audioWorkletNodeOptions);
+    }
+    finally {
+        port1.close();
+        port2.close();
+    }
 };
 
 const wrapAudioBufferSourceNodeStartMethodOffsetClamping = (nativeAudioBufferSourceNode) => {
@@ -7484,7 +7721,7 @@ const connectAudioParam = createConnectAudioParam(renderInputsOfAudioParam);
 const createNativeAudioBufferSourceNode = createNativeAudioBufferSourceNodeFactory(addSilentConnection, cacheTestResult, testAudioBufferSourceNodeStartMethodConsecutiveCallsSupport, testAudioBufferSourceNodeStartMethodOffsetClampingSupport, testAudioBufferSourceNodeStopMethodNullifiedBufferSupport, testAudioScheduledSourceNodeStartMethodNegativeParametersSupport, testAudioScheduledSourceNodeStopMethodConsecutiveCallsSupport, testAudioScheduledSourceNodeStopMethodNegativeParametersSupport, wrapAudioBufferSourceNodeStartMethodOffsetClamping, createWrapAudioBufferSourceNodeStopMethodNullifiedBuffer(overwriteAccessors), wrapAudioScheduledSourceNodeStopMethodConsecutiveCalls);
 const renderAutomation = createRenderAutomation(createGetAudioParamRenderer(getAudioParamConnections), renderInputsOfAudioParam);
 const createAudioBufferSourceNodeRenderer = createAudioBufferSourceNodeRendererFactory(connectAudioParam, createNativeAudioBufferSourceNode, getNativeAudioNode, renderAutomation, renderInputsOfAudioNode);
-const createAudioParam = createAudioParamFactory(createAddAudioParamConnections(AUDIO_PARAM_CONNECTIONS_STORE), audioParamAudioNodeStore, AUDIO_PARAM_STORE, createAudioParamRenderer, createCancelAndHoldAutomationEvent, createCancelScheduledValuesAutomationEvent, createExponentialRampToValueAutomationEvent, createLinearRampToValueAutomationEvent, createSetTargetAutomationEvent, createSetValueAutomationEvent, createSetValueCurveAutomationEvent, nativeAudioContextConstructor);
+const createAudioParam = createAudioParamFactory(createAddAudioParamConnections(AUDIO_PARAM_CONNECTIONS_STORE), audioParamAudioNodeStore, AUDIO_PARAM_STORE, createAudioParamRenderer, createCancelAndHoldAutomationEvent, createCancelScheduledValuesAutomationEvent, createExponentialRampToValueAutomationEvent, createLinearRampToValueAutomationEvent, createSetTargetAutomationEvent, createSetValueAutomationEvent, createSetValueCurveAutomationEvent, nativeAudioContextConstructor, setValueAtTimeUntilPossible);
 const audioBufferSourceNodeConstructor = createAudioBufferSourceNodeConstructor(audioNodeConstructor, createAudioBufferSourceNodeRenderer, createAudioParam, createInvalidStateError, createNativeAudioBufferSourceNode, getNativeContext, isNativeOfflineAudioContext, wrapEventListener);
 const audioDestinationNodeConstructor = createAudioDestinationNodeConstructor(audioNodeConstructor, createAudioDestinationNodeRenderer, createIndexSizeError, createInvalidStateError, createNativeAudioDestinationNodeFactory(createNativeGainNode, overwriteAccessors), getNativeContext, isNativeOfflineAudioContext, renderInputsOfAudioNode);
 const createBiquadFilterNodeRenderer = createBiquadFilterNodeRendererFactory(connectAudioParam, createNativeBiquadFilterNode, getNativeAudioNode, renderAutomation, renderInputsOfAudioNode);
@@ -7516,7 +7753,7 @@ const renderNativeOfflineAudioContext = createRenderNativeOfflineAudioContext(ca
 const createIIRFilterNodeRenderer = createIIRFilterNodeRendererFactory(createNativeAudioBufferSourceNode, getNativeAudioNode, nativeOfflineAudioContextConstructor, renderInputsOfAudioNode, renderNativeOfflineAudioContext);
 const createNativeIIRFilterNode = createNativeIIRFilterNodeFactory(createNativeIIRFilterNodeFaker);
 const iIRFilterNodeConstructor = createIIRFilterNodeConstructor(audioNodeConstructor, createNativeIIRFilterNode, createIIRFilterNodeRenderer, getNativeContext, isNativeOfflineAudioContext, setAudioNodeTailTime);
-const createAudioListener = createAudioListenerFactory(createAudioParam, createNativeChannelMergerNode, createNativeConstantSourceNode, createNativeScriptProcessorNode, isNativeOfflineAudioContext);
+const createAudioListener = createAudioListenerFactory(createAudioParam, createNativeChannelMergerNode, createNativeConstantSourceNode, createNativeScriptProcessorNode, createNotSupportedError, getFirstSample, isNativeOfflineAudioContext, overwriteAccessors);
 const unrenderedAudioWorkletNodeStore = new WeakMap();
 const minimalBaseAudioContextConstructor = createMinimalBaseAudioContextConstructor(audioDestinationNodeConstructor, createAudioListener, eventTargetConstructor, isNativeOfflineAudioContext, unrenderedAudioWorkletNodeStore, wrapEventListener);
 const createNativeOscillatorNode = createNativeOscillatorNodeFactory(addSilentConnection, cacheTestResult, testAudioScheduledSourceNodeStartMethodNegativeParametersSupport, testAudioScheduledSourceNodeStopMethodConsecutiveCallsSupport, testAudioScheduledSourceNodeStopMethodNegativeParametersSupport, wrapAudioScheduledSourceNodeStopMethodConsecutiveCalls);
@@ -7525,7 +7762,7 @@ const oscillatorNodeConstructor = createOscillatorNodeConstructor(audioNodeConst
 const createConnectedNativeAudioBufferSourceNode = createConnectedNativeAudioBufferSourceNodeFactory(createNativeAudioBufferSourceNode);
 const createNativeWaveShaperNodeFaker = createNativeWaveShaperNodeFakerFactory(createConnectedNativeAudioBufferSourceNode, createInvalidStateError, createNativeGainNode, isDCCurve, monitorConnections);
 const createNativeWaveShaperNode = createNativeWaveShaperNodeFactory(createConnectedNativeAudioBufferSourceNode, createInvalidStateError, createNativeWaveShaperNodeFaker, isDCCurve, monitorConnections, nativeAudioContextConstructor, overwriteAccessors);
-const createNativePannerNodeFaker = createNativePannerNodeFakerFactory(connectNativeAudioNodeToNativeAudioNode, createInvalidStateError, createNativeChannelMergerNode, createNativeGainNode, createNativeScriptProcessorNode, createNativeWaveShaperNode, createNotSupportedError, disconnectNativeAudioNodeFromNativeAudioNode, monitorConnections);
+const createNativePannerNodeFaker = createNativePannerNodeFakerFactory(connectNativeAudioNodeToNativeAudioNode, createInvalidStateError, createNativeChannelMergerNode, createNativeGainNode, createNativeScriptProcessorNode, createNativeWaveShaperNode, createNotSupportedError, disconnectNativeAudioNodeFromNativeAudioNode, getFirstSample, monitorConnections);
 const createNativePannerNode = createNativePannerNodeFactory(createNativePannerNodeFaker);
 const createPannerNodeRenderer = createPannerNodeRendererFactory(connectAudioParam, createNativeChannelMergerNode, createNativeConstantSourceNode, createNativeGainNode, createNativePannerNode, getNativeAudioNode, nativeOfflineAudioContextConstructor, renderAutomation, renderInputsOfAudioNode, renderNativeOfflineAudioContext);
 const pannerNodeConstructor = createPannerNodeConstructor(audioNodeConstructor, createAudioParam, createNativePannerNode, createPannerNodeRenderer, getNativeContext, isNativeOfflineAudioContext, setAudioNodeTailTime);
@@ -7544,7 +7781,7 @@ const getOrCreateBackupOfflineAudioContext = createGetOrCreateBackupOfflineAudio
 const nativeAudioWorkletNodeConstructor = createNativeAudioWorkletNodeConstructor(window$1);
 // The addAudioWorkletModule() function is only available in a SecureContext.
 const addAudioWorkletModule = isSecureContext
-    ? createAddAudioWorkletModule(cacheTestResult, createNotSupportedError, createEvaluateSource(window$1), exposeCurrentFrameAndCurrentTime, createFetchSource(createAbortError), getNativeContext, getOrCreateBackupOfflineAudioContext, isNativeOfflineAudioContext, new WeakMap(), new WeakMap(), createTestAudioWorkletProcessorPostMessageSupport(nativeAudioWorkletNodeConstructor, nativeOfflineAudioContextConstructor), 
+    ? createAddAudioWorkletModule(cacheTestResult, createNotSupportedError, createEvaluateSource(window$1), exposeCurrentFrameAndCurrentTime, createFetchSource(createAbortError), getNativeContext, getOrCreateBackupOfflineAudioContext, isNativeOfflineAudioContext, nativeAudioWorkletNodeConstructor, new WeakMap(), new WeakMap(), createTestAudioWorkletProcessorPostMessageSupport(nativeAudioWorkletNodeConstructor, nativeOfflineAudioContextConstructor), 
     // @todo window is guaranteed to be defined because isSecureContext checks that as well.
     window$1)
     : undefined;
@@ -7571,7 +7808,7 @@ const getBackupOfflineAudioContext = createGetBackupOfflineAudioContext(backupOf
 const setActiveAudioWorkletNodeInputs = createSetActiveAudioWorkletNodeInputs(activeAudioWorkletNodeInputsStore);
 // The AudioWorkletNode constructor is only available in a SecureContext.
 const audioWorkletNodeConstructor = isSecureContext
-    ? createAudioWorkletNodeConstructor(addUnrenderedAudioWorkletNode, audioNodeConstructor, createAudioParam, createAudioWorkletNodeRenderer, createNativeAudioWorkletNode, getAudioNodeConnections, getBackupOfflineAudioContext, getNativeContext, isNativeOfflineAudioContext, nativeAudioWorkletNodeConstructor, sanitizeAudioWorkletNodeOptions, setActiveAudioWorkletNodeInputs, wrapEventListener)
+    ? createAudioWorkletNodeConstructor(addUnrenderedAudioWorkletNode, audioNodeConstructor, createAudioParam, createAudioWorkletNodeRenderer, createNativeAudioWorkletNode, getAudioNodeConnections, getBackupOfflineAudioContext, getNativeContext, isNativeOfflineAudioContext, nativeAudioWorkletNodeConstructor, sanitizeAudioWorkletNodeOptions, setActiveAudioWorkletNodeInputs, testAudioWorkletNodeOptionsClonability, wrapEventListener)
     : undefined;
 const createNativeOfflineAudioContext = createCreateNativeOfflineAudioContext(createNotSupportedError, nativeOfflineAudioContextConstructor);
 const startRendering = createStartRendering(audioBufferStore, cacheTestResult, getAudioNodeRenderer, getUnrenderedAudioWorkletNodes, renderNativeOfflineAudioContext, testAudioBufferCopyChannelMethodsOutOfBoundsSupport, wrapAudioBufferCopyChannelMethods, wrapAudioBufferCopyChannelMethodsOutOfBounds);
@@ -8597,6 +8834,14 @@ class BaseContext extends Emitter {
         super(...arguments);
         this.isOffline = false;
     }
+    /*
+     * This is a placeholder so that JSON.stringify does not throw an error
+     * This matches what JSON.stringify(audioContext) returns on a native
+     * audioContext instance.
+     */
+    toJSON() {
+        return {};
+    }
 }
 
 /**
@@ -8634,7 +8879,9 @@ class Context extends BaseContext {
          * Maps a module name to promise of the addModule method
          */
         this._workletModules = new Map();
-        const options = optionsFromArguments(Context.getDefaults(), arguments, ["context"]);
+        const options = optionsFromArguments(Context.getDefaults(), arguments, [
+            "context",
+        ]);
         if (options.context) {
             this._context = options.context;
         }
@@ -8730,6 +8977,11 @@ class Context extends BaseContext {
         assert(isAudioContext(this._context), "Not available if OfflineAudioContext");
         const context = this._context;
         return context.createMediaStreamSource(stream);
+    }
+    createMediaElementSource(element) {
+        assert(isAudioContext(this._context), "Not available if OfflineAudioContext");
+        const context = this._context;
+        return context.createMediaElementSource(element);
     }
     createMediaStreamDestination() {
         assert(isAudioContext(this._context), "Not available if OfflineAudioContext");
@@ -8828,7 +9080,7 @@ class Context extends BaseContext {
     workletsAreReady() {
         return __awaiter(this, void 0, void 0, function* () {
             const promises = [];
-            this._workletModules.forEach(promise => promises.push(promise));
+            this._workletModules.forEach((promise) => promises.push(promise));
             yield Promise.all(promises);
         });
     }
@@ -8924,7 +9176,7 @@ class Context extends BaseContext {
      * to initially start the AudioContext. See [[Tone.start]]
      */
     resume() {
-        if (this._context.state === "suspended" && isAudioContext(this._context)) {
+        if (isAudioContext(this._context)) {
             return this._context.resume();
         }
         else {
@@ -8975,7 +9227,7 @@ class Context extends BaseContext {
         super.dispose();
         this._ticker.dispose();
         this._timeouts.dispose();
-        Object.keys(this._constants).map(val => this._constants[val].disconnect());
+        Object.keys(this._constants).map((val) => this._constants[val].disconnect());
         return this;
     }
     //---------------------------
@@ -9019,7 +9271,7 @@ class Context extends BaseContext {
      * @param  id  The ID returned from setTimeout
      */
     clearTimeout(id) {
-        this._timeouts.forEach(event => {
+        this._timeouts.forEach((event) => {
             if (event.id === id) {
                 this._timeouts.remove(event);
             }
@@ -9118,6 +9370,9 @@ class DummyContext extends BaseContext {
         return {};
     }
     createMediaStreamSource(_stream) {
+        return {};
+    }
+    createMediaElementSource(_element) {
         return {};
     }
     createMediaStreamDestination() {
@@ -9224,9 +9479,6 @@ const noOp = () => {
  * AudioBuffer loading and storage. ToneAudioBuffer is used internally by all
  * classes that make requests for audio files such as Tone.Player,
  * Tone.Sampler and Tone.Convolver.
- * Aside from load callbacks from individual buffers, ToneAudioBuffer
- * provides events which keep track of the loading progress
- * of _all_ of the buffers. These are ToneAudioBuffer.on("load" / "progress" / "error")
  * @example
  * const buffer = new Tone.ToneAudioBuffer("https://tonejs.github.io/audio/casio/A1.mp3", () => {
  * 	console.log("loaded");
@@ -9515,7 +9767,7 @@ class ToneAudioBuffer extends Tone {
     static load(url) {
         return __awaiter(this, void 0, void 0, function* () {
             // test if the url contains multiple extensions
-            const matches = url.match(/\[(.+\|?)+\]$/);
+            const matches = url.match(/\[([^\]\[]+\|.+)\]$/);
             if (matches) {
                 const extensions = matches[1].split("|");
                 let extension = extensions[0];
@@ -10857,7 +11109,8 @@ class Param extends ToneWithContext {
     }
     exponentialRampToValueAtTime(value, endTime) {
         let numericValue = this._fromType(value);
-        numericValue = Math.max(this._minOutput, numericValue);
+        // the value can't be 0
+        numericValue = EQ(numericValue, 0) ? this._minOutput : numericValue;
         this._assertRange(numericValue);
         const computedTime = this.toSeconds(endTime);
         assert(isFinite(numericValue) && isFinite(computedTime), `Invalid argument(s) to exponentialRampToValueAtTime: ${JSON.stringify(value)}, ${JSON.stringify(endTime)}`);
@@ -13607,7 +13860,7 @@ class Volume extends ToneAudioNode {
  * @example
  * const oscillator = new Tone.Oscillator().start();
  * // the audio will go from the oscillator to the speakers
- * oscillator.connect(Tone.Destination);
+ * oscillator.connect(Tone.getDestination());
  * // a convenience for connecting to the master output is also provided:
  * oscillator.toDestination();
  * @category Core
@@ -13619,7 +13872,12 @@ class Destination extends ToneAudioNode {
         this.input = new Volume({ context: this.context });
         this.output = new Gain({ context: this.context });
         /**
-         * The volume of the master output.
+         * The volume of the master output in decibels. -Infinity is silent, and 0 is no change.
+         * @example
+         * const osc = new Tone.Oscillator().toDestination();
+         * osc.start();
+         * // ramp the volume down to silent over 10 seconds
+         * Tone.getDestination().volume.rampTo(-Infinity, 10);
          */
         this.volume = this.input.volume;
         const options = optionsFromArguments(Destination.getDefaults(), arguments);
@@ -13977,15 +14235,6 @@ class Transport extends ToneWithContext {
      * @param  tickTime clock relative tick time
      */
     _processTick(tickTime, ticks) {
-        // handle swing
-        if (this._swingAmount > 0 &&
-            ticks % this._ppq !== 0 && // not on a downbeat
-            ticks % (this._swingTicks * 2) !== 0) {
-            // add some swing
-            const progress = (ticks % (this._swingTicks * 2)) / (this._swingTicks * 2);
-            const amount = Math.sin((progress) * Math.PI) * this._swingAmount;
-            tickTime += new TicksClass(this.context, this._swingTicks * 2 / 3).toSeconds() * amount;
-        }
         // do the loop test
         if (this._loop.get(tickTime)) {
             if (ticks >= this._loopEnd) {
@@ -13995,6 +14244,15 @@ class Transport extends ToneWithContext {
                 this.emit("loopStart", tickTime, this._clock.getSecondsAtTime(tickTime));
                 this.emit("loop", tickTime);
             }
+        }
+        // handle swing
+        if (this._swingAmount > 0 &&
+            ticks % this._ppq !== 0 && // not on a downbeat
+            ticks % (this._swingTicks * 2) !== 0) {
+            // add some swing
+            const progress = (ticks % (this._swingTicks * 2)) / (this._swingTicks * 2);
+            const amount = Math.sin((progress) * Math.PI) * this._swingAmount;
+            tickTime += new TicksClass(this.context, this._swingTicks * 2 / 3).toSeconds() * amount;
         }
         // invoke the timeline events scheduled on this tick
         this._timeline.forEachAtTime(ticks, event => event.invoke(tickTime));
@@ -14308,7 +14566,8 @@ class Transport extends ToneWithContext {
             if (this.state === "started") {
                 const ticks = this._clock.getTicksAtTime(now);
                 // schedule to start on the next tick, #573
-                const time = this._clock.getTimeOfTick(Math.ceil(ticks));
+                const remainingTick = this._clock.frequency.getDurationOfTicks(Math.ceil(ticks) - ticks, now);
+                const time = now + remainingTick;
                 this.emit("stop", time);
                 this._clock.setTicksAtTime(t, time);
                 // restart it with the new time
@@ -16849,11 +17108,7 @@ class Player extends Source {
             offset = defaultArg(offset, 0);
         }
         // compute the values in seconds
-        let computedOffset = this.toSeconds(offset);
-        // if it's synced, it should factor in the playback rate for computing the offset
-        if (this._synced) {
-            computedOffset *= this._playbackRate;
-        }
+        const computedOffset = this.toSeconds(offset);
         // compute the duration which is either the passed in duration of the buffer.duration - offset
         const origDuration = duration;
         duration = defaultArg(duration, Math.max(this._buffer.duration - computedOffset, 0));
@@ -19054,7 +19309,7 @@ class Piano extends ToneAudioNode {
 var webmidi_min = createCommonjsModule(function (module) {
 /*
 
-WebMidi v2.5.1
+WebMidi v2.5.2
 
 WebMidi.js helps you tame the Web MIDI API. Send and receive MIDI messages with ease. Control instruments with user-friendly functions (playNote, sendPitchBend, etc.). React to MIDI input with simple event listeners (noteon, pitchbend, controlchange, etc.).
 https://github.com/djipco/webmidi
@@ -19082,7 +19337,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 
-!function(scope){function WebMidi(){if(WebMidi.prototype._singleton)throw new Error("WebMidi is a singleton, it cannot be instantiated directly.");(WebMidi.prototype._singleton=this)._inputs=[],this._outputs=[],this._userHandlers={},this._stateChangeQueue=[],this._processingStateChange=!1,this._midiInterfaceEvents=["connected","disconnected"],this._nrpnBuffer=[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],this._nrpnEventsEnabled=!0,this._nrpnTypes=["entry","increment","decrement"],this._notes=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"],this._semitones={C:0,D:2,E:4,F:5,G:7,A:9,B:11},Object.defineProperties(this,{MIDI_SYSTEM_MESSAGES:{value:{sysex:240,timecode:241,songposition:242,songselect:243,tuningrequest:246,sysexend:247,clock:248,start:250,continue:251,stop:252,activesensing:254,reset:255,midimessage:0,unknownsystemmessage:-1},writable:!1,enumerable:!0,configurable:!1},MIDI_CHANNEL_MESSAGES:{value:{noteoff:8,noteon:9,keyaftertouch:10,controlchange:11,channelmode:11,nrpn:11,programchange:12,channelaftertouch:13,pitchbend:14},writable:!1,enumerable:!0,configurable:!1},MIDI_REGISTERED_PARAMETER:{value:{pitchbendrange:[0,0],channelfinetuning:[0,1],channelcoarsetuning:[0,2],tuningprogram:[0,3],tuningbank:[0,4],modulationrange:[0,5],azimuthangle:[61,0],elevationangle:[61,1],gain:[61,2],distanceratio:[61,3],maximumdistance:[61,4],maximumdistancegain:[61,5],referencedistanceratio:[61,6],panspreadangle:[61,7],rollangle:[61,8]},writable:!1,enumerable:!0,configurable:!1},MIDI_CONTROL_CHANGE_MESSAGES:{value:{bankselectcoarse:0,modulationwheelcoarse:1,breathcontrollercoarse:2,footcontrollercoarse:4,portamentotimecoarse:5,dataentrycoarse:6,volumecoarse:7,balancecoarse:8,pancoarse:10,expressioncoarse:11,effectcontrol1coarse:12,effectcontrol2coarse:13,generalpurposeslider1:16,generalpurposeslider2:17,generalpurposeslider3:18,generalpurposeslider4:19,bankselectfine:32,modulationwheelfine:33,breathcontrollerfine:34,footcontrollerfine:36,portamentotimefine:37,dataentryfine:38,volumefine:39,balancefine:40,panfine:42,expressionfine:43,effectcontrol1fine:44,effectcontrol2fine:45,holdpedal:64,portamento:65,sustenutopedal:66,softpedal:67,legatopedal:68,hold2pedal:69,soundvariation:70,resonance:71,soundreleasetime:72,soundattacktime:73,brightness:74,soundcontrol6:75,soundcontrol7:76,soundcontrol8:77,soundcontrol9:78,soundcontrol10:79,generalpurposebutton1:80,generalpurposebutton2:81,generalpurposebutton3:82,generalpurposebutton4:83,reverblevel:91,tremololevel:92,choruslevel:93,celestelevel:94,phaserlevel:95,databuttonincrement:96,databuttondecrement:97,nonregisteredparametercoarse:98,nonregisteredparameterfine:99,registeredparametercoarse:100,registeredparameterfine:101},writable:!1,enumerable:!0,configurable:!1},MIDI_NRPN_MESSAGES:{value:{entrymsb:6,entrylsb:38,increment:96,decrement:97,paramlsb:98,parammsb:99,nullactiveparameter:127},writable:!1,enumerable:!0,configurable:!1},MIDI_CHANNEL_MODE_MESSAGES:{value:{allsoundoff:120,resetallcontrollers:121,localcontrol:122,allnotesoff:123,omnimodeoff:124,omnimodeon:125,monomodeon:126,polymodeon:127},writable:!1,enumerable:!0,configurable:!1},octaveOffset:{value:0,writable:!0,enumerable:!0,configurable:!1}}),Object.defineProperties(this,{supported:{enumerable:!0,get:function(){return "requestMIDIAccess"in navigator}},enabled:{enumerable:!0,get:function(){return void 0!==this.interface}.bind(this)},inputs:{enumerable:!0,get:function(){return this._inputs}.bind(this)},outputs:{enumerable:!0,get:function(){return this._outputs}.bind(this)},sysexEnabled:{enumerable:!0,get:function(){return !(!this.interface||!this.interface.sysexEnabled)}.bind(this)},nrpnEventsEnabled:{enumerable:!0,get:function(){return !!this._nrpnEventsEnabled}.bind(this),set:function(enabled){return this._nrpnEventsEnabled=enabled,this._nrpnEventsEnabled}},nrpnTypes:{enumerable:!0,get:function(){return this._nrpnTypes}.bind(this)},time:{enumerable:!0,get:function(){return performance.now()}}});}var wm=new WebMidi;function Input(midiInput){var that=this;this._userHandlers={channel:{},system:{}},this._midiInput=midiInput,Object.defineProperties(this,{connection:{enumerable:!0,get:function(){return that._midiInput.connection}},id:{enumerable:!0,get:function(){return that._midiInput.id}},manufacturer:{enumerable:!0,get:function(){return that._midiInput.manufacturer}},name:{enumerable:!0,get:function(){return that._midiInput.name}},state:{enumerable:!0,get:function(){return that._midiInput.state}},type:{enumerable:!0,get:function(){return that._midiInput.type}}}),this._initializeUserHandlers(),this._midiInput.onmidimessage=this._onMidiMessage.bind(this);}function Output(midiOutput){var that=this;this._midiOutput=midiOutput,Object.defineProperties(this,{connection:{enumerable:!0,get:function(){return that._midiOutput.connection}},id:{enumerable:!0,get:function(){return that._midiOutput.id}},manufacturer:{enumerable:!0,get:function(){return that._midiOutput.manufacturer}},name:{enumerable:!0,get:function(){return that._midiOutput.name}},state:{enumerable:!0,get:function(){return that._midiOutput.state}},type:{enumerable:!0,get:function(){return that._midiOutput.type}}});}WebMidi.prototype.enable=function(callback,sysex){this.enabled||(this.supported?navigator.requestMIDIAccess({sysex:sysex}).then(function(midiAccess){var promiseTimeout,events=[],promises=[];this.interface=midiAccess,this._resetInterfaceUserHandlers(),this.interface.onstatechange=function(e){events.push(e);};for(var inputs=midiAccess.inputs.values(),input=inputs.next();input&&!input.done;input=inputs.next())promises.push(input.value.open());for(var outputs=midiAccess.outputs.values(),output=outputs.next();output&&!output.done;output=outputs.next())promises.push(output.value.open());function onPortsOpen(){clearTimeout(promiseTimeout),this._updateInputsAndOutputs(),this.interface.onstatechange=this._onInterfaceStateChange.bind(this),"function"==typeof callback&&callback.call(this),events.forEach(function(event){this._onInterfaceStateChange(event);}.bind(this));}promiseTimeout=setTimeout(onPortsOpen.bind(this),200),Promise&&Promise.all(promises).catch(function(err){}).then(onPortsOpen.bind(this));}.bind(this),function(err){"function"==typeof callback&&callback.call(this,err);}.bind(this)):"function"==typeof callback&&callback(new Error("The Web MIDI API is not supported by your browser.")));},WebMidi.prototype.disable=function(){if(!this.supported)throw new Error("The Web MIDI API is not supported by your browser.");this.interface&&(this.interface.onstatechange=void 0),this.interface=void 0,this._inputs=[],this._outputs=[],this._nrpnEventsEnabled=!0,this._resetInterfaceUserHandlers();},WebMidi.prototype.addListener=function(type,listener){if(!this.enabled)throw new Error("WebMidi must be enabled before adding event listeners.");if("function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(!(0<=this._midiInterfaceEvents.indexOf(type)))throw new TypeError("The specified event type is not supported.");return this._userHandlers[type].push(listener),this},WebMidi.prototype.hasListener=function(type,listener){if(!this.enabled)throw new Error("WebMidi must be enabled before checking event listeners.");if("function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(!(0<=this._midiInterfaceEvents.indexOf(type)))throw new TypeError("The specified event type is not supported.");for(var o=0;o<this._userHandlers[type].length;o++)if(this._userHandlers[type][o]===listener)return !0;return !1},WebMidi.prototype.removeListener=function(type,listener){if(!this.enabled)throw new Error("WebMidi must be enabled before removing event listeners.");if(void 0!==listener&&"function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(0<=this._midiInterfaceEvents.indexOf(type))if(listener)for(var o=0;o<this._userHandlers[type].length;o++)this._userHandlers[type][o]===listener&&this._userHandlers[type].splice(o,1);else this._userHandlers[type]=[];else {if(void 0!==type)throw new TypeError("The specified event type is not supported.");this._resetInterfaceUserHandlers();}return this},WebMidi.prototype.toMIDIChannels=function(channel){var channels;if("all"===channel||void 0===channel)channels=["all"];else {if("none"===channel)return channels=[];channels=Array.isArray(channel)?channel:[channel];}return -1<channels.indexOf("all")&&(channels=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]),channels.map(function(ch){return parseInt(ch)}).filter(function(ch){return 1<=ch&&ch<=16})},WebMidi.prototype.getInputById=function(id){if(!this.enabled)throw new Error("WebMidi is not enabled.");id=String(id);for(var i=0;i<this.inputs.length;i++)if(this.inputs[i].id===id)return this.inputs[i];return !1},WebMidi.prototype.getOutputById=function(id){if(!this.enabled)throw new Error("WebMidi is not enabled.");id=String(id);for(var i=0;i<this.outputs.length;i++)if(this.outputs[i].id===id)return this.outputs[i];return !1},WebMidi.prototype.getInputByName=function(name){if(!this.enabled)throw new Error("WebMidi is not enabled.");for(var i=0;i<this.inputs.length;i++)if(~this.inputs[i].name.indexOf(name))return this.inputs[i];return !1},WebMidi.prototype.getOctave=function(number){if(null!=number&&0<=number&&number<=127)return Math.floor(Math.floor(number)/12-1)+Math.floor(wm.octaveOffset)},WebMidi.prototype.getOutputByName=function(name){if(!this.enabled)throw new Error("WebMidi is not enabled.");for(var i=0;i<this.outputs.length;i++)if(~this.outputs[i].name.indexOf(name))return this.outputs[i];return !1},WebMidi.prototype.guessNoteNumber=function(input){var output=!1;if(input&&input.toFixed&&0<=input&&input<=127?output=Math.round(input):0<=parseInt(input)&&parseInt(input)<=127?output=parseInt(input):("string"==typeof input||input instanceof String)&&(output=this.noteNameToNumber(input)),!1===output)throw new Error("Invalid input value ("+input+").");return output},WebMidi.prototype.noteNameToNumber=function(name){"string"!=typeof name&&(name="");var matches=name.match(/([CDEFGAB])(#{0,2}|b{0,2})(-?\d+)/i);if(!matches)throw new RangeError("Invalid note name.");var semitones=wm._semitones[matches[1].toUpperCase()],result=12*(parseInt(matches[3])+1-Math.floor(wm.octaveOffset))+semitones;if(-1<matches[2].toLowerCase().indexOf("b")?result-=matches[2].length:-1<matches[2].toLowerCase().indexOf("#")&&(result+=matches[2].length),result<0||127<result)throw new RangeError("Invalid note name or note outside valid range.");return result},WebMidi.prototype._updateInputsAndOutputs=function(){this._updateInputs(),this._updateOutputs();},WebMidi.prototype._updateInputs=function(){for(var i=0;i<this._inputs.length;i++){for(var remove=!0,updated=this.interface.inputs.values(),input=updated.next();input&&!input.done;input=updated.next())if(this._inputs[i]._midiInput===input.value){remove=!1;break}remove&&this._inputs.splice(i,1);}this.interface&&this.interface.inputs.forEach(function(nInput){for(var add=!0,j=0;j<this._inputs.length;j++)this._inputs[j]._midiInput===nInput&&(add=!1);add&&this._inputs.push(new Input(nInput));}.bind(this));},WebMidi.prototype._updateOutputs=function(){for(var i=0;i<this._outputs.length;i++){for(var remove=!0,updated=this.interface.outputs.values(),output=updated.next();output&&!output.done;output=updated.next())if(this._outputs[i]._midiOutput===output.value){remove=!1;break}remove&&this._outputs.splice(i,1);}this.interface&&this.interface.outputs.forEach(function(nOutput){for(var add=!0,j=0;j<this._outputs.length;j++)this._outputs[j]._midiOutput===nOutput&&(add=!1);add&&this._outputs.push(new Output(nOutput));}.bind(this));},WebMidi.prototype._onInterfaceStateChange=function(e){this._updateInputsAndOutputs();var event={timestamp:e.timeStamp,type:e.port.state};this.interface&&"connected"===e.port.state?"output"===e.port.type?event.port=this.getOutputById(e.port.id):"input"===e.port.type&&(event.port=this.getInputById(e.port.id)):event.port={connection:"closed",id:e.port.id,manufacturer:e.port.manufacturer,name:e.port.name,state:e.port.state,type:e.port.type},this._userHandlers[e.port.state].forEach(function(handler){handler(event);});},WebMidi.prototype._resetInterfaceUserHandlers=function(){for(var i=0;i<this._midiInterfaceEvents.length;i++)this._userHandlers[this._midiInterfaceEvents[i]]=[];},Input.prototype.on=Input.prototype.addListener=function(type,channel,listener){var that=this;if(void 0===channel&&(channel="all"),Array.isArray(channel)||(channel=[channel]),channel.forEach(function(item){if("all"!==item&&!(1<=item&&item<=16))throw new RangeError("The 'channel' parameter is invalid.")}),"function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(void 0!==wm.MIDI_SYSTEM_MESSAGES[type])this._userHandlers.system[type]||(this._userHandlers.system[type]=[]),this._userHandlers.system[type].push(listener);else {if(void 0===wm.MIDI_CHANNEL_MESSAGES[type])throw new TypeError("The specified event type is not supported.");if(-1<channel.indexOf("all")){channel=[];for(var j=1;j<=16;j++)channel.push(j);}this._userHandlers.channel[type]||(this._userHandlers.channel[type]=[]),channel.forEach(function(ch){that._userHandlers.channel[type][ch]||(that._userHandlers.channel[type][ch]=[]),that._userHandlers.channel[type][ch].push(listener);});}return this},Input.prototype.hasListener=function(type,channel,listener){var that=this;if("function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(void 0===channel&&(channel="all"),channel.constructor!==Array&&(channel=[channel]),void 0!==wm.MIDI_SYSTEM_MESSAGES[type]){for(var o=0;o<this._userHandlers.system[type].length;o++)if(this._userHandlers.system[type][o]===listener)return !0}else if(void 0!==wm.MIDI_CHANNEL_MESSAGES[type]){if(-1<channel.indexOf("all")){channel=[];for(var j=1;j<=16;j++)channel.push(j);}return !!this._userHandlers.channel[type]&&channel.every(function(chNum){var listeners=that._userHandlers.channel[type][chNum];return listeners&&-1<listeners.indexOf(listener)})}return !1},Input.prototype.removeListener=function(type,channel,listener){var that=this;if(void 0!==listener&&"function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(void 0===channel&&(channel="all"),channel.constructor!==Array&&(channel=[channel]),void 0!==wm.MIDI_SYSTEM_MESSAGES[type])if(void 0===listener)this._userHandlers.system[type]=[];else for(var o=0;o<this._userHandlers.system[type].length;o++)this._userHandlers.system[type][o]===listener&&this._userHandlers.system[type].splice(o,1);else if(void 0!==wm.MIDI_CHANNEL_MESSAGES[type]){if(-1<channel.indexOf("all")){channel=[];for(var j=1;j<=16;j++)channel.push(j);}if(!this._userHandlers.channel[type])return this;channel.forEach(function(chNum){var listeners=that._userHandlers.channel[type][chNum];if(listeners)if(void 0===listener)that._userHandlers.channel[type][chNum]=[];else for(var l=0;l<listeners.length;l++)listeners[l]===listener&&listeners.splice(l,1);});}else {if(void 0!==type)throw new TypeError("The specified event type is not supported.");this._initializeUserHandlers();}return this},Input.prototype._initializeUserHandlers=function(){for(var prop1 in wm.MIDI_CHANNEL_MESSAGES)wm.MIDI_CHANNEL_MESSAGES.hasOwnProperty(prop1)&&(this._userHandlers.channel[prop1]={});for(var prop2 in wm.MIDI_SYSTEM_MESSAGES)wm.MIDI_SYSTEM_MESSAGES.hasOwnProperty(prop2)&&(this._userHandlers.system[prop2]=[]);},Input.prototype._onMidiMessage=function(e){if(0<this._userHandlers.system.midimessage.length){var event={target:this,data:e.data,timestamp:e.timeStamp,type:"midimessage"};this._userHandlers.system.midimessage.forEach(function(callback){callback(event);});}e.data[0]<240?(this._parseChannelEvent(e),this._parseNrpnEvent(e)):e.data[0]<=255&&this._parseSystemEvent(e);},Input.prototype._parseNrpnEvent=function(e){var data1,data2,command=e.data[0]>>4,channelBufferIndex=15&e.data[0],channel=1+channelBufferIndex;if(1<e.data.length&&(data1=e.data[1],data2=2<e.data.length?e.data[2]:void 0),wm.nrpnEventsEnabled&&command===wm.MIDI_CHANNEL_MESSAGES.controlchange&&(data1>=wm.MIDI_NRPN_MESSAGES.increment&&data1<=wm.MIDI_NRPN_MESSAGES.parammsb||data1===wm.MIDI_NRPN_MESSAGES.entrymsb||data1===wm.MIDI_NRPN_MESSAGES.entrylsb)){var ccEvent={target:this,type:"controlchange",data:e.data,timestamp:e.timeStamp,channel:channel,controller:{number:data1,name:this.getCcNameByNumber(data1)},value:data2};if(ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.parammsb&&ccEvent.value!=wm.MIDI_NRPN_MESSAGES.nullactiveparameter)wm._nrpnBuffer[channelBufferIndex]=[],wm._nrpnBuffer[channelBufferIndex][0]=ccEvent;else if(1===wm._nrpnBuffer[channelBufferIndex].length&&ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.paramlsb)wm._nrpnBuffer[channelBufferIndex].push(ccEvent);else if(2!==wm._nrpnBuffer[channelBufferIndex].length||ccEvent.controller.number!==wm.MIDI_NRPN_MESSAGES.increment&&ccEvent.controller.number!==wm.MIDI_NRPN_MESSAGES.decrement&&ccEvent.controller.number!==wm.MIDI_NRPN_MESSAGES.entrymsb)if(3===wm._nrpnBuffer[channelBufferIndex].length&&wm._nrpnBuffer[channelBufferIndex][2].number===wm.MIDI_NRPN_MESSAGES.entrymsb&&ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.entrylsb)wm._nrpnBuffer[channelBufferIndex].push(ccEvent);else if(3<=wm._nrpnBuffer[channelBufferIndex].length&&wm._nrpnBuffer[channelBufferIndex].length<=4&&ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.parammsb&&ccEvent.value===wm.MIDI_NRPN_MESSAGES.nullactiveparameter)wm._nrpnBuffer[channelBufferIndex].push(ccEvent);else if(4<=wm._nrpnBuffer[channelBufferIndex].length&&wm._nrpnBuffer[channelBufferIndex].length<=5&&ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.paramlsb&&ccEvent.value===wm.MIDI_NRPN_MESSAGES.nullactiveparameter){wm._nrpnBuffer[channelBufferIndex].push(ccEvent);var rawData=[];wm._nrpnBuffer[channelBufferIndex].forEach(function(ev){rawData.push(ev.data);});var nrpnNumber=wm._nrpnBuffer[channelBufferIndex][0].value<<7|wm._nrpnBuffer[channelBufferIndex][1].value,nrpnValue=wm._nrpnBuffer[channelBufferIndex][2].value;6===wm._nrpnBuffer[channelBufferIndex].length&&(nrpnValue=wm._nrpnBuffer[channelBufferIndex][2].value<<7|wm._nrpnBuffer[channelBufferIndex][3].value);var nrpnControllerType="";switch(wm._nrpnBuffer[channelBufferIndex][2].controller.number){case wm.MIDI_NRPN_MESSAGES.entrymsb:nrpnControllerType=wm._nrpnTypes[0];break;case wm.MIDI_NRPN_MESSAGES.increment:nrpnControllerType=wm._nrpnTypes[1];break;case wm.MIDI_NRPN_MESSAGES.decrement:nrpnControllerType=wm._nrpnTypes[2];break;default:throw new Error("The NPRN type was unidentifiable.")}var nrpnEvent={timestamp:ccEvent.timestamp,channel:ccEvent.channel,type:"nrpn",data:rawData,controller:{number:nrpnNumber,type:nrpnControllerType,name:"Non-Registered Parameter "+nrpnNumber},value:nrpnValue};wm._nrpnBuffer[channelBufferIndex]=[],this._userHandlers.channel[nrpnEvent.type]&&this._userHandlers.channel[nrpnEvent.type][nrpnEvent.channel]&&this._userHandlers.channel[nrpnEvent.type][nrpnEvent.channel].forEach(function(callback){callback(nrpnEvent);});}else wm._nrpnBuffer[channelBufferIndex]=[];else wm._nrpnBuffer[channelBufferIndex].push(ccEvent);}},Input.prototype._parseChannelEvent=function(e){var data1,data2,command=e.data[0]>>4,channel=1+(15&e.data[0]);1<e.data.length&&(data1=e.data[1],data2=2<e.data.length?e.data[2]:void 0);var event={target:this,data:e.data,timestamp:e.timeStamp,channel:channel};command===wm.MIDI_CHANNEL_MESSAGES.noteoff||command===wm.MIDI_CHANNEL_MESSAGES.noteon&&0===data2?(event.type="noteoff",event.note={number:data1,name:wm._notes[data1%12],octave:wm.getOctave(data1)},event.velocity=data2/127,event.rawVelocity=data2):command===wm.MIDI_CHANNEL_MESSAGES.noteon?(event.type="noteon",event.note={number:data1,name:wm._notes[data1%12],octave:wm.getOctave(data1)},event.velocity=data2/127,event.rawVelocity=data2):command===wm.MIDI_CHANNEL_MESSAGES.keyaftertouch?(event.type="keyaftertouch",event.note={number:data1,name:wm._notes[data1%12],octave:wm.getOctave(data1)},event.value=data2/127):command===wm.MIDI_CHANNEL_MESSAGES.controlchange&&0<=data1&&data1<=119?(event.type="controlchange",event.controller={number:data1,name:this.getCcNameByNumber(data1)},event.value=data2):command===wm.MIDI_CHANNEL_MESSAGES.channelmode&&120<=data1&&data1<=127?(event.type="channelmode",event.controller={number:data1,name:this.getChannelModeByNumber(data1)},event.value=data2):command===wm.MIDI_CHANNEL_MESSAGES.programchange?(event.type="programchange",event.value=data1):command===wm.MIDI_CHANNEL_MESSAGES.channelaftertouch?(event.type="channelaftertouch",event.value=data1/127):command===wm.MIDI_CHANNEL_MESSAGES.pitchbend?(event.type="pitchbend",event.value=((data2<<7)+data1-8192)/8192):event.type="unknownchannelmessage",this._userHandlers.channel[event.type]&&this._userHandlers.channel[event.type][channel]&&this._userHandlers.channel[event.type][channel].forEach(function(callback){callback(event);});},Input.prototype.getCcNameByNumber=function(number){if(!(0<=(number=Math.floor(number))&&number<=119))throw new RangeError("The control change number must be between 0 and 119.");for(var cc in wm.MIDI_CONTROL_CHANGE_MESSAGES)if(wm.MIDI_CONTROL_CHANGE_MESSAGES.hasOwnProperty(cc)&&number===wm.MIDI_CONTROL_CHANGE_MESSAGES[cc])return cc},Input.prototype.getChannelModeByNumber=function(number){if(!(120<=(number=Math.floor(number))&&status<=127))throw new RangeError("The control change number must be between 120 and 127.");for(var cm in wm.MIDI_CHANNEL_MODE_MESSAGES)if(wm.MIDI_CHANNEL_MODE_MESSAGES.hasOwnProperty(cm)&&number===wm.MIDI_CHANNEL_MODE_MESSAGES[cm])return cm},Input.prototype._parseSystemEvent=function(e){var command=e.data[0],event={target:this,data:e.data,timestamp:e.timeStamp};command===wm.MIDI_SYSTEM_MESSAGES.sysex?event.type="sysex":command===wm.MIDI_SYSTEM_MESSAGES.timecode?event.type="timecode":command===wm.MIDI_SYSTEM_MESSAGES.songposition?event.type="songposition":command===wm.MIDI_SYSTEM_MESSAGES.songselect?(event.type="songselect",event.song=e.data[1]):command===wm.MIDI_SYSTEM_MESSAGES.tuningrequest?event.type="tuningrequest":command===wm.MIDI_SYSTEM_MESSAGES.clock?event.type="clock":command===wm.MIDI_SYSTEM_MESSAGES.start?event.type="start":command===wm.MIDI_SYSTEM_MESSAGES.continue?event.type="continue":command===wm.MIDI_SYSTEM_MESSAGES.stop?event.type="stop":command===wm.MIDI_SYSTEM_MESSAGES.activesensing?event.type="activesensing":command===wm.MIDI_SYSTEM_MESSAGES.reset?event.type="reset":event.type="unknownsystemmessage",this._userHandlers.system[event.type]&&this._userHandlers.system[event.type].forEach(function(callback){callback(event);});},Output.prototype.send=function(status,data,timestamp){if(!(128<=status&&status<=255))throw new RangeError("The status byte must be an integer between 128 (0x80) and 255 (0xFF).");void 0===data&&(data=[]),Array.isArray(data)||(data=[data]);var message=[];return data.forEach(function(item){var parsed=Math.floor(item);if(!(0<=parsed&&parsed<=255))throw new RangeError("Data bytes must be integers between 0 (0x00) and 255 (0xFF).");message.push(parsed);}),this._midiOutput.send([status].concat(message),parseFloat(timestamp)||0),this},Output.prototype.sendSysex=function(manufacturer,data,options){if(!wm.sysexEnabled)throw new Error("Sysex message support must first be activated.");return options=options||{},manufacturer=[].concat(manufacturer),data.forEach(function(item){if(item<0||127<item)throw new RangeError("The data bytes of a sysex message must be integers between 0 (0x00) and 127 (0x7F).")}),data=manufacturer.concat(data,wm.MIDI_SYSTEM_MESSAGES.sysexend),this.send(wm.MIDI_SYSTEM_MESSAGES.sysex,data,this._parseTimeParameter(options.time)),this},Output.prototype.sendTimecodeQuarterFrame=function(value,options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.timecode,value,this._parseTimeParameter(options.time)),this},Output.prototype.sendSongPosition=function(value,options){options=options||{};var msb=(value=Math.floor(value)||0)>>7&127,lsb=127&value;return this.send(wm.MIDI_SYSTEM_MESSAGES.songposition,[msb,lsb],this._parseTimeParameter(options.time)),this},Output.prototype.sendSongSelect=function(value,options){if(options=options||{},!(0<=(value=Math.floor(value))&&value<=127))throw new RangeError("The song number must be between 0 and 127.");return this.send(wm.MIDI_SYSTEM_MESSAGES.songselect,[value],this._parseTimeParameter(options.time)),this},Output.prototype.sendTuningRequest=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.tuningrequest,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendClock=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.clock,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendStart=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.start,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendContinue=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.continue,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendStop=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.stop,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendActiveSensing=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.activesensing,[],this._parseTimeParameter(options.time)),this},Output.prototype.sendReset=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.reset,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.stopNote=function(note,channel,options){if("all"===note)return this.sendChannelMode("allnotesoff",0,channel,options);var nVelocity=64;return (options=options||{}).rawVelocity?!isNaN(options.velocity)&&0<=options.velocity&&options.velocity<=127&&(nVelocity=options.velocity):!isNaN(options.velocity)&&0<=options.velocity&&options.velocity<=1&&(nVelocity=127*options.velocity),this._convertNoteToArray(note).forEach(function(item){wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.noteoff<<4)+(ch-1),[item,Math.round(nVelocity)],this._parseTimeParameter(options.time));}.bind(this));}.bind(this)),this},Output.prototype.playNote=function(note,channel,options){var time,nVelocity=64;if((options=options||{}).rawVelocity?!isNaN(options.velocity)&&0<=options.velocity&&options.velocity<=127&&(nVelocity=options.velocity):!isNaN(options.velocity)&&0<=options.velocity&&options.velocity<=1&&(nVelocity=127*options.velocity),time=this._parseTimeParameter(options.time),this._convertNoteToArray(note).forEach(function(item){wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.noteon<<4)+(ch-1),[item,Math.round(nVelocity)],time);}.bind(this));}.bind(this)),!isNaN(options.duration)){options.duration<=0&&(options.duration=0);var nRelease=64;options.rawVelocity?!isNaN(options.release)&&0<=options.release&&options.release<=127&&(nRelease=options.release):!isNaN(options.release)&&0<=options.release&&options.release<=1&&(nRelease=127*options.release),this._convertNoteToArray(note).forEach(function(item){wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.noteoff<<4)+(ch-1),[item,Math.round(nRelease)],(time||wm.time)+options.duration);}.bind(this));}.bind(this));}return this},Output.prototype.sendKeyAftertouch=function(note,channel,pressure,options){var that=this;if(options=options||{},channel<1||16<channel)throw new RangeError("The channel must be between 1 and 16.");(isNaN(pressure)||pressure<0||1<pressure)&&(pressure=.5);var nPressure=Math.round(127*pressure);return this._convertNoteToArray(note).forEach(function(item){wm.toMIDIChannels(channel).forEach(function(ch){that.send((wm.MIDI_CHANNEL_MESSAGES.keyaftertouch<<4)+(ch-1),[item,nPressure],that._parseTimeParameter(options.time));});}),this},Output.prototype.sendControlChange=function(controller,value,channel,options){if(options=options||{},"string"==typeof controller){if(void 0===(controller=wm.MIDI_CONTROL_CHANGE_MESSAGES[controller]))throw new TypeError("Invalid controller name.")}else if(!(0<=(controller=Math.floor(controller))&&controller<=119))throw new RangeError("Controller numbers must be between 0 and 119.");if(!(0<=(value=Math.floor(value)||0)&&value<=127))throw new RangeError("Controller value must be between 0 and 127.");return wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.controlchange<<4)+(ch-1),[controller,value],this._parseTimeParameter(options.time));}.bind(this)),this},Output.prototype._selectRegisteredParameter=function(parameter,channel,time){var that=this;if(parameter[0]=Math.floor(parameter[0]),!(0<=parameter[0]&&parameter[0]<=127))throw new RangeError("The control65 value must be between 0 and 127");if(parameter[1]=Math.floor(parameter[1]),!(0<=parameter[1]&&parameter[1]<=127))throw new RangeError("The control64 value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(101,parameter[0],channel,{time:time}),that.sendControlChange(100,parameter[1],channel,{time:time});}),this},Output.prototype._selectNonRegisteredParameter=function(parameter,channel,time){var that=this;if(parameter[0]=Math.floor(parameter[0]),!(0<=parameter[0]&&parameter[0]<=127))throw new RangeError("The control63 value must be between 0 and 127");if(parameter[1]=Math.floor(parameter[1]),!(0<=parameter[1]&&parameter[1]<=127))throw new RangeError("The control62 value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(99,parameter[0],channel,{time:time}),that.sendControlChange(98,parameter[1],channel,{time:time});}),this},Output.prototype._setCurrentRegisteredParameter=function(data,channel,time){var that=this;if((data=[].concat(data))[0]=Math.floor(data[0]),!(0<=data[0]&&data[0]<=127))throw new RangeError("The msb value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(6,data[0],channel,{time:time});}),data[1]=Math.floor(data[1]),0<=data[1]&&data[1]<=127&&wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(38,data[1],channel,{time:time});}),this},Output.prototype._deselectRegisteredParameter=function(channel,time){var that=this;return wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(101,127,channel,{time:time}),that.sendControlChange(100,127,channel,{time:time});}),this},Output.prototype.setRegisteredParameter=function(parameter,data,channel,options){var that=this;if(options=options||{},!Array.isArray(parameter)){if(!wm.MIDI_REGISTERED_PARAMETER[parameter])throw new Error("The specified parameter is not available.");parameter=wm.MIDI_REGISTERED_PARAMETER[parameter];}return wm.toMIDIChannels(channel).forEach(function(){that._selectRegisteredParameter(parameter,channel,options.time),that._setCurrentRegisteredParameter(data,channel,options.time),that._deselectRegisteredParameter(channel,options.time);}),this},Output.prototype.setNonRegisteredParameter=function(parameter,data,channel,options){var that=this;if(options=options||{},!(0<=parameter[0]&&parameter[0]<=127&&0<=parameter[1]&&parameter[1]<=127))throw new Error("Position 0 and 1 of the 2-position parameter array must both be between 0 and 127.");return data=[].concat(data),wm.toMIDIChannels(channel).forEach(function(){that._selectNonRegisteredParameter(parameter,channel,options.time),that._setCurrentRegisteredParameter(data,channel,options.time),that._deselectRegisteredParameter(channel,options.time);}),this},Output.prototype.incrementRegisteredParameter=function(parameter,channel,options){var that=this;if(options=options||{},!Array.isArray(parameter)){if(!wm.MIDI_REGISTERED_PARAMETER[parameter])throw new Error("The specified parameter is not available.");parameter=wm.MIDI_REGISTERED_PARAMETER[parameter];}return wm.toMIDIChannels(channel).forEach(function(){that._selectRegisteredParameter(parameter,channel,options.time),that.sendControlChange(96,0,channel,{time:options.time}),that._deselectRegisteredParameter(channel,options.time);}),this},Output.prototype.decrementRegisteredParameter=function(parameter,channel,options){if(options=options||{},!Array.isArray(parameter)){if(!wm.MIDI_REGISTERED_PARAMETER[parameter])throw new TypeError("The specified parameter is not available.");parameter=wm.MIDI_REGISTERED_PARAMETER[parameter];}return wm.toMIDIChannels(channel).forEach(function(){this._selectRegisteredParameter(parameter,channel,options.time),this.sendControlChange(97,0,channel,{time:options.time}),this._deselectRegisteredParameter(channel,options.time);}.bind(this)),this},Output.prototype.setPitchBendRange=function(semitones,cents,channel,options){var that=this;if(options=options||{},!(0<=(semitones=Math.floor(semitones)||0)&&semitones<=127))throw new RangeError("The semitones value must be between 0 and 127");if(!(0<=(cents=Math.floor(cents)||0)&&cents<=127))throw new RangeError("The cents value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("pitchbendrange",[semitones,cents],channel,{time:options.time});}),this},Output.prototype.setModulationRange=function(semitones,cents,channel,options){var that=this;if(options=options||{},!(0<=(semitones=Math.floor(semitones)||0)&&semitones<=127))throw new RangeError("The semitones value must be between 0 and 127");if(!(0<=(cents=Math.floor(cents)||0)&&cents<=127))throw new RangeError("The cents value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("modulationrange",[semitones,cents],channel,{time:options.time});}),this},Output.prototype.setMasterTuning=function(value,channel,options){var that=this;if(options=options||{},(value=parseFloat(value)||0)<=-65||64<=value)throw new RangeError("The value must be a decimal number larger than -65 and smaller than 64.");var coarse=Math.floor(value)+64,fine=value-Math.floor(value),msb=(fine=Math.round((fine+1)/2*16383))>>7&127,lsb=127&fine;return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("channelcoarsetuning",coarse,channel,{time:options.time}),that.setRegisteredParameter("channelfinetuning",[msb,lsb],channel,{time:options.time});}),this},Output.prototype.setTuningProgram=function(value,channel,options){var that=this;if(options=options||{},!(0<=(value=Math.floor(value))&&value<=127))throw new RangeError("The program value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("tuningprogram",value,channel,{time:options.time});}),this},Output.prototype.setTuningBank=function(value,channel,options){var that=this;if(options=options||{},!(0<=(value=Math.floor(value)||0)&&value<=127))throw new RangeError("The bank value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("tuningbank",value,channel,{time:options.time});}),this},Output.prototype.sendChannelMode=function(command,value,channel,options){if(options=options||{},"string"==typeof command){if(!(command=wm.MIDI_CHANNEL_MODE_MESSAGES[command]))throw new TypeError("Invalid channel mode message name.")}else if(!(120<=(command=Math.floor(command))&&command<=127))throw new RangeError("Channel mode numerical identifiers must be between 120 and 127.");if((value=Math.floor(value)||0)<0||127<value)throw new RangeError("Value must be an integer between 0 and 127.");return wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.channelmode<<4)+(ch-1),[command,value],this._parseTimeParameter(options.time));}.bind(this)),this},Output.prototype.sendProgramChange=function(program,channel,options){var that=this;if(options=options||{},program=Math.floor(program),isNaN(program)||program<0||127<program)throw new RangeError("Program numbers must be between 0 and 127.");return wm.toMIDIChannels(channel).forEach(function(ch){that.send((wm.MIDI_CHANNEL_MESSAGES.programchange<<4)+(ch-1),[program],that._parseTimeParameter(options.time));}),this},Output.prototype.sendChannelAftertouch=function(pressure,channel,options){var that=this;options=options||{},pressure=parseFloat(pressure),(isNaN(pressure)||pressure<0||1<pressure)&&(pressure=.5);var nPressure=Math.round(127*pressure);return wm.toMIDIChannels(channel).forEach(function(ch){that.send((wm.MIDI_CHANNEL_MESSAGES.channelaftertouch<<4)+(ch-1),[nPressure],that._parseTimeParameter(options.time));}),this},Output.prototype.sendPitchBend=function(bend,channel,options){var that=this;if(options=options||{},isNaN(bend)||bend<-1||1<bend)throw new RangeError("Pitch bend value must be between -1 and 1.");var nLevel=Math.round((bend+1)/2*16383),msb=nLevel>>7&127,lsb=127&nLevel;return wm.toMIDIChannels(channel).forEach(function(ch){that.send((wm.MIDI_CHANNEL_MESSAGES.pitchbend<<4)+(ch-1),[lsb,msb],that._parseTimeParameter(options.time));}),this},Output.prototype._parseTimeParameter=function(time){var value,parsed=parseFloat(time);return "string"==typeof time&&"+"===time.substring(0,1)?parsed&&0<parsed&&(value=wm.time+parsed):parsed>wm.time&&(value=parsed),value},Output.prototype._convertNoteToArray=function(note){var notes=[];return Array.isArray(note)||(note=[note]),note.forEach(function(item){notes.push(wm.guessNoteNumber(item));}),notes},module.exports?module.exports=wm:scope.WebMidi||(scope.WebMidi=wm);}(commonjsGlobal);
+!function(scope){function WebMidi(){if(WebMidi.prototype._singleton)throw new Error("WebMidi is a singleton, it cannot be instantiated directly.");(WebMidi.prototype._singleton=this)._inputs=[],this._outputs=[],this._userHandlers={},this._stateChangeQueue=[],this._processingStateChange=!1,this._midiInterfaceEvents=["connected","disconnected"],this._nrpnBuffer=[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],this._nrpnEventsEnabled=!0,this._nrpnTypes=["entry","increment","decrement"],this._notes=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"],this._semitones={C:0,D:2,E:4,F:5,G:7,A:9,B:11},Object.defineProperties(this,{MIDI_SYSTEM_MESSAGES:{value:{sysex:240,timecode:241,songposition:242,songselect:243,tuningrequest:246,sysexend:247,clock:248,start:250,continue:251,stop:252,activesensing:254,reset:255,midimessage:0,unknownsystemmessage:-1},writable:!1,enumerable:!0,configurable:!1},MIDI_CHANNEL_MESSAGES:{value:{noteoff:8,noteon:9,keyaftertouch:10,controlchange:11,channelmode:11,nrpn:11,programchange:12,channelaftertouch:13,pitchbend:14},writable:!1,enumerable:!0,configurable:!1},MIDI_REGISTERED_PARAMETER:{value:{pitchbendrange:[0,0],channelfinetuning:[0,1],channelcoarsetuning:[0,2],tuningprogram:[0,3],tuningbank:[0,4],modulationrange:[0,5],azimuthangle:[61,0],elevationangle:[61,1],gain:[61,2],distanceratio:[61,3],maximumdistance:[61,4],maximumdistancegain:[61,5],referencedistanceratio:[61,6],panspreadangle:[61,7],rollangle:[61,8]},writable:!1,enumerable:!0,configurable:!1},MIDI_CONTROL_CHANGE_MESSAGES:{value:{bankselectcoarse:0,modulationwheelcoarse:1,breathcontrollercoarse:2,footcontrollercoarse:4,portamentotimecoarse:5,dataentrycoarse:6,volumecoarse:7,balancecoarse:8,pancoarse:10,expressioncoarse:11,effectcontrol1coarse:12,effectcontrol2coarse:13,generalpurposeslider1:16,generalpurposeslider2:17,generalpurposeslider3:18,generalpurposeslider4:19,bankselectfine:32,modulationwheelfine:33,breathcontrollerfine:34,footcontrollerfine:36,portamentotimefine:37,dataentryfine:38,volumefine:39,balancefine:40,panfine:42,expressionfine:43,effectcontrol1fine:44,effectcontrol2fine:45,holdpedal:64,portamento:65,sustenutopedal:66,softpedal:67,legatopedal:68,hold2pedal:69,soundvariation:70,resonance:71,soundreleasetime:72,soundattacktime:73,brightness:74,soundcontrol6:75,soundcontrol7:76,soundcontrol8:77,soundcontrol9:78,soundcontrol10:79,generalpurposebutton1:80,generalpurposebutton2:81,generalpurposebutton3:82,generalpurposebutton4:83,reverblevel:91,tremololevel:92,choruslevel:93,celestelevel:94,phaserlevel:95,databuttonincrement:96,databuttondecrement:97,nonregisteredparametercoarse:98,nonregisteredparameterfine:99,registeredparametercoarse:100,registeredparameterfine:101},writable:!1,enumerable:!0,configurable:!1},MIDI_NRPN_MESSAGES:{value:{entrymsb:6,entrylsb:38,increment:96,decrement:97,paramlsb:98,parammsb:99,nullactiveparameter:127},writable:!1,enumerable:!0,configurable:!1},MIDI_CHANNEL_MODE_MESSAGES:{value:{allsoundoff:120,resetallcontrollers:121,localcontrol:122,allnotesoff:123,omnimodeoff:124,omnimodeon:125,monomodeon:126,polymodeon:127},writable:!1,enumerable:!0,configurable:!1},octaveOffset:{value:0,writable:!0,enumerable:!0,configurable:!1}}),Object.defineProperties(this,{supported:{enumerable:!0,get:function(){return "requestMIDIAccess"in navigator}},enabled:{enumerable:!0,get:function(){return void 0!==this.interface}.bind(this)},inputs:{enumerable:!0,get:function(){return this._inputs}.bind(this)},outputs:{enumerable:!0,get:function(){return this._outputs}.bind(this)},sysexEnabled:{enumerable:!0,get:function(){return !(!this.interface||!this.interface.sysexEnabled)}.bind(this)},nrpnEventsEnabled:{enumerable:!0,get:function(){return !!this._nrpnEventsEnabled}.bind(this),set:function(enabled){return this._nrpnEventsEnabled=enabled,this._nrpnEventsEnabled}},nrpnTypes:{enumerable:!0,get:function(){return this._nrpnTypes}.bind(this)},time:{enumerable:!0,get:function(){return performance.now()}}});}var wm=new WebMidi;function Input(midiInput){var that=this;this._userHandlers={channel:{},system:{}},this._midiInput=midiInput,Object.defineProperties(this,{connection:{enumerable:!0,get:function(){return that._midiInput.connection}},id:{enumerable:!0,get:function(){return that._midiInput.id}},manufacturer:{enumerable:!0,get:function(){return that._midiInput.manufacturer}},name:{enumerable:!0,get:function(){return that._midiInput.name}},state:{enumerable:!0,get:function(){return that._midiInput.state}},type:{enumerable:!0,get:function(){return that._midiInput.type}}}),this._initializeUserHandlers(),this._midiInput.onmidimessage=this._onMidiMessage.bind(this);}function Output(midiOutput){var that=this;this._midiOutput=midiOutput,Object.defineProperties(this,{connection:{enumerable:!0,get:function(){return that._midiOutput.connection}},id:{enumerable:!0,get:function(){return that._midiOutput.id}},manufacturer:{enumerable:!0,get:function(){return that._midiOutput.manufacturer}},name:{enumerable:!0,get:function(){return that._midiOutput.name}},state:{enumerable:!0,get:function(){return that._midiOutput.state}},type:{enumerable:!0,get:function(){return that._midiOutput.type}}});}WebMidi.prototype.enable=function(callback,sysex){this.enabled||(this.supported?navigator.requestMIDIAccess({sysex:sysex}).then(function(midiAccess){var promiseTimeout,events=[],promises=[];this.interface=midiAccess,this._resetInterfaceUserHandlers(),this.interface.onstatechange=function(e){events.push(e);};for(var inputs=midiAccess.inputs.values(),input=inputs.next();input&&!input.done;input=inputs.next())promises.push(input.value.open());for(var outputs=midiAccess.outputs.values(),output=outputs.next();output&&!output.done;output=outputs.next())promises.push(output.value.open());function onPortsOpen(){clearTimeout(promiseTimeout),this._updateInputsAndOutputs(),this.interface.onstatechange=this._onInterfaceStateChange.bind(this),"function"==typeof callback&&callback.call(this),events.forEach(function(event){this._onInterfaceStateChange(event);}.bind(this));}promiseTimeout=setTimeout(onPortsOpen.bind(this),200),Promise&&Promise.all(promises).catch(function(err){}).then(onPortsOpen.bind(this));}.bind(this),function(err){"function"==typeof callback&&callback.call(this,err);}.bind(this)):"function"==typeof callback&&callback(new Error("The Web MIDI API is not supported by your browser.")));},WebMidi.prototype.disable=function(){if(!this.supported)throw new Error("The Web MIDI API is not supported by your browser.");this.enabled&&(this.removeListener(),this.inputs.forEach(function(input){input.removeListener();})),this.interface&&(this.interface.onstatechange=void 0),this.interface=void 0,this._inputs=[],this._outputs=[],this._nrpnEventsEnabled=!0,this._resetInterfaceUserHandlers();},WebMidi.prototype.addListener=function(type,listener){if(!this.enabled)throw new Error("WebMidi must be enabled before adding event listeners.");if("function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(!(0<=this._midiInterfaceEvents.indexOf(type)))throw new TypeError("The specified event type is not supported.");return this._userHandlers[type].push(listener),this},WebMidi.prototype.hasListener=function(type,listener){if(!this.enabled)throw new Error("WebMidi must be enabled before checking event listeners.");if("function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(!(0<=this._midiInterfaceEvents.indexOf(type)))throw new TypeError("The specified event type is not supported.");for(var o=0;o<this._userHandlers[type].length;o++)if(this._userHandlers[type][o]===listener)return !0;return !1},WebMidi.prototype.removeListener=function(type,listener){if(!this.enabled)throw new Error("WebMidi must be enabled before removing event listeners.");if(void 0!==listener&&"function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(0<=this._midiInterfaceEvents.indexOf(type))if(listener)for(var o=0;o<this._userHandlers[type].length;o++)this._userHandlers[type][o]===listener&&this._userHandlers[type].splice(o,1);else this._userHandlers[type]=[];else {if(void 0!==type)throw new TypeError("The specified event type is not supported.");this._resetInterfaceUserHandlers();}return this},WebMidi.prototype.toMIDIChannels=function(channel){var channels;if("all"===channel||void 0===channel)channels=["all"];else {if("none"===channel)return channels=[];channels=Array.isArray(channel)?channel:[channel];}return -1<channels.indexOf("all")&&(channels=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]),channels.map(function(ch){return parseInt(ch)}).filter(function(ch){return 1<=ch&&ch<=16})},WebMidi.prototype.getInputById=function(id){if(!this.enabled)throw new Error("WebMidi is not enabled.");id=String(id);for(var i=0;i<this.inputs.length;i++)if(this.inputs[i].id===id)return this.inputs[i];return !1},WebMidi.prototype.getOutputById=function(id){if(!this.enabled)throw new Error("WebMidi is not enabled.");id=String(id);for(var i=0;i<this.outputs.length;i++)if(this.outputs[i].id===id)return this.outputs[i];return !1},WebMidi.prototype.getInputByName=function(name){if(!this.enabled)throw new Error("WebMidi is not enabled.");for(var i=0;i<this.inputs.length;i++)if(~this.inputs[i].name.indexOf(name))return this.inputs[i];return !1},WebMidi.prototype.getOctave=function(number){if(null!=number&&0<=number&&number<=127)return Math.floor(Math.floor(number)/12-1)+Math.floor(wm.octaveOffset)},WebMidi.prototype.getOutputByName=function(name){if(!this.enabled)throw new Error("WebMidi is not enabled.");for(var i=0;i<this.outputs.length;i++)if(~this.outputs[i].name.indexOf(name))return this.outputs[i];return !1},WebMidi.prototype.guessNoteNumber=function(input){var output=!1;if(input&&input.toFixed&&0<=input&&input<=127?output=Math.round(input):0<=parseInt(input)&&parseInt(input)<=127?output=parseInt(input):("string"==typeof input||input instanceof String)&&(output=this.noteNameToNumber(input)),!1===output)throw new Error("Invalid input value ("+input+").");return output},WebMidi.prototype.noteNameToNumber=function(name){"string"!=typeof name&&(name="");var matches=name.match(/([CDEFGAB])(#{0,2}|b{0,2})(-?\d+)/i);if(!matches)throw new RangeError("Invalid note name.");var semitones=wm._semitones[matches[1].toUpperCase()],result=12*(parseInt(matches[3])+1-Math.floor(wm.octaveOffset))+semitones;if(-1<matches[2].toLowerCase().indexOf("b")?result-=matches[2].length:-1<matches[2].toLowerCase().indexOf("#")&&(result+=matches[2].length),result<0||127<result)throw new RangeError("Invalid note name or note outside valid range.");return result},WebMidi.prototype._updateInputsAndOutputs=function(){this._updateInputs(),this._updateOutputs();},WebMidi.prototype._updateInputs=function(){for(var i=0;i<this._inputs.length;i++){for(var remove=!0,updated=this.interface.inputs.values(),input=updated.next();input&&!input.done;input=updated.next())if(this._inputs[i]._midiInput===input.value){remove=!1;break}remove&&this._inputs.splice(i,1);}this.interface&&this.interface.inputs.forEach(function(nInput){for(var add=!0,j=0;j<this._inputs.length;j++)this._inputs[j]._midiInput===nInput&&(add=!1);add&&this._inputs.push(new Input(nInput));}.bind(this));},WebMidi.prototype._updateOutputs=function(){for(var i=0;i<this._outputs.length;i++){for(var remove=!0,updated=this.interface.outputs.values(),output=updated.next();output&&!output.done;output=updated.next())if(this._outputs[i]._midiOutput===output.value){remove=!1;break}remove&&this._outputs.splice(i,1);}this.interface&&this.interface.outputs.forEach(function(nOutput){for(var add=!0,j=0;j<this._outputs.length;j++)this._outputs[j]._midiOutput===nOutput&&(add=!1);add&&this._outputs.push(new Output(nOutput));}.bind(this));},WebMidi.prototype._onInterfaceStateChange=function(e){this._updateInputsAndOutputs();var event={timestamp:e.timeStamp,type:e.port.state};this.interface&&"connected"===e.port.state?"output"===e.port.type?event.port=this.getOutputById(e.port.id):"input"===e.port.type&&(event.port=this.getInputById(e.port.id)):event.port={connection:"closed",id:e.port.id,manufacturer:e.port.manufacturer,name:e.port.name,state:e.port.state,type:e.port.type},this._userHandlers[e.port.state].forEach(function(handler){handler(event);});},WebMidi.prototype._resetInterfaceUserHandlers=function(){for(var i=0;i<this._midiInterfaceEvents.length;i++)this._userHandlers[this._midiInterfaceEvents[i]]=[];},Input.prototype.on=Input.prototype.addListener=function(type,channel,listener){var that=this;if(void 0===channel&&(channel="all"),Array.isArray(channel)||(channel=[channel]),channel.forEach(function(item){if("all"!==item&&!(1<=item&&item<=16))throw new RangeError("The 'channel' parameter is invalid.")}),"function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(void 0!==wm.MIDI_SYSTEM_MESSAGES[type])this._userHandlers.system[type]||(this._userHandlers.system[type]=[]),this._userHandlers.system[type].push(listener);else {if(void 0===wm.MIDI_CHANNEL_MESSAGES[type])throw new TypeError("The specified event type is not supported.");if(-1<channel.indexOf("all")){channel=[];for(var j=1;j<=16;j++)channel.push(j);}this._userHandlers.channel[type]||(this._userHandlers.channel[type]=[]),channel.forEach(function(ch){that._userHandlers.channel[type][ch]||(that._userHandlers.channel[type][ch]=[]),that._userHandlers.channel[type][ch].push(listener);});}return this},Input.prototype.hasListener=function(type,channel,listener){var that=this;if("function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(void 0===channel&&(channel="all"),channel.constructor!==Array&&(channel=[channel]),void 0!==wm.MIDI_SYSTEM_MESSAGES[type]){for(var o=0;o<this._userHandlers.system[type].length;o++)if(this._userHandlers.system[type][o]===listener)return !0}else if(void 0!==wm.MIDI_CHANNEL_MESSAGES[type]){if(-1<channel.indexOf("all")){channel=[];for(var j=1;j<=16;j++)channel.push(j);}return !!this._userHandlers.channel[type]&&channel.every(function(chNum){var listeners=that._userHandlers.channel[type][chNum];return listeners&&-1<listeners.indexOf(listener)})}return !1},Input.prototype.removeListener=function(type,channel,listener){var that=this;if(void 0!==listener&&"function"!=typeof listener)throw new TypeError("The 'listener' parameter must be a function.");if(void 0===channel&&(channel="all"),channel.constructor!==Array&&(channel=[channel]),void 0!==wm.MIDI_SYSTEM_MESSAGES[type])if(void 0===listener)this._userHandlers.system[type]=[];else for(var o=0;o<this._userHandlers.system[type].length;o++)this._userHandlers.system[type][o]===listener&&this._userHandlers.system[type].splice(o,1);else if(void 0!==wm.MIDI_CHANNEL_MESSAGES[type]){if(-1<channel.indexOf("all")){channel=[];for(var j=1;j<=16;j++)channel.push(j);}if(!this._userHandlers.channel[type])return this;channel.forEach(function(chNum){var listeners=that._userHandlers.channel[type][chNum];if(listeners)if(void 0===listener)that._userHandlers.channel[type][chNum]=[];else for(var l=0;l<listeners.length;l++)listeners[l]===listener&&listeners.splice(l,1);});}else {if(void 0!==type)throw new TypeError("The specified event type is not supported.");this._initializeUserHandlers();}return this},Input.prototype._initializeUserHandlers=function(){for(var prop1 in wm.MIDI_CHANNEL_MESSAGES)Object.prototype.hasOwnProperty.call(wm.MIDI_CHANNEL_MESSAGES,prop1)&&(this._userHandlers.channel[prop1]={});for(var prop2 in wm.MIDI_SYSTEM_MESSAGES)Object.prototype.hasOwnProperty.call(wm.MIDI_SYSTEM_MESSAGES,prop2)&&(this._userHandlers.system[prop2]=[]);},Input.prototype._onMidiMessage=function(e){if(0<this._userHandlers.system.midimessage.length){var event={target:this,data:e.data,timestamp:e.timeStamp,type:"midimessage"};this._userHandlers.system.midimessage.forEach(function(callback){callback(event);});}e.data[0]<240?(this._parseChannelEvent(e),this._parseNrpnEvent(e)):e.data[0]<=255&&this._parseSystemEvent(e);},Input.prototype._parseNrpnEvent=function(e){var data1,data2,command=e.data[0]>>4,channelBufferIndex=15&e.data[0],channel=1+channelBufferIndex;if(1<e.data.length&&(data1=e.data[1],data2=2<e.data.length?e.data[2]:void 0),wm.nrpnEventsEnabled&&command===wm.MIDI_CHANNEL_MESSAGES.controlchange&&(data1>=wm.MIDI_NRPN_MESSAGES.increment&&data1<=wm.MIDI_NRPN_MESSAGES.parammsb||data1===wm.MIDI_NRPN_MESSAGES.entrymsb||data1===wm.MIDI_NRPN_MESSAGES.entrylsb)){var ccEvent={target:this,type:"controlchange",data:e.data,timestamp:e.timeStamp,channel:channel,controller:{number:data1,name:this.getCcNameByNumber(data1)},value:data2};if(ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.parammsb&&ccEvent.value!=wm.MIDI_NRPN_MESSAGES.nullactiveparameter)wm._nrpnBuffer[channelBufferIndex]=[],wm._nrpnBuffer[channelBufferIndex][0]=ccEvent;else if(1===wm._nrpnBuffer[channelBufferIndex].length&&ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.paramlsb)wm._nrpnBuffer[channelBufferIndex].push(ccEvent);else if(2!==wm._nrpnBuffer[channelBufferIndex].length||ccEvent.controller.number!==wm.MIDI_NRPN_MESSAGES.increment&&ccEvent.controller.number!==wm.MIDI_NRPN_MESSAGES.decrement&&ccEvent.controller.number!==wm.MIDI_NRPN_MESSAGES.entrymsb)if(3===wm._nrpnBuffer[channelBufferIndex].length&&wm._nrpnBuffer[channelBufferIndex][2].number===wm.MIDI_NRPN_MESSAGES.entrymsb&&ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.entrylsb)wm._nrpnBuffer[channelBufferIndex].push(ccEvent);else if(3<=wm._nrpnBuffer[channelBufferIndex].length&&wm._nrpnBuffer[channelBufferIndex].length<=4&&ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.parammsb&&ccEvent.value===wm.MIDI_NRPN_MESSAGES.nullactiveparameter)wm._nrpnBuffer[channelBufferIndex].push(ccEvent);else if(4<=wm._nrpnBuffer[channelBufferIndex].length&&wm._nrpnBuffer[channelBufferIndex].length<=5&&ccEvent.controller.number===wm.MIDI_NRPN_MESSAGES.paramlsb&&ccEvent.value===wm.MIDI_NRPN_MESSAGES.nullactiveparameter){wm._nrpnBuffer[channelBufferIndex].push(ccEvent);var rawData=[];wm._nrpnBuffer[channelBufferIndex].forEach(function(ev){rawData.push(ev.data);});var nrpnNumber=wm._nrpnBuffer[channelBufferIndex][0].value<<7|wm._nrpnBuffer[channelBufferIndex][1].value,nrpnValue=wm._nrpnBuffer[channelBufferIndex][2].value;6===wm._nrpnBuffer[channelBufferIndex].length&&(nrpnValue=wm._nrpnBuffer[channelBufferIndex][2].value<<7|wm._nrpnBuffer[channelBufferIndex][3].value);var nrpnControllerType="";switch(wm._nrpnBuffer[channelBufferIndex][2].controller.number){case wm.MIDI_NRPN_MESSAGES.entrymsb:nrpnControllerType=wm._nrpnTypes[0];break;case wm.MIDI_NRPN_MESSAGES.increment:nrpnControllerType=wm._nrpnTypes[1];break;case wm.MIDI_NRPN_MESSAGES.decrement:nrpnControllerType=wm._nrpnTypes[2];break;default:throw new Error("The NPRN type was unidentifiable.")}var nrpnEvent={timestamp:ccEvent.timestamp,channel:ccEvent.channel,type:"nrpn",data:rawData,controller:{number:nrpnNumber,type:nrpnControllerType,name:"Non-Registered Parameter "+nrpnNumber},value:nrpnValue};wm._nrpnBuffer[channelBufferIndex]=[],this._userHandlers.channel[nrpnEvent.type]&&this._userHandlers.channel[nrpnEvent.type][nrpnEvent.channel]&&this._userHandlers.channel[nrpnEvent.type][nrpnEvent.channel].forEach(function(callback){callback(nrpnEvent);});}else wm._nrpnBuffer[channelBufferIndex]=[];else wm._nrpnBuffer[channelBufferIndex].push(ccEvent);}},Input.prototype._parseChannelEvent=function(e){var data1,data2,command=e.data[0]>>4,channel=1+(15&e.data[0]);1<e.data.length&&(data1=e.data[1],data2=2<e.data.length?e.data[2]:void 0);var event={target:this,data:e.data,timestamp:e.timeStamp,channel:channel};command===wm.MIDI_CHANNEL_MESSAGES.noteoff||command===wm.MIDI_CHANNEL_MESSAGES.noteon&&0===data2?(event.type="noteoff",event.note={number:data1,name:wm._notes[data1%12],octave:wm.getOctave(data1)},event.velocity=data2/127,event.rawVelocity=data2):command===wm.MIDI_CHANNEL_MESSAGES.noteon?(event.type="noteon",event.note={number:data1,name:wm._notes[data1%12],octave:wm.getOctave(data1)},event.velocity=data2/127,event.rawVelocity=data2):command===wm.MIDI_CHANNEL_MESSAGES.keyaftertouch?(event.type="keyaftertouch",event.note={number:data1,name:wm._notes[data1%12],octave:wm.getOctave(data1)},event.value=data2/127):command===wm.MIDI_CHANNEL_MESSAGES.controlchange&&0<=data1&&data1<=119?(event.type="controlchange",event.controller={number:data1,name:this.getCcNameByNumber(data1)},event.value=data2):command===wm.MIDI_CHANNEL_MESSAGES.channelmode&&120<=data1&&data1<=127?(event.type="channelmode",event.controller={number:data1,name:this.getChannelModeByNumber(data1)},event.value=data2):command===wm.MIDI_CHANNEL_MESSAGES.programchange?(event.type="programchange",event.value=data1):command===wm.MIDI_CHANNEL_MESSAGES.channelaftertouch?(event.type="channelaftertouch",event.value=data1/127):command===wm.MIDI_CHANNEL_MESSAGES.pitchbend?(event.type="pitchbend",event.value=((data2<<7)+data1-8192)/8192):event.type="unknownchannelmessage",this._userHandlers.channel[event.type]&&this._userHandlers.channel[event.type][channel]&&this._userHandlers.channel[event.type][channel].forEach(function(callback){callback(event);});},Input.prototype.getCcNameByNumber=function(number){if(!(0<=(number=Math.floor(number))&&number<=119))throw new RangeError("The control change number must be between 0 and 119.");for(var cc in wm.MIDI_CONTROL_CHANGE_MESSAGES)if(Object.prototype.hasOwnProperty.call(wm.MIDI_CONTROL_CHANGE_MESSAGES,cc)&&number===wm.MIDI_CONTROL_CHANGE_MESSAGES[cc])return cc},Input.prototype.getChannelModeByNumber=function(number){if(!(120<=(number=Math.floor(number))&&status<=127))throw new RangeError("The control change number must be between 120 and 127.");for(var cm in wm.MIDI_CHANNEL_MODE_MESSAGES)if(Object.prototype.hasOwnProperty.call(wm.MIDI_CHANNEL_MODE_MESSAGES,cm)&&number===wm.MIDI_CHANNEL_MODE_MESSAGES[cm])return cm},Input.prototype._parseSystemEvent=function(e){var command=e.data[0],event={target:this,data:e.data,timestamp:e.timeStamp};command===wm.MIDI_SYSTEM_MESSAGES.sysex?event.type="sysex":command===wm.MIDI_SYSTEM_MESSAGES.timecode?event.type="timecode":command===wm.MIDI_SYSTEM_MESSAGES.songposition?event.type="songposition":command===wm.MIDI_SYSTEM_MESSAGES.songselect?(event.type="songselect",event.song=e.data[1]):command===wm.MIDI_SYSTEM_MESSAGES.tuningrequest?event.type="tuningrequest":command===wm.MIDI_SYSTEM_MESSAGES.clock?event.type="clock":command===wm.MIDI_SYSTEM_MESSAGES.start?event.type="start":command===wm.MIDI_SYSTEM_MESSAGES.continue?event.type="continue":command===wm.MIDI_SYSTEM_MESSAGES.stop?event.type="stop":command===wm.MIDI_SYSTEM_MESSAGES.activesensing?event.type="activesensing":command===wm.MIDI_SYSTEM_MESSAGES.reset?event.type="reset":event.type="unknownsystemmessage",this._userHandlers.system[event.type]&&this._userHandlers.system[event.type].forEach(function(callback){callback(event);});},Output.prototype.send=function(status,data,timestamp){if(!(128<=status&&status<=255))throw new RangeError("The status byte must be an integer between 128 (0x80) and 255 (0xFF).");void 0===data&&(data=[]),Array.isArray(data)||(data=[data]);var message=[];return data.forEach(function(item){var parsed=Math.floor(item);if(!(0<=parsed&&parsed<=255))throw new RangeError("Data bytes must be integers between 0 (0x00) and 255 (0xFF).");message.push(parsed);}),this._midiOutput.send([status].concat(message),parseFloat(timestamp)||0),this},Output.prototype.sendSysex=function(manufacturer,data,options){if(!wm.sysexEnabled)throw new Error("Sysex message support must first be activated.");return options=options||{},manufacturer=[].concat(manufacturer),data.forEach(function(item){if(item<0||127<item)throw new RangeError("The data bytes of a sysex message must be integers between 0 (0x00) and 127 (0x7F).")}),data=manufacturer.concat(data,wm.MIDI_SYSTEM_MESSAGES.sysexend),this.send(wm.MIDI_SYSTEM_MESSAGES.sysex,data,this._parseTimeParameter(options.time)),this},Output.prototype.sendTimecodeQuarterFrame=function(value,options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.timecode,value,this._parseTimeParameter(options.time)),this},Output.prototype.sendSongPosition=function(value,options){options=options||{};var msb=(value=Math.floor(value)||0)>>7&127,lsb=127&value;return this.send(wm.MIDI_SYSTEM_MESSAGES.songposition,[msb,lsb],this._parseTimeParameter(options.time)),this},Output.prototype.sendSongSelect=function(value,options){if(options=options||{},!(0<=(value=Math.floor(value))&&value<=127))throw new RangeError("The song number must be between 0 and 127.");return this.send(wm.MIDI_SYSTEM_MESSAGES.songselect,[value],this._parseTimeParameter(options.time)),this},Output.prototype.sendTuningRequest=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.tuningrequest,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendClock=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.clock,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendStart=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.start,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendContinue=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.continue,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendStop=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.stop,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.sendActiveSensing=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.activesensing,[],this._parseTimeParameter(options.time)),this},Output.prototype.sendReset=function(options){return options=options||{},this.send(wm.MIDI_SYSTEM_MESSAGES.reset,void 0,this._parseTimeParameter(options.time)),this},Output.prototype.stopNote=function(note,channel,options){if("all"===note)return this.sendChannelMode("allnotesoff",0,channel,options);var nVelocity=64;return (options=options||{}).rawVelocity?!isNaN(options.velocity)&&0<=options.velocity&&options.velocity<=127&&(nVelocity=options.velocity):!isNaN(options.velocity)&&0<=options.velocity&&options.velocity<=1&&(nVelocity=127*options.velocity),this._convertNoteToArray(note).forEach(function(item){wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.noteoff<<4)+(ch-1),[item,Math.round(nVelocity)],this._parseTimeParameter(options.time));}.bind(this));}.bind(this)),this},Output.prototype.playNote=function(note,channel,options){var time,nVelocity=64;if((options=options||{}).rawVelocity?!isNaN(options.velocity)&&0<=options.velocity&&options.velocity<=127&&(nVelocity=options.velocity):!isNaN(options.velocity)&&0<=options.velocity&&options.velocity<=1&&(nVelocity=127*options.velocity),time=this._parseTimeParameter(options.time),this._convertNoteToArray(note).forEach(function(item){wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.noteon<<4)+(ch-1),[item,Math.round(nVelocity)],time);}.bind(this));}.bind(this)),!isNaN(options.duration)){options.duration<=0&&(options.duration=0);var nRelease=64;options.rawVelocity?!isNaN(options.release)&&0<=options.release&&options.release<=127&&(nRelease=options.release):!isNaN(options.release)&&0<=options.release&&options.release<=1&&(nRelease=127*options.release),this._convertNoteToArray(note).forEach(function(item){wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.noteoff<<4)+(ch-1),[item,Math.round(nRelease)],(time||wm.time)+options.duration);}.bind(this));}.bind(this));}return this},Output.prototype.sendKeyAftertouch=function(note,channel,pressure,options){var that=this;if(options=options||{},channel<1||16<channel)throw new RangeError("The channel must be between 1 and 16.");(isNaN(pressure)||pressure<0||1<pressure)&&(pressure=.5);var nPressure=Math.round(127*pressure);return this._convertNoteToArray(note).forEach(function(item){wm.toMIDIChannels(channel).forEach(function(ch){that.send((wm.MIDI_CHANNEL_MESSAGES.keyaftertouch<<4)+(ch-1),[item,nPressure],that._parseTimeParameter(options.time));});}),this},Output.prototype.sendControlChange=function(controller,value,channel,options){if(options=options||{},"string"==typeof controller){if(void 0===(controller=wm.MIDI_CONTROL_CHANGE_MESSAGES[controller]))throw new TypeError("Invalid controller name.")}else if(!(0<=(controller=Math.floor(controller))&&controller<=119))throw new RangeError("Controller numbers must be between 0 and 119.");if(!(0<=(value=Math.floor(value)||0)&&value<=127))throw new RangeError("Controller value must be between 0 and 127.");return wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.controlchange<<4)+(ch-1),[controller,value],this._parseTimeParameter(options.time));}.bind(this)),this},Output.prototype._selectRegisteredParameter=function(parameter,channel,time){var that=this;if(parameter[0]=Math.floor(parameter[0]),!(0<=parameter[0]&&parameter[0]<=127))throw new RangeError("The control65 value must be between 0 and 127");if(parameter[1]=Math.floor(parameter[1]),!(0<=parameter[1]&&parameter[1]<=127))throw new RangeError("The control64 value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(101,parameter[0],channel,{time:time}),that.sendControlChange(100,parameter[1],channel,{time:time});}),this},Output.prototype._selectNonRegisteredParameter=function(parameter,channel,time){var that=this;if(parameter[0]=Math.floor(parameter[0]),!(0<=parameter[0]&&parameter[0]<=127))throw new RangeError("The control63 value must be between 0 and 127");if(parameter[1]=Math.floor(parameter[1]),!(0<=parameter[1]&&parameter[1]<=127))throw new RangeError("The control62 value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(99,parameter[0],channel,{time:time}),that.sendControlChange(98,parameter[1],channel,{time:time});}),this},Output.prototype._setCurrentRegisteredParameter=function(data,channel,time){var that=this;if((data=[].concat(data))[0]=Math.floor(data[0]),!(0<=data[0]&&data[0]<=127))throw new RangeError("The msb value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(6,data[0],channel,{time:time});}),data[1]=Math.floor(data[1]),0<=data[1]&&data[1]<=127&&wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(38,data[1],channel,{time:time});}),this},Output.prototype._deselectRegisteredParameter=function(channel,time){var that=this;return wm.toMIDIChannels(channel).forEach(function(){that.sendControlChange(101,127,channel,{time:time}),that.sendControlChange(100,127,channel,{time:time});}),this},Output.prototype.setRegisteredParameter=function(parameter,data,channel,options){var that=this;if(options=options||{},!Array.isArray(parameter)){if(!wm.MIDI_REGISTERED_PARAMETER[parameter])throw new Error("The specified parameter is not available.");parameter=wm.MIDI_REGISTERED_PARAMETER[parameter];}return wm.toMIDIChannels(channel).forEach(function(){that._selectRegisteredParameter(parameter,channel,options.time),that._setCurrentRegisteredParameter(data,channel,options.time),that._deselectRegisteredParameter(channel,options.time);}),this},Output.prototype.setNonRegisteredParameter=function(parameter,data,channel,options){var that=this;if(options=options||{},!(0<=parameter[0]&&parameter[0]<=127&&0<=parameter[1]&&parameter[1]<=127))throw new Error("Position 0 and 1 of the 2-position parameter array must both be between 0 and 127.");return data=[].concat(data),wm.toMIDIChannels(channel).forEach(function(){that._selectNonRegisteredParameter(parameter,channel,options.time),that._setCurrentRegisteredParameter(data,channel,options.time),that._deselectRegisteredParameter(channel,options.time);}),this},Output.prototype.incrementRegisteredParameter=function(parameter,channel,options){var that=this;if(options=options||{},!Array.isArray(parameter)){if(!wm.MIDI_REGISTERED_PARAMETER[parameter])throw new Error("The specified parameter is not available.");parameter=wm.MIDI_REGISTERED_PARAMETER[parameter];}return wm.toMIDIChannels(channel).forEach(function(){that._selectRegisteredParameter(parameter,channel,options.time),that.sendControlChange(96,0,channel,{time:options.time}),that._deselectRegisteredParameter(channel,options.time);}),this},Output.prototype.decrementRegisteredParameter=function(parameter,channel,options){if(options=options||{},!Array.isArray(parameter)){if(!wm.MIDI_REGISTERED_PARAMETER[parameter])throw new TypeError("The specified parameter is not available.");parameter=wm.MIDI_REGISTERED_PARAMETER[parameter];}return wm.toMIDIChannels(channel).forEach(function(){this._selectRegisteredParameter(parameter,channel,options.time),this.sendControlChange(97,0,channel,{time:options.time}),this._deselectRegisteredParameter(channel,options.time);}.bind(this)),this},Output.prototype.setPitchBendRange=function(semitones,cents,channel,options){var that=this;if(options=options||{},!(0<=(semitones=Math.floor(semitones)||0)&&semitones<=127))throw new RangeError("The semitones value must be between 0 and 127");if(!(0<=(cents=Math.floor(cents)||0)&&cents<=127))throw new RangeError("The cents value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("pitchbendrange",[semitones,cents],channel,{time:options.time});}),this},Output.prototype.setModulationRange=function(semitones,cents,channel,options){var that=this;if(options=options||{},!(0<=(semitones=Math.floor(semitones)||0)&&semitones<=127))throw new RangeError("The semitones value must be between 0 and 127");if(!(0<=(cents=Math.floor(cents)||0)&&cents<=127))throw new RangeError("The cents value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("modulationrange",[semitones,cents],channel,{time:options.time});}),this},Output.prototype.setMasterTuning=function(value,channel,options){var that=this;if(options=options||{},(value=parseFloat(value)||0)<=-65||64<=value)throw new RangeError("The value must be a decimal number larger than -65 and smaller than 64.");var coarse=Math.floor(value)+64,fine=value-Math.floor(value),msb=(fine=Math.round((fine+1)/2*16383))>>7&127,lsb=127&fine;return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("channelcoarsetuning",coarse,channel,{time:options.time}),that.setRegisteredParameter("channelfinetuning",[msb,lsb],channel,{time:options.time});}),this},Output.prototype.setTuningProgram=function(value,channel,options){var that=this;if(options=options||{},!(0<=(value=Math.floor(value))&&value<=127))throw new RangeError("The program value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("tuningprogram",value,channel,{time:options.time});}),this},Output.prototype.setTuningBank=function(value,channel,options){var that=this;if(options=options||{},!(0<=(value=Math.floor(value)||0)&&value<=127))throw new RangeError("The bank value must be between 0 and 127");return wm.toMIDIChannels(channel).forEach(function(){that.setRegisteredParameter("tuningbank",value,channel,{time:options.time});}),this},Output.prototype.sendChannelMode=function(command,value,channel,options){if(options=options||{},"string"==typeof command){if(!(command=wm.MIDI_CHANNEL_MODE_MESSAGES[command]))throw new TypeError("Invalid channel mode message name.")}else if(!(120<=(command=Math.floor(command))&&command<=127))throw new RangeError("Channel mode numerical identifiers must be between 120 and 127.");if((value=Math.floor(value)||0)<0||127<value)throw new RangeError("Value must be an integer between 0 and 127.");return wm.toMIDIChannels(channel).forEach(function(ch){this.send((wm.MIDI_CHANNEL_MESSAGES.channelmode<<4)+(ch-1),[command,value],this._parseTimeParameter(options.time));}.bind(this)),this},Output.prototype.sendProgramChange=function(program,channel,options){var that=this;if(options=options||{},program=Math.floor(program),isNaN(program)||program<0||127<program)throw new RangeError("Program numbers must be between 0 and 127.");return wm.toMIDIChannels(channel).forEach(function(ch){that.send((wm.MIDI_CHANNEL_MESSAGES.programchange<<4)+(ch-1),[program],that._parseTimeParameter(options.time));}),this},Output.prototype.sendChannelAftertouch=function(pressure,channel,options){var that=this;options=options||{},pressure=parseFloat(pressure),(isNaN(pressure)||pressure<0||1<pressure)&&(pressure=.5);var nPressure=Math.round(127*pressure);return wm.toMIDIChannels(channel).forEach(function(ch){that.send((wm.MIDI_CHANNEL_MESSAGES.channelaftertouch<<4)+(ch-1),[nPressure],that._parseTimeParameter(options.time));}),this},Output.prototype.sendPitchBend=function(bend,channel,options){var that=this;if(options=options||{},isNaN(bend)||bend<-1||1<bend)throw new RangeError("Pitch bend value must be between -1 and 1.");var nLevel=Math.round((bend+1)/2*16383),msb=nLevel>>7&127,lsb=127&nLevel;return wm.toMIDIChannels(channel).forEach(function(ch){that.send((wm.MIDI_CHANNEL_MESSAGES.pitchbend<<4)+(ch-1),[lsb,msb],that._parseTimeParameter(options.time));}),this},Output.prototype._parseTimeParameter=function(time){var value,parsed=parseFloat(time);return "string"==typeof time&&"+"===time.substring(0,1)?parsed&&0<parsed&&(value=wm.time+parsed):parsed>wm.time&&(value=parsed),value},Output.prototype._convertNoteToArray=function(note){var notes=[];return Array.isArray(note)||(note=[note]),note.forEach(function(item){notes.push(wm.guessNoteNumber(item));}),notes},module.exports?module.exports=wm:scope.WebMidi||(scope.WebMidi=wm);}(commonjsGlobal);
 });
 
 var __awaiter$4 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
