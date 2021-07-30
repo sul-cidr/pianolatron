@@ -145,12 +145,21 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
   import { rollMetadata, currentTick, userSettings } from "../stores";
-  import { clamp, getNoteLabel, normalizeInRange, mapToRange } from "../utils";
+  import {
+    clamp,
+    getNoteLabel,
+    normalizeInRange,
+    mapToRange,
+    isNoteHole,
+  } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
   export let holesByTickInterval;
   export let skipToTick;
+
+  const noteHoleHue = 57; // yellow
+  const controlHoleColor = "orange";
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -181,6 +190,9 @@
     } = hole;
     const mark = document.createElement("mark");
     let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+    if (!isNoteHole(midiKey, $rollMetadata.ROLL_TYPE)) {
+      mark.style.setProperty("--highlight-color", controlHoleColor);
+    }
     if (velocity) {
       const velocityNormalized = normalizeInRange(
         velocity,
@@ -192,7 +204,7 @@
 
       mark.style.setProperty(
         "--highlight-color",
-        `hsla(57, ${velocityMappedPct}%, 50%, 100%`,
+        `hsla(${noteHoleHue}, ${velocityMappedPct}%, 50%, 100%`,
       );
 
       mark.style.setProperty(
