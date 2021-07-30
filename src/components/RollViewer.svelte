@@ -46,6 +46,8 @@
     }
 
     :global(mark) {
+      --highlight-color: #{$hole-highlight-color};
+      --highlight-radius: 5px;
       background-color: transparent;
 
       &:hover {
@@ -72,8 +74,8 @@
       right: 0;
       mix-blend-mode: multiply;
       animation: mark-recede 0.5s ease-in-out;
-      background-color: $hole-highlight-color;
-      box-shadow: 0 0 5px $hole-highlight-color;
+      background-color: var(--highlight-color);
+      box-shadow: 0 0 var(--highlight-radius) var(--highlight-color);
       display: inline-block;
     }
 
@@ -157,7 +159,7 @@
     userSettings,
     playingNow,
   } from "../stores";
-  import { clamp, getNoteLabel } from "../utils";
+  import { clamp, getNoteLabel, normalizeInRange, mapToRange } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
@@ -167,6 +169,9 @@
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
+
+  let minNoteVelocity = 30;
+  let maxNoteVelocity = 70;
 
   let openSeadragon;
   let viewport;
@@ -191,8 +196,28 @@
     } = hole;
     const mark = document.createElement("mark");
     let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
-    if (velocity && $userSettings.showNoteVelocities) {
-      noteLabel += `\nv:${velocity}`;
+    if (velocity) {
+      const velocityNormalized = normalizeInRange(
+        velocity,
+        minNoteVelocity,
+        maxNoteVelocity,
+      );
+      const velocityMapped = mapToRange(velocityNormalized, 0.4, 1.0);
+      const velocityMappedPct = parseInt(velocityMapped * 100, 10);
+
+      mark.style.setProperty(
+        "--highlight-color",
+        `hsla(57, ${velocityMappedPct}%, 50%, 100%`,
+      );
+
+      mark.style.setProperty(
+        "--highlight-radius",
+        `${velocityMappedPct / 10}px`,
+      );
+
+      if ($userSettings.showNoteVelocities) {
+        noteLabel += `\nv:${velocity}`;
+      }
     }
     mark.dataset.info = noteLabel;
     mark.addEventListener("mouseout", () => {
@@ -238,7 +263,12 @@
         "http://www.w3.org/2000/svg",
         "rect",
       );
-      const { x: offsetX, y: offsetY, w: width, h: height } = hole;
+      const { x: offsetX, y: offsetY, w: width, h: height, v: velocity } = hole;
+
+      if (velocity) {
+        minNoteVelocity = Math.min(minNoteVelocity, velocity);
+        maxNoteVelocity = Math.max(maxNoteVelocity, velocity);
+      }
 
       rect.setAttribute("x", offsetX);
       rect.setAttribute(
