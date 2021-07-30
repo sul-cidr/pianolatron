@@ -49,6 +49,29 @@
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
+    :global(.displayregion::after) {
+      content: attr(data-label);
+      display: block;
+      position: absolute;
+      width: 100%;
+      font-size: 16px;
+      text-align: center;
+      padding: 8px 0;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        white 20%,
+        white 80%,
+        transparent 100%
+      );
+      margin: 2px 0;
+      top: 100%;
+      transition: margin 1s ease;
+    }
+
+    :global(.displayregion.label-above::after) {
+      margin-top: -100%;
+    }
   }
 </style>
 
