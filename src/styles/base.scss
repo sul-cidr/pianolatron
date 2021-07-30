@@ -40,6 +40,7 @@ body {
   --background-color: #{$cloud};
   --background-darker: #{darken($cloud, 15%)};
   --primary-accent: #{$cardinal};
+  --primary-accent-semiopaque: #{transparentize($cardinal, 0.5)};
   --background-angle: 75deg;
 
   &.blue {

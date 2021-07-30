@@ -21,10 +21,11 @@
     }
 
     &::before {
-      background: var(--primary-accent);
+      background-color: var(--primary-accent-semiopaque);
+      border: 1px solid var(--primary-accent);
       content: "";
       display: block;
-      height: 1px;
+      height: var(--trackerbar-height);
       pointer-events: none;
       position: absolute;
       top: 50%;
@@ -161,6 +162,8 @@
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
+
+  const trackerbarPixels = 20.0;
 
   let openSeadragon;
   let viewport;
@@ -321,6 +324,16 @@
         "fully-loaded-change",
         () => (rollImageReady = true),
       );
+    });
+    openSeadragon.addHandler("zoom", (e) => {
+      const imageZoom = viewport.viewportToImageZoom(e.zoom);
+      const rv = document.getElementById("roll-viewer");
+      if (!rv) return;
+      const trackerbarHeight = Math.max(
+        1,
+        parseInt(trackerbarPixels * imageZoom, 10),
+      );
+      rv.style.setProperty("--trackerbar-height", `${trackerbarHeight}px`);
     });
     openSeadragon.open(imageUrl);
   });
