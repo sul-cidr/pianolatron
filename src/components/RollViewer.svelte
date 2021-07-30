@@ -166,9 +166,20 @@
   let imageWidth;
 
   const createMark = (hole) => {
-    const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey } = hole;
+    const {
+      x: offsetX,
+      y: offsetY,
+      w: width,
+      h: height,
+      m: midiKey,
+      v: velocity,
+    } = hole;
     const mark = document.createElement("mark");
-    mark.dataset.info = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+    let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+    if (velocity && $userSettings.showNoteVelocities) {
+      noteLabel += `\nv:${velocity}`;
+    }
+    mark.dataset.info = noteLabel;
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);

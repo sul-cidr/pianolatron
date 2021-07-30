@@ -93,7 +93,7 @@
   {
     "druid": "hb523vs3190",
     "image_url": "https://stacks.stanford.edu/image/iiif/hb523vs3190%2Fhb523vs3190_0002/info.json",
-    "label": "4388 Victoria",
+    "label": "4108 Victoria",
     "title": "Beethoven - Sonata, op. 2, no 1, en fa menor: minuetto",
     "type": "88-note"
   },
@@ -1360,13 +1360,6 @@
   {
     "druid": "gn803sk7089",
     "image_url": "https://stacks.stanford.edu/image/iiif/gn803sk7089%2Fgn803sk7089_0002/info.json",
-    "label": "4504 Princesa",
-    "title": "Guerrero - El huésped del sevillano. lagarteranas",
-    "type": "88-note"
-  },
-  {
-    "druid": "rr052wh1991",
-    "image_url": "https://stacks.stanford.edu/image/iiif/rr052wh1991%2Frr052wh1991_0002/info.json",
     "label": "4504 Princesa",
     "title": "Guerrero - El huésped del sevillano. lagarteranas",
     "type": "88-note"

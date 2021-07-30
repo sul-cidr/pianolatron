@@ -90,6 +90,10 @@
       Show Details for Active Notes:
       <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
     </div>
+    <div>
+      Display Note Velocities:
+      <input type="checkbox" bind:checked={$userSettings.showNoteVelocities} />
+    </div>
   </fieldset>
 
   <fieldset>
