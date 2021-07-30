@@ -151,7 +151,12 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
-  import { rollMetadata, currentTick, userSettings } from "../stores";
+  import {
+    rollMetadata,
+    currentTick,
+    userSettings,
+    playingNow,
+  } from "../stores";
   import { clamp, getNoteLabel } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
@@ -267,7 +272,7 @@
       lineViewport.y,
     );
 
-    viewport.panTo(lineCenter);
+    viewport.panTo(lineCenter, $playingNow);
   };
 
   const highlightHoles = (tick) => {
