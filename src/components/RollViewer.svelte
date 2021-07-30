@@ -273,6 +273,10 @@
 
     viewport.panTo(lineCenter, !$animatePan);
     osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
+    osdNavDisplayRegion.classList.toggle(
+      "label-above",
+      $playbackProgress > 0.5,
+    );
   };
 
   const highlightHoles = (tick) => {
