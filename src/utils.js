@@ -20,6 +20,10 @@ export const normalizeInRange = (value, min, max) => {
 // 0 and 1
 export const mapToRange = (value, min, max) => value * (max - min) + min;
 
+export const isNoteHole = (midiNumber, rollType) =>
+  midiNumber >= rollProfile[rollType].bassNotesBegin &&
+  midiNumber <= rollProfile[rollType].trebleNotesEnd;
+
 export const getNoteName = (midiNumber) => {
   const octave = parseInt(midiNumber / 12, 10) - 1;
   const name = [
