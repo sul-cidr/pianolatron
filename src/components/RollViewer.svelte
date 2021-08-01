@@ -168,8 +168,6 @@
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
 
-  const trackerbarPixels = 20.0;
-
   let openSeadragon;
   let viewport;
   let firstHolePx;
@@ -180,6 +178,7 @@
   let showControls;
   let imageLength;
   let imageWidth;
+  let avgHoleWidth;
 
   const createMark = (hole) => {
     const {
@@ -336,7 +335,7 @@
       if (!rv) return;
       const trackerbarHeight = Math.max(
         1,
-        parseInt(trackerbarPixels * imageZoom, 10),
+        parseInt(avgHoleWidth * imageZoom, 10),
       );
       rv.style.setProperty("--trackerbar-height", `${trackerbarHeight}px`);
     });
@@ -368,6 +367,7 @@
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
+  $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
   $: firstHolePx = scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
