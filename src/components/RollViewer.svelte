@@ -46,12 +46,6 @@
 
     :global(mark) {
       background-color: transparent;
-      --left-flag-position: calc(
-        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-      );
-      --right-flag-position: calc(
-        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-      );
 
       &:hover {
         background-color: transparent;
@@ -88,13 +82,21 @@
       content: attr(data-info);
       display: block;
       font-weight: bold;
-      left: var(--left-flag-position);
-      right: var(--right-flag-position);
+      left: calc(
+        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+      );
       padding: 8px ($highlight-hover-outline-width + 4px) 8px 4px;
       position: absolute;
       text-shadow: 0px 0px 8px black;
       top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
       transform: none;
+    }
+
+    :global(mark.flag-left:hover[data-info]::after) {
+      left: auto;
+      right: calc(
+        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+      );
     }
 
     :global(canvas) {
@@ -199,11 +201,7 @@
     const markFractionalPosition =
       parseFloat(offsetX + width / 2 - imgBounds.x) /
       parseFloat(imgBounds.width);
-    if (markFractionalPosition > 0.8) {
-      mark.style.setProperty("--left-flag-position", "auto");
-    } else {
-      mark.style.setProperty("--right-flag-position", "auto");
-    }
+    mark.classList.toggle("flag-left", markFractionalPosition > 0.8);
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
   };
