@@ -45,7 +45,7 @@ function create_if_block_1(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Downloading roll image...";
-			attr(p, "class", "svelte-e6s52x");
+			attr(p, "class", "svelte-e5hit7");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -73,7 +73,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (337:2) {#if showControls}
+// (347:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
@@ -148,7 +148,7 @@ function create_fragment(ctx) {
 			t = space();
 			if (if_block1) if_block1.c();
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-e6s52x");
+			attr(div, "class", "svelte-e5hit7");
 			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
 		},
 		m(target, anchor) {
@@ -288,6 +288,9 @@ function instance($$self, $$props, $$invalidate) {
 			height
 		);
 
+		const imgBounds = viewport.viewportToImageRectangle(viewport.getBounds());
+		const markFractionalPosition = parseFloat(offsetX + width / 2 - imgBounds.x) / parseFloat(imgBounds.width);
+		mark.classList.toggle("flag-left", markFractionalPosition > 0.8);
 		viewport.viewer.addOverlay(mark, viewportRectangle);
 		return mark;
 	};

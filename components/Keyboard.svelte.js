@@ -33,14 +33,14 @@ import KeyboardControls from "./KeyboardControls.svelte.js";
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[24] = list[i];
+	child_ctx[26] = list[i];
 	return child_ctx;
 }
 
 function get_each_context_1(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[27] = list[i].title;
-	child_ctx[28] = list[i].note;
+	child_ctx[29] = list[i].title;
+	child_ctx[30] = list[i].note;
 	return child_ctx;
 }
 
@@ -53,17 +53,17 @@ function create_each_block_1(ctx) {
 	return {
 		c() {
 			span = element("span");
-			attr(span, "title", span_title_value = /*title*/ ctx[27]);
-			attr(span, "data-key", span_data_key_value = /*note*/ ctx[28]);
+			attr(span, "title", span_title_value = /*title*/ ctx[29]);
+			attr(span, "data-key", span_data_key_value = /*note*/ ctx[30]);
 			attr(span, "class", "svelte-1lm3ox6");
-			toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[28]) || /*playing*/ ctx[4].has(/*note*/ ctx[28]));
+			toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[30]) || /*playing*/ ctx[4].has(/*note*/ ctx[30]));
 		},
 		m(target, anchor) {
 			insert(target, span, anchor);
 		},
 		p(ctx, dirty) {
-			if (dirty & /*$activeNotes, keys, playing*/ 304) {
-				toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[28]) || /*playing*/ ctx[4].has(/*note*/ ctx[28]));
+			if (dirty[0] & /*$activeNotes, keys, playing*/ 304) {
+				toggle_class(span, "depressed", /*$activeNotes*/ ctx[5].has(/*note*/ ctx[30]) || /*playing*/ ctx[4].has(/*note*/ ctx[30]));
 			}
 		},
 		d(detaching) {
@@ -76,7 +76,7 @@ function create_each_block_1(ctx) {
 function create_each_block(ctx) {
 	let div;
 	let t;
-	let each_value_1 = /*key*/ ctx[24];
+	let each_value_1 = /*key*/ ctx[26];
 	let each_blocks = [];
 
 	for (let i = 0; i < each_value_1.length; i += 1) {
@@ -104,8 +104,8 @@ function create_each_block(ctx) {
 			append(div, t);
 		},
 		p(ctx, dirty) {
-			if (dirty & /*keys, $activeNotes, playing*/ 304) {
-				each_value_1 = /*key*/ ctx[24];
+			if (dirty[0] & /*keys, $activeNotes, playing*/ 304) {
+				each_value_1 = /*key*/ ctx[26];
 				let i;
 
 				for (i = 0; i < each_value_1.length; i += 1) {
@@ -243,16 +243,18 @@ function create_fragment(ctx) {
 					listen(div2, "mousedown", /*mousedown_handler_1*/ ctx[15]),
 					listen(div2, "mouseup", /*mouseup_handler_2*/ ctx[16]),
 					listen(div2, "mouseout", /*mouseout_handler*/ ctx[17]),
-					listen(div3, "mousedown", /*mousedown_handler_2*/ ctx[18]),
-					listen(div3, "mouseup", /*mouseup_handler_3*/ ctx[19]),
-					listen(div3, "mouseout", /*mouseout_handler_1*/ ctx[20])
+					listen(div2, "blur", /*blur_handler*/ ctx[18]),
+					listen(div3, "mousedown", /*mousedown_handler_2*/ ctx[19]),
+					listen(div3, "mouseup", /*mouseup_handler_3*/ ctx[20]),
+					listen(div3, "mouseout", /*mouseout_handler_1*/ ctx[21]),
+					listen(div3, "blur", /*blur_handler_1*/ ctx[22])
 				];
 
 				mounted = true;
 			}
 		},
-		p(ctx, [dirty]) {
-			if (dirty & /*keys, $activeNotes, playing*/ 304) {
+		p(ctx, dirty) {
+			if (dirty[0] & /*keys, $activeNotes, playing*/ 304) {
 				each_value = /*keys*/ ctx[8];
 				let i;
 
@@ -275,11 +277,11 @@ function create_fragment(ctx) {
 				each_blocks.length = each_value.length;
 			}
 
-			if (dirty & /*$softOnOff*/ 64) {
+			if (dirty[0] & /*$softOnOff*/ 64) {
 				toggle_class(div2, "depressed", /*$softOnOff*/ ctx[6]);
 			}
 
-			if (dirty & /*$sustainOnOff*/ 128) {
+			if (dirty[0] & /*$sustainOnOff*/ 128) {
 				toggle_class(div3, "depressed", /*$sustainOnOff*/ ctx[7]);
 			}
 		},
@@ -394,9 +396,11 @@ function instance($$self, $$props, $$invalidate) {
 	const mousedown_handler_1 = () => set_store_value(softOnOff, $softOnOff = true, $softOnOff);
 	const mouseup_handler_2 = () => set_store_value(softOnOff, $softOnOff = false, $softOnOff);
 	const mouseout_handler = () => set_store_value(softOnOff, $softOnOff = false, $softOnOff);
+	const blur_handler = () => set_store_value(softOnOff, $softOnOff = false, $softOnOff);
 	const mousedown_handler_2 = () => set_store_value(sustainOnOff, $sustainOnOff = true, $sustainOnOff);
 	const mouseup_handler_3 = () => set_store_value(sustainOnOff, $sustainOnOff = false, $sustainOnOff);
 	const mouseout_handler_1 = () => set_store_value(sustainOnOff, $sustainOnOff = false, $sustainOnOff);
+	const blur_handler_1 = () => set_store_value(sustainOnOff, $sustainOnOff = false, $sustainOnOff);
 
 	$$self.$$set = $$props => {
 		if ('keyCount' in $$props) $$invalidate(10, keyCount = $$props.keyCount);
@@ -424,9 +428,11 @@ function instance($$self, $$props, $$invalidate) {
 		mousedown_handler_1,
 		mouseup_handler_2,
 		mouseout_handler,
+		blur_handler,
 		mousedown_handler_2,
 		mouseup_handler_3,
-		mouseout_handler_1
+		mouseout_handler_1,
+		blur_handler_1
 	];
 }
 
@@ -434,12 +440,21 @@ class Keyboard extends SvelteComponent {
 	constructor(options) {
 		super();
 
-		init(this, options, instance, create_fragment, safe_not_equal, {
-			keyCount: 10,
-			startNote: 0,
-			stopNote: 1,
-			activeNotes: 2
-		});
+		init(
+			this,
+			options,
+			instance,
+			create_fragment,
+			safe_not_equal,
+			{
+				keyCount: 10,
+				startNote: 0,
+				stopNote: 1,
+				activeNotes: 2
+			},
+			null,
+			[-1, -1]
+		);
 	}
 }
 
