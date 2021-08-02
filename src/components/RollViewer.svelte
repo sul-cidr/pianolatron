@@ -97,6 +97,7 @@
       right: calc(
         100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
       );
+      padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
     }
 
     :global(canvas) {
