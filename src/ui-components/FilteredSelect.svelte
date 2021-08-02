@@ -298,8 +298,11 @@
     open = true;
     await tick();
     input.innerHTML = "";
-    activeFacet = undefined;
-    filteredListItems = listItems;
+    filteredListItems = activeFacet
+      ? listItems.filter(
+          (listItem) => listItem.item[facetFieldName] === activeFacet,
+        )
+      : listItems;
     activateListItem(items.indexOf(selectedItem));
     input.focus();
   };
