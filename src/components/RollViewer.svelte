@@ -92,6 +92,14 @@
       transform: none;
     }
 
+    :global(mark.flag-left:hover[data-info]::after) {
+      left: auto;
+      right: calc(
+        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+      );
+      padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
+    }
+
     :global(canvas) {
       background: white !important;
     }
@@ -190,6 +198,11 @@
       width,
       height,
     );
+    const imgBounds = viewport.viewportToImageRectangle(viewport.getBounds());
+    const markFractionalPosition =
+      parseFloat(offsetX + width / 2 - imgBounds.x) /
+      parseFloat(imgBounds.width);
+    mark.classList.toggle("flag-left", markFractionalPosition > 0.8);
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
   };
