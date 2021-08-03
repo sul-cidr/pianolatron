@@ -23,6 +23,8 @@
   let pedalingMap;
   let notesMap;
 
+  const PLAYBACK_DELAY_MS = 120;
+
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
 
@@ -231,23 +233,25 @@
   midiSamplePlayer.on(
     "midiEvent",
     ({ name, value, number, noteNumber, velocity, data }) => {
-      if (name === "Note on") {
-        if (velocity === 0) {
-          stopNote(noteNumber);
-          activeNotes.delete(noteNumber);
-        } else {
-          startNote(noteNumber, velocity);
-          activeNotes.add(noteNumber);
+      setTimeout(() => {
+        if (name === "Note on") {
+          if (velocity === 0) {
+            stopNote(noteNumber);
+            activeNotes.delete(noteNumber);
+          } else {
+            startNote(noteNumber, velocity);
+            activeNotes.add(noteNumber);
+          }
+        } else if (name === "Controller Change" && $rollPedalingOnOff) {
+          if (number === SUSTAIN_PEDAL) {
+            sustainOnOff.set(!!value);
+          } else if (number === SOFT_PEDAL) {
+            softOnOff.set(!!value);
+          }
+        } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
+          midiSamplePlayer.setTempo(data * $tempoCoefficient);
         }
-      } else if (name === "Controller Change" && $rollPedalingOnOff) {
-        if (number === SUSTAIN_PEDAL) {
-          sustainOnOff.set(!!value);
-        } else if (number === SOFT_PEDAL) {
-          softOnOff.set(!!value);
-        }
-      } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-        midiSamplePlayer.setTempo(data * $tempoCoefficient);
-      }
+      }, PLAYBACK_DELAY_MS);
     },
   );
 
