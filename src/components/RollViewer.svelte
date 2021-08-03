@@ -329,8 +329,8 @@
         () => (rollImageReady = true),
       );
     });
-    openSeadragon.addHandler("zoom", (e) => {
-      const imageZoom = viewport.viewportToImageZoom(e.zoom);
+    openSeadragon.addHandler("zoom", ({ zoom }) => {
+      const imageZoom = viewport.viewportToImageZoom(zoom);
       const rv = document.getElementById("roll-viewer");
       if (!rv) return;
       const trackerbarHeight = Math.max(
