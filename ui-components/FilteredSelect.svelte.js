@@ -40,7 +40,7 @@ function get_each_context_1(ctx, list, i) {
 	return child_ctx;
 }
 
-// (362:6) {#if facets}
+// (365:6) {#if facets}
 function create_if_block_1(ctx) {
 	let ul;
 	let each_value_1 = /*facets*/ ctx[3];
@@ -98,7 +98,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (364:10) {#each facets as facet}
+// (367:10) {#each facets as facet}
 function create_each_block_1(ctx) {
 	let li;
 	let t0_value = /*facet*/ ctx[43] + "";
@@ -145,7 +145,7 @@ function create_each_block_1(ctx) {
 	};
 }
 
-// (390:6) {:else}
+// (393:6) {:else}
 function create_else_block(ctx) {
 	let li;
 
@@ -165,7 +165,7 @@ function create_else_block(ctx) {
 	};
 }
 
-// (380:6) {#if filteredListItems?.length}
+// (383:6) {#if filteredListItems?.length}
 function create_if_block(ctx) {
 	let each_1_anchor;
 	let each_value = /*filteredListItems*/ ctx[2];
@@ -221,7 +221,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (381:8) {#each filteredListItems as listItem, i}
+// (384:8) {#each filteredListItems as listItem, i}
 function create_each_block(ctx) {
 	let li;
 	let html_tag;
@@ -528,8 +528,11 @@ function instance($$self, $$props, $$invalidate) {
 		$$invalidate(4, open = true);
 		await tick();
 		$$invalidate(7, input.innerHTML = "", input);
-		$$invalidate(6, activeFacet = undefined);
-		$$invalidate(2, filteredListItems = listItems);
+
+		$$invalidate(2, filteredListItems = activeFacet
+		? listItems.filter(listItem => listItem.item[facetFieldName] === activeFacet)
+		: listItems);
+
 		activateListItem(items.indexOf(selectedItem));
 		input.focus();
 	};

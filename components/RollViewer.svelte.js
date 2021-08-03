@@ -32,7 +32,7 @@ import {
 import { onMount } from "../_snowpack/pkg/svelte.js";
 import { fade } from "../_snowpack/pkg/svelte/transition.js";
 import OpenSeadragon from "../_snowpack/pkg/openseadragon.js";
-import { rollMetadata, currentTick, userSettings } from "../stores.js";
+import { rollMetadata, currentTick, userSettings, playingNow } from "../stores.js";
 import { clamp, getNoteLabel } from "../utils.js";
 import RollViewerControls from "./RollViewerControls.svelte.js";
 
@@ -45,7 +45,7 @@ function create_if_block_1(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Downloading roll image...";
-			attr(p, "class", "svelte-e5hit7");
+			attr(p, "class", "svelte-zzqd0t");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -73,7 +73,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (347:2) {#if showControls}
+// (365:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
@@ -148,7 +148,7 @@ function create_fragment(ctx) {
 			t = space();
 			if (if_block1) if_block1.c();
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-e5hit7");
+			attr(div, "class", "svelte-zzqd0t");
 			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
 		},
 		m(target, anchor) {
@@ -246,9 +246,11 @@ function instance($$self, $$props, $$invalidate) {
 	let scrollDownwards;
 	let $rollMetadata;
 	let $currentTick;
+	let $playingNow;
 	let $userSettings;
 	component_subscribe($$self, rollMetadata, $$value => $$invalidate(10, $rollMetadata = $$value));
 	component_subscribe($$self, currentTick, $$value => $$invalidate(11, $currentTick = $$value));
+	component_subscribe($$self, playingNow, $$value => $$invalidate(23, $playingNow = $$value));
 	component_subscribe($$self, userSettings, $$value => $$invalidate(4, $userSettings = $$value));
 	let { imageUrl } = $$props;
 	let { holesByTickInterval } = $$props;
@@ -263,6 +265,7 @@ function instance($$self, $$props, $$invalidate) {
 	let showControls;
 	let imageLength;
 	let imageWidth;
+	let avgHoleWidth;
 
 	const createMark = hole => {
 		const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey, v: velocity } = hole;
@@ -340,7 +343,7 @@ function instance($$self, $$props, $$invalidate) {
 		const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
 		const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 		const lineCenter = new OpenSeadragon.Point(viewportBounds.x + viewportBounds.width / 2, lineViewport.y);
-		viewport.panTo(lineCenter);
+		viewport.panTo(lineCenter, $playingNow);
 	};
 
 	const highlightHoles = tick => {
@@ -400,6 +403,14 @@ function instance($$self, $$props, $$invalidate) {
 			tiledImage.addOnceHandler("fully-loaded-change", () => $$invalidate(2, rollImageReady = true));
 		});
 
+		openSeadragon.addHandler("zoom", ({ zoom }) => {
+			const imageZoom = viewport.viewportToImageZoom(zoom);
+			const rv = document.getElementById("roll-viewer");
+			if (!rv) return;
+			const trackerbarHeight = Math.max(1, parseInt(avgHoleWidth * imageZoom, 10));
+			rv.style.setProperty("--trackerbar-height", `${trackerbarHeight}px`);
+		});
+
 		openSeadragon.open(imageUrl);
 	});
 
@@ -454,6 +465,10 @@ function instance($$self, $$props, $$invalidate) {
 
 		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
 			$: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
+		}
+
+		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
+			$: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
 		}
 
 		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 1536) {
