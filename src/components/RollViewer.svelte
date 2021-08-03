@@ -21,10 +21,11 @@
     }
 
     &::before {
-      background: var(--primary-accent);
+      background-color: var(--primary-accent-semiopaque);
+      border: 1px solid var(--primary-accent);
       content: "";
       display: block;
-      height: 1px;
+      height: var(--trackerbar-height);
       pointer-events: none;
       position: absolute;
       top: 50%;
@@ -150,7 +151,12 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
-  import { rollMetadata, currentTick, userSettings } from "../stores";
+  import {
+    rollMetadata,
+    currentTick,
+    userSettings,
+    playingNow,
+  } from "../stores";
   import { clamp, getNoteLabel } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
@@ -172,6 +178,7 @@
   let showControls;
   let imageLength;
   let imageWidth;
+  let avgHoleWidth;
 
   const createMark = (hole) => {
     const {
@@ -264,7 +271,7 @@
       lineViewport.y,
     );
 
-    viewport.panTo(lineCenter);
+    viewport.panTo(lineCenter, $playingNow);
   };
 
   const highlightHoles = (tick) => {
@@ -322,6 +329,16 @@
         () => (rollImageReady = true),
       );
     });
+    openSeadragon.addHandler("zoom", ({ zoom }) => {
+      const imageZoom = viewport.viewportToImageZoom(zoom);
+      const rv = document.getElementById("roll-viewer");
+      if (!rv) return;
+      const trackerbarHeight = Math.max(
+        1,
+        parseInt(avgHoleWidth * imageZoom, 10),
+      );
+      rv.style.setProperty("--trackerbar-height", `${trackerbarHeight}px`);
+    });
     openSeadragon.open(imageUrl);
   });
 
@@ -350,6 +367,7 @@
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
+  $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
   $: firstHolePx = scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -

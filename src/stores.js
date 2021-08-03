@@ -60,6 +60,7 @@ export const activeShortcutKeys = createStore({
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
+export const playingNow = createStore(false);
 
 // User Settings
 export const showKeyboard = createStore(true);
