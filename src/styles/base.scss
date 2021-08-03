@@ -47,16 +47,19 @@ body {
     --background-color: aliceblue;
     --background-darker: hsl(208, 100%, 90%);
     --primary-accent: steelblue;
+    --primary-accent-semiopaque: #{transparentize(steelblue, 0.5)};
   }
 
   &.green {
     --primary-accent: darkolivegreen;
+    --primary-accent-semiopaque: #{transparentize(darkolivegreen, 0.5)};
   }
 
   &.grey {
     --background-color: gainsboro;
     --background-darker: hsl(0, 0%, 71%);
     --primary-accent: darkslategrey;
+    --primary-accent-semiopaque: #{transparentize(darkslategrey, 0.5)};
   }
 }
 
