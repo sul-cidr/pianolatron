@@ -346,7 +346,7 @@
   };
 
   $: advanceToTick($currentTick);
-  $: highlightHoles($currentTick);
+  $: setTimeout(() => highlightHoles($currentTick), 120);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
