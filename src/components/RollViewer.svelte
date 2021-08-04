@@ -147,11 +147,11 @@
         padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
       }
     }
+
     &.hide-hole-overlays {
       :global(svg rect) {
         fill: none;
         stroke: none;
-        stroke-width: none;
       }
     }
   }
@@ -357,13 +357,19 @@
         m: midiKey,
         v: velocity,
       } = hole;
-      rect.setAttribute("x", offsetX);
+      const padding = 10;
+
+      rect.setAttribute("x", offsetX - padding);
       rect.setAttribute(
         "y",
-        scrollDownwards ? offsetY : imageLength - offsetY - height,
+        scrollDownwards
+          ? offsetY - padding
+          : imageLength - offsetY - height - padding,
       );
-      rect.setAttribute("width", width);
-      rect.setAttribute("height", height);
+      rect.setAttribute("width", width + padding * 2);
+      rect.setAttribute("height", height + padding * 2);
+      rect.setAttribute("rx", 10);
+      rect.setAttribute("ry", 10);
       rect.addEventListener("mouseover", () => {
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);
@@ -371,7 +377,6 @@
       });
       const [holeColor] = holeColorAndRadius(midiKey, velocity, true);
       rect.setAttribute("fill", hexToRGBA(holeColor, 0.8));
-      rect.setAttribute("stroke", hexToRGBA(holeColor, 0.8));
       g.appendChild(rect);
     });
 
