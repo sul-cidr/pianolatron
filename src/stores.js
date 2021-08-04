@@ -69,6 +69,7 @@ export const userSettings = createStore({
   theme: "cardinal",
   activeNoteDetails: false,
   showNoteVelocities: false,
+  showAllHoles: false,
 });
 
 // Browser State

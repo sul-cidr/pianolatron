@@ -1,5 +1,5 @@
 <style lang="scss">
-  $hole-highlight-color: yellow;
+  $note-highlight-color: yellow;
   $highlight-hover-outline-color: darkturquoise;
   $highlight-hover-outline-width: 6px;
   $highlight-hover-outline-offset: 8px;
@@ -46,7 +46,7 @@
     }
 
     :global(mark) {
-      --highlight-color: #{$hole-highlight-color};
+      --highlight-color: #{$note-highlight-color};
       --highlight-radius: 5px;
       background-color: transparent;
 
@@ -112,7 +112,7 @@
     }
 
     :global(svg rect) {
-      fill: none;
+      //fill: none;
       pointer-events: all;
     }
     &.active-note-details {
@@ -139,6 +139,13 @@
         transform: none;
       }
     }
+    &.hide-hole-overlays {
+      :global(svg rect) {
+        fill: none;
+        stroke: none;
+        stroke-width: none;
+      }
+    }
   }
 
   @keyframes mark-recede {
@@ -153,13 +160,22 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
-  import { rollMetadata, currentTick, userSettings } from "../stores";
+  import {
+    rollMetadata,
+    currentTick,
+    userSettings,
+    playingNow,
+    playExpressionsOnOff,
+    rollPedalingOnOff,
+  } from "../stores";
   import {
     clamp,
     getNoteLabel,
     normalizeInRange,
     mapToRange,
-    isNoteHole,
+    isControlHole,
+    isPedalHole,
+    hexToRGBA,
   } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
@@ -167,15 +183,37 @@
   export let holesByTickInterval;
   export let skipToTick;
 
-  const noteHoleHue = 57; // yellow
-  const controlHoleColor = "orange";
+  // This is the "coolwarm" color map -- blue to red
+  // RdYlBu (reversed) sort of works, but the yellows are too ambiguous
+  const colorMap = [
+    "#3b4cc0",
+    "#4f69d9",
+    "#6485ec",
+    "#7b9ff9",
+    "#93b5fe",
+    "#aac7fd",
+    "#c0d4f5",
+    "#d4dbe6",
+    "#e5d8d1",
+    "#f2cbb7",
+    "#f7b89c",
+    "#f5a081",
+    "#ee8468",
+    "#e0654f",
+    "#cc403a",
+    "#b40426",
+  ];
+
+  const noteHoleColor = "#ffff00"; // yellow (default)
+  const controlHoleColor = "#90ee90"; // light green
+  const pedalHoleColor = "#ffa500"; // orange;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
 
-  let minNoteVelocity = 30;
-  let maxNoteVelocity = 70;
+  let minNoteVelocity;
+  let maxNoteVelocity;
 
   let openSeadragon;
   let viewport;
@@ -189,6 +227,44 @@
   let imageWidth;
   let avgHoleWidth;
 
+  const holeColorAndRadius = (midiKey, velocity, alwaysColorizeVelocity) => {
+    let color = "none";
+    let radius = "5px";
+
+    // Colorize control/pedal holes unless their functions are disabled
+    if (isControlHole(midiKey, $rollMetadata.ROLL_TYPE)) {
+      if (isPedalHole(midiKey, $rollMetadata.ROLL_TYPE)) {
+        if ($rollPedalingOnOff) {
+          color = pedalHoleColor;
+        }
+      } else if ($playExpressionsOnOff) {
+        color = controlHoleColor;
+      }
+      // Do not colorize note holes if velocity viz or expression emulation is
+      // disabled -- unless we're setting a rectangle's underlying color
+    } else if (
+      ((!$userSettings.showNoteVelocities || !$playExpressionsOnOff) &&
+        !alwaysColorizeVelocity) ||
+      velocity == null
+    ) {
+      color = noteHoleColor;
+      // Colorize note holes according to the color map and scale glow radius
+    } else {
+      const velocityNormalized = normalizeInRange(
+        velocity,
+        minNoteVelocity,
+        maxNoteVelocity,
+      );
+      const velocityMapped = mapToRange(velocityNormalized, 0.4, 1.0);
+      const velocityMappedIndex = Math.round(
+        mapToRange(velocityNormalized, 0, colorMap.length - 1),
+      );
+      color = colorMap[velocityMappedIndex];
+      radius = `${parseInt(velocityMapped * 10, 10)}px`;
+    }
+    return [color, radius];
+  };
+
   const createMark = (hole) => {
     const {
       x: offsetX,
@@ -200,31 +276,11 @@
     } = hole;
     const mark = document.createElement("mark");
     let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
-    if (!isNoteHole(midiKey, $rollMetadata.ROLL_TYPE)) {
-      mark.style.setProperty("--highlight-color", controlHoleColor);
-    }
-    if (velocity) {
-      const velocityNormalized = normalizeInRange(
-        velocity,
-        minNoteVelocity,
-        maxNoteVelocity,
-      );
-      const velocityMapped = mapToRange(velocityNormalized, 0.4, 1.0);
-      const velocityMappedPct = parseInt(velocityMapped * 100, 10);
-
-      mark.style.setProperty(
-        "--highlight-color",
-        `hsla(${noteHoleHue}, ${velocityMappedPct}%, 50%, 100%`,
-      );
-
-      mark.style.setProperty(
-        "--highlight-radius",
-        `${velocityMappedPct / 10}px`,
-      );
-
-      if ($userSettings.showNoteVelocities) {
-        noteLabel += `\nv:${velocity}`;
-      }
+    const [holeColor, holeRadius] = holeColorAndRadius(midiKey, velocity);
+    mark.style.setProperty("--highlight-color", holeColor);
+    mark.style.setProperty("--highlight-radius", holeRadius);
+    if (velocity && $userSettings.showNoteVelocities && $playExpressionsOnOff) {
+      noteLabel += `\nv:${velocity}`;
     }
     mark.dataset.info = noteLabel;
     mark.addEventListener("mouseout", () => {
@@ -265,18 +321,34 @@
     svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
     svg.appendChild(g);
 
+    minNoteVelocity = 64;
+    maxNoteVelocity = 64;
+    if (
+      $rollMetadata.ROLL_TYPE !== "88-note" &&
+      $rollMetadata.ROLL_TYPE !== "65-note"
+    ) {
+      holeData.forEach((hole) => {
+        const { v: velocity } = hole;
+        if (velocity) {
+          minNoteVelocity = Math.min(minNoteVelocity, velocity);
+          maxNoteVelocity = Math.max(maxNoteVelocity, velocity);
+        }
+      });
+    }
+
     holeData.forEach((hole) => {
       const rect = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "rect",
       );
-      const { x: offsetX, y: offsetY, w: width, h: height, v: velocity } = hole;
-
-      if (velocity) {
-        minNoteVelocity = Math.min(minNoteVelocity, velocity);
-        maxNoteVelocity = Math.max(maxNoteVelocity, velocity);
-      }
-
+      const {
+        x: offsetX,
+        y: offsetY,
+        w: width,
+        h: height,
+        m: midiKey,
+        v: velocity,
+      } = hole;
       rect.setAttribute("x", offsetX);
       rect.setAttribute(
         "y",
@@ -289,7 +361,9 @@
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
-
+      const [holeColor] = holeColorAndRadius(midiKey, velocity, true);
+      rect.setAttribute("fill", hexToRGBA(holeColor, 0.8));
+      rect.setAttribute("stroke", hexToRGBA(holeColor, 0.8));
       g.appendChild(rect);
     });
 
@@ -422,6 +496,7 @@
     }
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
+  class:hide-hole-overlays={!$userSettings.showAllHoles}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>

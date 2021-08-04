@@ -20,9 +20,23 @@ export const normalizeInRange = (value, min, max) => {
 // 0 and 1
 export const mapToRange = (value, min, max) => value * (max - min) + min;
 
-export const isNoteHole = (midiNumber, rollType) =>
-  midiNumber >= rollProfile[rollType].bassNotesBegin &&
-  midiNumber <= rollProfile[rollType].trebleNotesEnd;
+export const hexToRGBA = (hex, alpha) => {
+  const rgb = hex
+    .replace(/[^0-9a-f]/gi, "")
+    .match(/.{1,2}/g)
+    .map((h) => parseInt(h, 16));
+  return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
+};
+
+export const isControlHole = (midiNumber, rollType) =>
+  midiNumber < rollProfile[rollType].bassNotesBegin ||
+  midiNumber > rollProfile[rollType].trebleNotesEnd;
+
+export const isPedalHole = (midiNumber, rollType) =>
+  isControlHole(midiNumber, rollType) &&
+  rollProfile[rollType].ctrlMap[midiNumber] !== undefined &&
+  (rollProfile[rollType].ctrlMap[midiNumber].includes("soft") ||
+    rollProfile[rollType].ctrlMap[midiNumber].includes("sust"));
 
 export const getNoteName = (midiNumber) => {
   const octave = parseInt(midiNumber / 12, 10) - 1;
