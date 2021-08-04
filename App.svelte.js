@@ -45,7 +45,8 @@ import {
 	currentTick,
 	rollMetadata,
 	showKeyboard,
-	overlayKeyboard
+	overlayKeyboard,
+	animatePan
 } from "./stores.js";
 
 import { clamp } from "./utils.js";
@@ -115,7 +116,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (252:8) {#if !holesByTickInterval.count}
+// (254:8) {#if !holesByTickInterval.count}
 function create_if_block_6(ctx) {
 	let p;
 
@@ -137,7 +138,7 @@ function create_if_block_6(ctx) {
 	};
 }
 
-// (248:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (250:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -227,7 +228,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (260:4) {#if appReady}
+// (262:4) {#if appReady}
 function create_if_block_3(ctx) {
 	let div;
 	let rollviewer;
@@ -307,7 +308,7 @@ function create_if_block_3(ctx) {
 
 			const flexcollapsible_changes = {};
 
-			if (dirty[1] & /*$$scope*/ 2) {
+			if (dirty[1] & /*$$scope*/ 4) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -336,7 +337,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (267:8) {#if $showKeyboard && $overlayKeyboard}
+// (269:8) {#if $showKeyboard && $overlayKeyboard}
 function create_if_block_4(ctx) {
 	let div;
 	let keyboard;
@@ -395,7 +396,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (273:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (275:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -432,7 +433,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (282:27) 
+// (284:27) 
 function create_if_block_2(ctx) {
 	let keyboardcontrols;
 	let current;
@@ -462,7 +463,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (278:2) {#if $showKeyboard && !$overlayKeyboard}
+// (280:2) {#if $showKeyboard && !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -521,7 +522,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (285:2) {#if !appReady}
+// (287:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -644,7 +645,7 @@ function create_fragment(ctx) {
 		p(ctx, dirty) {
 			const flexcollapsible_changes = {};
 
-			if (dirty[0] & /*holesByTickInterval, appReady, currentRoll*/ 7 | dirty[1] & /*$$scope*/ 2) {
+			if (dirty[0] & /*holesByTickInterval, appReady, currentRoll*/ 7 | dirty[1] & /*$$scope*/ 4) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -769,10 +770,12 @@ function create_fragment(ctx) {
 function instance($$self, $$props, $$invalidate) {
 	let $currentTick;
 	let $rollMetadata;
+	let $animatePan;
 	let $showKeyboard;
 	let $overlayKeyboard;
 	component_subscribe($$self, currentTick, $$value => $$invalidate(17, $currentTick = $$value));
 	component_subscribe($$self, rollMetadata, $$value => $$invalidate(28, $rollMetadata = $$value));
+	component_subscribe($$self, animatePan, $$value => $$invalidate(29, $animatePan = $$value));
 	component_subscribe($$self, showKeyboard, $$value => $$invalidate(6, $showKeyboard = $$value));
 	component_subscribe($$self, overlayKeyboard, $$value => $$invalidate(7, $overlayKeyboard = $$value));
 	let appReady = false;
@@ -824,6 +827,7 @@ function instance($$self, $$props, $$invalidate) {
 
 	const skipToTick = tick => {
 		if (tick < 0) pausePlayback();
+		set_store_value(animatePan, $animatePan = true, $animatePan);
 		set_store_value(currentTick, $currentTick = tick, $currentTick);
 		updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
 	};

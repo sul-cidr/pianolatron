@@ -23,8 +23,7 @@ import {
 	rollPedalingOnOff,
 	useMidiTempoEventsOnOff,
 	activeNotes,
-	currentTick,
-	playingNow
+	currentTick
 } from "../stores.js";
 
 const SOFT_PEDAL = 67;
@@ -151,7 +150,6 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const resetPlayback = () => {
-		playingNow.set(false);
 		currentTick.reset();
 		midiSamplePlayer.stop();
 		activeNotes.reset();
@@ -161,7 +159,6 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	const pausePlayback = () => {
-		playingNow.set(false);
 		midiSamplePlayer.pause();
 		stopAllNotes();
 	};
@@ -169,7 +166,6 @@ function instance($$self, $$props, $$invalidate) {
 	const startPlayback = () => {
 		if ($currentTick < 0) resetPlayback();
 		updatePlayer();
-		playingNow.set(true);
 		midiSamplePlayer.play();
 	};
 
