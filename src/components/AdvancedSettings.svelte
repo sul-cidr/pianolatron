@@ -94,6 +94,10 @@
       Display Note Velocities:
       <input type="checkbox" bind:checked={$userSettings.showNoteVelocities} />
     </div>
+    <div>
+      Highlight All Holes:
+      <input type="checkbox" bind:checked={$userSettings.showAllHoles} />
+    </div>
   </fieldset>
 
   <fieldset>

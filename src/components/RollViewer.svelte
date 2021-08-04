@@ -156,6 +156,8 @@
     currentTick,
     userSettings,
     animatePan,
+    playExpressionsOnOff,
+    rollPedalingOnOff,
   } from "../stores";
   import {
     clamp,
