@@ -67,7 +67,7 @@ export const animatePan = (() => {
     set: (val) => {
       _set(val);
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => _set(false), 200);
+      timeoutId = setTimeout(() => _set(false), 780);
     },
     subscribe,
   };
