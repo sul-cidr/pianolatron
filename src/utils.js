@@ -65,7 +65,10 @@ export const getNoteLabel = (midiNumber, rollType = "welte-red") => {
     midiNumber <= rollProfile[rollType].trebleNotesEnd
   ) {
     noteLabel = getNoteName(midiNumber);
-  } else if (midiNumber in rollProfile[rollType].ctrlMap) {
+  } else if (
+    "ctrlMap" in rollProfile[rollType] &&
+    midiNumber in rollProfile[rollType].ctrlMap
+  ) {
     noteLabel = rollProfile[rollType].ctrlMap[midiNumber];
   }
 
