@@ -29,6 +29,7 @@
   const onZoom = () => (currentZoom = viewport.getZoom());
 
   const mousedownAction = (fn, immediate = true) => () => {
+    actionInterval?.clear();
     if (immediate) fn();
     actionInterval = easingInterval(() => fn());
   };
