@@ -128,6 +128,7 @@
         top: 0;
         mix-blend-mode: normal;
         transform: translate(-50%, -100%);
+        pointer-events: none;
       }
 
       :global(mark.active[data-info]:hover::after) {
