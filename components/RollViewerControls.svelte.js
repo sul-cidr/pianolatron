@@ -9,6 +9,7 @@ import {
 	element,
 	init,
 	insert,
+	is_function,
 	listen,
 	run_all,
 	safe_not_equal,
@@ -161,18 +162,28 @@ function create_fragment(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(window, "mouseup", /*mouseup_handler*/ ctx[9]),
-					listen(button0, "click", /*click_handler*/ ctx[10]),
-					listen(button1, "click", /*click_handler_1*/ ctx[11]),
-					listen(button2, "click", /*click_handler_2*/ ctx[12]),
-					listen(button3, "mousedown", /*mousedown_handler*/ ctx[13]),
-					listen(button4, "mousedown", /*mousedown_handler_1*/ ctx[14])
+					listen(window, "mouseup", /*mouseup_handler*/ ctx[10]),
+					listen(button0, "mousedown", function () {
+						if (is_function(/*mousedownAction*/ ctx[7](/*mousedown_handler*/ ctx[11]))) /*mousedownAction*/ ctx[7](/*mousedown_handler*/ ctx[11]).apply(this, arguments);
+					}),
+					listen(button1, "mousedown", function () {
+						if (is_function(/*mousedownAction*/ ctx[7](/*mousedown_handler_1*/ ctx[12]))) /*mousedownAction*/ ctx[7](/*mousedown_handler_1*/ ctx[12]).apply(this, arguments);
+					}),
+					listen(button2, "click", /*click_handler*/ ctx[13]),
+					listen(button3, "mousedown", function () {
+						if (is_function(/*mousedownAction*/ ctx[7](/*mousedown_handler_2*/ ctx[14]))) /*mousedownAction*/ ctx[7](/*mousedown_handler_2*/ ctx[14]).apply(this, arguments);
+					}),
+					listen(button4, "mousedown", function () {
+						if (is_function(/*mousedownAction*/ ctx[7](/*mousedown_handler_3*/ ctx[15]))) /*mousedownAction*/ ctx[7](/*mousedown_handler_3*/ ctx[15]).apply(this, arguments);
+					})
 				];
 
 				mounted = true;
 			}
 		},
-		p(ctx, [dirty]) {
+		p(new_ctx, [dirty]) {
+			ctx = new_ctx;
+
 			if (!current || dirty & /*currentZoom, maxZoomLevel*/ 17 && button0_disabled_value !== (button0_disabled_value = /*currentZoom*/ ctx[4] >= /*maxZoomLevel*/ ctx[0])) {
 				button0.disabled = button0_disabled_value;
 			}
@@ -225,53 +236,52 @@ function instance($$self, $$props, $$invalidate) {
 	let { minZoomLevel } = $$props;
 	let { strafing } = $$props;
 	let { panByIncrement } = $$props;
-	let panInterval;
+	let actionInterval;
 	const { viewport } = openSeadragon;
 	let currentZoom = viewport.getZoom();
 
 	const centerRoll = () => {
 		const viewportBounds = viewport.getBounds();
 		const lineCenter = new OpenSeadragon.Point(0.5, viewportBounds.y + viewportBounds.height / 2);
-		$$invalidate(7, strafing = true);
+		$$invalidate(8, strafing = true);
 		viewport.panTo(lineCenter);
-		setTimeout(() => $$invalidate(7, strafing = false), 1000);
+		setTimeout(() => $$invalidate(8, strafing = false), 1000);
 	};
 
 	const onZoom = () => $$invalidate(4, currentZoom = viewport.getZoom());
+
+	const mousedownAction = (fn, immediate = true) => () => {
+		actionInterval?.clear();
+		if (immediate) fn();
+		$$invalidate(3, actionInterval = easingInterval(() => fn()));
+	};
 
 	onMount(() => {
 		openSeadragon.addHandler("zoom", onZoom);
 
 		return () => {
 			openSeadragon.removeHandler("zoom", onZoom);
-			panInterval?.clear();
+			actionInterval?.clear();
 		};
 	});
 
-	const mouseup_handler = () => panInterval?.clear();
-	const click_handler = () => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel));
-	const click_handler_1 = () => viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel));
+	const mouseup_handler = () => actionInterval?.clear();
+	const mousedown_handler = () => viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel));
+	const mousedown_handler_1 = () => viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel));
 
-	const click_handler_2 = () => {
+	const click_handler = () => {
 		viewport.zoomTo(1);
 		centerRoll();
 	};
 
-	const mousedown_handler = () => {
-		panByIncrement(false);
-		$$invalidate(3, panInterval = easingInterval(() => panByIncrement(false)));
-	};
-
-	const mousedown_handler_1 = () => {
-		panByIncrement(true);
-		$$invalidate(3, panInterval = easingInterval(() => panByIncrement(true)));
-	};
+	const mousedown_handler_2 = () => panByIncrement(false);
+	const mousedown_handler_3 = () => panByIncrement(true);
 
 	$$self.$$set = $$props => {
-		if ('openSeadragon' in $$props) $$invalidate(8, openSeadragon = $$props.openSeadragon);
+		if ('openSeadragon' in $$props) $$invalidate(9, openSeadragon = $$props.openSeadragon);
 		if ('maxZoomLevel' in $$props) $$invalidate(0, maxZoomLevel = $$props.maxZoomLevel);
 		if ('minZoomLevel' in $$props) $$invalidate(1, minZoomLevel = $$props.minZoomLevel);
-		if ('strafing' in $$props) $$invalidate(7, strafing = $$props.strafing);
+		if ('strafing' in $$props) $$invalidate(8, strafing = $$props.strafing);
 		if ('panByIncrement' in $$props) $$invalidate(2, panByIncrement = $$props.panByIncrement);
 	};
 
@@ -279,18 +289,19 @@ function instance($$self, $$props, $$invalidate) {
 		maxZoomLevel,
 		minZoomLevel,
 		panByIncrement,
-		panInterval,
+		actionInterval,
 		currentZoom,
 		viewport,
 		centerRoll,
+		mousedownAction,
 		strafing,
 		openSeadragon,
 		mouseup_handler,
-		click_handler,
-		click_handler_1,
-		click_handler_2,
 		mousedown_handler,
-		mousedown_handler_1
+		mousedown_handler_1,
+		click_handler,
+		mousedown_handler_2,
+		mousedown_handler_3
 	];
 }
 
@@ -299,10 +310,10 @@ class RollViewerControls extends SvelteComponent {
 		super();
 
 		init(this, options, instance, create_fragment, safe_not_equal, {
-			openSeadragon: 8,
+			openSeadragon: 9,
 			maxZoomLevel: 0,
 			minZoomLevel: 1,
-			strafing: 7,
+			strafing: 8,
 			panByIncrement: 2
 		});
 	}
