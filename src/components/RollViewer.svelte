@@ -203,6 +203,9 @@
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
 
+  let minNoteVelocity;
+  let maxNoteVelocity;
+
   let openSeadragon;
   let viewport;
   let firstHolePx;
@@ -267,6 +270,21 @@
     svg.setAttribute("height", imageLength);
     svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
     svg.appendChild(g);
+
+    minNoteVelocity = 64;
+    maxNoteVelocity = 64;
+    if (
+      $rollMetadata.ROLL_TYPE !== "88-note" &&
+      $rollMetadata.ROLL_TYPE !== "65-note"
+    ) {
+      holeData.forEach((hole) => {
+        const { v: velocity } = hole;
+        if (velocity) {
+          minNoteVelocity = Math.min(minNoteVelocity, velocity);
+          maxNoteVelocity = Math.max(maxNoteVelocity, velocity);
+        }
+      });
+    }
 
     holeData.forEach((hole) => {
       const rect = document.createElementNS(
