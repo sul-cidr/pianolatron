@@ -10,7 +10,7 @@
   export let minZoomLevel;
   export let strafing;
   export let panByIncrement;
-  let panInterval;
+  let actionInterval;
 
   const { viewport } = openSeadragon;
   let currentZoom = viewport.getZoom();
@@ -30,14 +30,14 @@
 
   const mousedownAction = (fn, immediate = true) => () => {
     if (immediate) fn();
-    panInterval = easingInterval(() => fn());
+    actionInterval = easingInterval(() => fn());
   };
 
   onMount(() => {
     openSeadragon.addHandler("zoom", onZoom);
     return () => {
       openSeadragon.removeHandler("zoom", onZoom);
-      panInterval?.clear();
+      actionInterval?.clear();
     };
   });
 </script>
@@ -148,4 +148,4 @@
     </svg>
   </button>
 </div>
-<svelte:window on:mouseup={() => panInterval?.clear()} />
+<svelte:window on:mouseup={() => actionInterval?.clear()} />
