@@ -174,6 +174,31 @@
   export let holesByTickInterval;
   export let skipToTick;
 
+  // This is the "coolwarm" color map -- blue to red
+  // RdYlBu (reversed) sort of works, but the yellows are too ambiguous
+  const holeColorMap = [
+    "#3b4cc0",
+    "#4f69d9",
+    "#6485ec",
+    "#7b9ff9",
+    "#93b5fe",
+    "#aac7fd",
+    "#c0d4f5",
+    "#d4dbe6",
+    "#e5d8d1",
+    "#f2cbb7",
+    "#f7b89c",
+    "#f5a081",
+    "#ee8468",
+    "#e0654f",
+    "#cc403a",
+    "#b40426",
+  ];
+
+  const noteHoleColor = "#ffff00"; // yellow (default)
+  const controlHoleColor = "#90ee90"; // light green
+  const pedalHoleColor = "#ffa500"; // orange;
+
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
