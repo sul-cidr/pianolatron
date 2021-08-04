@@ -63,6 +63,7 @@
     rollMetadata,
     showKeyboard,
     overlayKeyboard,
+    animatePan,
   } from "./stores";
   import { clamp } from "./utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -129,6 +130,7 @@
 
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
+    $animatePan = true;
     $currentTick = tick;
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };

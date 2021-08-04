@@ -155,7 +155,7 @@
     rollMetadata,
     currentTick,
     userSettings,
-    playingNow,
+    animatePan,
   } from "../stores";
   import { clamp, getNoteLabel } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -271,7 +271,7 @@
       lineViewport.y,
     );
 
-    viewport.panTo(lineCenter, $playingNow);
+    viewport.panTo(lineCenter, !$animatePan);
   };
 
   const highlightHoles = (tick) => {

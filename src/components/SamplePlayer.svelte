@@ -17,7 +17,6 @@
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
-    playingNow,
   } from "../stores";
 
   let tempoMap;
@@ -121,7 +120,6 @@
   };
 
   const resetPlayback = () => {
-    playingNow.set(false);
     currentTick.reset();
     midiSamplePlayer.stop();
     activeNotes.reset();
@@ -131,7 +129,6 @@
   };
 
   const pausePlayback = () => {
-    playingNow.set(false);
     midiSamplePlayer.pause();
     stopAllNotes();
   };
@@ -139,7 +136,6 @@
   const startPlayback = () => {
     if ($currentTick < 0) resetPlayback();
     updatePlayer();
-    playingNow.set(true);
     midiSamplePlayer.play();
   };
 
