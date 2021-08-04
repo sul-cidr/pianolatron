@@ -157,7 +157,15 @@
     userSettings,
     animatePan,
   } from "../stores";
-  import { clamp, getNoteLabel } from "../utils";
+  import {
+    clamp,
+    getNoteLabel,
+    normalizeInRange,
+    mapToRange,
+    isControlHole,
+    isPedalHole,
+    hexToRGBA,
+  } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
