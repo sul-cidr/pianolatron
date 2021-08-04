@@ -114,6 +114,7 @@
     :global(svg rect) {
       pointer-events: all;
     }
+
     &.active-note-details {
       :global(mark.active[data-info]::after) {
         background-color: none;
@@ -137,6 +138,13 @@
         );
         top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
         transform: none;
+      }
+      :global(mark.flag-left:hover[data-info]::after) {
+        left: auto;
+        right: calc(
+          100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+        );
+        padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
       }
     }
     &.hide-hole-overlays {
