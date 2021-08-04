@@ -28,6 +28,11 @@
 
   const onZoom = () => (currentZoom = viewport.getZoom());
 
+  const mousedownAction = (fn, immediate = true) => () => {
+    if (immediate) fn();
+    panInterval = easingInterval(() => fn());
+  };
+
   onMount(() => {
     openSeadragon.addHandler("zoom", onZoom);
     return () => {
@@ -104,10 +109,7 @@
 <div class="overlay-buttons middle-right" transition:fade>
   <button
     disabled={false}
-    on:mousedown={() => {
-      panByIncrement(false);
-      panInterval = easingInterval(() => panByIncrement(false));
-    }}
+    on:mousedown={mousedownAction(() => panByIncrement(false))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -127,10 +129,7 @@
   </button>
   <button
     disabled={false}
-    on:mousedown={() => {
-      panByIncrement(true);
-      panInterval = easingInterval(() => panByIncrement(true));
-    }}
+    on:mousedown={mousedownAction(() => panByIncrement(true))}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
