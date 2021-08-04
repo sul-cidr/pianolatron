@@ -1,5 +1,5 @@
 <style lang="scss">
-  $hole-highlight-color: yellow;
+  $note-highlight-color: yellow;
   $highlight-hover-outline-color: darkturquoise;
   $highlight-hover-outline-width: 6px;
   $highlight-hover-outline-offset: 8px;
@@ -46,6 +46,8 @@
     }
 
     :global(mark) {
+      --highlight-color: #{$note-highlight-color};
+      --highlight-radius: 5px;
       background-color: transparent;
 
       &:hover {
@@ -72,8 +74,8 @@
       right: 0;
       mix-blend-mode: multiply;
       animation: mark-recede 0.5s ease-in-out;
-      background-color: $hole-highlight-color;
-      box-shadow: 0 0 5px $hole-highlight-color;
+      background-color: var(--highlight-color);
+      box-shadow: 0 0 var(--highlight-radius) var(--highlight-color);
       display: inline-block;
     }
 
@@ -110,7 +112,6 @@
     }
 
     :global(svg rect) {
-      fill: none;
       pointer-events: all;
     }
     &.active-note-details {
@@ -135,6 +136,13 @@
         );
         top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
         transform: none;
+      }
+    }
+    &.hide-hole-overlays {
+      :global(svg rect) {
+        fill: none;
+        stroke: none;
+        stroke-width: none;
       }
     }
   }
@@ -438,6 +446,7 @@
     }
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
+  class:hide-hole-overlays={!$userSettings.showAllHoles}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
