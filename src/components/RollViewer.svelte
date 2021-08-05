@@ -238,32 +238,35 @@
     let color = "none";
 
     // Colorize control/pedal holes unless their functions are disabled
-    if (isControlHole(midiKey, $rollMetadata.ROLL_TYPE)) {
-      if (isPedalHole(midiKey, $rollMetadata.ROLL_TYPE)) {
-        if ($rollPedalingOnOff) {
-          if (holeActive && $userSettings.showAllHoles) {
-            color = noteHoleColor;
-          } else {
-            color = pedalHoleColor;
-          }
-        }
-      } else if ($playExpressionsOnOff) {
-        if (holeActive && $userSettings.showAllHoles) {
-          color = noteHoleColor;
-        } else {
-          color = controlHoleColor;
-        }
+    // Always use yellow highlight color if Show All Holes is selected and
+    // the hole is active, regardless of type or Show Velocities setting.
+    if (isPedalHole(midiKey, $rollMetadata.ROLL_TYPE)) {
+      if ($rollPedalingOnOff) {
+        color =
+          holeActive && $userSettings.showAllHoles
+            ? noteHoleColor
+            : pedalHoleColor;
       }
-      // Do not colorize note holes if velocity viz or expression emulation is
-      // disabled -- unless we're setting a rectangle's underlying color
+    } else if (isControlHole(midiKey, $rollMetadata.ROLL_TYPE)) {
+      if ($playExpressionsOnOff) {
+        color =
+          holeActive && $userSettings.showAllHoles
+            ? noteHoleColor
+            : controlHoleColor;
+      }
     } else if (
+      // Also use yellow highlight if it's an active note hole and expressions/
+      // show velocities are off or if velocity data is not available
       ((!$userSettings.showNoteVelocities || !$playExpressionsOnOff) &&
         holeActive) ||
       velocity == null ||
       ($userSettings.showAllHoles && holeActive)
     ) {
       color = noteHoleColor;
-      // Colorize note holes according to the color map and scale glow radius
+      // For remaining cases (active holes with Show Velocities selected and
+      // Show All Holes not, and when setting all holes' underlying color,
+      // which may then be hidden by the hide-hole-overlays styel class),
+      // colorize note holes according to the color map
     } else {
       const velocityNormalized = normalizeInRange(
         velocity,
