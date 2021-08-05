@@ -155,7 +155,7 @@
     }
 
     &:not(.show-note-velocities) {
-      :global(mark) {
+      :global(mark.note) {
         --highlight-color: #{$note-highlight-color} !important;
       }
     }
@@ -187,7 +187,7 @@
     getNoteLabel,
     normalizeInRange,
     mapToRange,
-    holeType,
+    getHoleType,
   } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
@@ -254,17 +254,20 @@
       ];
 
     holeData.forEach((hole) => {
-      switch (holeType(hole, $rollMetadata.ROLL_TYPE)) {
+      switch (getHoleType(hole, $rollMetadata.ROLL_TYPE)) {
         case "pedal":
           hole.color = pedalHoleColor;
+          hole.type = "pedal";
           break;
 
         case "control":
           hole.color = controlHoleColor;
+          hole.type = "control";
           break;
 
         case "note":
           hole.color = getNoteHoleColor(hole);
+          hole.type = "note";
           break;
 
         default:
@@ -282,10 +285,12 @@
       m: midiKey,
       v: velocity,
       color: holeColor,
+      type: holeType,
     } = hole;
     const mark = document.createElement("mark");
     let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
+    mark.classList.add(holeType);
     if (velocity && $userSettings.showNoteVelocities && $playExpressionsOnOff) {
       noteLabel += `\nv:${velocity}`;
     }
@@ -339,6 +344,7 @@
         w: width,
         h: height,
         color: holeColor,
+        type: holeType,
       } = hole;
       const padding = 10;
 
@@ -359,6 +365,7 @@
         hoveredMark = createMark(hole);
       });
       rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
+      rect.setAttribute("class", holeType);
       g.appendChild(rect);
     });
 

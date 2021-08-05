@@ -14,7 +14,7 @@ export const normalizeInRange = (value, min, max) => {
   return (value - min) / (max - min);
 };
 
-export const holeType = ({ m: midiNumber }, rollType) => {
+export const getHoleType = ({ m: midiNumber }, rollType) => {
   const {
     bassNotesBegin: notesBegin,
     trebleNotesEnd: notesEnd,
