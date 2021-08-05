@@ -225,9 +225,6 @@
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
 
-  let minNoteVelocity;
-  let maxNoteVelocity;
-
   let openSeadragon;
   let viewport;
   let firstHolePx;
@@ -241,24 +238,23 @@
   let avgHoleWidth;
 
   const calculateHoleColors = (holeData) => {
-    minNoteVelocity = 64;
-    maxNoteVelocity = 64;
-    if (
-      $rollMetadata.ROLL_TYPE !== "88-note" &&
-      $rollMetadata.ROLL_TYPE !== "65-note"
-    ) {
-      holeData.forEach((hole) => {
-        const { v: velocity } = hole;
-        if (velocity) {
-          minNoteVelocity = Math.min(minNoteVelocity, velocity);
-          maxNoteVelocity = Math.max(maxNoteVelocity, velocity);
-        }
-      });
-    }
+    const velocities = holeData.map(({ v }) => v).filter((v) => v);
+    const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
+    const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
+
+    const getNoteHoleColor = ({ v: velocity }) =>
+      holeColorMap[
+        Math.round(
+          mapToRange(
+            normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+            0,
+            holeColorMap.length - 1,
+          ),
+        )
+      ];
 
     holeData.forEach((hole) => {
-      console.log(holeType(hole.m, $rollMetadata.ROLL_TYPE));
-      switch (holeType(hole.m, $rollMetadata.ROLL_TYPE)) {
+      switch (holeType(hole, $rollMetadata.ROLL_TYPE)) {
         case "pedal":
           hole.color = pedalHoleColor;
           break;
@@ -268,15 +264,7 @@
           break;
 
         case "note":
-          const velocityNormalized = normalizeInRange(
-            hole.v,
-            minNoteVelocity,
-            maxNoteVelocity,
-          );
-          const velocityColorIndex = Math.round(
-            mapToRange(velocityNormalized, 0, holeColorMap.length - 1),
-          );
-          hole.color = holeColorMap[velocityColorIndex];
+          hole.color = getNoteHoleColor(hole);
           break;
 
         default:
@@ -339,21 +327,6 @@
     svg.setAttribute("height", imageLength);
     svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
     svg.appendChild(g);
-
-    minNoteVelocity = 64;
-    maxNoteVelocity = 64;
-    if (
-      $rollMetadata.ROLL_TYPE !== "88-note" &&
-      $rollMetadata.ROLL_TYPE !== "65-note"
-    ) {
-      holeData.forEach((hole) => {
-        const { v: velocity } = hole;
-        if (velocity) {
-          minNoteVelocity = Math.min(minNoteVelocity, velocity);
-          maxNoteVelocity = Math.max(maxNoteVelocity, velocity);
-        }
-      });
-    }
 
     holeData.forEach((hole) => {
       const rect = document.createElementNS(
@@ -521,6 +494,7 @@
   class:active-note-details={$userSettings.activeNoteDetails}
   class:highlight-all-holes={$userSettings.showAllHoles}
   class:show-note-velocities={$userSettings.showNoteVelocities}
+  class:use-roll-pedaling={$rollPedalingOnOff}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
