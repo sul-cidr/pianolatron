@@ -182,9 +182,8 @@
     getNoteLabel,
     normalizeInRange,
     mapToRange,
-    isControlHole,
-    isPedalHole,
     hexToRGBA,
+    holeType,
   } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
@@ -236,51 +235,49 @@
   let imageWidth;
   let avgHoleWidth;
 
-  const getHoleColor = (midiKey, velocity, holeActive) => {
-    let color = "none";
-
-    // Colorize control/pedal holes unless their functions are disabled
-    // Always use yellow highlight color if Show All Holes is selected and
-    // the hole is active, regardless of type or Show Velocities setting.
-    if (isPedalHole(midiKey, $rollMetadata.ROLL_TYPE)) {
-      if ($rollPedalingOnOff) {
-        color =
-          holeActive && $userSettings.showAllHoles
-            ? noteHoleColor
-            : pedalHoleColor;
-      }
-    } else if (isControlHole(midiKey, $rollMetadata.ROLL_TYPE)) {
-      if ($playExpressionsOnOff) {
-        color =
-          holeActive && $userSettings.showAllHoles
-            ? noteHoleColor
-            : controlHoleColor;
-      }
-    } else if (
-      // Also use yellow highlight if it's an active note hole and expressions/
-      // show velocities are off or if velocity data is not available
-      ((!$userSettings.showNoteVelocities || !$playExpressionsOnOff) &&
-        holeActive) ||
-      velocity == null ||
-      ($userSettings.showAllHoles && holeActive)
+  const calculateHoleColors = (holeData) => {
+    minNoteVelocity = 64;
+    maxNoteVelocity = 64;
+    if (
+      $rollMetadata.ROLL_TYPE !== "88-note" &&
+      $rollMetadata.ROLL_TYPE !== "65-note"
     ) {
-      color = noteHoleColor;
-      // For remaining cases (active holes with Show Velocities selected and
-      // Show All Holes not, and when setting all holes' underlying color,
-      // which may then be hidden by the hide-hole-overlays styel class),
-      // colorize note holes according to the color map
-    } else {
-      const velocityNormalized = normalizeInRange(
-        velocity,
-        minNoteVelocity,
-        maxNoteVelocity,
-      );
-      const velocityColorIndex = Math.round(
-        mapToRange(velocityNormalized, 0, holeColorMap.length - 1),
-      );
-      color = holeColorMap[velocityColorIndex];
+      holeData.forEach((hole) => {
+        const { v: velocity } = hole;
+        if (velocity) {
+          minNoteVelocity = Math.min(minNoteVelocity, velocity);
+          maxNoteVelocity = Math.max(maxNoteVelocity, velocity);
+        }
+      });
     }
-    return color;
+
+    holeData.forEach((hole) => {
+      console.log(holeType(hole.m, $rollMetadata.ROLL_TYPE));
+      switch (holeType(hole.m, $rollMetadata.ROLL_TYPE)) {
+        case "pedal":
+          hole.color = pedalHoleColor;
+          break;
+
+        case "control":
+          hole.color = controlHoleColor;
+          break;
+
+        case "note":
+          const velocityNormalized = normalizeInRange(
+            hole.v,
+            minNoteVelocity,
+            maxNoteVelocity,
+          );
+          const velocityColorIndex = Math.round(
+            mapToRange(velocityNormalized, 0, holeColorMap.length - 1),
+          );
+          hole.color = holeColorMap[velocityColorIndex];
+          break;
+
+        default:
+          hole.color = "ffff00";
+      }
+    });
   };
 
   const createMark = (hole) => {
@@ -291,10 +288,10 @@
       h: height,
       m: midiKey,
       v: velocity,
+      color: holeColor,
     } = hole;
     const mark = document.createElement("mark");
     let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
-    const holeColor = getHoleColor(midiKey, velocity, true);
     mark.style.setProperty("--highlight-color", holeColor);
     if (velocity && $userSettings.showNoteVelocities && $playExpressionsOnOff) {
       noteLabel += `\nv:${velocity}`;
@@ -363,8 +360,7 @@
         y: offsetY,
         w: width,
         h: height,
-        m: midiKey,
-        v: velocity,
+        color: holeColor,
       } = hole;
       const padding = 10;
 
@@ -384,7 +380,6 @@
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
-      const holeColor = getHoleColor(midiKey, velocity, false);
       rect.setAttribute("fill", hexToRGBA(holeColor, 0.8));
       g.appendChild(rect);
     });
@@ -497,6 +492,7 @@
 
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
+  $: calculateHoleColors($rollMetadata.holeData);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
