@@ -10,9 +10,7 @@ export const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 // Return a float between 0 and 1 proportional to value's position between min
 // and max
 export const normalizeInRange = (value, min, max) => {
-  if (max - min === 0) {
-    return 0;
-  }
+  if (max - min === 0) return 0;
   return (value - min) / (max - min);
 };
 
@@ -32,7 +30,7 @@ export const holeType = ({ m: midiNumber }, rollType) => {
   return "control";
 };
 
-// Return a float beteen min and max proportional to value's position between
+// Return a float between min and max proportional to value's position between
 // 0 and 1
 export const mapToRange = (value, min, max) => value * (max - min) + min;
 
