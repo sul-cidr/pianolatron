@@ -187,7 +187,6 @@
     getNoteLabel,
     normalizeInRange,
     mapToRange,
-    hexToRGBA,
     holeType,
   } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -198,28 +197,29 @@
 
   // This is the "coolwarm" color map -- blue to red
   // RdYlBu (reversed) sort of works, but the yellows are too ambiguous
+  // (values in H, S, L)
   const holeColorMap = [
-    "#3b4cc0",
-    "#4f69d9",
-    "#6485ec",
-    "#7b9ff9",
-    "#93b5fe",
-    "#aac7fd",
-    "#c0d4f5",
-    "#d4dbe6",
-    "#e5d8d1",
-    "#f2cbb7",
-    "#f7b89c",
-    "#f5a081",
-    "#ee8468",
-    "#e0654f",
-    "#cc403a",
-    "#b40426",
+    "232, 53%, 49%",
+    "229, 64%, 58%",
+    "225, 78%, 66%",
+    "223, 91%, 73%",
+    "221, 98%, 79%",
+    "219, 95%, 83%",
+    "217, 73%, 86%",
+    "217, 26%, 87%",
+    "21, 28%, 86%",
+    "20, 69%, 83%",
+    "18, 85%, 79%",
+    "16, 85%, 73%",
+    "13, 80%, 67%",
+    "9, 70%, 59%",
+    "2, 59%, 51%",
+    "348, 96%, 36%",
   ];
 
-  const defaultHoleColor = "#ffff00"; // yellow (default)
-  const controlHoleColor = "#90ee90"; // light green
-  const pedalHoleColor = "#ffa500"; // orange;
+  const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
+  const controlHoleColor = "120, 73%, 75%"; // light green
+  const pedalHoleColor = "39, 100%, 50%"; // orange;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -285,7 +285,7 @@
     } = hole;
     const mark = document.createElement("mark");
     let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
-    mark.style.setProperty("--highlight-color", holeColor);
+    mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
     if (velocity && $userSettings.showNoteVelocities && $playExpressionsOnOff) {
       noteLabel += `\nv:${velocity}`;
     }
@@ -358,7 +358,7 @@
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
-      rect.setAttribute("fill", hexToRGBA(holeColor, 0.8));
+      rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
       g.appendChild(rect);
     });
 

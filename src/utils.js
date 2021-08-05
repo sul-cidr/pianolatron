@@ -36,14 +36,6 @@ export const holeType = ({ m: midiNumber }, rollType) => {
 // 0 and 1
 export const mapToRange = (value, min, max) => value * (max - min) + min;
 
-export const hexToRGBA = (hex = "ffff00", alpha) => {
-  const rgb = hex
-    .replace(/[^0-9a-f]/gi, "")
-    .match(/.{1,2}/g)
-    .map((h) => parseInt(h, 16));
-  return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
-};
-
 export const getNoteName = (midiNumber) => {
   const octave = parseInt(midiNumber / 12, 10) - 1;
   const name = [
