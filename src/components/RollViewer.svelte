@@ -151,7 +151,12 @@
     &:not(.highlight-all-holes) {
       :global(svg rect) {
         fill: none;
-        stroke: none;
+      }
+    }
+
+    &:not(.show-note-velocities) {
+      :global(mark) {
+        --highlight-color: #{$note-highlight-color} !important;
       }
     }
   }
@@ -515,6 +520,7 @@
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
   class:highlight-all-holes={$userSettings.showAllHoles}
+  class:show-note-velocities={$userSettings.showNoteVelocities}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
