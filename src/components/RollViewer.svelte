@@ -47,7 +47,6 @@
 
     :global(mark) {
       --highlight-color: #{$note-highlight-color};
-      --highlight-radius: 5px;
       background-color: transparent;
 
       &:hover {
@@ -75,7 +74,7 @@
       mix-blend-mode: multiply;
       animation: mark-recede 0.5s ease-in-out;
       background-color: var(--highlight-color);
-      box-shadow: 0 0 var(--highlight-radius) var(--highlight-color);
+      box-shadow: 0 0 5px var(--highlight-color);
       display: inline-block;
     }
 
@@ -235,25 +234,33 @@
   let imageWidth;
   let avgHoleWidth;
 
-  const holeColorAndRadius = (midiKey, velocity, alwaysColorizeVelocity) => {
+  const getHoleColor = (midiKey, velocity, holeActive) => {
     let color = "none";
-    let radius = "5px";
 
     // Colorize control/pedal holes unless their functions are disabled
     if (isControlHole(midiKey, $rollMetadata.ROLL_TYPE)) {
       if (isPedalHole(midiKey, $rollMetadata.ROLL_TYPE)) {
         if ($rollPedalingOnOff) {
-          color = pedalHoleColor;
+          if (holeActive && $userSettings.showAllHoles) {
+            color = noteHoleColor;
+          } else {
+            color = pedalHoleColor;
+          }
         }
       } else if ($playExpressionsOnOff) {
-        color = controlHoleColor;
+        if (holeActive && $userSettings.showAllHoles) {
+          color = noteHoleColor;
+        } else {
+          color = controlHoleColor;
+        }
       }
       // Do not colorize note holes if velocity viz or expression emulation is
       // disabled -- unless we're setting a rectangle's underlying color
     } else if (
       ((!$userSettings.showNoteVelocities || !$playExpressionsOnOff) &&
-        !alwaysColorizeVelocity) ||
-      velocity == null
+        holeActive) ||
+      velocity == null ||
+      ($userSettings.showAllHoles && holeActive)
     ) {
       color = noteHoleColor;
       // Colorize note holes according to the color map and scale glow radius
@@ -263,14 +270,12 @@
         minNoteVelocity,
         maxNoteVelocity,
       );
-      const velocityMapped = mapToRange(velocityNormalized, 0.4, 1.0);
-      const velocityMappedIndex = Math.round(
+      const velocityColorIndex = Math.round(
         mapToRange(velocityNormalized, 0, holeColorMap.length - 1),
       );
-      color = holeColorMap[velocityMappedIndex];
-      radius = `${parseInt(velocityMapped * 10, 10)}px`;
+      color = holeColorMap[velocityColorIndex];
     }
-    return [color, radius];
+    return color;
   };
 
   const createMark = (hole) => {
@@ -284,9 +289,8 @@
     } = hole;
     const mark = document.createElement("mark");
     let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
-    const [holeColor, holeRadius] = holeColorAndRadius(midiKey, velocity);
+    const holeColor = getHoleColor(midiKey, velocity, true);
     mark.style.setProperty("--highlight-color", holeColor);
-    mark.style.setProperty("--highlight-radius", holeRadius);
     if (velocity && $userSettings.showNoteVelocities && $playExpressionsOnOff) {
       noteLabel += `\nv:${velocity}`;
     }
@@ -375,7 +379,7 @@
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
-      const [holeColor] = holeColorAndRadius(midiKey, velocity, true);
+      const holeColor = getHoleColor(midiKey, velocity, false);
       rect.setAttribute("fill", hexToRGBA(holeColor, 0.8));
       g.appendChild(rect);
     });
