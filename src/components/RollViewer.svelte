@@ -217,7 +217,7 @@
     "#b40426",
   ];
 
-  const noteHoleColor = "#ffff00"; // yellow (default)
+  const defaultHoleColor = "#ffff00"; // yellow (default)
   const controlHoleColor = "#90ee90"; // light green
   const pedalHoleColor = "#ffa500"; // orange;
 
@@ -268,7 +268,7 @@
           break;
 
         default:
-          hole.color = "ffff00";
+          hole.color = defaultHoleColor;
       }
     });
   };
