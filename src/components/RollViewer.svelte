@@ -164,7 +164,7 @@
   @keyframes mark-recede {
     from {
       mix-blend-mode: normal;
-      padding: 4px;
+      padding: 2%;
       opacity: 0.8;
     }
   }
