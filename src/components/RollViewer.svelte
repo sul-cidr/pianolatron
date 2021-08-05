@@ -2,7 +2,7 @@
   $note-highlight-color: yellow;
   $highlight-hover-outline-color: darkturquoise;
   $highlight-hover-outline-width: 6px;
-  $highlight-hover-outline-offset: 8px;
+  $highlight-hover-outline-offset: 4px;
 
   #roll-viewer {
     position: relative;
@@ -76,6 +76,7 @@
       background-color: var(--highlight-color);
       box-shadow: 0 0 5px var(--highlight-color);
       display: inline-block;
+      border-radius: 20px;
     }
 
     :global(mark:hover[data-info]::after) {
@@ -157,8 +158,9 @@
 
   @keyframes mark-recede {
     from {
-      border-radius: 30%;
       mix-blend-mode: normal;
+      padding: 4px;
+      opacity: 0.8;
     }
   }
 </style>
@@ -303,10 +305,10 @@
         viewport.viewer.removeOverlay(hoveredMark);
     });
     const viewportRectangle = viewport.imageToViewportRectangle(
-      offsetX,
-      scrollDownwards ? offsetY : imageLength - offsetY - height,
-      width,
-      height,
+      offsetX - 4,
+      scrollDownwards ? offsetY - 4 : imageLength - offsetY - height - 4,
+      width + 11,
+      height + 12,
     );
     const imgBounds = viewport.viewportToImageRectangle(viewport.getBounds());
     const markFractionalPosition =
