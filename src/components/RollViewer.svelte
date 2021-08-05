@@ -148,7 +148,7 @@
       }
     }
 
-    &.hide-hole-overlays {
+    &:not(.highlight-all-holes) {
       :global(svg rect) {
         fill: none;
         stroke: none;
@@ -518,7 +518,7 @@
     }
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
-  class:hide-hole-overlays={!$userSettings.showAllHoles}
+  class:highlight-all-holes={$userSettings.showAllHoles}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
