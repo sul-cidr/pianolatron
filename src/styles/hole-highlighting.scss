@@ -95,6 +95,12 @@ $highlight-hover-outline-offset: 4px;
     }
   }
 
+  &.highlight-all-holes {
+    mark {
+      --highlight-color: #{$note-highlight-color} !important;
+    }
+  }
+
   &:not(.show-note-velocities) {
     mark.note {
       --highlight-color: #{$note-highlight-color} !important;
