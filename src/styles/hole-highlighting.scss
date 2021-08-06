@@ -135,8 +135,8 @@ $highlight-hover-outline-offset: 4px;
 
     // if "Play Expressions" is off, velocity is 64, so...
     &:not(.play-expressions) {
-      // ...the highlight color is adjusted
-      mark.note {
+      // ...the highlight color is adjusted (if "Highlight Enabled Holes" is off)
+      &:not(.highlight-enabled-holes) mark.note {
         --highlight-color: hsla(217, 73%, 86%, 0.8) !important;
       }
 
