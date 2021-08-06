@@ -96,6 +96,8 @@ export const rollProfile = {
     ctrlMap: {
       16: "rewind",
       18: "sust",
+      19: "acc",
+      20: "acc",
       109: "acc",
       110: "acc",
     },
