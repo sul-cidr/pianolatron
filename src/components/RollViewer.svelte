@@ -1,5 +1,5 @@
 <style lang="scss">
-  // See styles/hole-highlighing.scss for all the <mark/> and <rect/> styling
+  // See styles/hole-highlighting.scss for all the <mark/> and <rect/> styling
 
   #roll-viewer {
     position: relative;
