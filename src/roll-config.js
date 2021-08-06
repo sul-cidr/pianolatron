@@ -90,6 +90,8 @@ export const rollProfile = {
     bassCtrlBegin: 15,
     bassCtrlEnd: 20,
     bassNotesBegin: 21,
+    bassNotesEnd: 64,
+    trebleNotesBegin: 65,
     trebleNotesEnd: 108,
     trebleCtrlBegin: 109,
     trebleCtrlEnd: 110,
