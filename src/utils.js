@@ -53,22 +53,19 @@ export const getNoteName = (midiNumber) => {
   return `${name}${octave}`;
 };
 
-export const getNoteLabel = (midiNumber, rollType = "welte-red") => {
-  let noteLabel = `mid_${midiNumber}`;
+export const getHoleLabel = (midiNumber, rollType = "welte-red") => {
+  const {
+    bassNotesBegin: notesBegin,
+    trebleNotesEnd: notesEnd,
+    ctrlMap,
+  } = rollProfile[rollType];
 
-  if (
-    midiNumber >= rollProfile[rollType].bassNotesBegin &&
-    midiNumber <= rollProfile[rollType].trebleNotesEnd
-  ) {
-    noteLabel = getNoteName(midiNumber);
-  } else if (
-    "ctrlMap" in rollProfile[rollType] &&
-    midiNumber in rollProfile[rollType].ctrlMap
-  ) {
-    noteLabel = rollProfile[rollType].ctrlMap[midiNumber];
-  }
+  if (midiNumber >= notesBegin && midiNumber <= notesEnd)
+    return getNoteName(midiNumber);
 
-  return noteLabel;
+  if (ctrlMap && ctrlMap[midiNumber]) return ctrlMap[midiNumber];
+
+  return `mid_${midiNumber}`;
 };
 
 export const easingInterval = (

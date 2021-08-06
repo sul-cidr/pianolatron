@@ -66,9 +66,9 @@
   } from "../stores";
   import {
     clamp,
-    getNoteLabel,
-    normalizeInRange,
     mapToRange,
+    normalizeInRange,
+    getHoleLabel,
     getHoleType,
   } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -171,7 +171,7 @@
     } = hole;
     const mark = document.createElement("mark");
 
-    const holeLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+    const holeLabel = getHoleLabel(midiKey, $rollMetadata.ROLL_TYPE);
     mark.dataset.holeLabel = holeLabel;
     if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
 
