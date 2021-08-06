@@ -66,9 +66,9 @@
   } from "../stores";
   import {
     clamp,
-    getNoteLabel,
-    normalizeInRange,
     mapToRange,
+    normalizeInRange,
+    getHoleLabel,
     getHoleType,
   } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -117,6 +117,7 @@
   let imageLength;
   let imageWidth;
   let avgHoleWidth;
+  let trackerbarHeight;
 
   const calculateHoleColors = (holeData) => {
     const velocities = holeData.map(({ v }) => v).filter((v) => v);
@@ -170,7 +171,7 @@
     } = hole;
     const mark = document.createElement("mark");
 
-    const holeLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+    const holeLabel = getHoleLabel(midiKey, $rollMetadata.ROLL_TYPE);
     mark.dataset.holeLabel = holeLabel;
     if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
 
@@ -328,13 +329,7 @@
     });
     openSeadragon.addHandler("zoom", ({ zoom }) => {
       const imageZoom = viewport.viewportToImageZoom(zoom);
-      const rv = document.getElementById("roll-viewer");
-      if (!rv) return;
-      const trackerbarHeight = Math.max(
-        1,
-        parseInt(avgHoleWidth * imageZoom, 10),
-      );
-      rv.style.setProperty("--trackerbar-height", `${trackerbarHeight}px`);
+      trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
     });
     openSeadragon.open(imageUrl);
   });
@@ -387,6 +382,7 @@
   class:show-note-velocities={$userSettings.showNoteVelocities}
   class:use-roll-pedaling={$rollPedalingOnOff}
   class:play-expressions={$playExpressionsOnOff}
+  style="--trackerbar-height: {trackerbarHeight}px"
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
