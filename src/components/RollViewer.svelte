@@ -170,28 +170,32 @@
       type: holeType,
     } = hole;
     const mark = document.createElement("mark");
-    let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+
+    const noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+    mark.dataset.noteLabel = noteLabel;
+    if (holeType === "note")
+      mark.dataset.noteLabelExtra = `${noteLabel}\nv:${velocity}`;
+
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
     mark.classList.add(holeType);
-    if (velocity && $userSettings.showNoteVelocities && $playExpressionsOnOff) {
-      noteLabel += `\nv:${velocity}`;
-    }
-    mark.dataset.info = noteLabel;
+
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);
     });
+
+    const imgBounds = viewport.viewportToImageRectangle(viewport.getBounds());
+    const markFractionalPosition =
+      parseFloat(offsetX + width / 2 - imgBounds.x) /
+      parseFloat(imgBounds.width);
+    mark.classList.toggle("flag-left", markFractionalPosition > 0.8);
+
     const viewportRectangle = viewport.imageToViewportRectangle(
       offsetX - 4,
       scrollDownwards ? offsetY - 4 : imageLength - offsetY - height - 4,
       width + 11,
       height + 12,
     );
-    const imgBounds = viewport.viewportToImageRectangle(viewport.getBounds());
-    const markFractionalPosition =
-      parseFloat(offsetX + width / 2 - imgBounds.x) /
-      parseFloat(imgBounds.width);
-    mark.classList.toggle("flag-left", markFractionalPosition > 0.8);
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
   };
