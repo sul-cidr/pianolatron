@@ -1,8 +1,5 @@
 <style lang="scss">
-  $note-highlight-color: yellow;
-  $highlight-hover-outline-color: darkturquoise;
-  $highlight-hover-outline-width: 6px;
-  $highlight-hover-outline-offset: 4px;
+  // See styles/hole-highlighing.scss for all the <mark/> and <rect/> styling
 
   #roll-viewer {
     position: relative;
@@ -45,127 +42,12 @@
       top: 0;
     }
 
-    :global(mark) {
-      --highlight-color: #{$note-highlight-color};
-      background-color: transparent;
-
-      &:hover {
-        background-color: transparent;
-        box-shadow: none;
-        outline: $highlight-hover-outline-width solid
-          $highlight-hover-outline-color;
-        outline-offset: $highlight-hover-outline-offset;
-        z-index: 1;
-
-        &::before {
-          height: 0;
-          position: relative;
-        }
-      }
-    }
-
-    :global(mark.active::before) {
-      position: absolute;
-      content: "";
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      mix-blend-mode: multiply;
-      animation: mark-recede 0.5s ease-in-out;
-      background-color: var(--highlight-color);
-      box-shadow: 0 0 5px var(--highlight-color);
-      display: inline-block;
-      border-radius: 20px;
-    }
-
-    :global(mark:hover[data-info]::after) {
-      background-color: $highlight-hover-outline-color;
-      color: white;
-      content: attr(data-info);
-      display: block;
-      font-weight: bold;
-      left: calc(
-        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-      );
-      padding: 8px ($highlight-hover-outline-width + 4px) 8px 4px;
-      position: absolute;
-      text-shadow: 0px 0px 8px black;
-      top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
-      transform: none;
-    }
-
-    :global(mark.flag-left:hover[data-info]::after) {
-      left: auto;
-      right: calc(
-        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-      );
-      padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
-    }
-
     :global(canvas) {
       background: white !important;
     }
 
     :global(.openseadragon-canvas:focus) {
       outline: none;
-    }
-
-    :global(svg rect) {
-      pointer-events: all;
-    }
-
-    &.active-note-details {
-      :global(mark.active[data-info]::after) {
-        background-color: none;
-        color: white;
-        content: attr(data-info);
-        display: block;
-        font-weight: bold;
-        left: 50%;
-        padding: 8px 4px;
-        position: absolute;
-        text-shadow: 0px 0px 8px black;
-        top: 0;
-        mix-blend-mode: normal;
-        transform: translate(-50%, -100%);
-        pointer-events: none;
-      }
-
-      :global(mark.active[data-info]:hover::after) {
-        left: calc(
-          100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-        );
-        top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
-        transform: none;
-      }
-      :global(mark.flag-left:hover[data-info]::after) {
-        left: auto;
-        right: calc(
-          100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-        );
-        padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
-      }
-    }
-
-    &:not(.highlight-all-holes) {
-      :global(svg rect) {
-        fill: none;
-      }
-    }
-
-    &:not(.show-note-velocities) {
-      :global(mark.note) {
-        --highlight-color: #{$note-highlight-color} !important;
-      }
-    }
-  }
-
-  @keyframes mark-recede {
-    from {
-      mix-blend-mode: normal;
-      padding: 2%;
-      opacity: 0.8;
     }
   }
 </style>
