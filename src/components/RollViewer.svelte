@@ -1,8 +1,5 @@
 <style lang="scss">
-  $hole-highlight-color: yellow;
-  $highlight-hover-outline-color: darkturquoise;
-  $highlight-hover-outline-width: 6px;
-  $highlight-hover-outline-offset: 8px;
+  // See styles/hole-highlighting.scss for all the <mark/> and <rect/> styling
 
   #roll-viewer {
     position: relative;
@@ -45,104 +42,12 @@
       top: 0;
     }
 
-    :global(mark) {
-      background-color: transparent;
-
-      &:hover {
-        background-color: transparent;
-        box-shadow: none;
-        outline: $highlight-hover-outline-width solid
-          $highlight-hover-outline-color;
-        outline-offset: $highlight-hover-outline-offset;
-        z-index: 1;
-
-        &::before {
-          height: 0;
-          position: relative;
-        }
-      }
-    }
-
-    :global(mark.active::before) {
-      position: absolute;
-      content: "";
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      mix-blend-mode: multiply;
-      animation: mark-recede 0.5s ease-in-out;
-      background-color: $hole-highlight-color;
-      box-shadow: 0 0 5px $hole-highlight-color;
-      display: inline-block;
-    }
-
-    :global(mark:hover[data-info]::after) {
-      background-color: $highlight-hover-outline-color;
-      color: white;
-      content: attr(data-info);
-      display: block;
-      font-weight: bold;
-      left: calc(
-        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-      );
-      padding: 8px ($highlight-hover-outline-width + 4px) 8px 4px;
-      position: absolute;
-      text-shadow: 0px 0px 8px black;
-      top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
-      transform: none;
-    }
-
-    :global(mark.flag-left:hover[data-info]::after) {
-      left: auto;
-      right: calc(
-        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-      );
-      padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
-    }
-
     :global(canvas) {
       background: white !important;
     }
 
     :global(.openseadragon-canvas:focus) {
       outline: none;
-    }
-
-    :global(svg rect) {
-      fill: none;
-      pointer-events: all;
-    }
-    &.active-note-details {
-      :global(mark.active[data-info]::after) {
-        background-color: none;
-        color: white;
-        content: attr(data-info);
-        display: block;
-        font-weight: bold;
-        left: 50%;
-        padding: 8px 4px;
-        position: absolute;
-        text-shadow: 0px 0px 8px black;
-        top: 0;
-        mix-blend-mode: normal;
-        transform: translate(-50%, -100%);
-      }
-
-      :global(mark.active[data-info]:hover::after) {
-        left: calc(
-          100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
-        );
-        top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
-        transform: none;
-      }
-    }
-  }
-
-  @keyframes mark-recede {
-    from {
-      border-radius: 30%;
-      mix-blend-mode: normal;
     }
   }
 </style>
@@ -156,13 +61,46 @@
     currentTick,
     userSettings,
     animatePan,
+    playExpressionsOnOff,
+    rollPedalingOnOff,
   } from "../stores";
-  import { clamp, getNoteLabel } from "../utils";
+  import {
+    clamp,
+    getNoteLabel,
+    normalizeInRange,
+    mapToRange,
+    getHoleType,
+  } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
   export let holesByTickInterval;
   export let skipToTick;
+
+  // This is the "coolwarm" color map -- blue to red
+  // RdYlBu (reversed) sort of works, but the yellows are too ambiguous
+  // (values in H, S, L)
+  const holeColorMap = [
+    "232, 53%, 49%",
+    "229, 64%, 58%",
+    "225, 78%, 66%",
+    "223, 91%, 73%",
+    "221, 98%, 79%",
+    "219, 95%, 83%",
+    "217, 73%, 86%",
+    "21, 28%, 86%",
+    "20, 69%, 83%",
+    "18, 85%, 79%",
+    "16, 85%, 73%",
+    "13, 80%, 67%",
+    "9, 70%, 59%",
+    "2, 59%, 51%",
+    "348, 96%, 36%",
+  ];
+
+  const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
+  const controlHoleColor = "120, 73%, 75%"; // light green
+  const pedalHoleColor = "39, 100%, 50%"; // orange;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -180,6 +118,45 @@
   let imageWidth;
   let avgHoleWidth;
 
+  const calculateHoleColors = (holeData) => {
+    const velocities = holeData.map(({ v }) => v).filter((v) => v);
+    const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
+    const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
+
+    const getNoteHoleColor = ({ v: velocity }) =>
+      holeColorMap[
+        Math.round(
+          mapToRange(
+            normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+            0,
+            holeColorMap.length - 1,
+          ),
+        )
+      ];
+
+    holeData.forEach((hole) => {
+      switch (getHoleType(hole, $rollMetadata.ROLL_TYPE)) {
+        case "pedal":
+          hole.color = pedalHoleColor;
+          hole.type = "pedal";
+          break;
+
+        case "control":
+          hole.color = controlHoleColor;
+          hole.type = "control";
+          break;
+
+        case "note":
+          hole.color = getNoteHoleColor(hole);
+          hole.type = "note";
+          break;
+
+        default:
+          hole.color = defaultHoleColor;
+      }
+    });
+  };
+
   const createMark = (hole) => {
     const {
       x: offsetX,
@@ -188,28 +165,35 @@
       h: height,
       m: midiKey,
       v: velocity,
+      color: holeColor,
+      type: holeType,
     } = hole;
     const mark = document.createElement("mark");
-    let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
-    if (velocity && $userSettings.showNoteVelocities) {
-      noteLabel += `\nv:${velocity}`;
-    }
-    mark.dataset.info = noteLabel;
+
+    const holeLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+    mark.dataset.holeLabel = holeLabel;
+    if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
+
+    mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
+    mark.classList.add(holeType);
+
     mark.addEventListener("mouseout", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);
     });
-    const viewportRectangle = viewport.imageToViewportRectangle(
-      offsetX,
-      scrollDownwards ? offsetY : imageLength - offsetY - height,
-      width,
-      height,
-    );
+
     const imgBounds = viewport.viewportToImageRectangle(viewport.getBounds());
     const markFractionalPosition =
       parseFloat(offsetX + width / 2 - imgBounds.x) /
       parseFloat(imgBounds.width);
     mark.classList.toggle("flag-left", markFractionalPosition > 0.8);
+
+    const viewportRectangle = viewport.imageToViewportRectangle(
+      offsetX - 4,
+      scrollDownwards ? offsetY - 4 : imageLength - offsetY - height - 4,
+      width + 11,
+      height + 12,
+    );
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
   };
@@ -238,21 +222,34 @@
         "http://www.w3.org/2000/svg",
         "rect",
       );
-      const { x: offsetX, y: offsetY, w: width, h: height } = hole;
+      const {
+        x: offsetX,
+        y: offsetY,
+        w: width,
+        h: height,
+        color: holeColor,
+        type: holeType,
+      } = hole;
+      const padding = 10;
 
-      rect.setAttribute("x", offsetX);
+      rect.setAttribute("x", offsetX - padding);
       rect.setAttribute(
         "y",
-        scrollDownwards ? offsetY : imageLength - offsetY - height,
+        scrollDownwards
+          ? offsetY - padding
+          : imageLength - offsetY - height - padding,
       );
-      rect.setAttribute("width", width);
-      rect.setAttribute("height", height);
+      rect.setAttribute("width", width + padding * 2);
+      rect.setAttribute("height", height + padding * 2);
+      rect.setAttribute("rx", 10);
+      rect.setAttribute("ry", 10);
       rect.addEventListener("mouseover", () => {
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
-
+      rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
+      rect.setAttribute("class", holeType);
       g.appendChild(rect);
     });
 
@@ -364,6 +361,7 @@
 
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
+  $: calculateHoleColors($rollMetadata.holeData);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
@@ -385,6 +383,10 @@
     }
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
+  class:highlight-enabled-holes={$userSettings.highlightEnabledHoles}
+  class:show-note-velocities={$userSettings.showNoteVelocities}
+  class:use-roll-pedaling={$rollPedalingOnOff}
+  class:play-expressions={$playExpressionsOnOff}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>

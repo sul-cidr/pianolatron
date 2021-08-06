@@ -1,0 +1,206 @@
+$note-highlight-color: yellow;
+$highlight-hover-outline-color: darkturquoise;
+$highlight-hover-outline-width: 6px;
+$highlight-hover-outline-offset: 4px;
+
+#roll-viewer {
+  mark {
+    --highlight-color: #{$note-highlight-color};
+    background-color: transparent;
+
+    // mouseover hole outline and label flag
+    &:hover {
+      box-shadow: none;
+      outline: $highlight-hover-outline-width solid
+        $highlight-hover-outline-color;
+      outline-offset: $highlight-hover-outline-offset;
+      z-index: 1;
+
+      // winds off the actual hole highlight style, if one is set
+      &::before {
+        height: 0;
+        position: relative;
+      }
+
+      // the label "flag" (points to the right by default -- see .flag-left below)
+      &::after {
+        background-color: $highlight-hover-outline-color;
+        color: white;
+        content: attr(data-hole-label);
+        display: block;
+        font-weight: bold;
+        left: calc(
+          100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+        );
+        padding: 8px ($highlight-hover-outline-width + 4px) 8px 4px;
+        position: absolute;
+        text-shadow: 0px 0px 8px black;
+        top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
+        transform: none;
+      }
+    }
+  }
+
+  // .active marks are currently playing -- the ::before pseudo element overlays the highlight color
+  mark.active::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    mix-blend-mode: multiply;
+    animation: mark-recede 0.5s ease-in-out;
+    background-color: var(--highlight-color);
+    box-shadow: 0 0 5px var(--highlight-color);
+    display: inline-block;
+    border-radius: 20px;
+  }
+
+  // .flag-left marks have their label "flag" pointing to the left
+  mark.flag-left:hover::after {
+    left: auto;
+    right: calc(
+      100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+    );
+    padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
+  }
+
+  // if "Display Note Velocities" is on, a tooltip is displayed on .active marks
+  &.active-note-details {
+    mark.active::after {
+      background-color: none;
+      color: white;
+      content: attr(data-hole-label);
+      display: block;
+      font-weight: bold;
+      left: 50%;
+      padding: 8px 4px;
+      position: absolute;
+      text-shadow: 0px 0px 8px black;
+      top: 0;
+      mix-blend-mode: normal;
+      transform: translate(-50%, -100%);
+      pointer-events: none;
+    }
+
+    // when hovering a mark, revert to the outline+flag style
+    mark:hover::after {
+      left: calc(
+        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+      );
+      top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
+      transform: none;
+    }
+
+    // ditto for .flag-left marks
+    mark.flag-left:hover::after {
+      left: auto;
+      right: calc(
+        100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
+      );
+      padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
+    }
+  }
+
+  // when "Highlight All Holes" is on, force a yellow highlight
+  &.highlight-enabled-holes {
+    mark {
+      --highlight-color: #{$note-highlight-color} !important;
+    }
+  }
+
+  // if "Display Note Velocities" is *not* on, force a yellow highlight for .note marks
+  &:not(.show-note-velocities) {
+    mark.note {
+      --highlight-color: #{$note-highlight-color} !important;
+    }
+  }
+
+  // if "Display Note Velocities" is on...
+  &.show-note-velocities {
+    // ...label "flags" for note marks use the data-note-velocity value too
+    mark.note:hover::after {
+      content: attr(data-hole-label) "\av:"attr(data-note-velocity);
+    }
+
+    // ...and if "Show Details for Active Notes" is also on...
+    &.active-note-details {
+      // ..."tooltips" for note marks use the data-note-velocity value too
+      mark.note.active::after {
+        content: attr(data-hole-label) "\av:"attr(data-note-velocity);
+      }
+    }
+
+    // if "Play Expressions" is off, velocity is 64, so...
+    &:not(.play-expressions) {
+      // ...the highlight color is adjusted
+      mark.note {
+        --highlight-color: hsla(217, 73%, 86%, 0.8) !important;
+      }
+
+      // ...and so is the label
+      mark.note.active::after {
+        content: attr(data-hole-label) "\av:64";
+      }
+
+      // ...and if "Show Details for Active Notes" is also on...
+      &.active-note-details {
+        // ...so too is the "tooltip"
+        mark.note.active::after {
+          content: attr(data-hole-label) "\av:64";
+        }
+      }
+    }
+  }
+
+  // if "Use Roll Pedaling" is off, don't highlight pedal holes
+  &:not(.use-roll-pedaling) {
+    mark.pedal {
+      --highlight-color: none !important;
+    }
+
+    rect.pedal {
+      fill: none;
+    }
+  }
+
+  // if "Play Expressions" is off, don't highlight control holes
+  &:not(.play-expressions) {
+    mark.control {
+      --highlight-color: none !important;
+    }
+
+    rect.control {
+      fill: none;
+    }
+  }
+
+  // if "Play Expressions" is off, use the colour from the middle of the palate
+  //  for all note holes (but only if "Highlight All Holes" is on!)
+  &.highlight-enabled-holes:not(.play-expressions) {
+    rect.note {
+      fill: hsla(217, 73%, 86%, 0.8);
+    }
+  }
+
+  svg rect {
+    pointer-events: all;
+  }
+
+  // when "Highlight All Holes" is off, don't fill the hole <rect/> elements
+  &:not(.highlight-enabled-holes) {
+    svg rect {
+      fill: none;
+    }
+  }
+}
+
+// style of the initial "attack"
+@keyframes mark-recede {
+  from {
+    mix-blend-mode: normal;
+    padding: 2%;
+    opacity: 0.8;
+  }
+}

@@ -83,8 +83,8 @@ export const rollProfile = {
     },
   },
   "65-note": {
-    notesBegin: 33,
-    notesEnd: 97,
+    bassNotesBegin: 33,
+    trebleNotesEnd: 97,
   },
   "88-note": {
     bassCtrlBegin: 15,
