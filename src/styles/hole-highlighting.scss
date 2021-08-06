@@ -163,6 +163,13 @@ $highlight-hover-outline-offset: 4px;
     rect.pedal {
       fill: none;
     }
+
+    // and don't use the tooltips on pedal holes either
+    &.active-note-details {
+      mark.pedal.active::after {
+        content: none;
+      }
+    }
   }
 
   // if "Play Expressions" is off, don't highlight control holes
@@ -173,6 +180,13 @@ $highlight-hover-outline-offset: 4px;
 
     rect.control {
       fill: none;
+    }
+
+    // and don't use the tooltips on pedal holes either
+    &.active-note-details {
+      mark.control.active::after {
+        content: none;
+      }
     }
   }
 
