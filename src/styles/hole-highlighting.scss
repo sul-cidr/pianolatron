@@ -107,6 +107,16 @@ $highlight-hover-outline-offset: 4px;
     }
   }
 
+  &:not(.use-roll-pedaling) {
+    mark.pedal {
+      --highlight-color: none !important;
+    }
+
+    rect.pedal {
+      fill: none;
+    }
+  }
+
   svg rect {
     pointer-events: all;
   }
