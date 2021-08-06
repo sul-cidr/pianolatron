@@ -315,7 +315,7 @@ kbd.depressed {
 #roll-viewer.show-note-velocities.active-note-details mark.note.active::after {
   content: attr(data-hole-label) "\av:" attr(data-note-velocity);
 }
-#roll-viewer.show-note-velocities:not(.play-expressions) mark.note {
+#roll-viewer.show-note-velocities:not(.play-expressions):not(.highlight-enabled-holes) mark.note {
   --highlight-color: hsla(217, 73%, 86%, 0.8) !important;
 }
 #roll-viewer.show-note-velocities:not(.play-expressions) mark.note:hover::after {
