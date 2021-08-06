@@ -80,7 +80,7 @@ export const userSettings = createStore({
   theme: "cardinal",
   activeNoteDetails: false,
   showNoteVelocities: false,
-  showAllHoles: false,
+  highlightEnabledHoles: false,
 });
 
 // Browser State

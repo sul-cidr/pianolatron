@@ -95,8 +95,11 @@
       <input type="checkbox" bind:checked={$userSettings.showNoteVelocities} />
     </div>
     <div>
-      Highlight All Holes:
-      <input type="checkbox" bind:checked={$userSettings.showAllHoles} />
+      Highlight Enabled Holes:
+      <input
+        type="checkbox"
+        bind:checked={$userSettings.highlightEnabledHoles}
+      />
     </div>
   </fieldset>
 

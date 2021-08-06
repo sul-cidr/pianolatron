@@ -384,7 +384,7 @@
     }
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
-  class:highlight-all-holes={$userSettings.showAllHoles}
+  class:highlight-enabled-holes={$userSettings.highlightEnabledHoles}
   class:show-note-velocities={$userSettings.showNoteVelocities}
   class:use-roll-pedaling={$rollPedalingOnOff}
   class:play-expressions={$playExpressionsOnOff}

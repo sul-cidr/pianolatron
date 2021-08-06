@@ -104,7 +104,7 @@ $highlight-hover-outline-offset: 4px;
   }
 
   // when "Highlight All Holes" is on, force a yellow highlight
-  &.highlight-all-holes {
+  &.highlight-enabled-holes {
     mark {
       --highlight-color: #{$note-highlight-color} !important;
     }
@@ -156,7 +156,7 @@ $highlight-hover-outline-offset: 4px;
 
   // if "Play Expressions" is off, use the colour from the middle of the palate
   //  for all note holes (but only if "Highlight All Holes" is on!)
-  &.highlight-all-holes:not(.play-expressions) {
+  &.highlight-enabled-holes:not(.play-expressions) {
     rect.note {
       fill: hsla(217, 73%, 86%, 0.8);
     }
@@ -167,7 +167,7 @@ $highlight-hover-outline-offset: 4px;
   }
 
   // when "Highlight All Holes" is off, don't fill the hole <rect/> elements
-  &:not(.highlight-all-holes) {
+  &:not(.highlight-enabled-holes) {
     svg rect {
       fill: none;
     }
