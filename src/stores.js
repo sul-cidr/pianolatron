@@ -29,7 +29,12 @@ const createSetStore = () => {
 export const rollMetadata = createStore({});
 export const rollHasExpressions = derived(
   rollMetadata,
-  ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
+  ($rollMetadata) => $rollMetadata.ROLL_TYPE !== "65-note",
+);
+export const isReproducingRoll = derived(rollMetadata, ($rollMetadata) =>
+  ["welte-red", "welte-green", "welte-licensee"].includes(
+    $rollMetadata.ROLL_TYPE,
+  ),
 );
 
 // Pedaling
