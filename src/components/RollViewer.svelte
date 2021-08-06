@@ -384,6 +384,7 @@
   class:highlight-all-holes={$userSettings.showAllHoles}
   class:show-note-velocities={$userSettings.showNoteVelocities}
   class:use-roll-pedaling={$rollPedalingOnOff}
+  class:play-expressions={$playExpressionsOnOff}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
