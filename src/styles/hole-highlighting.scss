@@ -117,32 +117,39 @@ $highlight-hover-outline-offset: 4px;
     }
   }
 
-  // if "Display Note Velocities" is on, label "flags" for note marks use the
-  //  data-note-velocity value too
+  // if "Display Note Velocities" is on...
   &.show-note-velocities {
+    // ...label "flags" for note marks use the data-note-velocity value too
     mark.note:hover::after {
       content: attr(data-hole-label) "\av:"attr(data-note-velocity);
     }
 
-    // unless "Play Expressions" is off, in which case velocity is 64
+    // ...and if "Show Details for Active Notes" is also on...
+    &.active-note-details {
+      // ..."tooltips" for note marks use the data-note-velocity value too
+      mark.note.active::after {
+        content: attr(data-hole-label) "\av:"attr(data-note-velocity);
+      }
+    }
+
+    // if "Play Expressions" is off, velocity is 64, so...
     &:not(.play-expressions) {
+      // ...the highlight color is adjusted
+      mark.note {
+        --highlight-color: hsla(217, 73%, 86%, 0.8) !important;
+      }
+
+      // ...and so is the label
       mark.note.active::after {
         content: attr(data-hole-label) "\av:64";
       }
-    }
-  }
 
-  // if "Display Note Velocities" and "Show Details for Active Notes" are both on,
-  //  tooltips for note marks  use the data-note-velocity value too
-  &.show-note-velocities.active-note-details {
-    mark.note.active::after {
-      content: attr(data-hole-label) "\av:"attr(data-note-velocity);
-    }
-
-    // unless "Play Expressions" is off, in which case velocity is 64
-    &:not(.play-expressions) {
-      mark.note.active::after {
-        content: attr(data-hole-label) "\av:64";
+      // ...and if "Show Details for Active Notes" is also on...
+      &.active-note-details {
+        // ...so too is the "tooltip"
+        mark.note.active::after {
+          content: attr(data-hole-label) "\av:64";
+        }
       }
     }
   }
