@@ -1,0 +1,127 @@
+#roll-viewer mark {
+  --highlight-color: yellow;
+  background-color: transparent;
+}
+#roll-viewer mark:hover {
+  box-shadow: none;
+  outline: 6px solid darkturquoise;
+  outline-offset: 4px;
+  z-index: 1;
+}
+#roll-viewer mark:hover::before {
+  height: 0;
+  position: relative;
+}
+#roll-viewer mark:hover::after {
+  background-color: darkturquoise;
+  color: white;
+  content: attr(data-hole-label);
+  display: block;
+  font-weight: bold;
+  left: calc( 100% + 4px + 6px );
+  padding: 8px 10px 8px 4px;
+  position: absolute;
+  text-shadow: 0px 0px 8px black;
+  top: -10px;
+  transform: none;
+}
+#roll-viewer mark.active::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  mix-blend-mode: multiply;
+  animation: mark-recede 0.5s ease-in-out;
+  background-color: var(--highlight-color);
+  box-shadow: 0 0 5px var(--highlight-color);
+  display: inline-block;
+  border-radius: 20px;
+}
+#roll-viewer mark.flag-left:hover::after {
+  left: auto;
+  right: calc( 100% + 4px + 6px );
+  padding: 8px 4px 8px 10px;
+}
+#roll-viewer.active-note-details mark.active::after {
+  background-color: none;
+  color: white;
+  content: attr(data-hole-label);
+  display: block;
+  font-weight: bold;
+  left: 50%;
+  padding: 8px 4px;
+  position: absolute;
+  text-shadow: 0px 0px 8px black;
+  top: 0;
+  mix-blend-mode: normal;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+}
+#roll-viewer.active-note-details mark:hover::after {
+  left: calc( 100% + 4px + 6px );
+  top: -10px;
+  transform: none;
+}
+#roll-viewer.active-note-details mark.flag-left:hover::after {
+  left: auto;
+  right: calc( 100% + 4px + 6px );
+  padding: 8px 4px 8px 10px;
+}
+#roll-viewer.highlight-enabled-holes mark {
+  --highlight-color: yellow !important;
+}
+#roll-viewer:not(.show-note-velocities) mark.note {
+  --highlight-color: yellow !important;
+}
+#roll-viewer.show-note-velocities mark.note:hover::after {
+  content: attr(data-hole-label) "\av:" attr(data-note-velocity);
+}
+#roll-viewer.show-note-velocities.active-note-details mark.note.active::after {
+  content: attr(data-hole-label) "\av:" attr(data-note-velocity);
+}
+#roll-viewer.show-note-velocities:not(.play-expressions) mark.note {
+  --highlight-color: hsla(217, 73%, 86%, 0.8) !important;
+}
+#roll-viewer.show-note-velocities:not(.play-expressions) mark.note.active::after {
+  content: attr(data-hole-label) "\av:64";
+}
+#roll-viewer.show-note-velocities:not(.play-expressions).active-note-details mark.note.active::after {
+  content: attr(data-hole-label) "\av:64";
+}
+#roll-viewer:not(.use-roll-pedaling) mark.pedal {
+  --highlight-color: none !important;
+}
+#roll-viewer:not(.use-roll-pedaling) rect.pedal {
+  fill: none;
+}
+#roll-viewer:not(.use-roll-pedaling).active-note-details mark.pedal.active::after {
+  content: none;
+}
+#roll-viewer:not(.play-expressions) mark.control {
+  --highlight-color: none !important;
+}
+#roll-viewer:not(.play-expressions) rect.control {
+  fill: none;
+}
+#roll-viewer:not(.play-expressions).active-note-details mark.control.active::after {
+  content: none;
+}
+#roll-viewer.highlight-enabled-holes:not(.play-expressions) rect.note {
+  fill: rgba(193, 213, 245, 0.8);
+}
+#roll-viewer svg rect {
+  pointer-events: all;
+}
+#roll-viewer:not(.highlight-enabled-holes) svg rect {
+  fill: none;
+}
+
+@keyframes mark-recede {
+  from {
+    mix-blend-mode: normal;
+    padding: 2%;
+    opacity: 0.8;
+  }
+}

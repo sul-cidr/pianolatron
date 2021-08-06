@@ -7,6 +7,33 @@ export const enforcePrecision = (value, precision) => {
 
 export const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+// Return a float between 0 and 1 proportional to value's position between min
+// and max
+export const normalizeInRange = (value, min, max) => {
+  if (max - min === 0) return 0;
+  return (value - min) / (max - min);
+};
+
+export const getHoleType = ({ m: midiNumber }, rollType) => {
+  const {
+    bassNotesBegin: notesBegin,
+    trebleNotesEnd: notesEnd,
+    ctrlMap,
+  } = rollProfile[rollType];
+
+  if (midiNumber >= notesBegin && midiNumber <= notesEnd) return "note";
+  if (
+    ctrlMap[midiNumber]?.includes("soft") ||
+    ctrlMap[midiNumber]?.includes("sust")
+  )
+    return "pedal";
+  return "control";
+};
+
+// Return a float between min and max proportional to value's position between
+// 0 and 1
+export const mapToRange = (value, min, max) => value * (max - min) + min;
+
 export const getNoteName = (midiNumber) => {
   const octave = parseInt(midiNumber / 12, 10) - 1;
   const name = [
@@ -34,7 +61,10 @@ export const getNoteLabel = (midiNumber, rollType = "welte-red") => {
     midiNumber <= rollProfile[rollType].trebleNotesEnd
   ) {
     noteLabel = getNoteName(midiNumber);
-  } else if (midiNumber in rollProfile[rollType].ctrlMap) {
+  } else if (
+    "ctrlMap" in rollProfile[rollType] &&
+    midiNumber in rollProfile[rollType].ctrlMap
+  ) {
     noteLabel = rollProfile[rollType].ctrlMap[midiNumber];
   }
 

@@ -32,8 +32,24 @@ import {
 import { onMount } from "../_snowpack/pkg/svelte.js";
 import { fade } from "../_snowpack/pkg/svelte/transition.js";
 import OpenSeadragon from "../_snowpack/pkg/openseadragon.js";
-import { rollMetadata, currentTick, userSettings, animatePan } from "../stores.js";
-import { clamp, getNoteLabel } from "../utils.js";
+
+import {
+	rollMetadata,
+	currentTick,
+	userSettings,
+	animatePan,
+	playExpressionsOnOff,
+	rollPedalingOnOff
+} from "../stores.js";
+
+import {
+	clamp,
+	getNoteLabel,
+	normalizeInRange,
+	mapToRange,
+	getHoleType
+} from "../utils.js";
+
 import RollViewerControls from "./RollViewerControls.svelte.js";
 
 function create_if_block_1(ctx) {
@@ -45,7 +61,7 @@ function create_if_block_1(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Downloading roll image...";
-			attr(p, "class", "svelte-zzqd0t");
+			attr(p, "class", "svelte-1dmpfr");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -73,21 +89,21 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (365:2) {#if showControls}
+// (387:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
 	let current;
 
 	function rollviewercontrols_strafing_binding(value) {
-		/*rollviewercontrols_strafing_binding*/ ctx[12](value);
+		/*rollviewercontrols_strafing_binding*/ ctx[14](value);
 	}
 
 	let rollviewercontrols_props = {
 		openSeadragon: /*openSeadragon*/ ctx[0],
 		minZoomLevel,
 		maxZoomLevel,
-		panByIncrement: /*panByIncrement*/ ctx[5]
+		panByIncrement: /*panByIncrement*/ ctx[7]
 	};
 
 	if (/*strafing*/ ctx[1] !== void 0) {
@@ -107,9 +123,9 @@ function create_if_block(ctx) {
 		},
 		p(ctx, dirty) {
 			const rollviewercontrols_changes = {};
-			if (dirty & /*openSeadragon*/ 1) rollviewercontrols_changes.openSeadragon = /*openSeadragon*/ ctx[0];
+			if (dirty[0] & /*openSeadragon*/ 1) rollviewercontrols_changes.openSeadragon = /*openSeadragon*/ ctx[0];
 
-			if (!updating_strafing && dirty & /*strafing*/ 2) {
+			if (!updating_strafing && dirty[0] & /*strafing*/ 2) {
 				updating_strafing = true;
 				rollviewercontrols_changes.strafing = /*strafing*/ ctx[1];
 				add_flush_callback(() => updating_strafing = false);
@@ -148,8 +164,12 @@ function create_fragment(ctx) {
 			t = space();
 			if (if_block1) if_block1.c();
 			attr(div, "id", "roll-viewer");
-			attr(div, "class", "svelte-zzqd0t");
+			attr(div, "class", "svelte-1dmpfr");
 			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
+			toggle_class(div, "highlight-enabled-holes", /*$userSettings*/ ctx[4].highlightEnabledHoles);
+			toggle_class(div, "show-note-velocities", /*$userSettings*/ ctx[4].showNoteVelocities);
+			toggle_class(div, "use-roll-pedaling", /*$rollPedalingOnOff*/ ctx[5]);
+			toggle_class(div, "play-expressions", /*$playExpressionsOnOff*/ ctx[6]);
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -160,18 +180,18 @@ function create_fragment(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(div, "mouseenter", /*mouseenter_handler*/ ctx[13]),
-					listen(div, "mouseleave", /*mouseleave_handler*/ ctx[14]),
-					listen(div, "wheel", prevent_default(/*wheel_handler*/ ctx[15]), true)
+					listen(div, "mouseenter", /*mouseenter_handler*/ ctx[15]),
+					listen(div, "mouseleave", /*mouseleave_handler*/ ctx[16]),
+					listen(div, "wheel", prevent_default(/*wheel_handler*/ ctx[17]), true)
 				];
 
 				mounted = true;
 			}
 		},
-		p(ctx, [dirty]) {
+		p(ctx, dirty) {
 			if (!/*rollImageReady*/ ctx[2]) {
 				if (if_block0) {
-					if (dirty & /*rollImageReady*/ 4) {
+					if (dirty[0] & /*rollImageReady*/ 4) {
 						transition_in(if_block0, 1);
 					}
 				} else {
@@ -194,7 +214,7 @@ function create_fragment(ctx) {
 				if (if_block1) {
 					if_block1.p(ctx, dirty);
 
-					if (dirty & /*showControls*/ 8) {
+					if (dirty[0] & /*showControls*/ 8) {
 						transition_in(if_block1, 1);
 					}
 				} else {
@@ -213,8 +233,24 @@ function create_fragment(ctx) {
 				check_outros();
 			}
 
-			if (dirty & /*$userSettings*/ 16) {
+			if (dirty[0] & /*$userSettings*/ 16) {
 				toggle_class(div, "active-note-details", /*$userSettings*/ ctx[4].activeNoteDetails);
+			}
+
+			if (dirty[0] & /*$userSettings*/ 16) {
+				toggle_class(div, "highlight-enabled-holes", /*$userSettings*/ ctx[4].highlightEnabledHoles);
+			}
+
+			if (dirty[0] & /*$userSettings*/ 16) {
+				toggle_class(div, "show-note-velocities", /*$userSettings*/ ctx[4].showNoteVelocities);
+			}
+
+			if (dirty[0] & /*$rollPedalingOnOff*/ 32) {
+				toggle_class(div, "use-roll-pedaling", /*$rollPedalingOnOff*/ ctx[5]);
+			}
+
+			if (dirty[0] & /*$playExpressionsOnOff*/ 64) {
+				toggle_class(div, "play-expressions", /*$playExpressionsOnOff*/ ctx[6]);
 			}
 		},
 		i(local) {
@@ -238,6 +274,9 @@ function create_fragment(ctx) {
 	};
 }
 
+const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
+const controlHoleColor = "120, 73%, 75%"; // light green
+const pedalHoleColor = "39, 100%, 50%"; // orange;
 const defaultZoomLevel = 1;
 const minZoomLevel = 0.1;
 const maxZoomLevel = 4;
@@ -248,13 +287,39 @@ function instance($$self, $$props, $$invalidate) {
 	let $currentTick;
 	let $animatePan;
 	let $userSettings;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(10, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(11, $currentTick = $$value));
-	component_subscribe($$self, animatePan, $$value => $$invalidate(23, $animatePan = $$value));
+	let $rollPedalingOnOff;
+	let $playExpressionsOnOff;
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(12, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(13, $currentTick = $$value));
+	component_subscribe($$self, animatePan, $$value => $$invalidate(25, $animatePan = $$value));
 	component_subscribe($$self, userSettings, $$value => $$invalidate(4, $userSettings = $$value));
+	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(5, $rollPedalingOnOff = $$value));
+	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(6, $playExpressionsOnOff = $$value));
 	let { imageUrl } = $$props;
 	let { holesByTickInterval } = $$props;
 	let { skipToTick } = $$props;
+
+	// This is the "coolwarm" color map -- blue to red
+	// RdYlBu (reversed) sort of works, but the yellows are too ambiguous
+	// (values in H, S, L)
+	const holeColorMap = [
+		"232, 53%, 49%",
+		"229, 64%, 58%",
+		"225, 78%, 66%",
+		"223, 91%, 73%",
+		"221, 98%, 79%",
+		"219, 95%, 83%",
+		"217, 73%, 86%",
+		"21, 28%, 86%",
+		"20, 69%, 83%",
+		"18, 85%, 79%",
+		"16, 85%, 73%",
+		"13, 80%, 67%",
+		"9, 70%, 59%",
+		"2, 59%, 51%",
+		"348, 96%, 36%"
+	];
+
 	let openSeadragon;
 	let viewport;
 	let firstHolePx;
@@ -267,33 +332,58 @@ function instance($$self, $$props, $$invalidate) {
 	let imageWidth;
 	let avgHoleWidth;
 
+	const calculateHoleColors = holeData => {
+		const velocities = holeData.map(({ v }) => v).filter(v => v);
+		const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
+		const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
+		const getNoteHoleColor = ({ v: velocity }) => holeColorMap[Math.round(mapToRange(normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity), 0, holeColorMap.length - 1))];
+
+		holeData.forEach(hole => {
+			switch (getHoleType(hole, $rollMetadata.ROLL_TYPE)) {
+				case "pedal":
+					hole.color = pedalHoleColor;
+					hole.type = "pedal";
+					break;
+				case "control":
+					hole.color = controlHoleColor;
+					hole.type = "control";
+					break;
+				case "note":
+					hole.color = getNoteHoleColor(hole);
+					hole.type = "note";
+					break;
+				default:
+					hole.color = defaultHoleColor;
+			}
+		});
+	};
+
 	const createMark = hole => {
-		const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey, v: velocity } = hole;
+		const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey, v: velocity, color: holeColor, type: holeType } = hole;
 		const mark = document.createElement("mark");
-		let noteLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
-
-		if (velocity && $userSettings.showNoteVelocities) {
-			noteLabel += `\nv:${velocity}`;
-		}
-
-		mark.dataset.info = noteLabel;
+		const holeLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
+		mark.dataset.holeLabel = holeLabel;
+		if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
+		mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
+		mark.classList.add(holeType);
 
 		mark.addEventListener("mouseout", () => {
 			if (!marks.map(([_hole]) => _hole).includes(hole)) viewport.viewer.removeOverlay(hoveredMark);
 		});
 
-		const viewportRectangle = viewport.imageToViewportRectangle(
-			offsetX,
-			scrollDownwards
-			? offsetY
-			: imageLength - offsetY - height,
-			width,
-			height
-		);
-
 		const imgBounds = viewport.viewportToImageRectangle(viewport.getBounds());
 		const markFractionalPosition = parseFloat(offsetX + width / 2 - imgBounds.x) / parseFloat(imgBounds.width);
 		mark.classList.toggle("flag-left", markFractionalPosition > 0.8);
+
+		const viewportRectangle = viewport.imageToViewportRectangle(
+			offsetX - 4,
+			scrollDownwards
+			? offsetY - 4
+			: imageLength - offsetY - height - 4,
+			width + 11,
+			height + 12
+		);
+
 		viewport.viewer.addOverlay(mark, viewportRectangle);
 		return mark;
 	};
@@ -311,15 +401,18 @@ function instance($$self, $$props, $$invalidate) {
 
 		holeData.forEach(hole => {
 			const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-			const { x: offsetX, y: offsetY, w: width, h: height } = hole;
-			rect.setAttribute("x", offsetX);
+			const { x: offsetX, y: offsetY, w: width, h: height, color: holeColor, type: holeType } = hole;
+			const padding = 10;
+			rect.setAttribute("x", offsetX - padding);
 
 			rect.setAttribute("y", scrollDownwards
-			? offsetY
-			: imageLength - offsetY - height);
+			? offsetY - padding
+			: imageLength - offsetY - height - padding);
 
-			rect.setAttribute("width", width);
-			rect.setAttribute("height", height);
+			rect.setAttribute("width", width + padding * 2);
+			rect.setAttribute("height", height + padding * 2);
+			rect.setAttribute("rx", 10);
+			rect.setAttribute("ry", 10);
 
 			rect.addEventListener("mouseover", () => {
 				if (marks.map(([_hole]) => _hole).includes(hole)) return;
@@ -327,6 +420,8 @@ function instance($$self, $$props, $$invalidate) {
 				hoveredMark = createMark(hole);
 			});
 
+			rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
+			rect.setAttribute("class", holeType);
 			g.appendChild(rect);
 		});
 
@@ -441,37 +536,41 @@ function instance($$self, $$props, $$invalidate) {
 	};
 
 	$$self.$$set = $$props => {
-		if ('imageUrl' in $$props) $$invalidate(6, imageUrl = $$props.imageUrl);
-		if ('holesByTickInterval' in $$props) $$invalidate(7, holesByTickInterval = $$props.holesByTickInterval);
-		if ('skipToTick' in $$props) $$invalidate(8, skipToTick = $$props.skipToTick);
+		if ('imageUrl' in $$props) $$invalidate(8, imageUrl = $$props.imageUrl);
+		if ('holesByTickInterval' in $$props) $$invalidate(9, holesByTickInterval = $$props.holesByTickInterval);
+		if ('skipToTick' in $$props) $$invalidate(10, skipToTick = $$props.skipToTick);
 	};
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$currentTick*/ 2048) {
+		if ($$self.$$.dirty[0] & /*$currentTick*/ 8192) {
 			$: advanceToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$currentTick*/ 2048) {
+		if ($$self.$$.dirty[0] & /*$currentTick*/ 8192) {
 			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
-			$: $$invalidate(9, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 4096) {
+			$: calculateHoleColors($rollMetadata.holeData);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 4096) {
+			$: $$invalidate(11, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		}
+
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 4096) {
 			$: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 4096) {
 			$: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
 		}
 
-		if ($$self.$$.dirty & /*$rollMetadata*/ 1024) {
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 4096) {
 			$: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
 		}
 
-		if ($$self.$$.dirty & /*scrollDownwards, $rollMetadata*/ 1536) {
+		if ($$self.$$.dirty[0] & /*scrollDownwards, $rollMetadata*/ 6144) {
 			$: firstHolePx = scrollDownwards
 			? parseInt($rollMetadata.FIRST_HOLE, 10)
 			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
@@ -484,6 +583,8 @@ function instance($$self, $$props, $$invalidate) {
 		rollImageReady,
 		showControls,
 		$userSettings,
+		$rollPedalingOnOff,
+		$playExpressionsOnOff,
 		panByIncrement,
 		imageUrl,
 		holesByTickInterval,
@@ -502,11 +603,20 @@ class RollViewer extends SvelteComponent {
 	constructor(options) {
 		super();
 
-		init(this, options, instance, create_fragment, safe_not_equal, {
-			imageUrl: 6,
-			holesByTickInterval: 7,
-			skipToTick: 8
-		});
+		init(
+			this,
+			options,
+			instance,
+			create_fragment,
+			safe_not_equal,
+			{
+				imageUrl: 8,
+				holesByTickInterval: 9,
+				skipToTick: 10
+			},
+			null,
+			[-1, -1]
+		);
 	}
 }
 

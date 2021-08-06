@@ -34,11 +34,11 @@ import {
 
 function get_each_context(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[14] = list[i];
+	child_ctx[15] = list[i];
 	return child_ctx;
 }
 
-// (118:4) {#each themes as theme}
+// (125:4) {#each themes as theme}
 function create_each_block(ctx) {
 	let button;
 	let button_class_value;
@@ -46,14 +46,14 @@ function create_each_block(ctx) {
 	let dispose;
 
 	function click_handler() {
-		return /*click_handler*/ ctx[12](/*theme*/ ctx[14]);
+		return /*click_handler*/ ctx[13](/*theme*/ ctx[15]);
 	}
 
 	return {
 		c() {
 			button = element("button");
-			attr(button, "class", button_class_value = "" + (null_to_empty(/*theme*/ ctx[14]) + " svelte-3yrbwy"));
-			toggle_class(button, "active", /*$userSettings*/ ctx[0].theme === /*theme*/ ctx[14]);
+			attr(button, "class", button_class_value = "" + (null_to_empty(/*theme*/ ctx[15]) + " svelte-3yrbwy"));
+			toggle_class(button, "active", /*$userSettings*/ ctx[0].theme === /*theme*/ ctx[15]);
 		},
 		m(target, anchor) {
 			insert(target, button, anchor);
@@ -67,7 +67,7 @@ function create_each_block(ctx) {
 			ctx = new_ctx;
 
 			if (dirty & /*$userSettings, themes*/ 65) {
-				toggle_class(button, "active", /*$userSettings*/ ctx[0].theme === /*theme*/ ctx[14]);
+				toggle_class(button, "active", /*$userSettings*/ ctx[0].theme === /*theme*/ ctx[15]);
 			}
 		},
 		d(detaching) {
@@ -79,7 +79,7 @@ function create_each_block(ctx) {
 }
 
 function create_fragment(ctx) {
-	let div6;
+	let div7;
 	let fieldset0;
 	let legend0;
 	let t1;
@@ -91,13 +91,12 @@ function create_fragment(ctx) {
 	let t4;
 	let input1;
 	let t5;
+	let div2;
+	let t6;
+	let input2;
+	let t7;
 	let fieldset1;
 	let legend1;
-	let t7;
-	let div2;
-	let t8;
-	let input2;
-	let input2_disabled_value;
 	let t9;
 	let div3;
 	let t10;
@@ -107,10 +106,15 @@ function create_fragment(ctx) {
 	let div4;
 	let t12;
 	let input4;
+	let input4_disabled_value;
 	let t13;
 	let div5;
 	let t14;
-	let div6_transition;
+	let input5;
+	let t15;
+	let div6;
+	let t16;
+	let div7_transition;
 	let current;
 	let mounted;
 	let dispose;
@@ -123,7 +127,7 @@ function create_fragment(ctx) {
 
 	return {
 		c() {
-			div6 = element("div");
+			div7 = element("div");
 			fieldset0 = element("fieldset");
 			legend0 = element("legend");
 			legend0.textContent = "Visualization Settings";
@@ -136,24 +140,28 @@ function create_fragment(ctx) {
 			t4 = text("Display Note Velocities:\n      ");
 			input1 = element("input");
 			t5 = space();
+			div2 = element("div");
+			t6 = text("Highlight Enabled Holes:\n      ");
+			input2 = element("input");
+			t7 = space();
 			fieldset1 = element("fieldset");
 			legend1 = element("legend");
 			legend1.textContent = "Roll Emulation Settings";
-			t7 = space();
-			div2 = element("div");
-			t8 = text("Play Expressions:\n      ");
-			input2 = element("input");
 			t9 = space();
 			div3 = element("div");
-			t10 = text("Use Roll Pedaling:\n      ");
+			t10 = text("Play Expressions:\n      ");
 			input3 = element("input");
 			t11 = space();
 			div4 = element("div");
-			t12 = text("Emulate Roll Acceleration:\n      ");
+			t12 = text("Use Roll Pedaling:\n      ");
 			input4 = element("input");
 			t13 = space();
 			div5 = element("div");
-			t14 = text("Theme:\n    ");
+			t14 = text("Emulate Roll Acceleration:\n      ");
+			input5 = element("input");
+			t15 = space();
+			div6 = element("div");
+			t16 = text("Theme:\n    ");
 
 			for (let i = 0; i < each_blocks.length; i += 1) {
 				each_blocks[i].c();
@@ -164,23 +172,25 @@ function create_fragment(ctx) {
 			attr(div0, "class", "svelte-3yrbwy");
 			attr(input1, "type", "checkbox");
 			attr(div1, "class", "svelte-3yrbwy");
+			attr(input2, "type", "checkbox");
+			attr(div2, "class", "svelte-3yrbwy");
 			attr(fieldset0, "class", "svelte-3yrbwy");
 			attr(legend1, "class", "svelte-3yrbwy");
-			attr(input2, "type", "checkbox");
-			input2.disabled = input2_disabled_value = !/*$rollHasExpressions*/ ctx[2];
-			attr(div2, "class", "svelte-3yrbwy");
 			attr(input3, "type", "checkbox");
 			input3.disabled = input3_disabled_value = !/*$rollHasExpressions*/ ctx[2];
 			attr(div3, "class", "svelte-3yrbwy");
 			attr(input4, "type", "checkbox");
+			input4.disabled = input4_disabled_value = !/*$rollHasExpressions*/ ctx[2];
 			attr(div4, "class", "svelte-3yrbwy");
+			attr(input5, "type", "checkbox");
+			attr(div5, "class", "svelte-3yrbwy");
 			attr(fieldset1, "class", "svelte-3yrbwy");
-			attr(div6, "id", "settings-panel");
-			attr(div6, "class", "svelte-3yrbwy");
+			attr(div7, "id", "settings-panel");
+			attr(div7, "class", "svelte-3yrbwy");
 		},
 		m(target, anchor) {
-			insert(target, div6, anchor);
-			append(div6, fieldset0);
+			insert(target, div7, anchor);
+			append(div7, fieldset0);
 			append(fieldset0, legend0);
 			append(fieldset0, t1);
 			append(fieldset0, div0);
@@ -192,33 +202,38 @@ function create_fragment(ctx) {
 			append(div1, t4);
 			append(div1, input1);
 			input1.checked = /*$userSettings*/ ctx[0].showNoteVelocities;
-			append(div6, t5);
-			append(div6, fieldset1);
-			append(fieldset1, legend1);
-			append(fieldset1, t7);
-			append(fieldset1, div2);
-			append(div2, t8);
+			append(fieldset0, t5);
+			append(fieldset0, div2);
+			append(div2, t6);
 			append(div2, input2);
-			input2.checked = /*$playExpressionsOnOff*/ ctx[3];
+			input2.checked = /*$userSettings*/ ctx[0].highlightEnabledHoles;
+			append(div7, t7);
+			append(div7, fieldset1);
+			append(fieldset1, legend1);
 			append(fieldset1, t9);
 			append(fieldset1, div3);
 			append(div3, t10);
 			append(div3, input3);
-			input3.checked = /*$rollPedalingOnOff*/ ctx[4];
+			input3.checked = /*$playExpressionsOnOff*/ ctx[3];
 			append(fieldset1, t11);
 			append(fieldset1, div4);
 			append(div4, t12);
 			append(div4, input4);
-			input4.checked = /*$useMidiTempoEventsOnOff*/ ctx[5];
-			append(div6, t13);
-			append(div6, div5);
+			input4.checked = /*$rollPedalingOnOff*/ ctx[4];
+			append(fieldset1, t13);
+			append(fieldset1, div5);
 			append(div5, t14);
+			append(div5, input5);
+			input5.checked = /*$useMidiTempoEventsOnOff*/ ctx[5];
+			append(div7, t15);
+			append(div7, div6);
+			append(div6, t16);
 
 			for (let i = 0; i < each_blocks.length; i += 1) {
-				each_blocks[i].m(div5, null);
+				each_blocks[i].m(div6, null);
 			}
 
-			/*div6_binding*/ ctx[13](div6);
+			/*div7_binding*/ ctx[14](div7);
 			current = true;
 
 			if (!mounted) {
@@ -227,7 +242,8 @@ function create_fragment(ctx) {
 					listen(input1, "change", /*input1_change_handler*/ ctx[8]),
 					listen(input2, "change", /*input2_change_handler*/ ctx[9]),
 					listen(input3, "change", /*input3_change_handler*/ ctx[10]),
-					listen(input4, "change", /*input4_change_handler*/ ctx[11])
+					listen(input4, "change", /*input4_change_handler*/ ctx[11]),
+					listen(input5, "change", /*input5_change_handler*/ ctx[12])
 				];
 
 				mounted = true;
@@ -244,24 +260,28 @@ function create_fragment(ctx) {
 				input1.checked = /*$userSettings*/ ctx[0].showNoteVelocities;
 			}
 
-			if (!current || dirty & /*$rollHasExpressions*/ 4 && input2_disabled_value !== (input2_disabled_value = !/*$rollHasExpressions*/ ctx[2])) {
-				input2.disabled = input2_disabled_value;
-			}
-
-			if (dirty & /*$playExpressionsOnOff*/ 8) {
-				input2.checked = /*$playExpressionsOnOff*/ ctx[3];
+			if (dirty & /*$userSettings*/ 1) {
+				input2.checked = /*$userSettings*/ ctx[0].highlightEnabledHoles;
 			}
 
 			if (!current || dirty & /*$rollHasExpressions*/ 4 && input3_disabled_value !== (input3_disabled_value = !/*$rollHasExpressions*/ ctx[2])) {
 				input3.disabled = input3_disabled_value;
 			}
 
+			if (dirty & /*$playExpressionsOnOff*/ 8) {
+				input3.checked = /*$playExpressionsOnOff*/ ctx[3];
+			}
+
+			if (!current || dirty & /*$rollHasExpressions*/ 4 && input4_disabled_value !== (input4_disabled_value = !/*$rollHasExpressions*/ ctx[2])) {
+				input4.disabled = input4_disabled_value;
+			}
+
 			if (dirty & /*$rollPedalingOnOff*/ 16) {
-				input3.checked = /*$rollPedalingOnOff*/ ctx[4];
+				input4.checked = /*$rollPedalingOnOff*/ ctx[4];
 			}
 
 			if (dirty & /*$useMidiTempoEventsOnOff*/ 32) {
-				input4.checked = /*$useMidiTempoEventsOnOff*/ ctx[5];
+				input5.checked = /*$useMidiTempoEventsOnOff*/ ctx[5];
 			}
 
 			if (dirty & /*themes, $userSettings, userSettings*/ 65) {
@@ -276,7 +296,7 @@ function create_fragment(ctx) {
 					} else {
 						each_blocks[i] = create_each_block(child_ctx);
 						each_blocks[i].c();
-						each_blocks[i].m(div5, null);
+						each_blocks[i].m(div6, null);
 					}
 				}
 
@@ -292,8 +312,8 @@ function create_fragment(ctx) {
 
 			if (local) {
 				add_render_callback(() => {
-					if (!div6_transition) div6_transition = create_bidirectional_transition(
-						div6,
+					if (!div7_transition) div7_transition = create_bidirectional_transition(
+						div7,
 						fly,
 						{
 							delay: 0,
@@ -305,7 +325,7 @@ function create_fragment(ctx) {
 						true
 					);
 
-					div6_transition.run(1);
+					div7_transition.run(1);
 				});
 			}
 
@@ -313,8 +333,8 @@ function create_fragment(ctx) {
 		},
 		o(local) {
 			if (local) {
-				if (!div6_transition) div6_transition = create_bidirectional_transition(
-					div6,
+				if (!div7_transition) div7_transition = create_bidirectional_transition(
+					div7,
 					fly,
 					{
 						delay: 0,
@@ -326,16 +346,16 @@ function create_fragment(ctx) {
 					false
 				);
 
-				div6_transition.run(0);
+				div7_transition.run(0);
 			}
 
 			current = false;
 		},
 		d(detaching) {
-			if (detaching) detach(div6);
+			if (detaching) detach(div7);
 			destroy_each(each_blocks, detaching);
-			/*div6_binding*/ ctx[13](null);
-			if (detaching && div6_transition) div6_transition.end();
+			/*div7_binding*/ ctx[14](null);
+			if (detaching && div7_transition) div7_transition.end();
 			mounted = false;
 			run_all(dispose);
 		}
@@ -367,23 +387,28 @@ function instance($$self, $$props, $$invalidate) {
 	}
 
 	function input2_change_handler() {
+		$userSettings.highlightEnabledHoles = this.checked;
+		userSettings.set($userSettings);
+	}
+
+	function input3_change_handler() {
 		$playExpressionsOnOff = this.checked;
 		playExpressionsOnOff.set($playExpressionsOnOff);
 	}
 
-	function input3_change_handler() {
+	function input4_change_handler() {
 		$rollPedalingOnOff = this.checked;
 		rollPedalingOnOff.set($rollPedalingOnOff);
 	}
 
-	function input4_change_handler() {
+	function input5_change_handler() {
 		$useMidiTempoEventsOnOff = this.checked;
 		useMidiTempoEventsOnOff.set($useMidiTempoEventsOnOff);
 	}
 
 	const click_handler = theme => userSettings.update(settings => ({ ...settings, theme }));
 
-	function div6_binding($$value) {
+	function div7_binding($$value) {
 		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
 			el = $$value;
 			$$invalidate(1, el);
@@ -409,8 +434,9 @@ function instance($$self, $$props, $$invalidate) {
 		input2_change_handler,
 		input3_change_handler,
 		input4_change_handler,
+		input5_change_handler,
 		click_handler,
-		div6_binding
+		div7_binding
 	];
 }
 
