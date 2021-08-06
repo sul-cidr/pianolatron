@@ -172,7 +172,7 @@
 
     const holeLabel = getNoteLabel(midiKey, $rollMetadata.ROLL_TYPE);
     mark.dataset.holeLabel = holeLabel;
-    if (holeType === "note") mark.dataset.noteVelocity = velocity;
+    if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
 
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
     mark.classList.add(holeType);
