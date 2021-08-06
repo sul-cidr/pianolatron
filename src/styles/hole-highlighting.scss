@@ -38,7 +38,7 @@ $highlight-hover-outline-offset: 4px;
     border-radius: 20px;
   }
 
-  mark:hover[data-info]::after {
+  mark:hover::after {
     background-color: $highlight-hover-outline-color;
     color: white;
     content: attr(data-info);
@@ -54,7 +54,7 @@ $highlight-hover-outline-offset: 4px;
     transform: none;
   }
 
-  mark.flag-left:hover[data-info]::after {
+  mark.flag-left:hover::after {
     left: auto;
     right: calc(
       100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
@@ -63,7 +63,7 @@ $highlight-hover-outline-offset: 4px;
   }
 
   &.active-note-details {
-    mark.active[data-info]::after {
+    mark.active::after {
       background-color: none;
       color: white;
       content: attr(data-info);
@@ -79,14 +79,14 @@ $highlight-hover-outline-offset: 4px;
       pointer-events: none;
     }
 
-    mark.active[data-info]:hover::after {
+    mark.active:hover::after {
       left: calc(
         100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
       );
       top: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
       transform: none;
     }
-    mark.flag-left:hover[data-info]::after {
+    mark.flag-left:hover::after {
       left: auto;
       right: calc(
         100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
