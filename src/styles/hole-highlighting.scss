@@ -140,7 +140,7 @@ $highlight-hover-outline-offset: 4px;
       }
 
       // ...and so is the label
-      mark.note.active::after {
+      mark.note:hover::after {
         content: attr(data-hole-label) "\av:64";
       }
 
