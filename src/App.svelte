@@ -64,6 +64,9 @@
     showKeyboard,
     overlayKeyboard,
     animatePan,
+    isReproducingRoll,
+    playExpressionsOnOff,
+    rollPedalingOnOff,
   } from "./stores";
   import { clamp } from "./utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -194,6 +197,8 @@
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
         if (metadataJson.holeData)
           buildHolesIntervalTree(metadataJson.holeData);
+        $playExpressionsOnOff = $isReproducingRoll;
+        $rollPedalingOnOff = $isReproducingRoll;
         appReady = true;
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
