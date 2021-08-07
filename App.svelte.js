@@ -46,7 +46,10 @@ import {
 	rollMetadata,
 	showKeyboard,
 	overlayKeyboard,
-	animatePan
+	animatePan,
+	isReproducingRoll,
+	playExpressionsOnOff,
+	rollPedalingOnOff
 } from "./stores.js";
 
 import { clamp } from "./utils.js";
@@ -116,7 +119,7 @@ function create_if_block_5(ctx) {
 	};
 }
 
-// (254:8) {#if !holesByTickInterval.count}
+// (259:8) {#if !holesByTickInterval.count}
 function create_if_block_6(ctx) {
 	let p;
 
@@ -138,7 +141,7 @@ function create_if_block_6(ctx) {
 	};
 }
 
-// (250:4) <FlexCollapsible id="left-sidebar" width="20vw">
+// (255:4) <FlexCollapsible id="left-sidebar" width="20vw">
 function create_default_slot_1(ctx) {
 	let rollselector;
 	let updating_currentRoll;
@@ -228,7 +231,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (262:4) {#if appReady}
+// (267:4) {#if appReady}
 function create_if_block_3(ctx) {
 	let div;
 	let rollviewer;
@@ -308,7 +311,7 @@ function create_if_block_3(ctx) {
 
 			const flexcollapsible_changes = {};
 
-			if (dirty[1] & /*$$scope*/ 4) {
+			if (dirty[1] & /*$$scope*/ 32) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -337,7 +340,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (269:8) {#if $showKeyboard && $overlayKeyboard}
+// (274:8) {#if $showKeyboard && $overlayKeyboard}
 function create_if_block_4(ctx) {
 	let div;
 	let keyboard;
@@ -396,7 +399,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (275:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+// (280:6) <FlexCollapsible id="right-sidebar" width="20vw" position="left">
 function create_default_slot(ctx) {
 	let tabbedpanel;
 	let current;
@@ -433,7 +436,7 @@ function create_default_slot(ctx) {
 	};
 }
 
-// (284:27) 
+// (289:27) 
 function create_if_block_2(ctx) {
 	let keyboardcontrols;
 	let current;
@@ -463,7 +466,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (280:2) {#if $showKeyboard && !$overlayKeyboard}
+// (285:2) {#if $showKeyboard && !$overlayKeyboard}
 function create_if_block_1(ctx) {
 	let div;
 	let keyboard;
@@ -522,7 +525,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (287:2) {#if !appReady}
+// (292:2) {#if !appReady}
 function create_if_block(ctx) {
 	let div1;
 
@@ -645,7 +648,7 @@ function create_fragment(ctx) {
 		p(ctx, dirty) {
 			const flexcollapsible_changes = {};
 
-			if (dirty[0] & /*holesByTickInterval, appReady, currentRoll*/ 7 | dirty[1] & /*$$scope*/ 4) {
+			if (dirty[0] & /*holesByTickInterval, appReady, currentRoll*/ 7 | dirty[1] & /*$$scope*/ 32) {
 				flexcollapsible_changes.$$scope = { dirty, ctx };
 			}
 
@@ -769,13 +772,19 @@ function create_fragment(ctx) {
 
 function instance($$self, $$props, $$invalidate) {
 	let $currentTick;
+	let $isReproducingRoll;
+	let $rollPedalingOnOff;
+	let $playExpressionsOnOff;
 	let $rollMetadata;
 	let $animatePan;
 	let $showKeyboard;
 	let $overlayKeyboard;
 	component_subscribe($$self, currentTick, $$value => $$invalidate(17, $currentTick = $$value));
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(28, $rollMetadata = $$value));
-	component_subscribe($$self, animatePan, $$value => $$invalidate(29, $animatePan = $$value));
+	component_subscribe($$self, isReproducingRoll, $$value => $$invalidate(28, $isReproducingRoll = $$value));
+	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(29, $rollPedalingOnOff = $$value));
+	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(30, $playExpressionsOnOff = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(31, $rollMetadata = $$value));
+	component_subscribe($$self, animatePan, $$value => $$invalidate(32, $animatePan = $$value));
 	component_subscribe($$self, showKeyboard, $$value => $$invalidate(6, $showKeyboard = $$value));
 	component_subscribe($$self, overlayKeyboard, $$value => $$invalidate(7, $overlayKeyboard = $$value));
 	let appReady = false;
@@ -892,6 +901,8 @@ function instance($$self, $$props, $$invalidate) {
 		Promise.all([mididataReady, metadataReady, pianoReady]).then(([,metadataJson]) => {
 			set_store_value(rollMetadata, $rollMetadata = { ...$rollMetadata, ...metadataJson }, $rollMetadata);
 			if (metadataJson.holeData) buildHolesIntervalTree(metadataJson.holeData);
+			set_store_value(playExpressionsOnOff, $playExpressionsOnOff = $isReproducingRoll, $playExpressionsOnOff);
+			set_store_value(rollPedalingOnOff, $rollPedalingOnOff = $isReproducingRoll, $rollPedalingOnOff);
 			$$invalidate(1, appReady = true);
 			$$invalidate(15, previousRoll = currentRoll);
 			const params = new URLSearchParams(window.location.search);
