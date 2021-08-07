@@ -284,17 +284,15 @@
 
   const advanceToTick = (tick) => {
     if (!openSeadragon) return;
-    // if we're panning horizontally we want the target bounds, if otherwise
-    //  (and most especially if we happen to be zooming) we want the current bounds
-    const viewportBounds = viewport.getBounds(!strafing);
     const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
-    const lineCenter = new OpenSeadragon.Point(
-      viewportBounds.x + viewportBounds.width / 2,
-      lineViewport.y,
-    );
 
-    viewport.panTo(lineCenter, !$animatePan);
+    if ($animatePan) {
+      viewport.centerSpringY.springTo(lineViewport.y);
+    } else {
+      viewport.centerSpringY.resetTo(lineViewport.y);
+    }
+
     osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
     osdNavDisplayRegion.classList.toggle(
       "label-above",
