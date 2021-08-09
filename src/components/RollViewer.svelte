@@ -133,7 +133,6 @@
   let openSeadragon;
   let viewport;
   let firstHolePx;
-  let strafing = false;
   let rollImageReady;
   let marks = [];
   let hoveredMark;
@@ -388,8 +387,6 @@
       createHolesOverlaySvg();
       advanceToTick(0);
     });
-    openSeadragon.addHandler("canvas-drag", () => (strafing = true));
-    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
     openSeadragon.addHandler("pan", ({ immediately }) => {
       if (immediately) return;
       const viewportCenter = viewport.getCenter(false);
@@ -475,7 +472,6 @@
   {/if}
   {#if showControls}
     <RollViewerControls
-      bind:strafing
       {openSeadragon}
       {minZoomLevel}
       {maxZoomLevel}

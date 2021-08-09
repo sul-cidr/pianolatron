@@ -8,7 +8,6 @@
   export let openSeadragon;
   export let maxZoomLevel;
   export let minZoomLevel;
-  export let strafing;
   export let panByIncrement;
   let actionInterval;
 
@@ -21,9 +20,7 @@
       0.5,
       viewportBounds.y + viewportBounds.height / 2,
     );
-    strafing = true;
     viewport.panTo(lineCenter);
-    setTimeout(() => (strafing = false), 1000);
   };
 
   const onZoom = () => (currentZoom = viewport.getZoom());
