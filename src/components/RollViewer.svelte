@@ -341,26 +341,25 @@
       navigatorDisplayRegionColor: "transparent",
     });
 
+    const { navigator } = openSeadragon;
     ({ viewport } = openSeadragon);
-
-    osdNavDisplayRegion = openSeadragon.navigator.displayRegion;
+    ({ displayRegion: osdNavDisplayRegion } = navigator);
 
     // Override some styles that OSD sets directly on the elements
-    openSeadragon.navigator.element.style.border = "none";
-    openSeadragon.navigator.element.parentElement.style.backgroundColor =
-      "#666";
-    openSeadragon.navigator.displayRegion.style.display = "block";
-    openSeadragon.navigator.displayRegion.style.border = "none";
-    openSeadragon.navigator.displayRegion.style.overflow = "visible";
-    openSeadragon.navigator.displayRegion.style.left = "0";
-    openSeadragon.navigator.displayRegion.style.width = "100%";
+    navigator.element.style.border = "none";
+    navigator.element.parentElement.style.backgroundColor = "#666";
 
-    openSeadragon.navigator.displayRegion.style.backgroundColor =
-      "rgba(255 255 255 / .6)";
-    openSeadragon.navigator.displayRegion.style.boxShadow =
-      "0 0 4px var(--primary-accent)";
+    Object.assign(osdNavDisplayRegion.style, {
+      display: "block",
+      border: "none",
+      overflow: "visible",
+      left: "0",
+      width: "100%",
+      backgroundColor: "rgba(255 255 255 / .6)",
+      boxShadow: "0 0 4px var(--primary-accent)",
+    });
 
-    openSeadragon.navigator.update = function navUpdate(mainViewport) {
+    navigator.update = function navUpdate(mainViewport) {
       // reimplemented based on
       // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
 
