@@ -64,13 +64,13 @@
         white 80%,
         transparent 100%
       );
-      margin: 2px 0;
-      top: 100%;
+      top: calc(100% + 2px);
       transition: margin 1s ease;
     }
 
     :global(.displayregion.label-above::after) {
       margin-top: -100%;
+      top: 0;
     }
   }
 </style>
@@ -350,6 +350,7 @@
     openSeadragon.navigator.element.parentElement.style.backgroundColor =
       "#666";
     openSeadragon.navigator.displayRegion.style.display = "block";
+    openSeadragon.navigator.displayRegion.style.border = "none";
     openSeadragon.navigator.displayRegion.style.overflow = "visible";
     openSeadragon.navigator.displayRegion.style.left = "0";
     openSeadragon.navigator.displayRegion.style.width = "100%";
