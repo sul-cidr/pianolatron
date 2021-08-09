@@ -391,7 +391,8 @@
     });
     openSeadragon.addHandler("canvas-drag", () => (strafing = true));
     openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
-    openSeadragon.addHandler("pan", () => {
+    openSeadragon.addHandler("pan", ({ immediately }) => {
+      if (immediately) return;
       const viewportCenter = viewport.getCenter(false);
       const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
       skipToTick(
