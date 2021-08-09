@@ -108,8 +108,6 @@
       <line x1="14" y1="12" x2="20" y2="12" />
     </svg>
   </button>
-</div>
-<div class="overlay-buttons middle-right" transition:fade>
   <button
     disabled={false}
     on:mousedown={mousedownAction(() => panByIncrement(false))}
