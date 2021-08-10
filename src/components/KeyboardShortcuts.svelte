@@ -1,5 +1,12 @@
+<script context="module">
+  import { get, writable } from "svelte/store";
+
+  const showKeybindingsConfig = writable(false);
+  export const toggleKeybindingsConfig = () =>
+    showKeybindingsConfig.update((val) => !val);
+</script>
+
 <script>
-  import { get } from "svelte/store";
   import {
     softOnOff,
     sustainOnOff,
