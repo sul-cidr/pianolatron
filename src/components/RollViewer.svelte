@@ -358,7 +358,7 @@
       boxShadow: "0 0 4px var(--primary-accent)",
     });
 
-    navigator.update = function navUpdate(mainViewport) {
+    navigator.update = (mainViewport) => {
       // reimplemented based on
       // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
 
@@ -366,7 +366,7 @@
         viewport: navViewport,
         displayRegion: { style },
         totalBorderWidths,
-      } = this;
+      } = navigator;
 
       if (mainViewport && navViewport) {
         const bounds = viewport.getBoundsNoRotate(true);
