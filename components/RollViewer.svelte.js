@@ -40,7 +40,8 @@ import {
 	userSettings,
 	animatePan,
 	playExpressionsOnOff,
-	rollPedalingOnOff
+	rollPedalingOnOff,
+	playbackProgress
 } from "../stores.js";
 
 import {
@@ -62,7 +63,7 @@ function create_if_block_1(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Downloading roll image...";
-			attr(p, "class", "svelte-1dmpfr");
+			attr(p, "class", "svelte-11ybd8n");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -90,25 +91,25 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (383:2) {#if showControls}
+// (463:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let updating_strafing;
 	let current;
 
 	function rollviewercontrols_strafing_binding(value) {
-		/*rollviewercontrols_strafing_binding*/ ctx[15](value);
+		/*rollviewercontrols_strafing_binding*/ ctx[16](value);
 	}
 
 	let rollviewercontrols_props = {
 		openSeadragon: /*openSeadragon*/ ctx[0],
 		minZoomLevel,
 		maxZoomLevel,
-		panByIncrement: /*panByIncrement*/ ctx[8]
+		panByIncrement: /*panByIncrement*/ ctx[9]
 	};
 
-	if (/*strafing*/ ctx[1] !== void 0) {
-		rollviewercontrols_props.strafing = /*strafing*/ ctx[1];
+	if (/*strafing*/ ctx[2] !== void 0) {
+		rollviewercontrols_props.strafing = /*strafing*/ ctx[2];
 	}
 
 	rollviewercontrols = new RollViewerControls({ props: rollviewercontrols_props });
@@ -126,9 +127,9 @@ function create_if_block(ctx) {
 			const rollviewercontrols_changes = {};
 			if (dirty[0] & /*openSeadragon*/ 1) rollviewercontrols_changes.openSeadragon = /*openSeadragon*/ ctx[0];
 
-			if (!updating_strafing && dirty[0] & /*strafing*/ 2) {
+			if (!updating_strafing && dirty[0] & /*strafing*/ 4) {
 				updating_strafing = true;
-				rollviewercontrols_changes.strafing = /*strafing*/ ctx[1];
+				rollviewercontrols_changes.strafing = /*strafing*/ ctx[2];
 				add_flush_callback(() => updating_strafing = false);
 			}
 
@@ -155,8 +156,8 @@ function create_fragment(ctx) {
 	let current;
 	let mounted;
 	let dispose;
-	let if_block0 = !/*rollImageReady*/ ctx[2] && create_if_block_1(ctx);
-	let if_block1 = /*showControls*/ ctx[3] && create_if_block(ctx);
+	let if_block0 = !/*rollImageReady*/ ctx[3] && create_if_block_1(ctx);
+	let if_block1 = /*showControls*/ ctx[4] && create_if_block(ctx);
 
 	return {
 		c() {
@@ -165,13 +166,13 @@ function create_fragment(ctx) {
 			t = space();
 			if (if_block1) if_block1.c();
 			attr(div, "id", "roll-viewer");
-			set_style(div, "--trackerbar-height", /*trackerbarHeight*/ ctx[4] + "px");
-			attr(div, "class", "svelte-1dmpfr");
-			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[5].activeNoteDetails);
-			toggle_class(div, "highlight-enabled-holes", /*$userSettings*/ ctx[5].highlightEnabledHoles);
-			toggle_class(div, "show-note-velocities", /*$userSettings*/ ctx[5].showNoteVelocities);
-			toggle_class(div, "use-roll-pedaling", /*$rollPedalingOnOff*/ ctx[6]);
-			toggle_class(div, "play-expressions", /*$playExpressionsOnOff*/ ctx[7]);
+			set_style(div, "--trackerbar-height", /*trackerbarHeight*/ ctx[5] + "px");
+			attr(div, "class", "svelte-11ybd8n");
+			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[6].activeNoteDetails);
+			toggle_class(div, "highlight-enabled-holes", /*$userSettings*/ ctx[6].highlightEnabledHoles);
+			toggle_class(div, "show-note-velocities", /*$userSettings*/ ctx[6].showNoteVelocities);
+			toggle_class(div, "use-roll-pedaling", /*$rollPedalingOnOff*/ ctx[7]);
+			toggle_class(div, "play-expressions", /*$playExpressionsOnOff*/ ctx[8]);
 		},
 		m(target, anchor) {
 			insert(target, div, anchor);
@@ -182,18 +183,18 @@ function create_fragment(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen(div, "mouseenter", /*mouseenter_handler*/ ctx[16]),
-					listen(div, "mouseleave", /*mouseleave_handler*/ ctx[17]),
-					listen(div, "wheel", prevent_default(/*wheel_handler*/ ctx[18]), true)
+					listen(div, "mouseenter", /*mouseenter_handler*/ ctx[17]),
+					listen(div, "mouseleave", /*mouseleave_handler*/ ctx[18]),
+					listen(div, "wheel", prevent_default(/*wheel_handler*/ ctx[19]), true)
 				];
 
 				mounted = true;
 			}
 		},
 		p(ctx, dirty) {
-			if (!/*rollImageReady*/ ctx[2]) {
+			if (!/*rollImageReady*/ ctx[3]) {
 				if (if_block0) {
-					if (dirty[0] & /*rollImageReady*/ 4) {
+					if (dirty[0] & /*rollImageReady*/ 8) {
 						transition_in(if_block0, 1);
 					}
 				} else {
@@ -212,11 +213,11 @@ function create_fragment(ctx) {
 				check_outros();
 			}
 
-			if (/*showControls*/ ctx[3]) {
+			if (/*showControls*/ ctx[4]) {
 				if (if_block1) {
 					if_block1.p(ctx, dirty);
 
-					if (dirty[0] & /*showControls*/ 8) {
+					if (dirty[0] & /*showControls*/ 16) {
 						transition_in(if_block1, 1);
 					}
 				} else {
@@ -235,28 +236,28 @@ function create_fragment(ctx) {
 				check_outros();
 			}
 
-			if (!current || dirty[0] & /*trackerbarHeight*/ 16) {
-				set_style(div, "--trackerbar-height", /*trackerbarHeight*/ ctx[4] + "px");
+			if (!current || dirty[0] & /*trackerbarHeight*/ 32) {
+				set_style(div, "--trackerbar-height", /*trackerbarHeight*/ ctx[5] + "px");
 			}
 
-			if (dirty[0] & /*$userSettings*/ 32) {
-				toggle_class(div, "active-note-details", /*$userSettings*/ ctx[5].activeNoteDetails);
+			if (dirty[0] & /*$userSettings*/ 64) {
+				toggle_class(div, "active-note-details", /*$userSettings*/ ctx[6].activeNoteDetails);
 			}
 
-			if (dirty[0] & /*$userSettings*/ 32) {
-				toggle_class(div, "highlight-enabled-holes", /*$userSettings*/ ctx[5].highlightEnabledHoles);
+			if (dirty[0] & /*$userSettings*/ 64) {
+				toggle_class(div, "highlight-enabled-holes", /*$userSettings*/ ctx[6].highlightEnabledHoles);
 			}
 
-			if (dirty[0] & /*$userSettings*/ 32) {
-				toggle_class(div, "show-note-velocities", /*$userSettings*/ ctx[5].showNoteVelocities);
+			if (dirty[0] & /*$userSettings*/ 64) {
+				toggle_class(div, "show-note-velocities", /*$userSettings*/ ctx[6].showNoteVelocities);
 			}
 
-			if (dirty[0] & /*$rollPedalingOnOff*/ 64) {
-				toggle_class(div, "use-roll-pedaling", /*$rollPedalingOnOff*/ ctx[6]);
+			if (dirty[0] & /*$rollPedalingOnOff*/ 128) {
+				toggle_class(div, "use-roll-pedaling", /*$rollPedalingOnOff*/ ctx[7]);
 			}
 
-			if (dirty[0] & /*$playExpressionsOnOff*/ 128) {
-				toggle_class(div, "play-expressions", /*$playExpressionsOnOff*/ ctx[7]);
+			if (dirty[0] & /*$playExpressionsOnOff*/ 256) {
+				toggle_class(div, "play-expressions", /*$playExpressionsOnOff*/ ctx[8]);
 			}
 		},
 		i(local) {
@@ -291,16 +292,18 @@ function instance($$self, $$props, $$invalidate) {
 	let scrollDownwards;
 	let $rollMetadata;
 	let $currentTick;
+	let $playbackProgress;
 	let $animatePan;
 	let $userSettings;
 	let $rollPedalingOnOff;
 	let $playExpressionsOnOff;
-	component_subscribe($$self, rollMetadata, $$value => $$invalidate(13, $rollMetadata = $$value));
-	component_subscribe($$self, currentTick, $$value => $$invalidate(14, $currentTick = $$value));
-	component_subscribe($$self, animatePan, $$value => $$invalidate(26, $animatePan = $$value));
-	component_subscribe($$self, userSettings, $$value => $$invalidate(5, $userSettings = $$value));
-	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(6, $rollPedalingOnOff = $$value));
-	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(7, $playExpressionsOnOff = $$value));
+	component_subscribe($$self, rollMetadata, $$value => $$invalidate(14, $rollMetadata = $$value));
+	component_subscribe($$self, currentTick, $$value => $$invalidate(15, $currentTick = $$value));
+	component_subscribe($$self, playbackProgress, $$value => $$invalidate(27, $playbackProgress = $$value));
+	component_subscribe($$self, animatePan, $$value => $$invalidate(28, $animatePan = $$value));
+	component_subscribe($$self, userSettings, $$value => $$invalidate(6, $userSettings = $$value));
+	component_subscribe($$self, rollPedalingOnOff, $$value => $$invalidate(7, $rollPedalingOnOff = $$value));
+	component_subscribe($$self, playExpressionsOnOff, $$value => $$invalidate(8, $playExpressionsOnOff = $$value));
 	let { imageUrl } = $$props;
 	let { holesByTickInterval } = $$props;
 	let { skipToTick } = $$props;
@@ -364,6 +367,8 @@ function instance($$self, $$props, $$invalidate) {
 			}
 		});
 	};
+
+	let osdNavDisplayRegion;
 
 	const createMark = hole => {
 		const { x: offsetX, y: offsetY, w: width, h: height, m: midiKey, v: velocity, color: holeColor, type: holeType } = hole;
@@ -437,15 +442,17 @@ function instance($$self, $$props, $$invalidate) {
 
 	const advanceToTick = tick => {
 		if (!openSeadragon) return;
-
-		// if we're panning horizontally we want the target bounds, if otherwise
-		//  (and most especially if we happen to be zooming) we want the current bounds
-		const viewportBounds = viewport.getBounds(!strafing);
-
 		const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
 		const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
-		const lineCenter = new OpenSeadragon.Point(viewportBounds.x + viewportBounds.width / 2, lineViewport.y);
-		viewport.panTo(lineCenter, !$animatePan);
+
+		if ($animatePan) {
+			viewport.centerSpringY.springTo(lineViewport.y);
+		} else {
+			viewport.centerSpringY.resetTo(lineViewport.y);
+		}
+
+		osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
+		osdNavDisplayRegion.classList.toggle("label-above", $playbackProgress > 0.5);
 	};
 
 	const highlightHoles = tick => {
@@ -477,37 +484,76 @@ function instance($$self, $$props, $$invalidate) {
 			maxZoomLevel,
 			constrainDuringPan: true,
 			preserveImageSizeOnResize: true,
-			gestureSettingsMouse: { clickToZoom: false }
+			gestureSettingsMouse: { clickToZoom: false, scrollToZoom: false },
+			showNavigator: true,
+			navigatorAutoFade: false,
+			navigatorPosition: "ABSOLUTE",
+			navigatorTop: "0px",
+			navigatorLeft: "calc(100% - 40px)",
+			navigatorHeight: "100%",
+			navigatorWidth: "40px",
+			navigatorDisplayRegionColor: "transparent"
 		}));
 
-		({ viewport } = openSeadragon);
+		$$invalidate(1, { viewport } = openSeadragon, viewport);
+		osdNavDisplayRegion = openSeadragon.navigator.displayRegion;
+
+		// Override some styles that OSD sets directly on the elements
+		$$invalidate(0, openSeadragon.navigator.element.style.border = "none", openSeadragon);
+
+		$$invalidate(0, openSeadragon.navigator.element.parentElement.style.backgroundColor = "#666", openSeadragon);
+		$$invalidate(0, openSeadragon.navigator.displayRegion.style.display = "block", openSeadragon);
+		$$invalidate(0, openSeadragon.navigator.displayRegion.style.border = "none", openSeadragon);
+		$$invalidate(0, openSeadragon.navigator.displayRegion.style.overflow = "visible", openSeadragon);
+		$$invalidate(0, openSeadragon.navigator.displayRegion.style.left = "0", openSeadragon);
+		$$invalidate(0, openSeadragon.navigator.displayRegion.style.width = "100%", openSeadragon);
+		$$invalidate(0, openSeadragon.navigator.displayRegion.style.backgroundColor = "rgba(255 255 255 / .6)", openSeadragon);
+		$$invalidate(0, openSeadragon.navigator.displayRegion.style.boxShadow = "0 0 4px var(--primary-accent)", openSeadragon);
+
+		$$invalidate(
+			0,
+			openSeadragon.navigator.update = function navUpdate(mainViewport) {
+				// reimplemented based on
+				// https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
+				const { viewport: navViewport, displayRegion: { style }, totalBorderWidths } = this;
+
+				if (mainViewport && navViewport) {
+					const bounds = viewport.getBoundsNoRotate(true);
+					const topleft = navViewport.pixelFromPointNoRotate(bounds.getTopLeft(), false);
+					const bottomright = navViewport.pixelFromPointNoRotate(bounds.getBottomRight(), false).minus(totalBorderWidths);
+					style.top = `${Math.round(topleft.y)}px`;
+					style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
+				}
+			},
+			openSeadragon
+		);
 
 		openSeadragon.addOnceHandler("update-viewport", () => {
 			createHolesOverlaySvg();
 			advanceToTick(0);
 		});
 
-		openSeadragon.addHandler("canvas-drag", () => {
+		openSeadragon.addHandler("canvas-drag", () => $$invalidate(2, strafing = true));
+		openSeadragon.addHandler("canvas-drag-end", () => $$invalidate(2, strafing = false));
+
+		openSeadragon.addHandler("pan", ({ immediately }) => {
+			if (immediately) return;
 			const viewportCenter = viewport.getCenter(false);
 			const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
 
 			skipToTick(scrollDownwards
 			? imgCenter.y - firstHolePx
 			: firstHolePx - imgCenter.y);
-
-			$$invalidate(1, strafing = true);
 		});
-
-		openSeadragon.addHandler("canvas-drag-end", () => $$invalidate(1, strafing = false));
 
 		openSeadragon.addHandler("open", () => {
 			const tiledImage = viewport.viewer.world.getItemAt(0);
-			tiledImage.addOnceHandler("fully-loaded-change", () => $$invalidate(2, rollImageReady = true));
+			tiledImage.addOnceHandler("fully-loaded-change", () => $$invalidate(3, rollImageReady = true));
 		});
 
 		openSeadragon.addHandler("zoom", ({ zoom }) => {
 			const imageZoom = viewport.viewportToImageZoom(zoom);
-			$$invalidate(4, trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom));
+			$$invalidate(5, trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom));
 		});
 
 		openSeadragon.open(imageUrl);
@@ -526,55 +572,58 @@ function instance($$self, $$props, $$invalidate) {
 
 	function rollviewercontrols_strafing_binding(value) {
 		strafing = value;
-		$$invalidate(1, strafing);
+		$$invalidate(2, strafing);
 	}
 
-	const mouseenter_handler = () => $$invalidate(3, showControls = true);
-	const mouseleave_handler = () => $$invalidate(3, showControls = false);
+	const mouseenter_handler = () => $$invalidate(4, showControls = true);
+	const mouseleave_handler = () => $$invalidate(4, showControls = false);
 
 	const wheel_handler = event => {
 		if (event.ctrlKey) {
 			panByIncrement(event.deltaY > 0);
 			event.stopPropagation();
+			return;
 		}
+
+		viewport.zoomTo(Math.min(viewport.getZoom() * (event.deltaY > 0 ? 0.9 : 1.1), maxZoomLevel));
 	};
 
 	$$self.$$set = $$props => {
-		if ('imageUrl' in $$props) $$invalidate(9, imageUrl = $$props.imageUrl);
-		if ('holesByTickInterval' in $$props) $$invalidate(10, holesByTickInterval = $$props.holesByTickInterval);
-		if ('skipToTick' in $$props) $$invalidate(11, skipToTick = $$props.skipToTick);
+		if ('imageUrl' in $$props) $$invalidate(10, imageUrl = $$props.imageUrl);
+		if ('holesByTickInterval' in $$props) $$invalidate(11, holesByTickInterval = $$props.holesByTickInterval);
+		if ('skipToTick' in $$props) $$invalidate(12, skipToTick = $$props.skipToTick);
 	};
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty[0] & /*$currentTick*/ 16384) {
+		if ($$self.$$.dirty[0] & /*$currentTick*/ 32768) {
 			$: advanceToTick($currentTick);
 		}
 
-		if ($$self.$$.dirty[0] & /*$currentTick*/ 16384) {
+		if ($$self.$$.dirty[0] & /*$currentTick*/ 32768) {
 			$: highlightHoles($currentTick);
 		}
 
-		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 8192) {
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 16384) {
 			$: calculateHoleColors($rollMetadata.holeData);
 		}
 
-		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 8192) {
-			$: $$invalidate(12, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 16384) {
+			$: $$invalidate(13, scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red");
 		}
 
-		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 8192) {
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 16384) {
 			$: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
 		}
 
-		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 8192) {
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 16384) {
 			$: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
 		}
 
-		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 8192) {
+		if ($$self.$$.dirty[0] & /*$rollMetadata*/ 16384) {
 			$: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
 		}
 
-		if ($$self.$$.dirty[0] & /*scrollDownwards, $rollMetadata*/ 12288) {
+		if ($$self.$$.dirty[0] & /*scrollDownwards, $rollMetadata*/ 24576) {
 			$: firstHolePx = scrollDownwards
 			? parseInt($rollMetadata.FIRST_HOLE, 10)
 			: parseInt($rollMetadata.IMAGE_LENGTH, 10) - parseInt($rollMetadata.FIRST_HOLE, 10);
@@ -583,6 +632,7 @@ function instance($$self, $$props, $$invalidate) {
 
 	return [
 		openSeadragon,
+		viewport,
 		strafing,
 		rollImageReady,
 		showControls,
@@ -615,9 +665,9 @@ class RollViewer extends SvelteComponent {
 			create_fragment,
 			safe_not_equal,
 			{
-				imageUrl: 9,
-				holesByTickInterval: 10,
-				skipToTick: 11
+				imageUrl: 10,
+				holesByTickInterval: 11,
+				skipToTick: 12
 			},
 			null,
 			[-1, -1]
