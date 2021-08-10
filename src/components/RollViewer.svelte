@@ -152,6 +152,7 @@
   let imageWidth;
   let avgHoleWidth;
   let trackerbarHeight;
+  let dragging;
 
   const calculateHoleColors = (holeData) => {
     const velocities = holeData.map(({ v }) => v).filter((v) => v);
@@ -419,30 +420,24 @@
     });
 
     // The following six (!) event handlers are for cursor styling
-    openSeadragon.addHandler("canvas-drag", () =>
-      document.body.classList.add("dragging"),
-    );
-    openSeadragon.addHandler("canvas-drag-end", () =>
-      document.body.classList.remove("dragging"),
-    );
+    openSeadragon.addHandler("canvas-drag", () => (dragging = true));
+    openSeadragon.addHandler("canvas-drag-end", () => (dragging = false));
 
     // OSD does not emit events for the navigator element, so we have to
     //  monkey patch the appropriate MouseTracker object.
     const _dragHandler = navigator.innerTracker.dragHandler;
     navigator.innerTracker.dragHandler = (...args) => {
-      document.body.classList.add("dragging");
+      dragging = true;
       _dragHandler.apply(window, args);
     };
 
-    navigator.innerTracker.dragEndHandler = () =>
-      document.body.classList.remove("dragging");
+    navigator.innerTracker.dragEndHandler = () => (dragging = false);
 
-    navigator.innerTracker.pressHandler = () =>
-      document.body.classList.add("dragging");
+    navigator.innerTracker.pressHandler = () => (dragging = true);
 
     const _releaseHandler = navigator.innerTracker.releaseHandler;
     navigator.innerTracker.releaseHandler = (...args) => {
-      document.body.classList.remove("dragging");
+      dragging = false;
       _releaseHandler.apply(window, args);
     };
 
@@ -514,15 +509,17 @@
 </div>
 
 <svelte:head>
-  <style lang="scss">
-    body.dragging {
-      cursor: grabbing !important;
+  {#if dragging}
+    <style>
+      body {
+        cursor: grabbing !important;
+      }
 
       svg,
       .navigator,
       .displayregion {
         cursor: grabbing !important;
       }
-    }
-  </style>
+    </style>
+  {/if}
 </svelte:head>
