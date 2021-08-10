@@ -49,6 +49,29 @@
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
+    :global(.displayregion::after) {
+      content: attr(data-label);
+      display: block;
+      position: absolute;
+      width: 100%;
+      font-size: 16px;
+      text-align: center;
+      padding: 8px 0;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        white 20%,
+        white 80%,
+        transparent 100%
+      );
+      top: calc(100% + 2px);
+      transition: margin 1s ease;
+    }
+
+    :global(.displayregion.label-above::after) {
+      margin-top: -100%;
+      top: 0;
+    }
   }
 </style>
 
@@ -63,6 +86,7 @@
     animatePan,
     playExpressionsOnOff,
     rollPedalingOnOff,
+    playbackProgress,
   } from "../stores";
   import {
     clamp,
@@ -157,6 +181,7 @@
       }
     });
   };
+  let osdNavDisplayRegion;
 
   const createMark = (hole) => {
     const {
@@ -259,17 +284,20 @@
 
   const advanceToTick = (tick) => {
     if (!openSeadragon) return;
-    // if we're panning horizontally we want the target bounds, if otherwise
-    //  (and most especially if we happen to be zooming) we want the current bounds
-    const viewportBounds = viewport.getBounds(!strafing);
     const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
-    const lineCenter = new OpenSeadragon.Point(
-      viewportBounds.x + viewportBounds.width / 2,
-      lineViewport.y,
-    );
 
-    viewport.panTo(lineCenter, !$animatePan);
+    if ($animatePan) {
+      viewport.centerSpringY.springTo(lineViewport.y);
+    } else {
+      viewport.centerSpringY.resetTo(lineViewport.y);
+    }
+
+    osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
+    osdNavDisplayRegion.classList.toggle(
+      "label-above",
+      $playbackProgress > 0.5,
+    );
   };
 
   const highlightHoles = (tick) => {
@@ -302,24 +330,75 @@
       maxZoomLevel,
       constrainDuringPan: true,
       preserveImageSizeOnResize: true,
-      gestureSettingsMouse: { clickToZoom: false },
+      gestureSettingsMouse: { clickToZoom: false, scrollToZoom: false },
+      showNavigator: true,
+      navigatorAutoFade: false,
+      navigatorPosition: "ABSOLUTE",
+      navigatorTop: "0px",
+      navigatorLeft: "calc(100% - 40px)",
+      navigatorHeight: "100%",
+      navigatorWidth: "40px",
+      navigatorDisplayRegionColor: "transparent",
     });
 
     ({ viewport } = openSeadragon);
+
+    osdNavDisplayRegion = openSeadragon.navigator.displayRegion;
+
+    // Override some styles that OSD sets directly on the elements
+    openSeadragon.navigator.element.style.border = "none";
+    openSeadragon.navigator.element.parentElement.style.backgroundColor =
+      "#666";
+    openSeadragon.navigator.displayRegion.style.display = "block";
+    openSeadragon.navigator.displayRegion.style.border = "none";
+    openSeadragon.navigator.displayRegion.style.overflow = "visible";
+    openSeadragon.navigator.displayRegion.style.left = "0";
+    openSeadragon.navigator.displayRegion.style.width = "100%";
+
+    openSeadragon.navigator.displayRegion.style.backgroundColor =
+      "rgba(255 255 255 / .6)";
+    openSeadragon.navigator.displayRegion.style.boxShadow =
+      "0 0 4px var(--primary-accent)";
+
+    openSeadragon.navigator.update = function navUpdate(mainViewport) {
+      // reimplemented based on
+      // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
+
+      const {
+        viewport: navViewport,
+        displayRegion: { style },
+        totalBorderWidths,
+      } = this;
+
+      if (mainViewport && navViewport) {
+        const bounds = viewport.getBoundsNoRotate(true);
+        const topleft = navViewport.pixelFromPointNoRotate(
+          bounds.getTopLeft(),
+          false,
+        );
+        const bottomright = navViewport
+          .pixelFromPointNoRotate(bounds.getBottomRight(), false)
+          .minus(totalBorderWidths);
+
+        style.top = `${Math.round(topleft.y)}px`;
+        style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
+      }
+    };
 
     openSeadragon.addOnceHandler("update-viewport", () => {
       createHolesOverlaySvg();
       advanceToTick(0);
     });
-    openSeadragon.addHandler("canvas-drag", () => {
+    openSeadragon.addHandler("canvas-drag", () => (strafing = true));
+    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
+    openSeadragon.addHandler("pan", ({ immediately }) => {
+      if (immediately) return;
       const viewportCenter = viewport.getCenter(false);
       const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
       skipToTick(
         scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
       );
-      strafing = true;
     });
-    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
     openSeadragon.addHandler("open", () => {
       const tiledImage = viewport.viewer.world.getItemAt(0);
       tiledImage.addOnceHandler(
@@ -375,7 +454,15 @@
     if (event.ctrlKey) {
       panByIncrement(event.deltaY > 0);
       event.stopPropagation();
+      return;
     }
+
+    viewport.zoomTo(
+      Math.min(
+        viewport.getZoom() * (event.deltaY > 0 ? 0.9 : 1.1),
+        maxZoomLevel,
+      ),
+    );
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
   class:highlight-enabled-holes={$userSettings.highlightEnabledHoles}
