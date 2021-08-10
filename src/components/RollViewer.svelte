@@ -26,7 +26,7 @@
       pointer-events: none;
       position: absolute;
       top: 50%;
-      width: 100%;
+      width: calc(100% - 40px);
       z-index: 1;
     }
 
