@@ -42,7 +42,9 @@
   };
 
   const updateStore = (
+    // config object
     { store, min, max, delta, shiftDelta, ctrlDelta, precision },
+    // event
     { shiftKey, ctrlKey },
     increment,
   ) => {
