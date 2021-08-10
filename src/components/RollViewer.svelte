@@ -49,6 +49,7 @@
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
+
     :global(.displayregion::after) {
       content: attr(data-label);
       display: block;
@@ -71,6 +72,16 @@
     :global(.displayregion.label-above::after) {
       margin-top: -100%;
       top: 0;
+    }
+
+    // Cursor styling (see <svelte:head/> below)
+    :global(svg),
+    :global(.displayregion) {
+      cursor: grab;
+    }
+
+    :global(.navigator) {
+      cursor: pointer;
     }
   }
 </style>
@@ -406,6 +417,36 @@
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
     });
+
+    // The following six (!) event handlers are for cursor styling
+    openSeadragon.addHandler("canvas-drag", () =>
+      document.body.classList.add("dragging"),
+    );
+    openSeadragon.addHandler("canvas-drag-end", () =>
+      document.body.classList.remove("dragging"),
+    );
+
+    // OSD does not emit events for the navigator element, so we have to
+    //  monkey patch the appropriate MouseTracker object.
+    const _dragHandler = navigator.innerTracker.dragHandler;
+    navigator.innerTracker.dragHandler = (...args) => {
+      document.body.classList.add("dragging");
+      _dragHandler.apply(window, args);
+    };
+
+    navigator.innerTracker.dragEndHandler = () =>
+      document.body.classList.remove("dragging");
+
+    navigator.innerTracker.pressHandler = () =>
+      document.body.classList.add("dragging");
+
+    const _releaseHandler = navigator.innerTracker.releaseHandler;
+    navigator.innerTracker.releaseHandler = (...args) => {
+      document.body.classList.remove("dragging");
+      _releaseHandler.apply(window, args);
+    };
+
+    // Load the image!
     openSeadragon.open(imageUrl);
   });
 
@@ -471,3 +512,17 @@
     />
   {/if}
 </div>
+
+<svelte:head>
+  <style lang="scss">
+    body.dragging {
+      cursor: grabbing !important;
+
+      svg,
+      .navigator,
+      .displayregion {
+        cursor: grabbing !important;
+      }
+    }
+  </style>
+</svelte:head>
