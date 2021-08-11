@@ -1,3 +1,27 @@
+<style lang="scss">
+  div {
+    @include background;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3);
+    left: 50%;
+    max-height: 100%;
+    max-width: 100%;
+    min-width: 400px;
+    padding: 1em;
+    position: absolute;
+    top: 20%;
+    transform: translate(-50%);
+    width: 400px;
+    z-index: z($main-context, notifications);
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+  }
+</style>
+
 <script context="module">
   import { get, writable } from "svelte/store";
 
@@ -25,7 +49,7 @@
 
   let actionInterval;
 
-  const keyMap = Object.freeze({
+  const keyMap = {
     SOFT: "KeyB",
     SUSTAIN: "Space",
     ACCENT: "KeyN",
@@ -44,7 +68,7 @@
     REWIND: "Backspace",
     FORWARD: "Digit8",
     BACKWARD: "Digit6",
-  });
+  };
 
   const config = {
     volume: {
@@ -108,6 +132,23 @@
     actionInterval = easingInterval(fn);
   };
 </script>
+
+{#if $showKeybindingsConfig}
+  <div>
+    <dl>
+      {#each Object.keys(keyMap) as func}
+        <dt>{func}</dt>
+        <dd>
+          <input
+            type="text"
+            value={keyMap[func]}
+            on:input={(e) => (keyMap[func] = e.target.value)}
+          />
+        </dd>
+      {/each}
+    </dl>
+  </div>
+{/if}
 
 <svelte:window
   on:keydown={(event) => {
