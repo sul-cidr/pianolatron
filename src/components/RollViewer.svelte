@@ -329,7 +329,7 @@
       maxZoomLevel,
       constrainDuringPan: true,
       preserveImageSizeOnResize: true,
-      gestureSettingsMouse: { clickToZoom: false, scrollToZoom: false },
+      gestureSettingsMouse: { clickToZoom: false, scrollToZoom: true },
       showNavigator: true,
       navigatorAutoFade: false,
       navigatorPosition: "ABSOLUTE",
@@ -450,15 +450,7 @@
     if (event.ctrlKey) {
       panByIncrement(event.deltaY > 0);
       event.stopPropagation();
-      return;
     }
-
-    viewport.zoomTo(
-      Math.min(
-        viewport.getZoom() * (event.deltaY > 0 ? 0.9 : 1.1),
-        maxZoomLevel,
-      ),
-    );
   }}
   class:active-note-details={$userSettings.activeNoteDetails}
   class:highlight-enabled-holes={$userSettings.highlightEnabledHoles}
