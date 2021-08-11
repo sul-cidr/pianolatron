@@ -83,7 +83,6 @@
     rollMetadata,
     currentTick,
     userSettings,
-    animatePan,
     playExpressionsOnOff,
     rollPedalingOnOff,
     playbackProgress,
@@ -141,6 +140,7 @@
   let imageWidth;
   let avgHoleWidth;
   let trackerbarHeight;
+  let animationEaseInterval;
 
   const calculateHoleColors = (holeData) => {
     const velocities = holeData.map(({ v }) => v).filter((v) => v);
@@ -286,11 +286,7 @@
     const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 
-    if ($animatePan) {
-      viewport.centerSpringY.springTo(lineViewport.y);
-    } else {
-      viewport.centerSpringY.resetTo(lineViewport.y);
-    }
+    viewport.centerSpringY.springTo(lineViewport.y);
 
     osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
     osdNavDisplayRegion.classList.toggle(
@@ -338,6 +334,7 @@
       navigatorHeight: "100%",
       navigatorWidth: "40px",
       navigatorDisplayRegionColor: "transparent",
+      animationTime: 0,
     });
 
     const { navigator } = openSeadragon;
@@ -389,6 +386,21 @@
     });
     openSeadragon.addHandler("pan", ({ immediately }) => {
       if (immediately) return;
+
+      const { centerSpringY } = viewport;
+      centerSpringY.animationTime = 1.2;
+
+      clearInterval(animationEaseInterval);
+      animationEaseInterval = setInterval(() => {
+        centerSpringY.animationTime = Math.max(
+          centerSpringY.animationTime - 0.1,
+          0,
+        );
+        if (centerSpringY.animationTime <= 0) {
+          clearInterval(animationEaseInterval);
+        }
+      }, 100);
+
       const viewportCenter = viewport.getCenter(false);
       const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
       skipToTick(

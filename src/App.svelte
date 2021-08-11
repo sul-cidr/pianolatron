@@ -63,7 +63,6 @@
     rollMetadata,
     showKeyboard,
     overlayKeyboard,
-    animatePan,
     isReproducingRoll,
     playExpressionsOnOff,
     rollPedalingOnOff,
@@ -133,7 +132,6 @@
 
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
-    $animatePan = true;
     $currentTick = tick;
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
