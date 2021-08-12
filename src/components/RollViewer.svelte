@@ -49,6 +49,7 @@
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
+
     :global(.displayregion::after) {
       content: attr(data-label);
       display: block;
