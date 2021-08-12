@@ -409,10 +409,15 @@
     ({ viewport } = openSeadragon);
     ({ displayRegion: osdNavDisplayRegion } = navigator);
 
+    // Directly set some OSD internals that aren't exposed in the constructor
+    viewport.zoomSpring.animationTime = 1.2;
+    viewport.centerSpringX.animationTime = 1.2;
+    viewport.centerSpringY.animationTime = 0;
+    navigator.panHorizontal = false;
+
     // Override some styles that OSD sets directly on the elements
     navigator.element.style.border = "none";
     navigator.element.parentElement.style.backgroundColor = "#666";
-
     Object.assign(osdNavDisplayRegion.style, {
       display: "block",
       border: "none",
@@ -423,11 +428,8 @@
       boxShadow: "0 0 4px var(--primary-accent)",
     });
 
-    viewport.zoomSpring.animationTime = 1.2;
-    viewport.centerSpringX.animationTime = 1.2;
-    viewport.centerSpringY.animationTime = 0;
-    navigator.panHorizontal = false;
-
+    // Monkey-patch the navigator.update method to prevent the displayRegion element
+    //  being resized to reflect the horizontal dimension of the viewport
     navigator.update = (mainViewport) => {
       // reimplemented based on
       // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
@@ -453,15 +455,7 @@
       }
     };
 
-    openSeadragon.addOnceHandler("update-viewport", () => {
-      createHolesOverlaySvg();
-      updateViewportFromTick(0);
-    });
-
-    openSeadragon.addHandler("pan", ({ immediately }) => {
-      if (immediately) return;
-      updateTickFromViewport(/* animate = */ true);
-    });
+    // OSD event handlers
 
     openSeadragon.addHandler("open", () => {
       const tiledImage = viewport.viewer.world.getItemAt(0);
@@ -470,6 +464,21 @@
         () => (rollImageReady = true),
       );
     });
+
+    openSeadragon.addOnceHandler("update-viewport", () => {
+      createHolesOverlaySvg();
+      updateViewportFromTick(0);
+    });
+
+    openSeadragon.addHandler("pan", ({ immediately }) => {
+      // OSD fires the pan event twice before the viewport can be be updated to
+      //  the correct position.  We want to ignore these events -- fortunately
+      //  they're raised with `immediately=true` and we don't raise any such
+      //  events ourselves, so we can abuse this property here.
+      if (immediately) return;
+      updateTickFromViewport(/* animate = */ true);
+    });
+
     openSeadragon.addHandler("zoom", ({ zoom }) => {
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
