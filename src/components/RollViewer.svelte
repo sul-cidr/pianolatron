@@ -314,6 +314,32 @@
     });
   };
 
+  const updatePosition = ({ target, immediately }) => {
+    if (immediately) return;
+
+    const { centerSpringY } = viewport;
+    centerSpringY.animationTime = 1.2;
+
+    clearInterval(animationEaseInterval);
+    animationEaseInterval = setInterval(() => {
+      centerSpringY.animationTime = Math.max(
+        centerSpringY.animationTime - 0.1,
+        0,
+      );
+      if (centerSpringY.animationTime <= 0) {
+        clearInterval(animationEaseInterval);
+      }
+    }, 100);
+
+    if (target) viewport.centerSpringY.springTo(target.y);
+
+    const viewportCenter = viewport.getCenter(false);
+    const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
+    skipToTick(
+      scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
+    );
+  };
+
   onMount(async () => {
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
@@ -355,6 +381,11 @@
       boxShadow: "0 0 4px var(--primary-accent)",
     });
 
+    viewport.zoomSpring.animationTime = 1.2;
+    viewport.centerSpringX.animationTime = 1.2;
+    viewport.centerSpringY.animationTime = 0;
+    navigator.panHorizontal = false;
+
     navigator.update = (mainViewport) => {
       // reimplemented based on
       // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
@@ -384,29 +415,9 @@
       createHolesOverlaySvg();
       advanceToTick(0);
     });
-    openSeadragon.addHandler("pan", ({ immediately }) => {
-      if (immediately) return;
 
-      const { centerSpringY } = viewport;
-      centerSpringY.animationTime = 1.2;
+    openSeadragon.addHandler("pan", updatePosition);
 
-      clearInterval(animationEaseInterval);
-      animationEaseInterval = setInterval(() => {
-        centerSpringY.animationTime = Math.max(
-          centerSpringY.animationTime - 0.1,
-          0,
-        );
-        if (centerSpringY.animationTime <= 0) {
-          clearInterval(animationEaseInterval);
-        }
-      }, 100);
-
-      const viewportCenter = viewport.getCenter(false);
-      const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
-      skipToTick(
-        scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
-      );
-    });
     openSeadragon.addHandler("open", () => {
       const tiledImage = viewport.viewer.world.getItemAt(0);
       tiledImage.addOnceHandler(
@@ -418,6 +429,13 @@
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
     });
+
+    openSeadragon.addHandler("navigator-click", (event) => {
+      const target = navigator.viewport.pointFromPixel(event.position);
+      updatePosition({ target });
+      event.preventDefaultAction = true;
+    });
+
     openSeadragon.open(imageUrl);
   });
 
