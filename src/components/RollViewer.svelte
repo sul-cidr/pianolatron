@@ -143,6 +143,7 @@
   let avgHoleWidth;
   let trackerbarHeight;
   let animationEaseInterval;
+  let osdNavDisplayRegion;
 
   const calculateHoleColors = (holeData) => {
     const velocities = holeData.map(({ v }) => v).filter((v) => v);
@@ -182,7 +183,6 @@
       }
     });
   };
-  let osdNavDisplayRegion;
 
   const createMark = (hole) => {
     const {
@@ -283,20 +283,6 @@
     viewport.viewer.addOverlay(svg, entireViewportRectangle);
   };
 
-  const advanceToTick = (tick) => {
-    if (!openSeadragon) return;
-    const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
-    const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
-
-    viewport.centerSpringY.springTo(lineViewport.y);
-
-    osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
-    osdNavDisplayRegion.classList.toggle(
-      "label-above",
-      scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
-    );
-  };
-
   const highlightHoles = (tick) => {
     if (!openSeadragon) return;
 
@@ -314,6 +300,40 @@
       mark.classList.add("active");
       marks.push([hole, mark]);
     });
+  };
+
+  const advanceToTick = (tick) => {
+    if (!openSeadragon) return;
+    const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
+    const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
+
+    viewport.centerSpringY.springTo(lineViewport.y);
+
+    osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
+    osdNavDisplayRegion.classList.toggle(
+      "label-above",
+      scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
+    );
+  };
+
+  const panByIncrement = (up = true) => {
+    const viewportBounds = viewport.getBounds();
+    const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
+    const delta = up ? imgBounds.height / 200 : -imgBounds.height / 200;
+    const centerY = imgBounds.y + imgBounds.height / 2;
+    skipToTick(
+      scrollDownwards
+        ? clamp(
+            centerY + delta - firstHolePx,
+            -firstHolePx,
+            imageLength - firstHolePx,
+          )
+        : clamp(
+            firstHolePx - centerY - delta,
+            firstHolePx - imageLength,
+            firstHolePx,
+          ),
+    );
   };
 
   const updatePosition = ({ target, immediately }) => {
@@ -440,26 +460,6 @@
 
     openSeadragon.open(imageUrl);
   });
-
-  const panByIncrement = (up = true) => {
-    const viewportBounds = viewport.getBounds();
-    const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
-    const delta = up ? imgBounds.height / 200 : -imgBounds.height / 200;
-    const centerY = imgBounds.y + imgBounds.height / 2;
-    skipToTick(
-      scrollDownwards
-        ? clamp(
-            centerY + delta - firstHolePx,
-            -firstHolePx,
-            imageLength - firstHolePx,
-          )
-        : clamp(
-            firstHolePx - centerY - delta,
-            firstHolePx - imageLength,
-            firstHolePx,
-          ),
-    );
-  };
 
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
