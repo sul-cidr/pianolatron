@@ -17,6 +17,7 @@
       z-index: 1;
     }
 
+    // tracker bar
     &::before {
       background-color: var(--primary-accent-semiopaque);
       border: 1px solid var(--primary-accent);
@@ -30,6 +31,7 @@
       z-index: 1;
     }
 
+    // overlay to mask white borders on the roll images
     &::after {
       @include background;
       bottom: 0;
