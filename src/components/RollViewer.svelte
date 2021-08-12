@@ -26,7 +26,7 @@
       pointer-events: none;
       position: absolute;
       top: 50%;
-      width: calc(100% - 40px);
+      width: calc(100% - var(--navigator-width));
       z-index: 1;
     }
 
@@ -124,6 +124,8 @@
   const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
   const controlHoleColor = "120, 73%, 75%"; // light green
   const pedalHoleColor = "39, 100%, 50%"; // orange;
+
+  const navigatorWidth = 40;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -356,9 +358,9 @@
       navigatorAutoFade: false,
       navigatorPosition: "ABSOLUTE",
       navigatorTop: "0px",
-      navigatorLeft: "calc(100% - 40px)",
+      navigatorLeft: `calc(100% - ${navigatorWidth}px)`,
       navigatorHeight: "100%",
-      navigatorWidth: "40px",
+      navigatorWidth: `${navigatorWidth}px`,
       navigatorDisplayRegionColor: "transparent",
       animationTime: 0,
     });
@@ -495,7 +497,7 @@
   class:show-note-velocities={$userSettings.showNoteVelocities}
   class:use-roll-pedaling={$rollPedalingOnOff}
   class:play-expressions={$playExpressionsOnOff}
-  style="--trackerbar-height: {trackerbarHeight}px"
+  style="--trackerbar-height: {trackerbarHeight}px; --navigator-width: {navigatorWidth}px"
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
