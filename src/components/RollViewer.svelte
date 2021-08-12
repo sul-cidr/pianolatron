@@ -26,7 +26,7 @@
       height: var(--trackerbar-height);
       pointer-events: none;
       position: absolute;
-      top: 50%;
+      top: calc(50% - var(--trackerbar-height) / 2);
       width: calc(100% - var(--navigator-width));
       z-index: 1;
     }
