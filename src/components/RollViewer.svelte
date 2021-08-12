@@ -145,7 +145,7 @@
   let animationEaseInterval;
   let osdNavDisplayRegion;
 
-  const calculateHoleColors = (holeData) => {
+  const annotateHoleData = (holeData) => {
     const velocities = holeData.map(({ v }) => v).filter((v) => v);
     const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
     const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
@@ -463,7 +463,7 @@
 
   $: advanceToTick($currentTick);
   $: highlightHoles($currentTick);
-  $: calculateHoleColors($rollMetadata.holeData);
+  $: annotateHoleData($rollMetadata.holeData);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
