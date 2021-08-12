@@ -302,7 +302,9 @@
     });
   };
 
-  const advanceToTick = (tick) => {
+  // Pan the viewer to bring the position of `@tick` to the center of
+  //  the viewport.  Does not trigger an OSD `pan` event.
+  const updateViewportFromTick = (tick) => {
     if (!openSeadragon) return;
     const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
@@ -316,7 +318,10 @@
     );
   };
 
-  const panByIncrement = (up = true) => {
+  // Updates the application position by an amount proportional to the
+  //  current size of the viewport, in a direction specified by `@up`.
+  // Pans the viewer only indirectly by virtue of updating `$currentTick`.
+  const updateTickByViewportIncrement = (up = true) => {
     const viewportBounds = viewport.getBounds();
     const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
     const delta = up ? imgBounds.height / 200 : -imgBounds.height / 200;
@@ -336,24 +341,29 @@
     );
   };
 
-  const updatePosition = ({ target, immediately }) => {
-    if (immediately) return;
-
-    const { centerSpringY } = viewport;
-    centerSpringY.animationTime = 1.2;
-
+  // Updates the application position to reflect the current position of
+  //  the viewport.
+  // Pans the viewer only indirectly by virtue of updating `$currentTick`.
+  // If `@animate` is passed, vertical panning is animated, but the
+  //  `animationTime` for the OSD spring animation is reduced over time
+  //  until it returns to zero (no animation).
+  const updateTickFromViewport = (animate) => {
     clearInterval(animationEaseInterval);
-    animationEaseInterval = setInterval(() => {
-      centerSpringY.animationTime = Math.max(
-        centerSpringY.animationTime - 0.1,
-        0,
-      );
-      if (centerSpringY.animationTime <= 0) {
-        clearInterval(animationEaseInterval);
-      }
-    }, 100);
 
-    if (target) viewport.centerSpringY.springTo(target.y);
+    if (animate) {
+      const { centerSpringY } = viewport;
+      centerSpringY.animationTime = 1.2;
+
+      animationEaseInterval = setInterval(() => {
+        centerSpringY.animationTime = Math.max(
+          centerSpringY.animationTime - 0.1,
+          0,
+        );
+        if (centerSpringY.animationTime <= 0) {
+          clearInterval(animationEaseInterval);
+        }
+      }, 100);
+    }
 
     const viewportCenter = viewport.getCenter(false);
     const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
@@ -435,10 +445,13 @@
 
     openSeadragon.addOnceHandler("update-viewport", () => {
       createHolesOverlaySvg();
-      advanceToTick(0);
+      updateViewportFromTick(0);
     });
 
-    openSeadragon.addHandler("pan", updatePosition);
+    openSeadragon.addHandler("pan", ({ immediately }) => {
+      if (immediately) return;
+      updateTickFromViewport(/* animate = */ true);
+    });
 
     openSeadragon.addHandler("open", () => {
       const tiledImage = viewport.viewer.world.getItemAt(0);
@@ -454,14 +467,15 @@
 
     openSeadragon.addHandler("navigator-click", (event) => {
       const target = navigator.viewport.pointFromPixel(event.position);
-      updatePosition({ target });
+      viewport.centerSpringY.springTo(target.y);
+      updateTickFromViewport(/* animate = */ true);
       event.preventDefaultAction = true;
     });
 
     openSeadragon.open(imageUrl);
   });
 
-  $: advanceToTick($currentTick);
+  $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
   $: annotateHoleData($rollMetadata.holeData);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
@@ -480,7 +494,7 @@
   on:mouseleave={() => (showControls = false)}
   on:wheel|capture|preventDefault={(event) => {
     if (event.ctrlKey) {
-      panByIncrement(event.deltaY > 0);
+      updateTickByViewportIncrement(/* up = */ event.deltaY > 0);
       event.stopPropagation();
       return;
     }
@@ -507,7 +521,7 @@
       {openSeadragon}
       {minZoomLevel}
       {maxZoomLevel}
-      {panByIncrement}
+      {updateTickByViewportIncrement}
     />
   {/if}
 </div>

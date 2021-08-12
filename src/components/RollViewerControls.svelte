@@ -8,7 +8,7 @@
   export let openSeadragon;
   export let maxZoomLevel;
   export let minZoomLevel;
-  export let panByIncrement;
+  export let updateTickByViewportIncrement;
   let actionInterval;
 
   const { viewport } = openSeadragon;
@@ -107,7 +107,9 @@
   </button>
   <button
     disabled={false}
-    on:mousedown={mousedownAction(() => panByIncrement(false))}
+    on:mousedown={mousedownAction(() =>
+      updateTickByViewportIncrement(/* up = */ false),
+    )}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +129,9 @@
   </button>
   <button
     disabled={false}
-    on:mousedown={mousedownAction(() => panByIncrement(true))}
+    on:mousedown={mousedownAction(() =>
+      updateTickByViewportIncrement(/* up = */ true),
+    )}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
