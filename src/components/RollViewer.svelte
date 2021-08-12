@@ -66,7 +66,7 @@
         transparent 100%
       );
       top: calc(100% + 2px);
-      transition: margin 1s ease;
+      transition: margin 0.5s ease;
     }
 
     :global(.displayregion.label-above::after) {
