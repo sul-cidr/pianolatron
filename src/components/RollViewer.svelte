@@ -368,7 +368,17 @@
     const viewportCenter = viewport.getCenter(false);
     const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
     skipToTick(
-      scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
+      scrollDownwards
+        ? clamp(
+            imgCenter.y - firstHolePx,
+            -firstHolePx,
+            imageLength - firstHolePx,
+          )
+        : clamp(
+            firstHolePx - imgCenter.y,
+            firstHolePx - imageLength,
+            firstHolePx,
+          ),
     );
   };
 
