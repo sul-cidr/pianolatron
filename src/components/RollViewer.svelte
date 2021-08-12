@@ -25,7 +25,6 @@
         var(--primary-accent) 50%,
         var(--primary-accent-semiopaque) calc(50% + 1px)
       );
-      border: 1px solid var(--primary-accent);
       content: "";
       display: block;
       height: var(--trackerbar-height);
