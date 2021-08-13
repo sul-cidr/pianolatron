@@ -505,6 +505,15 @@
       updateTickFromViewport(/* animate = */ false);
     });
 
+    navigator.innerTracker.releaseHandler = () => {
+      // The releaseHandler for navigator viewports is delegated to an
+      //  `onCanvasRelease` function (see
+      //  https://github.com/openseadragon/openseadragon/blob/master/src/navigator.js#L586-L590 )
+      //  which calls viewport.applyConstraints() whether constraints are
+      //  wanted or not.  Since that's literally all it does (and we don't want
+      //  constraints applied here), we'll just neuter it here.
+    };
+
     openSeadragon.open(imageUrl);
   });
 
