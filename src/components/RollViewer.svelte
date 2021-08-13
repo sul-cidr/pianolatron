@@ -17,19 +17,25 @@
       z-index: 1;
     }
 
+    // tracker bar
     &::before {
-      background-color: var(--primary-accent-semiopaque);
-      border: 1px solid var(--primary-accent);
+      background: linear-gradient(
+        180deg,
+        var(--primary-accent-semiopaque) calc(50% - 1px),
+        var(--primary-accent) 50%,
+        var(--primary-accent-semiopaque) calc(50% + 1px)
+      );
       content: "";
       display: block;
       height: var(--trackerbar-height);
       pointer-events: none;
       position: absolute;
-      top: 50%;
+      top: calc(50% - var(--trackerbar-height) / 2);
       width: calc(100% - var(--navigator-width));
       z-index: 1;
     }
 
+    // overlay to mask white borders on the roll images
     &::after {
       @include background;
       bottom: 0;
