@@ -79,7 +79,7 @@
     <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider
       min="0.1"
-      max="4"
+      max="3"
       step=".001"
       bind:value={$tempoCoefficient}
       name="tempo"

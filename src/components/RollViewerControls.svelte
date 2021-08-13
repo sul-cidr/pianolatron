@@ -8,8 +8,7 @@
   export let openSeadragon;
   export let maxZoomLevel;
   export let minZoomLevel;
-  export let strafing;
-  export let panByIncrement;
+  export let updateTickByViewportIncrement;
   let actionInterval;
 
   const { viewport } = openSeadragon;
@@ -21,9 +20,7 @@
       0.5,
       viewportBounds.y + viewportBounds.height / 2,
     );
-    strafing = true;
     viewport.panTo(lineCenter);
-    setTimeout(() => (strafing = false), 1000);
   };
 
   const onZoom = () => (currentZoom = viewport.getZoom());
@@ -108,11 +105,11 @@
       <line x1="14" y1="12" x2="20" y2="12" />
     </svg>
   </button>
-</div>
-<div class="overlay-buttons middle-right" transition:fade>
   <button
     disabled={false}
-    on:mousedown={mousedownAction(() => panByIncrement(false))}
+    on:mousedown={mousedownAction(() =>
+      updateTickByViewportIncrement(/* up = */ false),
+    )}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +129,9 @@
   </button>
   <button
     disabled={false}
-    on:mousedown={mousedownAction(() => panByIncrement(true))}
+    on:mousedown={mousedownAction(() =>
+      updateTickByViewportIncrement(/* up = */ true),
+    )}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

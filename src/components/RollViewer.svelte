@@ -26,7 +26,7 @@
       pointer-events: none;
       position: absolute;
       top: 50%;
-      width: 100%;
+      width: calc(100% - var(--navigator-width));
       z-index: 1;
     }
 
@@ -49,6 +49,7 @@
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
+
     :global(.displayregion::after) {
       content: attr(data-label);
       display: block;
@@ -65,7 +66,7 @@
         transparent 100%
       );
       top: calc(100% + 2px);
-      transition: margin 1s ease;
+      transition: margin 0.5s ease;
     }
 
     :global(.displayregion.label-above::after) {
@@ -83,7 +84,6 @@
     rollMetadata,
     currentTick,
     userSettings,
-    animatePan,
     playExpressionsOnOff,
     rollPedalingOnOff,
     playbackProgress,
@@ -126,6 +126,8 @@
   const controlHoleColor = "120, 73%, 75%"; // light green
   const pedalHoleColor = "39, 100%, 50%"; // orange;
 
+  const navigatorWidth = 40;
+
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
@@ -133,7 +135,6 @@
   let openSeadragon;
   let viewport;
   let firstHolePx;
-  let strafing = false;
   let rollImageReady;
   let marks = [];
   let hoveredMark;
@@ -142,8 +143,10 @@
   let imageWidth;
   let avgHoleWidth;
   let trackerbarHeight;
+  let animationEaseInterval;
+  let osdNavDisplayRegion;
 
-  const calculateHoleColors = (holeData) => {
+  const annotateHoleData = (holeData) => {
     const velocities = holeData.map(({ v }) => v).filter((v) => v);
     const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
     const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
@@ -181,7 +184,6 @@
       }
     });
   };
-  let osdNavDisplayRegion;
 
   const createMark = (hole) => {
     const {
@@ -282,24 +284,6 @@
     viewport.viewer.addOverlay(svg, entireViewportRectangle);
   };
 
-  const advanceToTick = (tick) => {
-    if (!openSeadragon) return;
-    const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
-    const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
-
-    if ($animatePan) {
-      viewport.centerSpringY.springTo(lineViewport.y);
-    } else {
-      viewport.centerSpringY.resetTo(lineViewport.y);
-    }
-
-    osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
-    osdNavDisplayRegion.classList.toggle(
-      "label-above",
-      $playbackProgress > 0.5,
-    );
-  };
-
   const highlightHoles = (tick) => {
     if (!openSeadragon) return;
 
@@ -319,101 +303,26 @@
     });
   };
 
-  onMount(async () => {
-    openSeadragon = OpenSeadragon({
-      id: "roll-viewer",
-      showNavigationControl: false,
-      panHorizontal: true,
-      visibilityRatio: 1,
-      defaultZoomLevel,
-      minZoomLevel,
-      maxZoomLevel,
-      constrainDuringPan: true,
-      preserveImageSizeOnResize: true,
-      gestureSettingsMouse: { clickToZoom: false, scrollToZoom: false },
-      showNavigator: true,
-      navigatorAutoFade: false,
-      navigatorPosition: "ABSOLUTE",
-      navigatorTop: "0px",
-      navigatorLeft: "calc(100% - 40px)",
-      navigatorHeight: "100%",
-      navigatorWidth: "40px",
-      navigatorDisplayRegionColor: "transparent",
-    });
+  // Pan the viewer to bring the position of `@tick` to the center of
+  //  the viewport.  Does not trigger an OSD `pan` event.
+  const updateViewportFromTick = (tick) => {
+    if (!openSeadragon) return;
+    const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
+    const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 
-    ({ viewport } = openSeadragon);
+    viewport.centerSpringY.springTo(lineViewport.y);
 
-    osdNavDisplayRegion = openSeadragon.navigator.displayRegion;
+    osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
+    osdNavDisplayRegion.classList.toggle(
+      "label-above",
+      scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
+    );
+  };
 
-    // Override some styles that OSD sets directly on the elements
-    openSeadragon.navigator.element.style.border = "none";
-    openSeadragon.navigator.element.parentElement.style.backgroundColor =
-      "#666";
-    openSeadragon.navigator.displayRegion.style.display = "block";
-    openSeadragon.navigator.displayRegion.style.border = "none";
-    openSeadragon.navigator.displayRegion.style.overflow = "visible";
-    openSeadragon.navigator.displayRegion.style.left = "0";
-    openSeadragon.navigator.displayRegion.style.width = "100%";
-
-    openSeadragon.navigator.displayRegion.style.backgroundColor =
-      "rgba(255 255 255 / .6)";
-    openSeadragon.navigator.displayRegion.style.boxShadow =
-      "0 0 4px var(--primary-accent)";
-
-    openSeadragon.navigator.update = function navUpdate(mainViewport) {
-      // reimplemented based on
-      // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
-
-      const {
-        viewport: navViewport,
-        displayRegion: { style },
-        totalBorderWidths,
-      } = this;
-
-      if (mainViewport && navViewport) {
-        const bounds = viewport.getBoundsNoRotate(true);
-        const topleft = navViewport.pixelFromPointNoRotate(
-          bounds.getTopLeft(),
-          false,
-        );
-        const bottomright = navViewport
-          .pixelFromPointNoRotate(bounds.getBottomRight(), false)
-          .minus(totalBorderWidths);
-
-        style.top = `${Math.round(topleft.y)}px`;
-        style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
-      }
-    };
-
-    openSeadragon.addOnceHandler("update-viewport", () => {
-      createHolesOverlaySvg();
-      advanceToTick(0);
-    });
-    openSeadragon.addHandler("canvas-drag", () => (strafing = true));
-    openSeadragon.addHandler("canvas-drag-end", () => (strafing = false));
-    openSeadragon.addHandler("pan", ({ immediately }) => {
-      if (immediately) return;
-      const viewportCenter = viewport.getCenter(false);
-      const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
-      skipToTick(
-        scrollDownwards ? imgCenter.y - firstHolePx : firstHolePx - imgCenter.y,
-      );
-    });
-    openSeadragon.addHandler("open", () => {
-      const tiledImage = viewport.viewer.world.getItemAt(0);
-      tiledImage.addOnceHandler(
-        "fully-loaded-change",
-        () => (rollImageReady = true),
-      );
-    });
-    openSeadragon.addHandler("zoom", ({ zoom }) => {
-      const imageZoom = viewport.viewportToImageZoom(zoom);
-      trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
-    });
-    openSeadragon.open(imageUrl);
-  });
-
-  const panByIncrement = (up = true) => {
+  // Updates the application position by an amount proportional to the
+  //  current size of the viewport, in a direction specified by `@up`.
+  // Pans the viewer only indirectly by virtue of updating `$currentTick`.
+  const updateTickByViewportIncrement = (up = true) => {
     const viewportBounds = viewport.getBounds();
     const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
     const delta = up ? imgBounds.height / 200 : -imgBounds.height / 200;
@@ -433,9 +342,212 @@
     );
   };
 
-  $: advanceToTick($currentTick);
+  // Updates the application position to reflect the current position of
+  //  the viewport.
+  // Pans the viewer only indirectly by virtue of updating `$currentTick`.
+  // If `@animate` is passed, vertical panning is animated, but the
+  //  `animationTime` for the OSD spring animation is reduced over time
+  //  until it returns to zero (no animation).
+  const updateTickFromViewport = (animate) => {
+    clearInterval(animationEaseInterval);
+
+    if (animate) {
+      const { centerSpringY } = viewport;
+      centerSpringY.animationTime = 1.2;
+
+      animationEaseInterval = setInterval(() => {
+        centerSpringY.animationTime = Math.max(
+          centerSpringY.animationTime - 0.1,
+          0,
+        );
+        if (centerSpringY.animationTime <= 0) {
+          clearInterval(animationEaseInterval);
+        }
+      }, 100);
+    }
+
+    const viewportCenter = viewport.getCenter(false);
+    const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
+    skipToTick(
+      scrollDownwards
+        ? clamp(
+            imgCenter.y - firstHolePx,
+            -firstHolePx,
+            imageLength - firstHolePx,
+          )
+        : clamp(
+            firstHolePx - imgCenter.y,
+            firstHolePx - imageLength,
+            firstHolePx,
+          ),
+    );
+  };
+
+  onMount(async () => {
+    openSeadragon = OpenSeadragon({
+      id: "roll-viewer",
+      showNavigationControl: false,
+      panHorizontal: true,
+      visibilityRatio: 1,
+      defaultZoomLevel,
+      minZoomLevel,
+      maxZoomLevel,
+      constrainDuringPan: true,
+      preserveImageSizeOnResize: true,
+      gestureSettingsMouse: { clickToZoom: false, scrollToZoom: false },
+      showNavigator: true,
+      navigatorAutoFade: false,
+      navigatorPosition: "ABSOLUTE",
+      navigatorTop: "0px",
+      navigatorLeft: `calc(100% - ${navigatorWidth}px)`,
+      navigatorHeight: "100%",
+      navigatorWidth: `${navigatorWidth}px`,
+      navigatorDisplayRegionColor: "transparent",
+      animationTime: 0,
+    });
+
+    const { navigator } = openSeadragon;
+    ({ viewport } = openSeadragon);
+    ({ displayRegion: osdNavDisplayRegion } = navigator);
+
+    // Directly set some OSD internals that aren't exposed in the constructor
+    viewport.zoomSpring.animationTime = 1.2;
+    viewport.centerSpringX.animationTime = 1.2;
+    viewport.centerSpringY.animationTime = 0;
+    navigator.panHorizontal = false;
+
+    // Override some styles that OSD sets directly on the elements
+    navigator.element.style.border = "none";
+    navigator.element.parentElement.style.backgroundColor = "#666";
+    Object.assign(osdNavDisplayRegion.style, {
+      display: "block",
+      border: "none",
+      overflow: "visible",
+      left: "0",
+      width: "100%",
+      backgroundColor: "rgba(255 255 255 / .6)",
+      boxShadow: "0 0 4px var(--primary-accent)",
+    });
+
+    // Monkey-patch the navigator.update method to prevent the displayRegion element
+    //  being resized to reflect the horizontal dimension of the viewport
+    navigator.update = (mainViewport) => {
+      // reimplemented based on
+      // https://github.com/openseadragon/openseadragon/blob/6cb2c9e7bc4adebe28e386a093890a6c3e353c6b/src/navigator.js#L342-L393
+
+      const {
+        viewport: navViewport,
+        displayRegion: { style },
+        totalBorderWidths,
+      } = navigator;
+
+      if (mainViewport && navViewport) {
+        const bounds = viewport.getBoundsNoRotate(true);
+        const topleft = navViewport.pixelFromPointNoRotate(
+          bounds.getTopLeft(),
+          false,
+        );
+        const bottomright = navViewport
+          .pixelFromPointNoRotate(bounds.getBottomRight(), false)
+          .minus(totalBorderWidths);
+
+        style.top = `${Math.round(topleft.y)}px`;
+        style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
+      }
+    };
+
+    // OSD event handlers
+
+    // on open, configure an event listener for when the images arrive
+    //  from the SDR
+    openSeadragon.addHandler("open", () => {
+      const tiledImage = viewport.viewer.world.getItemAt(0);
+      tiledImage.addOnceHandler(
+        "fully-loaded-change",
+        () => (rollImageReady = true),
+      );
+    });
+
+    // create the holes overlay SVG and "rewind" to the beginning of the
+    //  performance when the viewport updates for the first time
+    openSeadragon.addOnceHandler("update-viewport", () => {
+      createHolesOverlaySvg();
+      updateViewportFromTick(0);
+    });
+
+    // update the height of the tracker bar when the zoom changes
+    openSeadragon.addHandler("zoom", ({ zoom }) => {
+      const imageZoom = viewport.viewportToImageZoom(zoom);
+      trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
+    });
+
+    // re-implement some default OSD interactions to apply our own constraints
+    //  and sidestep some interaction effects
+    openSeadragon.addHandler("canvas-drag", (event) => {
+      event.preventDefaultAction = true;
+
+      const center = new OpenSeadragon.Point(
+        viewport.centerSpringX.target.value,
+        viewport.centerSpringY.target.value,
+      );
+
+      const verticalBound = navigator.viewport.imageToViewportCoordinates(
+        new OpenSeadragon.Point(0, imageLength),
+      );
+
+      const delta = viewport.deltaPointsFromPixels(event.delta.negate());
+
+      viewport.centerSpringX.target.value += delta.x;
+      if (viewport.getBounds().x !== viewport.getConstrainedBounds().x)
+        delta.x = 0;
+
+      const target = center.plus(delta);
+
+      viewport.centerSpringX.springTo(target.x);
+      viewport.centerSpringY.springTo(clamp(target.y, 0, verticalBound.y));
+
+      updateTickFromViewport(/* animate = */ true);
+    });
+
+    openSeadragon.addHandler("navigator-click", (event) => {
+      event.preventDefaultAction = true;
+      if (!event.quick) return;
+      const target = navigator.viewport.pointFromPixel(event.position);
+      viewport.centerSpringY.springTo(target.y);
+      updateTickFromViewport(/* animate = */ true);
+    });
+
+    openSeadragon.addHandler("navigator-drag", (event) => {
+      event.preventDefaultAction = true;
+      const center = new OpenSeadragon.Point(
+        0,
+        viewport.centerSpringY.target.value,
+      );
+      const target = center.plus(
+        navigator.viewport.deltaPointsFromPixels(event.delta),
+      );
+      const verticalBound = navigator.viewport.imageToViewportCoordinates(
+        new OpenSeadragon.Point(0, imageLength),
+      );
+      viewport.centerSpringY.springTo(clamp(target.y, 0, verticalBound.y));
+      updateTickFromViewport(/* animate = */ false);
+    });
+
+    navigator.innerTracker.releaseHandler = () => {
+      // The releaseHandler for navigator viewports is delegated to an
+      //  `onCanvasRelease` function (see
+      //  https://github.com/openseadragon/openseadragon/blob/master/src/navigator.js#L586-L590 )
+      //  which calls viewport.applyConstraints() whether constraints are
+      //  wanted or not.  Since that's literally all it does (and we don't want
+      //  constraints applied here), we'll just neuter it here.
+    };
+
+    openSeadragon.open(imageUrl);
+  });
+
+  $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
-  $: calculateHoleColors($rollMetadata.holeData);
+  $: annotateHoleData($rollMetadata.holeData);
   $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
@@ -452,7 +564,7 @@
   on:mouseleave={() => (showControls = false)}
   on:wheel|capture|preventDefault={(event) => {
     if (event.ctrlKey) {
-      panByIncrement(event.deltaY > 0);
+      updateTickByViewportIncrement(/* up = */ event.deltaY > 0);
       event.stopPropagation();
       return;
     }
@@ -469,18 +581,18 @@
   class:show-note-velocities={$userSettings.showNoteVelocities}
   class:use-roll-pedaling={$rollPedalingOnOff}
   class:play-expressions={$playExpressionsOnOff}
-  style="--trackerbar-height: {trackerbarHeight}px"
+  style={`--trackerbar-height: ${trackerbarHeight}px;` +
+    `--navigator-width: ${navigatorWidth}px`}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
   {/if}
   {#if showControls}
     <RollViewerControls
-      bind:strafing
       {openSeadragon}
       {minZoomLevel}
       {maxZoomLevel}
-      {panByIncrement}
+      {updateTickByViewportIncrement}
     />
   {/if}
 </div>
