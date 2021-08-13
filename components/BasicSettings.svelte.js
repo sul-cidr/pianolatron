@@ -156,7 +156,7 @@ function create_fragment(ctx) {
 
 	let rangeslider3_props = {
 		min: "0.1",
-		max: "4",
+		max: "3",
 		step: ".001",
 		name: "tempo"
 	};

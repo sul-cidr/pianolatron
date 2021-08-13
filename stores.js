@@ -65,18 +65,6 @@ export const activeShortcutKeys = createStore({
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
-export const animatePan = (() => {
-  const { set: _set, subscribe } = writable(false);
-  let timeoutId;
-  return {
-    set: (val) => {
-      _set(val);
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => _set(false), 780);
-    },
-    subscribe,
-  };
-})();
 
 // User Settings
 export const showKeyboard = createStore(true);
