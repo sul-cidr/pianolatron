@@ -99,6 +99,7 @@
   import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
+  import RollViewerLegend from "./RollViewerLegend.svelte";
 
   export let imageUrl;
   export let holeData;
@@ -619,4 +620,5 @@
       {panHorizontal}
     />
   {/if}
+  <RollViewerLegend />
 </div>
