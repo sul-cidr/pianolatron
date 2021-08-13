@@ -486,10 +486,11 @@
     });
 
     openSeadragon.addHandler("navigator-click", (event) => {
+      event.preventDefaultAction = true;
+      if (!event.quick) return;
       const target = navigator.viewport.pointFromPixel(event.position);
       viewport.centerSpringY.springTo(target.y);
       updateTickFromViewport(/* animate = */ true);
-      event.preventDefaultAction = true;
     });
 
     openSeadragon.open(imageUrl);
