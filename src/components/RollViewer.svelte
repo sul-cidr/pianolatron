@@ -493,6 +493,18 @@
       updateTickFromViewport(/* animate = */ true);
     });
 
+    openSeadragon.addHandler("navigator-drag", (event) => {
+      event.preventDefaultAction = true;
+      const center = new OpenSeadragon.Point(
+        0,
+        viewport.centerSpringY.target.value,
+      );
+      viewport.centerSpringY.springTo(
+        center.plus(navigator.viewport.deltaPointsFromPixels(event.delta)).y,
+      );
+      updateTickFromViewport(/* animate = */ false);
+    });
+
     openSeadragon.open(imageUrl);
   });
 
