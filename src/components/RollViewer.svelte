@@ -499,9 +499,13 @@
         0,
         viewport.centerSpringY.target.value,
       );
-      viewport.centerSpringY.springTo(
-        center.plus(navigator.viewport.deltaPointsFromPixels(event.delta)).y,
+      const target = center.plus(
+        navigator.viewport.deltaPointsFromPixels(event.delta),
       );
+      const verticalBound = navigator.viewport.imageToViewportCoordinates(
+        new OpenSeadragon.Point(0, imageLength),
+      );
+      viewport.centerSpringY.springTo(clamp(target.y, 0, verticalBound.y));
       updateTickFromViewport(/* animate = */ false);
     });
 
