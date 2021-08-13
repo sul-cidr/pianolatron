@@ -30,9 +30,12 @@
 
   let webMidi;
 
+  import expressionBoxes from "../expression-boxes";
+
   let tempoMap;
   let pedalingMap;
   let notesMap;
+  let notesVelocitiesMap;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -331,6 +334,10 @@
     pedalingMap = buildPedalingMap(musicTracks[0]);
 
     notesMap = buildNotesMap(musicTracks);
+
+    const expressionBox = "expressiveMidi";
+    notesVelocitiesMap =
+      expressionBoxes[expressionBox].buildNoteVelocitiesMap(midiSamplePlayer);
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
@@ -339,12 +346,14 @@
 
   midiSamplePlayer.on(
     "midiEvent",
-    ({ name, value, number, noteNumber, velocity, data }) => {
+    ({ name, value, number, noteNumber, velocity, data, tick }) => {
       if (name === "Note on") {
         if (velocity === 0) {
           stopNote(noteNumber);
         } else {
-          startNote(noteNumber, velocity);
+          const expressionizedVelocity = notesVelocitiesMap[tick][noteNumber];
+          startNote(noteNumber, expressionizedVelocity);
+          activeNotes.add(noteNumber);
         }
       } else if (name === "Controller Change" && $rollPedalingOnOff) {
         if (number === SUSTAIN_PEDAL) {
