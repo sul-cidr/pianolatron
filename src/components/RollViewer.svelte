@@ -102,6 +102,7 @@
     getHoleType,
   } from "../utils";
   import RollViewerControls from "./RollViewerControls.svelte";
+  import RollViewerLegend from "./RollViewerLegend.svelte";
 
   export let imageUrl;
   export let holesByTickInterval;
@@ -602,4 +603,5 @@
       {updateTickByViewportIncrement}
     />
   {/if}
+  <RollViewerLegend />
 </div>
