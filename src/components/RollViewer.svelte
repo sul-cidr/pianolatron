@@ -480,6 +480,32 @@
       updateTickFromViewport(/* animate = */ true);
     });
 
+    openSeadragon.addHandler("canvas-drag", (event) => {
+      event.preventDefaultAction = true;
+
+      const center = new OpenSeadragon.Point(
+        viewport.centerSpringX.target.value,
+        viewport.centerSpringY.target.value,
+      );
+
+      const verticalBound = navigator.viewport.imageToViewportCoordinates(
+        new OpenSeadragon.Point(0, imageLength),
+      );
+
+      const delta = viewport.deltaPointsFromPixels(event.delta.negate());
+
+      viewport.centerSpringX.target.value += delta.x;
+      if (viewport.getBounds().x !== viewport.getConstrainedBounds().x)
+        delta.x = 0;
+
+      const target = center.plus(delta);
+
+      viewport.centerSpringX.springTo(target.x);
+      viewport.centerSpringY.springTo(clamp(target.y, 0, verticalBound.y));
+
+      updateTickFromViewport(/* animate = */ true);
+    });
+
     openSeadragon.addHandler("zoom", ({ zoom }) => {
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
