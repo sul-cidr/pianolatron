@@ -458,6 +458,8 @@
 
     // OSD event handlers
 
+    // on open, configure an event listener for when the images arrive
+    //  from the SDR
     openSeadragon.addHandler("open", () => {
       const tiledImage = viewport.viewer.world.getItemAt(0);
       tiledImage.addOnceHandler(
@@ -466,11 +468,21 @@
       );
     });
 
+    // create the holes overlay SVG and "rewind" to the beginning of the
+    //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
       createHolesOverlaySvg();
       updateViewportFromTick(0);
     });
 
+    // update the height of the tracker bar when the zoom changes
+    openSeadragon.addHandler("zoom", ({ zoom }) => {
+      const imageZoom = viewport.viewportToImageZoom(zoom);
+      trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
+    });
+
+    // re-implement some default OSD interactions to apply our own constraints
+    //  and sidestep some interaction effects
     openSeadragon.addHandler("canvas-drag", (event) => {
       event.preventDefaultAction = true;
 
@@ -495,11 +507,6 @@
       viewport.centerSpringY.springTo(clamp(target.y, 0, verticalBound.y));
 
       updateTickFromViewport(/* animate = */ true);
-    });
-
-    openSeadragon.addHandler("zoom", ({ zoom }) => {
-      const imageZoom = viewport.viewportToImageZoom(zoom);
-      trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
     });
 
     openSeadragon.addHandler("navigator-click", (event) => {
@@ -574,7 +581,8 @@
   class:show-note-velocities={$userSettings.showNoteVelocities}
   class:use-roll-pedaling={$rollPedalingOnOff}
   class:play-expressions={$playExpressionsOnOff}
-  style="--trackerbar-height: {trackerbarHeight}px; --navigator-width: {navigatorWidth}px"
+  style={`--trackerbar-height: ${trackerbarHeight}px;` +
+    `--navigator-width: ${navigatorWidth}px`}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>
