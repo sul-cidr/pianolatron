@@ -471,15 +471,6 @@
       updateViewportFromTick(0);
     });
 
-    openSeadragon.addHandler("pan", ({ immediately }) => {
-      // OSD fires the pan event twice before the viewport can be be updated to
-      //  the correct position.  We want to ignore these events -- fortunately
-      //  they're raised with `immediately=true` and we don't raise any such
-      //  events ourselves, so we can abuse this property here.
-      if (immediately) return;
-      updateTickFromViewport(/* animate = */ true);
-    });
-
     openSeadragon.addHandler("canvas-drag", (event) => {
       event.preventDefaultAction = true;
 
