@@ -18,5 +18,5 @@
 <div>
   Tempo: {($tempoCoefficient * 100).toFixed(0)}%
   <br />
-  Inches per second: {($ticksPerSecond / 300).toFixed(2)}
+  Feet per Minute: {(($ticksPerSecond / 300 / 12) * 60).toFixed(2)}
 </div>
