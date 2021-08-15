@@ -58,7 +58,7 @@ function create_if_block_1(ctx) {
 		c() {
 			p = element("p");
 			p.textContent = "Downloading roll image...";
-			attr(p, "class", "svelte-aepdni");
+			attr(p, "class", "svelte-im2hgj");
 		},
 		m(target, anchor) {
 			insert(target, p, anchor);
@@ -86,7 +86,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (575:2) {#if showControls}
+// (574:2) {#if showControls}
 function create_if_block(ctx) {
 	let rollviewercontrols;
 	let current;
@@ -146,7 +146,7 @@ function create_fragment(ctx) {
 			if (if_block1) if_block1.c();
 			attr(div, "id", "roll-viewer");
 			attr(div, "style", div_style_value = `--trackerbar-height: ${/*trackerbarHeight*/ ctx[4]}px;` + `--navigator-width: ${navigatorWidth}px`);
-			attr(div, "class", "svelte-aepdni");
+			attr(div, "class", "svelte-im2hgj");
 			toggle_class(div, "active-note-details", /*$userSettings*/ ctx[5].activeNoteDetails);
 			toggle_class(div, "highlight-enabled-holes", /*$userSettings*/ ctx[5].highlightEnabledHoles);
 			toggle_class(div, "show-note-velocities", /*$userSettings*/ ctx[5].showNoteVelocities);
