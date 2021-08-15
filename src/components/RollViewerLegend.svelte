@@ -12,9 +12,11 @@
 </style>
 
 <script>
-  import { tempoCoefficient } from "../stores";
+  import { tempoCoefficient, ticksPerSecond } from "../stores";
 </script>
 
 <div>
   Tempo: {($tempoCoefficient * 100).toFixed(0)}%
+  <br />
+  Inches per second: {($ticksPerSecond / 300).toFixed(2)}
 </div>

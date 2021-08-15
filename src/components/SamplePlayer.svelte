@@ -25,6 +25,7 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
+    ticksPerSecond,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -369,6 +370,8 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
+  $: $ticksPerSecond =
+    (midiSamplePlayer.division * midiSamplePlayer.tempo) / 60;
 
   export {
     midiSamplePlayer,
