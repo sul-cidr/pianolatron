@@ -81,6 +81,7 @@ export const useMidiTempoEventsOnOff = createStore(true);
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
+export const ticksPerSecond = createStore();
 
 // User Settings
 export const showKeyboard = createPersistedStore("showKeyboard", true);

@@ -17,6 +17,7 @@
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
+    ticksPerSecond,
   } from "../stores";
 
   let tempoMap;
@@ -258,6 +259,8 @@
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
+  $: $ticksPerSecond =
+    (midiSamplePlayer.division * midiSamplePlayer.tempo) / 60;
 
   export {
     midiSamplePlayer,
