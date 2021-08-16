@@ -620,5 +620,10 @@
       {panHorizontal}
     />
   {/if}
-  <RollViewerLegend />
+  <RollViewerLegend
+    {defaultHoleColor}
+    {pedalHoleColor}
+    {controlHoleColor}
+    {holeColorMap}
+  />
 </div>
