@@ -49,7 +49,6 @@
 
     :global(.control input[type="range"]) {
       grid-area: slider;
-      width: 100%;
     }
   }
 </style>

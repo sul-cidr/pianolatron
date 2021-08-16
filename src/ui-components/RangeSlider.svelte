@@ -5,17 +5,17 @@
   $track-color: #eaeaea;
   $thumb-color: var(--primary-accent);
 
-  $thumb-radius: 12px;
-  $thumb-height: 28px;
-  $thumb-width: 12px;
+  $thumb-radius: 14px;
+  $thumb-height: 14px;
+  $thumb-width: 14px;
   $thumb-shadow-size: 2px;
   $thumb-shadow-blur: 4px;
   $thumb-shadow-color: rgba(0, 0, 0, 0.2);
-  $thumb-border-width: 2px;
+  $thumb-border-width: 0px;
   $thumb-border-color: #eaeaea;
 
-  $track-width: 18em;
-  $track-height: 8px;
+  $track-width: 100%;
+  $track-height: 2px;
   $track-shadow-size: 1px;
   $track-shadow-blur: 1px;
   $track-shadow-color: rgba(0, 0, 0, 0.2);
@@ -57,6 +57,7 @@
   [type="range"] {
     -webkit-appearance: none;
     background: transparent;
+    height: 1px;
     margin: math.div($thumb-height, 2) 0;
     width: $track-width;
 
