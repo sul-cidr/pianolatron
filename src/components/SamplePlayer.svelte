@@ -74,7 +74,7 @@
       i += 1;
       if (i >= tempoMap.length) break;
     }
-    return tempo;
+    return tempo || DEFAULT_TEMPO;
   };
 
   const toggleSustain = (onOff, fromMidi) => {
