@@ -332,6 +332,8 @@
     pedalingMap = buildPedalingMap(musicTracks[0]);
 
     notesMap = buildNotesMap(musicTracks);
+
+    $ticksPerSecond = (midiSamplePlayer.division * getTempoAtTick(0)) / 60;
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
