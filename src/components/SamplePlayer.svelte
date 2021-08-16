@@ -30,12 +30,16 @@
 
   let webMidi;
 
+  import { rollProfile } from "../roll-config";
   import expressionBoxes from "../expression-boxes";
 
   let tempoMap;
   let pedalingMap;
   let notesMap;
   let notesVelocitiesMap;
+  let notesBegin;
+  let notesEnd;
+  let ctrlMap;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -335,6 +339,17 @@
 
     notesMap = buildNotesMap(musicTracks);
 
+    ({
+      bassNotesBegin: notesBegin,
+      trebleNotesEnd: notesEnd,
+      ctrlMap,
+    } = rollProfile[$rollMetadata.ROLL_TYPE]);
+    // const
+
+    // const expressionBox =
+    //   $rollMetadata.MIDIFILE_TYPE === "exp"
+    //     ? "expressiveMidi"
+    //     : $rollMetadata.ROLL_TYPE;
     const expressionBox = "expressiveMidi";
     notesVelocitiesMap =
       expressionBoxes[expressionBox].buildNoteVelocitiesMap(midiSamplePlayer);
@@ -348,9 +363,16 @@
     "midiEvent",
     ({ name, value, number, noteNumber, velocity, data, tick }) => {
       if (name === "Note on") {
+        if (noteNumber in ctrlMap) {
+          console.log(ctrlMap[noteNumber], velocity);
+          // switch
+        }
+        if (noteNumber < notesBegin || noteNumber > notesEnd) return;
+
         if (velocity === 0) {
           stopNote(noteNumber);
         } else {
+          console.log("v", velocity);
           const expressionizedVelocity = notesVelocitiesMap[tick][noteNumber];
           startNote(noteNumber, expressionizedVelocity);
           activeNotes.add(noteNumber);
@@ -362,6 +384,7 @@
           softOnOff.set(!!value);
         }
       } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
+        console.log("tempo", data);
         midiSamplePlayer.setTempo(data * $tempoCoefficient);
       }
     },
