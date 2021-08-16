@@ -5,6 +5,7 @@
     position: relative;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 
     p {
       background: rgba(black, 0.4);
