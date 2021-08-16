@@ -8,6 +8,11 @@
     z-index: z($main-context, overlay-buttons);
     bottom: 1%;
     left: 1%;
+    transition: background 0.5s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
   }
   dt {
     height: 1em;
