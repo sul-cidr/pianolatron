@@ -50,24 +50,36 @@
   let actionInterval;
 
   const keyMap = {
-    SOFT: "KeyB",
-    SUSTAIN: "Space",
-    ACCENT: "KeyN",
+    SOFT: { code: "KeyB", key: "b", description: "Soft Pedal" },
+    SUSTAIN: { code: "Space", key: "␣", description: "Sustain Pedal" },
+    ACCENT: { code: "KeyN", key: "n", description: "Accent Button" },
 
-    VOLUME_UP: "KeyO",
-    VOLUME_DOWN: "KeyI",
-    BASS_VOLUME_UP: "Digit4",
-    BASS_VOLUME_DOWN: "KeyE",
-    TREBLE_VOLUME_UP: "Digit0",
-    TREBLE_VOLUME_DOWN: "KeyP",
+    VOLUME_UP: { code: "KeyO", key: "o", description: "Volume Up" },
+    VOLUME_DOWN: { code: "KeyI", key: "i", description: "Volume Down" },
+    BASS_VOLUME_UP: { code: "Digit4", key: "4", description: "Bass Volume Up" },
+    BASS_VOLUME_DOWN: {
+      code: "KeyE",
+      key: "e",
+      description: "Bass Volume Down",
+    },
+    TREBLE_VOLUME_UP: {
+      code: "Digit0",
+      key: "0",
+      description: "Treble Volume Up",
+    },
+    TREBLE_VOLUME_DOWN: {
+      code: "KeyP",
+      key: "p",
+      description: "Treble Volume Down",
+    },
 
-    TEMPO_UP: "KeyT",
-    TEMPO_DOWN: "KeyR",
+    TEMPO_UP: { code: "KeyT", key: "t", description: "Tempo Up" },
+    TEMPO_DOWN: { code: "KeyR", key: "r", description: "Tempo Down" },
 
-    PLAY_PAUSE: "Digit7",
-    REWIND: "Backspace",
-    FORWARD: "Digit8",
-    BACKWARD: "Digit6",
+    PLAY_PAUSE: { code: "Digit7", key: "7", description: "Play/Pause" },
+    REWIND: { code: "Backspace", key: "←", description: "Rewind Roll" },
+    FORWARD: { code: "Digit8", key: "8", description: "Move Roll Forwards" },
+    BACKWARD: { code: "Digit6", key: "6", description: "Move Roll Backwards" },
   };
 
   const config = {
@@ -153,90 +165,90 @@
 <svelte:window
   on:keydown={(event) => {
     switch (event.code) {
-      case keyMap.SOFT:
+      case keyMap.SOFT.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         softOnOff.set(true);
         break;
 
-      case keyMap.SUSTAIN:
+      case keyMap.SUSTAIN.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         sustainOnOff.set(true);
         break;
 
-      case keyMap.ACCENT:
+      case keyMap.ACCENT.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         accentOnOff.set(true);
         break;
 
-      case keyMap.PLAY_PAUSE:
+      case keyMap.PLAY_PAUSE.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         $activeShortcutKeys.playPause = true;
         playPauseApp();
         break;
 
-      case keyMap.REWIND:
+      case keyMap.REWIND.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         $activeShortcutKeys.rewind = true;
         stopApp();
         break;
 
-      case keyMap.FORWARD:
+      case keyMap.FORWARD.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         keydownRepeatAction(() =>
           updateTickByViewportIncrement(/* up = */ true),
         );
         break;
 
-      case keyMap.BACKWARD:
+      case keyMap.BACKWARD.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         keydownRepeatAction(() =>
           updateTickByViewportIncrement(/* up = */ false),
         );
         break;
 
-      case keyMap.VOLUME_UP:
+      case keyMap.VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.volumeUp = true;
         increment(config.volume, event);
         break;
 
-      case keyMap.VOLUME_DOWN:
+      case keyMap.VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.volumeDown = true;
         decrement(config.volume, event);
         break;
 
-      case keyMap.BASS_VOLUME_UP:
+      case keyMap.BASS_VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.bassVolumeUp = true;
         increment(config.bassVolume, event);
         break;
 
-      case keyMap.BASS_VOLUME_DOWN:
+      case keyMap.BASS_VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.bassVolumeDown = true;
         decrement(config.bassVolume, event);
         break;
 
-      case keyMap.TREBLE_VOLUME_UP:
+      case keyMap.TREBLE_VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.trebleVolumeUp = true;
         increment(config.trebleVolume, event);
         break;
 
-      case keyMap.TREBLE_VOLUME_DOWN:
+      case keyMap.TREBLE_VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.trebleVolumeDown = true;
         decrement(config.trebleVolume, event);
         break;
 
-      case keyMap.TEMPO_UP:
+      case keyMap.TEMPO_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.tempoUp = true;
         increment(config.tempo, event);
         break;
 
-      case keyMap.TEMPO_DOWN:
+      case keyMap.TEMPO_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.tempoDown = true;
         decrement(config.tempo, event);
@@ -250,55 +262,55 @@
     actionInterval = undefined;
 
     switch (code) {
-      case keyMap.SOFT:
+      case keyMap.SOFT.code:
         softOnOff.set(false);
         break;
 
-      case keyMap.SUSTAIN:
+      case keyMap.SUSTAIN.code:
         sustainOnOff.set(false);
         break;
 
-      case keyMap.ACCENT:
+      case keyMap.ACCENT.code:
         accentOnOff.set(false);
         break;
 
-      case keyMap.PLAY_PAUSE:
+      case keyMap.PLAY_PAUSE.code:
         $activeShortcutKeys.playPause = false;
         break;
 
-      case keyMap.REWIND:
+      case keyMap.REWIND.code:
         $activeShortcutKeys.rewind = false;
         break;
 
-      case keyMap.VOLUME_UP:
+      case keyMap.VOLUME_UP.code:
         $activeShortcutKeys.volumeUp = false;
         break;
 
-      case keyMap.VOLUME_DOWN:
+      case keyMap.VOLUME_DOWN.code:
         $activeShortcutKeys.volumeDown = false;
         break;
 
-      case keyMap.BASS_VOLUME_UP:
+      case keyMap.BASS_VOLUME_UP.code:
         $activeShortcutKeys.bassVolumeUp = false;
         break;
 
-      case keyMap.BASS_VOLUME_DOWN:
+      case keyMap.BASS_VOLUME_DOWN.code:
         $activeShortcutKeys.bassVolumeDown = false;
         break;
 
-      case keyMap.TREBLE_VOLUME_UP:
+      case keyMap.TREBLE_VOLUME_UP.code:
         $activeShortcutKeys.trebleVolumeUp = false;
         break;
 
-      case keyMap.TREBLE_VOLUME_DOWN:
+      case keyMap.TREBLE_VOLUME_DOWN.code:
         $activeShortcutKeys.trebleVolumeDown = false;
         break;
 
-      case keyMap.TEMPO_UP:
+      case keyMap.TEMPO_UP.code:
         $activeShortcutKeys.tempoUp = false;
         break;
 
-      case keyMap.TEMPO_DOWN:
+      case keyMap.TEMPO_DOWN.code:
         $activeShortcutKeys.tempoDown = false;
         break;
 
