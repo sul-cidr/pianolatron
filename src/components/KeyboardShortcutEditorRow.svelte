@@ -15,8 +15,13 @@
 </style>
 
 <script>
+  import { createEventDispatcher } from "svelte";
+
   export let shortcut;
   let editing = false;
+
+  const dispatch = createEventDispatcher();
+  const updateShortcut = (event) => dispatch("update", event);
 </script>
 
 <dt>{shortcut.description}</dt>
@@ -43,3 +48,13 @@
     <line x1="16" y1="5" x2="19" y2="8" />
   </svg>
 </dd>
+
+<svelte:window
+  on:keydown|capture={(event) => editing && event.stopPropagation()}
+  on:keyup|capture={(event) => {
+    if (!editing) return;
+    updateShortcut(event);
+    editing = false;
+    event.stopPropagation();
+  }}
+/>

@@ -149,8 +149,14 @@
 {#if $showKeybindingsConfig}
   <div>
     <dl>
-      {#each Object.values(keyMap) as shortcut}
-        <KeyboardShortcutEditorRow {shortcut} />
+      {#each Object.keys(keyMap) as shortcut}
+        <KeyboardShortcutEditorRow
+          shortcut={keyMap[shortcut]}
+          on:update={({ detail }) => {
+            keyMap[shortcut].code = detail.code;
+            keyMap[shortcut].key = detail.key;
+          }}
+        />
       {/each}
     </dl>
   </div>
