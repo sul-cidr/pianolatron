@@ -20,20 +20,6 @@
     grid-template-columns: auto auto;
     justify-content: space-between;
   }
-
-  dd {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    svg {
-      cursor: pointer;
-      stroke: grey;
-
-      &:hover {
-        stroke: black;
-      }
-    }
-  }
 </style>
 
 <script context="module">
@@ -45,6 +31,7 @@
 </script>
 
 <script>
+  import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
   import {
     softOnOff,
     sustainOnOff,
@@ -159,33 +146,11 @@
   };
 </script>
 
-<svg style="display: none">
-  <symbol id="edit" viewBox="0 0 24 24">
-    <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
-    <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
-    <line x1="16" y1="5" x2="19" y2="8" />
-  </symbol>
-</svg>
-
 {#if $showKeybindingsConfig}
   <div>
     <dl>
-      {#each Object.keys(keyMap) as func}
-        <dt>{keyMap[func].description}</dt>
-        <dd>
-          <kbd>{keyMap[func].key}</kbd>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <use href="#edit" />
-          </svg>
-        </dd>
+      {#each Object.values(keyMap) as shortcut}
+        <KeyboardShortcutEditorRow {shortcut} />
       {/each}
     </dl>
   </div>
