@@ -188,17 +188,17 @@
     switch (event.code) {
       case $keyMap.SOFT.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        softOnOff.set(true);
+        $softOnOff = true;
         break;
 
       case $keyMap.SUSTAIN.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        sustainOnOff.set(true);
+        $sustainOnOff = true;
         break;
 
       case $keyMap.ACCENT.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        accentOnOff.set(true);
+        $accentOnOff = true;
         break;
 
       case keyMap.PLAY_PAUSE.code:
@@ -284,15 +284,15 @@
 
     switch (code) {
       case $keyMap.SOFT.code:
-        softOnOff.set(false);
+        $softOnOff = false;
         break;
 
       case $keyMap.SUSTAIN.code:
-        sustainOnOff.set(false);
+        $sustainOnOff = false;
         break;
 
       case $keyMap.ACCENT.code:
-        accentOnOff.set(false);
+        $accentOnOff = false;
         break;
 
       case keyMap.PLAY_PAUSE.code:
