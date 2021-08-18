@@ -2,7 +2,13 @@
   dd {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+    margin: 0.2em 0;
+
+    span {
+      color: grey;
+    }
+
     svg {
       cursor: pointer;
       stroke: grey;
@@ -12,7 +18,7 @@
       }
 
       &.disabled {
-        cursor: not-allowed;
+        cursor: default;
         opacity: 0.5;
       }
     }
@@ -39,8 +45,8 @@
   {/if}
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     stroke-width="2"
     fill="none"
@@ -55,8 +61,8 @@
   </svg>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     stroke-width="2"
     fill="none"
