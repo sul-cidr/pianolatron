@@ -31,6 +31,7 @@
 </style>
 
 <script>
+  import { keyMap } from "./KeyboardShortcuts.svelte";
   import {
     softOnOff,
     sustainOnOff,
@@ -57,7 +58,7 @@
     aria-pressed={$softOnOff}
     on:click={() => ($softOnOff = !$softOnOff)}
     >Soft
-    <kbd class:depressed={$softOnOff}>b</kbd></button
+    <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
   >
   <button
     type="button"
@@ -65,7 +66,7 @@
     aria-pressed={$sustainOnOff}
     on:click={() => ($sustainOnOff = !$sustainOnOff)}
     >Sustain
-    <kbd class:depressed={$sustainOnOff}>Space</kbd></button
+    <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
   >
   <br />
   <button
@@ -75,7 +76,7 @@
     aria-pressed={$accentOnOff}
     on:mousedown={() => ($accentOnOff = true)}
     >Accent
-    <kbd class:depressed={$accentOnOff}>n</kbd></button
+    <kbd class:depressed={$accentOnOff}>{$keyMap.ACCENT.key}</kbd></button
   >
 </div>
 <svelte:window on:mouseup={() => ($accentOnOff = false)} />

@@ -30,33 +30,7 @@
 <script context="module">
   import { get, writable } from "svelte/store";
 
-  const showKeybindingsConfig = writable(false);
-  export const toggleKeybindingsConfig = () =>
-    showKeybindingsConfig.update((val) => !val);
-</script>
-
-<script>
-  import { slide } from "svelte/transition";
-  import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
-  import {
-    softOnOff,
-    sustainOnOff,
-    accentOnOff,
-    volumeCoefficient,
-    bassVolumeCoefficient,
-    trebleVolumeCoefficient,
-    tempoCoefficient,
-    activeShortcutKeys,
-  } from "../stores";
-  import { clamp, easingInterval, enforcePrecision } from "../utils";
-
-  export let playPauseApp;
-  export let stopApp;
-  export let updateTickByViewportIncrement;
-
-  let actionInterval;
-
-  const keyMap = {
+  export const keyMap = writable({
     SOFT: { code: "KeyB", key: "b", description: "Soft Pedal" },
     SUSTAIN: { code: "Space", key: "␣", description: "Sustain Pedal" },
     ACCENT: { code: "KeyN", key: "n", description: "Accent Button" },
@@ -87,7 +61,33 @@
     REWIND: { code: "Backspace", key: "←", description: "Rewind Roll" },
     FORWARD: { code: "Digit8", key: "8", description: "Move Roll Forwards" },
     BACKWARD: { code: "Digit6", key: "6", description: "Move Roll Backwards" },
-  };
+  });
+
+  const showKeybindingsConfig = writable(true);
+  export const toggleKeybindingsConfig = () =>
+    showKeybindingsConfig.update((val) => !val);
+</script>
+
+<script>
+  import { slide } from "svelte/transition";
+  import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
+  import {
+    softOnOff,
+    sustainOnOff,
+    accentOnOff,
+    volumeCoefficient,
+    bassVolumeCoefficient,
+    trebleVolumeCoefficient,
+    tempoCoefficient,
+    activeShortcutKeys,
+  } from "../stores";
+  import { clamp, easingInterval, enforcePrecision } from "../utils";
+
+  export let playPauseApp;
+  export let stopApp;
+  export let updateTickByViewportIncrement;
+
+  let actionInterval;
 
   const config = {
     volume: {
@@ -160,22 +160,22 @@
       <p class="error-message" transition:slide>{errorMessage}</p>
     {/if}
     <dl>
-      {#each Object.keys(keyMap) as shortcut}
+      {#each Object.keys($keyMap) as shortcut}
         <KeyboardShortcutEditorRow
-          shortcut={keyMap[shortcut]}
+          shortcut={$keyMap[shortcut]}
           on:update={({ detail }) => {
             errorMessage = undefined;
             if (
-              Object.values(keyMap)
+              Object.values($keyMap)
                 .map(({ code }) => code)
                 .includes(detail.code) &&
-              detail.code !== keyMap[shortcut].code
+              detail.code !== $keyMap[shortcut].code
             ) {
               errorMessage = `Cancelled -- the "${detail.key}" key is already assigned!`;
               return;
             }
-            keyMap[shortcut].code = detail.code;
-            keyMap[shortcut].key = detail.key;
+            $keyMap[shortcut].code = detail.code;
+            $keyMap[shortcut].key = detail.key;
           }}
         />
       {/each}
@@ -186,17 +186,17 @@
 <svelte:window
   on:keydown={(event) => {
     switch (event.code) {
-      case keyMap.SOFT.code:
+      case $keyMap.SOFT.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         softOnOff.set(true);
         break;
 
-      case keyMap.SUSTAIN.code:
+      case $keyMap.SUSTAIN.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         sustainOnOff.set(true);
         break;
 
-      case keyMap.ACCENT.code:
+      case $keyMap.ACCENT.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         accentOnOff.set(true);
         break;
@@ -283,15 +283,15 @@
     actionInterval = undefined;
 
     switch (code) {
-      case keyMap.SOFT.code:
+      case $keyMap.SOFT.code:
         softOnOff.set(false);
         break;
 
-      case keyMap.SUSTAIN.code:
+      case $keyMap.SUSTAIN.code:
         sustainOnOff.set(false);
         break;
 
-      case keyMap.ACCENT.code:
+      case $keyMap.ACCENT.code:
         accentOnOff.set(false);
         break;
 
@@ -307,7 +307,7 @@
         $activeShortcutKeys.volumeUp = false;
         break;
 
-      case keyMap.VOLUME_DOWN.code:
+      case $keyMap.VOLUME_DOWN.code:
         $activeShortcutKeys.volumeDown = false;
         break;
 
@@ -331,7 +331,7 @@
         $activeShortcutKeys.tempoUp = false;
         break;
 
-      case keyMap.TEMPO_DOWN.code:
+      case $keyMap.TEMPO_DOWN.code:
         $activeShortcutKeys.tempoDown = false;
         break;
 
