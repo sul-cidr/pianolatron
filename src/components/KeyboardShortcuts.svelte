@@ -30,7 +30,7 @@
 <script context="module">
   import { get, writable } from "svelte/store";
 
-  export const keyMap = writable({
+  const defaultKeyMap = {
     SOFT: { code: "KeyB", key: "b", description: "Soft Pedal" },
     SUSTAIN: { code: "Space", key: "␣", description: "Sustain Pedal" },
     ACCENT: { code: "KeyN", key: "n", description: "Accent Button" },
@@ -61,7 +61,8 @@
     REWIND: { code: "Backspace", key: "←", description: "Rewind Roll" },
     FORWARD: { code: "Digit8", key: "8", description: "Move Roll Forwards" },
     BACKWARD: { code: "Digit6", key: "6", description: "Move Roll Backwards" },
-  });
+  };
+  export const keyMap = writable(JSON.parse(JSON.stringify(defaultKeyMap)));
 
   const showKeybindingsConfig = writable(true);
   export const toggleKeybindingsConfig = () =>
@@ -175,7 +176,11 @@
             }
             $keyMap[shortcut].code = detail.code;
             $keyMap[shortcut].key = detail.key;
+
+            $keyMap[shortcut].isChanged =
+              detail.key !== defaultKeyMap[shortcut].key;
           }}
+          on:reset={() => ($keyMap[shortcut] = { ...defaultKeyMap[shortcut] })}
         />
       {/each}
     </dl>
