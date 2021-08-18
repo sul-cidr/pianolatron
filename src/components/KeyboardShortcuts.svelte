@@ -79,7 +79,6 @@
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
-    activeShortcutKeys,
   } from "../stores";
   import { clamp, easingInterval, enforcePrecision } from "../utils";
 
@@ -203,13 +202,13 @@
 
       case keyMap.PLAY_PAUSE.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $activeShortcutKeys.playPause = true;
+        keyMap.PLAY_PAUSE.active = true;
         playPauseApp();
         break;
 
       case keyMap.REWIND.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $activeShortcutKeys.rewind = true;
+        keyMap.REWIND.active = true;
         stopApp();
         break;
 
@@ -229,49 +228,49 @@
 
       case keyMap.VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.volumeUp = true;
+        keyMap.VOLUME_UP.active = true;
         increment(config.volume, event);
         break;
 
       case keyMap.VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.volumeDown = true;
+        keyMap.VOLUME_DOWN.active = true;
         decrement(config.volume, event);
         break;
 
       case keyMap.BASS_VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.bassVolumeUp = true;
+        keyMap.BASS_VOLUME_UP.active = true;
         increment(config.bassVolume, event);
         break;
 
       case keyMap.BASS_VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.bassVolumeDown = true;
+        keyMap.BASS_VOLUME_DOWN.active = true;
         decrement(config.bassVolume, event);
         break;
 
       case keyMap.TREBLE_VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.trebleVolumeUp = true;
+        keyMap.TREBLE_VOLUME_UP.active = true;
         increment(config.trebleVolume, event);
         break;
 
       case keyMap.TREBLE_VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.trebleVolumeDown = true;
+        keyMap.TREBLE_VOLUME_DOWN.active = true;
         decrement(config.trebleVolume, event);
         break;
 
       case keyMap.TEMPO_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.tempoUp = true;
+        keyMap.TEMPO_UP.active = true;
         increment(config.tempo, event);
         break;
 
       case keyMap.TEMPO_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.tempoDown = true;
+        keyMap.TEMPO_DOWN.active = true;
         decrement(config.tempo, event);
         break;
 
@@ -296,43 +295,43 @@
         break;
 
       case keyMap.PLAY_PAUSE.code:
-        $activeShortcutKeys.playPause = false;
+        keyMap.PLAY_PAUSE.active = false;
         break;
 
       case keyMap.REWIND.code:
-        $activeShortcutKeys.rewind = false;
+        keyMap.REWIND.active = false;
         break;
 
       case keyMap.VOLUME_UP.code:
-        $activeShortcutKeys.volumeUp = false;
+        keyMap.VOLUME_UP.active = false;
         break;
 
       case $keyMap.VOLUME_DOWN.code:
-        $activeShortcutKeys.volumeDown = false;
+        $keyMap.VOLUME_DOWN.active = false;
         break;
 
       case keyMap.BASS_VOLUME_UP.code:
-        $activeShortcutKeys.bassVolumeUp = false;
+        keyMap.BASS_VOLUME_UP.active = false;
         break;
 
       case keyMap.BASS_VOLUME_DOWN.code:
-        $activeShortcutKeys.bassVolumeDown = false;
+        keyMap.BASS_VOLUME_DOWN.active = false;
         break;
 
       case keyMap.TREBLE_VOLUME_UP.code:
-        $activeShortcutKeys.trebleVolumeUp = false;
+        keyMap.TREBLE_VOLUME_UP.active = false;
         break;
 
       case keyMap.TREBLE_VOLUME_DOWN.code:
-        $activeShortcutKeys.trebleVolumeDown = false;
+        keyMap.TREBLE_VOLUME_DOWN.active = false;
         break;
 
       case keyMap.TEMPO_UP.code:
-        $activeShortcutKeys.tempoUp = false;
+        keyMap.TEMPO_UP.active = false;
         break;
 
       case $keyMap.TEMPO_DOWN.code:
-        $activeShortcutKeys.tempoDown = false;
+        $keyMap.TEMPO_DOWN.active = false;
         break;
 
       // no default
