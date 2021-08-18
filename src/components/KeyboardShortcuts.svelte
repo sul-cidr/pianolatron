@@ -15,6 +15,11 @@
     z-index: z($main-context, notifications);
   }
 
+  p.error-message {
+    padding: 1em 0;
+    color: red;
+  }
+
   dl {
     display: grid;
     grid-template-columns: auto auto;
@@ -31,6 +36,7 @@
 </script>
 
 <script>
+  import { slide } from "svelte/transition";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
   import {
     softOnOff,
@@ -122,6 +128,8 @@
     },
   };
 
+  let errorMessage;
+
   const updateStore = (
     // config object
     { store, min, max, delta, shiftDelta, ctrlDelta, precision },
@@ -148,11 +156,24 @@
 
 {#if $showKeybindingsConfig}
   <div>
+    {#if errorMessage}
+      <p class="error-message" transition:slide>{errorMessage}</p>
+    {/if}
     <dl>
       {#each Object.keys(keyMap) as shortcut}
         <KeyboardShortcutEditorRow
           shortcut={keyMap[shortcut]}
           on:update={({ detail }) => {
+            errorMessage = undefined;
+            if (
+              Object.values(keyMap)
+                .map(({ code }) => code)
+                .includes(detail.code) &&
+              detail.code !== keyMap[shortcut].code
+            ) {
+              errorMessage = `Cancelled -- the "${detail.key}" key is already assigned!`;
+              return;
+            }
             keyMap[shortcut].code = detail.code;
             keyMap[shortcut].key = detail.key;
           }}
