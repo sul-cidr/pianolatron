@@ -35,7 +35,7 @@
   const midiSamplePlayer = new MidiPlayer.Player();
 
   const piano = new Piano({
-    url: "assets/samples/",
+    url: "samples/",
     velocities: 4,
     release: true,
     pedal: true,
