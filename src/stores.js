@@ -53,13 +53,22 @@ export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
 
-//
 export const activeShortcutKeys = createStore({
   volumeUp: false,
   volumeDown: false,
   tempoUp: false,
   tempoDown: false,
 });
+
+// Piano Settings
+export const sampleVolumes = createStore({
+  strings: -15,
+  harmonics: -10,
+  pedals: -10,
+  keybed: -10,
+});
+export const sampleVelocities = createStore(4);
+export const reverbWetDry = createStore(0.8);
 
 // Playback State
 export const currentTick = createStore(0);
