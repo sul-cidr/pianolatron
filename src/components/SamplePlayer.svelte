@@ -26,6 +26,7 @@
   let tempoMap;
   let pedalingMap;
   let notesMap;
+  let reverb;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -52,7 +53,8 @@
     },
   });
 
-  const reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
+  reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
+
   piano.connect(reverb);
 
   const pianoReady = piano.load();
@@ -104,6 +106,12 @@
     for (const [key] of Object.entries($sampleVolumes)) {
       piano[key].value = $sampleVolumes[key];
     }
+  };
+
+  const updateReverb = () => {
+    reverb.dispose();
+    reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
+    piano.connect(reverb);
   };
 
   const startNote = (noteNumber, velocity) => {
@@ -271,8 +279,7 @@
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
   $: $sampleVolumes, updatePiano();
-  // $: $sampleVelocities, updatePiano();
-  // $: $reverbWetDry, updatePiano();
+  $: $reverbWetDry, updateReverb();
 
   export {
     midiSamplePlayer,
