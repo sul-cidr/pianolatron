@@ -8,6 +8,12 @@ import Pianolatron from '../App.svelte'
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
+    <style global lang="scss">
+      @import "../styles/base";
+      @import "../styles/loader";
+      @import "../styles/hole-highlighting";
+      @import "../styles/overlay-buttons";
+    </style>
   </head>
   <body>
     <Pianolatron client:only/>
