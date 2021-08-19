@@ -27,6 +27,7 @@
   let pedalingMap;
   let notesMap;
   let reverb;
+  let piano;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -39,7 +40,7 @@
 
   const midiSamplePlayer = new MidiPlayer.Player();
 
-  const piano = new Piano({
+  piano = new Piano({
     url: "samples/",
     velocities: $sampleVelocities,
     release: true,
@@ -274,6 +275,36 @@
 
   midiSamplePlayer.on("endOfFile", pausePlayback);
 
+  const reloadPiano = () => {
+    let paused = false;
+    if (midiSamplePlayer.isPlaying()) {
+      pausePlayback();
+      paused = true;
+    }
+
+    piano = new Piano({
+      url: "samples/",
+      velocities: $sampleVelocities,
+      release: true,
+      pedal: true,
+      maxPolyphony: 256,
+      volume: {
+        strings: $sampleVolumes.strings,
+        harmonics: $sampleVolumes.harmonics,
+        pedal: $sampleVolumes.pedal,
+        keybed: $sampleVolumes.keybed,
+      },
+    });
+
+    updateReverb();
+
+    piano.load().then(() => {
+      if (paused) {
+        startPlayback();
+      }
+    });
+  };
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
   $: $tempoCoefficient, updatePlayer();
@@ -281,6 +312,7 @@
   $: $rollPedalingOnOff, updatePlayer();
   $: $sampleVolumes, updatePiano();
   $: $reverbWetDry, updateReverb();
+  $: $sampleVelocities, reloadPiano();
 
   export {
     midiSamplePlayer,
