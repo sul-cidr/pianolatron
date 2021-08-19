@@ -85,7 +85,7 @@ export const useMidiTempoEventsOnOff = createStore(true);
 export const sampleVolumes = createStore({
   strings: -15,
   harmonics: -10,
-  pedals: -10,
+  pedal: -10,
   keybed: -10,
 });
 export const sampleVelocities = createStore(4);
