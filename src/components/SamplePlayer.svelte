@@ -1,6 +1,7 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
+  import { Reverb } from "tone";
   import { Piano } from "../tonejs-piano";
 
   import {
@@ -46,7 +47,10 @@
       pedal: -10,
       keybed: -10,
     },
-  }).toDestination();
+  });
+
+  const reverb = new Reverb({ wet: 0.7 }).toDestination();
+  piano.connect(reverb);
 
   const pianoReady = piano.load();
 
