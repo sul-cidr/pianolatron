@@ -1,14 +1,29 @@
 <style lang="scss">
-  div#settings-panel {
+  div#audio-panel {
     @include background;
     height: 100%;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%;
+    overflow-y: auto;
 
     div + div {
       margin-top: 1em;
+    }
+  }
+  .control {
+    align-items: center;
+    display: grid;
+    gap: 0.5em;
+    padding: 0 0.5em 0.5em;
+    grid:
+      "title value" auto
+      "slider slider" auto / 1fr auto;
+
+    :global(input[type="range"]) {
+      grid-area: slider;
+      width: 100%;
     }
   }
 
@@ -30,7 +45,7 @@
 
 <script>
   import { fly } from "svelte/transition";
-  import { userSettings } from "../stores";
+  import { sampleVolumes, sampleVelocities, reverbWetDry } from "../stores";
 
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
@@ -49,12 +64,75 @@
   }}
 >
   <fieldset>
-    <legend>Audio Settings</legend>
-    <div>Velocities</div>
-    <div>
-      Display Note Velocities:
-      <!-- <input type="checkbox" bind:checked={$userSettings.showNoteVelocities} /> -->
+    <legend>Piano Volumes</legend>
+    <div class="control">
+      <span>Strings</span>
+      <span>{$sampleVolumes.strings}</span>
+      <RangeSlider
+        min="-60"
+        max="10"
+        step="1"
+        bind:value={$sampleVolumes.strings}
+        name="strings-volume"
+      />
     </div>
-    >
+    <div class="control">
+      <span>Harmonics</span>
+      <span>{$sampleVolumes.harmonics}</span>
+      <RangeSlider
+        min="-60"
+        max="10"
+        step="1"
+        bind:value={$sampleVolumes.harmonics}
+        name="harmonics-volume"
+      />
+    </div>
+    <div class="control">
+      <span>Pedals</span>
+      <span>{$sampleVolumes.pedals}</span>
+      <RangeSlider
+        min="-60"
+        max="10"
+        step="1"
+        bind:value={$sampleVolumes.pedals}
+        name="pedals-volume"
+      />
+    </div>
+    <div class="control">
+      <span>Keybed</span>
+      <span>{$sampleVolumes.keybed}</span>
+      <RangeSlider
+        min="-60"
+        max="10"
+        step="1"
+        bind:value={$sampleVolumes.keybed}
+        name="keybed-volume"
+      />
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Audio Settings</legend>
+    <div class="control">
+      <span>Velocities</span>
+      <span>{$sampleVelocities}</span>
+      <RangeSlider
+        min="1"
+        max="16"
+        step="1"
+        bind:value={$sampleVelocities}
+        name="sample-velocities"
+      />
+    </div>
+    <div class="control">
+      <span>Reverb</span>
+      <span>{$reverbWetDry}</span>
+      <RangeSlider
+        min="0"
+        max="1"
+        step=".1"
+        bind:value={$reverbWetDry}
+        name="reverb-wetdry"
+      />
+    </div>
   </fieldset>
 </div>
