@@ -1,21 +1,7 @@
 ---
-import Pianolatron from '../App.svelte'
+import BaseLayout from "../layouts/base.astro";
+import Pianolatron from "../App.svelte";
 ---
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
-    <style global lang="scss">
-      @import "../styles/base";
-      @import "../styles/loader";
-      @import "../styles/hole-highlighting";
-      @import "../styles/overlay-buttons";
-    </style>
-  </head>
-  <body>
-    <Pianolatron client:only/>
-  </body>
-</html>
+<BaseLayout title="Pianolatron">
+  <Pianolatron client:only/>
+</BaseLayout>

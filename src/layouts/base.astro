@@ -1,0 +1,22 @@
+---
+import Footer from './footer.astro'
+const {title} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <style global lang="scss">
+      @import "../styles/base";
+      @import "../styles/loader";
+      @import "../styles/hole-highlighting";
+      @import "../styles/overlay-buttons";
+    </style>
+  </head>
+  <body>
+    <slot/>
+    <Footer/>
+  </body>
+</html>
