@@ -47,7 +47,7 @@
     volume: {
       strings: $sampleVolumes.strings,
       harmonics: $sampleVolumes.harmonics,
-      pedal: $sampleVolumes.pedals,
+      pedal: $sampleVolumes.pedal,
       keybed: $sampleVolumes.keybed,
     },
   });
@@ -80,7 +80,6 @@
       softOnOff.set(pedals.includes(SOFT_PEDAL));
     } else {
       sustainOnOff.set(false);
-      piano.pedalUp();
       softOnOff.set(false);
     }
 
@@ -99,6 +98,12 @@
     }
     fn();
     setPlayerStateAtTick($currentTick);
+  };
+
+  const updatePiano = () => {
+    for (const [key] of Object.entries($sampleVolumes)) {
+      piano[key].value = $sampleVolumes[key];
+    }
   };
 
   const startNote = (noteNumber, velocity) => {
@@ -265,6 +270,9 @@
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
+  $: $sampleVolumes, updatePiano();
+  // $: $sampleVelocities, updatePiano();
+  // $: $reverbWetDry, updatePiano();
 
   export {
     midiSamplePlayer,
