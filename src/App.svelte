@@ -232,6 +232,7 @@
   };
 
   onMount(async () => {
+    document.getElementById("loading").remove();
     ({
       midiSamplePlayer,
       pianoReady,

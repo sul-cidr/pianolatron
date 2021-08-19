@@ -3,5 +3,11 @@ import BaseLayout from "../layouts/base.astro";
 import Pianolatron from "../App.svelte";
 ---
 <BaseLayout title="Pianolatron">
+    <div id="loading">
+      <div>
+        <span></span> <span></span> <span></span> <span></span> <span></span>
+      </div>
+      Loading application...
+    </div>
   <Pianolatron client:only/>
 </BaseLayout>
