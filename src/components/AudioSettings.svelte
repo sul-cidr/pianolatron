@@ -89,12 +89,12 @@
     </div>
     <div class="control">
       <span>Pedals</span>
-      <span>{$sampleVolumes.pedals}</span>
+      <span>{$sampleVolumes.pedal}</span>
       <RangeSlider
         min="-60"
         max="10"
         step="1"
-        bind:value={$sampleVolumes.pedals}
+        bind:value={$sampleVolumes.pedal}
         name="pedals-volume"
       />
     </div>
