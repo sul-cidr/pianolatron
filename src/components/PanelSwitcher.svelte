@@ -30,8 +30,11 @@
 </style>
 
 <script>
+<<<<<<< HEAD
   import Icon from "../ui-components/Icon.svelte";
 
+=======
+>>>>>>> ead0d35... Add panel and icon for audio settings
   const panels = ["controls", "settings", "audio"];
   export let selectedPanel;
 </script>
