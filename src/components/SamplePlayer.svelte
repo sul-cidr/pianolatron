@@ -103,9 +103,10 @@
   };
 
   const updatePiano = () => {
-    for (const [key] of Object.entries($sampleVolumes)) {
-      piano[key].value = $sampleVolumes[key];
-    }
+    piano.strings.value = $sampleVolumes.strings;
+    piano.harmonics.value = $sampleVolumes.harmonics;
+    piano.pedal.value = $sampleVolumes.pedal;
+    piano.keybed.value = $sampleVolumes.keybed;
   };
 
   const updateReverb = () => {
