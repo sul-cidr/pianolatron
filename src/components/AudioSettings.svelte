@@ -129,7 +129,7 @@
       <RangeSlider
         min="0"
         max="1"
-        step=".1"
+        step=".05"
         bind:value={$reverbWetDry}
         name="reverb-wetdry"
       />
