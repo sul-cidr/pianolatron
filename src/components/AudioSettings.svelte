@@ -117,7 +117,7 @@
       <span>{$sampleVelocities}</span>
       <RangeSlider
         min="1"
-        max="4"
+        max="16"
         step="1"
         bind:value={$sampleVelocities}
         name="sample-velocities"
