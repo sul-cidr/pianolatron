@@ -116,6 +116,12 @@
     piano.connect(reverb);
   };
 
+  const updateReverb = () => {
+    reverb.dispose();
+    reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
+    piano.connect(reverb);
+  };
+
   const startNote = (noteNumber, velocity) => {
     const modifiedVelocity =
       ((($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100) *
