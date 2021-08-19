@@ -18,6 +18,9 @@
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
+    sampleVolumes,
+    sampleVelocities,
+    reverbWetDry,
   } from "../stores";
 
   let tempoMap;
@@ -37,19 +40,19 @@
 
   const piano = new Piano({
     url: "samples/",
-    velocities: 4,
+    velocities: $sampleVelocities,
     release: true,
     pedal: true,
     maxPolyphony: 64,
     volume: {
-      strings: -15,
-      harmonics: -10,
-      pedal: -10,
-      keybed: -10,
+      strings: $sampleVolumes.strings,
+      harmonics: $sampleVolumes.harmonics,
+      pedal: $sampleVolumes.pedals,
+      keybed: $sampleVolumes.keybed,
     },
   });
 
-  const reverb = new Reverb({ wet: 0.7 }).toDestination();
+  const reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
   piano.connect(reverb);
 
   const pianoReady = piano.load();
