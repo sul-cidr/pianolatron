@@ -13,6 +13,7 @@
   import PlaybackControls from "./PlaybackControls.svelte";
   import BasicSettings from "./BasicSettings.svelte";
   import AdvancedSettings from "./AdvancedSettings.svelte";
+  import AudioSettings from "./AudioSettings.svelte";
 
   export let playPauseApp;
   export let skipToPercentage;
@@ -26,6 +27,8 @@
   <BasicSettings {skipToPercentage} />
   {#if selectedPanel === "settings"}
     <AdvancedSettings />
+  {:else if selectedPanel === "audio"}
+    <AudioSettings />
   {/if}
 </div>
 <PlaybackControls {playPauseApp} {stopApp} />
