@@ -232,6 +232,30 @@
     if (immediate) fn();
     actionInterval = easingInterval(fn);
   };
+
+  const updateKeyBinding = (shortcut, detail) => {
+    errorMessage = undefined;
+
+    if (
+      Object.values($keyMap)
+        .map(({ code }) => code)
+        .includes(detail.code) &&
+      detail.code !== $keyMap[shortcut].code
+    ) {
+      errorMessage = `Cancelled -- the "${detail.key}" key is already assigned!`;
+      return;
+    }
+
+    if (unusableKeys.includes(detail.code)) {
+      errorMessage = `Cancelled -- the "${detail.key}" key cannot be assigned!`;
+      return;
+    }
+
+    $keyMap[shortcut].code = detail.code;
+    $keyMap[shortcut].key = detail.key;
+
+    $keyMap[shortcut].isChanged = detail.key !== defaultKeyMap[shortcut].key;
+  };
 </script>
 
 {#if $showKeybindingsConfig}
@@ -243,29 +267,7 @@
       {#each Object.keys($keyMap) as shortcut}
         <KeyboardShortcutEditorRow
           shortcut={$keyMap[shortcut]}
-          on:update={({ detail }) => {
-            errorMessage = undefined;
-            if (
-              Object.values($keyMap)
-                .map(({ code }) => code)
-                .includes(detail.code) &&
-              detail.code !== $keyMap[shortcut].code
-            ) {
-              errorMessage = `Cancelled -- the "${detail.key}" key is already assigned!`;
-              return;
-            }
-
-            if (unusableKeys.includes(detail.code)) {
-              errorMessage = `Cancelled -- the "${detail.key}" key cannot be assigned!`;
-              return;
-            }
-
-            $keyMap[shortcut].code = detail.code;
-            $keyMap[shortcut].key = detail.key;
-
-            $keyMap[shortcut].isChanged =
-              detail.key !== defaultKeyMap[shortcut].key;
-          }}
+          on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
           on:reset={() => ($keyMap[shortcut] = { ...defaultKeyMap[shortcut] })}
         />
       {/each}
