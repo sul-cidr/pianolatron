@@ -36,7 +36,7 @@
   const resetShortcut = () => dispatch("reset");
 </script>
 
-<dt>{shortcut.description}</dt>
+<dt data-tooltip={shortcut.help}>{shortcut.description}</dt>
 <dd>
   {#if editing}
     <span>Choose a new keystroke...</span>

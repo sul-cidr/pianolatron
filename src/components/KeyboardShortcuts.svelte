@@ -31,36 +31,107 @@
   import { get, writable } from "svelte/store";
 
   const defaultKeyMap = {
-    SOFT: { code: "KeyB", key: "b", description: "Soft Pedal" },
-    SUSTAIN: { code: "Space", key: "␣", description: "Sustain Pedal" },
-    ACCENT: { code: "KeyN", key: "n", description: "Accent Button" },
+    SOFT: {
+      code: "KeyB",
+      key: "b",
+      description: "Soft Pedal",
+      help: "Hold down to apply the soft pedal",
+    },
+    SUSTAIN: {
+      code: "Space",
+      key: "␣",
+      description: "Sustain Pedal",
+      help: "Hold down to apply the sustain pedal",
+    },
+    ACCENT: {
+      code: "KeyN",
+      key: "n",
+      description: "Accent Button",
+      help: "Hold down to apply a bump to the intensity",
+    },
 
-    VOLUME_UP: { code: "KeyO", key: "o", description: "Volume Up" },
-    VOLUME_DOWN: { code: "KeyI", key: "i", description: "Volume Down" },
-    BASS_VOLUME_UP: { code: "Digit4", key: "4", description: "Bass Volume Up" },
+    VOLUME_UP: {
+      code: "KeyO",
+      key: "o",
+      description: "Volume Up",
+      help:
+        "Increase the main volume (use Shift for a larger increment, and Ctrl for finer-grained control)",
+    },
+    VOLUME_DOWN: {
+      code: "KeyI",
+      key: "i",
+      description: "Volume Down",
+      help:
+        "Decrease the main volume (use Shift for a larger increment, and Ctrl for finer-grained control)",
+    },
+    BASS_VOLUME_UP: {
+      code: "Digit4",
+      key: "4",
+      description: "Bass Volume Up",
+      help:
+        "Increase the bass volume (use Shift for a larger increment, and Ctrl for finer-grained control)",
+    },
     BASS_VOLUME_DOWN: {
       code: "KeyE",
       key: "e",
       description: "Bass Volume Down",
+      help:
+        "Decrease the bass volume (use Shift for a larger increment, and Ctrl for finer-grained control)",
     },
     TREBLE_VOLUME_UP: {
       code: "Digit0",
       key: "0",
       description: "Treble Volume Up",
+      help:
+        "Increase the treble volume (use Shift for a larger increment, and Ctrl for finer-grained control)",
     },
     TREBLE_VOLUME_DOWN: {
       code: "KeyP",
       key: "p",
       description: "Treble Volume Down",
+      help:
+        "Decrease the treble volume (use Shift for a larger increment, and Ctrl for finer-grained control)",
     },
 
-    TEMPO_UP: { code: "KeyT", key: "t", description: "Tempo Up" },
-    TEMPO_DOWN: { code: "KeyR", key: "r", description: "Tempo Down" },
+    TEMPO_UP: {
+      code: "KeyT",
+      key: "t",
+      description: "Tempo Up",
+      help:
+        "Increase the tempo (use Shift for a larger increment, and Ctrl for finer-grained control)",
+    },
+    TEMPO_DOWN: {
+      code: "KeyR",
+      key: "r",
+      description: "Tempo Down",
+      help:
+        "Decrease the tempo (use Shift for a larger increment, and Ctrl for finer-grained control)",
+    },
 
-    PLAY_PAUSE: { code: "Digit7", key: "7", description: "Play/Pause" },
-    REWIND: { code: "Backspace", key: "←", description: "Rewind Roll" },
-    FORWARD: { code: "Digit8", key: "8", description: "Move Roll Forwards" },
-    BACKWARD: { code: "Digit6", key: "6", description: "Move Roll Backwards" },
+    PLAY_PAUSE: {
+      code: "Digit7",
+      key: "7",
+      description: "Play/Pause",
+      help: "Play or pause the roll playback",
+    },
+    REWIND: {
+      code: "Backspace",
+      key: "←",
+      description: "Rewind Roll",
+      help: "Rewind the roll to the beginning of the holes",
+    },
+    FORWARD: {
+      code: "Digit8",
+      key: "8",
+      description: "Move Roll Forwards",
+      help: "Advance the roll forwards (hold down to accelerate)",
+    },
+    BACKWARD: {
+      code: "Digit6",
+      key: "6",
+      description: "Move Roll Backwards",
+      help: "Move the roll backwards (hold down to accelerate)",
+    },
   };
   export const keyMap = writable(JSON.parse(JSON.stringify(defaultKeyMap)));
 
