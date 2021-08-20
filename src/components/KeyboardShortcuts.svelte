@@ -135,6 +135,15 @@
   };
   export const keyMap = writable(JSON.parse(JSON.stringify(defaultKeyMap)));
 
+  const unusableKeys = [
+    "Escape",
+    "ControlLeft",
+    "ControlRight",
+    "Enter",
+    "ShiftLeft",
+    "ShiftRight",
+  ];
+
   const showKeybindingsConfig = writable(true);
   export const toggleKeybindingsConfig = () =>
     showKeybindingsConfig.update((val) => !val);
@@ -245,6 +254,12 @@
               errorMessage = `Cancelled -- the "${detail.key}" key is already assigned!`;
               return;
             }
+
+            if (unusableKeys.includes(detail.code)) {
+              errorMessage = `Cancelled -- the "${detail.key}" key cannot be assigned!`;
+              return;
+            }
+
             $keyMap[shortcut].code = detail.code;
             $keyMap[shortcut].key = detail.key;
 
