@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../layouts/base.astro";
+import Pianolatron from "../App.svelte";
+---
+<BaseLayout title="Pianolatron">
+    <div id="loading">
+      <div>
+        <span></span>&nbsp;<span></span>&nbsp;<span></span>&nbsp;<span></span>&nbsp;<span></span>
+      </div>
+      Loading application...
+    </div>
+  <Pianolatron client:only/>
+</BaseLayout>

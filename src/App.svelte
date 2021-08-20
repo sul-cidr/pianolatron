@@ -79,7 +79,7 @@
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
-  import catalog from "./assets/catalog.json";
+  import catalog from "./catalog.json";
 
   let appReady = false;
   let mididataReady;
@@ -165,7 +165,7 @@
   };
 
   const loadRoll = (roll) => {
-    mididataReady = fetch(`./assets/midi/${roll.druid}.mid`)
+    mididataReady = fetch(`./midi/${roll.druid}.mid`)
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
@@ -180,7 +180,7 @@
         currentRoll = previousRoll;
       });
 
-    metadataReady = fetch(`./assets/json/${roll.druid}.json`)
+    metadataReady = fetch(`./json/${roll.druid}.json`)
       .then((metadataResponse) => {
         if (metadataResponse.status === 200) return metadataResponse.json();
         throw new Error("Error fetching metadata file! (Operation cancelled)");
@@ -232,6 +232,7 @@
   };
 
   onMount(async () => {
+    document.getElementById("loading").remove();
     ({
       midiSamplePlayer,
       pianoReady,
