@@ -1,45 +1,402 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pianolatron</title>
-    <link rel="stylesheet" href="styles/styles.css" />
-  </head>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pianolatron</title><style global="" type="text/css">*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-  <body>
-    <script type="module" src="index.js"></script>
-    <div id="loading">
-      <div>
-        <span></span> <span></span> <span></span> <span></span> <span></span>
-      </div>
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+body {
+  background: linear-gradient(var(--background-angle), var(--background-darker) 0%, var(--background-color) 25%, var(--background-color) 75%, var(--background-darker) 100%);
+  background-attachment: fixed;
+  background-position: center;
+  font-family: sans-serif;
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  transition: background 0.2s ease;
+  --background-color: #dad7cb;
+  --background-darker: #bab59e;
+  --primary-accent: #8c1515;
+  --primary-accent-semiopaque: rgba(140, 21, 21, 0.5);
+  --background-angle: 75deg;
+}
+body.blue {
+  --background-color: aliceblue;
+  --background-darker: hsl(208, 100%, 90%);
+  --primary-accent: steelblue;
+  --primary-accent-semiopaque: rgba(70, 130, 180, 0.5);
+}
+body.green {
+  --primary-accent: darkolivegreen;
+  --primary-accent-semiopaque: rgba(85, 107, 47, 0.5);
+}
+body.grey {
+  --background-color: gainsboro;
+  --background-darker: hsl(0, 0%, 71%);
+  --primary-accent: darkslategrey;
+  --primary-accent-semiopaque: rgba(47, 79, 79, 0.5);
+}
+
+a {
+  -webkit-text-decoration-skip: ink;
+          text-decoration-skip-ink: auto;
+}
+
+h1 {
+  font-family: serif;
+}
+
+footer {
+  bottom: 0;
+  display: flex;
+  gap: 2em;
+  justify-content: space-between;
+  left: 0;
+  opacity: 0.2;
+  padding: 0.4em 1em;
+  pointer-events: none;
+  position: absolute;
+  transition: all 0.3s ease;
+  width: 100vw;
+  z-index: 6;
+}
+footer:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 1;
+}
+footer:hover a {
+  color: white;
+}
+footer a {
+  display: flex;
+  vertical-align: bottom;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  color: black;
+  text-decoration: none;
+  align-items: center;
+  line-height: 25px;
+  gap: 0.25em;
+  pointer-events: auto;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+footer img {
+  margin-top: -8px;
+}
+footer svg {
+  margin-top: -4px;
+  width: 1em;
+}
+footer svg path {
+  fill: white;
+}
+footer svg rect {
+  fill: grey;
+}
+
+kbd {
+  background: linear-gradient(-225deg, #d5dbe4, #f8f8f8);
+  border-radius: 2px;
+  box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px rgba(30, 35, 90, 0.4);
+  color: black;
+  display: inline-block;
+  font-family: "Courier New";
+  font-size: 12px;
+  height: 18px;
+  justify-content: center;
+  line-height: 10px;
+  margin-right: 0.4em;
+  padding: 3px 5px;
+  text-align: center;
+  vertical-align: text-bottom;
+  width: 20px;
+}
+kbd.depressed {
+  box-shadow: inset 0 -1px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 0q 2px 1px rgba(30, 35, 90, 0.4);
+  padding-top: 4px;
+}
+
+#loading {
+  position: absolute;
+  display: grid;
+  place-content: center;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  color: var(--primary-accent);
+  font-size: 1.4em;
+  text-shadow: 1px 2px white;
+}
+#loading div {
+  width: 100px;
+  height: 80px;
+  text-align: center;
+  font-size: 10px;
+  margin: 10px auto;
+}
+#loading div span {
+  background-color: var(--primary-accent);
+  height: 100%;
+  width: 12px;
+  display: inline-block;
+  box-shadow: 0px 0px 10px 3px white;
+  border-radius: 0px 20px 0px 20px;
+  -webkit-animation: pulse 1.2s infinite ease-in-out;
+          animation: pulse 1.2s infinite ease-in-out;
+}
+#loading div span:nth-child(2) {
+  -webkit-animation-delay: -1.1s;
+          animation-delay: -1.1s;
+}
+#loading div span:nth-child(3) {
+  -webkit-animation-delay: -1s;
+          animation-delay: -1s;
+}
+#loading div span:nth-child(4) {
+  -webkit-animation-delay: -0.9s;
+          animation-delay: -0.9s;
+}
+#loading div span:nth-child(5) {
+  -webkit-animation-delay: -0.8s;
+          animation-delay: -0.8s;
+}
+
+@-webkit-keyframes pulse {
+  0%, 40%, 100% {
+    transform: scaleY(0.6);
+  }
+  20% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 40%, 100% {
+    transform: scaleY(0.6);
+  }
+  20% {
+    transform: scaleY(1);
+  }
+}
+#roll-viewer mark {
+  --highlight-color: yellow;
+  background-color: transparent;
+}
+#roll-viewer mark:hover {
+  box-shadow: none;
+  outline: 6px solid darkturquoise;
+  outline-offset: 4px;
+  z-index: 1;
+}
+#roll-viewer mark:hover::before {
+  height: 0;
+  position: relative;
+}
+#roll-viewer mark:hover::after {
+  background-color: darkturquoise;
+  color: white;
+  content: attr(data-hole-label);
+  display: block;
+  font-weight: bold;
+  left: calc( 100% + 4px + 6px );
+  padding: 8px 10px 8px 4px;
+  position: absolute;
+  text-shadow: 0px 0px 8px black;
+  top: -10px;
+  transform: none;
+}
+#roll-viewer mark.active::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  mix-blend-mode: multiply;
+  -webkit-animation: mark-recede 0.5s ease-in-out;
+          animation: mark-recede 0.5s ease-in-out;
+  background-color: var(--highlight-color);
+  box-shadow: 0 0 5px var(--highlight-color);
+  display: inline-block;
+  border-radius: 20px;
+}
+#roll-viewer mark.flag-left:hover::after {
+  left: auto;
+  right: calc( 100% + 4px + 6px );
+  padding: 8px 4px 8px 10px;
+}
+#roll-viewer.active-note-details mark.active::after {
+  background-color: none;
+  color: white;
+  content: attr(data-hole-label);
+  display: block;
+  font-weight: bold;
+  left: 50%;
+  padding: 8px 4px;
+  position: absolute;
+  text-shadow: 0px 0px 8px black;
+  top: 0;
+  mix-blend-mode: normal;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+}
+#roll-viewer.active-note-details mark:hover::after {
+  left: calc( 100% + 4px + 6px );
+  padding: 8px 10px 8px 4px;
+  top: -10px;
+  transform: none;
+}
+#roll-viewer.active-note-details mark.flag-left:hover::after {
+  left: auto;
+  right: calc( 100% + 4px + 6px );
+  padding: 8px 4px 8px 10px;
+}
+#roll-viewer.highlight-enabled-holes mark {
+  --highlight-color: yellow !important;
+}
+#roll-viewer:not(.show-note-velocities) mark.note {
+  --highlight-color: yellow !important;
+}
+#roll-viewer.show-note-velocities mark.note:hover::after {
+  content: attr(data-hole-label) "\av:" attr(data-note-velocity);
+}
+#roll-viewer.show-note-velocities.active-note-details mark.note.active::after {
+  content: attr(data-hole-label) "\av:" attr(data-note-velocity);
+}
+#roll-viewer.show-note-velocities:not(.play-expressions):not(.highlight-enabled-holes) mark.note {
+  --highlight-color: hsla(217, 73%, 86%, 0.8) !important;
+}
+#roll-viewer.show-note-velocities:not(.play-expressions) mark.note:hover::after {
+  content: attr(data-hole-label) "\av:64";
+}
+#roll-viewer.show-note-velocities:not(.play-expressions).active-note-details mark.note.active::after {
+  content: attr(data-hole-label) "\av:64";
+}
+#roll-viewer:not(.use-roll-pedaling) mark.pedal {
+  --highlight-color: none !important;
+}
+#roll-viewer:not(.use-roll-pedaling) rect.pedal {
+  fill: none;
+}
+#roll-viewer:not(.use-roll-pedaling).active-note-details mark.pedal.active::after {
+  content: none;
+}
+#roll-viewer:not(.play-expressions) mark.control {
+  --highlight-color: none !important;
+}
+#roll-viewer:not(.play-expressions) rect.control {
+  fill: none;
+}
+#roll-viewer:not(.play-expressions).active-note-details mark.control.active::after {
+  content: none;
+}
+#roll-viewer.highlight-enabled-holes:not(.play-expressions) rect.note {
+  fill: rgba(193, 213, 245, 0.8);
+}
+#roll-viewer svg rect {
+  pointer-events: all;
+}
+#roll-viewer:not(.highlight-enabled-holes) svg rect {
+  fill: none;
+}
+
+@-webkit-keyframes mark-recede {
+  from {
+    mix-blend-mode: normal;
+    padding: 2%;
+    opacity: 0.8;
+  }
+}
+
+@keyframes mark-recede {
+  from {
+    mix-blend-mode: normal;
+    padding: 2%;
+    opacity: 0.8;
+  }
+}
+.overlay-buttons {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  padding: 8px;
+  position: absolute;
+  z-index: 8;
+}
+.overlay-buttons button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  margin: 0;
+  padding: 0.35em 0.8em;
+  transition: all 0.2s;
+}
+.overlay-buttons button:focus, .overlay-buttons button:active {
+  outline: 0;
+}
+.overlay-buttons button:hover {
+  outline: 1px solid white;
+}
+.overlay-buttons button:active {
+  color: grey;
+}
+.overlay-buttons button:disabled {
+  color: grey;
+  cursor: not-allowed;
+}
+.overlay-buttons.top-center {
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+}
+.overlay-buttons.middle-right {
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+}
+.overlay-buttons.middle-right button {
+  padding: 0.8em 0.35em;
+}</style></head><body><div id="loading"><div><span></span>&nbsp;<span></span>&nbsp;<span></span>&nbsp;<span></span>&nbsp;<span></span></div>
       Loading application...
-    </div>
-    <footer>
-      <a
-        href="http://cidr.stanford.edu/"
-        title="Center for Interdisciplinary Digital Research @ Stanford Libraries"
-      >
-        <img src="assets/cidr_i.8x25.png" alt="CIDR logo" />
-        Powered by CIDR
-      </a>
+    </div><astro-root uid="M"></astro-root>
+<script type="module">
+import setup from 'https://sul-cidr.github.io/pianolatron/_astro_frontend/hydrate/only.js';
+setup("M", {}, async () => {
+  
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("https://sul-cidr.github.io/pianolatron/_astro/src/App.svelte.js"), import("https://sul-cidr.github.io/pianolatron/_snowpack/pkg/@astrojs.renderer-svelte.client.v0.1.1.js")]);
+  return (el, children) => hydrate(el)(Component, {}, children);
 
-      <a href="https://github.com/sul-cidr/pianolatron" target="_blank">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          aria-label="GitHub"
-          role="img"
-          viewBox="0 0 512 512"
-        >
-          <rect width="512" height="512" rx="15%"></rect>
-          <path
-            d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16
-        1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67
-        0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18
-        24 18 48l-1 70c0 6 3 12 16 12z"
-          ></path></svg
-        >GitHub</a
-      >
-    </footer>
-  </body>
-</html>
+});
+</script><footer><a href="http://cidr.stanford.edu/" title="Center for Interdisciplinary Digital Research @ Stanford Libraries"><img src="https://sul-cidr.github.io/pianolatron/cidr_i.8x25.png" alt="CIDR logo">
+    Powered by CIDR
+  </a><a href="https://github.com/sul-cidr/pianolatron" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%"></rect><path d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16
+    1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67
+    0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18
+    24 18 48l-1 70c0 6 3 12 16 12z"></path></svg>GitHub</a></footer></body></html>
