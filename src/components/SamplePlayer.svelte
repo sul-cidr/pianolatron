@@ -45,7 +45,7 @@
     velocities: $sampleVelocities,
     release: true,
     pedal: true,
-    maxPolyphony: 256,
+    maxPolyphony: Infinity,
     volume: {
       strings: $sampleVolumes.strings,
       harmonics: $sampleVolumes.harmonics,
@@ -287,7 +287,7 @@
       velocities: $sampleVelocities,
       release: true,
       pedal: true,
-      maxPolyphony: 256,
+      maxPolyphony: Infinity,
       volume: {
         strings: $sampleVolumes.strings,
         harmonics: $sampleVolumes.harmonics,
