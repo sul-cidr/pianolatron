@@ -283,7 +283,7 @@
         <KeyboardShortcutEditorRow
           shortcut={$keyMap[shortcut]}
           on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
-          on:reset={() => ($keyMap[shortcut] = { ...defaultKeyMap[shortcut] })}
+          on:reset={() => updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
         />
       {/each}
     </dl>
