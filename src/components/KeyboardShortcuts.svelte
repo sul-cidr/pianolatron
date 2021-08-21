@@ -15,6 +15,17 @@
     z-index: z($main-context, notifications);
   }
 
+  header {
+    font-size: 1.4em;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 0.5em;
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+
   p.error-message {
     padding: 1em 0;
     color: red;
@@ -260,6 +271,8 @@
 
 {#if $showKeybindingsConfig}
   <div>
+    <header>Keyboard Controls</header>
+    <p>Click the edit button to reassign a command's key.</p>
     {#if errorMessage}
       <p class="error-message" transition:slide>{errorMessage}</p>
     {/if}
