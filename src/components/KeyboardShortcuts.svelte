@@ -27,8 +27,10 @@
   }
 
   p.error-message {
-    padding: 1em 0;
+    border-radius: 5px;
+    border: 1px solid red;
     color: red;
+    padding: 0.25em;
   }
 
   dl {
