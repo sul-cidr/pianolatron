@@ -38,6 +38,29 @@
     grid-template-columns: auto auto;
     justify-content: space-between;
   }
+
+  p.reset {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 1em 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+
+    svg {
+      stroke: grey;
+    }
+
+    &:hover svg {
+      stroke: black;
+    }
+  }
 </style>
 
 <script context="module">
@@ -269,6 +292,11 @@
 
     $keyMap[shortcut].isChanged = detail.key !== defaultKeyMap[shortcut].key;
   };
+
+  const resetShortcuts = () => {
+    errorMessage = undefined;
+    $keyMap = JSON.parse(JSON.stringify(defaultKeyMap));
+  };
 </script>
 
 {#if $showKeybindingsConfig}
@@ -287,6 +315,24 @@
         />
       {/each}
     </dl>
+    {#if Object.values($keyMap).some((shortcut) => shortcut.isChanged)}
+      <p class="reset" transition:slide>
+        Reset to defaults: <button on:click={resetShortcuts}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m 10.953,20.006141 a 8,8 0 1 1 4,-0.5 m 5,0.5 h -5 v -5" />
+          </svg>
+        </button>
+      </p>
+    {/if}
   </div>
 {/if}
 
