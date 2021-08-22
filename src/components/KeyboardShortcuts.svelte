@@ -182,7 +182,7 @@
     "ShiftRight",
   ];
 
-  const showKeybindingsConfig = writable(true);
+  const showKeybindingsConfig = writable(false);
   export const toggleKeybindingsConfig = () =>
     showKeybindingsConfig.update((val) => !val);
 </script>

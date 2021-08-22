@@ -27,7 +27,7 @@
     font-size: 1.4em;
   }
 
-  button {
+  .theme-selector button {
     height: 1.5em;
     width: 1.5em;
     border-radius: 1.5em;
@@ -55,6 +55,12 @@
       background: darkslategrey;
     }
   }
+
+  button.configure-keybindings {
+    margin: 1em 0;
+    padding: 3px 0;
+    width: 100%;
+  }
 </style>
 
 <script>
@@ -66,6 +72,7 @@
     useMidiTempoEventsOnOff,
     userSettings,
   } from "../stores";
+  import { toggleKeybindingsConfig } from "./KeyboardShortcuts.svelte";
 
   let el;
   const themes = ["cardinal", "blue", "green", "grey"];
@@ -127,7 +134,7 @@
     </div>
   </fieldset>
 
-  <div>
+  <div class="theme-selector">
     Theme:
     {#each themes as theme}
       <button
@@ -141,4 +148,7 @@
       />
     {/each}
   </div>
+  <button class="configure-keybindings" on:click={toggleKeybindingsConfig}
+    >Configure Key Bindings</button
+  >
 </div>
