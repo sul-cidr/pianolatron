@@ -604,10 +604,12 @@
       {updateTickByViewportIncrement}
     />
   {/if}
-  <RollViewerLegend
-    {defaultHoleColor}
-    {pedalHoleColor}
-    {controlHoleColor}
-    {holeColorMap}
-  />
+  {#if rollImageReady}
+    <RollViewerLegend
+      {defaultHoleColor}
+      {pedalHoleColor}
+      {controlHoleColor}
+      {holeColorMap}
+    />
+  {/if}
 </div>
