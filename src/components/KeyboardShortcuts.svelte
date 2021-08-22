@@ -16,10 +16,12 @@
   }
 
   header {
+    display: flex;
     font-size: 1.4em;
     font-weight: bold;
-    text-decoration: underline;
+    justify-content: space-between;
     margin-bottom: 0.5em;
+    text-decoration: underline;
   }
 
   p {
@@ -301,7 +303,25 @@
 
 {#if $showKeybindingsConfig}
   <div>
-    <header>Keyboard Controls</header>
+    <header>
+      Keyboard Controls
+      <button on:click={toggleKeybindingsConfig}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg></button
+      >
+    </header>
     <p>Click the edit button to reassign a command's key.</p>
     {#if errorMessage}
       <p class="error-message" transition:slide>{errorMessage}</p>
@@ -426,6 +446,10 @@
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         keyMap.TEMPO_DOWN.active = true;
         decrement(config.tempo, event);
+        break;
+
+      case "Escape":
+        if ($showKeybindingsConfig) toggleKeybindingsConfig();
         break;
 
       // no default
