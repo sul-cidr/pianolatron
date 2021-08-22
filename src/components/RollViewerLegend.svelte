@@ -24,9 +24,7 @@
   dt {
     height: 1em;
     width: 1em;
-    border: 1px solid #eaeaea;
     float: left;
-    margin-left: 0.5em;
     margin-right: 0.5em;
     border-radius: 4px;
     transition: background-color 0.25s ease;
