@@ -29,12 +29,8 @@
     border-radius: 4px;
     transition: background-color 0.25s ease;
 
-    &.struck-out {
+    &.disabled {
       background-color: none !important;
-
-      + dd {
-        text-decoration: line-through;
-      }
     }
   }
 
@@ -116,14 +112,14 @@
       style={$rollPedalingOnOff
         ? `background-color: hsl(${pedalHoleColor});`
         : ""}
-      class:struck-out={!$rollPedalingOnOff}
+      class:disabled={!$rollPedalingOnOff}
     />
     <dd>Pedal Holes</dd>
     <dt
       style={$playExpressionsOnOff
         ? `background-color: hsl(${controlHoleColor});`
         : ""}
-      class:struck-out={!$playExpressionsOnOff}
+      class:disabled={!$playExpressionsOnOff}
     />
     <dd>Control Holes</dd>
     {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
