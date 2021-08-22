@@ -188,7 +188,7 @@
 </script>
 
 <script>
-  import { slide } from "svelte/transition";
+  import { fade, slide } from "svelte/transition";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
   import {
     softOnOff,
@@ -302,7 +302,7 @@
 </script>
 
 {#if $showKeybindingsConfig}
-  <div>
+  <div transition:fade>
     <header>
       Keyboard Controls
       <button on:click={toggleKeybindingsConfig}>
