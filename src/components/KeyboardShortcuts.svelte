@@ -56,11 +56,11 @@
     margin: 0;
     padding: 0;
 
-    svg {
+    :global(svg) {
       stroke: grey;
     }
 
-    &:hover svg {
+    &:hover :global(svg) {
       stroke: black;
     }
   }
@@ -197,6 +197,7 @@
   import { get } from "svelte/store";
   import { fade, slide } from "svelte/transition";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
+  import Icon from "../ui-components/Icon.svelte";
   import {
     softOnOff,
     sustainOnOff,
@@ -343,21 +344,8 @@
     <header>
       Keyboard Controls
       <button on:click={toggleKeybindingsConfig}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg></button
-      >
+        <Icon name="cross" height="24" width="24" />
+      </button>
     </header>
     <p>Click the edit button to reassign a command's key.</p>
     {#if errorMessage}
@@ -375,18 +363,7 @@
     {#if Object.values($keyMap).some((shortcut) => shortcut.isChanged)}
       <p class="reset" transition:slide>
         Reset to defaults: <button on:click={resetShortcuts}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="m 10.953,20.006141 a 8,8 0 1 1 4,-0.5 m 5,0.5 h -5 v -5" />
-          </svg>
+          <Icon name="reset" height="24" width="24" />
         </button>
       </p>
     {/if}
