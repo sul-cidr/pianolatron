@@ -98,6 +98,7 @@
 </style>
 
 <script>
+  import { fade } from "svelte/transition";
   import {
     tempoCoefficient,
     ticksPerSecond,
@@ -114,7 +115,7 @@
   let collapsed = false;
 </script>
 
-<div class:collapsed>
+<div class:collapsed transition:fade|local>
   <label><input type="checkbox" bind:checked={collapsed} /></label>
   Tempo: {($tempoCoefficient * 100).toFixed(0)}%
   <br />
