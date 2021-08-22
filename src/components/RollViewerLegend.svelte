@@ -34,12 +34,25 @@
     }
   }
 
-  dd {
-    span {
-      display: inline-block;
-      text-align: right;
-      width: 3ch;
-      margin-right: 1ch;
+  dl:not(.hole-color-legend) dd span {
+    display: inline-block;
+    text-align: right;
+    width: 3ch;
+    margin-right: 1ch;
+  }
+
+  dl.hole-color-legend {
+    margin-top: 0.5em;
+
+    dt {
+      height: 8em;
+    }
+
+    dd {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 8em;
     }
   }
 
@@ -122,18 +135,23 @@
       class:disabled={!$playExpressionsOnOff}
     />
     <dd>Control Holes</dd>
-    {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
-      <span class="heading">Note Velocities</span>
-      {#each holeColorMap as hsl, i}
-        <dt style="background-color: hsl({hsl});" />
-        <dd>
-          <span>{((i / holeColorMap.length) * 100).toFixed(0)}</span> -
-          <span>{(((i + 1) / holeColorMap.length) * 100).toFixed(0)}</span>%
-        </dd>
-      {/each}
-    {:else}
+    {#if !$userSettings.showNoteVelocities && !$userSettings.highlightEnabledHoles}
       <dt style="background-color: hsl({defaultHoleColor});" />
       <dd>Note Holes</dd>
     {/if}
   </dl>
+  {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
+    <dl class="hole-color-legend">
+      <dt
+        style={`background: linear-gradient(180deg, ${holeColorMap
+          .map(
+            (hsl, i) => `hsl(${hsl}) ${(i / (holeColorMap.length - 1)) * 100}%`,
+          )
+          .join(", ")})`}
+      />
+      <dd>
+        <span>↑ lower</span><span>Note Velocity</span><span>↓ higher</span>
+      </dd>
+    </dl>
+  {/if}
 </div>
