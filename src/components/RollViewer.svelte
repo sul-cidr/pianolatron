@@ -405,9 +405,9 @@
       navigatorAutoFade: false,
       navigatorPosition: "ABSOLUTE",
       navigatorTop: "0px",
-      navigatorLeft: `calc(100% - ${navigatorWidth}px)`,
+      navigatorLeft: "calc(100% - var(--navigator-width))",
       navigatorHeight: "100%",
-      navigatorWidth: `${navigatorWidth}px`,
+      navigatorWidth: "var(--navigator-width)",
       navigatorDisplayRegionColor: "transparent",
       animationTime: 0,
     });
@@ -589,8 +589,7 @@
   class:show-note-velocities={$userSettings.showNoteVelocities}
   class:use-roll-pedaling={$rollPedalingOnOff}
   class:play-expressions={$playExpressionsOnOff}
-  style={`--trackerbar-height: ${trackerbarHeight}px;` +
-    `--navigator-width: ${navigatorWidth}px`}
+  style={`--trackerbar-height: ${trackerbarHeight}px;`}
 >
   {#if !rollImageReady}
     <p transition:fade>Downloading roll image...</p>

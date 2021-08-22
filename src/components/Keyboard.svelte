@@ -18,6 +18,7 @@
     #keyboard {
       padding-top: 10%;
     }
+
     div#keys {
       top: 0;
     }
