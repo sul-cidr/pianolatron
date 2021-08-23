@@ -41,16 +41,4 @@
     top: 8px;
     transform: translateX(-50%);
   }
-
-  &.middle-right {
-    top: 50%;
-    right: 8px;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-
-    button {
-      padding: 0.8em 0.35em;
-    }
-  }
 }
