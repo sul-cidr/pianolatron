@@ -19,19 +19,19 @@
   let actionInterval;
 
   const keyMap = Object.freeze({
-    SOFT: "KeyQ",
-    SUSTAIN: "KeyC",
-    ACCENT: "Comma",
+    SOFT: "KeyB",
+    SUSTAIN: "Space",
+    ACCENT: "KeyN",
 
-    VOLUME_UP: "BracketRight",
-    VOLUME_DOWN: "BracketLeft",
+    VOLUME_UP: "KeyO",
+    VOLUME_DOWN: "KeyI",
     BASS_VOLUME_UP: "Digit4",
     BASS_VOLUME_DOWN: "KeyE",
     TREBLE_VOLUME_UP: "Digit0",
     TREBLE_VOLUME_DOWN: "KeyP",
 
-    TEMPO_UP: "KeyE",
-    TEMPO_DOWN: "KeyW",
+    TEMPO_UP: "KeyT",
+    TEMPO_DOWN: "KeyR",
 
     PLAY_PAUSE: "Digit7",
     REWIND: "Delete",

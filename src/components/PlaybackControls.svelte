@@ -57,7 +57,7 @@
     aria-pressed={$softOnOff}
     on:click={() => ($softOnOff = !$softOnOff)}
     >Soft
-    <kbd class:depressed={$softOnOff}>q</kbd></button
+    <kbd class:depressed={$softOnOff}>b</kbd></button
   >
   <button
     type="button"
@@ -65,7 +65,7 @@
     aria-pressed={$sustainOnOff}
     on:click={() => ($sustainOnOff = !$sustainOnOff)}
     >Sustain
-    <kbd class:depressed={$sustainOnOff}>c</kbd></button
+    <kbd class:depressed={$sustainOnOff}>Space</kbd></button
   >
   <br />
   <button
@@ -75,7 +75,7 @@
     aria-pressed={$accentOnOff}
     on:mousedown={() => ($accentOnOff = true)}
     >Accent
-    <kbd class:depressed={$accentOnOff}>,</kbd></button
+    <kbd class:depressed={$accentOnOff}>n</kbd></button
   >
 </div>
 <svelte:window on:mouseup={() => ($accentOnOff = false)} />

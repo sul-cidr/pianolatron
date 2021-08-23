@@ -36,8 +36,8 @@
   <div class="control">
     <span
       >Volume:
-      <kbd class:depressed={$activeShortcutKeys.volumeDown}>[</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.volumeUp}>]</kbd>↑</span
+      <kbd class:depressed={$activeShortcutKeys.volumeDown}>o</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.volumeUp}>i</kbd>↑</span
     >
     <span>{$volumeCoefficient}</span>
     <RangeSlider
@@ -81,8 +81,8 @@
   <div class="control">
     <span
       >Tempo:
-      <kbd class:depressed={$activeShortcutKeys.tempoDown}>w</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.tempoUp}>e</kbd>↑</span
+      <kbd class:depressed={$activeShortcutKeys.tempoDown}>r</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.tempoUp}>t</kbd>↑</span
     >
     <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider
