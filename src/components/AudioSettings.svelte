@@ -64,7 +64,7 @@
   }}
 >
   <fieldset>
-    <legend>Piano Volumes</legend>
+    <legend>Piano Sample Volumes</legend>
     <div class="control">
       <span>Strings</span>
       <span>{$sampleVolumes.strings}</span>
@@ -111,9 +111,9 @@
     </div>
   </fieldset>
   <fieldset>
-    <legend>Audio Settings</legend>
+    <legend>Audio Controls</legend>
     <div class="control">
-      <span>Velocities</span>
+      <span>Sample Count</span>
       <span>{$sampleVelocities}</span>
       <RangeSlider
         min="1"
