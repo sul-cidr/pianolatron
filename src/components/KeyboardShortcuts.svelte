@@ -10,10 +10,13 @@
     tempoCoefficient,
     activeShortcutKeys,
   } from "../stores";
-  import { clamp, enforcePrecision } from "../utils";
+  import { clamp, easingInterval, enforcePrecision } from "../utils";
 
   export let playPauseApp;
   export let stopApp;
+  export let updateTickByViewportIncrement;
+
+  let actionInterval;
 
   const keyMap = Object.freeze({
     SOFT: "KeyQ",
@@ -32,6 +35,8 @@
 
     PLAY_PAUSE: "Digit7",
     REWIND: "Delete",
+    FORWARD: "Digit8",
+    BACKWARD: "Digit6",
   });
 
   const config = {
@@ -89,6 +94,12 @@
 
   const increment = (...args) => updateStore(...args, /* increment = */ true);
   const decrement = (...args) => updateStore(...args, /* increment = */ false);
+
+  const keydownRepeatAction = (fn, immediate = true) => {
+    if (actionInterval) return;
+    if (immediate) fn();
+    actionInterval = easingInterval(fn);
+  };
 </script>
 
 <svelte:window
@@ -119,6 +130,20 @@
         event.preventDefault();
         $activeShortcutKeys.rewind = true;
         stopApp();
+        break;
+
+      case keyMap.FORWARD:
+        event.preventDefault();
+        keydownRepeatAction(() =>
+          updateTickByViewportIncrement(/* up = */ true),
+        );
+        break;
+
+      case keyMap.BACKWARD:
+        event.preventDefault();
+        keydownRepeatAction(() =>
+          updateTickByViewportIncrement(/* up = */ false),
+        );
         break;
 
       case keyMap.VOLUME_UP:
@@ -173,6 +198,9 @@
     }
   }}
   on:keyup={({ code }) => {
+    actionInterval?.clear();
+    actionInterval = undefined;
+
     switch (code) {
       case keyMap.SOFT:
         softOnOff.set(false);

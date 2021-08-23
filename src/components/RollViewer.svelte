@@ -562,6 +562,8 @@
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
       parseInt($rollMetadata.FIRST_HOLE, 10);
+
+  export { updateTickByViewportIncrement };
 </script>
 
 <div
