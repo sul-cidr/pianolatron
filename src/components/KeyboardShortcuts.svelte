@@ -5,6 +5,8 @@
     sustainOnOff,
     accentOnOff,
     volumeCoefficient,
+    bassVolumeCoefficient,
+    trebleVolumeCoefficient,
     tempoCoefficient,
     activeShortcutKeys,
   } from "../stores";
@@ -14,8 +16,14 @@
     SOFT: "KeyQ",
     SUSTAIN: "KeyC",
     ACCENT: "Comma",
+
     VOLUME_UP: "BracketRight",
     VOLUME_DOWN: "BracketLeft",
+    BASS_VOLUME_UP: "Digit4",
+    BASS_VOLUME_DOWN: "KeyE",
+    TREBLE_VOLUME_UP: "Digit0",
+    TREBLE_VOLUME_DOWN: "KeyP",
+
     TEMPO_UP: "KeyE",
     TEMPO_DOWN: "KeyW",
   });
@@ -23,6 +31,24 @@
   const config = {
     volume: {
       store: volumeCoefficient,
+      min: 0,
+      max: 4,
+      delta: 0.1,
+      shiftDelta: 0.4,
+      ctrlDelta: 0.05,
+      precision: 2,
+    },
+    bassVolume: {
+      store: bassVolumeCoefficient,
+      min: 0,
+      max: 4,
+      delta: 0.1,
+      shiftDelta: 0.4,
+      ctrlDelta: 0.05,
+      precision: 2,
+    },
+    trebleVolume: {
+      store: trebleVolumeCoefficient,
       min: 0,
       max: 4,
       delta: 0.1,
@@ -89,6 +115,30 @@
         decrement(config.volume, event);
         break;
 
+      case keyMap.BASS_VOLUME_UP:
+        event.preventDefault();
+        $activeShortcutKeys.bassVolumeUp = true;
+        increment(config.bassVolume, event);
+        break;
+
+      case keyMap.BASS_VOLUME_DOWN:
+        event.preventDefault();
+        $activeShortcutKeys.bassVolumeDown = true;
+        decrement(config.bassVolume, event);
+        break;
+
+      case keyMap.TREBLE_VOLUME_UP:
+        event.preventDefault();
+        $activeShortcutKeys.trebleVolumeUp = true;
+        increment(config.trebleVolume, event);
+        break;
+
+      case keyMap.TREBLE_VOLUME_DOWN:
+        event.preventDefault();
+        $activeShortcutKeys.trebleVolumeDown = true;
+        decrement(config.trebleVolume, event);
+        break;
+
       case keyMap.TEMPO_UP:
         event.preventDefault();
         $activeShortcutKeys.tempoUp = true;
@@ -124,6 +174,22 @@
 
       case keyMap.VOLUME_DOWN:
         $activeShortcutKeys.volumeDown = false;
+        break;
+
+      case keyMap.BASS_VOLUME_UP:
+        $activeShortcutKeys.bassVolumeUp = false;
+        break;
+
+      case keyMap.BASS_VOLUME_DOWN:
+        $activeShortcutKeys.bassVolumeDown = false;
+        break;
+
+      case keyMap.TREBLE_VOLUME_UP:
+        $activeShortcutKeys.trebleVolumeUp = false;
+        break;
+
+      case keyMap.TREBLE_VOLUME_DOWN:
+        $activeShortcutKeys.trebleVolumeDown = false;
         break;
 
       case keyMap.TEMPO_UP:

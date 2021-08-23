@@ -49,7 +49,11 @@
     />
   </div>
   <div class="control">
-    <span>Bass Volume:</span>
+    <span
+      >Bass Volume:
+      <kbd class:depressed={$activeShortcutKeys.bassVolumeDown}>e</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.bassVolumeUp}>4</kbd>↑</span
+    >
     <span>{$bassVolumeCoefficient}</span>
     <RangeSlider
       min="0"
@@ -60,7 +64,11 @@
     />
   </div>
   <div class="control">
-    <span>Treble Volume:</span>
+    <span
+      >Treble Volume:
+      <kbd class:depressed={$activeShortcutKeys.trebleVolumeDown}>p</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.trebleVolumeUp}>0</kbd>↑
+    </span>
     <span>{$trebleVolumeCoefficient}</span>
     <RangeSlider
       min="0"
