@@ -98,7 +98,7 @@
 </style>
 
 <script>
-  import { fade } from "svelte/transition";
+  import { fade, slide } from "svelte/transition";
   import {
     tempoCoefficient,
     ticksPerSecond,
@@ -137,12 +137,12 @@
     />
     <dd>Control Holes</dd>
     {#if !$userSettings.showNoteVelocities && !$userSettings.highlightEnabledHoles}
-      <dt style="background-color: hsl({defaultHoleColor});" />
-      <dd>Note Holes</dd>
+      <dt style="background-color: hsl({defaultHoleColor});" transition:slide />
+      <dd transition:slide>Note Holes</dd>
     {/if}
   </dl>
   {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
-    <dl class="hole-color-legend">
+    <dl class="hole-color-legend" transition:slide>
       <dt
         style={`background: linear-gradient(180deg, ${holeColorMap
           .map(
