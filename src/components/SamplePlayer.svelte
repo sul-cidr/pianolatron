@@ -98,10 +98,15 @@
     }
   };
 
+  const setTempo = (tempo) => {
+    midiSamplePlayer.setTempo(tempo * $tempoCoefficient);
+    $ticksPerSecond = (midiSamplePlayer.division * midiSamplePlayer.tempo) / 60;
+  };
+
   const setPlayerStateAtTick = (tick = $currentTick) => {
     if (midiSamplePlayer.tracks[0])
       midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
-    midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
+    setTempo(getTempoAtTick(tick));
 
     if (pedalingMap && $rollPedalingOnOff) {
       const pedals = pedalingMap.search($currentTick, $currentTick);
@@ -356,7 +361,7 @@
           softOnOff.set(!!value);
         }
       } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-        midiSamplePlayer.setTempo(data * $tempoCoefficient);
+        setTempo(data);
       }
     },
   );
@@ -372,8 +377,6 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
-  $: $ticksPerSecond =
-    (midiSamplePlayer.division * midiSamplePlayer.tempo) / 60;
 
   export {
     midiSamplePlayer,
