@@ -63,6 +63,8 @@ export const activeShortcutKeys = createStore({
   trebleVolumeDown: false,
   tempoUp: false,
   tempoDown: false,
+  playPause: false,
+  rewind: false,
 });
 
 // Playback State

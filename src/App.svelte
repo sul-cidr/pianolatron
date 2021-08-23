@@ -300,7 +300,7 @@
   {/if}
 </div>
 <SamplePlayer bind:this={samplePlayer} />
-<KeyboardShortcuts />
+<KeyboardShortcuts {playPauseApp} {stopApp} />
 <Notification />
 
 <svelte:window

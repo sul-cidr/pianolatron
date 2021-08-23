@@ -12,6 +12,9 @@
   } from "../stores";
   import { clamp, enforcePrecision } from "../utils";
 
+  export let playPauseApp;
+  export let stopApp;
+
   const keyMap = Object.freeze({
     SOFT: "KeyQ",
     SUSTAIN: "KeyC",
@@ -26,6 +29,9 @@
 
     TEMPO_UP: "KeyE",
     TEMPO_DOWN: "KeyW",
+
+    PLAY_PAUSE: "Digit7",
+    REWIND: "Delete",
   });
 
   const config = {
@@ -103,6 +109,18 @@
         accentOnOff.set(true);
         break;
 
+      case keyMap.PLAY_PAUSE:
+        event.preventDefault();
+        $activeShortcutKeys.playPause = true;
+        playPauseApp();
+        break;
+
+      case keyMap.REWIND:
+        event.preventDefault();
+        $activeShortcutKeys.rewind = true;
+        stopApp();
+        break;
+
       case keyMap.VOLUME_UP:
         event.preventDefault();
         $activeShortcutKeys.volumeUp = true;
@@ -166,6 +184,14 @@
 
       case keyMap.ACCENT:
         accentOnOff.set(false);
+        break;
+
+      case keyMap.PLAY_PAUSE:
+        $activeShortcutKeys.playPause = false;
+        break;
+
+      case keyMap.REWIND:
+        $activeShortcutKeys.rewind = false;
         break;
 
       case keyMap.VOLUME_UP:
