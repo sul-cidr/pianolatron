@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "gh-deploy": "SITE=https://sul-cidr.github.io/pianolatron/ bin/gh-deploy.sh",
+    "gh-deploy": "SITE=https://pianolatron.stanford.edu/ bin/gh-deploy.sh",
     "lint": "prettier --check . && eslint src/ --ext svelte --ext js"
   },
   "devDependencies": {
