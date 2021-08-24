@@ -34,7 +34,7 @@
     TEMPO_DOWN: "KeyR",
 
     PLAY_PAUSE: "Digit7",
-    REWIND: "Delete",
+    REWIND: "Backspace",
     FORWARD: "Digit8",
     BACKWARD: "Digit6",
   });

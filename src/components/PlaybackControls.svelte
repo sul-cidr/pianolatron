@@ -49,7 +49,7 @@
   >
   <button type="button" on:click={stopApp}
     >Rewind
-    <kbd class:depressed={$activeShortcutKeys.rewind}>Del</kbd></button
+    <kbd class:depressed={$activeShortcutKeys.rewind}>Backspace</kbd></button
   >
   <button
     type="button"
