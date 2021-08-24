@@ -31,22 +31,33 @@
 </style>
 
 <script>
-  import { softOnOff, sustainOnOff, accentOnOff } from "../stores";
+  import {
+    softOnOff,
+    sustainOnOff,
+    accentOnOff,
+    activeShortcutKeys,
+  } from "../stores";
 
   export let playPauseApp;
   export let stopApp;
 </script>
 
 <div id="playback-controls">
-  <button type="button" on:click={playPauseApp}>Play/Pause</button>
-  <button type="button" on:click={stopApp}>Rewind</button>
+  <button type="button" on:click={playPauseApp}
+    >Play/Pause
+    <kbd class:depressed={$activeShortcutKeys.playPause}>7</kbd></button
+  >
+  <button type="button" on:click={stopApp}
+    >Rewind
+    <kbd class:depressed={$activeShortcutKeys.rewind}>Del</kbd></button
+  >
   <button
     type="button"
     class:pedal-on={$softOnOff}
     aria-pressed={$softOnOff}
     on:click={() => ($softOnOff = !$softOnOff)}
     >Soft
-    <kbd class:depressed={$softOnOff}>q</kbd></button
+    <kbd class:depressed={$softOnOff}>b</kbd></button
   >
   <button
     type="button"
@@ -54,7 +65,7 @@
     aria-pressed={$sustainOnOff}
     on:click={() => ($sustainOnOff = !$sustainOnOff)}
     >Sustain
-    <kbd class:depressed={$sustainOnOff}>c</kbd></button
+    <kbd class:depressed={$sustainOnOff}>Space</kbd></button
   >
   <br />
   <button
@@ -64,7 +75,7 @@
     aria-pressed={$accentOnOff}
     on:mousedown={() => ($accentOnOff = true)}
     >Accent
-    <kbd class:depressed={$accentOnOff}>,</kbd></button
+    <kbd class:depressed={$accentOnOff}>n</kbd></button
   >
 </div>
 <svelte:window on:mouseup={() => ($accentOnOff = false)} />

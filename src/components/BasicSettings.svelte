@@ -36,8 +36,8 @@
   <div class="control">
     <span
       >Volume:
-      <kbd class:depressed={$activeShortcutKeys.volumeDown}>[</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.volumeUp}>]</kbd>↑</span
+      <kbd class:depressed={$activeShortcutKeys.volumeDown}>o</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.volumeUp}>i</kbd>↑</span
     >
     <span>{$volumeCoefficient}</span>
     <RangeSlider
@@ -49,7 +49,11 @@
     />
   </div>
   <div class="control">
-    <span>Bass Volume:</span>
+    <span
+      >Bass Volume:
+      <kbd class:depressed={$activeShortcutKeys.bassVolumeDown}>e</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.bassVolumeUp}>4</kbd>↑</span
+    >
     <span>{$bassVolumeCoefficient}</span>
     <RangeSlider
       min="0"
@@ -60,7 +64,11 @@
     />
   </div>
   <div class="control">
-    <span>Treble Volume:</span>
+    <span
+      >Treble Volume:
+      <kbd class:depressed={$activeShortcutKeys.trebleVolumeDown}>p</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.trebleVolumeUp}>0</kbd>↑
+    </span>
     <span>{$trebleVolumeCoefficient}</span>
     <RangeSlider
       min="0"
@@ -73,8 +81,8 @@
   <div class="control">
     <span
       >Tempo:
-      <kbd class:depressed={$activeShortcutKeys.tempoDown}>w</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.tempoUp}>e</kbd>↑</span
+      <kbd class:depressed={$activeShortcutKeys.tempoDown}>r</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.tempoUp}>t</kbd>↑</span
     >
     <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider

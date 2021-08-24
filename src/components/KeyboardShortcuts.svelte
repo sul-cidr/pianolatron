@@ -5,24 +5,61 @@
     sustainOnOff,
     accentOnOff,
     volumeCoefficient,
+    bassVolumeCoefficient,
+    trebleVolumeCoefficient,
     tempoCoefficient,
     activeShortcutKeys,
   } from "../stores";
-  import { clamp, enforcePrecision } from "../utils";
+  import { clamp, easingInterval, enforcePrecision } from "../utils";
+
+  export let playPauseApp;
+  export let stopApp;
+  export let updateTickByViewportIncrement;
+
+  let actionInterval;
 
   const keyMap = Object.freeze({
-    SOFT: "KeyQ",
-    SUSTAIN: "KeyC",
-    ACCENT: "Comma",
-    VOLUME_UP: "BracketRight",
-    VOLUME_DOWN: "BracketLeft",
-    TEMPO_UP: "KeyE",
-    TEMPO_DOWN: "KeyW",
+    SOFT: "KeyB",
+    SUSTAIN: "Space",
+    ACCENT: "KeyN",
+
+    VOLUME_UP: "KeyO",
+    VOLUME_DOWN: "KeyI",
+    BASS_VOLUME_UP: "Digit4",
+    BASS_VOLUME_DOWN: "KeyE",
+    TREBLE_VOLUME_UP: "Digit0",
+    TREBLE_VOLUME_DOWN: "KeyP",
+
+    TEMPO_UP: "KeyT",
+    TEMPO_DOWN: "KeyR",
+
+    PLAY_PAUSE: "Digit7",
+    REWIND: "Delete",
+    FORWARD: "Digit8",
+    BACKWARD: "Digit6",
   });
 
   const config = {
     volume: {
       store: volumeCoefficient,
+      min: 0,
+      max: 4,
+      delta: 0.1,
+      shiftDelta: 0.4,
+      ctrlDelta: 0.05,
+      precision: 2,
+    },
+    bassVolume: {
+      store: bassVolumeCoefficient,
+      min: 0,
+      max: 4,
+      delta: 0.1,
+      shiftDelta: 0.4,
+      ctrlDelta: 0.05,
+      precision: 2,
+    },
+    trebleVolume: {
+      store: trebleVolumeCoefficient,
       min: 0,
       max: 4,
       delta: 0.1,
@@ -42,7 +79,9 @@
   };
 
   const updateStore = (
+    // config object
     { store, min, max, delta, shiftDelta, ctrlDelta, precision },
+    // event
     { shiftKey, ctrlKey },
     increment,
   ) => {
@@ -55,6 +94,12 @@
 
   const increment = (...args) => updateStore(...args, /* increment = */ true);
   const decrement = (...args) => updateStore(...args, /* increment = */ false);
+
+  const keydownRepeatAction = (fn, immediate = true) => {
+    if (actionInterval) return;
+    if (immediate) fn();
+    actionInterval = easingInterval(fn);
+  };
 </script>
 
 <svelte:window
@@ -75,6 +120,32 @@
         accentOnOff.set(true);
         break;
 
+      case keyMap.PLAY_PAUSE:
+        event.preventDefault();
+        $activeShortcutKeys.playPause = true;
+        playPauseApp();
+        break;
+
+      case keyMap.REWIND:
+        event.preventDefault();
+        $activeShortcutKeys.rewind = true;
+        stopApp();
+        break;
+
+      case keyMap.FORWARD:
+        event.preventDefault();
+        keydownRepeatAction(() =>
+          updateTickByViewportIncrement(/* up = */ true),
+        );
+        break;
+
+      case keyMap.BACKWARD:
+        event.preventDefault();
+        keydownRepeatAction(() =>
+          updateTickByViewportIncrement(/* up = */ false),
+        );
+        break;
+
       case keyMap.VOLUME_UP:
         event.preventDefault();
         $activeShortcutKeys.volumeUp = true;
@@ -85,6 +156,30 @@
         event.preventDefault();
         $activeShortcutKeys.volumeDown = true;
         decrement(config.volume, event);
+        break;
+
+      case keyMap.BASS_VOLUME_UP:
+        event.preventDefault();
+        $activeShortcutKeys.bassVolumeUp = true;
+        increment(config.bassVolume, event);
+        break;
+
+      case keyMap.BASS_VOLUME_DOWN:
+        event.preventDefault();
+        $activeShortcutKeys.bassVolumeDown = true;
+        decrement(config.bassVolume, event);
+        break;
+
+      case keyMap.TREBLE_VOLUME_UP:
+        event.preventDefault();
+        $activeShortcutKeys.trebleVolumeUp = true;
+        increment(config.trebleVolume, event);
+        break;
+
+      case keyMap.TREBLE_VOLUME_DOWN:
+        event.preventDefault();
+        $activeShortcutKeys.trebleVolumeDown = true;
+        decrement(config.trebleVolume, event);
         break;
 
       case keyMap.TEMPO_UP:
@@ -103,6 +198,9 @@
     }
   }}
   on:keyup={({ code }) => {
+    actionInterval?.clear();
+    actionInterval = undefined;
+
     switch (code) {
       case keyMap.SOFT:
         softOnOff.set(false);
@@ -116,12 +214,36 @@
         accentOnOff.set(false);
         break;
 
+      case keyMap.PLAY_PAUSE:
+        $activeShortcutKeys.playPause = false;
+        break;
+
+      case keyMap.REWIND:
+        $activeShortcutKeys.rewind = false;
+        break;
+
       case keyMap.VOLUME_UP:
         $activeShortcutKeys.volumeUp = false;
         break;
 
       case keyMap.VOLUME_DOWN:
         $activeShortcutKeys.volumeDown = false;
+        break;
+
+      case keyMap.BASS_VOLUME_UP:
+        $activeShortcutKeys.bassVolumeUp = false;
+        break;
+
+      case keyMap.BASS_VOLUME_DOWN:
+        $activeShortcutKeys.bassVolumeDown = false;
+        break;
+
+      case keyMap.TREBLE_VOLUME_UP:
+        $activeShortcutKeys.trebleVolumeUp = false;
+        break;
+
+      case keyMap.TREBLE_VOLUME_DOWN:
+        $activeShortcutKeys.trebleVolumeDown = false;
         break;
 
       case keyMap.TEMPO_UP:

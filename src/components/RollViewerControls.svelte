@@ -25,10 +25,10 @@
 
   const onZoom = () => (currentZoom = viewport.getZoom());
 
-  const mousedownAction = (fn, immediate = true) => () => {
+  const mousedownRepeatAction = (fn, immediate = true) => {
     actionInterval?.clear();
     if (immediate) fn();
-    actionInterval = easingInterval(() => fn());
+    actionInterval = easingInterval(fn);
   };
 
   onMount(() => {
@@ -43,7 +43,7 @@
 <div class="overlay-buttons top-center" transition:fade>
   <button
     disabled={currentZoom >= maxZoomLevel}
-    on:mousedown={mousedownAction(() =>
+    on:mousedown={mousedownRepeatAction(() =>
       viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel)),
     )}
   >
@@ -64,7 +64,7 @@
   </button>
   <button
     disabled={currentZoom <= minZoomLevel}
-    on:mousedown={mousedownAction(() =>
+    on:mousedown={mousedownRepeatAction(() =>
       viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel)),
     )}
   >
@@ -107,7 +107,7 @@
   </button>
   <button
     disabled={false}
-    on:mousedown={mousedownAction(() =>
+    on:mousedown={mousedownRepeatAction(() =>
       updateTickByViewportIncrement(/* up = */ false),
     )}
   >
@@ -129,7 +129,7 @@
   </button>
   <button
     disabled={false}
-    on:mousedown={mousedownAction(() =>
+    on:mousedown={mousedownRepeatAction(() =>
       updateTickByViewportIncrement(/* up = */ true),
     )}
   >

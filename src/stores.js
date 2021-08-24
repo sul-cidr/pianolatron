@@ -57,8 +57,14 @@ export const useMidiTempoEventsOnOff = createStore(true);
 export const activeShortcutKeys = createStore({
   volumeUp: false,
   volumeDown: false,
+  bassVolumeUp: false,
+  bassVolumeDown: false,
+  trebleVolumeUp: false,
+  trebleVolumeDown: false,
   tempoUp: false,
   tempoDown: false,
+  playPause: false,
+  rewind: false,
 });
 
 // Playback State

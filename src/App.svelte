@@ -99,6 +99,9 @@
   let startPlayback;
   let resetPlayback;
 
+  let rollViewer;
+  let updateTickByViewportIncrement;
+
   const rollListItems = catalog.map((item) => {
     const [number, label] = item.label.split(" ");
     return {
@@ -251,6 +254,7 @@
   $: playbackProgress.update(() =>
     clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1),
   );
+  $: if (rollViewer) ({ updateTickByViewportIncrement } = rollViewer);
 </script>
 
 <div id="app">
@@ -270,6 +274,7 @@
     {#if appReady}
       <div id="roll">
         <RollViewer
+          bind:this={rollViewer}
           imageUrl={currentRoll.image_url}
           {holesByTickInterval}
           {skipToTick}
@@ -300,7 +305,7 @@
   {/if}
 </div>
 <SamplePlayer bind:this={samplePlayer} />
-<KeyboardShortcuts />
+<KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
 <Notification />
 
 <svelte:window
