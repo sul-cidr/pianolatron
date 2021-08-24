@@ -387,14 +387,14 @@ kbd.depressed {
       Loading application...
     </div><astro-root uid="M"></astro-root>
 <script type="module">
-import setup from 'https://sul-cidr.github.io/pianolatron/_astro_frontend/hydrate/only.js';
+import setup from 'https://pianolatron.stanford.edu/_astro_frontend/hydrate/only.js';
 setup("M", {}, async () => {
   
-  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("https://sul-cidr.github.io/pianolatron/_astro/src/App.svelte.js"), import("https://sul-cidr.github.io/pianolatron/_snowpack/pkg/@astrojs.renderer-svelte.client.v0.1.1.js")]);
+  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("https://pianolatron.stanford.edu/_astro/src/App.svelte.js"), import("https://pianolatron.stanford.edu/_snowpack/pkg/@astrojs.renderer-svelte.client.v0.1.1.js")]);
   return (el, children) => hydrate(el)(Component, {}, children);
 
 });
-</script><footer><a href="http://cidr.stanford.edu/" title="Center for Interdisciplinary Digital Research @ Stanford Libraries"><img src="https://sul-cidr.github.io/pianolatron/cidr_i.8x25.png" alt="CIDR logo">
+</script><footer><a href="http://cidr.stanford.edu/" title="Center for Interdisciplinary Digital Research @ Stanford Libraries"><img src="https://pianolatron.stanford.edu/cidr_i.8x25.png" alt="CIDR logo">
     Powered by CIDR
   </a><a href="https://github.com/sul-cidr/pianolatron" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%"></rect><path d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16
     1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67
