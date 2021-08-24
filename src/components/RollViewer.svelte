@@ -209,11 +209,14 @@
     const holeLabel = getHoleLabel(midiKey, $rollMetadata.ROLL_TYPE);
     mark.dataset.holeLabel = holeLabel;
     if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
+    const details = document.createElement("div");
+    details.innerHTML = `${holeLabel}<div>v:<span class="v"></span></div>`;
+    mark.appendChild(details);
 
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
     mark.classList.add(holeType);
 
-    mark.addEventListener("mouseout", () => {
+    mark.addEventListener("mouseleave", () => {
       if (!marks.map(([_hole]) => _hole).includes(hole))
         viewport.viewer.removeOverlay(hoveredMark);
     });

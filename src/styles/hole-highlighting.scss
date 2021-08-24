@@ -8,6 +8,10 @@ $highlight-hover-outline-offset: 4px;
     --highlight-color: #{$note-highlight-color};
     background-color: transparent;
 
+    div {
+      display: none;
+    }
+
     // mouseover hole outline and label flag
     &:hover {
       box-shadow: none;
@@ -23,10 +27,9 @@ $highlight-hover-outline-offset: 4px;
       }
 
       // the label "flag" (points to the right by default -- see .flag-left below)
-      &::after {
+      > div {
         background-color: $highlight-hover-outline-color;
         color: white;
-        content: attr(data-hole-label);
         display: block;
         font-weight: bold;
         left: calc(
@@ -58,7 +61,7 @@ $highlight-hover-outline-offset: 4px;
   }
 
   // .flag-left marks have their label "flag" pointing to the left
-  mark.flag-left:hover::after {
+  mark.flag-left:hover > div {
     left: auto;
     right: calc(
       100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
@@ -68,10 +71,9 @@ $highlight-hover-outline-offset: 4px;
 
   // if "Display Note Velocities" is on, a tooltip is displayed on .active marks
   &.active-note-details {
-    mark.active::after {
+    mark.active > div {
       background-color: none;
       color: white;
-      content: attr(data-hole-label);
       display: block;
       font-weight: bold;
       left: 50%;
@@ -85,7 +87,7 @@ $highlight-hover-outline-offset: 4px;
     }
 
     // when hovering a mark, revert to the outline+flag style
-    mark:hover::after {
+    mark:hover > div {
       left: calc(
         100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
       );
@@ -95,7 +97,7 @@ $highlight-hover-outline-offset: 4px;
     }
 
     // ditto for .flag-left marks
-    mark.flag-left:hover::after {
+    mark.flag-left:hover > div {
       left: auto;
       right: calc(
         100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
@@ -121,15 +123,15 @@ $highlight-hover-outline-offset: 4px;
   // if "Display Note Velocities" is on...
   &.show-note-velocities {
     // ...label "flags" for note marks use the data-note-velocity value too
-    mark.note:hover::after {
-      content: attr(data-hole-label) "\av:"attr(data-note-velocity);
+    mark.note:hover div {
+      display: block;
     }
 
     // ...and if "Show Details for Active Notes" is also on...
     &.active-note-details {
       // ..."tooltips" for note marks use the data-note-velocity value too
-      mark.note.active::after {
-        content: attr(data-hole-label) "\av:"attr(data-note-velocity);
+      mark.note.active div {
+        display: block;
       }
     }
 
@@ -141,15 +143,15 @@ $highlight-hover-outline-offset: 4px;
       }
 
       // ...and so is the label
-      mark.note:hover::after {
-        content: attr(data-hole-label) "\av:64";
+      mark.note:hover span.v::before {
+        content: attr(data-hole-label) "\av:64"; // TODO:
       }
 
       // ...and if "Show Details for Active Notes" is also on...
       &.active-note-details {
         // ...so too is the "tooltip"
-        mark.note.active::after {
-          content: attr(data-hole-label) "\av:64";
+        mark.note.active span.v::before {
+          content: attr(data-hole-label) "\av:64"; // TODO:
         }
       }
     }
@@ -165,12 +167,12 @@ $highlight-hover-outline-offset: 4px;
       fill: none;
     }
 
-    // and don't use the tooltips on pedal holes either
-    &.active-note-details {
-      mark.pedal.active::after {
-        content: none;
-      }
-    }
+    // // and don't use the tooltips on pedal holes either
+    // &.active-note-details {
+    //   mark.pedal.active > div {
+    //     content: none;
+    //   }
+    // }
   }
 
   // if "Play Expressions" is off, don't highlight control holes
@@ -184,11 +186,11 @@ $highlight-hover-outline-offset: 4px;
     }
 
     // and don't use the tooltips on pedal holes either
-    &.active-note-details {
-      mark.control.active::after {
-        content: none;
-      }
-    }
+    // &.active-note-details {
+    //   mark.control.active > div {
+    //     content: none;
+    //   }
+    // }
   }
 
   // if "Play Expressions" is off, use the colour from the middle of the palate
