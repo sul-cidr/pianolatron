@@ -75,10 +75,10 @@
     <span
       >Treble Volume:
       <kbd class:depressed={$keyMap.TREBLE_VOLUME_DOWN.active}
-        >{$keyMap.BASS_VOLUME_DOWN.key}</kbd
+        >{$keyMap.TREBLE_VOLUME_DOWN.key}</kbd
       >↓
       <kbd class:depressed={$keyMap.TREBLE_VOLUME_UP.active}
-        >{$keyMap.BASS_VOLUME_UP.key}</kbd
+        >{$keyMap.TREBLE_VOLUME_UP.key}</kbd
       >↑
     </span>
     <span>{$trebleVolumeCoefficient}</span>

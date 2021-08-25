@@ -374,77 +374,77 @@
         $accentOnOff = true;
         break;
 
-      case keyMap.PLAY_PAUSE.code:
+      case $keyMap.PLAY_PAUSE.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        keyMap.PLAY_PAUSE.active = true;
+        $keyMap.PLAY_PAUSE.active = true;
         playPauseApp();
         break;
 
-      case keyMap.REWIND.code:
+      case $keyMap.REWIND.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        keyMap.REWIND.active = true;
+        $keyMap.REWIND.active = true;
         stopApp();
         break;
 
-      case keyMap.FORWARD.code:
+      case $keyMap.FORWARD.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         keydownRepeatAction(() =>
           updateTickByViewportIncrement(/* up = */ true),
         );
         break;
 
-      case keyMap.BACKWARD.code:
+      case $keyMap.BACKWARD.code:
         if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         keydownRepeatAction(() =>
           updateTickByViewportIncrement(/* up = */ false),
         );
         break;
 
-      case keyMap.VOLUME_UP.code:
+      case $keyMap.VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        keyMap.VOLUME_UP.active = true;
+        $keyMap.VOLUME_UP.active = true;
         increment(config.volume, event);
         break;
 
-      case keyMap.VOLUME_DOWN.code:
+      case $keyMap.VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        keyMap.VOLUME_DOWN.active = true;
+        $keyMap.VOLUME_DOWN.active = true;
         decrement(config.volume, event);
         break;
 
-      case keyMap.BASS_VOLUME_UP.code:
+      case $keyMap.BASS_VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        keyMap.BASS_VOLUME_UP.active = true;
+        $keyMap.BASS_VOLUME_UP.active = true;
         increment(config.bassVolume, event);
         break;
 
-      case keyMap.BASS_VOLUME_DOWN.code:
+      case $keyMap.BASS_VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        keyMap.BASS_VOLUME_DOWN.active = true;
+        $keyMap.BASS_VOLUME_DOWN.active = true;
         decrement(config.bassVolume, event);
         break;
 
-      case keyMap.TREBLE_VOLUME_UP.code:
+      case $keyMap.TREBLE_VOLUME_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        keyMap.TREBLE_VOLUME_UP.active = true;
+        $keyMap.TREBLE_VOLUME_UP.active = true;
         increment(config.trebleVolume, event);
         break;
 
-      case keyMap.TREBLE_VOLUME_DOWN.code:
+      case $keyMap.TREBLE_VOLUME_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        keyMap.TREBLE_VOLUME_DOWN.active = true;
+        $keyMap.TREBLE_VOLUME_DOWN.active = true;
         decrement(config.trebleVolume, event);
         break;
 
-      case keyMap.TEMPO_UP.code:
+      case $keyMap.TEMPO_UP.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        keyMap.TEMPO_UP.active = true;
+        $keyMap.TEMPO_UP.active = true;
         increment(config.tempo, event);
         break;
 
-      case keyMap.TEMPO_DOWN.code:
+      case $keyMap.TEMPO_DOWN.code:
         if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        keyMap.TEMPO_DOWN.active = true;
+        $keyMap.TEMPO_DOWN.active = true;
         decrement(config.tempo, event);
         break;
 
@@ -472,40 +472,40 @@
         $accentOnOff = false;
         break;
 
-      case keyMap.PLAY_PAUSE.code:
-        keyMap.PLAY_PAUSE.active = false;
+      case $keyMap.PLAY_PAUSE.code:
+        $keyMap.PLAY_PAUSE.active = false;
         break;
 
-      case keyMap.REWIND.code:
-        keyMap.REWIND.active = false;
+      case $keyMap.REWIND.code:
+        $keyMap.REWIND.active = false;
         break;
 
-      case keyMap.VOLUME_UP.code:
-        keyMap.VOLUME_UP.active = false;
+      case $keyMap.VOLUME_UP.code:
+        $keyMap.VOLUME_UP.active = false;
         break;
 
       case $keyMap.VOLUME_DOWN.code:
         $keyMap.VOLUME_DOWN.active = false;
         break;
 
-      case keyMap.BASS_VOLUME_UP.code:
-        keyMap.BASS_VOLUME_UP.active = false;
+      case $keyMap.BASS_VOLUME_UP.code:
+        $keyMap.BASS_VOLUME_UP.active = false;
         break;
 
-      case keyMap.BASS_VOLUME_DOWN.code:
-        keyMap.BASS_VOLUME_DOWN.active = false;
+      case $keyMap.BASS_VOLUME_DOWN.code:
+        $keyMap.BASS_VOLUME_DOWN.active = false;
         break;
 
-      case keyMap.TREBLE_VOLUME_UP.code:
-        keyMap.TREBLE_VOLUME_UP.active = false;
+      case $keyMap.TREBLE_VOLUME_UP.code:
+        $keyMap.TREBLE_VOLUME_UP.active = false;
         break;
 
-      case keyMap.TREBLE_VOLUME_DOWN.code:
-        keyMap.TREBLE_VOLUME_DOWN.active = false;
+      case $keyMap.TREBLE_VOLUME_DOWN.code:
+        $keyMap.TREBLE_VOLUME_DOWN.active = false;
         break;
 
-      case keyMap.TEMPO_UP.code:
-        keyMap.TEMPO_UP.active = false;
+      case $keyMap.TEMPO_UP.code:
+        $keyMap.TEMPO_UP.active = false;
         break;
 
       case $keyMap.TEMPO_DOWN.code:
