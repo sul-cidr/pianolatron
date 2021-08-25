@@ -39,6 +39,7 @@
     display: grid;
     grid-template-columns: auto auto;
     justify-content: space-between;
+    gap: 0 0.25em;
   }
 
   p.reset {

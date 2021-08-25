@@ -1,4 +1,9 @@
 <style lang="scss">
+  dt {
+    display: flex;
+    align-items: center;
+  }
+
   dd {
     display: flex;
     align-items: center;
