@@ -1,0 +1,28 @@
+@import "./globals";
+
+:root {
+  --background-color: #{$cloud};
+  --background-darker: #{darken($cloud, 15%)};
+  --primary-accent: #{$cardinal};
+  --primary-accent-semiopaque: #{transparentize($cardinal, 0.5)};
+  --background-angle: 75deg;
+}
+
+[data-theme="blue"] {
+  --background-color: aliceblue;
+  --background-darker: hsl(208, 100%, 90%);
+  --primary-accent: steelblue;
+  --primary-accent-semiopaque: #{transparentize(steelblue, 0.5)};
+}
+
+[data-theme="green"] {
+  --primary-accent: darkolivegreen;
+  --primary-accent-semiopaque: #{transparentize(darkolivegreen, 0.5)};
+}
+
+[data-theme="grey"] {
+  --background-color: gainsboro;
+  --background-darker: hsl(0, 0%, 71%);
+  --primary-accent: darkslategrey;
+  --primary-accent-semiopaque: #{transparentize(darkslategrey, 0.5)};
+}

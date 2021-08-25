@@ -97,9 +97,9 @@ export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
 
 // User Settings
-export const userSettings = createStore({
 export const showKeyboard = createPersistedStore("showKeyboard", true);
 export const overlayKeyboard = createPersistedStore("overlayKeyboard", false);
+export const userSettings = createPersistedStore("userSettings", {
   theme: "cardinal",
   activeNoteDetails: false,
   showNoteVelocities: false,
