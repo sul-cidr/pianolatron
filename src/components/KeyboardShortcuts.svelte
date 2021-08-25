@@ -473,47 +473,10 @@
         $accentOnOff = false;
         break;
 
-      case $keyMap.PLAY_PAUSE.code:
-        $keyMap.PLAY_PAUSE.active = false;
-        break;
-
-      case $keyMap.REWIND.code:
-        $keyMap.REWIND.active = false;
-        break;
-
-      case $keyMap.VOLUME_UP.code:
-        $keyMap.VOLUME_UP.active = false;
-        break;
-
-      case $keyMap.VOLUME_DOWN.code:
-        $keyMap.VOLUME_DOWN.active = false;
-        break;
-
-      case $keyMap.BASS_VOLUME_UP.code:
-        $keyMap.BASS_VOLUME_UP.active = false;
-        break;
-
-      case $keyMap.BASS_VOLUME_DOWN.code:
-        $keyMap.BASS_VOLUME_DOWN.active = false;
-        break;
-
-      case $keyMap.TREBLE_VOLUME_UP.code:
-        $keyMap.TREBLE_VOLUME_UP.active = false;
-        break;
-
-      case $keyMap.TREBLE_VOLUME_DOWN.code:
-        $keyMap.TREBLE_VOLUME_DOWN.active = false;
-        break;
-
-      case $keyMap.TEMPO_UP.code:
-        $keyMap.TEMPO_UP.active = false;
-        break;
-
-      case $keyMap.TEMPO_DOWN.code:
-        $keyMap.TEMPO_DOWN.active = false;
-        break;
-
       // no default
     }
+
+    const cmd = Object.keys($keyMap).find((key) => $keyMap[key].code === code);
+    if (cmd) $keyMap[cmd].active = false;
   }}
 />
