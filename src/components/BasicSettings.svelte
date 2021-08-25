@@ -36,8 +36,8 @@
   <div class="control">
     <span
       >Volume:
-      <kbd class:depressed={$activeShortcutKeys.volumeDown}>o</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.volumeUp}>i</kbd>↑</span
+      <kbd class:depressed={$activeShortcutKeys.volumeDown}>i</kbd>↓
+      <kbd class:depressed={$activeShortcutKeys.volumeUp}>o</kbd>↑</span
     >
     <span>{$volumeCoefficient}</span>
     <RangeSlider
