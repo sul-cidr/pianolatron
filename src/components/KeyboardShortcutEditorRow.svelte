@@ -98,8 +98,9 @@
 </dd>
 
 <svelte:window
-  on:keydown|capture={(event) => editing && event.stopPropagation()}
-  on:keyup|capture={(event) => {
+  on:keydown|preventDefault|capture={(event) =>
+    editing && event.stopPropagation()}
+  on:keyup|preventDefault|capture={(event) => {
     if (!editing) return;
     updateShortcut(event);
     editing = false;
