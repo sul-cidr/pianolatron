@@ -10,10 +10,15 @@ const {title} = Astro.props;
     <title>{title}</title>
     <style global lang="scss">
       @import "../styles/base";
+      @import "../styles/theme";
       @import "../styles/loader";
       @import "../styles/hole-highlighting";
       @import "../styles/overlay-buttons";
     </style>
+    <script>
+      const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
+      theme && document.documentElement.setAttribute("data-theme", theme);
+    </script>
   </head>
   <body>
     <slot/>

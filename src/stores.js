@@ -1,4 +1,4 @@
-import { writable, derived } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 import watchMedia from "./mq-store";
 
 const createStore = (defaultValue) => {
@@ -8,6 +8,30 @@ const createStore = (defaultValue) => {
     set,
     subscribe,
     update,
+  };
+};
+
+export const createPersistedStore = (key, defaultValue) => {
+  const persistedValue = localStorage.getItem(key);
+  let initialValue;
+  try {
+    initialValue = persistedValue ? JSON.parse(persistedValue) : defaultValue;
+  } catch {
+    initialValue = defaultValue;
+  }
+  const store = writable(initialValue);
+  const { set, subscribe } = store;
+  return {
+    set(value) {
+      localStorage.setItem(key, JSON.stringify(value));
+      set(value);
+    },
+    update(fn) {
+      const value = fn(get(store));
+      this.set(value);
+    },
+    reset: () => this.set(defaultValue),
+    subscribe,
   };
 };
 
@@ -73,9 +97,9 @@ export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
 
 // User Settings
-export const showKeyboard = createStore(true);
-export const overlayKeyboard = createStore(false);
-export const userSettings = createStore({
+export const showKeyboard = createPersistedStore("showKeyboard", true);
+export const overlayKeyboard = createPersistedStore("overlayKeyboard", false);
+export const userSettings = createPersistedStore("userSettings", {
   theme: "cardinal",
   activeNoteDetails: false,
   showNoteVelocities: false,

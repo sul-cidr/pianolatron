@@ -70,7 +70,7 @@
   let el;
   const themes = ["cardinal", "blue", "green", "grey"];
 
-  $: document.body.className = $userSettings.theme;
+  $: document.documentElement.setAttribute("data-theme", $userSettings.theme);
 </script>
 
 <div
