@@ -24,5 +24,6 @@
   labelFieldName="_label"
   searchFieldName="_label"
   facetFieldName="type"
-  postMarkup={(str) => str.replace(/^[\d.]+|\[[^\]]+\]$/g, "<small>$&</small>")}
+  postMarkup={(str) =>
+    str.replace(/^(?:[\d.]|<\/?mark>)+|\[[^\]]+\]$/g, "<small>$&</small>")}
 />

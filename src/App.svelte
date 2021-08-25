@@ -42,7 +42,7 @@
   #keyboard-overlay {
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: calc(100% - var(--navigator-width));
     opacity: 0.5;
     z-index: z($main-context, keyboard-overlay);
   }

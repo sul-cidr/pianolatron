@@ -121,75 +121,75 @@
         break;
 
       case keyMap.PLAY_PAUSE:
-        event.preventDefault();
+        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         $activeShortcutKeys.playPause = true;
         playPauseApp();
         break;
 
       case keyMap.REWIND:
-        event.preventDefault();
+        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         $activeShortcutKeys.rewind = true;
         stopApp();
         break;
 
       case keyMap.FORWARD:
-        event.preventDefault();
+        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         keydownRepeatAction(() =>
           updateTickByViewportIncrement(/* up = */ true),
         );
         break;
 
       case keyMap.BACKWARD:
-        event.preventDefault();
+        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
         keydownRepeatAction(() =>
           updateTickByViewportIncrement(/* up = */ false),
         );
         break;
 
       case keyMap.VOLUME_UP:
-        event.preventDefault();
+        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.volumeUp = true;
         increment(config.volume, event);
         break;
 
       case keyMap.VOLUME_DOWN:
-        event.preventDefault();
+        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.volumeDown = true;
         decrement(config.volume, event);
         break;
 
       case keyMap.BASS_VOLUME_UP:
-        event.preventDefault();
+        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.bassVolumeUp = true;
         increment(config.bassVolume, event);
         break;
 
       case keyMap.BASS_VOLUME_DOWN:
-        event.preventDefault();
+        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.bassVolumeDown = true;
         decrement(config.bassVolume, event);
         break;
 
       case keyMap.TREBLE_VOLUME_UP:
-        event.preventDefault();
+        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.trebleVolumeUp = true;
         increment(config.trebleVolume, event);
         break;
 
       case keyMap.TREBLE_VOLUME_DOWN:
-        event.preventDefault();
+        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.trebleVolumeDown = true;
         decrement(config.trebleVolume, event);
         break;
 
       case keyMap.TEMPO_UP:
-        event.preventDefault();
+        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.tempoUp = true;
         increment(config.tempo, event);
         break;
 
       case keyMap.TEMPO_DOWN:
-        event.preventDefault();
+        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
         $activeShortcutKeys.tempoDown = true;
         decrement(config.tempo, event);
         break;
