@@ -36,27 +36,6 @@ body {
   min-height: 100vh;
   text-rendering: optimizeSpeed;
   transition: background 0.2s ease;
-  --background-color: #dad7cb;
-  --background-darker: #bab59e;
-  --primary-accent: #8c1515;
-  --primary-accent-semiopaque: rgba(140, 21, 21, 0.5);
-  --background-angle: 75deg;
-}
-body.blue {
-  --background-color: aliceblue;
-  --background-darker: hsl(208, 100%, 90%);
-  --primary-accent: steelblue;
-  --primary-accent-semiopaque: rgba(70, 130, 180, 0.5);
-}
-body.green {
-  --primary-accent: darkolivegreen;
-  --primary-accent-semiopaque: rgba(85, 107, 47, 0.5);
-}
-body.grey {
-  --background-color: gainsboro;
-  --background-darker: hsl(0, 0%, 71%);
-  --primary-accent: darkslategrey;
-  --primary-accent-semiopaque: rgba(47, 79, 79, 0.5);
 }
 
 a {
@@ -139,6 +118,33 @@ kbd {
 kbd.depressed {
   box-shadow: inset 0 -1px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 0q 2px 1px rgba(30, 35, 90, 0.4);
   padding-top: 6px;
+}
+
+:root {
+  --background-color: #dad7cb;
+  --background-darker: #bab59e;
+  --primary-accent: #8c1515;
+  --primary-accent-semiopaque: rgba(140, 21, 21, 0.5);
+  --background-angle: 75deg;
+}
+
+[data-theme=blue] {
+  --background-color: aliceblue;
+  --background-darker: hsl(208, 100%, 90%);
+  --primary-accent: steelblue;
+  --primary-accent-semiopaque: rgba(70, 130, 180, 0.5);
+}
+
+[data-theme=green] {
+  --primary-accent: darkolivegreen;
+  --primary-accent-semiopaque: rgba(85, 107, 47, 0.5);
+}
+
+[data-theme=grey] {
+  --background-color: gainsboro;
+  --background-darker: hsl(0, 0%, 71%);
+  --primary-accent: darkslategrey;
+  --primary-accent-semiopaque: rgba(47, 79, 79, 0.5);
 }
 
 #loading {
@@ -383,7 +389,10 @@ kbd.depressed {
 }
 .overlay-buttons.middle-right button {
   padding: 0.8em 0.35em;
-}</style></head><body><div id="loading"><div><span></span>&nbsp;<span></span>&nbsp;<span></span>&nbsp;<span></span>&nbsp;<span></span></div>
+}</style><script>
+      const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
+      theme && document.documentElement.setAttribute("data-theme", theme);
+    </script></head><body><div id="loading"><div><span></span>&nbsp;<span></span>&nbsp;<span></span>&nbsp;<span></span>&nbsp;<span></span></div>
       Loading application...
     </div><astro-root uid="M"></astro-root>
 <script type="module">
