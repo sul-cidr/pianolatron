@@ -324,6 +324,12 @@
         updateTickByViewportIncrement(/* up = */ false),
       ),
   };
+
+  const keyupCommandMap = {
+    SOFT: () => ($softOnOff = false),
+    SUSTAIN: () => ($sustainOnOff = false),
+    ACCENT: () => ($accentOnOff = false),
+  };
 </script>
 
 {#if $showKeybindingsConfig}
@@ -398,26 +404,12 @@
       toggleKeybindingsConfig();
   }}
   on:keyup={({ code }) => {
-    actionInterval?.clear();
-    actionInterval = undefined;
-
-    switch (code) {
-      case $keyMap.SOFT.code:
-        $softOnOff = false;
-        break;
-
-      case $keyMap.SUSTAIN.code:
-        $sustainOnOff = false;
-        break;
-
-      case $keyMap.ACCENT.code:
-        $accentOnOff = false;
-        break;
-
-      // no default
-    }
-
     const cmd = Object.keys($keyMap).find((key) => $keyMap[key].code === code);
-    if (cmd) $keyMap[cmd].active = false;
+    if (cmd) {
+      actionInterval?.clear();
+      actionInterval = undefined;
+      $keyMap[cmd].active = false;
+      keyupCommandMap[cmd]?.();
+    }
   }}
 />
