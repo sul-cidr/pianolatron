@@ -30,7 +30,9 @@ export const createPersistedStore = (key, defaultValue) => {
       const value = fn(get(store));
       this.set(value);
     },
-    reset: () => this.set(defaultValue),
+    reset() {
+      this.set(defaultValue);
+    },
     subscribe,
   };
 };
