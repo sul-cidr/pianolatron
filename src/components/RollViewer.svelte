@@ -133,8 +133,6 @@
   const controlHoleColor = "120, 73%, 75%"; // light green
   const pedalHoleColor = "39, 100%, 50%"; // orange;
 
-  const navigatorWidth = 40;
-
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
