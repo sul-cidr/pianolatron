@@ -100,6 +100,7 @@
 <script>
   import { fade, slide } from "svelte/transition";
   import {
+    currentTick,
     tempoCoefficient,
     ticksPerSecond,
     rollPedalingOnOff,
@@ -118,9 +119,11 @@
 
 <div class:collapsed transition:fade|local>
   <label><input type="checkbox" bind:checked={collapsed} /></label>
-  Tempo: {($tempoCoefficient * 100).toFixed(0)}%
+  At current tempo ({($tempoCoefficient * 100).toFixed(0)}%):
   <br />
-  Feet per Minute: {(($ticksPerSecond / 300 / 12) * 60).toFixed(2)}
+  &nbsp;&nbsp;Feet per Minute: {(($ticksPerSecond / 300 / 12) * 60).toFixed(2)}
+  <br />
+  &nbsp;&nbsp;Time index: {($currentTick / $ticksPerSecond).toFixed(1)}s
   <hr />
   <dl>
     <dt
