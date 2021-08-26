@@ -300,6 +300,30 @@
     errorMessage = undefined;
     $keyMap = JSON.parse(JSON.stringify(defaultKeyMap));
   };
+
+  const keydownCommandMap = {
+    SOFT: () => ($softOnOff = true),
+    SUSTAIN: () => ($sustainOnOff = true),
+    ACCENT: () => ($accentOnOff = true),
+
+    VOLUME_UP: (event) => increment(config.volume, event),
+    VOLUME_DOWN: (event) => decrement(config.volume, event),
+    BASS_VOLUME_UP: (event) => increment(config.bassVolume, event),
+    BASS_VOLUME_DOWN: (event) => decrement(config.bassVolume, event),
+    TREBLE_VOLUME_UP: (event) => increment(config.trebleVolume, event),
+    TREBLE_VOLUME_DOWN: (event) => decrement(config.trebleVolume, event),
+    TEMPO_UP: (event) => increment(config.tempo, event),
+    TEMPO_DOWN: (event) => decrement(config.tempo, event),
+
+    PLAY_PAUSE: playPauseApp,
+    REWIND: stopApp,
+    FORWARD: () =>
+      keydownRepeatAction(() => updateTickByViewportIncrement(/* up = */ true)),
+    BACKWARD: () =>
+      keydownRepeatAction(() =>
+        updateTickByViewportIncrement(/* up = */ false),
+      ),
+  };
 </script>
 
 {#if $showKeybindingsConfig}
@@ -359,102 +383,19 @@
 
 <svelte:window
   on:keydown={(event) => {
-    switch (event.code) {
-      case $keyMap.SOFT.code:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $softOnOff = true;
-        break;
+    const cmd = Object.keys($keyMap).find(
+      (key) => $keyMap[key].code === event.code,
+    );
 
-      case $keyMap.SUSTAIN.code:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $sustainOnOff = true;
-        break;
-
-      case $keyMap.ACCENT.code:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $accentOnOff = true;
-        break;
-
-      case $keyMap.PLAY_PAUSE.code:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $keyMap.PLAY_PAUSE.active = true;
-        playPauseApp();
-        break;
-
-      case $keyMap.REWIND.code:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $keyMap.REWIND.active = true;
-        stopApp();
-        break;
-
-      case $keyMap.FORWARD.code:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        keydownRepeatAction(() =>
-          updateTickByViewportIncrement(/* up = */ true),
-        );
-        break;
-
-      case $keyMap.BACKWARD.code:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        keydownRepeatAction(() =>
-          updateTickByViewportIncrement(/* up = */ false),
-        );
-        break;
-
-      case $keyMap.VOLUME_UP.code:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $keyMap.VOLUME_UP.active = true;
-        increment(config.volume, event);
-        break;
-
-      case $keyMap.VOLUME_DOWN.code:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $keyMap.VOLUME_DOWN.active = true;
-        decrement(config.volume, event);
-        break;
-
-      case $keyMap.BASS_VOLUME_UP.code:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $keyMap.BASS_VOLUME_UP.active = true;
-        increment(config.bassVolume, event);
-        break;
-
-      case $keyMap.BASS_VOLUME_DOWN.code:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $keyMap.BASS_VOLUME_DOWN.active = true;
-        decrement(config.bassVolume, event);
-        break;
-
-      case $keyMap.TREBLE_VOLUME_UP.code:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $keyMap.TREBLE_VOLUME_UP.active = true;
-        increment(config.trebleVolume, event);
-        break;
-
-      case $keyMap.TREBLE_VOLUME_DOWN.code:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $keyMap.TREBLE_VOLUME_DOWN.active = true;
-        decrement(config.trebleVolume, event);
-        break;
-
-      case $keyMap.TEMPO_UP.code:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $keyMap.TEMPO_UP.active = true;
-        increment(config.tempo, event);
-        break;
-
-      case $keyMap.TEMPO_DOWN.code:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $keyMap.TEMPO_DOWN.active = true;
-        decrement(config.tempo, event);
-        break;
-
-      case "Escape":
-        if ($showKeybindingsConfig) toggleKeybindingsConfig();
-        break;
-
-      // no default
+    if (cmd) {
+      if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
+      $keyMap[cmd].active = true;
+      keydownCommandMap[cmd]?.(event);
+      return;
     }
+
+    if (event.code === "Escape" && $showKeybindingsConfig)
+      toggleKeybindingsConfig();
   }}
   on:keyup={({ code }) => {
     actionInterval?.clear();
