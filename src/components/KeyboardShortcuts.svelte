@@ -68,6 +68,8 @@
 
 <script context="module">
   import { writable } from "svelte/store";
+  // eslint-disable-next-line import/order
+  import { createPersistedStore } from "../stores";
 
   const defaultKeyMap = {
     SOFT: {
@@ -172,7 +174,10 @@
       help: "Move the roll backwards (hold down to accelerate)",
     },
   };
-  export const keyMap = writable(JSON.parse(JSON.stringify(defaultKeyMap)));
+  export const keyMap = createPersistedStore(
+    "keyMap",
+    JSON.parse(JSON.stringify(defaultKeyMap)),
+  );
 
   const unusableKeys = [
     "Escape",
