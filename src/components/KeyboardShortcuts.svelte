@@ -67,7 +67,7 @@
 </style>
 
 <script context="module">
-  import { get, writable } from "svelte/store";
+  import { writable } from "svelte/store";
 
   const defaultKeyMap = {
     SOFT: {
@@ -189,6 +189,7 @@
 </script>
 
 <script>
+  import { get } from "svelte/store";
   import { fade, slide } from "svelte/transition";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
   import {

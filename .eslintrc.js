@@ -21,9 +21,11 @@ module.exports = {
     "no-return-assign": ["error", "except-parens"],
     "no-cond-assign": ["error", "except-parens"],
     "no-param-reassign": ["error", { props: false }],
-    "import/first": "off", // import order cannot be determined correctly in .svelte components
+    // see https://github.com/sveltejs/eslint-plugin-svelte3/blob/master/OTHER_PLUGINS.md#eslint-plugin-import
+    "import/first": "off",
     "import/no-mutable-exports": "off",
     "import/prefer-default-export": "off",
+    "import/no-duplicates": "off",
   },
   settings: {
     "svelte3/ignore-styles": (attribs) => "lang" in attribs,
