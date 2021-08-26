@@ -80,7 +80,7 @@
     },
     SUSTAIN: {
       code: "Space",
-      key: "␣",
+      key: "＿",
       description: "Sustain Pedal",
       help: "Hold to apply the sustain pedal",
     },
@@ -157,7 +157,7 @@
     },
     REWIND: {
       code: "Backspace",
-      key: "←",
+      key: "⌫",
       description: "Rewind Roll",
       help: "Rewind the roll to the beginning",
     },
@@ -188,6 +188,17 @@
     "ShiftRight",
     "CapsLock",
   ];
+
+  const alternativeIndicatorText = {
+    Space: "＿",
+    Backspace: "⌫",
+    Delete: "⌦",
+    NumpadEnter: "⏎",
+    ArrowUp: "↑",
+    ArrowDown: "↓",
+    ArrowLeft: "←",
+    ArrowRight: "→",
+  };
 
   const showKeybindingsConfig = writable(false);
   export const toggleKeybindingsConfig = () =>
@@ -298,7 +309,7 @@
     }
 
     $keyMap[shortcut].code = detail.code;
-    $keyMap[shortcut].key = detail.key;
+    $keyMap[shortcut].key = alternativeIndicatorText[detail.code] || detail.key;
 
     $keyMap[shortcut].isChanged = detail.key !== defaultKeyMap[shortcut].key;
   };
