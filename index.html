@@ -1,4 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pianolatron</title><style global="" type="text/css">*,
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pianolatron</title><style global="" type="text/css">:root {
+  --navigator-width: 40px;
+}
+
+*,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -121,6 +125,10 @@ kbd.depressed {
 }
 
 :root {
+  --navigator-width: 40px;
+}
+
+:root {
   --background-color: #dad7cb;
   --background-darker: #bab59e;
   --primary-accent: #8c1515;
@@ -145,6 +153,10 @@ kbd.depressed {
   --background-darker: hsl(0, 0%, 71%);
   --primary-accent: darkslategrey;
   --primary-accent-semiopaque: rgba(47, 79, 79, 0.5);
+}
+
+:root {
+  --navigator-width: 40px;
 }
 
 #loading {
@@ -346,11 +358,19 @@ kbd.depressed {
     opacity: 0.8;
   }
 }
+:root {
+  --navigator-width: 40px;
+}
+
 .overlay-buttons {
   background: rgba(0, 0, 0, 0.4);
   border-radius: 4px;
   padding: 8px;
   position: absolute;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   z-index: 8;
 }
 .overlay-buttons button {
@@ -379,16 +399,6 @@ kbd.depressed {
   left: 50%;
   top: 8px;
   transform: translateX(-50%);
-}
-.overlay-buttons.middle-right {
-  top: 50%;
-  right: 8px;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-}
-.overlay-buttons.middle-right button {
-  padding: 0.8em 0.35em;
 }</style><script>
       const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
       theme && document.documentElement.setAttribute("data-theme", theme);
