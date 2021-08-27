@@ -2,7 +2,7 @@
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
   import { Reverb } from "tone";
-  import { Piano } from "../lib/tonejs-piano";
+  import { Piano } from "../pianolatron-piano";
 
   import {
     rollMetadata,
