@@ -25,7 +25,6 @@
   let tempoMap;
   let pedalingMap;
   let notesMap;
-  let piano;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -38,7 +37,7 @@
 
   const midiSamplePlayer = new MidiPlayer.Player();
 
-  piano = new Piano({
+  const piano = new Piano({
     url: "samples/",
     velocities: $sampleVelocities,
     release: true,
