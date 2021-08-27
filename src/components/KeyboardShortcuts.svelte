@@ -177,6 +177,18 @@
       description: "Scrub Backwards",
       help: "Back up (hold to accelerate)",
     },
+    PAN_UP: {
+      code: "ArrowUp",
+      key: "↑",
+      description: "Pan Upwards",
+      help: "Pan the roll upwards (hold to accelerate)",
+    },
+    PAN_DOWN: {
+      code: "ArrowDown",
+      key: "↓",
+      description: "Pan Downwards",
+      help: "Pan the roll downwards (hold to accelerate)",
+    },
   };
   export const keyMap = createPersistedStore(
     "keyMap",
@@ -348,6 +360,13 @@
       keydownRepeatAction(() =>
         updateTickByViewportIncrement(/* up = */ !$scrollDownwards),
       ),
+
+    PAN_UP: () =>
+      keydownRepeatAction(() =>
+        updateTickByViewportIncrement(/* up = */ false),
+      ),
+    PAN_DOWN: () =>
+      keydownRepeatAction(() => updateTickByViewportIncrement(/* up = */ true)),
   };
 
   const keyupCommandMap = {
