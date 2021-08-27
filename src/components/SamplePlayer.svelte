@@ -103,13 +103,6 @@
     setPlayerStateAtTick($currentTick);
   };
 
-  const updatePiano = () => {
-    piano.strings.value = $sampleVolumes.strings;
-    piano.harmonics.value = $sampleVolumes.harmonics;
-    piano.pedal.value = $sampleVolumes.pedal;
-    piano.keybed.value = $sampleVolumes.keybed;
-  };
-
   const updateReverb = () => {
     reverb.dispose();
     reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
@@ -310,7 +303,7 @@
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
-  $: $sampleVolumes, updatePiano();
+  $: piano.updateVolumes($sampleVolumes);
   $: $reverbWetDry, updateReverb();
   $: $sampleVelocities, reloadPiano();
 
