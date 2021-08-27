@@ -396,7 +396,7 @@ class PianoString extends ToneAudioNode {
 /**
  *  Manages all of the hammered string sounds
  */
-class PianoStrings extends PianoComponent {
+export class PianoStrings extends PianoComponent {
   constructor(options) {
     super(options);
     const notes = getNotesInRange(options.minNote, options.maxNote);
