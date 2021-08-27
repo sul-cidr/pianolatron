@@ -1,7 +1,6 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
-  import { Reverb } from "tone";
   import { Piano } from "../pianolatron-piano";
 
   import {
@@ -26,7 +25,6 @@
   let tempoMap;
   let pedalingMap;
   let notesMap;
-  let reverb;
   let piano;
 
   const SOFT_PEDAL = 67;
@@ -52,11 +50,8 @@
       pedal: $sampleVolumes.pedal,
       keybed: $sampleVolumes.keybed,
     },
+    reverbWet: $reverbWetDry,
   });
-
-  reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
-
-  piano.connect(reverb);
 
   const pianoReady = piano.load();
 
@@ -101,12 +96,6 @@
     }
     fn();
     setPlayerStateAtTick($currentTick);
-  };
-
-  const updateReverb = () => {
-    reverb.dispose();
-    reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
-    piano.connect(reverb);
   };
 
   const startNote = (noteNumber, velocity) => {
@@ -287,9 +276,8 @@
         pedal: $sampleVolumes.pedal,
         keybed: $sampleVolumes.keybed,
       },
+      reverbWet: $reverbWetDry,
     });
-
-    updateReverb();
 
     piano.load().then(() => {
       if (paused) {
@@ -304,7 +292,7 @@
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
   $: piano.updateVolumes($sampleVolumes);
-  $: $reverbWetDry, updateReverb();
+  $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, reloadPiano();
 
   export {
