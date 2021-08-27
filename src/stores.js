@@ -60,6 +60,10 @@ export const isReproducingRoll = derived(rollMetadata, ($rollMetadata) =>
     $rollMetadata.ROLL_TYPE,
   ),
 );
+export const scrollDownwards = derived(
+  rollMetadata,
+  ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
+);
 
 // Pedaling
 export const softOnOff = createStore(false);
@@ -76,20 +80,6 @@ export const tempoCoefficient = createStore(1);
 export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
-
-//
-export const activeShortcutKeys = createStore({
-  volumeUp: false,
-  volumeDown: false,
-  bassVolumeUp: false,
-  bassVolumeDown: false,
-  trebleVolumeUp: false,
-  trebleVolumeDown: false,
-  tempoUp: false,
-  tempoDown: false,
-  playPause: false,
-  rewind: false,
-});
 
 // Playback State
 export const currentTick = createStore(0);
