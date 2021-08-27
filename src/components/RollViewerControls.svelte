@@ -108,7 +108,7 @@
   <button
     disabled={false}
     on:mousedown={mousedownRepeatAction(() =>
-      updateTickByViewportIncrement(/* up = */ false),
+      updateTickByViewportIncrement(/* up = */ true),
     )}
   >
     <svg
@@ -130,7 +130,7 @@
   <button
     disabled={false}
     on:mousedown={mousedownRepeatAction(() =>
-      updateTickByViewportIncrement(/* up = */ true),
+      updateTickByViewportIncrement(/* up = */ false),
     )}
   >
     <svg

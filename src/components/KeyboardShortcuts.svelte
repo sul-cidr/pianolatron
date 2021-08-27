@@ -354,19 +354,19 @@
     REWIND: stopApp,
     FORWARD: () =>
       keydownRepeatAction(() =>
-        updateTickByViewportIncrement(/* up = */ $scrollDownwards),
+        updateTickByViewportIncrement(/* up = */ !$scrollDownwards),
       ),
     BACKWARD: () =>
       keydownRepeatAction(() =>
-        updateTickByViewportIncrement(/* up = */ !$scrollDownwards),
+        updateTickByViewportIncrement(/* up = */ $scrollDownwards),
       ),
 
     PAN_UP: () =>
+      keydownRepeatAction(() => updateTickByViewportIncrement(/* up = */ true)),
+    PAN_DOWN: () =>
       keydownRepeatAction(() =>
         updateTickByViewportIncrement(/* up = */ false),
       ),
-    PAN_DOWN: () =>
-      keydownRepeatAction(() => updateTickByViewportIncrement(/* up = */ true)),
   };
 
   const keyupCommandMap = {

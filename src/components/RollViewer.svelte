@@ -332,7 +332,7 @@
   const updateTickByViewportIncrement = (up = true) => {
     const viewportBounds = viewport.getBounds();
     const imgBounds = viewport.viewportToImageRectangle(viewportBounds);
-    const delta = up ? imgBounds.height / 200 : -imgBounds.height / 200;
+    const delta = up ? -imgBounds.height / 200 : imgBounds.height / 200;
     const centerY = imgBounds.y + imgBounds.height / 2;
     skipToTick(
       $scrollDownwards
@@ -572,7 +572,7 @@
   on:mouseleave={() => (showControls = false)}
   on:wheel|capture|preventDefault={(event) => {
     if (event.ctrlKey) {
-      updateTickByViewportIncrement(/* up = */ event.deltaY > 0);
+      updateTickByViewportIncrement(/* up = */ event.deltaY < 0);
       event.stopPropagation();
       return;
     }
