@@ -88,6 +88,7 @@
   import OpenSeadragon from "openseadragon";
   import {
     rollMetadata,
+    scrollDownwards,
     currentTick,
     userSettings,
     playExpressionsOnOff,
@@ -224,7 +225,7 @@
 
     const viewportRectangle = viewport.imageToViewportRectangle(
       offsetX - 4,
-      scrollDownwards ? offsetY - 4 : imageLength - offsetY - height - 4,
+      $scrollDownwards ? offsetY - 4 : imageLength - offsetY - height - 4,
       width + 11,
       height + 12,
     );
@@ -269,7 +270,7 @@
       rect.setAttribute("x", offsetX - padding);
       rect.setAttribute(
         "y",
-        scrollDownwards
+        $scrollDownwards
           ? offsetY - padding
           : imageLength - offsetY - height - padding,
       );
@@ -313,7 +314,7 @@
   //  the viewport.  Does not trigger an OSD `pan` event.
   const updateViewportFromTick = (tick) => {
     if (!openSeadragon) return;
-    const linePx = firstHolePx + (scrollDownwards ? tick : -tick);
+    const linePx = firstHolePx + ($scrollDownwards ? tick : -tick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 
     viewport.centerSpringY.springTo(lineViewport.y);
@@ -321,7 +322,7 @@
     osdNavDisplayRegion.dataset.label = ($playbackProgress * 100).toFixed(1);
     osdNavDisplayRegion.classList.toggle(
       "label-above",
-      scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
+      $scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
     );
   };
 
@@ -334,7 +335,7 @@
     const delta = up ? imgBounds.height / 200 : -imgBounds.height / 200;
     const centerY = imgBounds.y + imgBounds.height / 2;
     skipToTick(
-      scrollDownwards
+      $scrollDownwards
         ? clamp(
             centerY + delta - firstHolePx,
             -firstHolePx,
@@ -375,7 +376,7 @@
     const viewportCenter = viewport.getCenter(false);
     const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
     skipToTick(
-      scrollDownwards
+      $scrollDownwards
         ? clamp(
             imgCenter.y - firstHolePx,
             -firstHolePx,
@@ -554,11 +555,10 @@
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
   $: annotateHoleData($rollMetadata.holeData);
-  $: scrollDownwards = $rollMetadata.ROLL_TYPE === "welte-red";
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
-  $: firstHolePx = scrollDownwards
+  $: firstHolePx = $scrollDownwards
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
       parseInt($rollMetadata.FIRST_HOLE, 10);
