@@ -89,13 +89,12 @@
   const updatePlayer = (fn = () => {}) => {
     if (midiSamplePlayer.isPlaying()) {
       midiSamplePlayer.pause();
-      fn();
-      setPlayerStateAtTick($currentTick);
-      midiSamplePlayer.play();
-      return;
+      return Promise.resolve(fn()).then(() => {
+        setPlayerStateAtTick($currentTick);
+        midiSamplePlayer.play();
+      });
     }
-    fn();
-    setPlayerStateAtTick($currentTick);
+    return Promise.resolve(fn()).then(() => setPlayerStateAtTick($currentTick));
   };
 
   const startNote = (noteNumber, velocity) => {
