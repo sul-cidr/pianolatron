@@ -1,18 +1,20 @@
 <style lang="scss">
   div {
-    @include background;
+    background-color: var(--background-color);
     border-radius: 4px;
     box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3);
     left: 50%;
-    max-height: 100%;
+    max-height: 80%;
     max-width: 100%;
     min-width: 400px;
     padding: 1em;
     position: absolute;
-    top: 20%;
-    transform: translate(-50%);
+    top: 42%;
+    transform: translate(-50%, -50%);
     width: 400px;
     z-index: z($main-context, notifications);
+    display: flex;
+    flex-direction: column;
   }
 
   header {
@@ -40,6 +42,8 @@
     grid-template-columns: auto auto;
     justify-content: space-between;
     gap: 0 0.25em;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   p.reset {
