@@ -146,8 +146,8 @@
 </style>
 
 <script>
-  import { softOnOff, sustainOnOff } from "../stores";
   import KeyboardControls from "./KeyboardControls.svelte";
+  import { softOnOff, sustainOnOff } from "../stores";
 
   export let keyCount = 88;
   export let startNote;

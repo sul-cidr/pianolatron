@@ -22,11 +22,11 @@
     margin: 0;
     padding: 0;
 
-    svg {
+    :global(svg) {
       stroke: grey;
     }
 
-    &:not([disabled]):hover svg {
+    &:not([disabled]):hover :global(svg) {
       stroke: black;
     }
 
@@ -39,6 +39,7 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
+  import Icon from "../ui-components/Icon.svelte";
 
   export let shortcut;
   let editing = false;
@@ -61,39 +62,14 @@
     bind:this={editButtonRef}
     on:click={() => (editing = !editing)}
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      stroke-width="2"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
-      <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
-      <line x1="16" y1="5" x2="19" y2="8" />
-    </svg>
+    <Icon name="edit" height="20" width="20" />
   </button>
   <button
     data-tooltip={shortcut.isChanged ? "Reset to Default" : undefined}
     disabled={!shortcut.isChanged}
     on:click={resetShortcut}
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      stroke-width="2"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path d="m 10.953,20.006141 a 8,8 0 1 1 4,-0.5 m 5,0.5 h -5 v -5" />
-    </svg>
+    <Icon name="reset" height="20" width="20" />
   </button>
 </dd>
 

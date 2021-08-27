@@ -3,6 +3,7 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
 
+  import Icon from "../ui-components/Icon.svelte";
   import { easingInterval } from "../utils";
 
   export let openSeadragon;
@@ -47,20 +48,7 @@
       viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel)),
     )}
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      stroke-width="2"
-      stroke="currentColor"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
+    <Icon name="plus" height="24" width="24" />
   </button>
   <button
     disabled={currentZoom <= minZoomLevel}
@@ -68,19 +56,7 @@
       viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel)),
     )}
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      stroke-width="2"
-      stroke="currentColor"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
+    <Icon name="minus" height="24" width="24" />
   </button>
   <button
     disabled={currentZoom === 1}
@@ -89,21 +65,7 @@
       centerRoll();
     }}
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      height="24"
-      viewBox="0 0 24 24"
-      stroke-width="2"
-      stroke="currentColor"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <polyline points="7 8 3 12 7 16" />
-      <polyline points="17 8 21 12 17 16" />
-      <line x1="3" y1="12" x2="9" y2="12" />
-      <line x1="14" y1="12" x2="20" y2="12" />
-    </svg>
+    <Icon name="fit-width" height="24" width="24" />
   </button>
   <button
     disabled={false}
@@ -111,21 +73,7 @@
       updateTickByViewportIncrement(/* up = */ true),
     )}
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      stroke-width="2"
-      stroke="currentColor"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="16" y1="9" x2="12" y2="5" />
-      <line x1="8" y1="9" x2="12" y2="5" />
-    </svg>
+    <Icon name="arrow-up" height="24" width="24" />
   </button>
   <button
     disabled={false}
@@ -133,21 +81,7 @@
       updateTickByViewportIncrement(/* up = */ false),
     )}
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      stroke-width="2"
-      stroke="currentColor"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="16" y1="15" x2="12" y2="19" />
-      <line x1="8" y1="15" x2="12" y2="19" />
-    </svg>
+    <Icon name="arrow-down" height="24" width="24" />
   </button>
 </div>
 <svelte:window on:mouseup={() => actionInterval?.clear()} />
