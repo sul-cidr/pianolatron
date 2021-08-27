@@ -210,6 +210,7 @@
   import { fade, slide } from "svelte/transition";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
   import {
+    scrollDownwards,
     softOnOff,
     sustainOnOff,
     accentOnOff,
@@ -336,10 +337,12 @@
     PLAY_PAUSE: playPauseApp,
     REWIND: stopApp,
     FORWARD: () =>
-      keydownRepeatAction(() => updateTickByViewportIncrement(/* up = */ true)),
+      keydownRepeatAction(() =>
+        updateTickByViewportIncrement(/* up = */ $scrollDownwards),
+      ),
     BACKWARD: () =>
       keydownRepeatAction(() =>
-        updateTickByViewportIncrement(/* up = */ false),
+        updateTickByViewportIncrement(/* up = */ !$scrollDownwards),
       ),
   };
 
