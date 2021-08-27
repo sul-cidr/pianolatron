@@ -256,35 +256,6 @@
 
   midiSamplePlayer.on("endOfFile", pausePlayback);
 
-  const reloadPiano = () => {
-    let paused = false;
-    if (midiSamplePlayer.isPlaying()) {
-      pausePlayback();
-      paused = true;
-    }
-
-    piano = new Piano({
-      url: "samples/",
-      velocities: $sampleVelocities,
-      release: true,
-      pedal: true,
-      maxPolyphony: Infinity,
-      volume: {
-        strings: $sampleVolumes.strings,
-        harmonics: $sampleVolumes.harmonics,
-        pedal: $sampleVolumes.pedal,
-        keybed: $sampleVolumes.keybed,
-      },
-      reverbWet: $reverbWetDry,
-    });
-
-    piano.load().then(() => {
-      if (paused) {
-        startPlayback();
-      }
-    });
-  };
-
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
   $: $tempoCoefficient, updatePlayer();
@@ -292,7 +263,7 @@
   $: $rollPedalingOnOff, updatePlayer();
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
-  $: $sampleVelocities, reloadPiano();
+  $: updatePlayer(() => piano.updateVelocities($sampleVelocities));
 
   export {
     midiSamplePlayer,
