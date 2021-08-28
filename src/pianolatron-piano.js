@@ -26,6 +26,7 @@ export class Piano extends ToneJsPiano {
         samples: this.options.url,
         volume: this.options.volume.strings,
       }).connect(this.output);
+      this.strings = this._strings.volume;
       return this._strings.load();
     }
     // eslint-disable-next-line prefer-promise-reject-errors
