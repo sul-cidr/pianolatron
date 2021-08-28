@@ -1,6 +1,7 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
+
   import { Piano } from "../pianolatron-piano";
 
   import {
@@ -25,6 +26,8 @@
   let tempoMap;
   let pedalingMap;
   let notesMap;
+  let reverb;
+  let piano;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -37,7 +40,7 @@
 
   const midiSamplePlayer = new MidiPlayer.Player();
 
-  const piano = new Piano({
+  piano = new Piano({
     url: "samples/",
     velocities: $sampleVelocities,
     release: true,
@@ -94,6 +97,19 @@
       });
     }
     return Promise.resolve(fn()).then(() => setPlayerStateAtTick($currentTick));
+  };
+
+  const updatePiano = () => {
+    piano.strings.value = $sampleVolumes.strings;
+    piano.harmonics.value = $sampleVolumes.harmonics;
+    piano.pedal.value = $sampleVolumes.pedal;
+    piano.keybed.value = $sampleVolumes.keybed;
+  };
+
+  const updateReverb = () => {
+    reverb.dispose();
+    reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
+    piano.connect(reverb);
   };
 
   const startNote = (noteNumber, velocity) => {
@@ -254,6 +270,36 @@
   );
 
   midiSamplePlayer.on("endOfFile", pausePlayback);
+
+  const reloadPiano = () => {
+    let paused = false;
+    if (midiSamplePlayer.isPlaying()) {
+      pausePlayback();
+      paused = true;
+    }
+
+    piano = new Piano({
+      url: "samples/",
+      velocities: $sampleVelocities,
+      release: true,
+      pedal: true,
+      maxPolyphony: Infinity,
+      volume: {
+        strings: $sampleVolumes.strings,
+        harmonics: $sampleVolumes.harmonics,
+        pedal: $sampleVolumes.pedal,
+        keybed: $sampleVolumes.keybed,
+      },
+    });
+
+    updateReverb();
+
+    piano.load().then(() => {
+      if (paused) {
+        startPlayback();
+      }
+    });
+  };
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();

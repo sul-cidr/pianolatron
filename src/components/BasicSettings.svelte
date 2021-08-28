@@ -19,13 +19,13 @@
 </style>
 
 <script>
+  import { keyMap } from "./KeyboardShortcuts.svelte";
   import {
     volumeCoefficient,
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
-    activeShortcutKeys,
   } from "../stores";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
@@ -36,8 +36,12 @@
   <div class="control">
     <span
       >Volume:
-      <kbd class:depressed={$activeShortcutKeys.volumeDown}>i</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.volumeUp}>o</kbd>↑</span
+      <kbd class:depressed={$keyMap.VOLUME_DOWN.active}
+        >{$keyMap.VOLUME_DOWN.key}</kbd
+      >↓
+      <kbd class:depressed={$keyMap.VOLUME_UP.active}
+        >{$keyMap.VOLUME_UP.key}</kbd
+      >↑</span
     >
     <span>{$volumeCoefficient}</span>
     <RangeSlider
@@ -51,8 +55,12 @@
   <div class="control">
     <span
       >Bass Volume:
-      <kbd class:depressed={$activeShortcutKeys.bassVolumeDown}>e</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.bassVolumeUp}>4</kbd>↑</span
+      <kbd class:depressed={$keyMap.BASS_VOLUME_DOWN.active}
+        >{$keyMap.BASS_VOLUME_DOWN.key}</kbd
+      >↓
+      <kbd class:depressed={$keyMap.BASS_VOLUME_UP.active}
+        >{$keyMap.BASS_VOLUME_UP.key}</kbd
+      >↑</span
     >
     <span>{$bassVolumeCoefficient}</span>
     <RangeSlider
@@ -66,8 +74,12 @@
   <div class="control">
     <span
       >Treble Volume:
-      <kbd class:depressed={$activeShortcutKeys.trebleVolumeDown}>p</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.trebleVolumeUp}>0</kbd>↑
+      <kbd class:depressed={$keyMap.TREBLE_VOLUME_DOWN.active}
+        >{$keyMap.TREBLE_VOLUME_DOWN.key}</kbd
+      >↓
+      <kbd class:depressed={$keyMap.TREBLE_VOLUME_UP.active}
+        >{$keyMap.TREBLE_VOLUME_UP.key}</kbd
+      >↑
     </span>
     <span>{$trebleVolumeCoefficient}</span>
     <RangeSlider
@@ -81,8 +93,11 @@
   <div class="control">
     <span
       >Tempo:
-      <kbd class:depressed={$activeShortcutKeys.tempoDown}>r</kbd>↓
-      <kbd class:depressed={$activeShortcutKeys.tempoUp}>t</kbd>↑</span
+      <kbd class:depressed={$keyMap.TEMPO_DOWN.active}
+        >{$keyMap.TEMPO_DOWN.key}</kbd
+      >↓
+      <kbd class:depressed={$keyMap.TEMPO_UP.active}>{$keyMap.TEMPO_UP.key}</kbd
+      >↑</span
     >
     <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider

@@ -1,6 +1,233 @@
+<style lang="scss">
+  div {
+    background-color: var(--background-color);
+    border-radius: 4px;
+    box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3);
+    left: 50%;
+    max-height: 80%;
+    max-width: 100%;
+    min-width: 400px;
+    padding: 1em;
+    position: absolute;
+    top: 42%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    z-index: z($main-context, notifications);
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    display: flex;
+    font-size: 1.4em;
+    font-weight: bold;
+    justify-content: space-between;
+    margin-bottom: 0.5em;
+    text-decoration: underline;
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+
+  p.error-message {
+    border-radius: 5px;
+    border: 1px solid red;
+    color: red;
+    padding: 0.25em;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    gap: 0 0.25em;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  p.reset {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 1em 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+
+    :global(svg) {
+      stroke: grey;
+    }
+
+    &:hover :global(svg) {
+      stroke: black;
+    }
+  }
+</style>
+
+<script context="module">
+  import { writable } from "svelte/store";
+  // eslint-disable-next-line import/order
+  import { createPersistedStore } from "../stores";
+
+  const defaultKeyMap = {
+    SOFT: {
+      code: "KeyB",
+      key: "b",
+      description: "Soft Pedal",
+      help: "Hold to apply the soft pedal",
+    },
+    SUSTAIN: {
+      code: "Space",
+      key: "＿",
+      description: "Sustain Pedal",
+      help: "Hold to apply the sustain pedal",
+    },
+    ACCENT: {
+      code: "KeyN",
+      key: "n",
+      description: "Accent Button",
+      help: "Notes struck while this is held with be 50% louder",
+    },
+
+    VOLUME_UP: {
+      code: "KeyO",
+      key: "o",
+      description: "Volume Up",
+      help: `Increase the main volume
+        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    },
+    VOLUME_DOWN: {
+      code: "KeyI",
+      key: "i",
+      description: "Volume Down",
+      help: `Decrease the main volume
+        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    },
+    BASS_VOLUME_UP: {
+      code: "Digit4",
+      key: "4",
+      description: "Bass Volume Up",
+      help: `Increase the bass volume
+        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    },
+    BASS_VOLUME_DOWN: {
+      code: "KeyE",
+      key: "e",
+      description: "Bass Volume Down",
+      help: `Decrease the bass volume
+        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    },
+    TREBLE_VOLUME_UP: {
+      code: "Digit0",
+      key: "0",
+      description: "Treble Volume Up",
+      help: `Increase the treble volume
+        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    },
+    TREBLE_VOLUME_DOWN: {
+      code: "KeyP",
+      key: "p",
+      description: "Treble Volume Down",
+      help: `Decrease the treble volume
+        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    },
+
+    TEMPO_UP: {
+      code: "KeyT",
+      key: "t",
+      description: "Tempo Up",
+      help: `Increase the tempo
+        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    },
+    TEMPO_DOWN: {
+      code: "KeyR",
+      key: "r",
+      description: "Tempo Down",
+      help: `Decrease the tempo
+        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    },
+
+    PLAY_PAUSE: {
+      code: "Digit7",
+      key: "7",
+      description: "Play/Pause",
+      help: "Play or pause the roll playback",
+    },
+    REWIND: {
+      code: "Backspace",
+      key: "⌫",
+      description: "Rewind Roll",
+      help: "Rewind the roll to the beginning",
+    },
+    FORWARD: {
+      code: "Digit8",
+      key: "8",
+      description: "Scrub Forwards",
+      help: "Advance the roll (hold to accelerate)",
+    },
+    BACKWARD: {
+      code: "Digit6",
+      key: "6",
+      description: "Scrub Backwards",
+      help: "Back up (hold to accelerate)",
+    },
+    PAN_UP: {
+      code: "ArrowUp",
+      key: "↑",
+      description: "Pan Upwards",
+      help: "Pan the roll upwards (hold to accelerate)",
+    },
+    PAN_DOWN: {
+      code: "ArrowDown",
+      key: "↓",
+      description: "Pan Downwards",
+      help: "Pan the roll downwards (hold to accelerate)",
+    },
+  };
+  export const keyMap = createPersistedStore(
+    "keyMap",
+    JSON.parse(JSON.stringify(defaultKeyMap)),
+  );
+
+  const unusableKeys = [
+    "Escape",
+    "ControlLeft",
+    "ControlRight",
+    "Enter",
+    "ShiftLeft",
+    "ShiftRight",
+    "CapsLock",
+  ];
+
+  const alternativeIndicatorText = {
+    Space: "＿",
+    Backspace: "⌫",
+    Delete: "⌦",
+    NumpadEnter: "⏎",
+    ArrowUp: "↑",
+    ArrowDown: "↓",
+    ArrowLeft: "←",
+    ArrowRight: "→",
+  };
+
+  const showKeybindingsConfig = writable(false);
+  export const toggleKeybindingsConfig = () =>
+    showKeybindingsConfig.update((val) => !val);
+</script>
+
 <script>
   import { get } from "svelte/store";
+  import { fade, slide } from "svelte/transition";
+  import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
+  import Icon from "../ui-components/Icon.svelte";
   import {
+    scrollDownwards,
     softOnOff,
     sustainOnOff,
     accentOnOff,
@@ -8,7 +235,6 @@
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
-    activeShortcutKeys,
   } from "../stores";
   import { clamp, easingInterval, enforcePrecision } from "../utils";
 
@@ -17,27 +243,6 @@
   export let updateTickByViewportIncrement;
 
   let actionInterval;
-
-  const keyMap = Object.freeze({
-    SOFT: "KeyB",
-    SUSTAIN: "Space",
-    ACCENT: "KeyN",
-
-    VOLUME_UP: "KeyO",
-    VOLUME_DOWN: "KeyI",
-    BASS_VOLUME_UP: "Digit4",
-    BASS_VOLUME_DOWN: "KeyE",
-    TREBLE_VOLUME_UP: "Digit0",
-    TREBLE_VOLUME_DOWN: "KeyP",
-
-    TEMPO_UP: "KeyT",
-    TEMPO_DOWN: "KeyR",
-
-    PLAY_PAUSE: "Digit7",
-    REWIND: "Backspace",
-    FORWARD: "Digit8",
-    BACKWARD: "Digit6",
-  });
 
   const config = {
     volume: {
@@ -78,6 +283,8 @@
     },
   };
 
+  let errorMessage;
+
   const updateStore = (
     // config object
     { store, min, max, delta, shiftDelta, ctrlDelta, precision },
@@ -100,161 +307,130 @@
     if (immediate) fn();
     actionInterval = easingInterval(fn);
   };
+
+  const updateKeyBinding = (shortcut, detail) => {
+    errorMessage = undefined;
+
+    if (
+      Object.values($keyMap)
+        .map(({ code }) => code)
+        .includes(detail.code) &&
+      detail.code !== $keyMap[shortcut].code
+    ) {
+      errorMessage = `The "${detail.key}" key is already assigned.`;
+      return;
+    }
+
+    if (unusableKeys.includes(detail.code)) {
+      errorMessage = `The "${detail.key}" key cannot be assigned.`;
+      return;
+    }
+
+    $keyMap[shortcut].code = detail.code;
+    $keyMap[shortcut].key = alternativeIndicatorText[detail.code] || detail.key;
+
+    $keyMap[shortcut].isChanged = detail.key !== defaultKeyMap[shortcut].key;
+  };
+
+  const resetShortcuts = () => {
+    errorMessage = undefined;
+    $keyMap = JSON.parse(JSON.stringify(defaultKeyMap));
+  };
+
+  const keydownCommandMap = {
+    SOFT: () => ($softOnOff = true),
+    SUSTAIN: () => ($sustainOnOff = true),
+    ACCENT: () => ($accentOnOff = true),
+
+    VOLUME_UP: (event) => increment(config.volume, event),
+    VOLUME_DOWN: (event) => decrement(config.volume, event),
+    BASS_VOLUME_UP: (event) => increment(config.bassVolume, event),
+    BASS_VOLUME_DOWN: (event) => decrement(config.bassVolume, event),
+    TREBLE_VOLUME_UP: (event) => increment(config.trebleVolume, event),
+    TREBLE_VOLUME_DOWN: (event) => decrement(config.trebleVolume, event),
+    TEMPO_UP: (event) => increment(config.tempo, event),
+    TEMPO_DOWN: (event) => decrement(config.tempo, event),
+
+    PLAY_PAUSE: playPauseApp,
+    REWIND: stopApp,
+    FORWARD: () =>
+      keydownRepeatAction(() =>
+        updateTickByViewportIncrement(/* up = */ !$scrollDownwards),
+      ),
+    BACKWARD: () =>
+      keydownRepeatAction(() =>
+        updateTickByViewportIncrement(/* up = */ $scrollDownwards),
+      ),
+
+    PAN_UP: () =>
+      keydownRepeatAction(() => updateTickByViewportIncrement(/* up = */ true)),
+    PAN_DOWN: () =>
+      keydownRepeatAction(() =>
+        updateTickByViewportIncrement(/* up = */ false),
+      ),
+  };
+
+  const keyupCommandMap = {
+    SOFT: () => ($softOnOff = false),
+    SUSTAIN: () => ($sustainOnOff = false),
+    ACCENT: () => ($accentOnOff = false),
+  };
 </script>
+
+{#if $showKeybindingsConfig}
+  <div transition:fade>
+    <header>
+      Keyboard Controls
+      <button on:click={toggleKeybindingsConfig}>
+        <Icon name="cross" height="24" width="24" />
+      </button>
+    </header>
+    <p>Click the edit button to reassign a control button.</p>
+    {#if errorMessage}
+      <p class="error-message" transition:slide>{errorMessage}</p>
+    {/if}
+    <dl>
+      {#each Object.keys($keyMap) as shortcut}
+        <KeyboardShortcutEditorRow
+          shortcut={$keyMap[shortcut]}
+          on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
+          on:reset={() => updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
+        />
+      {/each}
+    </dl>
+    {#if Object.values($keyMap).some((shortcut) => shortcut.isChanged)}
+      <p class="reset" transition:slide>
+        Reset to defaults: <button on:click={resetShortcuts}>
+          <Icon name="reset" height="24" width="24" />
+        </button>
+      </p>
+    {/if}
+  </div>
+{/if}
 
 <svelte:window
   on:keydown={(event) => {
-    switch (event.code) {
-      case keyMap.SOFT:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        softOnOff.set(true);
-        break;
+    const cmd = Object.keys($keyMap).find(
+      (key) => $keyMap[key].code === event.code,
+    );
 
-      case keyMap.SUSTAIN:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        sustainOnOff.set(true);
-        break;
-
-      case keyMap.ACCENT:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        accentOnOff.set(true);
-        break;
-
-      case keyMap.PLAY_PAUSE:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $activeShortcutKeys.playPause = true;
-        playPauseApp();
-        break;
-
-      case keyMap.REWIND:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        $activeShortcutKeys.rewind = true;
-        stopApp();
-        break;
-
-      case keyMap.FORWARD:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        keydownRepeatAction(() =>
-          updateTickByViewportIncrement(/* up = */ true),
-        );
-        break;
-
-      case keyMap.BACKWARD:
-        if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
-        keydownRepeatAction(() =>
-          updateTickByViewportIncrement(/* up = */ false),
-        );
-        break;
-
-      case keyMap.VOLUME_UP:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.volumeUp = true;
-        increment(config.volume, event);
-        break;
-
-      case keyMap.VOLUME_DOWN:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.volumeDown = true;
-        decrement(config.volume, event);
-        break;
-
-      case keyMap.BASS_VOLUME_UP:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.bassVolumeUp = true;
-        increment(config.bassVolume, event);
-        break;
-
-      case keyMap.BASS_VOLUME_DOWN:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.bassVolumeDown = true;
-        decrement(config.bassVolume, event);
-        break;
-
-      case keyMap.TREBLE_VOLUME_UP:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.trebleVolumeUp = true;
-        increment(config.trebleVolume, event);
-        break;
-
-      case keyMap.TREBLE_VOLUME_DOWN:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.trebleVolumeDown = true;
-        decrement(config.trebleVolume, event);
-        break;
-
-      case keyMap.TEMPO_UP:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.tempoUp = true;
-        increment(config.tempo, event);
-        break;
-
-      case keyMap.TEMPO_DOWN:
-        if (!(event.ctrlKey && event.shiftKey)) event.preventDefault();
-        $activeShortcutKeys.tempoDown = true;
-        decrement(config.tempo, event);
-        break;
-
-      // no default
+    if (cmd) {
+      if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
+      $keyMap[cmd].active = true;
+      keydownCommandMap[cmd]?.(event);
+      return;
     }
+
+    if (event.code === "Escape" && $showKeybindingsConfig)
+      toggleKeybindingsConfig();
   }}
   on:keyup={({ code }) => {
-    actionInterval?.clear();
-    actionInterval = undefined;
-
-    switch (code) {
-      case keyMap.SOFT:
-        softOnOff.set(false);
-        break;
-
-      case keyMap.SUSTAIN:
-        sustainOnOff.set(false);
-        break;
-
-      case keyMap.ACCENT:
-        accentOnOff.set(false);
-        break;
-
-      case keyMap.PLAY_PAUSE:
-        $activeShortcutKeys.playPause = false;
-        break;
-
-      case keyMap.REWIND:
-        $activeShortcutKeys.rewind = false;
-        break;
-
-      case keyMap.VOLUME_UP:
-        $activeShortcutKeys.volumeUp = false;
-        break;
-
-      case keyMap.VOLUME_DOWN:
-        $activeShortcutKeys.volumeDown = false;
-        break;
-
-      case keyMap.BASS_VOLUME_UP:
-        $activeShortcutKeys.bassVolumeUp = false;
-        break;
-
-      case keyMap.BASS_VOLUME_DOWN:
-        $activeShortcutKeys.bassVolumeDown = false;
-        break;
-
-      case keyMap.TREBLE_VOLUME_UP:
-        $activeShortcutKeys.trebleVolumeUp = false;
-        break;
-
-      case keyMap.TREBLE_VOLUME_DOWN:
-        $activeShortcutKeys.trebleVolumeDown = false;
-        break;
-
-      case keyMap.TEMPO_UP:
-        $activeShortcutKeys.tempoUp = false;
-        break;
-
-      case keyMap.TEMPO_DOWN:
-        $activeShortcutKeys.tempoDown = false;
-        break;
-
-      // no default
+    const cmd = Object.keys($keyMap).find((key) => $keyMap[key].code === code);
+    if (cmd) {
+      actionInterval?.clear();
+      actionInterval = undefined;
+      $keyMap[cmd].active = false;
+      keyupCommandMap[cmd]?.();
     }
   }}
 />

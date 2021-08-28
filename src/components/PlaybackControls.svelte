@@ -31,12 +31,8 @@
 </style>
 
 <script>
-  import {
-    softOnOff,
-    sustainOnOff,
-    accentOnOff,
-    activeShortcutKeys,
-  } from "../stores";
+  import { keyMap } from "./KeyboardShortcuts.svelte";
+  import { softOnOff, sustainOnOff, accentOnOff } from "../stores";
 
   export let playPauseApp;
   export let stopApp;
@@ -45,11 +41,14 @@
 <div id="playback-controls">
   <button type="button" on:click={playPauseApp}
     >Play/Pause
-    <kbd class:depressed={$activeShortcutKeys.playPause}>7</kbd></button
+    <kbd class:depressed={$keyMap.PLAY_PAUSE.active}
+      >{$keyMap.PLAY_PAUSE.key}</kbd
+    ></button
   >
   <button type="button" on:click={stopApp}
     >Rewind
-    <kbd class:depressed={$activeShortcutKeys.rewind}>Backspace</kbd></button
+    <kbd class:depressed={$keyMap.REWIND.active}>{$keyMap.REWIND.key}</kbd
+    ></button
   >
   <button
     type="button"
@@ -57,7 +56,7 @@
     aria-pressed={$softOnOff}
     on:click={() => ($softOnOff = !$softOnOff)}
     >Soft
-    <kbd class:depressed={$softOnOff}>b</kbd></button
+    <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
   >
   <button
     type="button"
@@ -65,7 +64,7 @@
     aria-pressed={$sustainOnOff}
     on:click={() => ($sustainOnOff = !$sustainOnOff)}
     >Sustain
-    <kbd class:depressed={$sustainOnOff}>Space</kbd></button
+    <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
   >
   <br />
   <button
@@ -75,7 +74,7 @@
     aria-pressed={$accentOnOff}
     on:mousedown={() => ($accentOnOff = true)}
     >Accent
-    <kbd class:depressed={$accentOnOff}>n</kbd></button
+    <kbd class:depressed={$accentOnOff}>{$keyMap.ACCENT.key}</kbd></button
   >
 </div>
 <svelte:window on:mouseup={() => ($accentOnOff = false)} />

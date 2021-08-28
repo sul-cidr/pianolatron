@@ -60,6 +60,10 @@ export const isReproducingRoll = derived(rollMetadata, ($rollMetadata) =>
     $rollMetadata.ROLL_TYPE,
   ),
 );
+export const scrollDownwards = derived(
+  rollMetadata,
+  ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
+);
 
 // Pedaling
 export const softOnOff = createStore(false);

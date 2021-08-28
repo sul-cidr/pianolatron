@@ -30,6 +30,7 @@
 </style>
 
 <script>
+  import Icon from "../ui-components/Icon.svelte";
   const panels = ["controls", "settings", "audio"];
   export let selectedPanel;
 </script>
@@ -45,82 +46,11 @@
     />
     <label for={panel}>
       {#if panel === "controls"}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="14" cy="6" r="2" />
-          <line x1="4" y1="6" x2="12" y2="6" />
-          <line x1="16" y1="6" x2="20" y2="6" />
-          <circle cx="8" cy="12" r="2" />
-          <line x1="4" y1="12" x2="6" y2="12" />
-          <line x1="10" y1="12" x2="20" y2="12" />
-          <circle cx="17" cy="18" r="2" />
-          <line x1="4" y1="18" x2="15" y2="18" />
-          <line x1="19" y1="18" x2="20" y2="18" />
-        </svg>
+        <Icon name="sliders" height="24" width="24" />
       {:else if panel === "settings"}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"
-          />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
+        <Icon name="cog" height="24" width="24" />
       {:else if panel === "audio"}
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:svg="http://www.w3.org/2000/svg"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <rect x="2" y="7" width="20" height="12" rx="2" />
-          <line
-            x1="7"
-            y1="9"
-            x2="7"
-            y2="13.5"
-            style="stroke-width:2.5;stroke-linecap:square"
-          />
-          <line
-            x1="12"
-            y1="9"
-            x2="12"
-            y2="13.5"
-            style="stroke-width:2.5;stroke-linecap:square"
-          />
-          <line
-            x1="17"
-            y1="9"
-            x2="17"
-            y2="13.5"
-            style="stroke-width:2.5;stroke-linecap:square"
-          />
-        </svg>
+        <Icon name="piano" height="24" width="24" />
       {/if}
     </label>
   {/each}
