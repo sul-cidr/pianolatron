@@ -1,7 +1,10 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 585095bad15f5aeaba6b7a1f5dcef5e81b7e4faa
   import { Piano } from "../pianolatron-piano";
 
   import {
@@ -97,19 +100,6 @@
       });
     }
     return Promise.resolve(fn()).then(() => setPlayerStateAtTick($currentTick));
-  };
-
-  const updatePiano = () => {
-    piano.strings.value = $sampleVolumes.strings;
-    piano.harmonics.value = $sampleVolumes.harmonics;
-    piano.pedal.value = $sampleVolumes.pedal;
-    piano.keybed.value = $sampleVolumes.keybed;
-  };
-
-  const updateReverb = () => {
-    reverb.dispose();
-    reverb = new Reverb({ wet: $reverbWetDry }).toDestination();
-    piano.connect(reverb);
   };
 
   const startNote = (noteNumber, velocity) => {

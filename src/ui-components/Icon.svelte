@@ -85,8 +85,7 @@
       svg: `<path d="m 10.953,20.006141 a 8,8 0 1 1 4,-0.5 m 5,0.5 h -5 v -5" />`,
     },
     piano: {
-      svg: ` 
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      svg: `
         <rect x="2" y="7" width="20" height="12" rx="2" />
         <line
           x1="7"
