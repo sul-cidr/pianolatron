@@ -17,15 +17,19 @@ export class Piano extends ToneJsPiano {
   }
 
   updateVelocities(velocities) {
-    this._strings.dispose();
-    this._strings = new PianoStrings({
-      ...this.options,
-      velocities,
-      enabled: true,
-      samples: this.options.url,
-      volume: this.options.volume.strings,
-    }).connect(this.output);
-    return this._strings.load();
+    if (this._strings.loaded) {
+      this._strings.dispose();
+      this._strings = new PianoStrings({
+        ...this.options,
+        velocities,
+        enabled: true,
+        samples: this.options.url,
+        volume: this.options.volume.strings,
+      }).connect(this.output);
+      return this._strings.load();
+    }
+    // eslint-disable-next-line prefer-promise-reject-errors
+    return Promise.reject({ loadedVelocities: this._strings._strings.length });
   }
 
   updateVolumes({ strings, harmonics, pedal, keybed }) {
