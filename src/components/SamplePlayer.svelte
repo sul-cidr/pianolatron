@@ -262,7 +262,11 @@
   $: $rollPedalingOnOff, updatePlayer();
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
-  $: updatePlayer(() => piano.updateVelocities($sampleVelocities));
+  $: updatePlayer(() =>
+    piano
+      .updateVelocities($sampleVelocities)
+      .catch(({ loadedVelocities }) => ($sampleVelocities = loadedVelocities)),
+  );
 
   export {
     midiSamplePlayer,
