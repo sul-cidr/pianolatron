@@ -84,6 +84,33 @@
     reset: {
       svg: `<path d="m 10.953,20.006141 a 8,8 0 1 1 4,-0.5 m 5,0.5 h -5 v -5" />`,
     },
+    piano: {
+      svg: ` 
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <rect x="2" y="7" width="20" height="12" rx="2" />
+        <line
+          x1="7"
+          y1="9"
+          x2="7"
+          y2="13.5"
+          style="stroke-width:2.5;stroke-linecap:square"
+        />
+        <line
+          x1="12"
+          y1="9"
+          x2="12"
+          y2="13.5"
+          style="stroke-width:2.5;stroke-linecap:square"
+        />
+        <line
+          x1="17"
+          y1="9"
+          x2="17"
+          y2="13.5"
+          style="stroke-width:2.5;stroke-linecap:square"
+        />
+      `,
+    },
     "piano-out": {
       svg: `
         <path d="M11 19h-6a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v4" />
