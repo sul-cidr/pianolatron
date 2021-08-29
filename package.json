@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "preview": "astro build --site http://localhost:8080/ && astro preview",
     "gh-deploy": "SITE=https://pianolatron.stanford.edu/ bin/gh-deploy.sh",
     "lint": "prettier --check . && eslint src/ --ext svelte --ext js"
   },
