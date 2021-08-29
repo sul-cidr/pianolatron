@@ -14,13 +14,13 @@
   },
   "devDependencies": {
     "astro": "^0.20.3",
-    "eslint": "^7.22.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-svelte3": "^3.2.0",
-    "prettier": "~2.2.1",
-    "prettier-plugin-svelte": "^2.2.0"
+    "prettier": "~2.3.2",
+    "prettier-plugin-svelte": "^2.4.0"
   },
   "dependencies": {
     "midi-player-js": "^2.0.13",
