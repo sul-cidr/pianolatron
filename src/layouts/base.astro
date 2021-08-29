@@ -1,12 +1,16 @@
 ---
 import Footer from "./footer.astro";
+import { execSync } from "node:child_process";
+
 const { title } = Astro.props;
+const commit = execSync("git rev-parse --short HEAD").toString().trim();
 ---
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="version" content={commit}>
     <title>{title}</title>
     <style global lang="scss">
       @import "../styles/base";
