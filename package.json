@@ -12,7 +12,7 @@
     "lint": "prettier --check . && eslint src/ --ext svelte --ext js"
   },
   "devDependencies": {
-    "astro": "^0.19.0",
+    "astro": "^0.20.3",
     "eslint": "^7.22.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^8.1.0",
