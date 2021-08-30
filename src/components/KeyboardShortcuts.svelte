@@ -102,6 +102,7 @@
     accentOnOff,
   } from "../stores";
   import { controlsConfig } from "../config/controls-config";
+  import { keyMapMeta } from "../config/keyboard-shortcut-config";
   import { clamp, easingInterval, enforcePrecision } from "../utils";
 
   export let playPauseApp;
@@ -220,6 +221,7 @@
       {#each Object.keys($keyMap) as shortcut}
         <KeyboardShortcutEditorRow
           shortcut={$keyMap[shortcut]}
+          meta={keyMapMeta[shortcut]}
           on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
           on:reset={() => updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
         />
