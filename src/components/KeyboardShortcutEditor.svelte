@@ -92,14 +92,14 @@
 
   let errorMessage;
 
-  const updateKeyBinding = (shortcut, detail) => {
+  const updateKeyBinding = (command, detail) => {
     errorMessage = undefined;
 
     if (
       Object.values($keyMap)
         .map(({ code }) => code)
         .includes(detail.code) &&
-      detail.code !== $keyMap[shortcut].code
+      detail.code !== $keyMap[command].code
     ) {
       errorMessage = `The "${detail.key}" key is already assigned.`;
       return;
@@ -110,16 +110,30 @@
       return;
     }
 
-    $keyMap[shortcut].code = detail.code;
-    $keyMap[shortcut].key = alternativeIndicatorText[detail.code] || detail.key;
+    $keyMap[command].code = detail.code;
+    $keyMap[command].key = alternativeIndicatorText[detail.code] || detail.key;
 
-    $keyMap[shortcut].isChanged = detail.key !== defaultKeyMap[shortcut].key;
+    $keyMap[command].isChanged = detail.key !== defaultKeyMap[command].key;
+  };
+
+  // Toggle the editing state for @command, ensure all others are `false`
+  //  (sets all to `false` if no @command is passed).
+  const toggleEditingState = (command) => {
+    Object.keys($keyMap).forEach(
+      (key) =>
+        ($keyMap[key].editing =
+          key === command ? !$keyMap[key].editing : false),
+    );
   };
 
   const resetShortcuts = () => {
     errorMessage = undefined;
+    toggleEditingState();
     $keyMap = JSON.parse(JSON.stringify(defaultKeyMap));
   };
+
+  // Clear the editing state for all shortcuts when the dialogue is closed
+  $: if (!$showKeybindingsConfig) toggleEditingState();
 </script>
 
 {#if $showKeybindingsConfig}
@@ -135,12 +149,13 @@
       <p class="error-message" transition:slide>{errorMessage}</p>
     {/if}
     <dl>
-      {#each Object.keys($keyMap) as shortcut}
+      {#each Object.keys($keyMap) as command}
         <KeyboardShortcutEditorRow
-          shortcut={$keyMap[shortcut]}
-          meta={keyMapMeta[shortcut]}
-          on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
-          on:reset={() => updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
+          shortcut={$keyMap[command]}
+          meta={keyMapMeta[command]}
+          on:update={({ detail }) => updateKeyBinding(command, detail)}
+          on:toggleEditing={() => toggleEditingState(command)}
+          on:reset={() => updateKeyBinding(command, defaultKeyMap[command])}
         />
       {/each}
     </dl>

@@ -43,17 +43,17 @@
 
   export let shortcut;
   export let meta;
-  let editing = false;
   let editButtonRef;
 
   const dispatch = createEventDispatcher();
   const updateShortcut = (event) => dispatch("update", event);
+  const toggleEditing = () => dispatch("toggleEditing");
   const resetShortcut = () => dispatch("reset");
 </script>
 
 <dt data-tooltip={meta.help}>{meta.description}</dt>
 <dd>
-  {#if editing}
+  {#if shortcut.editing}
     <span>Choose a new keystroke...</span>
   {:else}
     <kbd>{shortcut.key}</kbd>
@@ -61,7 +61,7 @@
   <button
     data-tooltip="Edit"
     bind:this={editButtonRef}
-    on:click={() => (editing = !editing)}
+    on:click={toggleEditing}
   >
     <Icon name="edit" height="20" width="20" />
   </button>
@@ -76,11 +76,11 @@
 
 <svelte:window
   on:keydown|preventDefault|capture={(event) =>
-    editing && event.stopPropagation()}
+    shortcut.editing && event.stopPropagation()}
   on:keyup|preventDefault|capture={(event) => {
-    if (!editing) return;
+    if (!shortcut.editing) return;
     if (event.code !== "Escape") updateShortcut(event);
-    editing = false;
+    shortcut.editing = false;
     editButtonRef.blur();
     event.stopPropagation();
   }}
