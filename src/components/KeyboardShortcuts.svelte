@@ -1,6 +1,5 @@
 <script context="module">
   import { writable } from "svelte/store";
-  // eslint-disable-next-line import/order
   import { createPersistedStore } from "../stores";
   import { defaultKeyMap } from "../config/keyboard-shortcut-config";
 
