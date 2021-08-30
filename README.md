@@ -9,13 +9,16 @@ Development repository for the CIDR Pianolatron application.
 ### Live Updating Development Build
 
 1. `yarn`
-1. `yarn dev` (This will run the development server and reflect your changes to the page as you save files)
+1. `yarn dev` (This will run the development server and reflect your changes to
+   the page as you save files)
 1. Visit `localhost:8080` in your browser
 
 ### Static Build
 
 1. `yarn build`
 1. Serve `build/` using an http server
+1. `yarn preview` is now also available, which will perform a static production
+   build and then serve it from http://localhost:8080/.
 
 ## Linting and Testing
 
