@@ -32,7 +32,7 @@
   import Icon from "../ui-components/Icon.svelte";
   import { showKeyboard, overlayKeyboard } from "../stores";
 
-  export let outside;
+  export let outside = false;
 </script>
 
 <div class="overlay-buttons" class:outside transition:fade|local>
