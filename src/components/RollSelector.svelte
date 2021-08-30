@@ -15,7 +15,7 @@
   import FilteredSelect from "../ui-components/FilteredSelect.svelte";
 
   export let rollListItems;
-  export let currentRoll;
+  export let currentRoll = null;
 </script>
 
 <FilteredSelect

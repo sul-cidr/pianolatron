@@ -2,7 +2,7 @@
   export let name;
   export let width = "1rem";
   export let height = "1rem";
-  export let customAttribs;
+  export let customAttribs = {};
 
   const defaultAttribs = {
     viewBox: "0 0 24 24",
