@@ -1,4 +1,4 @@
-import { rollProfile } from "./roll-config";
+import { rollProfile } from "./config/roll-config";
 
 export const enforcePrecision = (value, precision) => {
   const multiplier = 10 ** (precision || 0);

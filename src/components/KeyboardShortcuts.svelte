@@ -78,7 +78,7 @@
     defaultKeyMap,
     unusableKeys,
     alternativeIndicatorText,
-  } from "../keyboard-shortcut-config";
+  } from "../config/keyboard-shortcut-config";
 
   export const keyMap = createPersistedStore(
     "keyMap",
@@ -101,7 +101,7 @@
     sustainOnOff,
     accentOnOff,
   } from "../stores";
-  import { controlsConfig } from "../controls-config";
+  import { controlsConfig } from "../config/controls-config";
   import { clamp, easingInterval, enforcePrecision } from "../utils";
 
   export let playPauseApp;

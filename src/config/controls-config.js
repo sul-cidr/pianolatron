@@ -3,7 +3,7 @@ import {
   bassVolumeCoefficient,
   trebleVolumeCoefficient,
   tempoCoefficient,
-} from "./stores";
+} from "../stores";
 
 export const controlsConfig = {
   volume: {

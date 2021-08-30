@@ -27,7 +27,7 @@
     tempoCoefficient,
     playbackProgress,
   } from "../stores";
-  import { controlsConfig } from "../controls-config";
+  import { controlsConfig } from "../config/controls-config";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
   export let skipToPercentage;
