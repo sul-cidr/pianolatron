@@ -79,7 +79,7 @@
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
-  import catalog from "./catalog.json";
+  import catalog from "./config/catalog.json";
 
   let appReady = false;
   let mididataReady;
