@@ -79,7 +79,7 @@
     editing && event.stopPropagation()}
   on:keyup|preventDefault|capture={(event) => {
     if (!editing) return;
-    updateShortcut(event);
+    if (event.code !== "Escape") updateShortcut(event);
     editing = false;
     editButtonRef.blur();
     event.stopPropagation();
