@@ -14,14 +14,7 @@ const datetime = new Date().toISOString();
     <meta name="version" content={commit}>
     <meta name="dcterms.modified" content={datetime}>
     <title>{title}</title>
-    <style global lang="scss">
-      @import "../styles/base";
-      @import "../styles/theme";
-      @import "../styles/loader";
-      @import "../styles/hole-highlighting";
-      @import "../styles/overlay-buttons";
-      @import "../styles/tooltips";
-    </style>
+    <link rel="stylesheet" href={Astro.resolve("../styles/styles.css")} />
     <script>
       const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
       theme && document.documentElement.setAttribute("data-theme", theme);
