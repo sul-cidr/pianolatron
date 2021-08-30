@@ -59,36 +59,8 @@ const velocitiesMap = {
  * All the notes of audio samples
  */
 const allNotes = [
-  21,
-  24,
-  27,
-  30,
-  33,
-  36,
-  39,
-  42,
-  45,
-  48,
-  51,
-  54,
-  57,
-  60,
-  63,
-  66,
-  69,
-  72,
-  75,
-  78,
-  81,
-  84,
-  87,
-  90,
-  93,
-  96,
-  99,
-  102,
-  105,
-  108,
+  21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72, 75,
+  78, 81, 84, 87, 90, 93, 96, 99, 102, 105, 108,
 ];
 
 function getNotesInRange(min, max) {
@@ -99,29 +71,8 @@ function getNotesInRange(min, max) {
  * All the notes of audio samples
  */
 const harmonics = [
-  21,
-  24,
-  27,
-  30,
-  33,
-  36,
-  39,
-  42,
-  45,
-  48,
-  51,
-  54,
-  57,
-  60,
-  63,
-  66,
-  69,
-  72,
-  75,
-  78,
-  81,
-  84,
-  87,
+  21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72, 75,
+  78, 81, 84, 87,
 ];
 function getHarmonicsInRange(min, max) {
   return harmonics.filter((note) => min <= note && note <= max);
