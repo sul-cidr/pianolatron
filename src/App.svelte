@@ -75,6 +75,7 @@
   import Keyboard from "./components/Keyboard.svelte";
   import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
+  import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
@@ -306,6 +307,7 @@
 </div>
 <SamplePlayer bind:this={samplePlayer} />
 <KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
+<KeyboardShortcutEditor />
 <Notification />
 
 <svelte:window

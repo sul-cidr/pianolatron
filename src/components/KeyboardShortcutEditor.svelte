@@ -70,6 +70,14 @@
   }
 </style>
 
+<script context="module">
+  import { writable } from "svelte/store";
+
+  const showKeybindingsConfig = writable(false);
+  export const toggleKeybindingsConfig = () =>
+    showKeybindingsConfig.update((val) => !val);
+</script>
+
 <script>
   import { fade, slide } from "svelte/transition";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
@@ -80,7 +88,7 @@
     unusableKeys,
     alternativeIndicatorText,
   } from "../config/keyboard-shortcut-config";
-  import { keyMap, toggleKeybindingsConfig } from "./KeyboardShortcuts.svelte";
+  import { keyMap } from "./KeyboardShortcuts.svelte";
 
   let errorMessage;
 
@@ -114,32 +122,39 @@
   };
 </script>
 
-<div transition:fade>
-  <header>
-    Keyboard Controls
-    <button on:click={toggleKeybindingsConfig}>
-      <Icon name="cross" height="24" width="24" />
-    </button>
-  </header>
-  <p>Click the edit button to reassign a control button.</p>
-  {#if errorMessage}
-    <p class="error-message" transition:slide>{errorMessage}</p>
-  {/if}
-  <dl>
-    {#each Object.keys($keyMap) as shortcut}
-      <KeyboardShortcutEditorRow
-        shortcut={$keyMap[shortcut]}
-        meta={keyMapMeta[shortcut]}
-        on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
-        on:reset={() => updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
-      />
-    {/each}
-  </dl>
-  {#if Object.values($keyMap).some((shortcut) => shortcut.isChanged)}
-    <p class="reset" transition:slide>
-      Reset to defaults: <button on:click={resetShortcuts}>
-        <Icon name="reset" height="24" width="24" />
+{#if $showKeybindingsConfig}
+  <div transition:fade>
+    <header>
+      Keyboard Controls
+      <button on:click={toggleKeybindingsConfig}>
+        <Icon name="cross" height="24" width="24" />
       </button>
-    </p>
-  {/if}
-</div>
+    </header>
+    <p>Click the edit button to reassign a control button.</p>
+    {#if errorMessage}
+      <p class="error-message" transition:slide>{errorMessage}</p>
+    {/if}
+    <dl>
+      {#each Object.keys($keyMap) as shortcut}
+        <KeyboardShortcutEditorRow
+          shortcut={$keyMap[shortcut]}
+          meta={keyMapMeta[shortcut]}
+          on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
+          on:reset={() => updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
+        />
+      {/each}
+    </dl>
+    {#if Object.values($keyMap).some((shortcut) => shortcut.isChanged)}
+      <p class="reset" transition:slide>
+        Reset to defaults: <button on:click={resetShortcuts}>
+          <Icon name="reset" height="24" width="24" />
+        </button>
+      </p>
+    {/if}
+  </div>
+{/if}
+<svelte:window
+  on:keydown={({ code }) => {
+    if (code === "Escape" && $showKeybindingsConfig) toggleKeybindingsConfig();
+  }}
+/>

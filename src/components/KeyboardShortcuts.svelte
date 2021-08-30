@@ -1,5 +1,4 @@
 <script context="module">
-  import { writable } from "svelte/store";
   import { createPersistedStore } from "../stores";
   import { defaultKeyMap } from "../config/keyboard-shortcut-config";
 
@@ -7,10 +6,6 @@
     "keyMap",
     JSON.parse(JSON.stringify(defaultKeyMap)),
   );
-
-  const showKeybindingsConfig = writable(false);
-  export const toggleKeybindingsConfig = () =>
-    showKeybindingsConfig.update((val) => !val);
 </script>
 
 <script>
@@ -23,7 +18,6 @@
   } from "../stores";
   import { controlsConfig } from "../config/controls-config";
   import { clamp, easingInterval, enforcePrecision } from "../utils";
-  import KeyboardShortcutEditor from "./KeyboardShortcutEditor.svelte";
 
   export let playPauseApp;
   export let stopApp;
@@ -95,8 +89,6 @@
   };
 </script>
 
-{#if $showKeybindingsConfig}<KeyboardShortcutEditor />{/if}
-
 <svelte:window
   on:keydown={(event) => {
     const cmd = Object.keys($keyMap).find(
@@ -107,11 +99,7 @@
       if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
       $keyMap[cmd].active = true;
       keydownCommandMap[cmd]?.(event);
-      return;
     }
-
-    if (event.code === "Escape" && $showKeybindingsConfig)
-      toggleKeybindingsConfig();
   }}
   on:keyup={({ code }) => {
     const cmd = Object.keys($keyMap).find((key) => $keyMap[key].code === code);
