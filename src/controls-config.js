@@ -36,7 +36,7 @@ export const controlsConfig = {
   tempo: {
     store: tempoCoefficient,
     min: 0.1,
-    max: 4,
+    max: 3,
     delta: 0.05,
     shiftDelta: 0.1,
     ctrlDelta: 0.01,

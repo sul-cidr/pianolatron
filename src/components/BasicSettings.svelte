@@ -27,6 +27,7 @@
     tempoCoefficient,
     playbackProgress,
   } from "../stores";
+  import { controlsConfig } from "../controls-config";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
   export let skipToPercentage;
@@ -45,9 +46,9 @@
     >
     <span>{$volumeCoefficient}</span>
     <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
+      min={controlsConfig.volume.min}
+      max={controlsConfig.volume.max}
+      step={controlsConfig.volume.delta}
       bind:value={$volumeCoefficient}
       name="volume"
     />
@@ -64,9 +65,9 @@
     >
     <span>{$bassVolumeCoefficient}</span>
     <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
+      min={controlsConfig.bassVolume.min}
+      max={controlsConfig.bassVolume.max}
+      step={controlsConfig.bassVolume.delta}
       bind:value={$bassVolumeCoefficient}
       name="bass-volume"
     />
@@ -83,9 +84,9 @@
     </span>
     <span>{$trebleVolumeCoefficient}</span>
     <RangeSlider
-      min="0"
-      max="4"
-      step=".1"
+      min={controlsConfig.trebleVolume.min}
+      max={controlsConfig.trebleVolume.max}
+      step={controlsConfig.trebleVolume.delta}
       bind:value={$trebleVolumeCoefficient}
       name="treble-volume"
     />
@@ -101,9 +102,9 @@
     >
     <span>{($tempoCoefficient * 100).toFixed(0)}%</span>
     <RangeSlider
-      min="0.1"
-      max="3"
-      step=".001"
+      min={controlsConfig.tempo.min}
+      max={controlsConfig.tempo.max}
+      step={controlsConfig.tempo.delta}
       bind:value={$tempoCoefficient}
       name="tempo"
     />
