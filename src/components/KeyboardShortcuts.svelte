@@ -100,11 +100,8 @@
     softOnOff,
     sustainOnOff,
     accentOnOff,
-    volumeCoefficient,
-    bassVolumeCoefficient,
-    trebleVolumeCoefficient,
-    tempoCoefficient,
   } from "../stores";
+  import { controlsConfig } from "../controls-config";
   import { clamp, easingInterval, enforcePrecision } from "../utils";
 
   export let playPauseApp;
@@ -112,46 +109,6 @@
   export let updateTickByViewportIncrement;
 
   let actionInterval;
-
-  const config = {
-    volume: {
-      store: volumeCoefficient,
-      min: 0,
-      max: 4,
-      delta: 0.1,
-      shiftDelta: 0.4,
-      ctrlDelta: 0.05,
-      precision: 2,
-    },
-    bassVolume: {
-      store: bassVolumeCoefficient,
-      min: 0,
-      max: 4,
-      delta: 0.1,
-      shiftDelta: 0.4,
-      ctrlDelta: 0.05,
-      precision: 2,
-    },
-    trebleVolume: {
-      store: trebleVolumeCoefficient,
-      min: 0,
-      max: 4,
-      delta: 0.1,
-      shiftDelta: 0.4,
-      ctrlDelta: 0.05,
-      precision: 2,
-    },
-    tempo: {
-      store: tempoCoefficient,
-      min: 0.1,
-      max: 4,
-      delta: 0.05,
-      shiftDelta: 0.1,
-      ctrlDelta: 0.01,
-      precision: 2,
-    },
-  };
-
   let errorMessage;
 
   const updateStore = (
@@ -211,14 +168,15 @@
     SUSTAIN: () => ($sustainOnOff = true),
     ACCENT: () => ($accentOnOff = true),
 
-    VOLUME_UP: (event) => increment(config.volume, event),
-    VOLUME_DOWN: (event) => decrement(config.volume, event),
-    BASS_VOLUME_UP: (event) => increment(config.bassVolume, event),
-    BASS_VOLUME_DOWN: (event) => decrement(config.bassVolume, event),
-    TREBLE_VOLUME_UP: (event) => increment(config.trebleVolume, event),
-    TREBLE_VOLUME_DOWN: (event) => decrement(config.trebleVolume, event),
-    TEMPO_UP: (event) => increment(config.tempo, event),
-    TEMPO_DOWN: (event) => decrement(config.tempo, event),
+    VOLUME_UP: (event) => increment(controlsConfig.volume, event),
+    VOLUME_DOWN: (event) => decrement(controlsConfig.volume, event),
+    BASS_VOLUME_UP: (event) => increment(controlsConfig.bassVolume, event),
+    BASS_VOLUME_DOWN: (event) => decrement(controlsConfig.bassVolume, event),
+    TREBLE_VOLUME_UP: (event) => increment(controlsConfig.trebleVolume, event),
+    TREBLE_VOLUME_DOWN: (event) =>
+      decrement(controlsConfig.trebleVolume, event),
+    TEMPO_UP: (event) => increment(controlsConfig.tempo, event),
+    TEMPO_DOWN: (event) => decrement(controlsConfig.tempo, event),
 
     PLAY_PAUSE: playPauseApp,
     REWIND: stopApp,
