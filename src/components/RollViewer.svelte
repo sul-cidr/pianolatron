@@ -80,6 +80,15 @@
       top: 0;
     }
   }
+
+  .scale-bar {
+    position: absolute;
+    height: 20px;
+    display: block;
+    z-index: 10;
+    background: rgba(grey, 0.8);
+    padding: 0 1em 0;
+  }
 </style>
 
 <script>
@@ -120,6 +129,8 @@
   let trackerbarHeight;
   let animationEaseInterval;
   let osdNavDisplayRegion;
+
+  let scaleBarWidth = { px: 100, label: "1in" };
 
   const createMark = (hole) => {
     const {
@@ -477,6 +488,14 @@
       //  constraints applied here), we'll just neuter it here.
     };
 
+    openSeadragon.addHandler("zoom", () => {
+      const minScaleBarWidth = 100;
+      const ppi = viewport.viewportToImageZoom(viewport.getZoom(true)) * 300;
+      let inches = 1;
+      while (ppi * inches < minScaleBarWidth) inches += 1;
+      scaleBarWidth = { px: ppi * inches, label: `${inches}in` };
+    });
+
     openSeadragon.open(imageUrl);
   });
 
@@ -530,4 +549,7 @@
       {updateTickByViewportIncrement}
     />
   {/if}
+  <span class="scale-bar" style={`width: ${scaleBarWidth.px}px`}
+    >{scaleBarWidth.label}</span
+  >
 </div>
