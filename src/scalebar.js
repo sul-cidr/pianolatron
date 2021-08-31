@@ -155,16 +155,6 @@ export const ScalebarLocation = {
  * default: $.ScalebarSizeAndTextRenderer.METRIC_LENGTH
  */
 
-//    $.Viewer.prototype.scalebar = function (options) {
-//     if (!this.scalebarInstance) {
-//       options = options || {};
-//       options.viewer = this;
-//       this.scalebarInstance = new $.Scalebar(options);
-//     } else {
-//       this.scalebarInstance.refresh(options);
-//     }
-//   };
-
 export class Scalebar {
   constructor(options) {
     options = options || {};
@@ -181,7 +171,9 @@ export class Scalebar {
 
     this.setMinWidth(options.minWidth || "150px");
 
-    this.setDrawScalebarFunction(options.type || ScalebarType.MICROSCOPY);
+    this.setDrawScalebarFunction(
+      ScalebarType[options.type] || ScalebarType.MICROSCOPY,
+    );
     this.color = options.color || "black";
     this.fontColor = options.fontColor || "black";
     this.backgroundColor = options.backgroundColor || "none";
@@ -190,14 +182,16 @@ export class Scalebar {
     this.barThickness = options.barThickness || 2;
     this.pixelsPerMeter = options.pixelsPerMeter || null;
     this.referenceItemIdx = options.referenceItemIdx || 0;
-    this.location = options.location || ScalebarLocation.BOTTOM_LEFT;
+    this.location =
+      ScalebarLocation[options.location] || ScalebarLocation.BOTTOM_LEFT;
     this.xOffset = options.xOffset || 5;
     this.yOffset = options.yOffset || 5;
     this.stayInsideImage = isDefined(options.stayInsideImage)
       ? options.stayInsideImage
       : true;
     this.sizeAndTextRenderer =
-      options.sizeAndTextRenderer || ScalebarSizeAndTextRenderer.METRIC_LENGTH;
+      ScalebarSizeAndTextRenderer[options.sizeAndTextRenderer] ||
+      ScalebarSizeAndTextRenderer.METRIC_LENGTH;
 
     let self = this;
     this.viewer.addHandler("open", function () {

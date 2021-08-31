@@ -86,12 +86,7 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
-  import {
-    Scalebar,
-    ScalebarType,
-    ScalebarLocation,
-    ScalebarSizeAndTextRenderer,
-  } from "../scalebar";
+  import { Scalebar } from "../scalebar";
   import {
     rollMetadata,
     scrollDownwards,
@@ -424,19 +419,18 @@
 
     scalebar = new Scalebar({
       viewer: viewport.viewer,
-      type: ScalebarType.MICROSCOPY,
-      pixelsPerMeter: 11811,
+      pixelsPerMeter: 11811.03, // This is 300 ppi
       minWidth: "75px",
-      location: ScalebarLocation.TOP_LEFT,
+      location: "TOP_LEFT",
       xOffset: 5,
       yOffset: 10,
-      stayInsideImage: true,
+      stayInsideImage: false,
       color: "rgb(150, 150, 150)",
-      fontColor: "rgb(100, 100, 100)",
+      fontColor: "rgb(127, 119, 118)",
       backgroundColor: "rgba(255, 255, 255, 0.8)",
       fontSize: "small",
       barThickness: 2,
-      sizeAndTextRenderer: ScalebarSizeAndTextRenderer.IMPERIAL_LENGTH,
+      sizeAndTextRenderer: "IMPERIAL_LENGTH",
     });
 
     // Directly set some OSD internals that aren't exposed in the constructor
