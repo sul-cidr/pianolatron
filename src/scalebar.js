@@ -121,7 +121,7 @@ export const ScalebarLocation = {
  * @param {Object} options
  * @param {OpenSeadragon.Viewer} options.viewer The viewer to attach this
  * Scalebar to.
- * @param {OpenSeadragon.ScalebarType} options.type The scale bar type.
+ * @param {ScalebarType} options.type The scale bar type.
  * Default: microscopy
  * @param {Integer} options.pixelsPerMeter The pixels per meter of the
  * zoomable image at the original image size. If null, the scale bar is not
@@ -131,7 +131,7 @@ export const ScalebarLocation = {
  * default: 0
  * @param (String} options.minWidth The minimal width of the scale bar as a
  * CSS string (ex: 100px, 1em, 1% etc...) default: 150px
- * @param {OpenSeadragon.ScalebarLocation} options.location The location
+ * @param {ScalebarLocation} options.location The location
  * of the scale bar inside the viewer. default: bottom left
  * @param {Integer} options.xOffset Offset location of the scale bar along x.
  * default: 5
@@ -152,7 +152,7 @@ export const ScalebarLocation = {
  * The function must have 2 parameters: the PPM at the current zoom level
  * and the minimum size of the scale bar. It must return an object containing
  * 2 attributes: size and text containing the size of the scale bar and the text.
- * default: $.ScalebarSizeAndTextRenderer.METRIC_LENGTH
+ * default: ScalebarSizeAndTextRenderer.METRIC_LENGTH
  */
 
 export class Scalebar {
@@ -276,7 +276,7 @@ export class Scalebar {
   /**
    * Refresh the scalebar with the options submitted.
    * @param {Object} options
-   * @param {OpenSeadragon.ScalebarType} options.type The scale bar type.
+   * @param {ScalebarType} options.type The scale bar type.
    * Default: microscopy
    * @param {Integer} options.pixelsPerMeter The pixels per meter of the
    * zoomable image at the original image size. If null, the scale bar is not
@@ -286,7 +286,7 @@ export class Scalebar {
    * default: 0
    * @param (String} options.minWidth The minimal width of the scale bar as a
    * CSS string (ex: 100px, 1em, 1% etc...) default: 150px
-   * @param {OpenSeadragon.ScalebarLocation} options.location The location
+   * @param {ScalebarLocation} options.location The location
    * of the scale bar inside the viewer. default: bottom left
    * @param {Integer} options.xOffset Offset location of the scale bar along x.
    * default: 5
@@ -306,7 +306,7 @@ export class Scalebar {
    * The function must have 2 parameters: the PPM at the current zoom level
    * and the minimum size of the scale bar. It must return an object containing
    * 2 attributes: size and text containing the size of the scale bar and the text.
-   * default: $.ScalebarSizeAndTextRenderer.METRIC_LENGTH
+   * default: ScalebarSizeAndTextRenderer.METRIC_LENGTH
    */
   refresh(options) {
     this.updateOptions(options);
@@ -565,7 +565,7 @@ export class ScalebarSizeAndTextRenderer {
    * Generic metric unit. One can use this function to create a new metric
    * scale. For example, here is an implementation of energy levels:
    * function(ppeV, minSize) {
-   *   return OpenSeadragon.ScalebarSizeAndTextRenderer.METRIC_GENERIC(
+   *   return ScalebarSizeAndTextRenderer.METRIC_GENERIC(
    *           ppeV, minSize, "eV");
    * }
    */
