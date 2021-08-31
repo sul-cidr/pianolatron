@@ -87,6 +87,12 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
   import {
+    Scalebar,
+    ScalebarType,
+    ScalebarLocation,
+    ScalebarSizeAndTextRenderer,
+  } from "../scalebar";
+  import {
     rollMetadata,
     scrollDownwards,
     currentTick,
@@ -150,6 +156,7 @@
   let trackerbarHeight;
   let animationEaseInterval;
   let osdNavDisplayRegion;
+  let scalebar;
 
   const annotateHoleData = (holeData) => {
     const velocities = holeData.map(({ v }) => v).filter((v) => v);
@@ -414,6 +421,23 @@
     const { navigator } = openSeadragon;
     ({ viewport } = openSeadragon);
     ({ displayRegion: osdNavDisplayRegion } = navigator);
+
+    scalebar = new Scalebar({
+      viewer: viewport.viewer,
+      type: ScalebarType.MICROSCOPY,
+      pixelsPerMeter: 11811,
+      minWidth: "75px",
+      location: ScalebarLocation.TOP_LEFT,
+      xOffset: 5,
+      yOffset: 10,
+      stayInsideImage: true,
+      color: "rgb(150, 150, 150)",
+      fontColor: "rgb(100, 100, 100)",
+      backgroundColor: "rgba(255, 255, 255, 0.8)",
+      fontSize: "small",
+      barThickness: 2,
+      sizeAndTextRenderer: ScalebarSizeAndTextRenderer.IMPERIAL_LENGTH,
+    });
 
     // Directly set some OSD internals that aren't exposed in the constructor
     viewport.zoomSpring.animationTime = 1.2;
