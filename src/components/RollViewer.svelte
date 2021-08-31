@@ -6,17 +6,6 @@
     height: 100%;
     width: 100%;
 
-    p {
-      background: rgba(black, 0.4);
-      border-radius: 4px;
-      color: white;
-      left: 1em;
-      padding: 4px 8px;
-      position: absolute;
-      top: 1em;
-      z-index: 1;
-    }
-
     // tracker bar
     &::before {
       background: linear-gradient(
@@ -81,13 +70,18 @@
     }
   }
 
-  .scale-bar {
+  span {
+    background: rgba(black, 0.4);
+    border-radius: 4px;
+    color: white;
+    left: 1em;
+    padding: 4px 8px;
     position: absolute;
-    height: 20px;
-    display: block;
-    z-index: 10;
+    top: 1em;
+    z-index: 1;
+  }
+  .scale-bar {
     background: rgba(grey, 0.8);
-    padding: 0 1em 0;
   }
 </style>
 
@@ -539,7 +533,13 @@
   style={`--trackerbar-height: ${trackerbarHeight}px;`}
 >
   {#if !rollImageReady}
-    <p transition:fade>Downloading roll image...</p>
+    <span class="roll-loading" transition:fade>Downloading roll image...</span>
+  {:else}
+    <span
+      class="scale-bar"
+      transition:fade
+      style={`width: ${scaleBarWidth.px}px`}>{scaleBarWidth.label}</span
+    >
   {/if}
   {#if showControls}
     <RollViewerControls
@@ -549,7 +549,4 @@
       {updateTickByViewportIncrement}
     />
   {/if}
-  <span class="scale-bar" style={`width: ${scaleBarWidth.px}px`}
-    >{scaleBarWidth.label}</span
-  >
 </div>
