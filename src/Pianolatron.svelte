@@ -67,7 +67,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
   } from "./stores";
-  import { clamp } from "./utils";
+  import { clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";

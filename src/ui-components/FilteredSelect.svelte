@@ -117,7 +117,7 @@
 
 <script>
   import { tick } from "svelte";
-  import { clamp } from "../utils";
+  import { clamp } from "../lib/utils";
 
   export let items = [];
   export let selectedItem;

@@ -1,5 +1,5 @@
 <script context="module">
-  import { createPersistedStore } from "../stores";
+  import { createPersistedStore } from "../lib/stores";
   import { defaultKeyMap } from "../config/keyboard-shortcut-config";
 
   export const keyMap = createPersistedStore(
@@ -17,7 +17,7 @@
     accentOnOff,
   } from "../stores";
   import { controlsConfig } from "../config/controls-config";
-  import { clamp, easingInterval, enforcePrecision } from "../utils";
+  import { clamp, easingInterval, enforcePrecision } from "../lib/utils";
 
   export let playPauseApp;
   export let stopApp;
