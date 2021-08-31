@@ -576,8 +576,9 @@
     }
 
     viewport.zoomTo(
-      Math.min(
+      clamp(
         viewport.getZoom() * (event.deltaY > 0 ? 0.9 : 1.1),
+        minZoomLevel,
         maxZoomLevel,
       ),
     );
