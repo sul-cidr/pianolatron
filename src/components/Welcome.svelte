@@ -17,16 +17,16 @@
 
   header {
     color: var(--primary-accent);
-    font-family: $primary-typeface;
     font-size: 40px;
     font-weight: bold;
-    text-decoration: underline;
-    text-decoration-color: rgba(38, 50, 56, 0.2);
     width: 100%;
+    text-shadow: 4px 4px 4px rgb(38 50 56 / 20%);
+    border-bottom: 1px solid var(--primary-accent);
+    padding-bottom: 0.2em;
   }
 
   p {
-    margin-top: 1em;
+    margin: 2em 0;
   }
 
   a {
