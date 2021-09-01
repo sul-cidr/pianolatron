@@ -42,6 +42,13 @@
   button {
     float: right;
   }
+
+  img {
+    height: 176px;
+    width: 300px;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
 </style>
 
 <script context="module">
@@ -69,7 +76,11 @@
       href="http://cidr.stanford.edu/"
       title="Center for Interdisciplinary Digital Research @ Stanford Libraries"
     >
-      <img src="cidr.trsp.300x176.png" alt="CIDR logo" height="176" />
+      <img
+        src="cidr.trsp.300x176.png"
+        alt="CIDR logo"
+        on:load={({ target }) => (target.style.opacity = 1)}
+      />
     </a>
   </p>
   <button
