@@ -81,7 +81,27 @@
     z-index: 1;
   }
   .scale-bar {
-    background: rgba(grey, 0.8);
+    background-color: rgba(white, 0.5);
+    background-repeat: no-repeat;
+    border-radius: 0;
+    border-top: 0;
+    border: 1px solid black;
+    color: black;
+    font-size: 12px;
+    height: 22px;
+    padding: 0 2px;
+    transition: width 0.5s ease;
+
+    &.us {
+      background-image: linear-gradient(black, black),
+        linear-gradient(black, black), linear-gradient(black, black),
+        linear-gradient(black, black), linear-gradient(black, black),
+        linear-gradient(black, black), linear-gradient(black, black);
+      background-position: 12.5% bottom, 25% bottom, 37.5% bottom, 50% bottom,
+        62.5% bottom, 75% bottom, 87.5% bottom;
+      background-size: 1px 6px, 1px 9px, 1px 6px, 1px 12px, 1px 6px, 1px 9px,
+        1px 6px;
+    }
   }
 </style>
 
@@ -536,7 +556,7 @@
     <span class="roll-loading" transition:fade>Downloading roll image...</span>
   {:else}
     <span
-      class="scale-bar"
+      class="scale-bar us"
       transition:fade
       style={`width: ${scaleBarWidth.px}px`}>{scaleBarWidth.label}</span
     >
