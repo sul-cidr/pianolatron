@@ -77,11 +77,14 @@
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
+  import Welcome, {
+    welcomeScreenInhibited,
+    showWelcomeScreen,
+  } from "./components/Welcome.svelte";
   import Notification, {
     notify,
     clearNotification,
   } from "./ui-components/Notification.svelte";
-  import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
   import catalog from "./config/catalog.json";
@@ -319,7 +322,7 @@
 <KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
 <KeyboardShortcutEditor />
 <Notification />
-{#if $showWelcomeScreen}<Welcome />{/if}
+{#if !$welcomeScreenInhibited && $showWelcomeScreen}<Welcome />{/if}
 
 <svelte:window
   on:popstate={({ state }) =>

@@ -26,7 +26,7 @@
   }
 
   p {
-    margin: 1em;
+    margin-top: 1em;
   }
 
   a {
@@ -38,13 +38,22 @@
     color: #333;
     text-decoration: none;
   }
+
+  button {
+    float: right;
+  }
 </style>
 
 <script context="module">
   import { writable } from "svelte/store";
   import { fly } from "svelte/transition";
+  import { createPersistedStore } from "../lib/stores";
 
   export const showWelcomeScreen = writable(true);
+  export const welcomeScreenInhibited = createPersistedStore(
+    "welcomeScreenInhibited",
+    false,
+  );
 </script>
 
 <article
@@ -56,13 +65,19 @@
     This site is under active development.<br />Please direct enquiries and
     feedback to
     <a href="mailto:contact-cidr@stanford.edu">contact-cidr@stanford.edu</a>.
+    <a
+      href="http://cidr.stanford.edu/"
+      title="Center for Interdisciplinary Digital Research @ Stanford Libraries"
+    >
+      <img src="cidr.trsp.300x176.png" alt="CIDR logo" height="176" />
+    </a>
   </p>
-  <a
-    href="http://cidr.stanford.edu/"
-    title="Center for Interdisciplinary Digital Research @ Stanford Libraries"
+  <button
+    on:click={() => {
+      $welcomeScreenInhibited = true;
+      $showWelcomeScreen = false;
+    }}>Dismiss, and don't show again</button
   >
-    <img src="cidr.trsp.300x176.png" alt="CIDR logo" height="176" />
-  </a>
 </article>
 
 <svelte:window
