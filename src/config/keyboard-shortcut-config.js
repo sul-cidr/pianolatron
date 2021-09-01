@@ -117,6 +117,7 @@ export const alternativeIndicatorText = {
   Backspace: "⌫",
   Delete: "⌦",
   NumpadEnter: "⏎",
+  Enter: "⏎",
   ArrowUp: "↑",
   ArrowDown: "↓",
   ArrowLeft: "←",
