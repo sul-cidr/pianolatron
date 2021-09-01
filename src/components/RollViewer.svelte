@@ -538,7 +538,7 @@
 
     openSeadragon.addHandler("zoom", () => {
       const minScaleBarWidth = 100;
-      const ppi = viewport.viewportToImageZoom(viewport.getZoom(true)) * 300;
+      const ppi = viewport.viewportToImageZoom(viewport.getZoom(false)) * 300;
       let inches = 1;
       while (ppi * inches < minScaleBarWidth) inches += 1;
       scaleBarWidth = {
