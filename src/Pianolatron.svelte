@@ -67,7 +67,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
   } from "./stores";
-  import { clamp } from "./utils";
+  import { clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -75,11 +75,12 @@
   import Keyboard from "./components/Keyboard.svelte";
   import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
+  import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import Notification, { notify } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
-  import catalog from "./catalog.json";
+  import catalog from "./config/catalog.json";
 
   let appReady = false;
   let mididataReady;
@@ -306,6 +307,7 @@
 </div>
 <SamplePlayer bind:this={samplePlayer} />
 <KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
+<KeyboardShortcutEditor />
 <Notification />
 
 <svelte:window

@@ -42,6 +42,7 @@
   import Icon from "../ui-components/Icon.svelte";
 
   export let shortcut;
+  export let meta;
   let editing = false;
   let editButtonRef;
 
@@ -50,7 +51,7 @@
   const resetShortcut = () => dispatch("reset");
 </script>
 
-<dt data-tooltip={shortcut.help}>{shortcut.description}</dt>
+<dt data-tooltip={meta.help}>{meta.description}</dt>
 <dd>
   {#if editing}
     <span>Choose a new keystroke...</span>

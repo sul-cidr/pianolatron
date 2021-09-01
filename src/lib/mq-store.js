@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-export default (mediaQueries) => {
+export const watchMedia = (mediaQueries) => {
   const calculateMedia = (mediaQueryLists) => {
     const media = {};
     Object.keys(mediaQueryLists).forEach(

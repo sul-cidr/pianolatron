@@ -101,7 +101,7 @@
     normalizeInRange,
     getHoleLabel,
     getHoleType,
-  } from "../utils";
+  } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;

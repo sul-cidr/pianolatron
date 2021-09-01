@@ -4,7 +4,7 @@
   import OpenSeadragon from "openseadragon";
 
   import Icon from "../ui-components/Icon.svelte";
-  import { easingInterval } from "../utils";
+  import { easingInterval } from "../lib/utils";
 
   export let openSeadragon;
   export let maxZoomLevel;

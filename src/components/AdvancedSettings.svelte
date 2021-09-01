@@ -72,7 +72,7 @@
     useMidiTempoEventsOnOff,
     userSettings,
   } from "../stores";
-  import { toggleKeybindingsConfig } from "./KeyboardShortcuts.svelte";
+  import { toggleKeybindingsConfig } from "./KeyboardShortcutEditor.svelte";
 
   let el;
   const themes = ["cardinal", "blue", "green", "grey"];
