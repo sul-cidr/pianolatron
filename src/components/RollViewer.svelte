@@ -99,8 +99,9 @@
     &:before {
       content: attr(data-label);
       display: block;
-      left: 4px;
+      right: 4px;
       position: absolute;
+      top: calc(100% + 2px);
     }
 
     span {
@@ -110,6 +111,21 @@
     }
 
     &.us span {
+      background-image: linear-gradient(black, black),
+        linear-gradient(black, black);
+      background-position: 50% bottom, 100% bottom;
+      background-size: 1px 12px, 1px 22px;
+    }
+
+    &.us.major span {
+      background-image: linear-gradient(black, black),
+        linear-gradient(black, black), linear-gradient(black, black),
+        linear-gradient(black, black);
+      background-position: 25% bottom, 50% bottom, 75% bottom, 100% bottom;
+      background-size: 1px 9px, 1px 12px, 1px 9px, 1px 22px;
+    }
+
+    &.us.minor span {
       background-image: linear-gradient(black, black),
         linear-gradient(black, black), linear-gradient(black, black),
         linear-gradient(black, black), linear-gradient(black, black),
@@ -579,6 +595,8 @@
   {:else}
     <div
       class="scale-bar us"
+      class:major={scaleBarWidth.multiples < 5}
+      class:minor={scaleBarWidth.multiples < 3}
       transition:fade
       style={`width: ${scaleBarWidth.px}px`}
       data-label={scaleBarWidth.label}
