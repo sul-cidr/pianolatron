@@ -107,7 +107,6 @@ export const unusableKeys = [
   "Escape",
   "ControlLeft",
   "ControlRight",
-  "Enter",
   "ShiftLeft",
   "ShiftRight",
   "CapsLock",
