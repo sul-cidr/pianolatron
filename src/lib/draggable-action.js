@@ -1,14 +1,14 @@
 import { clamp } from "./utils";
 
 export const draggable = (node, corral = false) => {
-  const {
+  const { style } = node;
+
+  let {
     top: parentTop,
     left: parentLeft,
     width: parentWidth,
     height: parentHeight,
   } = node.parentElement.getBoundingClientRect();
-  const { style } = node;
-
   let { left, top } = node.getBoundingClientRect();
   let dragging = false;
 
@@ -26,6 +26,13 @@ export const draggable = (node, corral = false) => {
     dragging = false;
   };
 
+  const resizeObserver = new ResizeObserver(
+    () =>
+      ({ width: parentWidth, height: parentHeight } =
+        node.parentElement.getBoundingClientRect()),
+  );
+  resizeObserver.observe(node.parentElement);
+
   node.addEventListener("mousedown", () => {
     window.document.body.style.cursor = "move";
     dragging = true;
@@ -33,10 +40,10 @@ export const draggable = (node, corral = false) => {
 
   window.addEventListener("mousemove", (event) => {
     if (dragging) {
-      const { height, width } = node.getBoundingClientRect();
       left += event.movementX;
       top += event.movementY;
       if (corral) {
+        const { height, width } = node.getBoundingClientRect();
         left = clamp(left, 0, parentWidth - width);
         top = clamp(top, 0, parentHeight - height);
       }
@@ -47,4 +54,6 @@ export const draggable = (node, corral = false) => {
 
   window.addEventListener("mouseup", releaseDrag);
   document.documentElement.addEventListener("mouseleave", releaseDrag);
+
+  return { destroy: resizeObserver.disconnect };
 };
