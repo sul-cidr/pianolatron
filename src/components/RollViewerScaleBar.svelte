@@ -11,7 +11,7 @@
     z-index: 1;
     display: flex;
     border: 1px solid black;
-    border-top: 0;
+    border-bottom: 0;
     border-right: 0;
 
     &:before {
@@ -33,14 +33,14 @@
 
   .us span {
     background-image: linear-gradient(black, black);
-    background-position: 100% bottom;
+    background-position: 100% top;
     background-size: 1px 22px;
   }
 
   .us.halves span {
     background-image: linear-gradient(black, black),
       linear-gradient(black, black);
-    background-position: 50% bottom, 100% bottom;
+    background-position: 50% top, 100% top;
     background-size: 1px 16px, 1px 22px;
   }
 
@@ -48,7 +48,7 @@
     background-image: linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black);
-    background-position: 25% bottom, 50% bottom, 75% bottom, 100% bottom;
+    background-position: 25% top, 50% top, 75% top, 100% top;
     background-size: 1px 12px, 1px 16px, 1px 12px, 1px 22px;
   }
 
@@ -58,8 +58,8 @@
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black);
-    background-position: 12.5% bottom, 25% bottom, 37.5% bottom, 50% bottom,
-      62.5% bottom, 75% bottom, 87.5% bottom, 100% bottom;
+    background-position: 12.5% top, 25% top, 37.5% top, 50% top, 62.5% top,
+      75% top, 87.5% top, 100% top;
     background-size: 1px 8px, 1px 12px, 1px 8px, 1px 16px, 1px 8px, 1px 12px,
       1px 8px, 1px 22px;
   }
@@ -74,10 +74,9 @@
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black);
-    background-position: 6.25% bottom, 12.5% bottom, 18.75% bottom, 25% bottom,
-      31.25% bottom, 37.5% bottom, 43.75% bottom, 50% bottom, 56.25% bottom,
-      62.5% bottom, 68.75% bottom, 75% bottom, 81.25% bottom, 87.5% bottom,
-      93.75% bottom, 100% bottom;
+    background-position: 6.25% top, 12.5% top, 18.75% top, 25% top, 31.25% top,
+      37.5% top, 43.75% top, 50% top, 56.25% top, 62.5% top, 68.75% top, 75% top,
+      81.25% top, 87.5% top, 93.75% top, 100% top;
     background-size: 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
       1px 4px, 1px 16px, 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
       1px 4px, 1px 22px;
