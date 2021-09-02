@@ -1,10 +1,16 @@
-export const draggable = (node) => {
-  const { top: parentTop, left: parentLeft } =
-    node.parentElement.getBoundingClientRect();
+import { clamp } from "./utils";
+
+export const draggable = (node, corral = false) => {
+  const {
+    top: parentTop,
+    left: parentLeft,
+    width: parentWidth,
+    height: parentHeight,
+  } = node.parentElement.getBoundingClientRect();
   const { style } = node;
 
-  let { top, left } = node.getBoundingClientRect();
-  let moving = false;
+  let { left, top } = node.getBoundingClientRect();
+  let dragging = false;
 
   left -= parentLeft;
   top -= parentTop;
@@ -15,16 +21,21 @@ export const draggable = (node) => {
   style.cursor = "move";
   style.userSelect = "none";
 
-  node.addEventListener("mousedown", () => (moving = true));
+  node.addEventListener("mousedown", () => (dragging = true));
 
   window.addEventListener("mousemove", (event) => {
-    if (moving) {
+    if (dragging) {
+      const { height, width } = node.getBoundingClientRect();
       left += event.movementX;
       top += event.movementY;
-      style.top = `${top}px`;
+      if (corral) {
+        left = clamp(left, 0, parentWidth - width);
+        top = clamp(top, 0, parentHeight - height);
+      }
       style.left = `${left}px`;
+      style.top = `${top}px`;
     }
   });
 
-  window.addEventListener("mouseup", () => (moving = false));
+  window.addEventListener("mouseup", () => (dragging = false));
 };

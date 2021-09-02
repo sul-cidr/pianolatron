@@ -164,7 +164,7 @@
 
 <div
   transition:fade
-  use:draggable
+  use:draggable={/* corral = */ true}
   bind:this={ref}
   class="us"
   class:halves={multiples < 9}
