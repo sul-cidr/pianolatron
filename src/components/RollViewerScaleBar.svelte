@@ -90,13 +90,15 @@
   export let ppi;
 
   const minScaleBarWidth = 100;
+  const maxMultiples = 12;
 
   let multiples;
   let width;
 
   const calculateMultiples = () => {
     multiples = 1;
-    while (ppi * multiples < minScaleBarWidth) multiples += 1;
+    while (ppi * multiples < minScaleBarWidth && multiples < maxMultiples)
+      multiples += 1;
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
