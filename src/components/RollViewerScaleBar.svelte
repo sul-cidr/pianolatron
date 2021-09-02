@@ -30,13 +30,19 @@
   }
 
   .us span {
+    background-image: linear-gradient(black, black);
+    background-position: 100% bottom;
+    background-size: 1px 22px;
+  }
+
+  .us.halves span {
     background-image: linear-gradient(black, black),
       linear-gradient(black, black);
     background-position: 50% bottom, 100% bottom;
     background-size: 1px 12px, 1px 22px;
   }
 
-  .us.major span {
+  .us.quarters span {
     background-image: linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black);
@@ -44,7 +50,7 @@
     background-size: 1px 9px, 1px 12px, 1px 9px, 1px 22px;
   }
 
-  .us.minor span {
+  .us.eighths span {
     background-image: linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
@@ -54,6 +60,25 @@
       62.5% bottom, 75% bottom, 87.5% bottom, 100% bottom;
     background-size: 1px 6px, 1px 9px, 1px 6px, 1px 12px, 1px 6px, 1px 9px,
       1px 6px, 1px 22px;
+  }
+
+  .us.sixteenths span {
+    background-image: linear-gradient(black, black),
+      linear-gradient(black, black), linear-gradient(black, black),
+      linear-gradient(black, black), linear-gradient(black, black),
+      linear-gradient(black, black), linear-gradient(black, black),
+      linear-gradient(black, black), linear-gradient(black, black),
+      linear-gradient(black, black), linear-gradient(black, black),
+      linear-gradient(black, black), linear-gradient(black, black),
+      linear-gradient(black, black), linear-gradient(black, black),
+      linear-gradient(black, black);
+    background-position: 6.25% bottom, 12.5% bottom, 18.75% bottom, 25% bottom,
+      31.25% bottom, 37.5% bottom, 43.75% bottom, 50% bottom, 56.25% bottom,
+      62.5% bottom, 68.75% bottom, 75% bottom, 81.25% bottom, 87.5% bottom,
+      93.75% bottom, 100% bottom;
+    background-size: 1px 3px, 1px 6px, 1px 3px, 1px 9px, 1px 3px, 1px 6px,
+      1px 3px, 1px 12px, 1px 3px, 1px 6px, 1px 3px, 1px 9px, 1px 3px, 1px 6px,
+      1px 3px, 1px 22px;
   }
 </style>
 
@@ -80,8 +105,10 @@
 <div
   transition:fade
   class="us"
-  class:major={multiples < 5}
-  class:minor={multiples < 3}
+  class:halves={multiples < 9}
+  class:quarters={multiples < 5}
+  class:eighths={multiples < 3}
+  class:sixteenths={multiples === 1}
   style={`width: ${width}px`}
   data-label={`${multiples}in`}
 >
