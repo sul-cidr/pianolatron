@@ -26,11 +26,27 @@ export const draggable = (node, corral = false) => {
     dragging = false;
   };
 
-  const resizeObserver = new ResizeObserver(
-    () =>
-      ({ width: parentWidth, height: parentHeight } =
-        node.parentElement.getBoundingClientRect()),
-  );
+  const updatePosition = (event) => {
+    left += event?.movementX || 0;
+    top += event?.movementY || 0;
+    if (corral) {
+      const { height, width } = node.getBoundingClientRect();
+      left = clamp(left, 0, parentWidth - width);
+      top = clamp(top, 0, parentHeight - height);
+    }
+    style.left = `${left}px`;
+    style.top = `${top}px`;
+  };
+
+  const resizeObserver = new ResizeObserver(() => {
+    ({
+      top: parentTop,
+      left: parentLeft,
+      width: parentWidth,
+      height: parentHeight,
+    } = node.parentElement.getBoundingClientRect());
+    updatePosition();
+  });
   resizeObserver.observe(node.parentElement);
 
   node.addEventListener("mousedown", () => {
@@ -39,17 +55,7 @@ export const draggable = (node, corral = false) => {
   });
 
   window.addEventListener("mousemove", (event) => {
-    if (dragging) {
-      left += event.movementX;
-      top += event.movementY;
-      if (corral) {
-        const { height, width } = node.getBoundingClientRect();
-        left = clamp(left, 0, parentWidth - width);
-        top = clamp(top, 0, parentHeight - height);
-      }
-      style.left = `${left}px`;
-      style.top = `${top}px`;
-    }
+    if (dragging) updatePosition(event);
   });
 
   window.addEventListener("mouseup", releaseDrag);
