@@ -15,11 +15,13 @@
     border-right: 0;
 
     &:before {
+      background: rgba(white, 0.5);
       content: attr(data-label);
       display: block;
-      right: 4px;
+      padding: 1px 4px;
       position: absolute;
-      top: calc(100% + 2px);
+      right: 1px;
+      top: calc(100% + 4px);
     }
   }
 
