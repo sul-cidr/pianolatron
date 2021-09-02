@@ -3,7 +3,7 @@
     background-color: rgba(white, 0.5);
     color: black;
     font-size: 12px;
-    height: 22px;
+    height: 28px;
     transition: width 0.5s ease;
     position: absolute;
     left: 1em;
@@ -29,19 +29,45 @@
     background-repeat: no-repeat;
     border-radius: 0;
     flex: 1 0 auto;
+    position: relative;
+
+    &::before {
+      bottom: -2px;
+      content: attr(data-label);
+      display: none;
+      position: absolute;
+    }
   }
 
   .us span {
     background-image: linear-gradient(black, black);
     background-position: 100% top;
-    background-size: 1px 22px;
+    background-size: 1px 16px;
+
+    &:last-child {
+      background-size: 1px 100%;
+    }
+
+    &:nth-child(even)::before {
+      display: block;
+      right: 1px;
+    }
   }
 
   .us.halves span {
     background-image: linear-gradient(black, black),
       linear-gradient(black, black);
     background-position: 50% top, 100% top;
-    background-size: 1px 16px, 1px 22px;
+    background-size: 1px 12px, 1px 22px;
+
+    &:last-child {
+      background-size: 1px 12px, 1px 100%;
+    }
+
+    &::before {
+      display: block;
+      right: 4px;
+    }
   }
 
   .us.quarters span {
@@ -50,6 +76,15 @@
       linear-gradient(black, black);
     background-position: 25% top, 50% top, 75% top, 100% top;
     background-size: 1px 12px, 1px 16px, 1px 12px, 1px 22px;
+
+    &:last-child {
+      background-size: 1px 12px, 1px 16px, 1px 12px, 1px 100%;
+    }
+
+    &::before {
+      display: block;
+      right: 4px;
+    }
   }
 
   .us.eighths span {
@@ -62,6 +97,16 @@
       75% top, 87.5% top, 100% top;
     background-size: 1px 8px, 1px 12px, 1px 8px, 1px 16px, 1px 8px, 1px 12px,
       1px 8px, 1px 22px;
+
+    &:last-child {
+      background-size: 1px 8px, 1px 12px, 1px 8px, 1px 16px, 1px 8px, 1px 12px,
+        1px 8px, 1px 100%;
+    }
+
+    &::before {
+      display: block;
+      right: 4px;
+    }
   }
 
   .us.sixteenths span {
@@ -80,6 +125,17 @@
     background-size: 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
       1px 4px, 1px 16px, 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
       1px 4px, 1px 22px;
+
+    &:last-child {
+      background-size: 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
+        1px 4px, 1px 16px, 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
+        1px 4px, 1px 100%;
+    }
+
+    &::before {
+      display: block;
+      right: 4px;
+    }
   }
 </style>
 
@@ -115,7 +171,7 @@
   class:quarters={multiples < 5}
   class:eighths={multiples < 3}
   class:sixteenths={multiples === 1}
-  data-label={`${multiples}in`}
+  data-label="inches"
 >
-  {#each Array(multiples) as _}<span />{/each}
+  {#each Array(multiples) as _, i}<span data-label={i + 1} />{/each}
 </div>
