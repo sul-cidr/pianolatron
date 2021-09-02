@@ -44,13 +44,14 @@ export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
 
 // User Settings
-export const showKeyboard = createPersistedStore("showKeyboard", true);
-export const overlayKeyboard = createPersistedStore("overlayKeyboard", false);
 export const userSettings = createPersistedStore("userSettings", {
   theme: "cardinal",
   activeNoteDetails: false,
   showNoteVelocities: false,
   highlightEnabledHoles: false,
+  showKeyboard: true,
+  overlayKeyboard: false,
+  welcomeScreenInhibited: false,
 });
 
 // Browser State

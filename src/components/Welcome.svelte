@@ -54,13 +54,9 @@
 <script context="module">
   import { writable } from "svelte/store";
   import { fly } from "svelte/transition";
-  import { createPersistedStore } from "../lib/stores";
+  import { userSettings } from "../stores";
 
   export const showWelcomeScreen = writable(true);
-  export const welcomeScreenInhibited = createPersistedStore(
-    "welcomeScreenInhibited",
-    false,
-  );
 </script>
 
 <article
@@ -85,7 +81,7 @@
   </p>
   <button
     on:click={() => {
-      $welcomeScreenInhibited = true;
+      $userSettings.welcomeScreenInhibited = true;
       $showWelcomeScreen = false;
     }}>Dismiss, and don't show again</button
   >
