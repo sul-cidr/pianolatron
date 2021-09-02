@@ -73,6 +73,7 @@
     userSettings,
   } from "../stores";
   import { toggleKeybindingsConfig } from "./KeyboardShortcutEditor.svelte";
+  import { notify } from "../ui-components/Notification.svelte";
 
   let el;
   const themes = ["cardinal", "blue", "green", "grey"];
@@ -151,7 +152,15 @@
   <button class="full-width" on:click={toggleKeybindingsConfig}
     >Configure Key Bindings</button
   >
-  <button class="full-width" on:click={() => userSettings.reset()}
-    >Reset All Settings</button
+  <button
+    class="full-width"
+    on:click={() => {
+      userSettings.reset();
+      notify({
+        message: "Settings have been reset!",
+        type: "success",
+        timeout: 4000,
+      });
+    }}>Reset All Settings</button
   >
 </div>

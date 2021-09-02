@@ -7,25 +7,35 @@
     left: 50%;
     min-width: 400px;
     position: absolute;
-    top: 20%;
+    top: 10vh;
     transform: translate(-50%);
     z-index: z($main-context, notifications);
+    border-left-width: 6px;
+
+    color: white;
+
+    :global(a) {
+      color: white;
+      font-weight: bold;
+    }
+
+    .close {
+      color: white;
+      border-left-color: rgba(255, 255, 255, 0.5);
+    }
+    &.default {
+      background: cornflowerblue;
+      border: 1px solid desaturate(darken(cornflowerblue, 12), 10);
+    }
+
+    &.success {
+      background: #8bc34a;
+      border: 1px solid desaturate(darken(#8bc34a, 12), 10);
+    }
 
     &.error {
       background: rgb(255, 72, 72);
       border: 1px solid rgb(235, 15, 15);
-      border-left-width: 6px;
-      color: white;
-
-      :global(a) {
-        color: white;
-        font-weight: bold;
-      }
-
-      .close {
-        color: white;
-        border-left-color: rgba(255, 255, 255, 0.5);
-      }
     }
   }
 
@@ -60,14 +70,27 @@
 
 <script context="module">
   import { writable } from "svelte/store";
+  import { fly } from "svelte/transition";
 
   const NotificationStore = writable();
   export const notify = (detail) => NotificationStore.set(detail);
   export const clearNotification = NotificationStore.set;
 </script>
 
+<script>
+  let timeout;
+  $: if ($NotificationStore?.timeout)
+    timeout = setTimeout(NotificationStore.set, $NotificationStore?.timeout);
+</script>
+
 {#if $NotificationStore}
-  <div class="notification {$NotificationStore.type || 'default'}">
+  <div
+    transition:fly={{
+      y: -200,
+      duration: $NotificationStore.timeout ? 1000 : 400,
+    }}
+    class="notification {$NotificationStore.type || 'default'}"
+  >
     <section>
       {#if $NotificationStore.title}
         <header>{$NotificationStore.title}</header>
@@ -75,7 +98,15 @@
       <p>{@html $NotificationStore.message}</p>
     </section>
     {#if $NotificationStore.closable !== false}
-      <div class="close" on:click={clearNotification}>&times;</div>
+      <div
+        class="close"
+        on:click={() => {
+          clearTimeout(timeout);
+          NotificationStore.set();
+        }}
+      >
+        &times;
+      </div>
     {/if}
   </div>
 {/if}

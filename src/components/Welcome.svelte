@@ -52,11 +52,13 @@
 </style>
 
 <script context="module">
-  import { writable } from "svelte/store";
+  import { writable, get } from "svelte/store";
   import { fly } from "svelte/transition";
   import { userSettings } from "../stores";
 
-  export const showWelcomeScreen = writable(true);
+  export const showWelcomeScreen = writable(
+    !get(userSettings).welcomeScreenInhibited,
+  );
 </script>
 
 <article

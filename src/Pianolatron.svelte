@@ -318,8 +318,7 @@
 <KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
 <KeyboardShortcutEditor />
 <Notification />
-{#if !$userSettings.welcomeScreenInhibited && $showWelcomeScreen}<Welcome
-  />{/if}
+{#if $showWelcomeScreen}<Welcome />{/if}
 
 <svelte:window
   on:popstate={({ state }) =>
