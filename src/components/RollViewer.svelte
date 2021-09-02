@@ -80,63 +80,6 @@
     top: 1em;
     z-index: 1;
   }
-
-  .scale-bar {
-    background-color: rgba(white, 0.5);
-    color: black;
-    font-size: 12px;
-    height: 22px;
-    transition: width 0.5s ease;
-    position: absolute;
-    left: 1em;
-    top: 1em;
-    z-index: 1;
-    display: flex;
-    border: 1px solid black;
-    border-top: 0;
-    border-right: 0;
-
-    &:before {
-      content: attr(data-label);
-      display: block;
-      right: 4px;
-      position: absolute;
-      top: calc(100% + 2px);
-    }
-
-    span {
-      background-repeat: no-repeat;
-      border-radius: 0;
-      flex: 1 0 auto;
-    }
-
-    &.us span {
-      background-image: linear-gradient(black, black),
-        linear-gradient(black, black);
-      background-position: 50% bottom, 100% bottom;
-      background-size: 1px 12px, 1px 22px;
-    }
-
-    &.us.major span {
-      background-image: linear-gradient(black, black),
-        linear-gradient(black, black), linear-gradient(black, black),
-        linear-gradient(black, black);
-      background-position: 25% bottom, 50% bottom, 75% bottom, 100% bottom;
-      background-size: 1px 9px, 1px 12px, 1px 9px, 1px 22px;
-    }
-
-    &.us.minor span {
-      background-image: linear-gradient(black, black),
-        linear-gradient(black, black), linear-gradient(black, black),
-        linear-gradient(black, black), linear-gradient(black, black),
-        linear-gradient(black, black), linear-gradient(black, black),
-        linear-gradient(black, black);
-      background-position: 12.5% bottom, 25% bottom, 37.5% bottom, 50% bottom,
-        62.5% bottom, 75% bottom, 87.5% bottom, 100% bottom;
-      background-size: 1px 6px, 1px 9px, 1px 6px, 1px 12px, 1px 6px, 1px 9px,
-        1px 6px, 1px 22px;
-    }
-  }
 </style>
 
 <script>
@@ -154,6 +97,7 @@
   } from "../stores";
   import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
+  import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
 
   export let imageUrl;
   export let holeData;
@@ -177,8 +121,7 @@
   let trackerbarHeight;
   let animationEaseInterval;
   let osdNavDisplayRegion;
-
-  let scaleBarWidth = { px: 100, label: "1in" };
+  let ppi;
 
   const createMark = (hole) => {
     const {
@@ -469,10 +412,12 @@
       updateViewportFromTick(0);
     });
 
-    // update the height of the tracker bar when the zoom changes
+    // update the height of the tracker bar and the PPI value passed to
+    //  <RollViewerScaleBar/> when the zoom changes
     openSeadragon.addHandler("zoom", ({ zoom }) => {
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
+      ppi = imageZoom * 300;
     });
 
     // re-implement some default OSD interactions to apply our own constraints
@@ -536,18 +481,6 @@
       //  constraints applied here), we'll just neuter it here.
     };
 
-    openSeadragon.addHandler("zoom", ({ zoom }) => {
-      const minScaleBarWidth = 100;
-      const ppi = viewport.viewportToImageZoom(zoom) * 300;
-      let inches = 1;
-      while (ppi * inches < minScaleBarWidth) inches += 1;
-      scaleBarWidth = {
-        px: ppi * inches,
-        label: `${inches}in`,
-        multiples: inches,
-      };
-    });
-
     openSeadragon.open(imageUrl);
   });
 
@@ -593,18 +526,7 @@
   {#if !rollImageReady}
     <span class="roll-loading" transition:fade>Downloading roll image...</span>
   {:else}
-    <div
-      class="scale-bar us"
-      class:major={scaleBarWidth.multiples < 5}
-      class:minor={scaleBarWidth.multiples < 3}
-      transition:fade
-      style={`width: ${scaleBarWidth.px}px`}
-      data-label={scaleBarWidth.label}
-    >
-      {#each Array(scaleBarWidth.multiples) as _}
-        <span />
-      {/each}
-    </div>
+    <RollViewerScaleBar {ppi} />
   {/if}
   {#if showControls}
     <RollViewerControls
