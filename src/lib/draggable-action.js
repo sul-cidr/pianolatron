@@ -21,6 +21,11 @@ export const draggable = (node, corral = false) => {
   style.cursor = "move";
   style.userSelect = "none";
 
+  const releaseDrag = () => {
+    window.document.body.style.cursor = "unset";
+    dragging = false;
+  };
+
   node.addEventListener("mousedown", () => {
     window.document.body.style.cursor = "move";
     dragging = true;
@@ -40,8 +45,6 @@ export const draggable = (node, corral = false) => {
     }
   });
 
-  window.addEventListener("mouseup", () => {
-    window.document.body.style.cursor = "unset";
-    dragging = false;
-  });
+  window.addEventListener("mouseup", releaseDrag);
+  document.documentElement.addEventListener("mouseleave", releaseDrag);
 };
