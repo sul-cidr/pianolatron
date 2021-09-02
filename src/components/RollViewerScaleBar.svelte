@@ -4,7 +4,7 @@
     color: black;
     font-size: 12px;
     height: 28px;
-    transition: width 0.5s ease;
+    transition: width 0.5s ease, transform 0.5s ease;
     position: absolute;
     left: 1em;
     top: 1em;
@@ -13,8 +13,9 @@
     border: 1px solid black;
     border-bottom: 0;
     border-right: 0;
+    transform-origin: top left;
 
-    &:before {
+    &::before {
       background: rgba(white, 0.5);
       content: attr(data-label);
       display: block;
@@ -22,6 +23,20 @@
       position: absolute;
       right: 1px;
       top: calc(100% + 4px);
+    }
+
+    &.vertical {
+      transform: rotate(-90deg) translate(-100%);
+
+      &::before {
+        right: 0;
+        top: 0;
+        transform: rotate(-270deg) translate(100%);
+      }
+
+      span::before {
+        transform: rotate(-270deg);
+      }
     }
   }
 
@@ -137,6 +152,15 @@
       right: 4px;
     }
   }
+
+  button {
+    background: rgba(white, 0.5);
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: calc(100% + 4px);
+  }
 </style>
 
 <script>
@@ -150,6 +174,7 @@
 
   let multiples;
   let ref;
+  let vertical = false;
 
   const calculateMultiples = () => {
     multiples = 1;
@@ -167,6 +192,7 @@
   use:draggable={/* corral = */ true}
   bind:this={ref}
   class="us"
+  class:vertical
   class:halves={multiples < 9}
   class:quarters={multiples < 5}
   class:eighths={multiples < 3}
@@ -174,4 +200,5 @@
   data-label="inches"
 >
   {#each Array(multiples) as _, i}<span data-label={i + 1} />{/each}
+  <button on:click={() => (vertical = !vertical)}>⟳</button>
 </div>
