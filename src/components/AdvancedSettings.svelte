@@ -56,7 +56,7 @@
     }
   }
 
-  button.configure-keybindings {
+  button.full-width {
     margin: 1em 0;
     padding: 3px 0;
     width: 100%;
@@ -148,7 +148,10 @@
       />
     {/each}
   </div>
-  <button class="configure-keybindings" on:click={toggleKeybindingsConfig}
+  <button class="full-width" on:click={toggleKeybindingsConfig}
     >Configure Key Bindings</button
+  >
+  <button class="full-width" on:click={() => userSettings.reset()}
+    >Reset All Settings</button
   >
 </div>
