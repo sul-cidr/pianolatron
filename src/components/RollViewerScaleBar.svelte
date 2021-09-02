@@ -85,6 +85,7 @@
 
 <script>
   import { fade } from "svelte/transition";
+  import { draggable } from "../lib/draggable-action";
 
   export let ppi;
 
@@ -92,7 +93,7 @@
   const maxMultiples = 12;
 
   let multiples;
-  let width;
+  let ref;
 
   const calculateMultiples = () => {
     multiples = 1;
@@ -102,17 +103,18 @@
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: ppi, calculateMultiples();
-  $: width = ppi * multiples;
+  $: if (ref) ref.style.width = `${ppi * multiples}px`;
 </script>
 
 <div
   transition:fade
+  use:draggable
+  bind:this={ref}
   class="us"
   class:halves={multiples < 9}
   class:quarters={multiples < 5}
   class:eighths={multiples < 3}
   class:sixteenths={multiples === 1}
-  style={`width: ${width}px`}
   data-label={`${multiples}in`}
 >
   {#each Array(multiples) as _}<span />{/each}
