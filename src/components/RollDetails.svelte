@@ -22,7 +22,7 @@
 </style>
 
 <script>
-  import { rollMetadata } from "../stores";
+  export let metadata;
 
   const unavailable = "<span>Unavailable</span>";
 </script>
@@ -30,26 +30,26 @@
 <dl>
   <dt>Title</dt>
   <dd>
-    {@html $rollMetadata.TITLE || $rollMetadata.title || unavailable}
+    {@html metadata.title || unavailable}
   </dd>
   <dt>Performer</dt>
   <dd>
-    {@html $rollMetadata.PERFORMER || $rollMetadata.performer || unavailable}
+    {@html metadata.performer || unavailable}
   </dd>
   <dt>Composer</dt>
   <dd>
-    {@html $rollMetadata.COMPOSER || $rollMetadata.composer || unavailable}
+    {@html metadata.composer || unavailable}
   </dd>
   <dt>Label</dt>
   <dd>
-    {@html $rollMetadata.LABEL || $rollMetadata.label || unavailable}
+    {@html metadata.label || unavailable}
   </dd>
   <dt>PURL</dt>
   <dd>
-    <a href={$rollMetadata.PURL}>{@html $rollMetadata.PURL || unavailable}</a>
+    <a href={metadata.PURL}>{@html metadata.PURL || unavailable}</a>
   </dd>
   <dt>Call No</dt>
   <dd>
-    {@html $rollMetadata.CALLNUM || unavailable}
+    {@html metadata.CALLNUM || unavailable}
   </dd>
 </dl>

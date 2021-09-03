@@ -87,6 +87,7 @@
   let metadataReady;
   let currentRoll;
   let previousRoll;
+  let metadata;
   let holeData;
   let holesByTickInterval = new IntervalTree();
 
@@ -197,7 +198,7 @@
 
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
-        $rollMetadata = { ...$rollMetadata, ...metadataJson };
+        metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
         holeData = metadataJson.holeData;
         annotateHoleData(holeData, $rollMetadata.ROLL_TYPE);
         buildHolesIntervalTree();
@@ -265,7 +266,7 @@
     <FlexCollapsible id="left-sidebar" width="20vw">
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
-        <RollDetails />
+        <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
