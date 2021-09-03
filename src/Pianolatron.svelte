@@ -67,7 +67,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
   } from "./stores";
-  import { clamp } from "./lib/utils";
+  import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -87,6 +87,7 @@
   let metadataReady;
   let currentRoll;
   let previousRoll;
+  let holeData;
   let holesByTickInterval = new IntervalTree();
 
   let samplePlayer;
@@ -121,7 +122,7 @@
   };
 
   const buildHolesIntervalTree = () => {
-    const { FIRST_HOLE, holeData } = $rollMetadata;
+    const { FIRST_HOLE } = $rollMetadata;
 
     const firstHolePx = parseInt(FIRST_HOLE, 10);
 
@@ -197,8 +198,9 @@
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
         $rollMetadata = { ...$rollMetadata, ...metadataJson };
-        if (metadataJson.holeData)
-          buildHolesIntervalTree(metadataJson.holeData);
+        holeData = metadataJson.holeData;
+        annotateHoleData(holeData, $rollMetadata.ROLL_TYPE);
+        buildHolesIntervalTree();
         $playExpressionsOnOff = $isReproducingRoll;
         $rollPedalingOnOff = $isReproducingRoll;
         appReady = true;
@@ -277,6 +279,7 @@
         <RollViewer
           bind:this={rollViewer}
           imageUrl={currentRoll.image_url}
+          {holeData}
           {holesByTickInterval}
           {skipToTick}
         />

@@ -95,43 +95,13 @@
     rollPedalingOnOff,
     playbackProgress,
   } from "../stores";
-  import {
-    clamp,
-    mapToRange,
-    normalizeInRange,
-    getHoleLabel,
-    getHoleType,
-  } from "../lib/utils";
+  import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
 
   export let imageUrl;
+  export let holeData;
   export let holesByTickInterval;
   export let skipToTick;
-
-  // This is the "coolwarm" color map -- blue to red
-  // RdYlBu (reversed) sort of works, but the yellows are too ambiguous
-  // (values in H, S, L)
-  const holeColorMap = [
-    "232, 53%, 49%",
-    "229, 64%, 58%",
-    "225, 78%, 66%",
-    "223, 91%, 73%",
-    "221, 98%, 79%",
-    "219, 95%, 83%",
-    "217, 73%, 86%",
-    "21, 28%, 86%",
-    "20, 69%, 83%",
-    "18, 85%, 79%",
-    "16, 85%, 73%",
-    "13, 80%, 67%",
-    "9, 70%, 59%",
-    "2, 59%, 51%",
-    "348, 96%, 36%",
-  ];
-
-  const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
-  const controlHoleColor = "120, 73%, 75%"; // light green
-  const pedalHoleColor = "39, 100%, 50%"; // orange;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -150,45 +120,6 @@
   let trackerbarHeight;
   let animationEaseInterval;
   let osdNavDisplayRegion;
-
-  const annotateHoleData = (holeData) => {
-    const velocities = holeData.map(({ v }) => v).filter((v) => v);
-    const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
-    const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
-
-    const getNoteHoleColor = ({ v: velocity }) =>
-      holeColorMap[
-        Math.round(
-          mapToRange(
-            normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-            0,
-            holeColorMap.length - 1,
-          ),
-        )
-      ];
-
-    holeData.forEach((hole) => {
-      switch (getHoleType(hole, $rollMetadata.ROLL_TYPE)) {
-        case "pedal":
-          hole.color = pedalHoleColor;
-          hole.type = "pedal";
-          break;
-
-        case "control":
-          hole.color = controlHoleColor;
-          hole.type = "control";
-          break;
-
-        case "note":
-          hole.color = getNoteHoleColor(hole);
-          hole.type = "note";
-          break;
-
-        default:
-          hole.color = defaultHoleColor;
-      }
-    });
-  };
 
   const createMark = (hole) => {
     const {
@@ -232,7 +163,6 @@
   };
 
   const createHolesOverlaySvg = () => {
-    const { holeData } = $rollMetadata;
     if (!holeData) return;
 
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -388,7 +318,7 @@
     );
   };
 
-  onMount(async () => {
+  onMount(() => {
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
       showNavigationControl: false,
@@ -552,7 +482,6 @@
 
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
-  $: annotateHoleData($rollMetadata.holeData);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
