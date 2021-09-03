@@ -309,7 +309,13 @@
   {/if}
   {#if !appReady}
     <div id="loading">
-      <div><span /> <span /> <span /> <span /> <span /></div>
+      <div>
+        <span />&nbsp;
+        <span />&nbsp;
+        <span />&nbsp;
+        <span />&nbsp;
+        <span />
+      </div>
       Loading resources...
     </div>
   {/if}
