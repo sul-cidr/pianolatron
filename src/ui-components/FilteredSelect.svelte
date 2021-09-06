@@ -120,7 +120,7 @@
   import { clamp } from "../lib/utils";
 
   export let items = [];
-  export let selectedItem;
+  export let selectedItem = undefined;
 
   export let labelFieldName;
   export let searchFieldName = labelFieldName;
