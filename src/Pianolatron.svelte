@@ -227,7 +227,7 @@
         notify({
           title: "DRUID not found!",
           message:
-            "Please check the specified DRUID, or <a href='/'>click here to continue</a>.",
+            "Please check the specified DRUID, or select a roll to continue.",
           type: "error",
           closable: false,
         });

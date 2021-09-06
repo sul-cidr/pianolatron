@@ -1,5 +1,5 @@
 <style lang="scss">
-  :global(.filtered-select small) {
+  :global(small) {
     color: grey;
     display: inline-block;
     text-align: right;
@@ -8,6 +8,10 @@
     &:first-child {
       width: 5ch;
     }
+  }
+
+  :global(.place-holder) {
+    color: grey;
   }
 </style>
 
@@ -24,6 +28,7 @@
   labelFieldName="_label"
   searchFieldName="_label"
   facetFieldName="type"
+  placeHolder="<span class='place-holder'>Select a roll...</span>"
   postMarkup={(str) =>
     str.replace(/^(?:[\d.]|<\/?mark>)+|\[[^\]]+\]$/g, "<small>$&</small>")}
 />
