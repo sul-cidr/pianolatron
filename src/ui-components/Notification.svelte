@@ -63,6 +63,7 @@
 
   const NotificationStore = writable();
   export const notify = (detail) => NotificationStore.set(detail);
+  export const clearNotification = NotificationStore.set;
 </script>
 
 {#if $NotificationStore}
@@ -74,7 +75,7 @@
       <p>{@html $NotificationStore.message}</p>
     </section>
     {#if $NotificationStore.closable !== false}
-      <div class="close" on:click={() => NotificationStore.set()}>&times;</div>
+      <div class="close" on:click={clearNotification}>&times;</div>
     {/if}
   </div>
 {/if}

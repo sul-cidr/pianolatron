@@ -77,7 +77,10 @@
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
-  import Notification, { notify } from "./ui-components/Notification.svelte";
+  import Notification, {
+    notify,
+    clearNotification,
+  } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
   import catalog from "./config/catalog.json";
@@ -160,6 +163,7 @@
 
   const resetApp = () => {
     mididataReady = false;
+    clearNotification();
     appReady = false;
     pausePlayback();
     resetPlayback();
