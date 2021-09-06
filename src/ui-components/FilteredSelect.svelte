@@ -224,8 +224,10 @@
     const activeListItem = list.querySelector(".selected");
 
     if (activeListItem) {
-      const { top: listItemTop, bottom: listItemBottom } =
-        activeListItem.getBoundingClientRect();
+      const {
+        top: listItemTop,
+        bottom: listItemBottom,
+      } = activeListItem.getBoundingClientRect();
       const { top: listTop, bottom: listBottom } = list.getBoundingClientRect();
 
       if (listItemBottom > listBottom) activeListItem.scrollIntoView(false);
