@@ -67,7 +67,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
   } from "./stores";
-  import { clamp } from "./lib/utils";
+  import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -77,7 +77,10 @@
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
-  import Notification, { notify } from "./ui-components/Notification.svelte";
+  import Notification, {
+    notify,
+    clearNotification,
+  } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
 
   import catalog from "./config/catalog.json";
@@ -87,6 +90,8 @@
   let metadataReady;
   let currentRoll;
   let previousRoll;
+  let metadata;
+  let holeData;
   let holesByTickInterval = new IntervalTree();
 
   let samplePlayer;
@@ -121,7 +126,7 @@
   };
 
   const buildHolesIntervalTree = () => {
-    const { FIRST_HOLE, holeData } = $rollMetadata;
+    const { FIRST_HOLE } = $rollMetadata;
 
     const firstHolePx = parseInt(FIRST_HOLE, 10);
 
@@ -158,6 +163,7 @@
 
   const resetApp = () => {
     mididataReady = false;
+    clearNotification();
     appReady = false;
     pausePlayback();
     resetPlayback();
@@ -196,9 +202,10 @@
 
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
-        $rollMetadata = { ...$rollMetadata, ...metadataJson };
-        if (metadataJson.holeData)
-          buildHolesIntervalTree(metadataJson.holeData);
+        metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
+        holeData = metadataJson.holeData;
+        annotateHoleData(holeData, $rollMetadata.ROLL_TYPE);
+        buildHolesIntervalTree();
         $playExpressionsOnOff = $isReproducingRoll;
         $rollPedalingOnOff = $isReproducingRoll;
         appReady = true;
@@ -224,7 +231,7 @@
         notify({
           title: "DRUID not found!",
           message:
-            "Please check the specified DRUID, or <a href='/'>click here to continue</a>.",
+            "Please check the specified DRUID, or select a roll to continue.",
           type: "error",
           closable: false,
         });
@@ -263,7 +270,7 @@
     <FlexCollapsible id="left-sidebar" width="20vw">
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
-        <RollDetails />
+        <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
@@ -277,6 +284,7 @@
         <RollViewer
           bind:this={rollViewer}
           imageUrl={currentRoll.image_url}
+          {holeData}
           {holesByTickInterval}
           {skipToTick}
         />

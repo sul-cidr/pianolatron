@@ -10,6 +10,7 @@
   color: var(--primary-accent);
   font-size: 1.4em;
   text-shadow: 1px 2px white;
+  pointer-events: none;
 
   div {
     width: 100px;

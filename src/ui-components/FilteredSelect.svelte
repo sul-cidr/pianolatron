@@ -120,11 +120,13 @@
   import { clamp } from "../lib/utils";
 
   export let items = [];
-  export let selectedItem;
+  export let selectedItem = undefined;
 
   export let labelFieldName;
   export let searchFieldName = labelFieldName;
   export let facetFieldName;
+
+  export let placeHolder = "Select an item...";
 
   export let postMarkup = (str) => str;
 
@@ -224,8 +226,10 @@
     const activeListItem = list.querySelector(".selected");
 
     if (activeListItem) {
-      const { top: listItemTop, bottom: listItemBottom } =
-        activeListItem.getBoundingClientRect();
+      const {
+        top: listItemTop,
+        bottom: listItemBottom,
+      } = activeListItem.getBoundingClientRect();
       const { top: listTop, bottom: listBottom } = list.getBoundingClientRect();
 
       if (listItemBottom > listBottom) activeListItem.scrollIntoView(false);
@@ -285,10 +289,15 @@
   };
 
   const onSelectedItemChanged = () => {
-    if (input)
-      input.innerHTML = postMarkup(
-        labelFieldName ? selectedItem[labelFieldName] : selectedItem,
-      );
+    if (input) {
+      if (selectedItem) {
+        input.innerHTML = postMarkup(
+          labelFieldName ? selectedItem[labelFieldName] : selectedItem,
+        );
+      } else {
+        input.innerHTML = placeHolder;
+      }
+    }
   };
 
   const activateDropdown = async () => {
@@ -367,8 +376,8 @@
 
         default:
       }
-    }}
-  />
+    }}>{@html placeHolder}</span
+  >
   <div class="dropdown" class:open bind:this={dropdown}>
     <div class="facets">
       {#if facets}
