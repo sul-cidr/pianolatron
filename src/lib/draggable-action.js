@@ -21,11 +21,6 @@ export const draggable = (node, corral = false) => {
   style.cursor = "move";
   style.userSelect = "none";
 
-  const releaseDrag = () => {
-    window.document.body.style.cursor = "unset";
-    dragging = false;
-  };
-
   const updatePosition = (event) => {
     left += event?.movementX || 0;
     top += event?.movementY || 0;
@@ -36,6 +31,20 @@ export const draggable = (node, corral = false) => {
     }
     style.left = `${left}px`;
     style.top = `${top}px`;
+  };
+
+  const startDrag = () => {
+    window.document.body.style.cursor = "move";
+    dragging = true;
+  };
+
+  const releaseDrag = () => {
+    window.document.body.style.cursor = "unset";
+    dragging = false;
+  };
+
+  const drag = (event) => {
+    if (dragging) updatePosition(event);
   };
 
   const resizeObserver = new ResizeObserver(() => {
@@ -49,17 +58,18 @@ export const draggable = (node, corral = false) => {
   });
   resizeObserver.observe(node.parentElement);
 
-  node.addEventListener("mousedown", () => {
-    window.document.body.style.cursor = "move";
-    dragging = true;
-  });
-
-  window.addEventListener("mousemove", (event) => {
-    if (dragging) updatePosition(event);
-  });
-
+  node.addEventListener("mousedown", startDrag);
+  window.addEventListener("mousemove", drag);
   window.addEventListener("mouseup", releaseDrag);
   document.documentElement.addEventListener("mouseleave", releaseDrag);
 
-  return { destroy: resizeObserver.disconnect };
+  return {
+    destroy() {
+      resizeObserver.disconnect();
+      node.removeEventListener("mousedown", startDrag);
+      window.removeEventListener("mousemove", drag);
+      window.removeEventListener("mouseup", releaseDrag);
+      document.documentElement.removeEventListener("mouseleave", releaseDrag);
+    },
+  };
 };
