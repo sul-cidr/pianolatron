@@ -164,7 +164,6 @@
 </style>
 
 <script>
-  import { fade } from "svelte/transition";
   import { draggable } from "../lib/draggable-action";
 
   export let ppi;
@@ -188,7 +187,6 @@
 </script>
 
 <div
-  transition:fade
   use:draggable={/* corral = */ true}
   bind:this={ref}
   class="us"
