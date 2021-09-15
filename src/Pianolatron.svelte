@@ -162,6 +162,7 @@
   };
 
   const resetApp = () => {
+    rollViewer?.$destroy();
     mididataReady = false;
     clearNotification();
     appReady = false;
