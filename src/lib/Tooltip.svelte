@@ -1,20 +1,25 @@
 <svelte:options accessors />
 
 <style lang="scss">
-  .tooltip {
+  div {
+    z-index: z($main-context, tooltips);
+  }
+
+  span {
+    animation: tooltip 0.2s ease-out;
     background-color: hsla(0, 0%, 20%, 0.9);
     border-radius: 3px;
     color: #fff;
-    left: 50%;
+    display: inline-block;
     line-height: 1.2;
     max-width: 250px;
     min-width: 70px;
     padding: 7px;
-    position: absolute;
+    position: relative;
     text-align: center;
+    transform: translate(0, -5px);
     white-space: pre-line;
     width: max-content;
-    z-index: 13;
 
     &::after {
       border-left: 5px solid transparent;
@@ -29,6 +34,17 @@
       width: 0;
     }
   }
+
+  @keyframes tooltip {
+    from {
+      opacity: 0;
+      transform: translate(0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, -5px);
+    }
+  }
 </style>
 
 <script>
@@ -36,4 +52,6 @@
   export let element;
 </script>
 
-<span class="tooltip" bind:this={element}>{text}</span>
+<div bind:this={element}>
+  <span>{text}</span>
+</div>
