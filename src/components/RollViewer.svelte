@@ -6,17 +6,6 @@
     height: 100%;
     width: 100%;
 
-    p {
-      background: rgba(black, 0.4);
-      border-radius: 4px;
-      color: white;
-      left: 1em;
-      padding: 4px 8px;
-      position: absolute;
-      top: 1em;
-      z-index: 1;
-    }
-
     // tracker bar
     &::before {
       background: linear-gradient(
@@ -80,6 +69,17 @@
       top: 0;
     }
   }
+
+  .roll-loading {
+    background: rgba(black, 0.4);
+    border-radius: 4px;
+    color: white;
+    left: 1em;
+    padding: 4px 8px;
+    position: absolute;
+    top: 1em;
+    z-index: 1;
+  }
 </style>
 
 <script>
@@ -97,6 +97,7 @@
   } from "../stores";
   import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
+  import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
 
   export let imageUrl;
   export let holeData;
@@ -120,6 +121,7 @@
   let trackerbarHeight;
   let animationEaseInterval;
   let osdNavDisplayRegion;
+  let ppi;
 
   const createMark = (hole) => {
     const {
@@ -410,10 +412,12 @@
       updateViewportFromTick(0);
     });
 
-    // update the height of the tracker bar when the zoom changes
+    // update the height of the tracker bar and the PPI value passed to
+    //  <RollViewerScaleBar/> when the zoom changes
     openSeadragon.addHandler("zoom", ({ zoom }) => {
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
+      ppi = imageZoom * 300;
     });
 
     // re-implement some default OSD interactions to apply our own constraints
@@ -520,7 +524,9 @@
   style={`--trackerbar-height: ${trackerbarHeight}px;`}
 >
   {#if !rollImageReady}
-    <p transition:fade>Downloading roll image...</p>
+    <span class="roll-loading" transition:fade>Downloading roll image...</span>
+  {:else}
+    <RollViewerScaleBar {ppi} />
   {/if}
   {#if showControls}
     <RollViewerControls
