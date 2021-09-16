@@ -85,6 +85,7 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import IntervalTree from "node-interval-tree";
   import OpenSeadragon from "openseadragon";
   import {
     rollMetadata,
@@ -122,6 +123,8 @@
   let animationEaseInterval;
   let osdNavDisplayRegion;
   let ppi;
+  let svgPartitions;
+  let visibleSvgs = [];
 
   const createMark = (hole) => {
     const {
@@ -164,18 +167,9 @@
     return mark;
   };
 
-  const createHolesOverlaySvg = () => {
-    if (!holeData) return;
-
+  const createHolesOverlaySvg = (firstPixelRow, lastPixelRow) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-
-    const entireViewportRectangle = viewport.imageToViewportRectangle(
-      0,
-      0,
-      imageWidth,
-      imageLength,
-    );
 
     svg.setAttribute("width", imageWidth);
     svg.setAttribute("height", imageLength);
@@ -183,10 +177,6 @@
     svg.appendChild(g);
 
     holeData.forEach((hole) => {
-      const rect = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "rect",
-      );
       const {
         x: offsetX,
         y: offsetY,
@@ -197,13 +187,21 @@
       } = hole;
       const padding = 10;
 
-      rect.setAttribute("x", offsetX - padding);
-      rect.setAttribute(
-        "y",
-        $scrollDownwards
-          ? offsetY - padding
-          : imageLength - offsetY - height - padding,
+      const yCoord = $scrollDownwards
+        ? offsetY - padding
+        : imageLength - offsetY - height - padding;
+
+      if (yCoord < firstPixelRow || yCoord > lastPixelRow) {
+        return;
+      }
+
+      const rect = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect",
       );
+
+      rect.setAttribute("x", offsetX - padding);
+      rect.setAttribute("y", yCoord);
       rect.setAttribute("width", width + padding * 2);
       rect.setAttribute("height", height + padding * 2);
       rect.setAttribute("rx", 10);
@@ -218,7 +216,73 @@
       g.appendChild(rect);
     });
 
-    viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    return svg;
+  };
+
+  const createHolesOverlaySvgs = () => {
+    if (!holeData) return;
+
+    svgPartitions = new IntervalTree();
+
+    // Calculate the maximum image length visible at maximum zoom (out)
+    const maxViewportImageLength =
+      viewport.viewportToImageRectangle(viewport.getBounds()).height *
+      (maxZoomLevel / viewport.getZoom());
+
+    // Regularize the length of the SVG partitions
+    const partitionLength = Math.ceil(
+      imageLength / Math.ceil(imageLength / maxViewportImageLength),
+    );
+
+    for (
+      let firstPixelRow = 0;
+      firstPixelRow <= imageLength;
+      firstPixelRow += partitionLength
+    ) {
+      const lastPixelRow = Math.min(
+        firstPixelRow + partitionLength,
+        imageLength,
+      );
+
+      const svg = createHolesOverlaySvg(firstPixelRow, lastPixelRow);
+
+      svgPartitions.insert(firstPixelRow, lastPixelRow, svg);
+    }
+  };
+
+  const updateVisibleSvgPartitions = () => {
+    if (svgPartitions === undefined) return;
+
+    const { y: firstImagePixel, height: viewportImageLength } =
+      viewport.viewportToImageRectangle(viewport.getBounds());
+
+    const lastImagePixel = firstImagePixel + viewportImageLength;
+
+    const svgs = svgPartitions.search(firstImagePixel, lastImagePixel);
+
+    // Remove any currently displayed SVG overlays that don't overlap with the
+    // viewer window
+    visibleSvgs.forEach((visibleSvg) => {
+      if (!svgs.includes(visibleSvg)) {
+        visibleSvgs.splice(visibleSvgs.indexOf(visibleSvg), 1);
+        viewport.viewer.removeOverlay(visibleSvg);
+      }
+    });
+
+    // Add SVG overlays that newly overlap with the viewer window
+    svgs.forEach((svg) => {
+      if (visibleSvgs.includes(svg)) {
+        return;
+      }
+      visibleSvgs.push(svg);
+      const entireViewportRectangle = viewport.imageToViewportRectangle(
+        0,
+        0,
+        imageWidth,
+        imageLength,
+      );
+      viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    });
   };
 
   const highlightHoles = (tick) => {
@@ -254,6 +318,8 @@
       "label-above",
       $scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
     );
+
+    updateVisibleSvgPartitions();
   };
 
   // Updates the application position by an amount proportional to the
@@ -408,7 +474,7 @@
     // create the holes overlay SVG and "rewind" to the beginning of the
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
-      createHolesOverlaySvg();
+      createHolesOverlaySvgs();
       updateViewportFromTick(0);
     });
 
@@ -418,6 +484,7 @@
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
       ppi = imageZoom * 300;
+      updateVisibleSvgPartitions();
     });
 
     // re-implement some default OSD interactions to apply our own constraints
