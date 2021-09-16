@@ -40,6 +40,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import Icon from "../ui-components/Icon.svelte";
+  import { tooltip } from "../lib/tooltip-action";
 
   export let shortcut;
   export let meta;
@@ -51,7 +52,7 @@
   const resetShortcut = () => dispatch("reset");
 </script>
 
-<dt data-tooltip={meta.help}>{meta.description}</dt>
+<dt use:tooltip={meta.help}>{meta.description}</dt>
 <dd>
   {#if editing}
     <span>Choose a new keystroke...</span>
@@ -59,14 +60,14 @@
     <kbd>{shortcut.key}</kbd>
   {/if}
   <button
-    data-tooltip="Edit"
+    use:tooltip={"Edit"}
     bind:this={editButtonRef}
     on:click={() => (editing = !editing)}
   >
     <Icon name="edit" height="20" width="20" />
   </button>
   <button
-    data-tooltip={shortcut.isChanged ? "Reset to Default" : undefined}
+    use:tooltip={shortcut.isChanged ? "Reset to Default" : undefined}
     disabled={!shortcut.isChanged}
     on:click={resetShortcut}
   >
