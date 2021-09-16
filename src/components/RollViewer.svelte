@@ -243,9 +243,7 @@
         firstPixelRow + partitionLength,
         imageLength,
       );
-
       const svg = createHolesOverlaySvg(firstPixelRow, lastPixelRow);
-
       svgPartitions.insert(firstPixelRow, lastPixelRow, svg);
     }
   };
@@ -257,7 +255,6 @@
       viewport.viewportToImageRectangle(viewport.getBounds());
 
     const lastImagePixel = firstImagePixel + viewportImageLength;
-
     const svgs = svgPartitions.search(firstImagePixel, lastImagePixel);
 
     // Remove any currently displayed SVG overlays that don't overlap with the
