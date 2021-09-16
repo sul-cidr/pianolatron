@@ -219,7 +219,7 @@
     return svg;
   };
 
-  const createHolesOverlaySvgs = () => {
+  const partitionHolesOverlaySvgs = () => {
     if (!holeData) return;
 
     svgPartitions = new IntervalTree();
@@ -474,7 +474,7 @@
     // create the holes overlay SVG and "rewind" to the beginning of the
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
-      createHolesOverlaySvgs();
+      partitionHolesOverlaySvgs();
       updateViewportFromTick(0);
     });
 
