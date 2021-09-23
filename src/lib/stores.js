@@ -14,9 +14,11 @@ export const createPersistedStore = (key, defaultValue) => {
   const persistedValue = localStorage.getItem(key);
   let initialValue;
   try {
-    initialValue = persistedValue ? JSON.parse(persistedValue) : defaultValue;
+    initialValue = persistedValue
+      ? JSON.parse(persistedValue)
+      : { ...defaultValue };
   } catch {
-    initialValue = defaultValue;
+    initialValue = { ...defaultValue };
   }
   const store = writable(initialValue);
   const { set, subscribe } = store;
@@ -30,7 +32,8 @@ export const createPersistedStore = (key, defaultValue) => {
       this.set(value);
     },
     reset() {
-      this.set(defaultValue);
+      localStorage.removeItem(key);
+      this.set({ ...defaultValue });
     },
     subscribe,
   };

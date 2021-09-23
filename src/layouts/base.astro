@@ -14,6 +14,7 @@ const datetime = new Date().toISOString();
     <meta name="version" content={commit}>
     <meta name="dcterms.modified" content={datetime}>
     <title>{title}</title>
+    <link rel="preload" href={Astro.site.href + "cidr.trsp.300x176.png"} as="image">
     <link rel="stylesheet" href={Astro.resolve("../styles/styles.css")} />
     <script>
       const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};

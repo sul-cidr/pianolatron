@@ -61,11 +61,10 @@
     activeNotes,
     currentTick,
     rollMetadata,
-    showKeyboard,
-    overlayKeyboard,
     isReproducingRoll,
     playExpressionsOnOff,
     rollPedalingOnOff,
+    userSettings,
   } from "./stores";
   import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -77,6 +76,7 @@
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
+  import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
   import Notification, {
     notify,
     clearNotification,
@@ -289,7 +289,7 @@
           {holesByTickInterval}
           {skipToTick}
         />
-        {#if $showKeyboard && $overlayKeyboard}
+        {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
           <div id="keyboard-overlay" transition:fade>
             <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
           </div>
@@ -300,16 +300,22 @@
       </FlexCollapsible>
     {/if}
   </div>
-  {#if $showKeyboard && !$overlayKeyboard}
+  {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>
       <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
     </div>
-  {:else if !$showKeyboard}
+  {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
   {#if !appReady}
     <div id="loading">
-      <div><span /> <span /> <span /> <span /> <span /></div>
+      <div>
+        <span />&nbsp;
+        <span />&nbsp;
+        <span />&nbsp;
+        <span />&nbsp;
+        <span />
+      </div>
       Loading resources...
     </div>
   {/if}
@@ -318,6 +324,7 @@
 <KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
 <KeyboardShortcutEditor />
 <Notification />
+{#if $showWelcomeScreen}<Welcome />{/if}
 
 <svelte:window
   on:popstate={({ state }) =>
