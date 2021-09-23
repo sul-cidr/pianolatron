@@ -167,7 +167,7 @@
     return mark;
   };
 
-  const createHolesOverlaySvg = (firstPixelRow, lastPixelRow) => {
+  const createHolesOverlaySvg = (holes) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
@@ -178,7 +178,7 @@
     svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
     svg.appendChild(g);
 
-    holeData.forEach((hole) => {
+    holes.forEach((hole) => {
       const {
         x: offsetX,
         y: offsetY,
@@ -188,21 +188,18 @@
         type: holeType,
       } = hole;
 
-      const yCoord = $scrollDownwards
-        ? offsetY - padding
-        : imageLength - offsetY - height - padding;
-
-      if (yCoord < firstPixelRow || yCoord > lastPixelRow) {
-        return;
-      }
-
       const rect = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "rect",
       );
 
       rect.setAttribute("x", offsetX - padding);
-      rect.setAttribute("y", yCoord);
+      rect.setAttribute(
+        "y",
+        $scrollDownwards
+          ? offsetY - padding
+          : imageLength - offsetY - height - padding,
+      );
       rect.setAttribute("width", width + padding * 2);
       rect.setAttribute("height", height + padding * 2);
       rect.setAttribute("rx", 10);
@@ -236,16 +233,25 @@
     );
 
     for (
-      let firstPixelRow = 0;
-      firstPixelRow <= imageLength;
+      let firstPixelRow = $scrollDownwards ? firstHolePx : lastHolePx;
+      firstPixelRow <= ($scrollDownwards ? lastHolePx : firstHolePx);
       firstPixelRow += partitionLength
     ) {
       const lastPixelRow = Math.min(
         firstPixelRow + partitionLength,
-        imageLength,
+        $scrollDownwards ? lastHolePx : firstHolePx,
       );
-      const svg = createHolesOverlaySvg(firstPixelRow, lastPixelRow);
-      svgPartitions.insert(firstPixelRow, lastPixelRow, svg);
+
+      const firstTick = $scrollDownwards
+        ? firstPixelRow - firstHolePx
+        : Math.max(firstHolePx - firstPixelRow - partitionLength, 0);
+      const lastTick = firstTick + partitionLength;
+
+      const holes = holesByTickInterval.search(firstTick, lastTick);
+      if (holes) {
+        const svg = createHolesOverlaySvg(holes);
+        svgPartitions.insert(firstPixelRow, lastPixelRow, svg);
+      }
     }
   };
 
@@ -555,6 +561,10 @@
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
       parseInt($rollMetadata.FIRST_HOLE, 10);
+  $: lastHolePx = $scrollDownwards
+    ? parseInt($rollMetadata.LAST_HOLE, 10)
+    : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
+      parseInt($rollMetadata.LAST_HOLE, 10);
 
   export { updateTickByViewportIncrement };
 </script>
