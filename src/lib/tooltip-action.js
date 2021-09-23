@@ -20,7 +20,7 @@ export const tooltip = (node, text) => {
   const removeTooltip = () => {
     popperInstance?.destroy();
     popperInstance = null;
-    componentInstance.$destroy();
+    componentInstance?.$destroy();
   };
 
   node.addEventListener("mouseenter", attachTooltip);
@@ -28,6 +28,7 @@ export const tooltip = (node, text) => {
 
   return {
     destroy() {
+      removeTooltip();
       node.removeEventListener("mouseenter", attachTooltip);
       node.removeEventListener("mouseleave", removeTooltip);
     },
