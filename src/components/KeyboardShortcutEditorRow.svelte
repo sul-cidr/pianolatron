@@ -66,13 +66,15 @@
   >
     <Icon name="edit" height="20" width="20" />
   </button>
-  <button
-    use:tooltip={shortcut.isChanged ? "Reset to Default" : undefined}
-    disabled={!shortcut.isChanged}
-    on:click={resetShortcut}
-  >
-    <Icon name="reset" height="20" width="20" />
-  </button>
+  {#key shortcut.isChanged}
+    <button
+      use:tooltip={shortcut.isChanged ? "Reset to Default" : undefined}
+      disabled={!shortcut.isChanged}
+      on:click={resetShortcut}
+    >
+      <Icon name="reset" height="20" width="20" />
+    </button>
+  {/key}
 </dd>
 
 <svelte:window
