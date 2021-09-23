@@ -164,10 +164,8 @@ def get_iiif_manifest(druid, redownload_manifests, iiif_source_dir):
     target_iiif_filepath = Path(f"input/manifests/{druid}.json")
     source_iiif_filepath = Path(f"{iiif_source_dir}/{druid}.json")
     if (
-        not target_iiif_filepath.exists()
-        or not source_iiif_filepath.exists()
-        or redownload_manifests
-    ):
+        not target_iiif_filepath.exists() and not source_iiif_filepath.exists()
+    ) or redownload_manifests:
         response = requests.get(f"{PURL_BASE}{druid}/iiif/manifest")
         iiif_manifest = response.json()
         with target_iiif_filepath.open("w") as _fh:
@@ -259,7 +257,7 @@ def get_hole_report_data(druid, analysis_source_dir):
     hole_data = []
 
     if not txt_filepath.exists():
-        logging.info(f"Unable to find hole analysis output file for {druid}.")
+        logging.info(f"Unable to find hole analysis output file for {druid}")
         return roll_data, hole_data
 
     roll_keys = [
