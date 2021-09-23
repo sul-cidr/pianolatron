@@ -2,6 +2,7 @@ import { createPopper } from "@popperjs/core/lib/popper-lite";
 import Tooltip from "./Tooltip.svelte";
 
 export const tooltip = (node, text) => {
+  if (!text) return {};
   let popperInstance;
   let componentInstance;
 
