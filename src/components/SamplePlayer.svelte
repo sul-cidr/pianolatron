@@ -1,7 +1,7 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
-  import { Piano } from "../pianolatron-piano";
+  import { Piano } from "../lib/pianolatron-piano";
 
   import {
     rollMetadata,
