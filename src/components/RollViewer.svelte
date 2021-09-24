@@ -125,6 +125,7 @@
   let ppi;
   let svgPartitions;
   let visibleSvgs = [];
+  let entireViewportRectangle;
 
   const createMark = (hole) => {
     const {
@@ -220,6 +221,13 @@
   const partitionHolesOverlaySvgs = () => {
     if (!holeData) return;
 
+    entireViewportRectangle = viewport.imageToViewportRectangle(
+      0,
+      0,
+      imageWidth,
+      imageLength,
+    );
+
     svgPartitions = new IntervalTree();
 
     // Calculate the maximum image length visible at maximum zoom (out)
@@ -276,12 +284,6 @@
     svgs.forEach((svg) => {
       if (visibleSvgs.includes(svg)) return;
       visibleSvgs.push(svg);
-      const entireViewportRectangle = viewport.imageToViewportRectangle(
-        0,
-        0,
-        imageWidth,
-        imageLength,
-      );
       viewport.viewer.addOverlay(svg, entireViewportRectangle);
     });
   };
