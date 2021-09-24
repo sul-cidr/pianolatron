@@ -250,7 +250,15 @@
         : Math.max(firstHolePx - firstPixelRow - partitionLength, 0);
       const lastTick = firstTick + partitionLength;
 
-      const holes = holesByTickInterval.search(firstTick, lastTick);
+      const holes = holesByTickInterval
+        .search(firstTick, lastTick)
+        // eslint-disable-next-line no-loop-func
+        .filter(({ y: offsetY, h: height }) => {
+          const yCoord = $scrollDownwards
+            ? offsetY
+            : imageLength - offsetY - height;
+          return yCoord >= firstPixelRow && yCoord < lastPixelRow;
+        });
       if (holes) {
         const svg = createHolesOverlaySvg(holes);
         svgPartitions.insert(firstPixelRow, lastPixelRow, svg);
