@@ -171,6 +171,8 @@
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
+    const padding = 10;
+
     svg.setAttribute("width", imageWidth);
     svg.setAttribute("height", imageLength);
     svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
@@ -185,7 +187,6 @@
         color: holeColor,
         type: holeType,
       } = hole;
-      const padding = 10;
 
       const yCoord = $scrollDownwards
         ? offsetY - padding
@@ -259,18 +260,15 @@
 
     // Remove any currently displayed SVG overlays that don't overlap with the
     // viewer window
-    visibleSvgs.forEach((visibleSvg) => {
-      if (!svgs.includes(visibleSvg)) {
-        visibleSvgs.splice(visibleSvgs.indexOf(visibleSvg), 1);
-        viewport.viewer.removeOverlay(visibleSvg);
-      }
+    visibleSvgs = visibleSvgs.filter((visibleSvg) => {
+      if (svgs.includes(visibleSvg)) return true;
+      viewport.viewer.removeOverlay(visibleSvg);
+      return false;
     });
 
     // Add SVG overlays that newly overlap with the viewer window
     svgs.forEach((svg) => {
-      if (visibleSvgs.includes(svg)) {
-        return;
-      }
+      if (visibleSvgs.includes(svg)) return;
       visibleSvgs.push(svg);
       const entireViewportRectangle = viewport.imageToViewportRectangle(
         0,
