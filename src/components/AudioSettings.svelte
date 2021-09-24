@@ -44,25 +44,12 @@
 </style>
 
 <script>
-  import { fly } from "svelte/transition";
   import { sampleVolumes, sampleVelocities, reverbWetDry } from "../stores";
 
   import RangeSlider from "../ui-components/RangeSlider.svelte";
-
-  let el;
 </script>
 
-<div
-  id="audio-panel"
-  bind:this={el}
-  transition:fly|local={{
-    delay: 0,
-    duration: 300,
-    x: parseInt(window.getComputedStyle(el).width, 10),
-    y: 0,
-    opacity: 1,
-  }}
->
+<div id="audio-panel">
   <fieldset>
     <legend>Piano Sample Volumes</legend>
     <div class="control">

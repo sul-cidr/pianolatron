@@ -64,7 +64,6 @@
 </style>
 
 <script>
-  import { fly } from "svelte/transition";
   import {
     rollHasExpressions,
     playExpressionsOnOff,
@@ -75,23 +74,12 @@
   import { toggleKeybindingsConfig } from "./KeyboardShortcutEditor.svelte";
   import { notify } from "../ui-components/Notification.svelte";
 
-  let el;
   const themes = ["cardinal", "blue", "green", "grey"];
 
   $: document.documentElement.setAttribute("data-theme", $userSettings.theme);
 </script>
 
-<div
-  id="settings-panel"
-  bind:this={el}
-  transition:fly|local={{
-    delay: 0,
-    duration: 300,
-    x: parseInt(window.getComputedStyle(el).width, 10),
-    y: 0,
-    opacity: 1,
-  }}
->
+<div id="settings-panel">
   <fieldset>
     <legend>Visualization Settings</legend>
     <div>
