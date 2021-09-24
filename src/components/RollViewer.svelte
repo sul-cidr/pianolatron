@@ -253,11 +253,11 @@
       const holes = holesByTickInterval
         .search(firstTick, lastTick)
         // eslint-disable-next-line no-loop-func
-        .filter(({ y: offsetY, h: height }) => {
-          const yCoord = $scrollDownwards
-            ? offsetY
-            : imageLength - offsetY - height;
-          return yCoord >= firstPixelRow && yCoord < lastPixelRow;
+        .filter(({ y: offsetY }) => {
+          const yCoord = $scrollDownwards ? offsetY : imageLength - offsetY;
+          return $scrollDownwards
+            ? yCoord >= firstPixelRow && yCoord < lastPixelRow
+            : yCoord > firstPixelRow && yCoord <= lastPixelRow;
         });
       if (holes) {
         const svg = createHolesOverlaySvg(holes);
