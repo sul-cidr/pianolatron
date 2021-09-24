@@ -32,12 +32,16 @@
 <script>
   import Icon from "../ui-components/Icon.svelte";
 
-  const panels = ["controls", "settings", "audio"];
+  const panels = [
+    ["controls", "sliders"],
+    ["settings", "cog"],
+    ["audio", "piano"],
+  ];
   export let selectedPanel;
 </script>
 
 <div>
-  {#each panels as panel}
+  {#each panels as [panel, icon]}
     <input
       type="radio"
       name="panel-switcher"
@@ -46,13 +50,7 @@
       id={panel}
     />
     <label for={panel}>
-      {#if panel === "controls"}
-        <Icon name="sliders" height="24" width="24" />
-      {:else if panel === "settings"}
-        <Icon name="cog" height="24" width="24" />
-      {:else if panel === "audio"}
-        <Icon name="piano" height="24" width="24" />
-      {/if}
+      <Icon name={icon} height="24" width="24" />
     </label>
   {/each}
 </div>
