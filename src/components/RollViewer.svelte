@@ -230,15 +230,10 @@
 
     svgPartitions = new IntervalTree();
 
-    // Calculate the maximum image length visible at maximum zoom (out)
-    const maxViewportImageLength =
-      viewport.viewportToImageRectangle(viewport.getBounds()).height *
-      (maxZoomLevel / viewport.getZoom());
-
-    // Regularize the length of the SVG partitions
-    const partitionLength = Math.ceil(
-      imageLength / Math.ceil(imageLength / maxViewportImageLength),
-    );
+    // This should be small enough that few <rect/>s that are not in the viewer
+    // are drawn and scrolled, but not so small that the interval lookup
+    // becomes onerous
+    const partitionLength = 1000;
 
     for (
       let firstPixelRow = $scrollDownwards ? firstHolePx : lastHolePx;
