@@ -85,6 +85,7 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import IntervalTree from "node-interval-tree";
   import OpenSeadragon from "openseadragon";
   import {
     rollMetadata,
@@ -122,6 +123,9 @@
   let animationEaseInterval;
   let osdNavDisplayRegion;
   let ppi;
+  let svgPartitions;
+  let visibleSvgs = [];
+  let entireViewportRectangle;
 
   const createMark = (hole) => {
     const {
@@ -164,29 +168,18 @@
     return mark;
   };
 
-  const createHolesOverlaySvg = () => {
-    if (!holeData) return;
-
+  const createHolesOverlaySvg = (holes) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
-    const entireViewportRectangle = viewport.imageToViewportRectangle(
-      0,
-      0,
-      imageWidth,
-      imageLength,
-    );
+    const padding = 10;
 
     svg.setAttribute("width", imageWidth);
     svg.setAttribute("height", imageLength);
     svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
     svg.appendChild(g);
 
-    holeData.forEach((hole) => {
-      const rect = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "rect",
-      );
+    holes.forEach((hole) => {
       const {
         x: offsetX,
         y: offsetY,
@@ -195,7 +188,11 @@
         color: holeColor,
         type: holeType,
       } = hole;
-      const padding = 10;
+
+      const rect = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect",
+      );
 
       rect.setAttribute("x", offsetX - padding);
       rect.setAttribute(
@@ -218,7 +215,94 @@
       g.appendChild(rect);
     });
 
-    viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    return svg;
+  };
+
+  const partitionHolesOverlaySvgs = () => {
+    if (!holeData) return;
+
+    entireViewportRectangle = viewport.imageToViewportRectangle(
+      0,
+      0,
+      imageWidth,
+      imageLength,
+    );
+
+    svgPartitions = new IntervalTree();
+
+    // This should be small enough that few <rect/>s that are not in the viewer
+    // are drawn and scrolled, but not so small that the interval lookup
+    // becomes onerous
+    const partitionLength = 1000;
+
+    for (
+      let firstPixelRow = $scrollDownwards ? firstHolePx : lastHolePx;
+      firstPixelRow <= ($scrollDownwards ? lastHolePx : firstHolePx);
+      firstPixelRow += partitionLength
+    ) {
+      const lastPixelRow = Math.min(
+        firstPixelRow + partitionLength,
+        $scrollDownwards ? lastHolePx : firstHolePx,
+      );
+
+      const firstTick = $scrollDownwards
+        ? firstPixelRow - firstHolePx
+        : Math.max(firstHolePx - firstPixelRow - partitionLength, 0);
+      const lastTick = firstTick + partitionLength;
+
+      const holes = holesByTickInterval
+        .search(firstTick, lastTick)
+        // eslint-disable-next-line no-loop-func
+        .filter(({ y: offsetY }) => {
+          const yCoord = $scrollDownwards ? offsetY : imageLength - offsetY;
+          return $scrollDownwards
+            ? yCoord >= firstPixelRow && yCoord < lastPixelRow
+            : yCoord > firstPixelRow && yCoord <= lastPixelRow;
+        });
+
+      if (holes.length) {
+        const ext = $scrollDownwards
+          ? clamp(Math.max(...holes.map(({ y, h }) => y + h)), 0, imageLength)
+          : clamp(
+              // eslint-disable-next-line no-loop-func
+              Math.min(...holes.map(({ y, h }) => imageLength - y - h)),
+              0,
+              imageLength,
+            );
+
+        const svg = createHolesOverlaySvg(holes);
+        if ($scrollDownwards) {
+          svgPartitions.insert(firstPixelRow, Math.max(lastPixelRow, ext), svg);
+        } else {
+          svgPartitions.insert(Math.min(firstPixelRow, ext), lastPixelRow, svg);
+        }
+      }
+    }
+  };
+
+  const updateVisibleSvgPartitions = () => {
+    if (svgPartitions === undefined) return;
+
+    const { y: firstImagePixel, height: viewportImageLength } =
+      viewport.viewportToImageRectangle(viewport.getBounds());
+
+    const lastImagePixel = firstImagePixel + viewportImageLength;
+    const svgs = svgPartitions.search(firstImagePixel, lastImagePixel);
+
+    // Remove any currently displayed SVG overlays that don't overlap with the
+    // viewer window
+    visibleSvgs = visibleSvgs.filter((visibleSvg) => {
+      if (svgs.includes(visibleSvg)) return true;
+      viewport.viewer.removeOverlay(visibleSvg);
+      return false;
+    });
+
+    // Add SVG overlays that newly overlap with the viewer window
+    svgs.forEach((svg) => {
+      if (visibleSvgs.includes(svg)) return;
+      visibleSvgs.push(svg);
+      viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    });
   };
 
   const highlightHoles = (tick) => {
@@ -254,6 +338,8 @@
       "label-above",
       $scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
     );
+
+    updateVisibleSvgPartitions();
   };
 
   // Updates the application position by an amount proportional to the
@@ -408,7 +494,7 @@
     // create the holes overlay SVG and "rewind" to the beginning of the
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
-      createHolesOverlaySvg();
+      partitionHolesOverlaySvgs();
       updateViewportFromTick(0);
     });
 
@@ -418,6 +504,7 @@
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
       ppi = imageZoom * 300;
+      updateVisibleSvgPartitions();
     });
 
     // re-implement some default OSD interactions to apply our own constraints
@@ -493,6 +580,10 @@
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
       parseInt($rollMetadata.FIRST_HOLE, 10);
+  $: lastHolePx = $scrollDownwards
+    ? parseInt($rollMetadata.LAST_HOLE, 10)
+    : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
+      parseInt($rollMetadata.LAST_HOLE, 10);
 
   export { updateTickByViewportIncrement };
 </script>
