@@ -259,9 +259,23 @@
             ? yCoord >= firstPixelRow && yCoord < lastPixelRow
             : yCoord > firstPixelRow && yCoord <= lastPixelRow;
         });
-      if (holes) {
+
+      if (holes.length) {
+        const ext = $scrollDownwards
+          ? clamp(Math.max(...holes.map(({ y, h }) => y + h)), 0, imageLength)
+          : clamp(
+              // eslint-disable-next-line no-loop-func
+              Math.min(...holes.map(({ y, h }) => imageLength - y - h)),
+              0,
+              imageLength,
+            );
+
         const svg = createHolesOverlaySvg(holes);
-        svgPartitions.insert(firstPixelRow, lastPixelRow, svg);
+        if ($scrollDownwards) {
+          svgPartitions.insert(firstPixelRow, Math.max(lastPixelRow, ext), svg);
+        } else {
+          svgPartitions.insert(Math.min(firstPixelRow, ext), lastPixelRow, svg);
+        }
       }
     }
   };
