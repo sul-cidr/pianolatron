@@ -177,6 +177,7 @@
     svg.setAttribute("width", imageWidth);
     svg.setAttribute("height", imageLength);
     svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+    svg.setAttribute("style", "pointer-events: none;");
     svg.appendChild(g);
 
     holes.forEach((hole) => {
