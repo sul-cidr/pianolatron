@@ -350,7 +350,7 @@ class Pedal extends PianoComponent {
    * Indicates if the pedal is down at the given time
    */
   isDown(time) {
-    return time > this._downTime;
+    return time >= this._downTime;
   }
 }
 
