@@ -19,16 +19,23 @@
   export let skipToPercentage;
   export let stopApp;
 
+  const panels = {
+    controls: {
+      component: BasicSettings,
+      props: { skipToPercentage },
+    },
+    settings: { component: AdvancedSettings },
+    audio: { component: AudioSettings },
+  };
+
   let selectedPanel = "controls";
 </script>
 
 <PanelSwitcher bind:selectedPanel />
 <div>
-  <BasicSettings {skipToPercentage} />
-  {#if selectedPanel === "settings"}
-    <AdvancedSettings />
-  {:else if selectedPanel === "audio"}
-    <AudioSettings />
-  {/if}
+  <svelte:component
+    this={panels[selectedPanel].component}
+    {...panels[selectedPanel].props}
+  />
 </div>
 <PlaybackControls {playPauseApp} {stopApp} />
