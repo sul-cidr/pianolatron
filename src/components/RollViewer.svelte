@@ -231,9 +231,6 @@
 
     svgPartitions = new IntervalTree();
 
-    // This should be small enough that few <rect/>s that are not in the viewer
-    // are drawn and scrolled, but not so small that the interval lookup
-    // becomes onerous
     const partitionLength = 1000;
 
     for (
