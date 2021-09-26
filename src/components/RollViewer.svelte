@@ -226,37 +226,29 @@
 
     svgPartitions = new IntervalTree();
 
-    const partitionLength = 1000;
+    const rangeLengthPx = 1000;
+
+    // firstHolePx and lastHolePx reflect the temporal order of the holes, and
+    //  so are top-to-bottom for $scrollDownwards rolls, and bottom-to-top for
+    //  !$scrollDownwards rolls.
+    const holesBeginPx = $scrollDownwards ? firstHolePx : lastHolePx;
+    const holesEndPx = $scrollDownwards ? lastHolePx : firstHolePx;
 
     for (
-      let firstPixelRow = $scrollDownwards ? firstHolePx : lastHolePx;
-      firstPixelRow <= ($scrollDownwards ? lastHolePx : firstHolePx);
-      firstPixelRow += partitionLength
+      let rangeBeginsPx = holesBeginPx;
+      rangeBeginsPx <= holesEndPx;
+      rangeBeginsPx += rangeLengthPx
     ) {
-      const lastPixelRow = Math.min(
-        firstPixelRow + partitionLength,
-        $scrollDownwards ? lastHolePx : firstHolePx,
+      const rangeEndsPx = Math.min(rangeBeginsPx + rangeLengthPx, holesEndPx);
+
+      const holes = holeData.filter(
+        ({ startY }) => startY >= rangeBeginsPx && startY < rangeEndsPx,
       );
 
-      const firstTick = $scrollDownwards
-        ? firstPixelRow - firstHolePx
-        : Math.max(firstHolePx - firstPixelRow - partitionLength, 0);
-      const lastTick = firstTick + partitionLength;
-
-      const holes = holesByTickInterval
-        .search(firstTick, lastTick)
-        .filter(
-          ({ startY }) => startY >= firstPixelRow && startY < lastPixelRow,
-        );
-
       if (holes.length) {
-        const ext = clamp(
-          Math.max(...holes.map(({ endY }) => endY)),
-          0,
-          imageLength,
-        );
+        const lastHoleEndsPx = Math.max(...holes.map(({ endY }) => endY));
         const svg = createHolesOverlaySvg(holes);
-        svgPartitions.insert(firstPixelRow, Math.max(lastPixelRow, ext), svg);
+        svgPartitions.insert(rangeBeginsPx, lastHoleEndsPx, svg);
       }
     }
   };
