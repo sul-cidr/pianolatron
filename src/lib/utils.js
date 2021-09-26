@@ -161,9 +161,10 @@ export const annotateHoleData = (
     }
   });
 
+  const imageLengthPx = parseInt(imageLength, 10);
+
   holeData.forEach((hole) => {
-    hole.startY = scrollDownwards
-      ? hole.y
-      : parseInt(imageLength, 10) - hole.y - hole.h;
+    hole.startY = scrollDownwards ? hole.y : imageLengthPx - hole.y - hole.h;
+    hole.endY = scrollDownwards ? hole.y + hole.h : imageLengthPx - hole.y;
   });
 };

@@ -245,30 +245,18 @@
 
       const holes = holesByTickInterval
         .search(firstTick, lastTick)
-        // eslint-disable-next-line no-loop-func
-        .filter(({ y: offsetY }) => {
-          const yCoord = $scrollDownwards ? offsetY : imageLength - offsetY;
-          return $scrollDownwards
-            ? yCoord >= firstPixelRow && yCoord < lastPixelRow
-            : yCoord > firstPixelRow && yCoord <= lastPixelRow;
-        });
+        .filter(
+          ({ startY }) => startY >= firstPixelRow && startY < lastPixelRow,
+        );
 
       if (holes.length) {
-        const ext = $scrollDownwards
-          ? clamp(Math.max(...holes.map(({ y, h }) => y + h)), 0, imageLength)
-          : clamp(
-              // eslint-disable-next-line no-loop-func
-              Math.min(...holes.map(({ y, h }) => imageLength - y - h)),
-              0,
-              imageLength,
-            );
-
+        const ext = clamp(
+          Math.max(...holes.map(({ endY }) => endY)),
+          0,
+          imageLength,
+        );
         const svg = createHolesOverlaySvg(holes);
-        if ($scrollDownwards) {
-          svgPartitions.insert(firstPixelRow, Math.max(lastPixelRow, ext), svg);
-        } else {
-          svgPartitions.insert(Math.min(firstPixelRow, ext), lastPixelRow, svg);
-        }
+        svgPartitions.insert(firstPixelRow, Math.max(lastPixelRow, ext), svg);
       }
     }
   };
