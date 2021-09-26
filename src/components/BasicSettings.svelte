@@ -1,23 +1,3 @@
-<style lang="scss">
-  #playback-settings {
-    overflow-y: auto;
-  }
-  .control {
-    align-items: center;
-    display: grid;
-    gap: 0.5em;
-    padding: 0 0.5em 0.5em;
-    grid:
-      "title value" auto
-      "slider slider" auto / 1fr auto;
-
-    :global(input[type="range"]) {
-      grid-area: slider;
-      width: 100%;
-    }
-  }
-</style>
-
 <script>
   import { keyMap } from "./KeyboardShortcuts.svelte";
   import {
