@@ -130,7 +130,7 @@
   const createMark = (hole) => {
     const {
       x: offsetX,
-      y: offsetY,
+      startY: offsetY,
       w: width,
       h: height,
       m: midiKey,
@@ -160,7 +160,7 @@
 
     const viewportRectangle = viewport.imageToViewportRectangle(
       offsetX - 4,
-      $scrollDownwards ? offsetY - 4 : imageLength - offsetY - height - 4,
+      offsetY - 4,
       width + 11,
       height + 12,
     );
@@ -183,7 +183,7 @@
     holes.forEach((hole) => {
       const {
         x: offsetX,
-        y: offsetY,
+        startY: offsetY,
         w: width,
         h: height,
         color: holeColor,
@@ -196,12 +196,7 @@
       );
 
       rect.setAttribute("x", offsetX - padding);
-      rect.setAttribute(
-        "y",
-        $scrollDownwards
-          ? offsetY - padding
-          : imageLength - offsetY - height - padding,
-      );
+      rect.setAttribute("y", offsetY - padding);
       rect.setAttribute("width", width + padding * 2);
       rect.setAttribute("height", height + padding * 2);
       rect.setAttribute("rx", 10);

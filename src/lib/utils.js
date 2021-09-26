@@ -119,7 +119,11 @@ const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
 const controlHoleColor = "120, 73%, 75%"; // light green
 const pedalHoleColor = "39, 100%, 50%"; // orange;
 
-export const annotateHoleData = (holeData, rollType) => {
+export const annotateHoleData = (
+  holeData,
+  { ROLL_TYPE: rollType, IMAGE_LENGTH: imageLength },
+  scrollDownwards,
+) => {
   const velocities = holeData.map(({ v }) => v).filter((v) => v);
   const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
   const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
@@ -155,5 +159,11 @@ export const annotateHoleData = (holeData, rollType) => {
       default:
         hole.color = defaultHoleColor;
     }
+  });
+
+  holeData.forEach((hole) => {
+    hole.startY = scrollDownwards
+      ? hole.y
+      : parseInt(imageLength, 10) - hole.y - hole.h;
   });
 };
