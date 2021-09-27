@@ -62,6 +62,7 @@
     currentTick,
     rollMetadata,
     isReproducingRoll,
+    scrollDownwards,
     playExpressionsOnOff,
     rollPedalingOnOff,
     userSettings,
@@ -205,7 +206,7 @@
       ([, metadataJson]) => {
         metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
         holeData = metadataJson.holeData;
-        annotateHoleData(holeData, $rollMetadata.ROLL_TYPE);
+        annotateHoleData(holeData, $rollMetadata, $scrollDownwards);
         buildHolesIntervalTree();
         $playExpressionsOnOff = $isReproducingRoll;
         $rollPedalingOnOff = $isReproducingRoll;

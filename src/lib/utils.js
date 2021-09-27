@@ -119,7 +119,11 @@ const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
 const controlHoleColor = "120, 73%, 75%"; // light green
 const pedalHoleColor = "39, 100%, 50%"; // orange;
 
-export const annotateHoleData = (holeData, rollType) => {
+export const annotateHoleData = (
+  holeData,
+  { ROLL_TYPE: rollType, IMAGE_LENGTH: imageLength },
+  scrollDownwards,
+) => {
   const velocities = holeData.map(({ v }) => v).filter((v) => v);
   const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
   const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
@@ -135,7 +139,15 @@ export const annotateHoleData = (holeData, rollType) => {
       )
     ];
 
+  const imageLengthPx = parseInt(imageLength, 10);
   holeData.forEach((hole) => {
+    // hole.y is the coordinate of the beginning of the hole *in the direction
+    //  of scroll*, so to turn it into a an image coordinate with the usual
+    //  computer graphics coordinate system of (0,0) in the top left (.startY),
+    //  some arithmetic is required for rolls that scroll upwards.
+    hole.startY = scrollDownwards ? hole.y : imageLengthPx - hole.y - hole.h;
+    hole.endY = scrollDownwards ? hole.y + hole.h : imageLengthPx - hole.y;
+
     switch (getHoleType(hole, rollType)) {
       case "pedal":
         hole.color = pedalHoleColor;
