@@ -141,6 +141,10 @@ export const annotateHoleData = (
 
   const imageLengthPx = parseInt(imageLength, 10);
   holeData.forEach((hole) => {
+    // hole.y is the coordinate of the beginning of the hole *in the direction
+    //  of scroll*, so to turn it into a an image coordinate with the usual
+    //  computer graphics coordinate system of (0,0) in the top left (.startY),
+    //  some arithmetic is required for rolls that scroll upwards.
     hole.startY = scrollDownwards ? hole.y : imageLengthPx - hole.y - hole.h;
     hole.endY = scrollDownwards ? hole.y + hole.h : imageLengthPx - hole.y;
 
