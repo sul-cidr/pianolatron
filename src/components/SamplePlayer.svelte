@@ -1,6 +1,7 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
+  import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
 
   import {
@@ -34,6 +35,8 @@
   const SOFT_PEDAL_RATIO = 0.67;
   const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
   const ACCENT_BUMP = 1.5;
+
+  const dispatch = createEventDispatcher();
 
   const midiSamplePlayer = new MidiPlayer.Player();
 
@@ -93,7 +96,9 @@
         midiSamplePlayer.play();
       });
     }
-    return Promise.resolve(fn()).then(() => setPlayerStateAtTick($currentTick));
+    return Promise.resolve(fn())
+      .then(() => setPlayerStateAtTick($currentTick))
+      .catch(() => {});
   };
 
   const startNote = (noteNumber, velocity) => {
@@ -262,11 +267,16 @@
   $: $rollPedalingOnOff, updatePlayer();
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
-  $: updatePlayer(() =>
-    piano
-      .updateVelocities($sampleVelocities)
-      .catch(({ loadedVelocities }) => ($sampleVelocities = loadedVelocities)),
-  );
+  $: updatePlayer(() => {
+    const loadingSamples = piano.updateVelocities($sampleVelocities);
+    dispatch("loading", loadingSamples);
+    // if samples are in the process of being loaded, the promise is
+    //  rejected; update the UI to reflect the correct value
+    loadingSamples.catch(
+      ({ loadedVelocities }) => ($sampleVelocities = loadedVelocities),
+    );
+    return loadingSamples;
+  });
 
   export {
     midiSamplePlayer,

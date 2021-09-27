@@ -88,6 +88,7 @@
   import catalog from "./config/catalog.json";
 
   let appReady = false;
+  let appWaiting = true;
   let mididataReady;
   let metadataReady;
   let currentRoll;
@@ -212,6 +213,7 @@
         $playExpressionsOnOff = $isReproducingRoll;
         $rollPedalingOnOff = $isReproducingRoll;
         appReady = true;
+        appWaiting = false;
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -309,9 +311,15 @@
   {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
-  <LoadingSpinner showLoadingSpinner={!appReady} />
+  <LoadingSpinner showLoadingSpinner={appWaiting} />
 </div>
-<SamplePlayer bind:this={samplePlayer} />
+<SamplePlayer
+  bind:this={samplePlayer}
+  on:loading={({ detail: loadingSamples }) => {
+    appWaiting = true;
+    loadingSamples.then(() => (appWaiting = false)).catch(() => {});
+  }}
+/>
 <KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
 <KeyboardShortcutEditor />
 <Notification />
