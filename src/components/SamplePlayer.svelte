@@ -39,7 +39,7 @@
     velocities: 4,
     release: true,
     pedal: true,
-    maxPolyphony: 64,
+    maxPolyphony: Infinity,
     volume: {
       strings: -15,
       harmonics: -10,
