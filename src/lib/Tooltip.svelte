@@ -17,32 +17,25 @@
     padding: 7px;
     position: relative;
     text-align: center;
-    transform: translate(0, -5px);
+    top: -10px;
     white-space: pre-line;
     width: max-content;
-
-    &::after {
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 5px solid hsla(0, 0%, 20%, 0.9);
-      top: 100%;
-      content: " ";
-      font-size: 0;
-      left: 50%;
-      line-height: 0;
-      position: absolute;
-      width: 0;
-    }
+  }
+  [data-popper-arrow] {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+    top: 100%;
   }
 
   @keyframes tooltip {
     from {
       opacity: 0;
-      transform: translate(0, 0);
+      top: 0;
     }
     to {
       opacity: 1;
-      transform: translate(0, -5px);
+      top: -10px;
     }
   }
 </style>
@@ -53,5 +46,8 @@
 </script>
 
 <div bind:this={element}>
-  <span>{text}</span>
+  <span>
+    {text}
+    <div data-popper-arrow />
+  </span>
 </div>
