@@ -83,6 +83,7 @@
     clearNotification,
   } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
+  import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
 
   import catalog from "./config/catalog.json";
 
@@ -308,18 +309,7 @@
   {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
-  {#if !appReady}
-    <div id="loading">
-      <div>
-        <span />&nbsp;
-        <span />&nbsp;
-        <span />&nbsp;
-        <span />&nbsp;
-        <span />
-      </div>
-      Loading resources...
-    </div>
-  {/if}
+  <LoadingSpinner showLoadingSpinner={!appReady} />
 </div>
 <SamplePlayer bind:this={samplePlayer} />
 <KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
