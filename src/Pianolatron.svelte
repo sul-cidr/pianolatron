@@ -291,7 +291,7 @@
     <FlexCollapsible id="left-sidebar" width="20vw">
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
-        <RollDetails {metadata} />
+        <RollDetails {metadata} druid={currentRoll.druid} />
         {#if !holesByTickInterval.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at

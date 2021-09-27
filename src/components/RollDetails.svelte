@@ -42,10 +42,45 @@
   dd :global(span) {
     opacity: 0.5;
   }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    background-color: #999;
+    border-radius: 4px;
+    line-height: 0.9em;
+    min-width: 3ch;
+    text-align: center;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--primary-accent);
+    }
+
+    a {
+      text-decoration: none;
+      font-size: 0.9em;
+      color: white;
+      padding: 2px 4px;
+      display: inline-block;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 </style>
 
 <script>
+  import { tooltip } from "../lib/tooltip-action";
+
   export let metadata;
+  export let druid;
 
   const unavailable = "<span>Unavailable</span>";
 </script>
@@ -67,12 +102,54 @@
   <dd class="large">
     {@html metadata.label || unavailable}
   </dd>
-  <dt>PURL</dt>
+  <dt>Links</dt>
   <dd>
-    <a href={metadata.PURL}>{@html metadata.PURL || unavailable}</a>
-  </dd>
-  <dt>Call No</dt>
-  <dd>
-    {@html metadata.CALLNUM || unavailable}
+    <ul>
+      <li>
+        <a
+          use:tooltip={"Stanford Digital Repository entry for this roll"}
+          href={metadata.PURL}
+          target="purl"
+        >
+          SDR
+        </a>
+      </li>
+      <li>
+        <a
+          use:tooltip={"Image Analysis Report for this roll at the SUPRA site"}
+          href={`https://supra.stanford.edu/image-analysis/?druid=${druid}`}
+          target="image-analysis"
+        >
+          IA
+        </a>
+      </li>
+      <li>
+        <a
+          use:tooltip={"Drift Analysis Report for this roll at the SUPRA site"}
+          href={`https://supra.stanford.edu/drift/?druid=${druid}`}
+          target="drift"
+        >
+          D
+        </a>
+      </li>
+      <li>
+        <a
+          use:tooltip={"Download the “Expressive” MIDI file for this roll"}
+          href={`https://github.com/pianoroll/SUPRA/blob/master/welte-red/midi-exp/${druid}_exp.mid?raw=true`}
+        >
+          Mexp
+        </a>
+      </li>
+      <li>
+        <a
+          use:tooltip={"Download the Raw MIDI file for this roll"}
+          href={`https://github.com/pianoroll/SUPRA/blob/master/welte-red/midi-raw/${druid}_exp.mid?raw=true`}
+        >
+          Mraw
+        </a>
+      </li>
+      <li><a href={metadata.PURL}>MP4</a></li>
+      <li><a href={metadata.PURL}>MP3</a></li>
+    </ul>
   </dd>
 </dl>
