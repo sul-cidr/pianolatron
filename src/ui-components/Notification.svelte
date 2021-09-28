@@ -72,6 +72,16 @@
     font-weight: bold;
     padding: 0 6px;
   }
+
+  button {
+    @include button;
+    margin-left: 1em;
+    margin-right: 1em;
+
+    &:first-of-type {
+      margin-top: 1em;
+    }
+  }
 </style>
 
 <script context="module">
@@ -106,6 +116,14 @@
         <header>{$NotificationStore.title}</header>
       {/if}
       <p>{@html $NotificationStore.message}</p>
+      {#each $NotificationStore.actions || [] as action}
+        <button
+          on:click={() => {
+            clearNotification();
+            action.fn();
+          }}>{action.label}</button
+        >
+      {/each}
     </section>
     {#if $NotificationStore.closable !== false}
       <div class="close" on:click={clearNotification}>&times;</div>
