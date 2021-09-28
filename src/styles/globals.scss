@@ -21,3 +21,21 @@ $cardinal: #8c1515; // "cardinal"
   background-attachment: fixed;
   background-position: center;
 }
+
+@mixin button {
+  background-color: var(--primary-accent);
+  border-radius: 0.25em;
+  border: 0.1em solid #ffffff;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  padding: 0.35em 0.8em;
+  transition: all 0.2s;
+
+  &:hover {
+    color: var(--primary-accent);
+    border-color: var(--primary-accent);
+    background-color: #ffffff;
+  }
+}
