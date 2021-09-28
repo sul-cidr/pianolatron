@@ -1,53 +1,10 @@
-import { writable, derived, get } from "svelte/store";
-import watchMedia from "./mq-store";
-
-const createStore = (defaultValue) => {
-  const { set, subscribe, update } = writable(defaultValue);
-  return {
-    reset: () => set(defaultValue),
-    set,
-    subscribe,
-    update,
-  };
-};
-
-export const createPersistedStore = (key, defaultValue) => {
-  const persistedValue = localStorage.getItem(key);
-  let initialValue;
-  try {
-    initialValue = persistedValue ? JSON.parse(persistedValue) : defaultValue;
-  } catch {
-    initialValue = defaultValue;
-  }
-  const store = writable(initialValue);
-  const { set, subscribe } = store;
-  return {
-    set(value) {
-      localStorage.setItem(key, JSON.stringify(value));
-      set(value);
-    },
-    update(fn) {
-      const value = fn(get(store));
-      this.set(value);
-    },
-    reset: () => this.set(defaultValue),
-    subscribe,
-  };
-};
-
-const createSetStore = () => {
-  const { subscribe, update, set } = writable(new Set());
-  return {
-    subscribe,
-    add: (el) => update((wrappedSet) => wrappedSet.add(el)),
-    delete: (el) =>
-      update((wrappedSet) => {
-        wrappedSet.delete(el);
-        return wrappedSet;
-      }),
-    reset: (newValue) => set(new Set(newValue)),
-  };
-};
+import { derived } from "svelte/store";
+import {
+  createStore,
+  createSetStore,
+  createPersistedStore,
+} from "./lib/stores";
+import { watchMedia } from "./lib/mq-store";
 
 // Metadata
 export const rollMetadata = createStore({});
@@ -82,14 +39,16 @@ export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
 
 // Piano Settings
-export const sampleVolumes = createStore({
-  strings: -15,
-  harmonics: -10,
-  pedal: -10,
-  keybed: -10,
+export const pianoSettings = createPersistedStore("audioSettings", {
+  sampleVolumes: {
+    strings: -15,
+    harmonics: -10,
+    pedal: -10,
+    keybed: -10,
+  },
+  sampleVelocities: 4,
+  reverbWetDry: 0.8,
 });
-export const sampleVelocities = createStore(4);
-export const reverbWetDry = createStore(0.8);
 
 // Playback State
 export const currentTick = createStore(0);
@@ -97,13 +56,14 @@ export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
 
 // User Settings
-export const showKeyboard = createPersistedStore("showKeyboard", true);
-export const overlayKeyboard = createPersistedStore("overlayKeyboard", false);
 export const userSettings = createPersistedStore("userSettings", {
   theme: "cardinal",
   activeNoteDetails: false,
   showNoteVelocities: false,
   highlightEnabledHoles: false,
+  showKeyboard: true,
+  overlayKeyboard: false,
+  welcomeScreenInhibited: false,
 });
 
 // Browser State

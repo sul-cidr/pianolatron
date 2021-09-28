@@ -30,23 +30,28 @@
 <script>
   import { fade } from "svelte/transition";
   import Icon from "../ui-components/Icon.svelte";
-  import { showKeyboard, overlayKeyboard } from "../stores";
+  import { userSettings } from "../stores";
 
-  export let outside;
+  export let outside = false;
 </script>
 
 <div class="overlay-buttons" class:outside transition:fade|local>
-  <button on:click={() => ($showKeyboard = !$showKeyboard)}>
+  <button
+    on:click={() => ($userSettings.showKeyboard = !$userSettings.showKeyboard)}
+  >
     <Icon
-      name={$showKeyboard ? "piano-down" : "piano-up"}
+      name={$userSettings.showKeyboard ? "piano-down" : "piano-up"}
       height="24"
       width="24"
     />
   </button>
   {#if !outside}
-    <button on:click={() => ($overlayKeyboard = !$overlayKeyboard)}>
+    <button
+      on:click={() =>
+        ($userSettings.overlayKeyboard = !$userSettings.overlayKeyboard)}
+    >
       <Icon
-        name={$overlayKeyboard ? "piano-out" : "piano-in"}
+        name={$userSettings.overlayKeyboard ? "piano-out" : "piano-in"}
         height="24"
         width="24"
       />

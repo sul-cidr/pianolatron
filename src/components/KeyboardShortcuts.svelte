@@ -1,289 +1,29 @@
-<style lang="scss">
-  div {
-    background-color: var(--background-color);
-    border-radius: 4px;
-    box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3);
-    left: 50%;
-    max-height: 80%;
-    max-width: 100%;
-    min-width: 400px;
-    padding: 1em;
-    position: absolute;
-    top: 42%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    z-index: z($main-context, notifications);
-    display: flex;
-    flex-direction: column;
-  }
-
-  header {
-    display: flex;
-    font-size: 1.4em;
-    font-weight: bold;
-    justify-content: space-between;
-    margin-bottom: 0.5em;
-    text-decoration: underline;
-  }
-
-  p {
-    margin-bottom: 1em;
-  }
-
-  p.error-message {
-    border-radius: 5px;
-    border: 1px solid red;
-    color: red;
-    padding: 0.25em;
-  }
-
-  dl {
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: space-between;
-    gap: 0 0.25em;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  p.reset {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin: 1em 0;
-  }
-
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-
-    :global(svg) {
-      stroke: grey;
-    }
-
-    &:hover :global(svg) {
-      stroke: black;
-    }
-  }
-</style>
-
 <script context="module">
-  import { writable } from "svelte/store";
-  // eslint-disable-next-line import/order
-  import { createPersistedStore } from "../stores";
+  import { createPersistedStore } from "../lib/stores";
+  import { defaultKeyMap } from "../config/keyboard-shortcut-config";
 
-  const defaultKeyMap = {
-    SOFT: {
-      code: "KeyB",
-      key: "b",
-      description: "Soft Pedal",
-      help: "Hold to apply the soft pedal",
-    },
-    SUSTAIN: {
-      code: "Space",
-      key: "＿",
-      description: "Sustain Pedal",
-      help: "Hold to apply the sustain pedal",
-    },
-    ACCENT: {
-      code: "KeyN",
-      key: "n",
-      description: "Accent Button",
-      help: "Notes struck while this is held with be 50% louder",
-    },
-
-    VOLUME_UP: {
-      code: "KeyO",
-      key: "o",
-      description: "Volume Up",
-      help: `Increase the main volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
-    },
-    VOLUME_DOWN: {
-      code: "KeyI",
-      key: "i",
-      description: "Volume Down",
-      help: `Decrease the main volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
-    },
-    BASS_VOLUME_UP: {
-      code: "Digit4",
-      key: "4",
-      description: "Bass Volume Up",
-      help: `Increase the bass volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
-    },
-    BASS_VOLUME_DOWN: {
-      code: "KeyE",
-      key: "e",
-      description: "Bass Volume Down",
-      help: `Decrease the bass volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
-    },
-    TREBLE_VOLUME_UP: {
-      code: "Digit0",
-      key: "0",
-      description: "Treble Volume Up",
-      help: `Increase the treble volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
-    },
-    TREBLE_VOLUME_DOWN: {
-      code: "KeyP",
-      key: "p",
-      description: "Treble Volume Down",
-      help: `Decrease the treble volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
-    },
-
-    TEMPO_UP: {
-      code: "KeyT",
-      key: "t",
-      description: "Tempo Up",
-      help: `Increase the tempo
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
-    },
-    TEMPO_DOWN: {
-      code: "KeyR",
-      key: "r",
-      description: "Tempo Down",
-      help: `Decrease the tempo
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
-    },
-
-    PLAY_PAUSE: {
-      code: "Digit7",
-      key: "7",
-      description: "Play/Pause",
-      help: "Play or pause the roll playback",
-    },
-    REWIND: {
-      code: "Backspace",
-      key: "⌫",
-      description: "Rewind Roll",
-      help: "Rewind the roll to the beginning",
-    },
-    FORWARD: {
-      code: "Digit8",
-      key: "8",
-      description: "Scrub Forwards",
-      help: "Advance the roll (hold to accelerate)",
-    },
-    BACKWARD: {
-      code: "Digit6",
-      key: "6",
-      description: "Scrub Backwards",
-      help: "Back up (hold to accelerate)",
-    },
-    PAN_UP: {
-      code: "ArrowUp",
-      key: "↑",
-      description: "Pan Upwards",
-      help: "Pan the roll upwards (hold to accelerate)",
-    },
-    PAN_DOWN: {
-      code: "ArrowDown",
-      key: "↓",
-      description: "Pan Downwards",
-      help: "Pan the roll downwards (hold to accelerate)",
-    },
-  };
   export const keyMap = createPersistedStore(
     "keyMap",
     JSON.parse(JSON.stringify(defaultKeyMap)),
   );
-
-  const unusableKeys = [
-    "Escape",
-    "ControlLeft",
-    "ControlRight",
-    "Enter",
-    "ShiftLeft",
-    "ShiftRight",
-    "CapsLock",
-  ];
-
-  const alternativeIndicatorText = {
-    Space: "＿",
-    Backspace: "⌫",
-    Delete: "⌦",
-    NumpadEnter: "⏎",
-    ArrowUp: "↑",
-    ArrowDown: "↓",
-    ArrowLeft: "←",
-    ArrowRight: "→",
-  };
-
-  const showKeybindingsConfig = writable(false);
-  export const toggleKeybindingsConfig = () =>
-    showKeybindingsConfig.update((val) => !val);
 </script>
 
 <script>
   import { get } from "svelte/store";
-  import { fade, slide } from "svelte/transition";
-  import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
-  import Icon from "../ui-components/Icon.svelte";
   import {
     scrollDownwards,
     softOnOff,
     sustainOnOff,
     accentOnOff,
-    volumeCoefficient,
-    bassVolumeCoefficient,
-    trebleVolumeCoefficient,
-    tempoCoefficient,
   } from "../stores";
-  import { clamp, easingInterval, enforcePrecision } from "../utils";
+  import { controlsConfig } from "../config/controls-config";
+  import { clamp, easingInterval, enforcePrecision } from "../lib/utils";
 
   export let playPauseApp;
   export let stopApp;
   export let updateTickByViewportIncrement;
 
   let actionInterval;
-
-  const config = {
-    volume: {
-      store: volumeCoefficient,
-      min: 0,
-      max: 4,
-      delta: 0.1,
-      shiftDelta: 0.4,
-      ctrlDelta: 0.05,
-      precision: 2,
-    },
-    bassVolume: {
-      store: bassVolumeCoefficient,
-      min: 0,
-      max: 4,
-      delta: 0.1,
-      shiftDelta: 0.4,
-      ctrlDelta: 0.05,
-      precision: 2,
-    },
-    trebleVolume: {
-      store: trebleVolumeCoefficient,
-      min: 0,
-      max: 4,
-      delta: 0.1,
-      shiftDelta: 0.4,
-      ctrlDelta: 0.05,
-      precision: 2,
-    },
-    tempo: {
-      store: tempoCoefficient,
-      min: 0.1,
-      max: 4,
-      delta: 0.05,
-      shiftDelta: 0.1,
-      ctrlDelta: 0.01,
-      precision: 2,
-    },
-  };
-
-  let errorMessage;
 
   const updateStore = (
     // config object
@@ -308,48 +48,20 @@
     actionInterval = easingInterval(fn);
   };
 
-  const updateKeyBinding = (shortcut, detail) => {
-    errorMessage = undefined;
-
-    if (
-      Object.values($keyMap)
-        .map(({ code }) => code)
-        .includes(detail.code) &&
-      detail.code !== $keyMap[shortcut].code
-    ) {
-      errorMessage = `The "${detail.key}" key is already assigned.`;
-      return;
-    }
-
-    if (unusableKeys.includes(detail.code)) {
-      errorMessage = `The "${detail.key}" key cannot be assigned.`;
-      return;
-    }
-
-    $keyMap[shortcut].code = detail.code;
-    $keyMap[shortcut].key = alternativeIndicatorText[detail.code] || detail.key;
-
-    $keyMap[shortcut].isChanged = detail.key !== defaultKeyMap[shortcut].key;
-  };
-
-  const resetShortcuts = () => {
-    errorMessage = undefined;
-    $keyMap = JSON.parse(JSON.stringify(defaultKeyMap));
-  };
-
   const keydownCommandMap = {
     SOFT: () => ($softOnOff = true),
     SUSTAIN: () => ($sustainOnOff = true),
     ACCENT: () => ($accentOnOff = true),
 
-    VOLUME_UP: (event) => increment(config.volume, event),
-    VOLUME_DOWN: (event) => decrement(config.volume, event),
-    BASS_VOLUME_UP: (event) => increment(config.bassVolume, event),
-    BASS_VOLUME_DOWN: (event) => decrement(config.bassVolume, event),
-    TREBLE_VOLUME_UP: (event) => increment(config.trebleVolume, event),
-    TREBLE_VOLUME_DOWN: (event) => decrement(config.trebleVolume, event),
-    TEMPO_UP: (event) => increment(config.tempo, event),
-    TEMPO_DOWN: (event) => decrement(config.tempo, event),
+    VOLUME_UP: (event) => increment(controlsConfig.volume, event),
+    VOLUME_DOWN: (event) => decrement(controlsConfig.volume, event),
+    BASS_VOLUME_UP: (event) => increment(controlsConfig.bassVolume, event),
+    BASS_VOLUME_DOWN: (event) => decrement(controlsConfig.bassVolume, event),
+    TREBLE_VOLUME_UP: (event) => increment(controlsConfig.trebleVolume, event),
+    TREBLE_VOLUME_DOWN: (event) =>
+      decrement(controlsConfig.trebleVolume, event),
+    TEMPO_UP: (event) => increment(controlsConfig.tempo, event),
+    TEMPO_DOWN: (event) => decrement(controlsConfig.tempo, event),
 
     PLAY_PAUSE: playPauseApp,
     REWIND: stopApp,
@@ -377,37 +89,6 @@
   };
 </script>
 
-{#if $showKeybindingsConfig}
-  <div transition:fade>
-    <header>
-      Keyboard Controls
-      <button on:click={toggleKeybindingsConfig}>
-        <Icon name="cross" height="24" width="24" />
-      </button>
-    </header>
-    <p>Click the edit button to reassign a control button.</p>
-    {#if errorMessage}
-      <p class="error-message" transition:slide>{errorMessage}</p>
-    {/if}
-    <dl>
-      {#each Object.keys($keyMap) as shortcut}
-        <KeyboardShortcutEditorRow
-          shortcut={$keyMap[shortcut]}
-          on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
-          on:reset={() => updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
-        />
-      {/each}
-    </dl>
-    {#if Object.values($keyMap).some((shortcut) => shortcut.isChanged)}
-      <p class="reset" transition:slide>
-        Reset to defaults: <button on:click={resetShortcuts}>
-          <Icon name="reset" height="24" width="24" />
-        </button>
-      </p>
-    {/if}
-  </div>
-{/if}
-
 <svelte:window
   on:keydown={(event) => {
     const cmd = Object.keys($keyMap).find(
@@ -418,11 +99,7 @@
       if (!event.ctrlKey && !event.shiftKey) event.preventDefault();
       $keyMap[cmd].active = true;
       keydownCommandMap[cmd]?.(event);
-      return;
     }
-
-    if (event.code === "Escape" && $showKeybindingsConfig)
-      toggleKeybindingsConfig();
   }}
   on:keyup={({ code }) => {
     const cmd = Object.keys($keyMap).find((key) => $keyMap[key].code === code);

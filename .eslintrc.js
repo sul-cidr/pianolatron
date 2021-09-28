@@ -17,10 +17,11 @@ module.exports = {
     },
   ],
   rules: {
-    "no-underscore-dangle": "off",
-    "no-return-assign": ["error", "except-parens"],
     "no-cond-assign": ["error", "except-parens"],
     "no-param-reassign": ["error", { props: false }],
+    "no-return-assign": ["error", "except-parens"],
+    "no-undef-init": "off",
+    "no-underscore-dangle": "off",
     // see https://github.com/sveltejs/eslint-plugin-svelte3/blob/master/OTHER_PLUGINS.md#eslint-plugin-import
     "import/first": "off",
     "import/no-mutable-exports": "off",

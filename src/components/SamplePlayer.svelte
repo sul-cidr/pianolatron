@@ -1,12 +1,9 @@
 <script>
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
-<<<<<<< HEAD
-
-=======
->>>>>>> 585095bad15f5aeaba6b7a1f5dcef5e81b7e4faa
-  import { Piano } from "../pianolatron-piano";
-
+  import { createEventDispatcher } from "svelte";
+  import { Piano } from "../lib/pianolatron-piano";
+  import { notify } from "../ui-components/Notification.svelte";
   import {
     rollMetadata,
     softOnOff,
@@ -21,16 +18,12 @@
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
-    sampleVolumes,
-    sampleVelocities,
-    reverbWetDry,
+    pianoSettings,
   } from "../stores";
 
   let tempoMap;
   let pedalingMap;
   let notesMap;
-  let reverb;
-  let piano;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -41,21 +34,23 @@
   const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
   const ACCENT_BUMP = 1.5;
 
+  const dispatch = createEventDispatcher();
+
   const midiSamplePlayer = new MidiPlayer.Player();
 
   piano = new Piano({
     url: "samples/",
-    velocities: $sampleVelocities,
+    velocities: $pianoSettings.sampleVelocities,
     release: true,
     pedal: true,
     maxPolyphony: Infinity,
     volume: {
-      strings: $sampleVolumes.strings,
-      harmonics: $sampleVolumes.harmonics,
-      pedal: $sampleVolumes.pedal,
-      keybed: $sampleVolumes.keybed,
+      strings: $pianoSettings.sampleVolumes.strings,
+      harmonics: $pianoSettings.sampleVolumes.harmonics,
+      pedal: $pianoSettings.sampleVolumes.pedal,
+      keybed: $pianoSettings.sampleVolumes.keybed,
     },
-    reverbWet: $reverbWetDry,
+    reverbWet: $pianoSettings.reverbWetDry,
   });
 
   const pianoReady = piano.load();
@@ -99,7 +94,58 @@
         midiSamplePlayer.play();
       });
     }
-    return Promise.resolve(fn()).then(() => setPlayerStateAtTick($currentTick));
+    return Promise.resolve(fn())
+      .then(() => setPlayerStateAtTick($currentTick))
+      .catch(() => {});
+  };
+
+  const loadSampleVelocities = () => {
+    if ($pianoSettings.sampleVelocities === piano.loadedVelocities) return;
+    updatePlayer(() => {
+      const loadingSamples = piano.updateVelocities(
+        $pianoSettings.sampleVelocities,
+      );
+      dispatch("loading", loadingSamples);
+      // if samples are in the process of being loaded, the promise is
+      //  rejected; update the UI to reflect the correct value
+      loadingSamples
+        .then(() => ($pianoSettings.sampleVelocities = piano.loadedVelocities))
+        .catch(
+          ({ loadedVelocities }) =>
+            ($pianoSettings.sampleVelocities = loadedVelocities),
+        );
+      return loadingSamples;
+    });
+  };
+
+  const updateSampleVelocities = () => {
+    if (
+      $pianoSettings.sampleVelocities > 4 &&
+      $pianoSettings.sampleVelocities > piano.loadedVelocities
+    ) {
+      notify({
+        title: "Please confirm your choice",
+        message:
+          "Increasing the sample count beyond four will consume large amounts " +
+          "of your system's memory, and could result in crashing the browser " +
+          "or even the entire system.  If you experience issues, please " +
+          "lower the count to four or lower.",
+        closable: false,
+        actions: [
+          {
+            label: "okay",
+            fn: loadSampleVelocities,
+          },
+          {
+            label: "cancel",
+            fn: () =>
+              ($pianoSettings.sampleVelocities = piano.loadedVelocities),
+          },
+        ],
+      });
+      return;
+    }
+    loadSampleVelocities();
   };
 
   const startNote = (noteNumber, velocity) => {
@@ -296,13 +342,9 @@
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
-  $: piano.updateVolumes($sampleVolumes);
-  $: piano.updateReverb($reverbWetDry);
-  $: updatePlayer(() =>
-    piano
-      .updateVelocities($sampleVelocities)
-      .catch(({ loadedVelocities }) => ($sampleVelocities = loadedVelocities)),
-  );
+  $: piano.updateVolumes($pianoSettings.sampleVolumes);
+  $: piano.updateReverb($pianoSettings.reverbWetDry);
+  $: $pianoSettings.sampleVelocities, updateSampleVelocities();
 
   export {
     midiSamplePlayer,

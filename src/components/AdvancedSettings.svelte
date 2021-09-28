@@ -56,7 +56,7 @@
     }
   }
 
-  button.configure-keybindings {
+  button.full-width {
     margin: 1em 0;
     padding: 3px 0;
     width: 100%;
@@ -64,33 +64,23 @@
 </style>
 
 <script>
-  import { fly } from "svelte/transition";
   import {
     rollHasExpressions,
     playExpressionsOnOff,
     rollPedalingOnOff,
     useMidiTempoEventsOnOff,
     userSettings,
+    pianoSettings,
   } from "../stores";
-  import { toggleKeybindingsConfig } from "./KeyboardShortcuts.svelte";
+  import { toggleKeybindingsConfig } from "./KeyboardShortcutEditor.svelte";
+  import { notify } from "../ui-components/Notification.svelte";
 
-  let el;
   const themes = ["cardinal", "blue", "green", "grey"];
 
   $: document.documentElement.setAttribute("data-theme", $userSettings.theme);
 </script>
 
-<div
-  id="settings-panel"
-  bind:this={el}
-  transition:fly|local={{
-    delay: 0,
-    duration: 300,
-    x: parseInt(window.getComputedStyle(el).width, 10),
-    y: 0,
-    opacity: 1,
-  }}
->
+<div id="settings-panel">
   <fieldset>
     <legend>Visualization Settings</legend>
     <div>
@@ -148,7 +138,19 @@
       />
     {/each}
   </div>
-  <button class="configure-keybindings" on:click={toggleKeybindingsConfig}
+  <button class="full-width" on:click={toggleKeybindingsConfig}
     >Configure Key Bindings</button
+  >
+  <button
+    class="full-width"
+    on:click={() => {
+      userSettings.reset();
+      pianoSettings.reset();
+      notify({
+        message: "Settings have been reset!",
+        type: "success",
+        timeout: 4000,
+      });
+    }}>Reset All Settings</button
   >
 </div>

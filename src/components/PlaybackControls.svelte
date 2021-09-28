@@ -4,24 +4,12 @@
   }
 
   button {
-    display: inline-block;
-    padding: 0.35em 0.8em;
-    border: 0.1em solid #ffffff;
-    margin: 0;
-    border-radius: 0.25em;
-    color: #ffffff;
-    transition: all 0.2s;
-    background-color: var(--primary-accent);
-
-    &:hover,
-    &.pedal-on {
-      color: var(--primary-accent);
-      border-color: var(--primary-accent);
-      background-color: #ffffff;
-    }
+    @include button;
 
     &.pedal-on {
       background-color: yellow;
+      border-color: var(--primary-accent);
+      color: var(--primary-accent);
     }
 
     kbd {

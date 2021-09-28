@@ -61,13 +61,13 @@
     activeNotes,
     currentTick,
     rollMetadata,
-    showKeyboard,
-    overlayKeyboard,
     isReproducingRoll,
+    scrollDownwards,
     playExpressionsOnOff,
     rollPedalingOnOff,
+    userSettings,
   } from "./stores";
-  import { clamp } from "./utils";
+  import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -75,17 +75,26 @@
   import Keyboard from "./components/Keyboard.svelte";
   import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
+  import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
-  import Notification, { notify } from "./ui-components/Notification.svelte";
+  import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
+  import Notification, {
+    notify,
+    clearNotification,
+  } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
+  import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
 
-  import catalog from "./catalog.json";
+  import catalog from "./config/catalog.json";
 
   let appReady = false;
+  let appWaiting = true;
   let mididataReady;
   let metadataReady;
   let currentRoll;
   let previousRoll;
+  let metadata;
+  let holeData;
   let holesByTickInterval = new IntervalTree();
 
   let samplePlayer;
@@ -120,7 +129,7 @@
   };
 
   const buildHolesIntervalTree = () => {
-    const { FIRST_HOLE, holeData } = $rollMetadata;
+    const { FIRST_HOLE } = $rollMetadata;
 
     const firstHolePx = parseInt(FIRST_HOLE, 10);
 
@@ -156,7 +165,9 @@
   };
 
   const resetApp = () => {
+    rollViewer?.$destroy();
     mididataReady = false;
+    clearNotification();
     appReady = false;
     pausePlayback();
     resetPlayback();
@@ -195,12 +206,14 @@
 
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
-        $rollMetadata = { ...$rollMetadata, ...metadataJson };
-        if (metadataJson.holeData)
-          buildHolesIntervalTree(metadataJson.holeData);
+        metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
+        holeData = metadataJson.holeData;
+        annotateHoleData(holeData, $rollMetadata, $scrollDownwards);
+        buildHolesIntervalTree();
         $playExpressionsOnOff = $isReproducingRoll;
         $rollPedalingOnOff = $isReproducingRoll;
         appReady = true;
+        appWaiting = false;
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -223,7 +236,7 @@
         notify({
           title: "DRUID not found!",
           message:
-            "Please check the specified DRUID, or <a href='/'>click here to continue</a>.",
+            "Please check the specified DRUID, or select a roll to continue.",
           type: "error",
           closable: false,
         });
@@ -262,7 +275,7 @@
     <FlexCollapsible id="left-sidebar" width="20vw">
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
-        <RollDetails />
+        <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
@@ -276,10 +289,11 @@
         <RollViewer
           bind:this={rollViewer}
           imageUrl={currentRoll.image_url}
+          {holeData}
           {holesByTickInterval}
           {skipToTick}
         />
-        {#if $showKeyboard && $overlayKeyboard}
+        {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
           <div id="keyboard-overlay" transition:fade>
             <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
           </div>
@@ -290,23 +304,26 @@
       </FlexCollapsible>
     {/if}
   </div>
-  {#if $showKeyboard && !$overlayKeyboard}
+  {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>
       <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
     </div>
-  {:else if !$showKeyboard}
+  {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
-  {#if !appReady}
-    <div id="loading">
-      <div><span /> <span /> <span /> <span /> <span /></div>
-      Loading resources...
-    </div>
-  {/if}
+  <LoadingSpinner showLoadingSpinner={appWaiting} />
 </div>
-<SamplePlayer bind:this={samplePlayer} />
+<SamplePlayer
+  bind:this={samplePlayer}
+  on:loading={({ detail: loadingSamples }) => {
+    appWaiting = true;
+    loadingSamples.then(() => (appWaiting = false)).catch(() => {});
+  }}
+/>
 <KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
+<KeyboardShortcutEditor />
 <Notification />
+{#if $showWelcomeScreen}<Welcome />{/if}
 
 <svelte:window
   on:popstate={({ state }) =>

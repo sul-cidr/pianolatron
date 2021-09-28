@@ -6,17 +6,6 @@
     height: 100%;
     width: 100%;
 
-    p {
-      background: rgba(black, 0.4);
-      border-radius: 4px;
-      color: white;
-      left: 1em;
-      padding: 4px 8px;
-      position: absolute;
-      top: 1em;
-      z-index: 1;
-    }
-
     // tracker bar
     &::before {
       background: linear-gradient(
@@ -80,11 +69,23 @@
       top: 0;
     }
   }
+
+  .roll-loading {
+    background: rgba(black, 0.4);
+    border-radius: 4px;
+    color: white;
+    left: 1em;
+    padding: 4px 8px;
+    position: absolute;
+    top: 1em;
+    z-index: 1;
+  }
 </style>
 
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import IntervalTree from "node-interval-tree";
   import OpenSeadragon from "openseadragon";
   import {
     rollMetadata,
@@ -95,45 +96,14 @@
     rollPedalingOnOff,
     playbackProgress,
   } from "../stores";
-  import {
-    clamp,
-    mapToRange,
-    normalizeInRange,
-    getHoleLabel,
-    getHoleType,
-  } from "../utils";
+  import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
+  import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
 
   export let imageUrl;
+  export let holeData;
   export let holesByTickInterval;
   export let skipToTick;
-
-  // This is the "coolwarm" color map -- blue to red
-  // RdYlBu (reversed) sort of works, but the yellows are too ambiguous
-  // (values in H, S, L)
-  const holeColorMap = [
-    "232, 53%, 49%",
-    "229, 64%, 58%",
-    "225, 78%, 66%",
-    "223, 91%, 73%",
-    "221, 98%, 79%",
-    "219, 95%, 83%",
-    "217, 73%, 86%",
-    "21, 28%, 86%",
-    "20, 69%, 83%",
-    "18, 85%, 79%",
-    "16, 85%, 73%",
-    "13, 80%, 67%",
-    "9, 70%, 59%",
-    "2, 59%, 51%",
-    "348, 96%, 36%",
-  ];
-
-  const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
-  const controlHoleColor = "120, 73%, 75%"; // light green
-  const pedalHoleColor = "39, 100%, 50%"; // orange;
-
-  const navigatorWidth = 40;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -152,50 +122,15 @@
   let trackerbarHeight;
   let animationEaseInterval;
   let osdNavDisplayRegion;
-
-  const annotateHoleData = (holeData) => {
-    const velocities = holeData.map(({ v }) => v).filter((v) => v);
-    const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
-    const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
-
-    const getNoteHoleColor = ({ v: velocity }) =>
-      holeColorMap[
-        Math.round(
-          mapToRange(
-            normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-            0,
-            holeColorMap.length - 1,
-          ),
-        )
-      ];
-
-    holeData.forEach((hole) => {
-      switch (getHoleType(hole, $rollMetadata.ROLL_TYPE)) {
-        case "pedal":
-          hole.color = pedalHoleColor;
-          hole.type = "pedal";
-          break;
-
-        case "control":
-          hole.color = controlHoleColor;
-          hole.type = "control";
-          break;
-
-        case "note":
-          hole.color = getNoteHoleColor(hole);
-          hole.type = "note";
-          break;
-
-        default:
-          hole.color = defaultHoleColor;
-      }
-    });
-  };
+  let ppi;
+  let svgPartitions;
+  let visibleSvgs = [];
+  let entireViewportRectangle;
 
   const createMark = (hole) => {
     const {
       x: offsetX,
-      y: offsetY,
+      startY: offsetY,
       w: width,
       h: height,
       m: midiKey,
@@ -225,7 +160,7 @@
 
     const viewportRectangle = viewport.imageToViewportRectangle(
       offsetX - 4,
-      $scrollDownwards ? offsetY - 4 : imageLength - offsetY - height - 4,
+      offsetY - 4,
       width + 11,
       height + 12,
     );
@@ -233,47 +168,35 @@
     return mark;
   };
 
-  const createHolesOverlaySvg = () => {
-    const { holeData } = $rollMetadata;
-    if (!holeData) return;
-
+  const createHolesOverlaySvg = (holes) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
-    const entireViewportRectangle = viewport.imageToViewportRectangle(
-      0,
-      0,
-      imageWidth,
-      imageLength,
-    );
+    const padding = 10;
 
     svg.setAttribute("width", imageWidth);
     svg.setAttribute("height", imageLength);
     svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+    svg.setAttribute("style", "pointer-events: none;");
     svg.appendChild(g);
 
-    holeData.forEach((hole) => {
-      const rect = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "rect",
-      );
+    holes.forEach((hole) => {
       const {
         x: offsetX,
-        y: offsetY,
+        startY: offsetY,
         w: width,
         h: height,
         color: holeColor,
         type: holeType,
       } = hole;
-      const padding = 10;
+
+      const rect = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect",
+      );
 
       rect.setAttribute("x", offsetX - padding);
-      rect.setAttribute(
-        "y",
-        $scrollDownwards
-          ? offsetY - padding
-          : imageLength - offsetY - height - padding,
-      );
+      rect.setAttribute("y", offsetY - padding);
       rect.setAttribute("width", width + padding * 2);
       rect.setAttribute("height", height + padding * 2);
       rect.setAttribute("rx", 10);
@@ -288,7 +211,71 @@
       g.appendChild(rect);
     });
 
-    viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    return svg;
+  };
+
+  const partitionHolesOverlaySvgs = () => {
+    if (!holeData) return;
+
+    entireViewportRectangle = viewport.imageToViewportRectangle(
+      0,
+      0,
+      imageWidth,
+      imageLength,
+    );
+
+    svgPartitions = new IntervalTree();
+
+    const rangeLengthPx = 1000;
+
+    // firstHolePx and lastHolePx reflect the temporal order of the holes, and
+    //  so are top-to-bottom for $scrollDownwards rolls, and bottom-to-top for
+    //  !$scrollDownwards rolls.
+    const holesBeginPx = $scrollDownwards ? firstHolePx : lastHolePx;
+    const holesEndPx = $scrollDownwards ? lastHolePx : firstHolePx;
+
+    for (
+      let rangeBeginsPx = holesBeginPx;
+      rangeBeginsPx <= holesEndPx;
+      rangeBeginsPx += rangeLengthPx
+    ) {
+      const rangeEndsPx = Math.min(rangeBeginsPx + rangeLengthPx, holesEndPx);
+
+      const holes = holeData.filter(
+        ({ startY }) => startY >= rangeBeginsPx && startY < rangeEndsPx,
+      );
+
+      if (holes.length) {
+        const lastHoleEndsPx = Math.max(...holes.map(({ endY }) => endY));
+        const svg = createHolesOverlaySvg(holes);
+        svgPartitions.insert(rangeBeginsPx, lastHoleEndsPx, svg);
+      }
+    }
+  };
+
+  const updateVisibleSvgPartitions = () => {
+    if (svgPartitions === undefined) return;
+
+    const { y: firstImagePixel, height: viewportImageLength } =
+      viewport.viewportToImageRectangle(viewport.getBounds());
+
+    const lastImagePixel = firstImagePixel + viewportImageLength;
+    const svgs = svgPartitions.search(firstImagePixel, lastImagePixel);
+
+    // Remove any currently displayed SVG overlays that don't overlap with the
+    // viewer window
+    visibleSvgs = visibleSvgs.filter((visibleSvg) => {
+      if (svgs.includes(visibleSvg)) return true;
+      viewport.viewer.removeOverlay(visibleSvg);
+      return false;
+    });
+
+    // Add SVG overlays that newly overlap with the viewer window
+    svgs.forEach((svg) => {
+      if (visibleSvgs.includes(svg)) return;
+      visibleSvgs.push(svg);
+      viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    });
   };
 
   const highlightHoles = (tick) => {
@@ -324,6 +311,8 @@
       "label-above",
       $scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
     );
+
+    updateVisibleSvgPartitions();
   };
 
   // Updates the application position by an amount proportional to the
@@ -390,7 +379,7 @@
     );
   };
 
-  onMount(async () => {
+  onMount(() => {
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
       showNavigationControl: false,
@@ -478,14 +467,17 @@
     // create the holes overlay SVG and "rewind" to the beginning of the
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
-      createHolesOverlaySvg();
+      partitionHolesOverlaySvgs();
       updateViewportFromTick(0);
     });
 
-    // update the height of the tracker bar when the zoom changes
+    // update the height of the tracker bar and the PPI value passed to
+    //  <RollViewerScaleBar/> when the zoom changes
     openSeadragon.addHandler("zoom", ({ zoom }) => {
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
+      ppi = imageZoom * 300;
+      updateVisibleSvgPartitions();
     });
 
     // re-implement some default OSD interactions to apply our own constraints
@@ -554,7 +546,6 @@
 
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
-  $: annotateHoleData($rollMetadata.holeData);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
@@ -562,6 +553,10 @@
     ? parseInt($rollMetadata.FIRST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
       parseInt($rollMetadata.FIRST_HOLE, 10);
+  $: lastHolePx = $scrollDownwards
+    ? parseInt($rollMetadata.LAST_HOLE, 10)
+    : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
+      parseInt($rollMetadata.LAST_HOLE, 10);
 
   export { updateTickByViewportIncrement };
 </script>
@@ -578,8 +573,9 @@
     }
 
     viewport.zoomTo(
-      Math.min(
+      clamp(
         viewport.getZoom() * (event.deltaY > 0 ? 0.9 : 1.1),
+        minZoomLevel,
         maxZoomLevel,
       ),
     );
@@ -592,7 +588,9 @@
   style={`--trackerbar-height: ${trackerbarHeight}px;`}
 >
   {#if !rollImageReady}
-    <p transition:fade>Downloading roll image...</p>
+    <span class="roll-loading" transition:fade>Downloading roll image...</span>
+  {:else}
+    <RollViewerScaleBar {ppi} />
   {/if}
   {#if showControls}
     <RollViewerControls
