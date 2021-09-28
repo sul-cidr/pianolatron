@@ -79,12 +79,16 @@
   import { fly } from "svelte/transition";
 
   const NotificationStore = writable();
+  let timeout;
+
   export const notify = (detail) => NotificationStore.set(detail);
-  export const clearNotification = NotificationStore.set;
+  export const clearNotification = () => {
+    clearTimeout(timeout);
+    NotificationStore.set();
+  };
 </script>
 
 <script>
-  let timeout;
   $: if ($NotificationStore?.timeout)
     timeout = setTimeout(NotificationStore.set, $NotificationStore?.timeout);
 </script>
@@ -104,15 +108,7 @@
       <p>{@html $NotificationStore.message}</p>
     </section>
     {#if $NotificationStore.closable !== false}
-      <div
-        class="close"
-        on:click={() => {
-          clearTimeout(timeout);
-          NotificationStore.set();
-        }}
-      >
-        &times;
-      </div>
+      <div class="close" on:click={clearNotification}>&times;</div>
     {/if}
   </div>
 {/if}
