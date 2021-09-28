@@ -10,6 +10,10 @@ export class Piano extends ToneJsPiano {
     this.connect(this.reverb);
   }
 
+  get loadedVelocities() {
+    return this._strings._strings.length;
+  }
+
   updateReverb(wet) {
     this.reverb.dispose();
     this.reverb = new Reverb({ wet }).toDestination();
@@ -30,7 +34,7 @@ export class Piano extends ToneJsPiano {
       return this._strings.load();
     }
     // eslint-disable-next-line prefer-promise-reject-errors
-    return Promise.reject({ loadedVelocities: this._strings._strings.length });
+    return Promise.reject({ loadedVelocities: this.loadedVelocities });
   }
 
   updateVolumes({ strings, harmonics, pedal, keybed }) {
