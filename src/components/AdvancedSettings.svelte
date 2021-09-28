@@ -30,7 +30,7 @@
   }
 
   button.full-width {
-    margin: 1em 0;
+    margin: 0;
     padding: 3px 0;
     width: 100%;
   }
