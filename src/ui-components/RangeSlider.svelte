@@ -190,6 +190,7 @@
   type="range"
   bind:value
   on:input
+  on:change
   on:mousewheel={mousewheel ? handleWheel : () => {}}
   {min}
   {max}
