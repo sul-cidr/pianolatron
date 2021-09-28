@@ -3,7 +3,7 @@
   import IntervalTree from "node-interval-tree";
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
-
+  import { notify } from "../ui-components/Notification.svelte";
   import {
     rollMetadata,
     softOnOff,
@@ -99,6 +99,48 @@
     return Promise.resolve(fn())
       .then(() => setPlayerStateAtTick($currentTick))
       .catch(() => {});
+  };
+
+  const loadSampleVelocities = () => {
+    if ($sampleVelocities === piano.loadedVelocities) return;
+    updatePlayer(() => {
+      const loadingSamples = piano.updateVelocities($sampleVelocities);
+      dispatch("loading", loadingSamples);
+      // if samples are in the process of being loaded, the promise is
+      //  rejected; update the UI to reflect the correct value
+      loadingSamples
+        .then(() => ($sampleVelocities = piano.loadedVelocities))
+        .catch(
+          ({ loadedVelocities }) => ($sampleVelocities = loadedVelocities),
+        );
+      return loadingSamples;
+    });
+  };
+
+  const updateSampleVelocities = () => {
+    if ($sampleVelocities > 4 && $sampleVelocities > piano.loadedVelocities) {
+      notify({
+        title: "Please confirm your choice",
+        message:
+          "Increasing the sample count beyond four will consume large amounts " +
+          "of your system's memory, and could result in crashing the browser " +
+          "or even the entire system.  If you experience issues, please " +
+          "lower the count to four or lower.",
+        closable: false,
+        actions: [
+          {
+            label: "okay",
+            fn: loadSampleVelocities,
+          },
+          {
+            label: "cancel",
+            fn: () => ($sampleVelocities = piano.loadedVelocities),
+          },
+        ],
+      });
+      return;
+    }
+    loadSampleVelocities();
   };
 
   const startNote = (noteNumber, velocity) => {
@@ -267,16 +309,7 @@
   $: $rollPedalingOnOff, updatePlayer();
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
-  $: updatePlayer(() => {
-    const loadingSamples = piano.updateVelocities($sampleVelocities);
-    dispatch("loading", loadingSamples);
-    // if samples are in the process of being loaded, the promise is
-    //  rejected; update the UI to reflect the correct value
-    loadingSamples.catch(
-      ({ loadedVelocities }) => ($sampleVelocities = loadedVelocities),
-    );
-    return loadingSamples;
-  });
+  $: $sampleVelocities, updateSampleVelocities();
 
   export {
     midiSamplePlayer,
