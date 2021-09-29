@@ -55,25 +55,6 @@
   </div>
   <div class="control">
     <span
-      >Bass Volume:
-      <kbd class:depressed={$keyMap.BASS_VOLUME_DOWN.active}
-        >{$keyMap.BASS_VOLUME_DOWN.key}</kbd
-      >↓
-      <kbd class:depressed={$keyMap.BASS_VOLUME_UP.active}
-        >{$keyMap.BASS_VOLUME_UP.key}</kbd
-      >↑</span
-    >
-    <span>{$bassVolumeCoefficient}</span>
-    <RangeSlider
-      min={controlsConfig.bassVolume.min}
-      max={controlsConfig.bassVolume.max}
-      step={controlsConfig.bassVolume.delta}
-      bind:value={$bassVolumeCoefficient}
-      name="bass-volume"
-    />
-  </div>
-  <div class="control">
-    <span
       >Treble Volume:
       <kbd class:depressed={$keyMap.TREBLE_VOLUME_DOWN.active}
         >{$keyMap.TREBLE_VOLUME_DOWN.key}</kbd
@@ -89,6 +70,25 @@
       step={controlsConfig.trebleVolume.delta}
       bind:value={$trebleVolumeCoefficient}
       name="treble-volume"
+    />
+  </div>
+  <div class="control">
+    <span
+      >Bass Volume:
+      <kbd class:depressed={$keyMap.BASS_VOLUME_DOWN.active}
+        >{$keyMap.BASS_VOLUME_DOWN.key}</kbd
+      >↓
+      <kbd class:depressed={$keyMap.BASS_VOLUME_UP.active}
+        >{$keyMap.BASS_VOLUME_UP.key}</kbd
+      >↑</span
+    >
+    <span>{$bassVolumeCoefficient}</span>
+    <RangeSlider
+      min={controlsConfig.bassVolume.min}
+      max={controlsConfig.bassVolume.max}
+      step={controlsConfig.bassVolume.delta}
+      bind:value={$bassVolumeCoefficient}
+      name="bass-volume"
     />
   </div>
   <div class="control">
