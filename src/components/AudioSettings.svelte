@@ -44,13 +44,11 @@
 </style>
 
 <script>
-  import { pianoSettings } from "../stores";
+  import { sampleVolumes, sampleVelocities, reverbWetDry } from "../stores";
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
   let sampleVelocitiesSliderValue;
-  pianoSettings.subscribe(
-    (val) => (sampleVelocitiesSliderValue = val.sampleVelocities),
-  );
+  $: sampleVelocitiesSliderValue = $sampleVelocities;
 </script>
 
 <div id="audio-panel">
@@ -58,45 +56,45 @@
     <legend>Piano Sample Volumes</legend>
     <div class="control">
       <span>Strings</span>
-      <span>{$pianoSettings.sampleVolumes.strings}</span>
+      <span>{$sampleVolumes.strings}</span>
       <RangeSlider
         min="-60"
         max="10"
         step="1"
-        bind:value={$pianoSettings.sampleVolumes.strings}
+        bind:value={$sampleVolumes.strings}
         name="strings-volume"
       />
     </div>
     <div class="control">
       <span>Harmonics</span>
-      <span>{$pianoSettings.sampleVolumes.harmonics}</span>
+      <span>{$sampleVolumes.harmonics}</span>
       <RangeSlider
         min="-60"
         max="10"
         step="1"
-        bind:value={$pianoSettings.sampleVolumes.harmonics}
+        bind:value={$sampleVolumes.harmonics}
         name="harmonics-volume"
       />
     </div>
     <div class="control">
       <span>Pedals</span>
-      <span>{$pianoSettings.sampleVolumes.pedal}</span>
+      <span>{$sampleVolumes.pedal}</span>
       <RangeSlider
         min="-60"
         max="10"
         step="1"
-        bind:value={$pianoSettings.sampleVolumes.pedal}
+        bind:value={$sampleVolumes.pedal}
         name="pedals-volume"
       />
     </div>
     <div class="control">
       <span>Keybed</span>
-      <span>{$pianoSettings.sampleVolumes.keybed}</span>
+      <span>{$sampleVolumes.keybed}</span>
       <RangeSlider
         min="-60"
         max="10"
         step="1"
-        bind:value={$pianoSettings.sampleVolumes.keybed}
+        bind:value={$sampleVolumes.keybed}
         name="keybed-volume"
       />
     </div>
@@ -110,20 +108,19 @@
         min="1"
         max="16"
         step="1"
-        on:change={({ target: { value } }) =>
-          ($pianoSettings.sampleVelocities = value)}
+        on:change={({ target: { value } }) => ($sampleVelocities = value)}
         bind:value={sampleVelocitiesSliderValue}
         name="sample-velocities"
       />
     </div>
     <div class="control">
       <span>Reverb</span>
-      <span>{$pianoSettings.reverbWetDry}</span>
+      <span>{$reverbWetDry}</span>
       <RangeSlider
         min="0"
         max="1"
         step=".05"
-        bind:value={$pianoSettings.reverbWetDry}
+        bind:value={$reverbWetDry}
         name="reverb-wetdry"
       />
     </div>

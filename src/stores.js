@@ -39,16 +39,14 @@ export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
 
 // Piano Settings
-export const pianoSettings = createPersistedStore("audioSettings", {
-  sampleVolumes: {
-    strings: -15,
-    harmonics: -10,
-    pedal: -10,
-    keybed: -10,
-  },
-  sampleVelocities: 4,
-  reverbWetDry: 0.8,
+export const sampleVolumes = createPersistedStore("sampleVolumes", {
+  strings: -15,
+  harmonics: -10,
+  pedal: -10,
+  keybed: -10,
 });
+export const sampleVelocities = createPersistedStore("sampleVelocities", 4);
+export const reverbWetDry = createPersistedStore("reverbWetDry", 0.8);
 
 // Playback State
 export const currentTick = createStore(0);
