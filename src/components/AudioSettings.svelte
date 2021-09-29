@@ -48,7 +48,10 @@
   import RangeSlider from "../ui-components/RangeSlider.svelte";
 
   let sampleVelocitiesSliderValue;
+  let reverbWetDrySliderValue;
+
   $: sampleVelocitiesSliderValue = $sampleVelocities;
+  $: reverbWetDrySliderValue = $reverbWetDry;
 </script>
 
 <div id="audio-panel">
@@ -115,12 +118,13 @@
     </div>
     <div class="control">
       <span>Reverb</span>
-      <span>{$reverbWetDry}</span>
+      <span>{reverbWetDrySliderValue}</span>
       <RangeSlider
         min="0"
         max="1"
         step=".05"
-        bind:value={$reverbWetDry}
+        on:change={({ target: { value } }) => ($reverbWetDry = value)}
+        bind:value={reverbWetDrySliderValue}
         name="reverb-wetdry"
       />
     </div>
