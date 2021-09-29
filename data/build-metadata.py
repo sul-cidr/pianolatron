@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-""" Builds per-DRUID metadata .json files and a catalog.json file listing   """
-""" rolls available for consumption by the Pianolatron app, downloading     """
-""" metadata files (if not already cached) and incorporating data from the  """
-""" rolls' MIDI files, if available. Writes JSON and MIDI files to the      """
-""" proper locations to be used by the app.                                 """
+"""
+Builds per-DRUID metadata .json files and a catalog.json file listing rolls
+available for consumption by the Pianolatron app, downloading metadata files
+(if not already cached) and incorporating data from the rolls' MIDI files, if
+available. Writes JSON and MIDI files to the proper locations to be used by
+the app.
+"""
 
 import argparse
 from csv import DictReader
