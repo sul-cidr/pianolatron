@@ -173,28 +173,6 @@
   export let step;
   export let name;
   export let value;
-  export let mousewheel = true;
-
-  const clamp = (_value) => Math.min(Math.max(_value, min), max);
-
-  const handleWheel = (event) => {
-    const precision = (step.toString().split(".")[1] || "").length;
-    if (event.deltaY > 0) {
-      value = clamp((Number(value) + Number(step)).toFixed(precision));
-    } else {
-      value = clamp((Number(value) - Number(step)).toFixed(precision));
-    }
-  };
 </script>
 
-<input
-  type="range"
-  bind:value
-  on:input
-  on:change
-  on:mousewheel={mousewheel ? handleWheel : () => {}}
-  {min}
-  {max}
-  {step}
-  {name}
-/>
+<input type="range" bind:value on:input on:change {min} {max} {step} {name} />

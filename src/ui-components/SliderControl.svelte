@@ -23,19 +23,22 @@
   export let step;
   export let name;
   export let mousewheel = true;
+
+  const clamp = (_value) => Math.min(Math.max(_value, min), max);
+
+  const handleWheel = ({ deltaY }) => {
+    if (!mousewheel) return;
+    const precision = (step.toString().split(".")[1] || "").length;
+    if (deltaY > 0) {
+      value = clamp((Number(value) + Number(step)).toFixed(precision));
+    } else {
+      value = clamp((Number(value) - Number(step)).toFixed(precision));
+    }
+  };
 </script>
 
-<div>
+<div on:mousewheel={handleWheel}>
   <span><slot name="label">{name}</slot></span>
   <span><slot name="value">{value}</slot></span>
-  <RangeSlider
-    bind:value
-    on:input
-    on:change
-    {min}
-    {max}
-    {step}
-    {name}
-    {mousewheel}
-  />
+  <RangeSlider bind:value on:input on:change {min} {max} {step} {name} />
 </div>
