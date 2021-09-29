@@ -124,6 +124,7 @@
       $pianoSettings.sampleVelocities > piano.loadedVelocities
     ) {
       notify({
+        modal: true,
         title: "Please confirm your choice",
         message:
           "Increasing the sample count beyond four will consume large amounts " +
