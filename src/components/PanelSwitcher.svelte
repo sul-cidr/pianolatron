@@ -1,6 +1,7 @@
 <style lang="scss">
   div {
     text-align: right;
+    user-select: none;
   }
   input {
     display: none;
