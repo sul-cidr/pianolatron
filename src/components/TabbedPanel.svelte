@@ -36,20 +36,6 @@
       display: flex;
       justify-content: space-between;
     }
-
-    :global(.control) {
-      align-items: center;
-      display: grid;
-      gap: 0.5em;
-      padding: 0 0.5em 0.5em;
-      grid:
-        "title value" auto
-        "slider slider" auto / 1fr auto;
-    }
-
-    :global(.control input[type="range"]) {
-      grid-area: slider;
-    }
   }
 </style>
 
