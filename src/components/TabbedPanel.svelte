@@ -24,6 +24,7 @@
     }
 
     :global(fieldset) {
+      border-color: rgba(white, 0.8);
       padding: 1em 0.75em;
     }
 
