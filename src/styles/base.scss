@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+::selection {
+  background-color: var(--primary-accent);
+  color: white;
+}
+
 body,
 h1,
 h2,
