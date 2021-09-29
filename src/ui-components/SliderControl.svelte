@@ -1,16 +1,18 @@
 <style>
   div {
-    align-items: center;
-    display: grid;
-    gap: 0.5em;
+    display: flex;
+    height: 3.5em;
+    justify-content: space-between;
     padding: 0 0.5em 0.5em;
-    grid:
-      "title value" auto
-      "slider slider" auto / 1fr auto;
+    position: relative;
   }
 
-  :global(input[type="range"]) {
-    grid-area: slider;
+  div :global(input[type="range"]) {
+    left: 0;
+    margin: 0;
+    padding: 2.5em 0 1em 0;
+    position: absolute;
+    top: 0;
   }
 </style>
 
