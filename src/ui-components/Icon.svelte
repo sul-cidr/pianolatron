@@ -53,10 +53,10 @@
     },
     "fit-width": {
       svg: `
-        <polyline points="7 8 3 12 7 16" />
-        <polyline points="17 8 21 12 17 16" />
-        <line x1="3" y1="12" x2="9" y2="12" />
-        <line x1="14" y1="12" x2="20" y2="12" />
+        <path d="M1 4v16"/>
+        <path d="M23 4v16"/>
+        <path style="stroke-width:1.5" d="M5.8 12h12.4"/>
+        <path style="stroke-width:1.5" d="m8.5 8-4 4 4 4m7-8 4 4-4 4"/>
       `,
     },
     edit: {
