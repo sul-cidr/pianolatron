@@ -40,7 +40,7 @@
 
   const midiSamplePlayer = new MidiPlayer.Player();
 
-  piano = new Piano({
+  const piano = new Piano({
     url: "samples/",
     velocities: $sampleVelocities,
     release: true,
