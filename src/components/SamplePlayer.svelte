@@ -18,7 +18,9 @@
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
-    pianoSettings,
+    sampleVolumes,
+    sampleVelocities,
+    reverbWetDry,
   } from "../stores";
 
   let tempoMap;
@@ -40,17 +42,17 @@
 
   piano = new Piano({
     url: "samples/",
-    velocities: $pianoSettings.sampleVelocities,
+    velocities: $sampleVelocities,
     release: true,
     pedal: true,
     maxPolyphony: Infinity,
     volume: {
-      strings: $pianoSettings.sampleVolumes.strings,
-      harmonics: $pianoSettings.sampleVolumes.harmonics,
-      pedal: $pianoSettings.sampleVolumes.pedal,
-      keybed: $pianoSettings.sampleVolumes.keybed,
+      strings: $sampleVolumes.strings,
+      harmonics: $sampleVolumes.harmonics,
+      pedal: $sampleVolumes.pedal,
+      keybed: $sampleVolumes.keybed,
     },
-    reverbWet: $pianoSettings.reverbWetDry,
+    reverbWet: $reverbWetDry,
   });
 
   const pianoReady = piano.load();
@@ -100,30 +102,25 @@
   };
 
   const loadSampleVelocities = () => {
-    if ($pianoSettings.sampleVelocities === piano.loadedVelocities) return;
+    if ($sampleVelocities === piano.loadedVelocities) return;
     updatePlayer(() => {
-      const loadingSamples = piano.updateVelocities(
-        $pianoSettings.sampleVelocities,
-      );
+      const loadingSamples = piano.updateVelocities($sampleVelocities);
       dispatch("loading", loadingSamples);
       // if samples are in the process of being loaded, the promise is
       //  rejected; update the UI to reflect the correct value
       loadingSamples
-        .then(() => ($pianoSettings.sampleVelocities = piano.loadedVelocities))
+        .then(() => ($sampleVelocities = piano.loadedVelocities))
         .catch(
-          ({ loadedVelocities }) =>
-            ($pianoSettings.sampleVelocities = loadedVelocities),
+          ({ loadedVelocities }) => ($sampleVelocities = loadedVelocities),
         );
       return loadingSamples;
     });
   };
 
   const updateSampleVelocities = () => {
-    if (
-      $pianoSettings.sampleVelocities > 4 &&
-      $pianoSettings.sampleVelocities > piano.loadedVelocities
-    ) {
+    if ($sampleVelocities > 4 && $sampleVelocities > piano.loadedVelocities) {
       notify({
+        modal: true,
         title: "Please confirm your choice",
         message:
           "Increasing the sample count beyond four will consume large amounts " +
@@ -138,8 +135,7 @@
           },
           {
             label: "cancel",
-            fn: () =>
-              ($pianoSettings.sampleVelocities = piano.loadedVelocities),
+            fn: () => ($sampleVelocities = piano.loadedVelocities),
           },
         ],
       });
@@ -342,9 +338,9 @@
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
-  $: piano.updateVolumes($pianoSettings.sampleVolumes);
-  $: piano.updateReverb($pianoSettings.reverbWetDry);
-  $: $pianoSettings.sampleVelocities, updateSampleVelocities();
+  $: piano.updateVolumes($sampleVolumes);
+  $: piano.updateReverb($reverbWetDry);
+  $: $sampleVelocities, updateSampleVelocities();
 
   export {
     midiSamplePlayer,
