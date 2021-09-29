@@ -113,6 +113,7 @@
         step="1"
         on:change={({ target: { value } }) => ($sampleVelocities = value)}
         bind:value={sampleVelocitiesSliderValue}
+        mousewheel={false}
         name="sample-velocities"
       />
     </div>
@@ -125,6 +126,7 @@
         step=".05"
         on:change={({ target: { value } }) => ($reverbWetDry = value)}
         bind:value={reverbWetDrySliderValue}
+        mousewheel={false}
         name="reverb-wetdry"
       />
     </div>
