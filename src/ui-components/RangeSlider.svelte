@@ -178,7 +178,7 @@
   const clamp = (_value) => Math.min(Math.max(_value, min), max);
 
   const handleWheel = (event) => {
-    const precision = (step.split(".")[1] || "").length;
+    const precision = (step.toString().split(".")[1] || "").length;
     if (event.deltaY > 0) {
       value = clamp((Number(value) + Number(step)).toFixed(precision));
     } else {
