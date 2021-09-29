@@ -82,11 +82,21 @@
       margin-top: 1em;
     }
   }
+
+  .modal-screen {
+    background-color: rgba(black, 0.6);
+    height: 100vh;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    z-index: z($main-context, modal-screen);
+  }
 </style>
 
 <script context="module">
   import { writable } from "svelte/store";
-  import { fly } from "svelte/transition";
+  import { fly, fade } from "svelte/transition";
 
   const NotificationStore = writable();
   let timeout;
@@ -104,6 +114,9 @@
 </script>
 
 {#if $NotificationStore}
+  {#if $NotificationStore.modal}
+    <div class="modal-screen" transition:fade />
+  {/if}
   <div
     transition:fly={{
       y: -200,

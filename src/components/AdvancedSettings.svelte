@@ -70,7 +70,9 @@
     rollPedalingOnOff,
     useMidiTempoEventsOnOff,
     userSettings,
-    pianoSettings,
+    sampleVolumes,
+    sampleVelocities,
+    reverbWetDry,
   } from "../stores";
   import { toggleKeybindingsConfig } from "./KeyboardShortcutEditor.svelte";
   import { notify } from "../ui-components/Notification.svelte";
@@ -145,7 +147,9 @@
     class="full-width"
     on:click={() => {
       userSettings.reset();
-      pianoSettings.reset();
+      sampleVolumes.reset();
+      sampleVelocities.reset();
+      reverbWetDry.reset();
       notify({
         message: "Settings have been reset!",
         type: "success",
