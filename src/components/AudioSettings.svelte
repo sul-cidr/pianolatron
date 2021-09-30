@@ -34,6 +34,7 @@
       max="16"
       step="1"
       name="sample-velocities"
+      mousewheel={false}
       on:change={({ target: { value } }) => ($sampleVelocities = value)}
     >
       <span slot="label">Sample Count</span>
@@ -44,6 +45,7 @@
       max="1"
       step=".05"
       name="reverb-wetdry"
+      mousewheel={false}
       on:change={({ target: { value } }) => ($reverbWetDry = value)}
     >
       <span slot="label">Reverb</span>
