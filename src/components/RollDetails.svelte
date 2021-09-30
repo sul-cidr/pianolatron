@@ -27,6 +27,7 @@
   dd {
     font-family: $primary-typeface;
     display: inline;
+    overflow-wrap: anywhere;
 
     &.large {
       font-size: 1.4em;
