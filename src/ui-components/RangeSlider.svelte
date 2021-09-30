@@ -5,17 +5,17 @@
   $track-color: #eaeaea;
   $thumb-color: var(--primary-accent);
 
-  $thumb-radius: 12px;
-  $thumb-height: 28px;
-  $thumb-width: 12px;
+  $thumb-radius: 14px;
+  $thumb-height: 14px;
+  $thumb-width: 14px;
   $thumb-shadow-size: 2px;
   $thumb-shadow-blur: 4px;
   $thumb-shadow-color: rgba(0, 0, 0, 0.2);
-  $thumb-border-width: 2px;
+  $thumb-border-width: 0px;
   $thumb-border-color: #eaeaea;
 
-  $track-width: 18em;
-  $track-height: 8px;
+  $track-width: 100%;
+  $track-height: 2px;
   $track-shadow-size: 1px;
   $track-shadow-blur: 1px;
   $track-shadow-color: rgba(0, 0, 0, 0.2);
@@ -57,6 +57,7 @@
   [type="range"] {
     -webkit-appearance: none;
     background: transparent;
+    height: 1px;
     margin: math.div($thumb-height, 2) 0;
     width: $track-width;
 
@@ -172,28 +173,6 @@
   export let step;
   export let name;
   export let value;
-  export let mousewheel = true;
-
-  const clamp = (_value) => Math.min(Math.max(_value, min), max);
-
-  const handleWheel = (event) => {
-    const precision = (step.split(".")[1] || "").length;
-    if (event.deltaY > 0) {
-      value = clamp((Number(value) + Number(step)).toFixed(precision));
-    } else {
-      value = clamp((Number(value) - Number(step)).toFixed(precision));
-    }
-  };
 </script>
 
-<input
-  type="range"
-  bind:value
-  on:input
-  on:change
-  on:mousewheel={mousewheel ? handleWheel : () => {}}
-  {min}
-  {max}
-  {step}
-  {name}
-/>
+<input type="range" bind:value on:input on:change {min} {max} {step} {name} />

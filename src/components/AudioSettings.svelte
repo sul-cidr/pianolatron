@@ -1,51 +1,6 @@
-<style lang="scss">
-  div#audio-panel {
-    @include background;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    overflow-y: auto;
-
-    div + div {
-      margin-top: 1em;
-    }
-  }
-  .control {
-    align-items: center;
-    display: grid;
-    gap: 0.5em;
-    padding: 0 0.5em 0.5em;
-    grid:
-      "title value" auto
-      "slider slider" auto / 1fr auto;
-
-    :global(input[type="range"]) {
-      grid-area: slider;
-      width: 100%;
-    }
-  }
-
-  fieldset {
-    margin: 2em 0;
-    padding: 1em 0.75em;
-
-    div {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-
-  legend {
-    font-family: $primary-typeface;
-    font-size: 1.4em;
-  }
-</style>
-
 <script>
   import { sampleVolumes, sampleVelocities, reverbWetDry } from "../stores";
-  import RangeSlider from "../ui-components/RangeSlider.svelte";
+  import SliderControl from "../ui-components/SliderControl.svelte";
 
   let sampleVelocitiesSliderValue;
   let reverbWetDrySliderValue;
@@ -57,78 +12,41 @@
 <div id="audio-panel">
   <fieldset>
     <legend>Piano Sample Volumes</legend>
-    <div class="control">
-      <span>Strings</span>
-      <span>{$sampleVolumes.strings}</span>
-      <RangeSlider
+    {#each Object.keys($sampleVolumes) as sampleType}
+      <SliderControl
+        bind:value={$sampleVolumes[sampleType]}
         min="-60"
         max="10"
         step="1"
-        bind:value={$sampleVolumes.strings}
-        name="strings-volume"
-      />
-    </div>
-    <div class="control">
-      <span>Harmonics</span>
-      <span>{$sampleVolumes.harmonics}</span>
-      <RangeSlider
-        min="-60"
-        max="10"
-        step="1"
-        bind:value={$sampleVolumes.harmonics}
-        name="harmonics-volume"
-      />
-    </div>
-    <div class="control">
-      <span>Pedals</span>
-      <span>{$sampleVolumes.pedal}</span>
-      <RangeSlider
-        min="-60"
-        max="10"
-        step="1"
-        bind:value={$sampleVolumes.pedal}
-        name="pedals-volume"
-      />
-    </div>
-    <div class="control">
-      <span>Keybed</span>
-      <span>{$sampleVolumes.keybed}</span>
-      <RangeSlider
-        min="-60"
-        max="10"
-        step="1"
-        bind:value={$sampleVolumes.keybed}
-        name="keybed-volume"
-      />
-    </div>
+        name={`${sampleType}-volume`}
+      >
+        <span slot="label" style="text-transform: capitalize;"
+          >{sampleType}</span
+        >
+      </SliderControl>
+    {/each}
   </fieldset>
   <fieldset>
     <legend>Audio Controls</legend>
-    <div class="control">
-      <span>Sample Count</span>
-      <span>{sampleVelocitiesSliderValue}</span>
-      <RangeSlider
-        min="1"
-        max="16"
-        step="1"
-        on:change={({ target: { value } }) => ($sampleVelocities = value)}
-        bind:value={sampleVelocitiesSliderValue}
-        mousewheel={false}
-        name="sample-velocities"
-      />
-    </div>
-    <div class="control">
-      <span>Reverb</span>
-      <span>{reverbWetDrySliderValue}</span>
-      <RangeSlider
-        min="0"
-        max="1"
-        step=".05"
-        on:change={({ target: { value } }) => ($reverbWetDry = value)}
-        bind:value={reverbWetDrySliderValue}
-        mousewheel={false}
-        name="reverb-wetdry"
-      />
-    </div>
+    <SliderControl
+      bind:value={sampleVelocitiesSliderValue}
+      min="1"
+      max="16"
+      step="1"
+      name="sample-velocities"
+      on:change={({ target: { value } }) => ($sampleVelocities = value)}
+    >
+      <span slot="label">Sample Count</span>
+    </SliderControl>
+    <SliderControl
+      bind:value={reverbWetDrySliderValue}
+      min="0"
+      max="1"
+      step=".05"
+      name="reverb-wetdry"
+      on:change={({ target: { value } }) => ($reverbWetDry = value)}
+    >
+      <span slot="label">Reverb</span>
+    </SliderControl>
   </fieldset>
 </div>

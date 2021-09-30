@@ -1,38 +1,11 @@
 <style lang="scss">
-  div#settings-panel {
-    @include background;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-
-    div + div {
-      margin-top: 1em;
-    }
-  }
-
-  fieldset {
-    margin: 2em 0;
-    padding: 1em 0.75em;
-
-    div {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-
-  legend {
-    font-family: $primary-typeface;
-    font-size: 1.4em;
-  }
-
   .theme-selector button {
     height: 1.5em;
     width: 1.5em;
     border-radius: 1.5em;
     border: none;
     margin: 0 0.5em;
+    cursor: pointer;
 
     &.active {
       outline: 1px solid var(--primary-accent);
@@ -57,7 +30,7 @@
   }
 
   button.full-width {
-    margin: 1em 0;
+    margin: 0;
     padding: 3px 0;
     width: 100%;
   }
@@ -85,15 +58,15 @@
 <div id="settings-panel">
   <fieldset>
     <legend>Visualization Settings</legend>
-    <div>
+    <div class="setting">
       Show Details for Active Notes:
       <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
     </div>
-    <div>
+    <div class="setting">
       Display Note Velocities:
       <input type="checkbox" bind:checked={$userSettings.showNoteVelocities} />
     </div>
-    <div>
+    <div class="setting">
       Highlight Enabled Holes:
       <input
         type="checkbox"
@@ -104,7 +77,7 @@
 
   <fieldset>
     <legend>Roll Emulation Settings</legend>
-    <div>
+    <div class="setting">
       Play Expressions:
       <input
         type="checkbox"
@@ -112,7 +85,7 @@
         disabled={!$rollHasExpressions}
       />
     </div>
-    <div>
+    <div class="setting">
       Use Roll Pedaling:
       <input
         type="checkbox"
@@ -120,7 +93,7 @@
         disabled={!$rollHasExpressions}
       />
     </div>
-    <div>
+    <div class="setting">
       Emulate Roll Acceleration:
       <input type="checkbox" bind:checked={$useMidiTempoEventsOnOff} />
     </div>

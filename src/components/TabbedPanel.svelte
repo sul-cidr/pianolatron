@@ -1,10 +1,42 @@
-<style>
+<style lang="scss">
   div {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
     overflow: hidden;
     position: relative;
+
+    :global(> div) {
+      @include background;
+      display: flex;
+      flex-direction: column;
+      gap: 4%;
+      height: 100%;
+      left: 0;
+      overflow-y: auto;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    :global(.setting + .setting) {
+      margin-top: 1em;
+    }
+
+    :global(fieldset) {
+      border-color: rgba(white, 0.8);
+      padding: 1em 0.75em;
+    }
+
+    :global(legend) {
+      font-family: $primary-typeface;
+      font-size: 1.4em;
+    }
+
+    :global(fieldset div) {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 </style>
 
@@ -19,16 +51,23 @@
   export let skipToPercentage;
   export let stopApp;
 
+  const panels = {
+    controls: {
+      component: BasicSettings,
+      props: { skipToPercentage },
+    },
+    settings: { component: AdvancedSettings },
+    audio: { component: AudioSettings },
+  };
+
   let selectedPanel = "controls";
 </script>
 
 <PanelSwitcher bind:selectedPanel />
 <div>
-  <BasicSettings {skipToPercentage} />
-  {#if selectedPanel === "settings"}
-    <AdvancedSettings />
-  {:else if selectedPanel === "audio"}
-    <AudioSettings />
-  {/if}
+  <svelte:component
+    this={panels[selectedPanel].component}
+    {...panels[selectedPanel].props}
+  />
 </div>
 <PlaybackControls {playPauseApp} {stopApp} />
