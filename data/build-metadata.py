@@ -434,17 +434,20 @@ def main():
     argparser.add_argument(
         "druids",
         nargs="*",
-        help="DRUID(s) of one or more rolls to be processed, separated by spaces",
+        help="DRUID(s) of one or more rolls to be processed, separated by "
+        "spaces",
     )
     argparser.add_argument(
         "--no_catalog",
         action="store_true",
-        help="Do not generate a new catalog.json (preexisting file will remain)",
+        help="Do not generate a new catalog.json (preexisting file will "
+        "remain)",
     )
     argparser.add_argument(
         "--redownload_manifests",
         action="store_true",
-        help="Always download IIIF manifests, overwriting files in input/manifests/ and ignoring --iiif_source_dir",
+        help="Always download IIIF manifests, overwriting files in "
+        "input/manifests/ and ignoring --iiif_source_dir",
     )
     argparser.add_argument(
         "--redownload_mods",
@@ -454,22 +457,26 @@ def main():
     argparser.add_argument(
         "--use_exp_midi",
         action="store_true",
-        help="Use expressionized MIDI for output .mid files (default is to use note MIDI)",
+        help="Use expressionized MIDI for output .mid files (default is to "
+        "use note MIDI)",
     )
     argparser.add_argument(
         "--midi_source_dir",
         default=MIDI_DIR,
-        help="External folder containg note (/note/DRUID_note.mid) or expressionized (/note/DRUID_exp.mid) MIDI files",
+        help="External folder containing note (/note/DRUID_note.mid) or "
+        "expressionized (/note/DRUID_exp.mid) MIDI files",
     )
     argparser.add_argument(
         "--analysis_source_dir",
         default=TXT_DIR,
-        help="External folder containg hole analysis output files (DRUID.txt)",
+        help="External folder containing hole analysis output files "
+        "(DRUID.txt)",
     )
     argparser.add_argument(
         "--iiif_source_dir",
         default=IIIF_DIR,
-        help="External folder containg pre-downloaded IIIF manifests (DRUID.json)",
+        help="External folder containing pre-downloaded IIIF manifests "
+        "(DRUID.json)",
     )
 
     args = argparser.parse_args()
