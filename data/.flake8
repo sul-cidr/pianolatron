@@ -1,0 +1,8 @@
+[flake8]
+# B950  line too long
+# E303  too many blank lines (3)
+# E501  line too long
+ignore = B950, E303, E501
+max-line-length = 80
+max-complexity = 18
+select = B,C,E,F,T,W,B9
