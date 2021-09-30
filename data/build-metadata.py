@@ -422,7 +422,7 @@ def main():
     argparser = argparse.ArgumentParser(
         description="""Generate per-roll DRUID.json files as well as a
                        comprehensive catalog.json file that describes all rolls
-                       processed, and place these files, along with the 
+                       processed, and place these files, along with the
                        roll's MIDI file of the desired type (_note or _exp, as
                        DRUID.mid), in the proper locations in the Pianolatron
                        folders. If no DRUIDs are provided on the command line,
