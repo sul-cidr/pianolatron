@@ -223,7 +223,7 @@ def merge_midi_velocities(roll_data, hole_data, druid):
         for event in note_track:
             current_tick += event.time
             if event.type == "note_on":
-                # XXX Not sure why some note events have velocity=1, but this
+                # Not sure why some note events have velocity=1, but this
                 # works with the in-app expression code
                 if event.velocity > 1:
                     if current_tick in tick_notes_velocities:
@@ -488,9 +488,6 @@ def main():
 
     if len(DRUIDS) == 0:
         DRUIDS = get_druids_from_files()
-
-    # Override cmd line or CSV DRUIDs lists
-    # DRUIDS = ["hb523vs3190"]
 
     catalog_entries = []
 
