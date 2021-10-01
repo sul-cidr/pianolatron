@@ -9,16 +9,16 @@ the app.
 """
 
 import argparse
-from csv import DictReader
 import json
 import logging
-from pathlib import Path
 import re
+from csv import DictReader
+from pathlib import Path
 from shutil import copy
 
+import requests
 from lxml import etree
 from mido import MidiFile, tempo2bpm
-import requests
 
 WRITE_TEMPO_MAPS = False
 
