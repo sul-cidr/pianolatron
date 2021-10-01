@@ -25,17 +25,8 @@
 
   let actionInterval;
 
-  const updateStore = (
-    // config object
-    { store, min, max, delta, shiftDelta, ctrlDelta, precision },
-    // event
-    { shiftKey, ctrlKey },
-    increment,
-  ) => {
-    const d =
-      (increment ? 1 : -1) *
-      ((shiftKey && shiftDelta) || (ctrlKey && ctrlDelta) || delta);
-
+  const updateStore = ({ store, min, max, delta, precision }, increment) => {
+    const d = (increment ? 1 : -1) * delta;
     store.set(enforcePrecision(clamp(get(store) + d, min, max), precision));
   };
 
@@ -53,15 +44,14 @@
     SUSTAIN: () => ($sustainOnOff = true),
     ACCENT: () => ($accentOnOff = true),
 
-    VOLUME_UP: (event) => increment(controlsConfig.volume, event),
-    VOLUME_DOWN: (event) => decrement(controlsConfig.volume, event),
-    BASS_VOLUME_UP: (event) => increment(controlsConfig.bassVolume, event),
-    BASS_VOLUME_DOWN: (event) => decrement(controlsConfig.bassVolume, event),
-    TREBLE_VOLUME_UP: (event) => increment(controlsConfig.trebleVolume, event),
-    TREBLE_VOLUME_DOWN: (event) =>
-      decrement(controlsConfig.trebleVolume, event),
-    TEMPO_UP: (event) => increment(controlsConfig.tempo, event),
-    TEMPO_DOWN: (event) => decrement(controlsConfig.tempo, event),
+    VOLUME_UP: () => increment(controlsConfig.volume),
+    VOLUME_DOWN: () => decrement(controlsConfig.volume),
+    BASS_VOLUME_UP: () => increment(controlsConfig.bassVolume),
+    BASS_VOLUME_DOWN: () => decrement(controlsConfig.bassVolume),
+    TREBLE_VOLUME_UP: () => increment(controlsConfig.trebleVolume),
+    TREBLE_VOLUME_DOWN: () => decrement(controlsConfig.trebleVolume),
+    TEMPO_UP: () => increment(controlsConfig.tempo),
+    TEMPO_DOWN: () => decrement(controlsConfig.tempo),
 
     PLAY_PAUSE: playPauseApp,
     REWIND: stopApp,

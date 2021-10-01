@@ -37,44 +37,36 @@ export const keyMapMeta = {
 
   VOLUME_UP: {
     description: "Volume Up",
-    help: `Increase the main volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    help: `Increase the main volume`,
   },
   VOLUME_DOWN: {
     description: "Volume Down",
-    help: `Decrease the main volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    help: `Decrease the main volume`,
   },
   BASS_VOLUME_UP: {
     description: "Bass Volume Up",
-    help: `Increase the bass volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    help: `Increase the bass volume`,
   },
   BASS_VOLUME_DOWN: {
     description: "Bass Volume Down",
-    help: `Decrease the bass volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    help: `Decrease the bass volume`,
   },
   TREBLE_VOLUME_UP: {
     description: "Treble Volume Up",
-    help: `Increase the treble volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    help: `Increase the treble volume`,
   },
   TREBLE_VOLUME_DOWN: {
     description: "Treble Volume Down",
-    help: `Decrease the treble volume
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    help: `Decrease the treble volume`,
   },
 
   TEMPO_UP: {
     description: "Tempo Up",
-    help: `Increase the tempo
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    help: `Increase the tempo`,
   },
   TEMPO_DOWN: {
     description: "Tempo Down",
-    help: `Decrease the tempo
-        Use SHIFT for a larger increment, and CTRL for finer-grained control`,
+    help: `Decrease the tempo`,
   },
 
   PLAY_PAUSE: {
