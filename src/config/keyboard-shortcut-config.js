@@ -13,6 +13,9 @@ export const defaultKeyMap = {
   TEMPO_UP: { code: "KeyT", key: "t" },
   TEMPO_DOWN: { code: "KeyR", key: "r" },
 
+  LEFT_HAND_AUGMENT: { code: "KeyW", key: "w" },
+  RIGHT_HAND_AUGMENT: { code: "BracketLeft", key: "[" },
+
   PLAY_PAUSE: { code: "Digit7", key: "7" },
   REWIND: { code: "Backspace", key: "⌫" },
   FORWARD: { code: "Digit8", key: "8" },
@@ -67,6 +70,15 @@ export const keyMapMeta = {
   TEMPO_DOWN: {
     description: "Tempo Down",
     help: `Decrease the tempo`,
+  },
+
+  LEFT_HAND_AUGMENT: {
+    description: "Left-hand Augment",
+    help: "Hold this key to use larger jumps when using Tempo or Bass Volume keys",
+  },
+  RIGHT_HAND_AUGMENT: {
+    description: "Right-hand Augment",
+    help: "Hold this key to use larger jumps when using Volume or Treble Volume keys",
   },
 
   PLAY_PAUSE: {

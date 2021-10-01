@@ -24,9 +24,22 @@
   export let updateTickByViewportIncrement;
 
   let actionInterval;
+  let leftHandAugment = false;
+  let rightHandAugment = false;
 
-  const updateStore = ({ store, min, max, delta, precision }, increment) => {
-    const d = (increment ? 1 : -1) * delta;
+  const leftHandControls = ["tempo", "bassVolume"];
+  const rightHandControls = ["trebleVolume", "volume"];
+
+  const updateStore = (control, increment) => {
+    const { store, min, max, delta, augmentedDelta, precision } =
+      controlsConfig[control];
+
+    let d =
+      (leftHandControls.includes(control) && leftHandAugment) ||
+      (rightHandControls.includes(control) && rightHandAugment)
+        ? augmentedDelta
+        : delta;
+    d *= increment ? 1 : -1;
     store.set(enforcePrecision(clamp(get(store) + d, min, max), precision));
   };
 
@@ -44,14 +57,17 @@
     SUSTAIN: () => ($sustainOnOff = true),
     ACCENT: () => ($accentOnOff = true),
 
-    VOLUME_UP: () => increment(controlsConfig.volume),
-    VOLUME_DOWN: () => decrement(controlsConfig.volume),
-    BASS_VOLUME_UP: () => increment(controlsConfig.bassVolume),
-    BASS_VOLUME_DOWN: () => decrement(controlsConfig.bassVolume),
-    TREBLE_VOLUME_UP: () => increment(controlsConfig.trebleVolume),
-    TREBLE_VOLUME_DOWN: () => decrement(controlsConfig.trebleVolume),
-    TEMPO_UP: () => increment(controlsConfig.tempo),
-    TEMPO_DOWN: () => decrement(controlsConfig.tempo),
+    VOLUME_UP: () => increment("volume"),
+    VOLUME_DOWN: () => decrement("volume"),
+    BASS_VOLUME_UP: () => increment("bassVolume"),
+    BASS_VOLUME_DOWN: () => decrement("bassVolume"),
+    TREBLE_VOLUME_UP: () => increment("trebleVolume"),
+    TREBLE_VOLUME_DOWN: () => decrement("trebleVolume"),
+    TEMPO_UP: () => increment("tempo"),
+    TEMPO_DOWN: () => decrement("tempo"),
+
+    LEFT_HAND_AUGMENT: () => (leftHandAugment = true),
+    RIGHT_HAND_AUGMENT: () => (rightHandAugment = true),
 
     PLAY_PAUSE: playPauseApp,
     REWIND: stopApp,
@@ -76,6 +92,9 @@
     SOFT: () => ($softOnOff = false),
     SUSTAIN: () => ($sustainOnOff = false),
     ACCENT: () => ($accentOnOff = false),
+
+    LEFT_HAND_AUGMENT: () => (leftHandAugment = false),
+    RIGHT_HAND_AUGMENT: () => (rightHandAugment = false),
   };
 </script>
 

@@ -11,6 +11,7 @@ export const controlsConfig = {
     min: 0,
     max: 4,
     delta: 0.1,
+    augmentedDelta: 0.4,
     precision: 2,
   },
   bassVolume: {
@@ -18,6 +19,7 @@ export const controlsConfig = {
     min: 0,
     max: 4,
     delta: 0.1,
+    augmentedDelta: 0.4,
     precision: 2,
   },
   trebleVolume: {
@@ -25,6 +27,7 @@ export const controlsConfig = {
     min: 0,
     max: 4,
     delta: 0.1,
+    augmentedDelta: 0.4,
     precision: 2,
   },
   tempo: {
@@ -32,6 +35,7 @@ export const controlsConfig = {
     min: 0.1,
     max: 3,
     delta: 0.05,
+    augmentedDelta: 0.1,
     precision: 2,
   },
 };
