@@ -107,14 +107,7 @@ export const keyMapMeta = {
   },
 };
 
-export const unusableKeys = [
-  "Escape",
-  "ControlLeft",
-  "ControlRight",
-  "ShiftLeft",
-  "ShiftRight",
-  "CapsLock",
-];
+export const unusableKeys = ["Escape", "CapsLock"];
 
 export const alternativeIndicatorText = {
   Space: "＿",
@@ -126,4 +119,8 @@ export const alternativeIndicatorText = {
   ArrowDown: "↓",
   ArrowLeft: "←",
   ArrowRight: "→",
+  ControlLeft: " (L)Ctrl",
+  ControlRight: "(R)Ctrl",
+  ShiftLeft: "(L)Shift",
+  ShiftRight: "(R)Shift",
 };
