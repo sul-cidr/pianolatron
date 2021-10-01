@@ -438,42 +438,42 @@ def main():
         "spaces",
     )
     argparser.add_argument(
-        "--no_catalog",
+        "--no-catalog",
         action="store_true",
         help="Do not generate a new catalog.json (preexisting file will "
         "remain)",
     )
     argparser.add_argument(
-        "--redownload_manifests",
+        "--redownload-manifests",
         action="store_true",
         help="Always download IIIF manifests, overwriting files in "
-        "input/manifests/ and ignoring --iiif_source_dir",
+        "input/manifests/ and ignoring --iiif-source-dir",
     )
     argparser.add_argument(
-        "--redownload_mods",
+        "--redownload-mods",
         action="store_true",
         help="Always download MODS files, overwriting files in input/mods/",
     )
     argparser.add_argument(
-        "--use_exp_midi",
+        "--use-exp-midi",
         action="store_true",
         help="Use expressionized MIDI for output .mid files (default is to "
         "use note MIDI)",
     )
     argparser.add_argument(
-        "--midi_source_dir",
+        "--midi-source-dir",
         default=MIDI_DIR,
         help="External folder containing note (/note/DRUID_note.mid) or "
         "expressionized (/note/DRUID_exp.mid) MIDI files",
     )
     argparser.add_argument(
-        "--analysis_source_dir",
+        "--analysis-source-dir",
         default=TXT_DIR,
         help="External folder containing hole analysis output files "
         "(DRUID.txt)",
     )
     argparser.add_argument(
-        "--iiif_source_dir",
+        "--iiif-source-dir",
         default=IIIF_DIR,
         help="External folder containing pre-downloaded IIIF manifests "
         "(DRUID.json)",
