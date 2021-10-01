@@ -1,11 +1,16 @@
 <script context="module">
   import { createPersistedStore } from "../lib/stores";
   import { defaultKeyMap } from "../config/keyboard-shortcut-config";
+  import { controlsConfig as defaultControlsConfig } from "../config/controls-config";
 
   export const keyMap = createPersistedStore(
     "keyMap",
     JSON.parse(JSON.stringify(defaultKeyMap)),
   );
+
+  export const controlsConfig = createPersistedStore("controlConfig", {
+    ...defaultControlsConfig,
+  });
 </script>
 
 <script>
@@ -16,7 +21,6 @@
     sustainOnOff,
     accentOnOff,
   } from "../stores";
-  import { controlsConfig } from "../config/controls-config";
   import { clamp, easingInterval, enforcePrecision } from "../lib/utils";
 
   export let playPauseApp;
@@ -32,7 +36,7 @@
 
   const updateStore = (control, increment) => {
     const { store, min, max, delta, augmentedDelta, precision } =
-      controlsConfig[control];
+      $controlsConfig[control];
 
     let d =
       (leftHandControls.includes(control) && leftHandAugment) ||
