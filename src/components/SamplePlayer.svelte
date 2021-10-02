@@ -29,6 +29,7 @@
   let tempoMap;
   let pedalingMap;
   let notesMap;
+  let midiOut;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -38,6 +39,12 @@
   const SOFT_PEDAL_RATIO = 0.67;
   const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
   const ACCENT_BUMP = 1.5;
+
+  const MIDI_NOTE_ON = 0x90; // = the event code (0x90) + channel (0)
+  const MIDI_NOTE_OFF = 0x80;
+  const MIDI_CONTROL = 0xb0;
+  const MIDI_SUSTAIN = 0x40;
+  const MIDI_SOFT = 0x43;
 
   const dispatch = createEventDispatcher();
 
@@ -147,7 +154,7 @@
     loadSampleVelocities();
   };
 
-  const startNote = (noteNumber, velocity) => {
+  const startNote = (noteNumber, velocity, fromMidi) => {
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
     [$velocityCurveLow, $velocityCurveMid, $velocityCurveHigh].forEach(
@@ -178,14 +185,26 @@
         velocity: Math.min(modifiedVelocity, 1),
       });
     }
+    if (midiOut && fromMidi === undefined) {
+      midiOut.send([
+        MIDI_NOTE_ON,
+        noteNumber,
+        parseInt(modifiedVelocity * 127, 10),
+      ]);
+    }
   };
 
-  const stopNote = (noteNumber) => piano.keyUp({ midi: noteNumber });
+  const stopNote = (noteNumber, fromMidi) => {
+    piano.keyUp({ midi: noteNumber });
+    if (midiOut && fromMidi === undefined) {
+      midiOut.send([MIDI_NOTE_OFF, noteNumber, 0]);
+    }
+  };
 
   const stopAllNotes = () => {
-    piano.pedalUp();
-    if ($sustainOnOff) piano.pedalDown();
-    $activeNotes.forEach(stopNote);
+    toggleSustain(false);
+    $activeNotes.forEach((midiNumber) => stopNote(midiNumber));
+    if ($sustainOnOff) toggleSustain(true);
   };
 
   const resetPlayback = () => {
@@ -261,6 +280,48 @@
     return _notesMap;
   };
 
+  const initWebMidi = () => {
+    if (navigator.requestMIDIAccess) {
+      console.log("This browser supports WebMIDI");
+      navigator.requestMIDIAccess().then(function (midi) {
+        // Respond to input from attached MIDI controllers
+        Array.from(midi.inputs).forEach((input) => {
+          input[1].onmidimessage = (msg) => {
+            if (msg.data.length > 1) {
+              if (msg.data[0] == MIDI_CONTROL) {
+                if (msg.data[1] == MIDI_SUSTAIN) {
+                  toggleSustain(!!parseInt(msg.data[2], 10), true);
+                } else if (msg.data[1] == MIDI_SOFT) {
+                  toggleSoft(!!parseInt(msg.data[2], 10), true);
+                }
+              } else if (msg.data[0] == MIDI_NOTE_ON) {
+                if (msg.data[2] === 0) {
+                  stopNote(msg.data[1], true);
+                  activeNotes.delete(msg.data[1]);
+                } else {
+                  startNote(
+                    msg.data[1],
+                    parseInt((parseFloat(msg.data[2]) / 127.0) * 100.0, 10),
+                    true,
+                  );
+                  activeNotes.add(msg.data[1]);
+                }
+              } else if (msg.data[0] == MIDI_NOTE_OFF) {
+                stopNote(msg.data[1], true);
+                activeNotes.delete(msg.data[1]);
+              }
+            }
+          };
+        });
+        // Connect to the first detected MIDI output device
+        if (Array.from(midi.outputs).length > 0)
+          midiOut = Array.from(midi.outputs)[0][1];
+      });
+    } else {
+      console.log("WebMIDI is not supported in this browser");
+    }
+  };
+
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -283,6 +344,8 @@
           ),
       ),
     );
+
+    initWebMidi();
 
     tempoMap = buildTempoMap(metadataTrack);
 
@@ -322,8 +385,30 @@
 
   midiSamplePlayer.on("endOfFile", pausePlayback);
 
+  const toggleSustain = (onOff, fromMidi) => {
+    if (fromMidi) {
+      $sustainOnOff = onOff;
+      return;
+    }
+    onOff ? piano.pedalDown() : piano.pedalUp();
+    if (midiOut && fromMidi === undefined) {
+      midiOut.send([MIDI_CONTROL, MIDI_SUSTAIN, (onOff ? 1 : 0) * 127]);
+    }
+  };
+
+  const toggleSoft = (onOff, fromMidi) => {
+    if (fromMidi) {
+      $softOnOff = onOff;
+      return;
+    }
+    if (midiOut && fromMidi === undefined) {
+      midiOut.send([MIDI_CONTROL, MIDI_SOFT, (onOff ? 1 : 0) * 127]);
+    }
+  };
+
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
+  $: toggleSustain($sustainOnOff);
+  $: toggleSoft($softOnOff);
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
