@@ -178,6 +178,41 @@
     holesByTickInterval = new IntervalTree();
   };
 
+  const initWebMidi = () => {
+    if (navigator.requestMIDIAccess) {
+      if (!$userSettings.midiMessageSeen && !$showWelcomeScreen) {
+        notify({
+          title: "MIDI in/out available",
+          message:
+            "Connect a digital piano or other MIDI divice to send/receive keyboard events.",
+          closable: true,
+        });
+        $userSettings.midiMessageSeen = true;
+      }
+      navigator.requestMIDIAccess().then((midi) => {
+        midi.onstatechange = (e) => {
+          // Print information about the (dis)connected MIDI controller
+          notify({
+            title: "MIDI device change",
+            message: `${e.port.name} ${e.port.manufacturer} ${e.port.state}`,
+            timeout: 4000,
+            closable: true,
+          });
+        };
+      });
+    } else {
+      if (!$userSettings.midiMessageSeen && !$showWelcomeScreen) {
+        notify({
+          title: "MIDI in/out not available",
+          message:
+            "This browser does not support connecting to a digital piano or other MIDI device.",
+          closable: true,
+        });
+        $userSettings.midiMessageSeen = true;
+      }
+    }
+  };
+
   const loadRoll = (roll) => {
     mididataReady = fetch(`./midi/${roll.druid}.mid`)
       .then((mididataResponse) => {
@@ -221,6 +256,7 @@
           url.searchParams.set("druid", currentRoll.druid);
           window.history.pushState({ roll: currentRoll }, "", url);
         }
+        initWebMidi();
       },
     );
   };
