@@ -20,7 +20,6 @@
     currentTick,
     sampleVolumes,
     sampleVelocities,
-    userSettings,
     reverbWetDry,
     velocityCurveLow,
     velocityCurveMid,
@@ -30,7 +29,7 @@
   let tempoMap;
   let pedalingMap;
   let notesMap;
-  let midiOut;
+  let midiOuts = [];
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -68,6 +67,12 @@
 
   const pianoReady = piano.load();
 
+  const sendMidiMsg = (msg) => {
+    for (let i = 0; i < midiOuts.length; i++) {
+      midiOuts[i].send(msg);
+    }
+  };
+
   const getTempoAtTick = (tick) => {
     if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
     let tempo;
@@ -86,8 +91,8 @@
       return;
     }
     onOff ? piano.pedalDown() : piano.pedalUp();
-    if (midiOut && fromMidi === undefined) {
-      midiOut.send([MIDI_CONTROL, MIDI_SUSTAIN, (onOff ? 1 : 0) * 127]);
+    if (midiOuts.length && !fromMidi) {
+      sendMidiMsg([MIDI_CONTROL, MIDI_SUSTAIN, (onOff ? 1 : 0) * 127]);
     }
   };
 
@@ -96,8 +101,8 @@
       $softOnOff = onOff;
       return;
     }
-    if (midiOut && fromMidi === undefined) {
-      midiOut.send([MIDI_CONTROL, MIDI_SOFT, (onOff ? 1 : 0) * 127]);
+    if (midiOuts.length && !fromMidi) {
+      sendMidiMsg([MIDI_CONTROL, MIDI_SOFT, (onOff ? 1 : 0) * 127]);
     }
   };
 
@@ -207,8 +212,8 @@
         velocity: Math.min(modifiedVelocity, 1),
       });
     }
-    if (midiOut && fromMidi === undefined) {
-      midiOut.send([
+    if (midiOuts.length && !fromMidi) {
+      sendMidiMsg([
         MIDI_NOTE_ON,
         noteNumber,
         parseInt(modifiedVelocity * 127, 10),
@@ -218,8 +223,8 @@
 
   const stopNote = (noteNumber, fromMidi) => {
     piano.keyUp({ midi: noteNumber });
-    if (midiOut && fromMidi === undefined) {
-      midiOut.send([MIDI_NOTE_OFF, noteNumber, 0]);
+    if (midiOuts.length && !fromMidi) {
+      sendMidiMsg([MIDI_NOTE_OFF, noteNumber, 0]);
     }
   };
 
@@ -302,41 +307,49 @@
     return _notesMap;
   };
 
+  const registerMidiInputs = (midi) => {
+    // Respond to input from attached MIDI controllers
+    Array.from(midi.inputs).forEach((input) => {
+      if (input[1].onmidimessage !== null) return;
+      input[1].onmidimessage = (msg) => {
+        if (msg.data.length > 1) {
+          if (msg.data[0] == MIDI_CONTROL) {
+            if (msg.data[1] == MIDI_SUSTAIN) {
+              toggleSustain(!!parseInt(msg.data[2], 10), true);
+            } else if (msg.data[1] == MIDI_SOFT) {
+              toggleSoft(!!parseInt(msg.data[2], 10), true);
+            }
+          } else if (msg.data[0] == MIDI_NOTE_ON) {
+            if (msg.data[2] === 0) {
+              stopNote(msg.data[1], true);
+              activeNotes.delete(msg.data[1]);
+            } else {
+              startNote(
+                msg.data[1],
+                parseInt((parseFloat(msg.data[2]) / 127.0) * 100.0, 10),
+                true,
+              );
+              activeNotes.add(msg.data[1]);
+            }
+          } else if (msg.data[0] == MIDI_NOTE_OFF) {
+            stopNote(msg.data[1], true);
+            activeNotes.delete(msg.data[1]);
+          }
+        }
+      };
+    });
+  };
+
   const registerMidiDevices = () => {
     if (navigator.requestMIDIAccess) {
       navigator.requestMIDIAccess().then((midi) => {
-        // Respond to input from attached MIDI controllers
-        Array.from(midi.inputs).forEach((input) => {
-          input[1].onmidimessage = (msg) => {
-            if (msg.data.length > 1) {
-              if (msg.data[0] == MIDI_CONTROL) {
-                if (msg.data[1] == MIDI_SUSTAIN) {
-                  toggleSustain(!!parseInt(msg.data[2], 10), true);
-                } else if (msg.data[1] == MIDI_SOFT) {
-                  toggleSoft(!!parseInt(msg.data[2], 10), true);
-                }
-              } else if (msg.data[0] == MIDI_NOTE_ON) {
-                if (msg.data[2] === 0) {
-                  stopNote(msg.data[1], true);
-                  activeNotes.delete(msg.data[1]);
-                } else {
-                  startNote(
-                    msg.data[1],
-                    parseInt((parseFloat(msg.data[2]) / 127.0) * 100.0, 10),
-                    true,
-                  );
-                  activeNotes.add(msg.data[1]);
-                }
-              } else if (msg.data[0] == MIDI_NOTE_OFF) {
-                stopNote(msg.data[1], true);
-                activeNotes.delete(msg.data[1]);
-              }
-            }
-          };
-        });
-        // Connect to the first detected MIDI output device
-        if (Array.from(midi.outputs).length > 0)
-          midiOut = Array.from(midi.outputs)[0][1];
+        registerMidiInputs(midi);
+        midiOuts = Array.from(midi.outputs).map((output) => output[1]);
+        // This handles when new devices are connected (or disconnected)
+        midi.onstatechange = () => {
+          registerMidiInputs(midi);
+          midiOuts = Array.from(midi.outputs).map((output) => output[1]);
+        };
       });
     }
   };

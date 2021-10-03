@@ -184,7 +184,7 @@
         notify({
           title: "MIDI in/out available",
           message:
-            "Connect a digital piano or other MIDI divice to send/receive keyboard events.",
+            "Connect a digital piano or other MIDI divice to send/receive keyboard and pedal events.",
           closable: true,
         });
         $userSettings.midiMessageSeen = true;
