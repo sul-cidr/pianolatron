@@ -41,12 +41,6 @@
   const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
   const ACCENT_BUMP = 1.5;
 
-  const MIDI_NOTE_ON = 0x90; // = the event code (0x90) + channel (0)
-  const MIDI_NOTE_OFF = 0x80;
-  const MIDI_CONTROL = 0xb0;
-  const MIDI_SUSTAIN = 0x40;
-  const MIDI_SOFT = 0x43;
-
   const dispatch = createEventDispatcher();
 
   const midiSamplePlayer = new MidiPlayer.Player();
@@ -87,7 +81,7 @@
     }
     onOff ? piano.pedalDown() : piano.pedalUp();
     if (!fromMidi) {
-      webMidi?.sendMidiMsg([MIDI_CONTROL, MIDI_SUSTAIN, (onOff ? 1 : 0) * 127]);
+      webMidi?.sendMidiMsg("controller", "sustain", onOff);
     }
   };
 
@@ -97,7 +91,7 @@
       return;
     }
     if (!fromMidi) {
-      webMidi?.sendMidiMsg([MIDI_CONTROL, MIDI_SOFT, (onOff ? 1 : 0) * 127]);
+      webMidi?.sendMidiMsg("controller", "soft", onOff);
     }
   };
 
@@ -208,18 +202,14 @@
       });
     }
     if (!fromMidi) {
-      webMidi?.sendMidiMsg([
-        MIDI_NOTE_ON,
-        noteNumber,
-        parseInt(modifiedVelocity * 127, 10),
-      ]);
+      webMidi?.sendMidiMsg("note_on", noteNumber, modifiedVelocity);
     }
   };
 
   const stopNote = (noteNumber, fromMidi) => {
     piano.keyUp({ midi: noteNumber });
     if (!fromMidi) {
-      webMidi?.sendMidiMsg([MIDI_NOTE_OFF, noteNumber, 0]);
+      webMidi?.sendMidiMsg("note_off", noteNumber, 0);
     }
   };
 

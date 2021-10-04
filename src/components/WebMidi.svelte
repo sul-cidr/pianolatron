@@ -13,9 +13,23 @@
   const MIDI_SUSTAIN = 0x40;
   const MIDI_SOFT = 0x43;
 
-  const sendMidiMsg = (msg) => {
-    for (let i = 0; i < midiOuts.length; i++) {
-      midiOuts[i].send(msg);
+  const sendMidiMsg = (msgType, entity, value) => {
+    let msg = null;
+    if (msgType == "note_on") {
+      msg = [MIDI_NOTE_ON, entity, parseInt(value * 127, 10)];
+    } else if (msgType == "note_off") {
+      msg = [MIDI_NOTE_OFF, entity, value];
+    } else if (msgType == "controller") {
+      if (entity == "sustain") {
+        msg = [MIDI_CONTROL, MIDI_SUSTAIN, (value ? 1 : 0) * 127];
+      } else if (entity == "soft") {
+        msg = [MIDI_CONTROL, MIDI_SOFT, (value ? 1 : 0) * 127];
+      }
+    }
+    if (msg) {
+      for (let i = 0; i < midiOuts.length; i++) {
+        midiOuts[i].send(msg);
+      }
     }
   };
 
