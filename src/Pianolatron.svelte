@@ -83,6 +83,7 @@
   } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
+  import WebMidi from "./components/WebMidi.svelte";
 
   import catalog from "./config/catalog.json";
 
@@ -96,6 +97,7 @@
   let holeData;
   let holesByTickInterval = new IntervalTree();
 
+  let webMidi;
   let samplePlayer;
 
   let midiSamplePlayer;
@@ -178,41 +180,6 @@
     holesByTickInterval = new IntervalTree();
   };
 
-  const initWebMidi = () => {
-    if (navigator.requestMIDIAccess) {
-      if (!$userSettings.midiMessageSeen && !$showWelcomeScreen) {
-        notify({
-          title: "MIDI in/out available",
-          message:
-            "Connect a digital piano or other MIDI divice to send/receive keyboard and pedal events.",
-          closable: true,
-        });
-        $userSettings.midiMessageSeen = true;
-      }
-      navigator.requestMIDIAccess().then((midi) => {
-        midi.onstatechange = (e) => {
-          // Print information about the (dis)connected MIDI controller
-          notify({
-            title: "MIDI device change",
-            message: `${e.port.name} ${e.port.manufacturer} ${e.port.state}`,
-            timeout: 4000,
-            closable: true,
-          });
-        };
-      });
-    } else {
-      if (!$userSettings.midiMessageSeen && !$showWelcomeScreen) {
-        notify({
-          title: "MIDI in/out not available",
-          message:
-            "This browser does not support connecting to a digital piano or other MIDI device.",
-          closable: true,
-        });
-        $userSettings.midiMessageSeen = true;
-      }
-    }
-  };
-
   const loadRoll = (roll) => {
     mididataReady = fetch(`./midi/${roll.druid}.mid`)
       .then((mididataResponse) => {
@@ -256,7 +223,6 @@
           url.searchParams.set("druid", currentRoll.druid);
           window.history.pushState({ roll: currentRoll }, "", url);
         }
-        initWebMidi();
       },
     );
   };
@@ -350,8 +316,10 @@
   {/if}
   <LoadingSpinner showLoadingSpinner={appWaiting} />
 </div>
+<WebMidi bind:this={webMidi} {samplePlayer} />
 <SamplePlayer
   bind:this={samplePlayer}
+  {webMidi}
   on:loading={({ detail: loadingSamples }) => {
     appWaiting = true;
     loadingSamples.then(() => (appWaiting = false)).catch(() => {});
