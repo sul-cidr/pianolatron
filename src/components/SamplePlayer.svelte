@@ -75,10 +75,6 @@
   };
 
   const toggleSustain = (onOff, fromMidi) => {
-    if (fromMidi) {
-      $sustainOnOff = onOff;
-      return;
-    }
     onOff ? piano.pedalDown() : piano.pedalUp();
     if (!fromMidi) {
       webMidi?.sendMidiMsg("controller", "sustain", onOff);
@@ -86,10 +82,6 @@
   };
 
   const toggleSoft = (onOff, fromMidi) => {
-    if (fromMidi) {
-      $softOnOff = onOff;
-      return;
-    }
     if (!fromMidi) {
       webMidi?.sendMidiMsg("controller", "soft", onOff);
     }
