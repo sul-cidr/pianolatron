@@ -87,6 +87,7 @@
 
   import catalog from "./config/catalog.json";
 
+  let firstLoad = true;
   let appReady = false;
   let appWaiting = true;
   let mididataReady;
@@ -169,7 +170,7 @@
   const resetApp = () => {
     rollViewer?.$destroy();
     mididataReady = false;
-    clearNotification();
+    if (!firstLoad) clearNotification();
     appReady = false;
     pausePlayback();
     resetPlayback();
@@ -216,6 +217,7 @@
         $rollPedalingOnOff = $isReproducingRoll;
         appReady = true;
         appWaiting = false;
+        firstLoad = false;
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
