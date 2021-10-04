@@ -224,9 +224,9 @@
   };
 
   const stopAllNotes = () => {
-    toggleSustain(false);
+    piano.pedalUp();
     $activeNotes.forEach((midiNumber) => stopNote(midiNumber));
-    if ($sustainOnOff) toggleSustain(true);
+    if ($sustainOnOff) piano.pedalDown();
   };
 
   const resetPlayback = () => {
