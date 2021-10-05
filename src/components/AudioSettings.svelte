@@ -19,14 +19,14 @@
   let sampleVelocitiesSliderValue;
   let reverbWetDrySliderValue;
 
-  let splineCurves = new Array($velocityCurves.keyboardRegions.length);
-  let splineContainers = new Array($velocityCurves.keyboardRegions.length);
+  const splineCurves = new Array($velocityCurves.keyboardRegions.length);
+  const splineContainers = new Array($velocityCurves.keyboardRegions.length);
   const initSplines = (indexToReset) => {
     $velocityCurves.keyboardRegions.forEach((keyboardRegion, c) => {
       if (indexToReset !== undefined && indexToReset !== c) return;
       while (splineContainers[c].firstChild)
         splineContainers[c].removeChild(splineContainers[c].firstChild);
-      let cs = new CanvasSpliner(
+      const cs = new CanvasSpliner(
         splineContainers[c],
         splineContainers[c].clientWidth,
         splineContainers[c].clientWidth,

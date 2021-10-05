@@ -154,10 +154,10 @@
         noteNumber >= keyboardRegion.firstMidi &&
         noteNumber <= keyboardRegion.lastMidi
       ) {
-        baseVelocity =
+        [, baseVelocity] =
           keyboardRegion.velocityCurve[
             parseInt(keyboardRegion.velocityCurve.length * baseVelocity, 10)
-          ][1];
+          ];
       }
     });
     const modifiedVelocity =
