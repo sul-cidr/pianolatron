@@ -1,7 +1,15 @@
 <script>
   import { onMount } from "svelte";
   import { clamp } from "../lib/utils";
-  import { midiInputs, midiOutputs } from "../stores";
+  import { midiInputs, midiOutputs, webMidiEnabled } from "../stores";
+  import MidiWriter from "midi-writer-js";
+  import {
+    rollMetadata,
+    sustainOnOff,
+    softOnOff,
+    recordingOnOff,
+    recordingInBuffer,
+  } from "../stores";
 
   export let startNote;
   export let stopNote;
@@ -9,6 +17,8 @@
   export let toggleSoft;
 
   let mediaAccess;
+  let midiOuts = [];
+  let trackData = null;
 
   const midiBytes = {
     NOTE_ON: 0x90, // = the event code (0x90) + channel (0)
@@ -18,14 +28,64 @@
     SOFT: 0x43,
   };
 
+  const startPauseRecording = (onOff) => {
+    if (onOff && !trackData) {
+      $recordingInBuffer = true;
+      trackData = new MidiWriter.Track();
+      trackData.addEvent(new MidiWriter.ProgramChangeEvent({ instrument: 1 }));
+      trackData.setTempo(60);
+      if ($sustainOnOff) trackData.controllerChange(MIDI_SUSTAIN, 127);
+      if ($softOnOff) trackData.controllerChange(MIDI_SOFT, 127);
+    }
+  };
+
+  const exportRecording = () => {
+    $recordingOnOff = false;
+    //trackData.addEvent(new MidiWriter.EndTrackEvent()); // This doesn't work, for unknown reasons
+    const write = new MidiWriter.Writer(trackData);
+    console.log($rollMetadata);
+
+    var element = document.createElement("a");
+    element.setAttribute("href", write.dataUri());
+    element.setAttribute("download", `${$rollMetadata.DRUID}.mid`);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+
+    trackData = null;
+    $recordingInBuffer = false;
+  };
+
   const sendMidiMsg = (msgType, entity, value) => {
-    $midiOutputs.forEach((output) =>
-      output.send([
-        midiBytes[msgType],
-        midiBytes[entity] || entity,
-        clamp(parseInt(value * 127, 10), 0, 127),
-      ]),
-    );
+    let msg = [
+      midiBytes[msgType],
+      midiBytes[entity] || entity,
+      clamp(parseInt(value * 127, 10), 0, 127),
+    ];
+    $midiOutputs.forEach((output) => output.send(msg));
+    if (msgType == "note_on") {
+      if ($recordingOnOff)
+        trackData.addEvent(
+          new MidiWriter.NoteOnEvent({
+            pitch: entity,
+            velocity: clamp(parseInt(value * 127, 10), 0, 127),
+          }),
+        );
+    } else if (msgType == "note_off") {
+      if ($recordingOnOff)
+        trackData.addEvent(
+          new MidiWriter.NoteOnEvent({ pitch: entity, velocity: 0 }),
+        );
+    } else if (msgType == "controller") {
+      if (entity == "sustain") {
+        if ($recordingOnOff)
+          trackData.controllerChange(MIDI_SUSTAIN, (value ? 1 : 0) * 127);
+      } else if (entity == "soft") {
+        if ($recordingOnOff)
+          trackData.controllerChange(MIDI_SOFT, (value ? 1 : 0) * 127);
+      }
+    }
   };
 
   const receiveMidiMsg = ({ data: [msgType, entity, value] }) => {
@@ -119,5 +179,7 @@
     };
   });
 
-  export { sendMidiMsg };
+  $: startPauseRecording($recordingOnOff);
+
+  export { sendMidiMsg, exportRecording };
 </script>

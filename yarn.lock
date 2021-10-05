@@ -4085,6 +4085,13 @@ midi-player-js@^2.0.16:
   resolved "https://registry.yarnpkg.com/midi-player-js/-/midi-player-js-2.0.16.tgz#41167859e3f430e55eeb962887cb498726d6c570"
   integrity sha512-Y1yCRvvSjJjT5J4U8T4XTCDF1FLXtw8Otvq5BAmIob/2cj10aQUDrPDFByTWeuMRPu6/nLhusROc1DuTLCzRnw==
 
+midi-writer-js@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/midi-writer-js/-/midi-writer-js-2.0.1.tgz#732babdbd482ba3ceac88080f6beeedbd35edfcc"
+  integrity sha512-wVoE/o5Lyw2VQaUdnJQtqVhpEy9DlhlYQ/OkSCtJEhwodKXIXk/wfYQmjrVkW3abdZJqafnvPfSM50SvmSbltw==
+  dependencies:
+    tonal-midi "^0.69.7"
+
 mime-db@1.49.0, "mime-db@>= 1.43.0 < 2":
   version "1.49.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.49.0.tgz#f3dfde60c99e9cf3bc9701d687778f537001cbed"
@@ -4340,6 +4347,11 @@ normalize-url@^6.0.1:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-6.1.0.tgz#40d0885b535deffe3f3147bec877d05fe4c5668a"
   integrity sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==
+
+note-parser@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/note-parser/-/note-parser-2.0.1.tgz#2438fd57a46894b402b3a2071798660129c8fbc1"
+  integrity sha1-JDj9V6RolLQCs6IHF5hmASnI+8E=
 
 npm-bundled@^1.1.1:
   version "1.1.2"
@@ -6002,6 +6014,13 @@ toidentifier@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
   integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
+
+tonal-midi@^0.69.7:
+  version "0.69.7"
+  resolved "https://registry.yarnpkg.com/tonal-midi/-/tonal-midi-0.69.7.tgz#e754ec93f3dbdb28a6d39d42457c33ad245ffa47"
+  integrity sha1-51Tsk/Pb2yim051CRXwzrSRf+kc=
+  dependencies:
+    note-parser "^2.0.1"
 
 tone@^14.7.77:
   version "14.7.77"

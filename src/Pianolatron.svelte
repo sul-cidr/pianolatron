@@ -75,6 +75,7 @@
   import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
+  import RecordingControls from "./components/RecordingControls.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
   import Notification, {
@@ -279,6 +280,7 @@
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
+        <RecordingControls {webMidi} />
         {#if !holesByTickInterval.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at

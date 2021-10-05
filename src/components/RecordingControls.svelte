@@ -1,0 +1,37 @@
+<style lang="scss">
+  #recording-controls {
+    margin: 0 0.5em;
+  }
+
+  button {
+    @include button;
+
+    &.recording-on {
+      background-color: yellow;
+      border-color: var(--primary-accent);
+      color: var(--primary-accent);
+    }
+  }
+</style>
+
+<script>
+  import { recordingOnOff, recordingInBuffer } from "../stores";
+
+  export let webMidi;
+</script>
+
+<div id="recording-controls">
+  <div>Record MIDI</div>
+  <button
+    type="button"
+    class:recording-on={$recordingOnOff}
+    aria-pressed={$recordingOnOff}
+    on:click={() => ($recordingOnOff = !$recordingOnOff)}
+    >Start/Pause
+  </button>
+  {#if $recordingInBuffer}
+    <button type="button" on:click={() => webMidi.exportRecording()}
+      >Export
+    </button>
+  {/if}
+</div>

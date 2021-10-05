@@ -81,6 +81,10 @@ export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
 
+// Recording state
+export const recordingOnOff = createStore(false);
+export const recordingInBuffer = createStore(false);
+
 // User Settings
 export const userSettings = createPersistedStore("userSettings", {
   theme: "cardinal",
