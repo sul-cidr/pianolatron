@@ -3,13 +3,7 @@
   import { clamp } from "../lib/utils";
   import { midiInputs, midiOutputs, webMidiEnabled } from "../stores";
   import MidiWriter from "midi-writer-js";
-  import {
-    rollMetadata,
-    sustainOnOff,
-    softOnOff,
-    recordingOnOff,
-    recordingInBuffer,
-  } from "../stores";
+  import { rollMetadata, recordingOnOff, recordingInBuffer } from "../stores";
 
   export let startNote;
   export let stopNote;
@@ -18,6 +12,9 @@
 
   let mediaAccess;
   let trackData = null;
+  let recordingStartTime = null;
+  let heldDown = new Object();
+  let eventsByTime = new Object();
 
   const midiBytes = {
     NOTE_ON: 0x90, // = the event code (0x90) + channel (0)
@@ -28,32 +25,73 @@
   };
 
   const startPauseRecording = (onOff) => {
-    if (onOff && !trackData) {
+    if (onOff) {
       $recordingInBuffer = true;
-      trackData = new MidiWriter.Track();
-      trackData.addEvent(new MidiWriter.ProgramChangeEvent({ instrument: 1 }));
-      trackData.setTempo(60);
-      if ($sustainOnOff) trackData.controllerChange(MIDI_SUSTAIN, 127);
-      if ($softOnOff) trackData.controllerChange(MIDI_SOFT, 127);
+      if (!recordingStartTime) recordingStartTime = Date.now();
     }
+  };
+
+  const clearRecording = () => {
+    trackData = null;
+    $recordingInBuffer = false;
+    recordingStartTime = null;
+    eventsByTime = new Object();
+    heldDown = new Object();
   };
 
   const exportRecording = () => {
     $recordingOnOff = false;
-    //trackData.addEvent(new MidiWriter.EndTrackEvent()); // This doesn't work, for unknown reasons
-    const write = new MidiWriter.Writer(trackData);
-    console.log($rollMetadata);
+
+    const tempo = 60.0;
+    // midi-writer-js seems to use ticks per beat/quarter = 128
+    //const ticksPerSecond = samplePlayer.midiSamplePlayer.division;
+    const ticksPerSecond = 128;
+
+    trackData = new MidiWriter.Track();
+    trackData.addEvent(new MidiWriter.ProgramChangeEvent({ instrument: 1 }));
+    trackData.setTempo(tempo);
+
+    Object.keys(eventsByTime)
+      .sort()
+      .forEach((time) => {
+        eventsByTime[time].forEach((event) => {
+          if (event[0] == "note") {
+            const startTick = parseInt(
+              ((parseInt(time) - recordingStartTime) / 1000) * ticksPerSecond,
+            );
+            const durationInTicks = parseInt(
+              (event[2] / 1000) * ticksPerSecond,
+            );
+            trackData.addEvent(
+              new MidiWriter.NoteEvent({
+                pitch: event[1],
+                startTick: startTick,
+                duration: `t${durationInTicks}`,
+                velocity: event[3],
+              }),
+            );
+          } else if (event[0] in ["sustain", "soft"]) {
+            trackData.controllerChange(
+              event[0] === "sustain" ? MIDI_SUSTAIN : MIDI_SOFT,
+              event[1],
+            );
+          }
+        });
+      });
+
+    //trackData.addEvent(new MidiWriter.EndTrackEvent()); // This doesn't work, for unclear reasons
+    const writer = new MidiWriter.Writer(trackData);
+    const midiDataURI = writer.dataUri();
 
     var element = document.createElement("a");
-    element.setAttribute("href", write.dataUri());
+    element.setAttribute("href", midiDataURI);
     element.setAttribute("download", `${$rollMetadata.DRUID}.mid`);
     element.style.display = "none";
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
 
-    trackData = null;
-    $recordingInBuffer = false;
+    clearRecording();
   };
 
   const sendMidiMsg = (msgType, entity, value) => {
@@ -63,31 +101,46 @@
       clamp(parseInt(value * 127, 10), 0, 127),
     ];
     $midiOutputs.forEach((output) => output.send(msg));
-    if (msgType == "note_on") {
-      if ($recordingOnOff)
-        trackData.addEvent(
-          new MidiWriter.NoteOnEvent({
-            pitch: entity,
-            velocity: clamp(parseInt(value * 127, 10), 0, 127),
-          }),
-        );
-    } else if (msgType == "note_off") {
-      if ($recordingOnOff) {
-        trackData.addEvent(
-          new MidiWriter.NoteOffEvent({
-            pitch: entity,
-            velocity: 0,
-          }),
-        );
-      }
+    if (msgType == "note_on" && $recordingOnOff) {
+      trackData.addEvent(
+        new MidiWriter.NoteOnEvent({
+          pitch: entity,
+          velocity: clamp(parseInt(value * 127, 10), 0, 127),
+        }),
+      );
+    } else if (msgType == "note_off" && $recordingOnOff) {
+      trackData.addEvent(
+        new MidiWriter.NoteOffEvent({
+          pitch: entity,
+          velocity: 0,
+        }),
+      );
     } else if (msgType == "controller") {
-      if (entity == "sustain") {
-        if ($recordingOnOff)
-          trackData.controllerChange(MIDI_SUSTAIN, (value ? 1 : 0) * 127);
-      } else if (entity == "soft") {
-        if ($recordingOnOff)
-          trackData.controllerChange(MIDI_SOFT, (value ? 1 : 0) * 127);
-      }
+      if (entity == "sustain" && $recordingOnOff)
+        trackData.controllerChange(MIDI_SUSTAIN, (value ? 1 : 0) * 127);
+      else if (entity == "soft" && $recordingOnOff)
+        trackData.controllerChange(MIDI_SOFT, (value ? 1 : 0) * 127);
+      if ($recordingOnOff && !(entity in heldDown))
+        heldDown[entity] = [Date.now(), parseInt(value * 100, 10)]; // midi-writer-js uses velocity 1-100 (???)
+    } else if (msgType == "note_off" && $recordingOnOff && entity in heldDown) {
+      const startTime = heldDown[entity][0];
+      const duration = Date.now() - startTime;
+      const event = ["note", entity, duration, heldDown[entity][1]];
+      eventsByTime[startTime]?.length
+        ? eventsByTime[startTime].push(event)
+        : (eventsByTime[startTime] = [event]);
+      delete heldDown[entity];
+    } else if (
+      msgType == "controller" &&
+      entity in ["sustain", "soft"] &&
+      $recordingOnOff
+    ) {
+      // Control change events (pedal on/off) have no duration
+      const event = [entity, (value ? 1 : 0) * 127];
+      const startTime = Date.now();
+      eventsByTime[startTime]?.length
+        ? eventsByTime[startTime].push(event)
+        : (eventsByTime[startTime] = [event]);
     }
   };
 
@@ -184,5 +237,5 @@
 
   $: startPauseRecording($recordingOnOff);
 
-  export { sendMidiMsg, exportRecording };
+  export { sendMidiMsg, exportRecording, clearRecording };
 </script>

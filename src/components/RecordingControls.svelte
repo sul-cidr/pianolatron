@@ -30,6 +30,9 @@
     >Start/Pause
   </button>
   {#if $recordingInBuffer}
+    <button type="button" on:click={() => webMidi.clearRecording()}
+      >Clear
+    </button>
     <button type="button" on:click={() => webMidi.exportRecording()}
       >Export
     </button>

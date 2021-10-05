@@ -31,7 +31,6 @@
   import WebMidi from "./WebMidi.svelte";
 
   let webMidi;
-
   let tempoMap;
   let pedalingMap;
   let notesMap;
