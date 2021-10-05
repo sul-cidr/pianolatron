@@ -49,7 +49,7 @@
       mousewheel={false}
       on:change={({ target: { value } }) => ($sampleVelocities = value)}
     >
-      <span slot="label">Sample Count</span>
+      <svelte:fragment slot="label">Sample Count</svelte:fragment>
     </SliderControl>
     <SliderControl
       bind:value={reverbWetDrySliderValue}
@@ -60,7 +60,7 @@
       mousewheel={false}
       on:change={({ target: { value } }) => ($reverbWetDry = value)}
     >
-      <span slot="label">Reverb</span>
+      <svelte:fragment slot="label">Reverb</svelte:fragment>
     </SliderControl>
   </fieldset>
   <VelocitySpliner keyboardRegion={velocityCurveLow} {accentColor} />
