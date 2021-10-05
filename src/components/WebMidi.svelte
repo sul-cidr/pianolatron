@@ -17,7 +17,6 @@
   export let toggleSoft;
 
   let mediaAccess;
-  let midiOuts = [];
   let trackData = null;
 
   const midiBytes = {
@@ -73,10 +72,14 @@
           }),
         );
     } else if (msgType == "note_off") {
-      if ($recordingOnOff)
+      if ($recordingOnOff) {
         trackData.addEvent(
-          new MidiWriter.NoteOnEvent({ pitch: entity, velocity: 0 }),
+          new MidiWriter.NoteOffEvent({
+            pitch: entity,
+            velocity: 0,
+          }),
         );
+      }
     } else if (msgType == "controller") {
       if (entity == "sustain") {
         if ($recordingOnOff)
