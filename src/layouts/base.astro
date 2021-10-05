@@ -14,15 +14,15 @@ const datetime = new Date().toISOString();
     <meta name="version" content={commit}>
     <meta name="dcterms.modified" content={datetime}>
     <title>{title}</title>
+    <script>
+      const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
+      theme && document.documentElement.setAttribute("data-theme", theme);
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
     <link rel="preload" href={Astro.site.href + "cidr.trsp.300x176.png"} as="image">
     <link rel="stylesheet" href={Astro.resolve("../styles/styles.css")} />
-    <script>
-      const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
-      theme && document.documentElement.setAttribute("data-theme", theme);
-    </script>
   </head>
   <body>
     <slot/>
