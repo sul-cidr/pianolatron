@@ -31,9 +31,6 @@
   const initSpline = () => {
     while (splinerContainer.firstChild)
       splinerContainer.removeChild(splinerContainer.firstChild);
-    if (!accentColor)
-      accentColor =
-        getComputedStyle(splinerContainer).getPropertyValue("color");
 
     canvasSpliner = new CanvasSpliner(
       splinerContainer,
@@ -41,6 +38,7 @@
       splinerContainer.clientHeight,
       "monotonic",
     );
+
     if ($keyboardRegion.velocityPoints) {
       $keyboardRegion.velocityPoints._points.forEach((point) => {
         canvasSpliner.add({
@@ -53,17 +51,22 @@
       canvasSpliner.add({ x: 0.5, y: 0.5 });
       canvasSpliner.add({ x: 1, y: 1 });
     }
+
     canvasSpliner.setControlPointRadius(5);
-    canvasSpliner.setControlPointColor("idle", accentColor);
-    canvasSpliner.setControlPointColor("hovered", accentColor);
-    canvasSpliner.setControlPointColor("grabbed", accentColor);
-    canvasSpliner.setCurveColor("idle", accentColor);
     canvasSpliner.setCurveColor("moving", "#000000");
     canvasSpliner.setCurveThickness(0.5);
     canvasSpliner.setGridColor("#dad7cb");
     canvasSpliner.setGridStep(0.1);
-    canvasSpliner.setTextColor(accentColor);
     canvasSpliner.setBackgroundColor("#FFFFFF");
+
+    if (accentColor) {
+      canvasSpliner.setControlPointColor("idle", accentColor);
+      canvasSpliner.setControlPointColor("hovered", accentColor);
+      canvasSpliner.setControlPointColor("grabbed", accentColor);
+      canvasSpliner.setCurveColor("idle", accentColor);
+      canvasSpliner.setTextColor(accentColor);
+    }
+
     canvasSpliner.draw();
 
     ["movePoint", "releasePoint", "pointAdded", "pointRemoved"].forEach(
