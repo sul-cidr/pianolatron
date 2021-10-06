@@ -176,10 +176,11 @@
 
   const clamp = (_value) => Math.min(Math.max(_value, min), max);
 
-  const handleWheel = ({ deltaY }) => {
+  const handleWheel = (event) => {
     if (!mousewheel) return;
+    event.preventDefault();
     const precision = (step.toString().split(".")[1] || "").length;
-    if (deltaY > 0) {
+    if (event.deltaY > 0) {
       value = clamp((Number(value) + Number(step)).toFixed(precision));
     } else {
       value = clamp((Number(value) - Number(step)).toFixed(precision));
