@@ -104,7 +104,7 @@
       canvasSpliner.add({ x: 1, y: 1 });
     }
 
-    canvasSpliner.setControlPointRadius(5);
+    canvasSpliner.setControlPointRadius(7);
     canvasSpliner.setCurveColor("moving", "#000000");
     canvasSpliner.setCurveThickness(0.5);
     canvasSpliner.setGridColor("#dad7cb");
