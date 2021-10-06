@@ -54,29 +54,38 @@
   }
 
   p.error-message {
-    border-radius: 5px;
-    border: 1px solid red;
     color: red;
     padding: 0.25em;
+    margin: 0.5em 0 0;
+  }
+
+  .panels {
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-top: 4px;
+    position: relative;
   }
 
   dl {
     display: grid;
+    flex: none;
     gap: 0 0.25em;
     grid-auto-rows: min-content;
     grid-template-columns: auto auto;
-    height: 400px;
     justify-content: space-between;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding-top: 4px;
+    width: 100%;
+
+    &:not(:first-child) {
+      margin-left: -100%;
+    }
   }
 
   p.reset {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin: 1em 0;
+    margin: 0.5em 0 0;
   }
 
   button {
@@ -94,6 +103,19 @@
       stroke: black;
     }
   }
+
+  dl,
+  p.reset,
+  p.error-message {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+
+    &.shown {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
 </style>
 
 <script context="module">
@@ -105,7 +127,7 @@
 </script>
 
 <script>
-  import { fade, slide } from "svelte/transition";
+  import { fade } from "svelte/transition";
   import PanelSwitcher from "./PanelSwitcher.svelte";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
   import Icon from "../ui-components/Icon.svelte";
@@ -199,27 +221,35 @@
       </button>
     </header>
     <p>Click the edit button to reassign a control button.</p>
-    {#if errorMessage}
-      <p class="error-message" transition:slide>{errorMessage}</p>
-    {/if}
     <PanelSwitcher bind:selectedPanel {panels} class="panel-switcher" />
-    <dl>
-      {#each panels[selectedPanel].shortcuts as shortcut}
-        <KeyboardShortcutEditorRow
-          shortcut={$keyMap[shortcut]}
-          meta={keyMapMeta[shortcut]}
-          on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
-          on:reset={() => updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
-        />
+    <div class="panels">
+      {#each Object.keys(panels) as panel}
+        <dl class:shown={selectedPanel === panel}>
+          {#each panels[panel].shortcuts as shortcut}
+            <KeyboardShortcutEditorRow
+              shortcut={$keyMap[shortcut]}
+              meta={keyMapMeta[shortcut]}
+              on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
+              on:reset={() =>
+                updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
+            />
+          {/each}
+        </dl>
       {/each}
-    </dl>
-    {#if Object.values($keyMap).some((shortcut) => shortcut.isChanged)}
-      <p class="reset" transition:slide>
-        Reset to defaults: <button on:click={resetShortcuts}>
-          <Icon name="reset" height="24" width="24" />
-        </button>
-      </p>
-    {/if}
+    </div>
+    <p class="error-message" class:shown={errorMessage}>
+      {errorMessage}
+    </p>
+    <p
+      class="reset"
+      class:shown={Object.values($keyMap).some(
+        (shortcut) => shortcut.isChanged,
+      )}
+    >
+      Reset to defaults: <button on:click={resetShortcuts}>
+        <Icon name="reset" height="24" width="24" />
+      </button>
+    </p>
   </div>
 {/if}
 <svelte:window
