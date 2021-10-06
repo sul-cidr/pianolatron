@@ -1,5 +1,5 @@
 <style>
-  .splineCell {
+  .spliner-container {
     height: 200px;
   }
 </style>
@@ -12,61 +12,65 @@
   export let keyboardRegion;
   export let accentColor;
 
-  let container;
+  let splinerContainer;
+  let canvasSpliner;
+
+  const getVelocityCurve = () => {
+    const yCoords = canvasSpliner.getYSeriesInterpolated();
+    return [...canvasSpliner.getXSeriesInterpolated()].map((xCoord, i) => [
+      xCoord,
+      yCoords[i],
+    ]);
+  };
+
+  const onCurveUpdated = () => {
+    $keyboardRegion.velocityCurve = getVelocityCurve();
+    $keyboardRegion.velocityPoints = canvasSpliner._pointCollection;
+  };
 
   const initSpline = () => {
-    while (container.firstChild) container.removeChild(container.firstChild);
+    while (splinerContainer.firstChild)
+      splinerContainer.removeChild(splinerContainer.firstChild);
     if (!accentColor)
-      accentColor = getComputedStyle(container).getPropertyValue("color");
+      accentColor =
+        getComputedStyle(splinerContainer).getPropertyValue("color");
 
-    const cs = new CanvasSpliner(
-      container,
-      container.clientWidth,
-      container.clientHeight,
+    canvasSpliner = new CanvasSpliner(
+      splinerContainer,
+      splinerContainer.clientWidth,
+      splinerContainer.clientHeight,
       "monotonic",
     );
     if ($keyboardRegion.velocityPoints) {
       $keyboardRegion.velocityPoints._points.forEach((point) => {
-        cs.add({
+        canvasSpliner.add({
           x: point.x / $keyboardRegion.velocityPoints._max.x,
           y: point.y / $keyboardRegion.velocityPoints._max.y,
         });
       });
     } else {
-      cs.add({ x: 0, y: 0 });
-      cs.add({ x: 0.5, y: 0.5 });
-      cs.add({ x: 1, y: 1 });
+      canvasSpliner.add({ x: 0, y: 0 });
+      canvasSpliner.add({ x: 0.5, y: 0.5 });
+      canvasSpliner.add({ x: 1, y: 1 });
     }
-    cs.setControlPointRadius(5);
-    cs.setControlPointColor("idle", accentColor);
-    cs.setControlPointColor("hovered", accentColor);
-    cs.setControlPointColor("grabbed", accentColor);
-    cs.setCurveColor("idle", accentColor);
-    cs.setCurveColor("moving", "#000000");
-    cs.setCurveThickness(0.5);
-    cs.setGridColor("#dad7cb");
-    cs.setGridStep(0.1);
-    cs.setTextColor(accentColor);
-    cs.setBackgroundColor("#FFFFFF");
-    cs.draw();
-    const getVelocityCurve = (spliner) => {
-      const yCoords = spliner.getYSeriesInterpolated();
-      const combinedCoords = [];
-      spliner.getXSeriesInterpolated().forEach((xCoord, i) => {
-        combinedCoords.push([xCoord, yCoords[i]]);
-      });
-      return combinedCoords;
-    };
-    $keyboardRegion.velocityCurve = getVelocityCurve(cs);
-    $keyboardRegion.velocityPoints = cs._pointCollection;
+    canvasSpliner.setControlPointRadius(5);
+    canvasSpliner.setControlPointColor("idle", accentColor);
+    canvasSpliner.setControlPointColor("hovered", accentColor);
+    canvasSpliner.setControlPointColor("grabbed", accentColor);
+    canvasSpliner.setCurveColor("idle", accentColor);
+    canvasSpliner.setCurveColor("moving", "#000000");
+    canvasSpliner.setCurveThickness(0.5);
+    canvasSpliner.setGridColor("#dad7cb");
+    canvasSpliner.setGridStep(0.1);
+    canvasSpliner.setTextColor(accentColor);
+    canvasSpliner.setBackgroundColor("#FFFFFF");
+    canvasSpliner.draw();
+
     ["movePoint", "releasePoint", "pointAdded", "pointRemoved"].forEach(
-      (eventType) => {
-        cs.on(eventType, () => {
-          $keyboardRegion.velocityCurve = getVelocityCurve(cs);
-          $keyboardRegion.velocityPoints = cs._pointCollection;
-        });
-      },
+      (eventType) => canvasSpliner.on(eventType, onCurveUpdated),
     );
+
+    return () => (canvasSpliner = null);
   };
 
   onMount(initSpline);
@@ -78,12 +82,12 @@
       $keyboardRegion.lastMidi,
     )} Velocity Curve</legend
   >
-  <div bind:this={container} class="splineCell" />
+  <div bind:this={splinerContainer} class="spliner-container" />
   <div>X axis = input, Y axis = output</div>
   <button
     type="button"
     on:click={() => {
-      $keyboardRegion.velocityPoints = null;
+      keyboardRegion.reset();
       initSpline();
     }}>Reset</button
   >
