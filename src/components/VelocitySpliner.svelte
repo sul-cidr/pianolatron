@@ -8,6 +8,25 @@
     width: 100%;
   }
 
+  .x-axis,
+  .y-axis {
+    position: absolute;
+    color: rgba(black, 0.5);
+  }
+
+  .x-axis {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .y-axis {
+    left: 0;
+    top: 50%;
+    transform: rotate(270deg) translateX(-50%);
+    transform-origin: top left;
+  }
+
   button {
     background: none;
     border: none;
@@ -130,6 +149,7 @@
         }}><Icon name="reset" height="24" width="24" /></button
       >
     {/if}
+    <span class="x-axis">input velocity</span>
+    <span class="y-axis">output velocity</span>
   </div>
-  <div class="legend">X axis = input, Y axis = output</div>
 </fieldset>
