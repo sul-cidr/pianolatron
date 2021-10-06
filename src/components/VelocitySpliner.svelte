@@ -1,12 +1,45 @@
-<style>
+<style lang="scss">
+  .wrapper {
+    position: relative;
+  }
+
   .spliner-container {
     height: 200px;
+    width: 100%;
+  }
+
+  button {
+    background: none;
+    border: none;
+    bottom: 4px;
+    cursor: pointer;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 4px;
+
+    :global(svg) {
+      stroke: grey;
+    }
+
+    &:not([disabled]):hover :global(svg) {
+      stroke: black;
+    }
+
+    &[disabled] {
+      cursor: default;
+      opacity: 0.5;
+    }
   }
 </style>
 
 <script>
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
   import { CanvasSpliner } from "CanvasSpliner";
+  import Icon from "../ui-components/Icon.svelte";
+  import { tooltip } from "../lib/tooltip-action";
   import { getNoteName } from "../lib/utils";
 
   export let keyboardRegion;
@@ -85,13 +118,18 @@
       $keyboardRegion.lastMidi,
     )} Velocity Curve</legend
   >
-  <div bind:this={splinerContainer} class="spliner-container" />
-  <div>X axis = input, Y axis = output</div>
-  <button
-    type="button"
-    on:click={() => {
-      keyboardRegion.reset();
-      initSpline();
-    }}>Reset</button
-  >
+  <div class="wrapper">
+    <div bind:this={splinerContainer} class="spliner-container" />
+    {#if $keyboardRegion.velocityPoints}
+      <button
+        transition:fade
+        use:tooltip={"Reset"}
+        on:click={() => {
+          keyboardRegion.reset();
+          initSpline();
+        }}><Icon name="reset" height="24" width="24" /></button
+      >
+    {/if}
+  </div>
+  <div class="legend">X axis = input, Y axis = output</div>
 </fieldset>
