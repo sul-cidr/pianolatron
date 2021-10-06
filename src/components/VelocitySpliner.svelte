@@ -10,11 +10,15 @@
   import { getNoteName } from "../lib/utils";
 
   export let keyboardRegion;
+  export let accentColor;
 
   let container;
 
   const initSpline = () => {
     while (container.firstChild) container.removeChild(container.firstChild);
+    if (!accentColor)
+      accentColor = getComputedStyle(container).getPropertyValue("color");
+
     const cs = new CanvasSpliner(
       container,
       container.clientWidth,
@@ -34,15 +38,15 @@
       cs.add({ x: 1, y: 1 });
     }
     cs.setControlPointRadius(5);
-    cs.setControlPointColor("idle", "#8c1515");
-    cs.setControlPointColor("hovered", "#8c1515");
-    cs.setControlPointColor("grabbed", "#8c1515");
-    cs.setCurveColor("idle", "#8c1515");
+    cs.setControlPointColor("idle", accentColor);
+    cs.setControlPointColor("hovered", accentColor);
+    cs.setControlPointColor("grabbed", accentColor);
+    cs.setCurveColor("idle", accentColor);
     cs.setCurveColor("moving", "#000000");
     cs.setCurveThickness(0.5);
     cs.setGridColor("#dad7cb");
     cs.setGridStep(0.1);
-    cs.setTextColor("#8c1515");
+    cs.setTextColor(accentColor);
     cs.setBackgroundColor("#FFFFFF");
     cs.draw();
     const getVelocityCurve = (spliner) => {

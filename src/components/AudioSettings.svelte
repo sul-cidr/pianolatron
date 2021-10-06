@@ -13,6 +13,10 @@
   let sampleVelocitiesSliderValue;
   let reverbWetDrySliderValue;
 
+  const accentColor = getComputedStyle(
+    document.documentElement,
+  ).getPropertyValue("--primary-accent");
+
   $: sampleVelocitiesSliderValue = $sampleVelocities;
   $: reverbWetDrySliderValue = $reverbWetDry;
 </script>
@@ -59,7 +63,7 @@
       <span slot="label">Reverb</span>
     </SliderControl>
   </fieldset>
-  <VelocitySpliner keyboardRegion={velocityCurveLow} />
-  <VelocitySpliner keyboardRegion={velocityCurveMid} />
-  <VelocitySpliner keyboardRegion={velocityCurveHigh} />
+  <VelocitySpliner keyboardRegion={velocityCurveLow} {accentColor} />
+  <VelocitySpliner keyboardRegion={velocityCurveMid} {accentColor} />
+  <VelocitySpliner keyboardRegion={velocityCurveHigh} {accentColor} />
 </div>
