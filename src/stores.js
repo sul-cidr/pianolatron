@@ -57,13 +57,18 @@ export const sampleVolumes = createPersistedStore("sampleVolumes", {
 });
 export const sampleVelocities = createPersistedStore("sampleVelocities", 4);
 export const reverbWetDry = createPersistedStore("reverbWetDry", 0.8);
-export const velocityCurves = createPersistedStore("velocityCurves", {
-  keyboardRegions: [
-    new KeyboardRegion(21, 49),
-    new KeyboardRegion(50, 78),
-    new KeyboardRegion(79, 108),
-  ],
-});
+export const velocityCurveLow = createPersistedStore(
+  "velocityCurveLow",
+  new KeyboardRegion(21, 49),
+);
+export const velocityCurveMid = createPersistedStore(
+  "velocityCurveMid",
+  new KeyboardRegion(50, 78),
+);
+export const velocityCurveHigh = createPersistedStore(
+  "velocityCurveHigh",
+  new KeyboardRegion(79, 108),
+);
 
 // Playback State
 export const currentTick = createStore(0);

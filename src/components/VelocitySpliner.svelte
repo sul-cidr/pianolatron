@@ -21,11 +21,11 @@
       container.clientHeight,
       "monotonic",
     );
-    if (keyboardRegion.velocityPoints) {
-      keyboardRegion.velocityPoints._points.forEach((point) => {
+    if ($keyboardRegion.velocityPoints) {
+      $keyboardRegion.velocityPoints._points.forEach((point) => {
         cs.add({
-          x: point.x / keyboardRegion.velocityPoints._max.x,
-          y: point.y / keyboardRegion.velocityPoints._max.y,
+          x: point.x / $keyboardRegion.velocityPoints._max.x,
+          y: point.y / $keyboardRegion.velocityPoints._max.y,
         });
       });
     } else {
@@ -53,13 +53,13 @@
       });
       return combinedCoords;
     };
-    keyboardRegion.velocityCurve = getVelocityCurve(cs);
-    keyboardRegion.velocityPoints = cs._pointCollection;
+    $keyboardRegion.velocityCurve = getVelocityCurve(cs);
+    $keyboardRegion.velocityPoints = cs._pointCollection;
     ["movePoint", "releasePoint", "pointAdded", "pointRemoved"].forEach(
       (eventType) => {
         cs.on(eventType, () => {
-          keyboardRegion.velocityCurve = getVelocityCurve(cs);
-          keyboardRegion.velocityPoints = cs._pointCollection;
+          $keyboardRegion.velocityCurve = getVelocityCurve(cs);
+          $keyboardRegion.velocityPoints = cs._pointCollection;
         });
       },
     );
@@ -70,8 +70,8 @@
 
 <fieldset>
   <legend
-    >{getNoteName(keyboardRegion.firstMidi)}-{getNoteName(
-      keyboardRegion.lastMidi,
+    >{getNoteName($keyboardRegion.firstMidi)}-{getNoteName(
+      $keyboardRegion.lastMidi,
     )} Velocity Curve</legend
   >
   <div bind:this={container} class="splineCell" />

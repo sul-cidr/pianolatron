@@ -3,7 +3,9 @@
     sampleVolumes,
     sampleVelocities,
     reverbWetDry,
-    velocityCurves,
+    velocityCurveLow,
+    velocityCurveMid,
+    velocityCurveHigh,
   } from "../stores";
   import SliderControl from "../ui-components/SliderControl.svelte";
   import VelocitySpliner from "./VelocitySpliner.svelte";
@@ -57,7 +59,7 @@
       <span slot="label">Reverb</span>
     </SliderControl>
   </fieldset>
-  {#each $velocityCurves.keyboardRegions as keyboardRegion}
-    <VelocitySpliner {keyboardRegion} />
-  {/each}
+  <VelocitySpliner keyboardRegion={velocityCurveLow} />
+  <VelocitySpliner keyboardRegion={velocityCurveMid} />
+  <VelocitySpliner keyboardRegion={velocityCurveHigh} />
 </div>

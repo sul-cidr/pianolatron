@@ -21,7 +21,9 @@
     sampleVolumes,
     sampleVelocities,
     reverbWetDry,
-    velocityCurves,
+    velocityCurveLow,
+    velocityCurveMid,
+    velocityCurveHigh,
   } from "../stores";
 
   let tempoMap;
@@ -148,18 +150,20 @@
   const startNote = (noteNumber, velocity) => {
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
-    $velocityCurves.keyboardRegions.forEach((keyboardRegion) => {
-      if (
-        keyboardRegion.velocityCurve !== null &&
-        noteNumber >= keyboardRegion.firstMidi &&
-        noteNumber <= keyboardRegion.lastMidi
-      ) {
-        [, baseVelocity] =
-          keyboardRegion.velocityCurve[
-            parseInt(keyboardRegion.velocityCurve.length * baseVelocity, 10)
-          ];
-      }
-    });
+    [$velocityCurveLow, $velocityCurveMid, $velocityCurveHigh].forEach(
+      (keyboardRegion) => {
+        if (
+          keyboardRegion.velocityCurve !== null &&
+          noteNumber >= keyboardRegion.firstMidi &&
+          noteNumber <= keyboardRegion.lastMidi
+        ) {
+          [, baseVelocity] =
+            keyboardRegion.velocityCurve[
+              parseInt(keyboardRegion.velocityCurve.length * baseVelocity, 10)
+            ];
+        }
+      },
+    );
     const modifiedVelocity =
       baseVelocity *
       (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
