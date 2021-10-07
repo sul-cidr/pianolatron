@@ -57,7 +57,6 @@
   [type="range"] {
     -webkit-appearance: none;
     background: transparent;
-    height: 1px;
     margin: math.div($thumb-height, 2) 0;
     width: $track-width;
 
