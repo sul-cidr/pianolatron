@@ -7,13 +7,11 @@
     flex-direction: column;
     left: 50%;
     max-height: 80%;
-    max-width: 100vw;
-    min-width: min(400px, 100vw);
     padding: 1em;
     position: absolute;
     top: 42%;
     transform: translate(-50%, -50%);
-    width: 400px;
+    width: min(600px, 100vw);
     z-index: z($main-context, notifications);
 
     :global(.panel-switcher) {
