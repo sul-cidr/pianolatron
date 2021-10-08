@@ -124,3 +124,54 @@ export const alternativeIndicatorText = {
   ShiftLeft: "(L)Shift",
   ShiftRight: "(R)Shift",
 };
+
+export const deltaControls = {
+  VOLUME_DELTA: {
+    control: "volume",
+    deltaType: "delta",
+    description: "Volume Increment",
+    help: "Amount to increase/decrease volume by when using the Volume Up/Down keys",
+  },
+  VOLUME_AUGMENTED_DELTA: {
+    control: "volume",
+    deltaType: "augmentedDelta",
+    description: "Volume Increment (Augmented)",
+    help: "Amount to increase/decrease volume by when holding the left-hand augment key and using the Volume Up/Down keys",
+  },
+  TREBLE_VOLUME_DELTA: {
+    control: "trebleVolume",
+    deltaType: "delta",
+    description: "Treble Volume Increment",
+    help: "Amount to increase/decrease treble volume by when using the Treble Volume Up/Down keys",
+  },
+  TREBLE_VOLUME_AUGMENTED_DELTA: {
+    control: "trebleVolume",
+    deltaType: "augmentedDelta",
+    description: "Treble Volume Increment (Augmented)",
+    help: "Amount to increase/decrease treble volume by when holding the left-hand augment key and using the Treble Volume Up/Down keys",
+  },
+  BASS_VOLUME_DELTA: {
+    control: "bassVolume",
+    deltaType: "delta",
+    description: "Bass Volume Increment",
+    help: "Amount to increase/decrease bass volume by when using the Bass Volume Up/Down keys",
+  },
+  BASS_VOLUME_AUGMENTED_DELTA: {
+    control: "bassVolume",
+    deltaType: "augmentedDelta",
+    description: "Bass Volume Increment (Augmented)",
+    help: "Amount to increase/decrease bass volume by when holding the left-hand augment key and using the Bass Volume Up/Down keys",
+  },
+  TEMPO_DELTA: {
+    control: "tempo",
+    deltaType: "delta",
+    description: "Tempo Increment",
+    help: "Amount to increase/decrease tempo by when using the Tempo Up/Down keys",
+  },
+  TEMPO_AUGMENTED_DELTA: {
+    control: "tempo",
+    deltaType: "augmentedDelta",
+    description: "Tempo Increment (Augmented)",
+    help: "Amount to increase/decrease tempo by when holding the right-hand augment key and using the Tempo Up/Down keys",
+  },
+};

@@ -1,7 +1,7 @@
 <script context="module">
   import { createPersistedStore } from "../lib/stores";
   import { defaultKeyMap } from "../config/keyboard-shortcut-config";
-  import { controlsConfig as defaultControlsConfig } from "../config/controls-config";
+  import { defaultControlsConfig } from "../config/controls-config";
 
   export const keyMap = createPersistedStore(
     "keyMap",

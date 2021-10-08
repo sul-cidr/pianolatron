@@ -5,7 +5,7 @@ import {
   tempoCoefficient,
 } from "../stores";
 
-export const controlsConfig = {
+export const defaultControlsConfig = {
   volume: {
     min: 0,
     max: 4,
