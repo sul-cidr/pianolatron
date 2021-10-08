@@ -7,7 +7,6 @@ import {
 
 export const controlsConfig = {
   volume: {
-    store: volumeCoefficient,
     min: 0,
     max: 4,
     delta: 0.1,
@@ -15,7 +14,6 @@ export const controlsConfig = {
     precision: 2,
   },
   bassVolume: {
-    store: bassVolumeCoefficient,
     min: 0,
     max: 4,
     delta: 0.1,
@@ -23,7 +21,6 @@ export const controlsConfig = {
     precision: 2,
   },
   trebleVolume: {
-    store: trebleVolumeCoefficient,
     min: 0,
     max: 4,
     delta: 0.1,
@@ -31,11 +28,17 @@ export const controlsConfig = {
     precision: 2,
   },
   tempo: {
-    store: tempoCoefficient,
     min: 0.1,
     max: 3,
     delta: 0.05,
     augmentedDelta: 0.1,
     precision: 2,
   },
+};
+
+export const controlsStores = {
+  volume: volumeCoefficient,
+  bassVolume: bassVolumeCoefficient,
+  trebleVolume: trebleVolumeCoefficient,
+  tempo: tempoCoefficient,
 };

@@ -21,6 +21,8 @@
     sustainOnOff,
     accentOnOff,
   } from "../stores";
+  import { controlsStores } from "../config/controls-config";
+
   import { clamp, easingInterval, enforcePrecision } from "../lib/utils";
 
   export let playPauseApp;
@@ -35,8 +37,9 @@
   const rightHandControls = ["trebleVolume", "volume"];
 
   const updateStore = (control, increment) => {
-    const { store, min, max, delta, augmentedDelta, precision } =
+    const { min, max, delta, augmentedDelta, precision } =
       $controlsConfig[control];
+    const store = controlsStores[control];
 
     let d =
       (leftHandControls.includes(control) && leftHandAugment) ||
