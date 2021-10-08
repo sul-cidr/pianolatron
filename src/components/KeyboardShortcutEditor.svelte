@@ -128,14 +128,17 @@
   import { fade } from "svelte/transition";
   import PanelSwitcher from "./PanelSwitcher.svelte";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
+  import KeyboardShortcutDeltaEditorRow from "./KeyboardShortcutDeltaEditorRow.svelte";
   import Icon from "../ui-components/Icon.svelte";
   import {
     defaultKeyMap,
     keyMapMeta,
     unusableKeys,
     alternativeIndicatorText,
+    deltaControls,
   } from "../config/keyboard-shortcut-config";
-  import { keyMap } from "./KeyboardShortcuts.svelte";
+  import { defaultControlsConfig } from "../config/controls-config";
+  import { keyMap, controlsConfig } from "./KeyboardShortcuts.svelte";
 
   let errorMessage;
   let selectedPanel = "playback";
@@ -158,12 +161,24 @@
       shortcuts: [
         "VOLUME_UP",
         "VOLUME_DOWN",
-        "BASS_VOLUME_UP",
-        "BASS_VOLUME_DOWN",
+        "VOLUME_DELTA",
+        "VOLUME_AUGMENTED_DELTA",
+
         "TREBLE_VOLUME_UP",
         "TREBLE_VOLUME_DOWN",
+        "TREBLE_VOLUME_DELTA",
+        "TREBLE_VOLUME_AUGMENTED_DELTA",
+
+        "BASS_VOLUME_UP",
+        "BASS_VOLUME_DOWN",
+        "BASS_VOLUME_DELTA",
+        "BASS_VOLUME_AUGMENTED_DELTA",
+
         "TEMPO_UP",
         "TEMPO_DOWN",
+        "TEMPO_DELTA",
+        "TEMPO_AUGMENTED_DELTA",
+
         "LEFT_HAND_AUGMENT",
         "RIGHT_HAND_AUGMENT",
       ],
@@ -204,9 +219,27 @@
     $keyMap[shortcut].isChanged = detail.key !== defaultKeyMap[shortcut].key;
   };
 
+  const updateDelta = (shortcut, detail) => {
+    const { control, deltaType } = deltaControls[shortcut];
+    const delta = detail || defaultControlsConfig[control][deltaType];
+    $controlsConfig[control][deltaType] = delta;
+
+    $controlsConfig[control].isChanged = (
+      $controlsConfig[control].isChanged || []
+    ).filter((_deltaType) => _deltaType !== deltaType);
+
+    if (delta !== defaultControlsConfig[control][deltaType]) {
+      $controlsConfig[control].isChanged = [
+        ...$controlsConfig[control].isChanged,
+        deltaType,
+      ];
+    }
+  };
+
   const resetShortcuts = () => {
     errorMessage = undefined;
     $keyMap = JSON.parse(JSON.stringify(defaultKeyMap));
+    $controlsConfig = JSON.parse(JSON.stringify(defaultControlsConfig));
   };
 </script>
 
@@ -224,13 +257,27 @@
       {#each Object.keys(panels) as panel}
         <dl class:shown={selectedPanel === panel}>
           {#each panels[panel].shortcuts as shortcut}
-            <KeyboardShortcutEditorRow
-              shortcut={$keyMap[shortcut]}
-              meta={keyMapMeta[shortcut]}
-              on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
-              on:reset={() =>
-                updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
-            />
+            {#if shortcut in $keyMap}
+              <KeyboardShortcutEditorRow
+                shortcut={$keyMap[shortcut]}
+                meta={keyMapMeta[shortcut]}
+                on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
+                on:reset={() =>
+                  updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
+              />
+            {:else}
+              <KeyboardShortcutDeltaEditorRow
+                controlConfigValue={$controlsConfig[
+                  deltaControls[shortcut].control
+                ][deltaControls[shortcut].deltaType]}
+                meta={deltaControls[shortcut]}
+                isChanged={$controlsConfig[
+                  deltaControls[shortcut].control
+                ].isChanged?.includes(deltaControls[shortcut].deltaType)}
+                on:update={({ detail }) => updateDelta(shortcut, detail)}
+                on:reset={() => updateDelta(shortcut)}
+              />
+            {/if}
           {/each}
         </dl>
       {/each}
@@ -242,7 +289,10 @@
       class="reset"
       class:shown={Object.values($keyMap).some(
         (shortcut) => shortcut.isChanged,
-      )}
+      ) ||
+        Object.values($controlsConfig).some(
+          (shortcut) => shortcut.isChanged?.length,
+        )}
     >
       Reset to defaults: <button on:click={resetShortcuts}>
         <Icon name="reset" height="24" width="24" />
