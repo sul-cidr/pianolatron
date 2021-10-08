@@ -141,7 +141,7 @@
     <div bind:this={splinerContainer} class="spliner-container" />
     {#if $keyboardRegion.velocityPoints}
       <button
-        transition:fade
+        in:fade
         use:tooltip={"Reset"}
         on:click={() => {
           keyboardRegion.reset();
