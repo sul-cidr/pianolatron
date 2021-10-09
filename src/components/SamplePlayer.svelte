@@ -76,7 +76,11 @@
   };
 
   const toggleSustain = (onOff, fromMidi) => {
-    onOff ? piano.pedalDown() : piano.pedalUp();
+    if (onOff) {
+      piano.pedalDown();
+    } else {
+      piano.pedalUp();
+    }
     if (fromMidi) {
       $sustainOnOff = onOff;
     } else {
