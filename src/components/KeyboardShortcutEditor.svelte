@@ -111,22 +111,6 @@
     justify-content: flex-end;
   }
 
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-
-    :global(svg) {
-      stroke: grey;
-    }
-
-    &:hover :global(svg) {
-      stroke: black;
-    }
-  }
-
   dl,
   p.reset {
     opacity: 0;
@@ -154,7 +138,7 @@
   import PanelSwitcher from "./PanelSwitcher.svelte";
   import KeyboardShortcutEditorRow from "./KeyboardShortcutEditorRow.svelte";
   import KeyboardShortcutDeltaEditorRow from "./KeyboardShortcutDeltaEditorRow.svelte";
-  import Icon from "../ui-components/Icon.svelte";
+  import IconButton from "../ui-components/IconButton.svelte";
   import {
     defaultKeyMap,
     keyMapMeta,
@@ -296,9 +280,12 @@
   <div class="shortcut-editor" transition:fade>
     <header>
       Keyboard Controls
-      <button on:click={toggleKeybindingsConfig}>
-        <Icon name="cross" height="24" width="24" />
-      </button>
+      <IconButton
+        on:click={toggleKeybindingsConfig}
+        iconName="cross"
+        height="24"
+        width="24"
+      />
     </header>
     <p>Click the edit button to reassign a control button.</p>
     <PanelSwitcher bind:selectedPanel {panels} class="panel-switcher" />
@@ -351,9 +338,12 @@
             (shortcut) => shortcut.isChanged?.length,
           )}
       >
-        Reset to defaults: <button on:click={resetShortcuts}>
-          <Icon name="reset" height="24" width="24" />
-        </button>
+        Reset to defaults: <IconButton
+          on:click={resetShortcuts}
+          iconName="reset"
+          height="24"
+          width="24"
+        />
       </p>
     </footer>
   </div>
