@@ -1,4 +1,4 @@
-@import "./sass-globals";
+@use "./sass-globals" as *;
 
 .overlay-buttons {
   background: rgba(0, 0, 0, 0.4);
