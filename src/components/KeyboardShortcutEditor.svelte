@@ -293,6 +293,7 @@
               />
             {:else if shortcut in deltaControls}
               <KeyboardShortcutDeltaEditorRow
+                {shortcut}
                 controlConfigValue={$controlsConfig[
                   deltaControls[shortcut].control
                 ][deltaControls[shortcut].deltaType]}
