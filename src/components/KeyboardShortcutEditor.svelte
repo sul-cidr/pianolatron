@@ -79,6 +79,12 @@
     }
   }
 
+  :global(dd, dt) {
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+  }
+
   p.reset {
     display: flex;
     align-items: center;

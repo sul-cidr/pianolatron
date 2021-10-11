@@ -1,8 +1,5 @@
 <style lang="scss">
   dd {
-    align-items: center;
-    display: flex;
-
     span {
       width: 4ch;
       text-align: right;
