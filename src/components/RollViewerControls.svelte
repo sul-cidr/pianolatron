@@ -3,7 +3,7 @@
   import { fade } from "svelte/transition";
   import OpenSeadragon from "openseadragon";
 
-  import Icon from "../ui-components/Icon.svelte";
+  import IconButton from "../ui-components/IconButton.svelte";
   import { easingInterval } from "../lib/utils";
 
   export let openSeadragon;
@@ -42,46 +42,56 @@
 </script>
 
 <div class="overlay-buttons top-center" transition:fade>
-  <button
+  <IconButton
+    class="overlay"
     disabled={currentZoom >= maxZoomLevel}
     on:mousedown={mousedownRepeatAction(() =>
       viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel)),
     )}
-  >
-    <Icon name="plus" height="24" width="24" />
-  </button>
-  <button
+    iconName="plus"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class="overlay"
     disabled={currentZoom <= minZoomLevel}
     on:mousedown={mousedownRepeatAction(() =>
       viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel)),
     )}
-  >
-    <Icon name="minus" height="24" width="24" />
-  </button>
-  <button
+    iconName="minus"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class="overlay"
     disabled={currentZoom === 1}
     on:click={() => {
       viewport.zoomTo(1);
       centerRoll();
     }}
-  >
-    <Icon name="fit-width" height="24" width="24" />
-  </button>
-  <button
+    iconName="fit-width"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class="overlay"
     disabled={false}
     on:mousedown={mousedownRepeatAction(() =>
       updateTickByViewportIncrement(/* up = */ true),
     )}
-  >
-    <Icon name="arrow-up" height="24" width="24" />
-  </button>
-  <button
+    iconName="arrow-up"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class="overlay"
     disabled={false}
     on:mousedown={mousedownRepeatAction(() =>
       updateTickByViewportIncrement(/* up = */ false),
     )}
-  >
-    <Icon name="arrow-down" height="24" width="24" />
-  </button>
+    iconName="arrow-down"
+    height="24"
+    width="24"
+  />
 </div>
 <svelte:window on:mouseup={() => actionInterval?.clear()} />
