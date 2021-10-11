@@ -94,6 +94,5 @@
     <svelte:fragment slot="value"
       >{($playbackProgress * 100).toFixed(2)}%</svelte:fragment
     >
-    <kbd class:depressed={$keyMap.TEMPO_UP.active}>{$keyMap.TEMPO_UP.key}</kbd>↑
   </SliderControl>
 </div>
