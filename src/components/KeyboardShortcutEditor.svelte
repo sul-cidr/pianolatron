@@ -59,8 +59,7 @@
 
   .panels {
     display: flex;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     padding-top: 4px;
     position: relative;
   }
@@ -125,6 +124,7 @@
     &.shown {
       opacity: 1;
       pointer-events: all;
+      overflow-y: auto;
     }
   }
 </style>
