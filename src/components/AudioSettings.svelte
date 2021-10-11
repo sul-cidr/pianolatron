@@ -1,9 +1,21 @@
 <script>
-  import { sampleVolumes, sampleVelocities, reverbWetDry } from "../stores";
+  import {
+    sampleVolumes,
+    sampleVelocities,
+    reverbWetDry,
+    velocityCurveLow,
+    velocityCurveMid,
+    velocityCurveHigh,
+  } from "../stores";
   import SliderControl from "../ui-components/SliderControl.svelte";
+  import VelocitySpliner from "./VelocitySpliner.svelte";
 
   let sampleVelocitiesSliderValue;
   let reverbWetDrySliderValue;
+
+  const accentColor = getComputedStyle(
+    document.documentElement,
+  ).getPropertyValue("--primary-accent");
 
   $: sampleVelocitiesSliderValue = $sampleVelocities;
   $: reverbWetDrySliderValue = $reverbWetDry;
@@ -51,4 +63,7 @@
       <span slot="label">Reverb</span>
     </SliderControl>
   </fieldset>
+  <VelocitySpliner keyboardRegion={velocityCurveLow} {accentColor} />
+  <VelocitySpliner keyboardRegion={velocityCurveMid} {accentColor} />
+  <VelocitySpliner keyboardRegion={velocityCurveHigh} {accentColor} />
 </div>

@@ -6,6 +6,16 @@ import {
 } from "./lib/stores";
 import { watchMedia } from "./lib/mq-store";
 
+// For piano settings
+class KeyboardRegion {
+  constructor(firstMidi, lastMidi) {
+    this.firstMidi = firstMidi;
+    this.lastMidi = lastMidi;
+    this.velocityCurve = null;
+    this.velocityPoints = null;
+  }
+}
+
 // Metadata
 export const rollMetadata = createStore({});
 export const rollHasExpressions = derived(
@@ -47,6 +57,18 @@ export const sampleVolumes = createPersistedStore("sampleVolumes", {
 });
 export const sampleVelocities = createPersistedStore("sampleVelocities", 4);
 export const reverbWetDry = createPersistedStore("reverbWetDry", 0.8);
+export const velocityCurveLow = createPersistedStore(
+  "velocityCurveLow",
+  new KeyboardRegion(21, 49),
+);
+export const velocityCurveMid = createPersistedStore(
+  "velocityCurveMid",
+  new KeyboardRegion(50, 78),
+);
+export const velocityCurveHigh = createPersistedStore(
+  "velocityCurveHigh",
+  new KeyboardRegion(79, 108),
+);
 
 // Playback State
 export const currentTick = createStore(0);

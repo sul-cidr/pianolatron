@@ -875,6 +875,12 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.6.tgz#2c22bae88fe2b7b59fa68a9c9c4cd60bae2c1794"
   integrity sha512-uwX0Qs2e6kdF+WmxwuxJxOnKs/wEkMArtYpHSm7W+VY/23Tl8syMRyjnzEeXrNCAP0/8HZxEGkHJsjPEDNRuHw==
 
+CanvasSpliner@jonathanlurie/CanvasSpliner:
+  version "0.1.0"
+  resolved "https://codeload.github.com/jonathanlurie/CanvasSpliner/tar.gz/549d3ca8778e2f45edcb4442f246d7f619ab445a"
+  dependencies:
+    splines jonathanlurie/splines
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -5594,6 +5600,10 @@ spdx-license-ids@^3.0.0:
   version "3.0.10"
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.10.tgz#0d9becccde7003d6c658d487dd48a32f0bf3014b"
   integrity sha512-oie3/+gKf7QtpitB0LYLETe+k8SifzsX4KixvpOsbI6S0kRiRQ5MKOio8eMSAKQ17N06+wdEOXRiId+zOxo0hA==
+
+splines@jonathanlurie/splines:
+  version "1.0.0"
+  resolved "https://codeload.github.com/jonathanlurie/splines/tar.gz/571665cfe15f5aa9aad338cb6f933c773e251073"
 
 sprintf-js@~1.0.2:
   version "1.0.3"
