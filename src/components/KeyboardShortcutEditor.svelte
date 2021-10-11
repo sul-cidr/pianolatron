@@ -47,14 +47,17 @@
     text-decoration: underline;
   }
 
-  p {
-    margin-bottom: 1em;
+  footer {
+    display: flex;
+
+    p {
+      flex: 1;
+      margin: 1em 0 0;
+    }
   }
 
-  p.error-message {
-    color: red;
-    padding: 0.25em;
-    margin: 0.5em 0 0;
+  p {
+    margin-bottom: 1em;
   }
 
   .panels {
@@ -91,11 +94,14 @@
     width: 80%;
   }
 
+  p.error-message {
+    color: red;
+  }
+
   p.reset {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin: 0.5em 0 0;
   }
 
   button {
@@ -305,22 +311,24 @@
         </dl>
       {/each}
     </div>
-    <p class="error-message" class:shown={errorMessage}>
-      {errorMessage}
-    </p>
-    <p
-      class="reset"
-      class:shown={Object.values($keyMap).some(
-        (shortcut) => shortcut.isChanged,
-      ) ||
-        Object.values($controlsConfig).some(
-          (shortcut) => shortcut.isChanged?.length,
-        )}
-    >
-      Reset to defaults: <button on:click={resetShortcuts}>
-        <Icon name="reset" height="24" width="24" />
-      </button>
-    </p>
+    <footer>
+      <p class="error-message" class:shown={errorMessage}>
+        {errorMessage}
+      </p>
+      <p
+        class="reset"
+        class:shown={Object.values($keyMap).some(
+          (shortcut) => shortcut.isChanged,
+        ) ||
+          Object.values($controlsConfig).some(
+            (shortcut) => shortcut.isChanged?.length,
+          )}
+      >
+        Reset to defaults: <button on:click={resetShortcuts}>
+          <Icon name="reset" height="24" width="24" />
+        </button>
+      </p>
+    </footer>
   </div>
 {/if}
 <svelte:window
