@@ -224,10 +224,18 @@
     const delta = detail || defaultControlsConfig[control][deltaType];
     $controlsConfig[control][deltaType] = delta;
 
+    // $controlsConfig[control] is a single object per control (e.g. volume),
+    //  with .delta and .augmentedDelta keys.  To keep track of which of these
+    //  has been modified from the default, .isChanged (if it exists) is an
+    //  array of either or both of the strings "delta" and "augmentedDelta".
+
+    // clear the .isChanged array for this deltaType
     $controlsConfig[control].isChanged = (
       $controlsConfig[control].isChanged || []
     ).filter((_deltaType) => _deltaType !== deltaType);
 
+    // and then add it if the new value for this deltaType is different
+    //  from the default value
     if (delta !== defaultControlsConfig[control][deltaType]) {
       $controlsConfig[control].isChanged = [
         ...$controlsConfig[control].isChanged,
