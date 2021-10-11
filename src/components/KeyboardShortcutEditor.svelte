@@ -85,6 +85,13 @@
     margin: 2px 0;
   }
 
+  :global(hr) {
+    border-color: rgba(255, 255, 255, 0.8);
+    border-width: 0 0 1px 0;
+    grid-column: 1 / 3;
+    width: 80%;
+  }
+
   p.reset {
     display: flex;
     align-items: center;
@@ -169,22 +176,22 @@
         "VOLUME_DOWN",
         "VOLUME_DELTA",
         "VOLUME_AUGMENTED_DELTA",
-
+        "---",
         "TREBLE_VOLUME_UP",
         "TREBLE_VOLUME_DOWN",
         "TREBLE_VOLUME_DELTA",
         "TREBLE_VOLUME_AUGMENTED_DELTA",
-
+        "---",
         "BASS_VOLUME_UP",
         "BASS_VOLUME_DOWN",
         "BASS_VOLUME_DELTA",
         "BASS_VOLUME_AUGMENTED_DELTA",
-
+        "---",
         "TEMPO_UP",
         "TEMPO_DOWN",
         "TEMPO_DELTA",
         "TEMPO_AUGMENTED_DELTA",
-
+        "---",
         "LEFT_HAND_AUGMENT",
         "RIGHT_HAND_AUGMENT",
       ],
@@ -279,7 +286,7 @@
                 on:reset={() =>
                   updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
               />
-            {:else}
+            {:else if shortcut in deltaControls}
               <KeyboardShortcutDeltaEditorRow
                 controlConfigValue={$controlsConfig[
                   deltaControls[shortcut].control
@@ -291,6 +298,8 @@
                 on:update={({ detail }) => updateDelta(shortcut, detail)}
                 on:reset={() => updateDelta(shortcut)}
               />
+            {:else if shortcut === "---"}
+              <hr />
             {/if}
           {/each}
         </dl>
