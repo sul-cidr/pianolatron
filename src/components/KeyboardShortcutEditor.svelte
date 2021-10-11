@@ -121,8 +121,7 @@
   }
 
   dl,
-  p.reset,
-  p.error-message {
+  p.reset {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
@@ -312,9 +311,11 @@
       {/each}
     </div>
     <footer>
-      <p class="error-message" class:shown={errorMessage}>
-        {errorMessage}
-      </p>
+      {#if errorMessage}
+        <p class="error-message" transition:fade>
+          {errorMessage}
+        </p>
+      {/if}
       <p
         class="reset"
         class:shown={Object.values($keyMap).some(
