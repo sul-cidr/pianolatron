@@ -83,7 +83,6 @@
   } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
-  import WebMidi from "./components/WebMidi.svelte";
 
   import catalog from "./config/catalog.json";
 
@@ -98,7 +97,6 @@
   let holeData;
   let holesByTickInterval = new IntervalTree();
 
-  let webMidi;
   let samplePlayer;
 
   let midiSamplePlayer;
@@ -318,10 +316,8 @@
   {/if}
   <LoadingSpinner showLoadingSpinner={appWaiting} />
 </div>
-<WebMidi bind:this={webMidi} {samplePlayer} />
 <SamplePlayer
   bind:this={samplePlayer}
-  {webMidi}
   on:loading={({ detail: loadingSamples }) => {
     appWaiting = true;
     loadingSamples.then(() => (appWaiting = false)).catch(() => {});

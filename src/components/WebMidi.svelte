@@ -3,7 +3,11 @@
   import { notify } from "../ui-components/Notification.svelte";
   import { userSettings } from "../stores";
 
-  export let samplePlayer;
+  export let startNote;
+  export let stopNote;
+  export let activeNotes;
+  export let toggleSustain;
+  export let toggleSoft;
 
   let midiOuts = [];
 
@@ -41,25 +45,25 @@
         if (msg.data.length > 1) {
           if (msg.data[0] == MIDI_CONTROL) {
             if (msg.data[1] == MIDI_SUSTAIN) {
-              samplePlayer.toggleSustain(!!parseInt(msg.data[2], 10), true);
+              toggleSustain(!!parseInt(msg.data[2], 10), true);
             } else if (msg.data[1] == MIDI_SOFT) {
-              samplePlayer.toggleSoft(!!parseInt(msg.data[2], 10), true);
+              toggleSoft(!!parseInt(msg.data[2], 10), true);
             }
           } else if (msg.data[0] == MIDI_NOTE_ON) {
             if (msg.data[2] === 0) {
-              samplePlayer.stopNote(msg.data[1], true);
-              samplePlayer.activeNotes.delete(msg.data[1]);
+              stopNote(msg.data[1], true);
+              activeNotes.delete(msg.data[1]);
             } else {
-              samplePlayer.startNote(
+              startNote(
                 msg.data[1],
                 parseInt((parseFloat(msg.data[2]) / 127) * 100, 10),
                 true,
               );
-              samplePlayer.activeNotes.add(msg.data[1]);
+              activeNotes.add(msg.data[1]);
             }
           } else if (msg.data[0] == MIDI_NOTE_OFF) {
-            samplePlayer.stopNote(msg.data[1], true);
-            samplePlayer.activeNotes.delete(msg.data[1]);
+            stopNote(msg.data[1], true);
+            activeNotes.delete(msg.data[1]);
           }
         }
       };

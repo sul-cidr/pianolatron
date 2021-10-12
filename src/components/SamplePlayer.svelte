@@ -25,8 +25,9 @@
     velocityCurveMid,
     velocityCurveHigh,
   } from "../stores";
+  import WebMidi from "./WebMidi.svelte";
 
-  export let webMidi;
+  let webMidi;
 
   let tempoMap;
   let pedalingMap;
@@ -369,3 +370,12 @@
     toggleSoft,
   };
 </script>
+
+<WebMidi
+  bind:this={webMidi}
+  {startNote}
+  {stopNote}
+  {activeNotes}
+  {toggleSustain}
+  {toggleSoft}
+/>
