@@ -88,7 +88,7 @@
 
   let firstLoad = true;
   let appReady = false;
-  let appWaiting = true;
+  let appWaiting = false;
   let mididataReady;
   let metadataReady;
   let currentRoll;
@@ -213,6 +213,10 @@
         appReady = true;
         appWaiting = false;
         firstLoad = false;
+        document.getElementById("loading").classList.add("fade-out");
+        setTimeout(() => {
+          document.getElementById("loading").remove();
+        }, 2000);
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -247,7 +251,8 @@
   };
 
   onMount(async () => {
-    document.getElementById("loading").remove();
+    document.querySelector("#loading span").textContent =
+      "Loading resources...";
     ({
       midiSamplePlayer,
       pianoReady,
