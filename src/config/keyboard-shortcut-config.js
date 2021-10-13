@@ -22,6 +22,8 @@ export const defaultKeyMap = {
   BACKWARD: { code: "Digit6", key: "6" },
   PAN_UP: { code: "ArrowUp", key: "↑" },
   PAN_DOWN: { code: "ArrowDown", key: "↓" },
+  PAN_LEFT: { code: "ArrowLeft", key: "←" },
+  PAN_RIGHT: { code: "ArrowRight", key: "→" },
 };
 
 export const keyMapMeta = {
@@ -104,6 +106,14 @@ export const keyMapMeta = {
   PAN_DOWN: {
     description: "Pan Downwards",
     help: "Pan the roll downwards (hold to accelerate)",
+  },
+  PAN_LEFT: {
+    description: "Pan Left",
+    help: "Pan the roll leftwards (hold to accelerate)",
+  },
+  PAN_RIGHT: {
+    description: "Pan Right",
+    help: "Pan the roll rightwards (hold to accelerate)",
   },
 };
 
