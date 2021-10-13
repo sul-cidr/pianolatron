@@ -119,10 +119,14 @@ export const alternativeIndicatorText = {
   ArrowDown: "↓",
   ArrowLeft: "←",
   ArrowRight: "→",
-  ControlLeft: " (L)Ctrl",
-  ControlRight: "(R)Ctrl",
-  ShiftLeft: "(L)Shift",
-  ShiftRight: "(R)Shift",
+  ControlLeft: "L_Ctrl",
+  ControlRight: "R_Ctrl",
+  ShiftLeft: "L_Shift",
+  ShiftRight: "R_Shift",
+  AltLeft: "L_Alt",
+  AltRight: "R_Alt",
+  MetaLeft: "L_Meta",
+  MetaRight: "R_Meta",
 };
 
 export const deltaControls = {
