@@ -480,6 +480,12 @@
       updateVisibleSvgPartitions();
     });
 
+    // disable OSD's own vertical panning keyboard interactions
+    viewport.viewer.addHandler("canvas-key", (event) => {
+      event.preventDefault = true;
+      event.preventVerticalPan = true;
+    });
+
     // re-implement some default OSD interactions to apply our own constraints
     //  and sidestep some interaction effects
     openSeadragon.addHandler("canvas-drag", (event) => {
