@@ -187,6 +187,9 @@
         "TREBLE_VOLUME_DELTA",
         "TREBLE_VOLUME_AUGMENTED_DELTA",
         "---",
+        "RIGHT_HAND_AUGMENT",
+        "---",
+        "---",
         "BASS_VOLUME_UP",
         "BASS_VOLUME_DOWN",
         "BASS_VOLUME_DELTA",
@@ -198,7 +201,6 @@
         "TEMPO_AUGMENTED_DELTA",
         "---",
         "LEFT_HAND_AUGMENT",
-        "RIGHT_HAND_AUGMENT",
       ],
     },
   };
