@@ -108,6 +108,7 @@
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
   const maxZoomLevel = 4;
+  const horizontalPanIncrement = 40;
 
   let openSeadragon;
   let viewport;
@@ -379,6 +380,18 @@
     );
   };
 
+  const panHorizontal = (left = true) => {
+    viewport.panBy(
+      viewport.deltaPointsFromPixels(
+        new OpenSeadragon.Point(
+          left ? -horizontalPanIncrement : horizontalPanIncrement,
+          0,
+        ),
+      ),
+    );
+    viewport.applyConstraints();
+  };
+
   onMount(() => {
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
@@ -480,6 +493,11 @@
       updateVisibleSvgPartitions();
     });
 
+    // disable OSD's own keyboard interactions
+    viewport.viewer.addHandler("canvas-key", (event) => {
+      event.preventDefaultAction = true;
+    });
+
     // re-implement some default OSD interactions to apply our own constraints
     //  and sidestep some interaction effects
     openSeadragon.addHandler("canvas-drag", (event) => {
@@ -558,7 +576,7 @@
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
       parseInt($rollMetadata.LAST_HOLE, 10);
 
-  export { updateTickByViewportIncrement };
+  export { updateTickByViewportIncrement, panHorizontal };
 </script>
 
 <div

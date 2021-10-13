@@ -1,14 +1,6 @@
 <style lang="scss">
-  dt {
-    display: flex;
-    align-items: center;
-  }
-
   dd {
-    display: flex;
-    align-items: center;
     justify-content: flex-end;
-    margin: 0.2em 0;
 
     span {
       color: grey;

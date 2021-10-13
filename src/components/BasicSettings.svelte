@@ -7,7 +7,7 @@
     tempoCoefficient,
     playbackProgress,
   } from "../stores";
-  import { controlsConfig } from "../config/controls-config";
+  import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
 
   export let skipToPercentage;

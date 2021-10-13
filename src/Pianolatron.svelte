@@ -110,6 +110,7 @@
 
   let rollViewer;
   let updateTickByViewportIncrement;
+  let panHorizontal;
 
   const rollListItems = catalog.map((item) => {
     const [number, label] = item.label.split(" ");
@@ -267,7 +268,8 @@
   $: playbackProgress.update(() =>
     clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1),
   );
-  $: if (rollViewer) ({ updateTickByViewportIncrement } = rollViewer);
+  $: if (rollViewer)
+    ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
 </script>
 
 <div id="app">
@@ -320,7 +322,12 @@
     loadingSamples.then(() => (appWaiting = false)).catch(() => {});
   }}
 />
-<KeyboardShortcuts {playPauseApp} {stopApp} {updateTickByViewportIncrement} />
+<KeyboardShortcuts
+  {playPauseApp}
+  {stopApp}
+  {updateTickByViewportIncrement}
+  {panHorizontal}
+/>
 <KeyboardShortcutEditor />
 <Notification />
 {#if $showWelcomeScreen}<Welcome />{/if}

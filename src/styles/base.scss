@@ -51,7 +51,7 @@ h1 {
   font-family: $primary-typeface;
 }
 
-footer {
+body > footer {
   bottom: 0;
   display: flex;
   gap: 2em;

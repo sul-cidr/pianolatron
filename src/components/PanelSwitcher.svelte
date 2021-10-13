@@ -33,25 +33,26 @@
 <script>
   import Icon from "../ui-components/Icon.svelte";
 
-  const panels = [
-    ["controls", "sliders"],
-    ["settings", "cog"],
-    ["audio", "piano"],
-  ];
+  export let panels;
   export let selectedPanel;
 </script>
 
-<div>
-  {#each panels as [panel, icon]}
+<div class={$$props.class}>
+  {#each Object.entries(panels) as [panel, label]}
     <input
       type="radio"
-      name="panel-switcher"
+      name={Math.random().toString(16).slice(2)}
       bind:group={selectedPanel}
       value={panel}
       id={panel}
     />
     <label for={panel}>
-      <Icon name={icon} height="24" width="24" />
+      {#if label.icon}
+        <Icon name={label.icon} height="24" width="24" />
+      {/if}
+      {#if label.text}
+        {label.text}
+      {/if}
     </label>
   {/each}
 </div>

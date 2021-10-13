@@ -57,7 +57,6 @@
   [type="range"] {
     -webkit-appearance: none;
     background: transparent;
-    height: 1px;
     margin: math.div($thumb-height, 2) 0;
     width: $track-width;
 
@@ -173,6 +172,29 @@
   export let step;
   export let name;
   export let value;
+  export let mousewheel = true;
+
+  const clamp = (_value) => Math.min(Math.max(_value, min), max);
+
+  const handleWheel = ({ deltaY }) => {
+    if (!mousewheel) return;
+    const precision = (step.toString().split(".")[1] || "").length;
+    if (deltaY > 0) {
+      value = clamp((Number(value) + Number(step)).toFixed(precision));
+    } else {
+      value = clamp((Number(value) - Number(step)).toFixed(precision));
+    }
+  };
 </script>
 
-<input type="range" bind:value on:input on:change {min} {max} {step} {name} />
+<input
+  type="range"
+  bind:value
+  on:input
+  on:change
+  on:mousewheel={handleWheel}
+  {min}
+  {max}
+  {step}
+  {name}
+/>

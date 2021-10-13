@@ -55,15 +55,16 @@
     controls: {
       component: BasicSettings,
       props: { skipToPercentage },
+      icon: "sliders",
     },
-    settings: { component: AdvancedSettings },
-    audio: { component: AudioSettings },
+    settings: { component: AdvancedSettings, icon: "cog" },
+    audio: { component: AudioSettings, icon: "piano" },
   };
 
   let selectedPanel = "controls";
 </script>
 
-<PanelSwitcher bind:selectedPanel />
+<PanelSwitcher bind:selectedPanel {panels} />
 <div>
   <svelte:component
     this={panels[selectedPanel].component}

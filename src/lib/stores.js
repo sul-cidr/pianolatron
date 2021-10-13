@@ -17,7 +17,12 @@ export const createPersistedStore = (key, defaultValue) => {
   let initialValue =
     typeof defaultValue === "object" ? { ...defaultValue } : defaultValue;
   try {
-    if (persistedValue) initialValue = JSON.parse(persistedValue);
+    if (persistedValue) {
+      initialValue =
+        typeof defaultValue === "object"
+          ? Object.assign(initialValue, JSON.parse(persistedValue))
+          : JSON.parse(persistedValue);
+    }
   } catch {
     // pass
   }
