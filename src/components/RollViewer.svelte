@@ -480,10 +480,9 @@
       updateVisibleSvgPartitions();
     });
 
-    // disable OSD's own vertical panning keyboard interactions
+    // disable OSD's own keyboard interactions
     viewport.viewer.addHandler("canvas-key", (event) => {
-      event.preventDefault = true;
-      event.preventVerticalPan = true;
+      event.preventDefaultAction = true;
     });
 
     // re-implement some default OSD interactions to apply our own constraints
