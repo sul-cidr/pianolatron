@@ -74,11 +74,11 @@ export const keyMapMeta = {
 
   LEFT_HAND_AUGMENT: {
     description: "Left-hand Augment",
-    help: "Hold this key to use larger jumps when using Tempo or Bass Volume keys",
+    help: "Hold this key to use the “augmented” increments when using Tempo or Bass Volume keys",
   },
   RIGHT_HAND_AUGMENT: {
     description: "Right-hand Augment",
-    help: "Hold this key to use larger jumps when using Volume or Treble Volume keys",
+    help: "Hold this key to use the “augmented” increments when using Volume or Treble Volume keys",
   },
 
   PLAY_PAUSE: {
