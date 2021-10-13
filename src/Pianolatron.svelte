@@ -89,6 +89,7 @@
   let firstLoad = true;
   let appReady = false;
   let appWaiting = false;
+  let rollImageReady = false;
   let mididataReady;
   let metadataReady;
   let currentRoll;
@@ -177,6 +178,7 @@
   };
 
   const loadRoll = (roll) => {
+    appWaiting = true;
     mididataReady = fetch(`./midi/${roll.druid}.mid`)
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
@@ -213,10 +215,8 @@
         appReady = true;
         appWaiting = false;
         firstLoad = false;
-        document.getElementById("loading").classList.add("fade-out");
-        setTimeout(() => {
-          document.getElementById("loading").remove();
-        }, 2000);
+        document.querySelector("#loading span").textContent =
+          "Loading roll image...";
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -273,6 +273,14 @@
   );
   $: if (rollViewer)
     ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
+  $: if (rollImageReady) {
+    document
+      .getElementById("loading")
+      .addEventListener("transitionend", () =>
+        document.getElementById("loading").remove(),
+      );
+    document.getElementById("loading").classList.add("fade-out");
+  }
 </script>
 
 <div id="app">
@@ -293,6 +301,7 @@
       {#if appReady}
         <RollViewer
           bind:this={rollViewer}
+          bind:rollImageReady
           imageUrl={currentRoll.image_url}
           {holeData}
           {holesByTickInterval}

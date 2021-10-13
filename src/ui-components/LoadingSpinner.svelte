@@ -41,7 +41,7 @@
 
     &:global(.fade-out) {
       opacity: 0;
-      transition: opacity 2s ease;
+      transition: opacity 1s ease;
     }
   }
 
