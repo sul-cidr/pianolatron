@@ -616,6 +616,7 @@
       {minZoomLevel}
       {maxZoomLevel}
       {updateTickByViewportIncrement}
+      {panHorizontal}
     />
   {/if}
 </div>

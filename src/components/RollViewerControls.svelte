@@ -10,6 +10,8 @@
   export let maxZoomLevel;
   export let minZoomLevel;
   export let updateTickByViewportIncrement;
+  export let panHorizontal;
+
   let actionInterval;
 
   const { viewport } = openSeadragon;
@@ -90,6 +92,24 @@
       updateTickByViewportIncrement(/* up = */ false),
     )}
     iconName="arrow-down"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class="overlay"
+    disabled={false}
+    on:mousedown={mousedownRepeatAction(() => panHorizontal(/* left = */ true))}
+    iconName="arrow-left"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class="overlay"
+    disabled={false}
+    on:mousedown={mousedownRepeatAction(() =>
+      panHorizontal(/* left = */ false),
+    )}
+    iconName="arrow-right"
     height="24"
     width="24"
   />
