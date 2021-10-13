@@ -234,7 +234,21 @@
     }
 
     $keyMap[shortcut].code = detail.code;
-    $keyMap[shortcut].key = alternativeIndicatorText[detail.code] || detail.key;
+
+    const { keyboard } = navigator;
+    if (keyboard && typeof keyboard.getLayoutMap === "function") {
+      // Only available on Chromium-based browsers at time of writing
+      // https://developer.mozilla.org/en-US/docs/Web/API/Keyboard/getLayoutMap
+      // https://caniuse.com/mdn-api_keyboard_getlayoutmap
+      keyboard.getLayoutMap().then((keyboardLayoutMap) => {
+        const keyString = keyboardLayoutMap.get(detail.code);
+        $keyMap[shortcut].key =
+          keyString || alternativeIndicatorText[detail.code] || detail.key;
+      });
+    } else {
+      $keyMap[shortcut].key =
+        alternativeIndicatorText[detail.code] || detail.key;
+    }
 
     $keyMap[shortcut].isChanged = detail.key !== defaultKeyMap[shortcut].key;
   };
