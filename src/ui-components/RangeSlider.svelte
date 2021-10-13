@@ -193,6 +193,7 @@
   on:input
   on:change
   on:mousewheel={handleWheel}
+  {min}
   {max}
   {step}
   {name}
