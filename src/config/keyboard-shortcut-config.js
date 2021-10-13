@@ -137,6 +137,8 @@ export const alternativeIndicatorText = {
   AltRight: "R_Alt",
   MetaLeft: "L_Meta",
   MetaRight: "R_Meta",
+  OSLeft: "L ⌘",
+  OSRight: "R ⌘",
 };
 
 export const deltaControls = {
