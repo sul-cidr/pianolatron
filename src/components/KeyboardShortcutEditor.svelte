@@ -74,6 +74,7 @@
     grid-auto-rows: min-content;
     grid-template-columns: auto auto;
     justify-content: space-between;
+    padding: 0 4px;
     width: 100%;
 
     &:not(:first-child) {
@@ -92,6 +93,12 @@
     border-width: 0 0 1px 0;
     grid-column: 1 / 3;
     width: 80%;
+  }
+
+  :global(hr.section) {
+    border-color: rgba(0, 0, 0, 0.4);
+    margin: 2em 0 4px -4px;
+    width: calc(100% + 8px);
   }
 
   p.error-message {
@@ -168,6 +175,7 @@
         "SOFT",
         "SUSTAIN",
         "ACCENT",
+        "---",
         "PLAY_PAUSE",
         "REWIND",
         "FORWARD",
@@ -188,8 +196,7 @@
         "TREBLE_VOLUME_AUGMENTED_DELTA",
         "---",
         "RIGHT_HAND_AUGMENT",
-        "---",
-        "---",
+        "===",
         "BASS_VOLUME_UP",
         "BASS_VOLUME_DOWN",
         "BASS_VOLUME_DELTA",
@@ -322,6 +329,8 @@
               />
             {:else if shortcut === "---"}
               <hr />
+            {:else if shortcut === "==="}
+              <hr class="section" />
             {/if}
           {/each}
         </dl>
