@@ -70,7 +70,7 @@
                 velocity: event[3],
               }),
             );
-          } else if (event[0] in ["sustain", "soft"]) {
+          } else if (["sustain", "soft"].includes(event[0])) {
             trackData.controllerChange(
               event[0] === "sustain" ? MIDI_SUSTAIN : MIDI_SOFT,
               event[1],
