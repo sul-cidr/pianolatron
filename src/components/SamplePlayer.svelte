@@ -2,7 +2,6 @@
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
   import { createEventDispatcher } from "svelte";
-  import { onMount } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
   import {
@@ -25,8 +24,6 @@
     velocityCurveLow,
     velocityCurveMid,
     velocityCurveHigh,
-    webMidiAvailable,
-    webMidiEnabled,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -358,10 +355,6 @@
 
   midiSamplePlayer.on("endOfFile", pausePlayback);
 
-  onMount(() => {
-    if (navigator.requestMIDIAccess) $webMidiAvailable = true;
-  });
-
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);
   $: toggleSoft($softOnOff);
@@ -387,13 +380,11 @@
   };
 </script>
 
-{#if $webMidiEnabled}
-  <WebMidi
-    bind:this={webMidi}
-    {startNote}
-    {stopNote}
-    {activeNotes}
-    {toggleSustain}
-    {toggleSoft}
-  />
-{/if}
+<WebMidi
+  bind:this={webMidi}
+  {startNote}
+  {stopNote}
+  {activeNotes}
+  {toggleSustain}
+  {toggleSoft}
+/>

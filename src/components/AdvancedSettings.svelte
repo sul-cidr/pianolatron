@@ -46,8 +46,6 @@
     sampleVolumes,
     sampleVelocities,
     reverbWetDry,
-    webMidiAvailable,
-    webMidiEnabled,
   } from "../stores";
   import { toggleKeybindingsConfig } from "./KeyboardShortcutEditor.svelte";
   import { notify } from "../ui-components/Notification.svelte";
@@ -100,15 +98,6 @@
       <input type="checkbox" bind:checked={$useMidiTempoEventsOnOff} />
     </div>
   </fieldset>
-
-  {#if $webMidiAvailable}
-    <fieldset>
-      <div class="setting">
-        Enable Web MIDI:
-        <input type="checkbox" bind:checked={$webMidiEnabled} />
-      </div>
-    </fieldset>
-  {/if}
 
   <div class="theme-selector">
     Theme:
