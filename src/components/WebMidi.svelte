@@ -2,6 +2,7 @@
   import { notify } from "../ui-components/Notification.svelte";
   import { onMount } from "svelte";
   import { webMidiEnabled } from "../stores";
+  import { clamp } from "../lib/utils";
 
   export let startNote;
   export let stopNote;
@@ -20,7 +21,7 @@
   const sendMidiMsg = (msgType, entity, value) => {
     let msg = null;
     if (msgType == "note_on") {
-      msg = [MIDI_NOTE_ON, entity, parseInt(value * 127, 10)];
+      msg = [MIDI_NOTE_ON, entity, parseInt(clamp(0, 1, value) * 127, 10)];
     } else if (msgType == "note_off") {
       msg = [MIDI_NOTE_OFF, entity, value];
     } else if (msgType == "controller") {

@@ -183,18 +183,20 @@
         }
       },
     );
-    const modifiedVelocity =
+    const modifiedVelocity = Math.min(
       baseVelocity *
-      (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
-      (($accentOnOff && ACCENT_BUMP) || 1) *
-      $volumeCoefficient *
-      (noteNumber < HALF_BOUNDARY
-        ? $bassVolumeCoefficient
-        : $trebleVolumeCoefficient);
+        (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
+        (($accentOnOff && ACCENT_BUMP) || 1) *
+        $volumeCoefficient *
+        (noteNumber < HALF_BOUNDARY
+          ? $bassVolumeCoefficient
+          : $trebleVolumeCoefficient),
+      1,
+    );
     if (modifiedVelocity) {
       piano.keyDown({
         midi: noteNumber,
-        velocity: Math.min(modifiedVelocity, 1),
+        velocity: modifiedVelocity,
       });
     }
     if (!fromMidi) {
