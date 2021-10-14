@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import { clamp } from "../lib/utils";
   import { notify } from "../ui-components/Notification.svelte";
-  import { userSettings } from "../stores";
 
   export let startNote;
   export let stopNote;
@@ -73,19 +72,14 @@
 
   onMount(() => {
     if (navigator.requestMIDIAccess) {
-      if (
-        !$userSettings.midiMessageSeen &&
-        $userSettings.welcomeScreenInhibited
-      ) {
-        notify({
-          title: "MIDI in/out available",
-          message:
-            "Connect a digital piano or other MIDI device to send/receive keyboard and pedal events.",
-          timeout: 4000,
-          closable: true,
-        });
-        $userSettings.midiMessageSeen = true;
-      }
+      notify({
+        title: "MIDI in/out available",
+        message:
+          "Connect a digital piano or other MIDI device to send/receive keyboard and pedal events.",
+        timeout: 4000,
+        closable: true,
+      });
+
       navigator.requestMIDIAccess().then((midi) => {
         registerMidiInputs(midi);
         midiOuts = Array.from(midi.outputs).map((output) => output[1]);
@@ -101,10 +95,7 @@
           midiOuts = Array.from(midi.outputs).map((output) => output[1]);
         };
       });
-    } else if (
-      !$userSettings.midiMessageSeen &&
-      $userSettings.welcomeScreenInhibited
-    ) {
+    } else {
       notify({
         title: "MIDI in/out not available",
         message:
@@ -112,7 +103,6 @@
         timeout: 4000,
         closable: true,
       });
-      $userSettings.midiMessageSeen = true;
     }
   });
 
