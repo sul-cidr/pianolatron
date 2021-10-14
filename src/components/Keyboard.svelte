@@ -147,12 +147,11 @@
 
 <script>
   import KeyboardControls from "./KeyboardControls.svelte";
-  import { softOnOff, sustainOnOff } from "../stores";
+  import { activeNotes, softOnOff, sustainOnOff } from "../stores";
 
   export let keyCount = 88;
   export let startNote;
   export let stopNote;
-  export let activeNotes;
 
   const notes = [
     "A",

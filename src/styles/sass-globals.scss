@@ -4,11 +4,7 @@ $secondary-typeface: $primary-typeface;
 $cloud: #dad7cb; // Stanford's "cloud"
 $cardinal: #8c1515; // "cardinal"
 
-:root {
-  --navigator-width: 40px;
-}
-
-@import "./z-index";
+@forward "./z-index";
 
 @mixin background {
   background: linear-gradient(

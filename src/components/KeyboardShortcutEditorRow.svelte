@@ -6,32 +6,11 @@
       color: grey;
     }
   }
-
-  button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-
-    :global(svg) {
-      stroke: grey;
-    }
-
-    &:not([disabled]):hover :global(svg) {
-      stroke: black;
-    }
-
-    &[disabled] {
-      cursor: default;
-      opacity: 0.5;
-    }
-  }
 </style>
 
 <script>
   import { createEventDispatcher } from "svelte";
-  import Icon from "../ui-components/Icon.svelte";
+  import IconButton from "../ui-components/IconButton.svelte";
   import { tooltip } from "../lib/tooltip-action";
 
   export let shortcut;
@@ -51,21 +30,23 @@
   {:else}
     <kbd>{shortcut.key}</kbd>
   {/if}
-  <button
-    use:tooltip={"Edit"}
-    bind:this={editButtonRef}
+  <IconButton
+    iconName="edit"
+    height="20"
+    width="20"
+    tooltip="Edit"
     on:click={() => (editing = !editing)}
-  >
-    <Icon name="edit" height="20" width="20" />
-  </button>
+    bind:ref={editButtonRef}
+  />
   {#key shortcut.isChanged}
-    <button
-      use:tooltip={shortcut.isChanged ? "Reset to Default" : undefined}
+    <IconButton
+      iconName="reset"
+      height="20"
+      width="20"
+      tooltip={shortcut.isChanged ? "Reset to Default" : undefined}
       disabled={!shortcut.isChanged}
       on:click={resetShortcut}
-    >
-      <Icon name="reset" height="20" width="20" />
-    </button>
+    />
   {/key}
 </dd>
 

@@ -28,7 +28,7 @@
 </script>
 
 <div>
-  <span><slot name="label">{name}</slot></span>
+  <label for={name}><slot name="label">{name}</slot></label>
   <span><slot name="value">{value}</slot></span>
   <RangeSlider
     bind:value

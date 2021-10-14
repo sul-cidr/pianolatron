@@ -1,4 +1,4 @@
-@import "./globals";
+@use "./sass-globals" as *;
 
 .overlay-buttons {
   background: rgba(0, 0, 0, 0.4);
@@ -7,34 +7,6 @@
   position: absolute;
   user-select: none;
   z-index: z($main-context, overlay-buttons);
-
-  button {
-    background: none;
-    border: none;
-    color: #ffffff;
-    cursor: pointer;
-    margin: 0;
-    padding: 0.35em 0.8em;
-    transition: all 0.2s;
-
-    &:focus,
-    &:active {
-      outline: 0;
-    }
-
-    &:hover {
-      outline: 1px solid white;
-    }
-
-    &:active {
-      color: grey;
-    }
-
-    &:disabled {
-      color: grey;
-      cursor: not-allowed;
-    }
-  }
 
   &.top-center {
     left: 50%;

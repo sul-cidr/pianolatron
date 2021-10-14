@@ -10,26 +10,26 @@
     "build": "astro build",
     "preview": "astro build --site http://localhost:8080/ && astro preview",
     "gh-deploy": "SITE=https://pianolatron.stanford.edu/ bin/gh-deploy.sh",
-    "lint": "prettier --check . && eslint src/ --ext svelte --ext js"
+    "lint": "astro check && prettier --check . && eslint src/ --ext svelte --ext js"
   },
   "devDependencies": {
-    "astro": "^0.20.3",
+    "astro": "^0.20.11",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-svelte3": "^3.2.0",
-    "prettier": "~2.3.2",
+    "eslint-plugin-svelte3": "^3.2.1",
+    "prettier": "~2.4.1",
     "prettier-plugin-svelte": "^2.4.0"
   },
   "dependencies": {
-    "@popperjs/core": "^2.10.1",
+    "@popperjs/core": "^2.10.2",
     "CanvasSpliner": "jonathanlurie/CanvasSpliner",
-    "midi-player-js": "^2.0.14",
+    "midi-player-js": "^2.0.16",
     "node-interval-tree": "^1.3.3",
     "openseadragon": "^2.4.2",
-    "svelte": "^3.42.4",
     "svelte-preprocess": "^4.8.0",
+    "svelte": "^3.42.4",
     "tone": "^14.7.77",
     "webmidi": "^2.5.3"
   }

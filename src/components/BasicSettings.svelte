@@ -21,7 +21,7 @@
     step={controlsConfig.volume.delta}
     name="volume"
   >
-    <span slot="label">
+    <svelte:fragment slot="label">
       Volume:
       <kbd class:depressed={$keyMap.VOLUME_DOWN.active}
         >{$keyMap.VOLUME_DOWN.key}</kbd
@@ -29,7 +29,7 @@
       <kbd class:depressed={$keyMap.VOLUME_UP.active}
         >{$keyMap.VOLUME_UP.key}</kbd
       >↑
-    </span>
+    </svelte:fragment>
   </SliderControl>
   <SliderControl
     bind:value={$trebleVolumeCoefficient}
@@ -38,7 +38,7 @@
     step={controlsConfig.trebleVolume.delta}
     name="treble-volume"
   >
-    <span slot="label">
+    <svelte:fragment slot="label">
       Treble Volume:
       <kbd class:depressed={$keyMap.TREBLE_VOLUME_DOWN.active}
         >{$keyMap.TREBLE_VOLUME_DOWN.key}</kbd
@@ -46,7 +46,7 @@
       <kbd class:depressed={$keyMap.TREBLE_VOLUME_UP.active}
         >{$keyMap.TREBLE_VOLUME_UP.key}</kbd
       >↑
-    </span>
+    </svelte:fragment>
   </SliderControl>
   <SliderControl
     bind:value={$bassVolumeCoefficient}
@@ -55,7 +55,7 @@
     step={controlsConfig.bassVolume.delta}
     name="bass-volume"
   >
-    <span slot="label">
+    <svelte:fragment slot="label">
       Bass Volume:
       <kbd class:depressed={$keyMap.BASS_VOLUME_DOWN.active}
         >{$keyMap.BASS_VOLUME_DOWN.key}</kbd
@@ -63,7 +63,7 @@
       <kbd class:depressed={$keyMap.BASS_VOLUME_UP.active}
         >{$keyMap.BASS_VOLUME_UP.key}</kbd
       >↑
-    </span>
+    </svelte:fragment>
   </SliderControl>
   <SliderControl
     bind:value={$tempoCoefficient}
@@ -72,14 +72,14 @@
     step={controlsConfig.tempo.delta}
     name="tempo"
   >
-    <span slot="label">
+    <svelte:fragment slot="label">
       Tempo:
       <kbd class:depressed={$keyMap.TEMPO_DOWN.active}
         >{$keyMap.TEMPO_DOWN.key}</kbd
       >↓
       <kbd class:depressed={$keyMap.TEMPO_UP.active}>{$keyMap.TEMPO_UP.key}</kbd
       >↑
-    </span>
+    </svelte:fragment>
   </SliderControl>
   <SliderControl
     value={$playbackProgress}
@@ -90,8 +90,9 @@
     on:input={({ target: { value } }) => skipToPercentage(value)}
     mousewheel={false}
   >
-    <span slot="label">Progress:</span>
-    <span slot="value">{($playbackProgress * 100).toFixed(2)}%</span>
-    <kbd class:depressed={$keyMap.TEMPO_UP.active}>{$keyMap.TEMPO_UP.key}</kbd>↑
+    <svelte:fragment slot="label">Progress:</svelte:fragment>
+    <svelte:fragment slot="value"
+      >{($playbackProgress * 100).toFixed(2)}%</svelte:fragment
+    >
   </SliderControl>
 </div>

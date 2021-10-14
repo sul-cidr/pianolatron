@@ -1,4 +1,4 @@
-@import "./globals";
+@use "./sass-globals" as *;
 
 :root {
   --background-color: #{$cloud};

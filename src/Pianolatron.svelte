@@ -58,7 +58,6 @@
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
-    activeNotes,
     currentTick,
     rollMetadata,
     isReproducingRoll,
@@ -297,7 +296,7 @@
         />
         {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
           <div id="keyboard-overlay" transition:fade>
-            <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
+            <Keyboard keyCount="88" {startNote} {stopNote} />
           </div>
         {/if}
       </div>
@@ -308,7 +307,7 @@
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>
-      <Keyboard keyCount="88" {activeNotes} {startNote} {stopNote} />
+      <Keyboard keyCount="88" {startNote} {stopNote} />
     </div>
   {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
