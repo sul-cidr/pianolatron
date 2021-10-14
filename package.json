@@ -10,10 +10,10 @@
     "build": "astro build",
     "preview": "astro build --site http://localhost:8080/ && astro preview",
     "gh-deploy": "SITE=https://pianolatron.stanford.edu/ bin/gh-deploy.sh",
-    "lint": "prettier --check . && eslint src/ --ext svelte --ext js"
+    "lint": "astro check && prettier --check . && eslint src/ --ext svelte --ext js"
   },
   "devDependencies": {
-    "astro": "^0.20.9",
+    "astro": "^0.20.11",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
