@@ -84,8 +84,11 @@ export const userSettings = createPersistedStore("userSettings", {
   showKeyboard: true,
   overlayKeyboard: false,
   welcomeScreenInhibited: false,
-  midiMessageSeen: false,
 });
+
+// Web MIDI settings
+export const webMidiAvailable = createStore(false);
+export const webMidiEnabled = createPersistedStore("useWebMIDI", false);
 
 // Browser State
 export const media = watchMedia({

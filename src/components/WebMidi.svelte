@@ -1,7 +1,7 @@
 <script>
-  import { onMount } from "svelte";
   import { notify } from "../ui-components/Notification.svelte";
-  import { userSettings } from "../stores";
+  import { onMount } from "svelte";
+  import { webMidiEnabled } from "../stores";
 
   export let startNote;
   export let stopNote;
@@ -71,50 +71,23 @@
   };
 
   onMount(() => {
-    if (navigator.requestMIDIAccess) {
-      if (
-        !$userSettings.midiMessageSeen &&
-        $userSettings.welcomeScreenInhibited
-      ) {
+    navigator.requestMIDIAccess().then((midi) => {
+      registerMidiInputs(midi);
+      midiOuts = Array.from(midi.outputs).map((output) => output[1]);
+      midi.onstatechange = (e) => {
+        // Change event handlers persist even when WebMidi component is gone
+        if (!$webMidiEnabled) return;
+        // Print information about the (dis)connected MIDI controller
         notify({
-          title: "MIDI in/out available",
-          message:
-            "Connect a digital piano or other MIDI divice to send/receive keyboard and pedal events.",
+          title: "MIDI device change",
+          message: `${e.port.name} ${e.port.manufacturer} ${e.port.state}`,
           timeout: 4000,
           closable: true,
         });
-        $userSettings.midiMessageSeen = true;
-      }
-      navigator.requestMIDIAccess().then((midi) => {
         registerMidiInputs(midi);
         midiOuts = Array.from(midi.outputs).map((output) => output[1]);
-        midi.onstatechange = (e) => {
-          // Print information about the (dis)connected MIDI controller
-          notify({
-            title: "MIDI device change",
-            message: `${e.port.name} ${e.port.manufacturer} ${e.port.state}`,
-            timeout: 4000,
-            closable: true,
-          });
-          registerMidiInputs(midi);
-          midiOuts = Array.from(midi.outputs).map((output) => output[1]);
-        };
-      });
-    } else {
-      if (
-        !$userSettings.midiMessageSeen &&
-        $userSettings.welcomeScreenInhibited
-      ) {
-        notify({
-          title: "MIDI in/out not available",
-          message:
-            "This browser does not support connecting to a digital piano or other MIDI device.",
-          timeout: 4000,
-          closable: true,
-        });
-        $userSettings.midiMessageSeen = true;
-      }
-    }
+      };
+    });
   });
 
   export { sendMidiMsg };
