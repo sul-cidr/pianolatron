@@ -378,9 +378,6 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
-    activeNotes,
-    toggleSustain,
-    toggleSoft,
   };
 </script>
 
