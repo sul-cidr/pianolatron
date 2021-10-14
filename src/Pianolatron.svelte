@@ -65,6 +65,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     userSettings,
+    midiRecordingEnabled,
   } from "./stores";
   import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -280,7 +281,9 @@
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
-        <RecordingControls {webMidi} />
+        {#if $midiRecordingEnabled}
+          <RecordingControls {samplePlayer} />
+        {/if}
         {#if !holesByTickInterval.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at

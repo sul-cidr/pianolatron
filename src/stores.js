@@ -95,6 +95,7 @@ export const userSettings = createPersistedStore("userSettings", {
   overlayKeyboard: false,
   welcomeScreenInhibited: false,
   useWebMidi: false,
+  recordWebMidi: false,
 });
 
 // Browser State

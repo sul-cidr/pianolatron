@@ -17,7 +17,7 @@
 <script>
   import { recordingOnOff, recordingInBuffer } from "../stores";
 
-  export let webMidi;
+  export let samplePlayer;
 </script>
 
 <div id="recording-controls">
@@ -30,10 +30,10 @@
     >Start/Pause
   </button>
   {#if $recordingInBuffer}
-    <button type="button" on:click={() => webMidi.clearRecording()}
+    <button type="button" on:click={() => samplePlayer.midiRecording("clear")}
       >Clear
     </button>
-    <button type="button" on:click={() => webMidi.exportRecording()}
+    <button type="button" on:click={() => samplePlayer.midiRecording("export")}
       >Export
     </button>
   {/if}
