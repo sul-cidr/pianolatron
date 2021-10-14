@@ -6,6 +6,7 @@
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
+    userSettings,
   } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
@@ -95,4 +96,9 @@
       >{($playbackProgress * 100).toFixed(2)}%</svelte:fragment
     >
   </SliderControl>
+  <button
+    on:click={() => ($userSettings.useWebMidi = !$userSettings.useWebMidi)}
+  >
+    {$userSettings.useWebMidi ? "Disable" : "Enable"} WebMIDI
+  </button>
 </div>
