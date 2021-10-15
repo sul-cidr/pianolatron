@@ -86,7 +86,9 @@
   };
 
   const toggleSoft = (onOff, fromMidi) => {
-    if (!fromMidi) {
+    if (fromMidi) {
+      $softOnOff = onOff;
+    } else {
       webMidi?.sendMidiMsg("controller", "soft", onOff);
     }
   };
