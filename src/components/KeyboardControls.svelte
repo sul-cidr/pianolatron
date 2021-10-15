@@ -40,6 +40,7 @@
     class="overlay"
     on:click={() => ($userSettings.showKeyboard = !$userSettings.showKeyboard)}
     iconName={$userSettings.showKeyboard ? "piano-down" : "piano-up"}
+    label="Show/Hide Piano Keyboard"
     height="24"
     width="24"
   />
@@ -49,6 +50,7 @@
       on:click={() =>
         ($userSettings.overlayKeyboard = !$userSettings.overlayKeyboard)}
       iconName={$userSettings.overlayKeyboard ? "piano-out" : "piano-in"}
+      label="Overlay Piano Keyboard on Roll Image"
       height="24"
       width="24"
     />

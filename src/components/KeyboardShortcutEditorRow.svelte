@@ -32,6 +32,7 @@
   {/if}
   <IconButton
     iconName="edit"
+    label="Edit Keystroke"
     height="20"
     width="20"
     tooltip="Edit"
@@ -41,6 +42,7 @@
   {#key shortcut.isChanged}
     <IconButton
       iconName="reset"
+      label="Reset Keystroke to Default"
       height="20"
       width="20"
       tooltip={shortcut.isChanged ? "Reset to Default" : undefined}

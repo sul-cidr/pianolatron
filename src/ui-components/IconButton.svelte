@@ -54,17 +54,19 @@
   export let disabled = false;
 
   export let iconName;
+  export let label;
 
   export let ref = undefined;
 </script>
 
 <button
   class={$$props.class}
+  aria-label={label}
   use:tooltipAction={tooltip}
   {disabled}
   on:click
   on:mousedown
   bind:this={ref}
 >
-  <Icon name={iconName} {height} {width} />
+  <Icon name={iconName} {height} {width} aria-hidden="true" focusable="false" />
 </button>

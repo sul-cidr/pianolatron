@@ -172,10 +172,10 @@
 </script>
 
 <svg
-  class={$$props.class}
   {height}
   {width}
   {...defaultAttribs}
   {...attribs}
-  {...customAttribs}>{@html svg}</svg
+  {...customAttribs}
+  {...$$props}>{@html svg}</svg
 >
