@@ -44,6 +44,7 @@
   {#key isChanged}
     <IconButton
       iconName="reset"
+      label="Reset Increment to Default"
       height="20"
       width="20"
       disabled={!isChanged}

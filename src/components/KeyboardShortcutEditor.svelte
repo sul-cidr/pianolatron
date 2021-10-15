@@ -283,6 +283,7 @@
       <IconButton
         on:click={toggleKeybindingsConfig}
         iconName="cross"
+        label="Close Keyboard Controls Panel"
         height="24"
         width="24"
       />
@@ -341,6 +342,8 @@
         Reset to defaults: <IconButton
           on:click={resetShortcuts}
           iconName="reset"
+          tooltip="Reset all Keystrokes to Default"
+          label="Reset all Keystrokes to Default"
           height="24"
           width="24"
         />
