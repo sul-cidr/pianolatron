@@ -187,9 +187,12 @@
         }
       },
     );
+    // Note: SOFT_PEDAL_RATIO is only applied when calling piano.keyDown() as
+    //       @tonejs/piano has so built-in soft pedaling and so we emulate in
+    //       software.  For WebMIDI outputs we send soft pedal controller
+    //       events and note velocities that are not modified for softness.
     const modifiedVelocity = Math.min(
       baseVelocity *
-        (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
         (($accentOnOff && ACCENT_BUMP) || 1) *
         $volumeCoefficient *
         (noteNumber < HALF_BOUNDARY
@@ -200,7 +203,7 @@
     if (modifiedVelocity) {
       piano.keyDown({
         midi: noteNumber,
-        velocity: modifiedVelocity,
+        velocity: modifiedVelocity * (($softOnOff && SOFT_PEDAL_RATIO) || 1),
       });
     }
     if (!fromMidi) {
