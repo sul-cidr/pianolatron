@@ -10,57 +10,64 @@
 
   let midiOuts = [];
 
-  const MIDI_NOTE_ON = 0x90; // = the event code (0x90) + channel (0)
-  const MIDI_NOTE_OFF = 0x80;
-  const MIDI_CONTROL = 0xb0;
-  const MIDI_SUSTAIN = 0x40;
-  const MIDI_SOFT = 0x43;
+  const midiBytes = {
+    NOTE_ON: 0x90, // = the event code (0x90) + channel (0)
+    NOTE_OFF: 0x80,
+    CONTROLLER: 0xb0,
+    SUSTAIN: 0x40,
+    SOFT: 0x43,
+  };
 
   const sendMidiMsg = (msgType, entity, value) => {
-    let msg = null;
-    if (msgType === "note_on") {
-      msg = [MIDI_NOTE_ON, entity, parseInt(clamp(0, 1, value) * 127, 10)];
-    } else if (msgType === "note_off") {
-      msg = [MIDI_NOTE_OFF, entity, value];
-    } else if (msgType === "controller") {
-      if (entity === "sustain") {
-        msg = [MIDI_CONTROL, MIDI_SUSTAIN, (value ? 1 : 0) * 127];
-      } else if (entity === "soft") {
-        msg = [MIDI_CONTROL, MIDI_SOFT, (value ? 1 : 0) * 127];
-      }
-    }
-    if (msg) {
-      for (let i = 0; i < midiOuts.length; i += 1) {
-        midiOuts[i].send(msg);
-      }
-    }
+    midiOuts.forEach((midiOut) =>
+      midiOut.send([
+        midiBytes[msgType],
+        midiBytes[entity] || entity,
+        clamp(parseInt(value * 127, 10), 0, 127),
+      ]),
+    );
   };
 
   const registerMidiInputs = (midi) => {
     // Respond to input from attached MIDI controllers
-    Array.from(midi.inputs).forEach((input) => {
-      if (input[1].onmidimessage !== null) return;
-      input[1].onmidimessage = (msg) => {
-        if (msg.data.length > 1) {
-          if (msg.data[0] === MIDI_CONTROL) {
-            if (msg.data[1] === MIDI_SUSTAIN) {
-              toggleSustain(!!parseInt(msg.data[2], 10), true);
-            } else if (msg.data[1] === MIDI_SOFT) {
-              toggleSoft(!!parseInt(msg.data[2], 10), true);
+    [...midi.inputs].forEach(([, input]) => {
+      if (input.onmidimessage !== null) return;
+      input.onmidimessage = ({ data: [msgType, entity, value] }) => {
+        if (!entity) return;
+
+        switch (msgType) {
+          case midiBytes.CONTROLLER:
+            switch (entity) {
+              case midiBytes.SUSTAIN:
+                toggleSustain(!!parseInt(value, 10), /* fromMidi = */ true);
+                break;
+
+              case midiBytes.SOFT:
+                toggleSoft(!!parseInt(value, 10), /* fromMidi = */ true);
+                break;
+
+              default:
             }
-          } else if (msg.data[0] === MIDI_NOTE_ON) {
-            if (msg.data[2] === 0) {
-              stopNote(msg.data[1], true);
+
+            break;
+
+          case midiBytes.NOTE_ON:
+            if (value === 0) {
+              stopNote(entity, /* fromMidi = */ true);
             } else {
               startNote(
-                msg.data[1],
-                parseInt((parseFloat(msg.data[2]) / 127) * 100, 10),
-                true,
+                entity,
+                parseInt((parseFloat(value) / 127) * 100, 10),
+                /* fromMidi = */ true,
               );
             }
-          } else if (msg.data[0] === MIDI_NOTE_OFF) {
-            stopNote(msg.data[1], true);
-          }
+            break;
+
+          case midiBytes.NOTE_OFF:
+            stopNote(entity, /* fromMidi = */ true);
+            break;
+
+          default:
         }
       };
     });
@@ -78,17 +85,17 @@
 
       navigator.requestMIDIAccess().then((midi) => {
         registerMidiInputs(midi);
-        midiOuts = Array.from(midi.outputs).map((output) => output[1]);
-        midi.onstatechange = (e) => {
+        midiOuts = [...midi.outputs].map(([, output]) => output);
+        midi.onstatechange = ({ port }) => {
           // Print information about the (dis)connected MIDI controller
           notify({
             title: "MIDI device change",
-            message: `${e.port.name} ${e.port.manufacturer} ${e.port.state}`,
+            message: `${port.name} ${port.manufacturer} ${port.state}`,
             timeout: 4000,
             closable: true,
           });
           registerMidiInputs(midi);
-          midiOuts = Array.from(midi.outputs).map((output) => output[1]);
+          midiOuts = [...midi.outputs].map(([, output]) => output);
         };
       });
     } else {

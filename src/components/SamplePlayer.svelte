@@ -85,7 +85,7 @@
     if (fromMidi) {
       $sustainOnOff = onOff;
     } else {
-      webMidi?.sendMidiMsg("controller", "sustain", onOff);
+      webMidi?.sendMidiMsg("CONTROLLER", "SUSTAIN", onOff);
     }
   };
 
@@ -93,7 +93,7 @@
     if (fromMidi) {
       $softOnOff = onOff;
     } else {
-      webMidi?.sendMidiMsg("controller", "soft", onOff);
+      webMidi?.sendMidiMsg("CONTROLLER", "SOFT", onOff);
     }
   };
 
@@ -210,7 +210,7 @@
       });
     }
     if (!fromMidi) {
-      webMidi?.sendMidiMsg("note_on", noteNumber, modifiedVelocity);
+      webMidi?.sendMidiMsg("NOTE_ON", noteNumber, modifiedVelocity);
     }
   };
 
@@ -218,7 +218,7 @@
     activeNotes.delete(noteNumber);
     piano.keyUp({ midi: noteNumber });
     if (!fromMidi) {
-      webMidi?.sendMidiMsg("note_off", noteNumber, 0);
+      webMidi?.sendMidiMsg("NOTE_OFF", noteNumber, 0);
     }
   };
 
