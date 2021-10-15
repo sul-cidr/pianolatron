@@ -5,7 +5,6 @@
 
   export let startNote;
   export let stopNote;
-  export let activeNotes;
   export let toggleSustain;
   export let toggleSoft;
 
@@ -52,18 +51,15 @@
           } else if (msg.data[0] === MIDI_NOTE_ON) {
             if (msg.data[2] === 0) {
               stopNote(msg.data[1], true);
-              activeNotes.delete(msg.data[1]);
             } else {
               startNote(
                 msg.data[1],
                 parseInt((parseFloat(msg.data[2]) / 127) * 100, 10),
                 true,
               );
-              activeNotes.add(msg.data[1]);
             }
           } else if (msg.data[0] === MIDI_NOTE_OFF) {
             stopNote(msg.data[1], true);
-            activeNotes.delete(msg.data[1]);
           }
         }
       };

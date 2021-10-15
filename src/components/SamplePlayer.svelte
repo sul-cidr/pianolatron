@@ -173,6 +173,7 @@
   };
 
   const startNote = (noteNumber, velocity, fromMidi) => {
+    activeNotes.add(noteNumber);
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
     [$velocityCurveLow, $velocityCurveMid, $velocityCurveHigh].forEach(
@@ -214,6 +215,7 @@
   };
 
   const stopNote = (noteNumber, fromMidi) => {
+    activeNotes.delete(noteNumber);
     piano.keyUp({ midi: noteNumber });
     if (!fromMidi) {
       webMidi?.sendMidiMsg("note_off", noteNumber, 0);
@@ -341,10 +343,8 @@
       if (name === "Note on") {
         if (velocity === 0) {
           stopNote(noteNumber);
-          activeNotes.delete(noteNumber);
         } else {
           startNote(noteNumber, velocity);
-          activeNotes.add(noteNumber);
         }
       } else if (name === "Controller Change" && $rollPedalingOnOff) {
         if (number === SUSTAIN_PEDAL) {
@@ -387,7 +387,6 @@
     bind:this={webMidi}
     {startNote}
     {stopNote}
-    {activeNotes}
     {toggleSustain}
     {toggleSoft}
   />
