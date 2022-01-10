@@ -3,7 +3,7 @@
     "druid": "ch918dn4026",
     "image_url": "https://stacks.stanford.edu/image/iiif/ch918dn4026%2Fch918dn4026_0001/info.json",
     "label": "3270 Welte-Mignon",
-    "title": "Beethoven/Pembaur - Fantasia op. 77, G minor",
+    "title": "Beethoven/Pembaur - Fantasia op. 77, g minor",
     "type": "welte-green"
   },
   {
@@ -17,7 +17,7 @@
     "druid": "jg886ps8946",
     "image_url": "https://stacks.stanford.edu/image/iiif/jg886ps8946%2Fjg886ps8946_0001/info.json",
     "label": "1445 Welte-Mignon",
-    "title": "Chopin/Schelling - Etude op. 10, no. 10, A flat",
+    "title": "Chopin/Schelling - Etude op. 10, no. 10, a flat",
     "type": "welte-green"
   },
   {
@@ -31,14 +31,21 @@
     "druid": "df354sy6634",
     "image_url": "https://stacks.stanford.edu/image/iiif/df354sy6634%2Fdf354sy6634_0001/info.json",
     "label": "3379 Welte-Mignon",
-    "title": "Grieg/Berend - Peer Gynt II, op. 55, no. 4",
+    "title": "Grieg/Berend - Peer gynt ii, op. 55, no. 4",
     "type": "welte-green"
+  },
+  {
+    "druid": "ny606dc0992",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ny606dc0992%2Fny606dc0992_0001/info.json",
+    "label": "B-6239 De Luxe",
+    "title": "Mascagni/Davis - Cavelleria rusticana",
+    "type": "welte-licensee"
   },
   {
     "druid": "hh361xy4933",
     "image_url": "https://stacks.stanford.edu/image/iiif/hh361xy4933%2Fhh361xy4933_0001/info.json",
     "label": "C-6893 De Luxe",
-    "title": "Mendelssohn-Bartholdy-Hutcheson/Bacon - Scherzo (Midsummer night's dream)",
+    "title": "Mendelssohn-Bartholdy-Hutcheson/Bacon - Scherzo (midsummer night's dream)",
     "type": "welte-licensee"
   },
   {
@@ -59,7 +66,7 @@
     "druid": "vg335rq3648",
     "image_url": "https://stacks.stanford.edu/image/iiif/vg335rq3648%2Fvg335rq3648_0001/info.json",
     "label": "2634 Welte-Mignon",
-    "title": "Sibelius/Di Benici - Caprice F minor",
+    "title": "Sibelius/Di Benici - Caprice f minor",
     "type": "welte-green"
   }
 ]
