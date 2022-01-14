@@ -1,5 +1,8 @@
 <style lang="scss">
   .notifications {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
     left: 50%;
     min-width: 400px;
     position: absolute;
