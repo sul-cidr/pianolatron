@@ -97,17 +97,28 @@ def get_metadata_for_druid(druid, redownload_mods):
                 roll_type = ROLL_TYPES[note.text]
 
     metadata = {
+        "title_prefix": get_value_by_xpath("(x:titleInfo/x:nonSort)[1]/text()"),
         "title": get_value_by_xpath("(x:titleInfo/x:title)[1]/text()"),
+        "title_part_number": get_value_by_xpath(
+            "(x:titleInfo/x:partNumber)[1]/text()"
+        ),
+        "title_part_name": get_value_by_xpath(
+            "(x:titleInfo/x:partName)[1]/text()"
+        ),
+        "subtitle": get_value_by_xpath("(x:titleInfo/x:subTitle)[1]/text()"),
         "composer": get_value_by_xpaths(
             [
                 "x:name[descendant::x:roleTerm[text()='composer']]/x:namePart[not(@type='date')]/text()",
                 "x:name[descendant::x:roleTerm[text()='Composer']]/x:namePart[not(@type='date')]/text()",
+                "x:name[descendant::x:roleTerm[text()='composer.']]/x:namePart[not(@type='date')]/text()",
                 "x:name[descendant::x:roleTerm[text()='cmp']]/x:namePart[not(@type='date')]/text()",
             ]
         ),
-        "performer": get_value_by_xpath(
-            "x:name[descendant::x:roleTerm[text()='instrumentalist']]/"
-            "x:namePart[not(@type='date')]/text()"
+        "performer": get_value_by_xpaths(
+            [
+                "x:name[descendant::x:roleTerm[text()='instrumentalist']]/x:namePart[not(@type='date')]/text()",
+                "x:name[descendant::x:roleTerm[text()='instrumentalist.']]/x:namePart[not(@type='date')]/text()",
+            ]
         ),
         "arranger": get_value_by_xpaths(
             [
@@ -135,6 +146,8 @@ def get_metadata_for_druid(druid, redownload_mods):
             [
                 "x:identifier[@type='publisher']/text()",
                 "x:originInfo[@eventType='publication']/x:publisher/text()",
+                "x:name[@type='corporate']/x:nameType/text()",
+                "x:name[descendant::x:roleTerm[text()='publisher.']]/x:namePart/text()",
             ]
         ),
         "number": get_value_by_xpath(
@@ -145,11 +158,13 @@ def get_metadata_for_druid(druid, redownload_mods):
                 "x:originInfo[@eventType='publication']/x:dateIssued[@keyDate='yes']/text()",
                 "x:originInfo[@eventType='publication']/x:dateIssued/text()",
                 "x:originInfo/x:dateIssued[@point='start']/text()",
+                "x:originInfo[@displayLabel='publisher']/x:dateIssued/text()",
             ]
         ),
         "publish_place": get_value_by_xpaths(
             [
                 "x:originInfo[@eventType='publication']/x:place/x:placeTerm[@type='text']/text()",
+                "x:originInfo[@displayLabel='publisher']/x:place/x:placeTerm/text()",
             ]
         ),
         "recording_date": get_value_by_xpaths(
@@ -267,7 +282,9 @@ def get_hole_report_data(druid, analysis_source_dir):
     hole_data = []
 
     if not txt_filepath.exists():
-        logging.info(f"Unable to find hole analysis output file for {druid}")
+        logging.info(
+            f"Unable to find hole analysis output file for {druid} at {txt_filepath}."
+        )
         return roll_data, hole_data
 
     roll_keys = [
@@ -379,6 +396,19 @@ def refine_metadata(metadata):
             metadata["number"] = "----"
         metadata["label"] = metadata["number"] + " " + metadata["publisher"]
 
+    # Construct a more user-friendly title from the contents of <titleInfo>
+    fulltitle = metadata["title"].capitalize()
+    if metadata["title_prefix"] is not None:
+        fulltitle = f"{metadata['title_prefix']} {fulltitle}"
+    if metadata["subtitle"] is not None:
+        fulltitle = f"{fulltitle}: {metadata['subtitle']}"
+    if metadata["title_part_number"] is not None:
+        fulltitle = f"{fulltitle}: {metadata['title_part_number']}"
+    if metadata["title_part_name"] is not None:
+        fulltitle = f"{fulltitle}: {metadata['title_part_name']}"
+
+    metadata["title"] = fulltitle.replace(" : ", ": ")
+
     # Construct a summary of the roll's music to use in the searchbar
     searchtitle = None
 
@@ -413,11 +443,11 @@ def refine_metadata(metadata):
             searchtitle = performer_short
 
     if searchtitle is not None:
-        searchtitle += " - " + metadata["title"]
+        searchtitle += " - " + fulltitle
     else:
-        searchtitle = metadata["title"]
+        searchtitle = fulltitle
 
-    metadata["searchtitle"] = searchtitle
+    metadata["searchtitle"] = searchtitle.replace(" : ", ": ")
 
     return metadata
 
