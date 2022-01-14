@@ -46,6 +46,7 @@
   import BasicSettings from "./BasicSettings.svelte";
   import AdvancedSettings from "./AdvancedSettings.svelte";
   import AudioSettings from "./AudioSettings.svelte";
+  import MidiSettings from "./MidiSettings.svelte";
 
   export let playPauseApp;
   export let skipToPercentage;
@@ -59,6 +60,7 @@
     },
     settings: { component: AdvancedSettings, icon: "cog" },
     audio: { component: AudioSettings, icon: "piano" },
+    midi: { component: MidiSettings, icon: "midi" },
   };
 
   let selectedPanel = "controls";
