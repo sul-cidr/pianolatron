@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
   import { clamp } from "../lib/utils";
-  import { notify } from "../ui-components/Notification.svelte";
   import { midiInputs, midiOutputs } from "../stores";
 
   export let startNote;
