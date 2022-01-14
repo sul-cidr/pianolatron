@@ -35,6 +35,12 @@ ROLL_TYPES = {
     "88n": "88-note",
     "standard": "88-note",
     "non-reproducing": "88-note",
+    "Welte-Mignon green roll (T-98)": "welte-green",
+    "Welte-Mignon green roll (T-98).": "welte-green",
+    "Welte-Mignon licensee roll": "welte-licensee",
+    "Welte-Mignon licensee roll.": "welte-licensee",
+    "Duo-Art piano rolls": "duo-art",
+    "Duo-Art piano rolls.": "duo-art",
 }
 
 PURL_BASE = "https://purl.stanford.edu/"
@@ -166,7 +172,9 @@ def get_iiif_manifest(druid, redownload_manifests, iiif_source_dir):
     target_iiif_filepath = Path(f"input/manifests/{druid}.json")
     source_iiif_filepath = Path(f"{iiif_source_dir}/{druid}.json")
     if (
-        not target_iiif_filepath.exists() and not source_iiif_filepath.exists()
+        not target_iiif_filepath.exists()
+        or not source_iiif_filepath.exists()
+        or redownload_manifests
     ) or redownload_manifests:
         response = requests.get(f"{PURL_BASE}{druid}/iiif/manifest")
         iiif_manifest = response.json()
@@ -423,12 +431,11 @@ def main():
         description="""Generate per-roll DRUID.json files as well as a
                        comprehensive catalog.json file that describes all rolls
                        processed, and place these files, along with the 
-                       roll's MIDI file of the desired type (_note or _exp, as
-                       DRUID.mid), in the proper locations in the Pianolatron
-                       folders. If no DRUIDs are provided on the command line,
-                       the script will look for CSV files in the input/druids/
-                       folder, and will obtain DRUIDs from columns with the
-                       header "Druid".
+                       desired MIDI file type (_note or _exp) as DRUID.mid in
+                       the proper locations in the Pianolatron folders.
+                       If no DRUIDs are provided on the command line, the
+                       script will look for CSV files in the druids/ folder,
+                       and obtain DRUIDs from columns with the header "Druid".
                     """
     )
     argparser.add_argument(
