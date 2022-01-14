@@ -496,7 +496,7 @@ def main():
     argparser.add_argument(
         "--midi_source_dir",
         default=MIDI_DIR,
-        help="External folder containg note (/note/DRUID_note.mid) or expressionized (/note/DRUID_exp.mid) MIDI files",
+        help="External folder containg note (/note/DRUID_note.mid) or expressionized (/exp/DRUID_exp.mid) MIDI files",
     )
     argparser.add_argument(
         "--analysis_source_dir",
