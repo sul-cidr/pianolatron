@@ -1,18 +1,20 @@
 <style lang="scss">
-  .notification {
-    border-radius: 4px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
-    display: flex;
-    justify-content: space-between;
+  .notifications {
     left: 50%;
     min-width: 400px;
     position: absolute;
-    top: 10vh;
+    top: 5vh;
     transform: translate(-50%);
     z-index: z($main-context, notifications);
-    border-left-width: 6px;
+  }
 
+  .notification {
+    border-left-width: 6px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
     color: white;
+    display: flex;
+    justify-content: space-between;
 
     :global(a) {
       color: white;
@@ -29,8 +31,8 @@
       }
 
       .close {
-        color: var(--primary-accent);
         border-left-color: var(--primary-accent-semiopaque);
+        color: var(--primary-accent);
       }
     }
 
@@ -98,48 +100,75 @@
   import { writable } from "svelte/store";
   import { fly, fade } from "svelte/transition";
 
-  const NotificationStore = writable();
-  let timeout;
+  const NotificationsStore = writable([]);
+  const timeouts = {};
+  let nextId = 0;
 
-  export const notify = (detail) => NotificationStore.set(detail);
-  export const clearNotification = () => {
-    clearTimeout(timeout);
-    NotificationStore.set();
+  export const clearNotification = (id) => {
+    clearTimeout(timeouts[id]);
+    delete timeouts[id];
+    NotificationsStore.update((notifications) =>
+      notifications.filter((notification) => notification.id !== id),
+    );
+  };
+
+  export const notify = (detail) => {
+    const id = nextId;
+    nextId += 1;
+    NotificationsStore.update((notifications) => [
+      ...notifications,
+      { id, ...detail },
+    ]);
+    if (detail.timeout) {
+      timeouts[id] = setTimeout(() => clearNotification(id), detail.timeout);
+    }
   };
 </script>
 
 <script>
-  $: if ($NotificationStore?.timeout)
-    timeout = setTimeout(NotificationStore.set, $NotificationStore?.timeout);
+  import { onDestroy } from "svelte";
+
+  onDestroy(() =>
+    Object.values(timeouts).forEach((timeout) => clearTimeout(timeout)),
+  );
 </script>
 
-{#if $NotificationStore}
-  {#if $NotificationStore.modal}
+{#if $NotificationsStore}
+  {#if $NotificationsStore.some((notification) => notification.modal)}
     <div class="modal-screen" transition:fade />
   {/if}
-  <div
-    transition:fly={{
-      y: -200,
-      duration: $NotificationStore.timeout ? 1000 : 400,
-    }}
-    class="notification {$NotificationStore.type || 'default'}"
-  >
-    <section>
-      {#if $NotificationStore.title}
-        <header>{$NotificationStore.title}</header>
-      {/if}
-      <p>{@html $NotificationStore.message}</p>
-      {#each $NotificationStore.actions || [] as action}
-        <button
-          on:click={() => {
-            clearNotification();
-            action.fn();
-          }}>{action.label}</button
-        >
-      {/each}
-    </section>
-    {#if $NotificationStore.closable !== false}
-      <div class="close" on:click={clearNotification}>&times;</div>
-    {/if}
+  <div class="notifications">
+    {#each $NotificationsStore as notification (notification.id)}
+      <div
+        transition:fly={{
+          y: -200,
+          duration: notification.timeout ? 1000 : 400,
+        }}
+        class="notification {notification.type || 'default'}"
+      >
+        <section>
+          {#if notification.title}
+            <header>{notification.title}</header>
+          {/if}
+          <p>{@html notification.message}</p>
+          {#each notification.actions || [] as action}
+            <button
+              on:click={() => {
+                clearNotification(notification.id);
+                action.fn();
+              }}>{action.label}</button
+            >
+          {/each}
+        </section>
+        {#if notification.closable !== false}
+          <div
+            class="close"
+            on:click={() => clearNotification(notification.id)}
+          >
+            &times;
+          </div>
+        {/if}
+      </div>
+    {/each}
   </div>
 {/if}
