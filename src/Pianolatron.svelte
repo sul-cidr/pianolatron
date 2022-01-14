@@ -129,6 +129,8 @@
   };
 
   const buildHolesIntervalTree = () => {
+    if (!holeData) return;
+
     const { FIRST_HOLE } = $rollMetadata;
 
     const firstHolePx = parseInt(FIRST_HOLE, 10);
