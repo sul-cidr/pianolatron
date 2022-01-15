@@ -106,11 +106,12 @@
     playExpressionsOnOff,
     userSettings,
   } from "../stores";
-
-  export let defaultHoleColor;
-  export let pedalHoleColor;
-  export let controlHoleColor;
-  export let holeColorMap;
+  import {
+    defaultHoleColor,
+    pedalHoleColor,
+    controlHoleColor,
+    holeColorMap,
+  } from "../lib/utils";
 
   let collapsed = false;
 </script>

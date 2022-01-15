@@ -622,11 +622,6 @@
     />
   {/if}
   {#if rollImageReady}
-    <RollViewerLegend
-      {defaultHoleColor}
-      {pedalHoleColor}
-      {controlHoleColor}
-      {holeColorMap}
-    />
+    <RollViewerLegend />
   {/if}
 </div>
