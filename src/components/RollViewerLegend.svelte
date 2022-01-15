@@ -1,6 +1,6 @@
 <style lang="scss">
   div {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.8);
     color: white;
     border-radius: 4px;
     padding: 15px 15px 8px 8px;
@@ -9,10 +9,6 @@
     bottom: 1%;
     left: 1%;
     transition: background 0.5s ease, transform 0.5s ease;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
 
     &.collapsed {
       overflow: hidden;
@@ -42,17 +38,13 @@
   }
 
   dl.hole-color-legend {
+    display: flex;
+    flex-direction: column;
     margin-top: 0.5em;
 
     dt {
-      height: 8em;
-    }
-
-    dd {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 8em;
+      margin: 0.25em 0;
+      width: 100%;
     }
   }
 
@@ -147,16 +139,14 @@
   </dl>
   {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
     <dl class="hole-color-legend" transition:slide>
+      <dd>Note Velocity</dd>
       <dt
-        style={`background: linear-gradient(180deg, ${holeColorMap
+        style={`background: linear-gradient(90deg, ${holeColorMap
           .map(
             (hsl, i) => `hsl(${hsl}) ${(i / (holeColorMap.length - 1)) * 100}%`,
           )
           .join(", ")})`}
       />
-      <dd>
-        <span>↑ lower</span><span>Note Velocity</span><span>↓ higher</span>
-      </dd>
     </dl>
   {/if}
 </div>
