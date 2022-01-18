@@ -287,8 +287,8 @@
         {/if}
       {/if}
     </FlexCollapsible>
-    {#if appReady}
-      <div id="roll">
+    <div id="roll">
+      {#if appReady}
         <RollViewer
           bind:this={rollViewer}
           imageUrl={currentRoll.image_url}
@@ -296,16 +296,16 @@
           {holesByTickInterval}
           {skipToTick}
         />
-        {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
-          <div id="keyboard-overlay" transition:fade>
-            <Keyboard keyCount="88" {startNote} {stopNote} />
-          </div>
-        {/if}
-      </div>
-      <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-        <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
-      </FlexCollapsible>
-    {/if}
+      {/if}
+      {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
+        <div id="keyboard-overlay" transition:fade>
+          <Keyboard keyCount="88" {startNote} {stopNote} />
+        </div>
+      {/if}
+    </div>
+    <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+    </FlexCollapsible>
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>
