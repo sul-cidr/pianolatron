@@ -31,7 +31,24 @@
 
 <script>
   import { fade } from "svelte/transition";
-  import { midiInputs, midiOutputs, userSettings } from "../stores";
+  import {
+    midiInputs,
+    midiOutputs,
+    userSettings,
+    sustainOnOff,
+    softOnOff,
+    sustainFromExternalMidi,
+    softFromExternalMidi,
+  } from "../stores";
+
+  const resetPedals = () => {
+    $sustainOnOff = false;
+    $softOnOff = false;
+  };
+
+  /* eslint-disable no-unused-expressions, no-sequences */
+  $: $sustainFromExternalMidi, resetPedals();
+  $: $softFromExternalMidi, resetPedals();
 </script>
 
 <section>
@@ -50,6 +67,18 @@
       </div>
 
       {#if $userSettings.useWebMidi}
+        <fieldset>
+          <legend>Pedal Settings</legend>
+          <div class="setting">
+            Sustain from External MIDI:
+            <input type="checkbox" bind:checked={$sustainFromExternalMidi} />
+          </div>
+          <div class="setting">
+            Soft from External MIDI:
+            <input type="checkbox" bind:checked={$softFromExternalMidi} />
+          </div>
+        </fieldset>
+
         <p class="list-header" transition:fade>Connected Inputs:</p>
         <ul>
           {#each $midiInputs as input}

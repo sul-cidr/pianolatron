@@ -15,6 +15,8 @@
     tempoCoefficient,
     playExpressionsOnOff,
     rollPedalingOnOff,
+    sustainFromExternalMidi,
+    softFromExternalMidi,
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
@@ -82,17 +84,17 @@
     } else {
       piano.pedalUp();
     }
-    if (fromMidi) {
+    if (fromMidi && $sustainFromExternalMidi) {
       $sustainOnOff = onOff;
-    } else {
+    } else if (!fromMidi && !$sustainFromExternalMidi) {
       webMidi?.sendMidiMsg("CONTROLLER", "SUSTAIN", onOff);
     }
   };
 
   const toggleSoft = (onOff, fromMidi) => {
-    if (fromMidi) {
+    if (fromMidi && $softFromExternalMidi) {
       $softOnOff = onOff;
-    } else {
+    } else if (!fromMidi && !$softFromExternalMidi) {
       webMidi?.sendMidiMsg("CONTROLLER", "SOFT", onOff);
     }
   };

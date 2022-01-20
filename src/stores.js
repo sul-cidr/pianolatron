@@ -36,6 +36,8 @@ export const scrollDownwards = derived(
 export const softOnOff = createStore(false);
 export const sustainOnOff = createStore(false);
 export const accentOnOff = createStore(false);
+export const sustainFromExternalMidi = createStore(false);
+export const softFromExternalMidi = createStore(false);
 
 // Playback Settings
 export const volumeCoefficient = createStore(1.5);
