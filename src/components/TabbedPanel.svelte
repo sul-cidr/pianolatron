@@ -51,11 +51,12 @@
   export let playPauseApp;
   export let skipToPercentage;
   export let stopApp;
+  export let reloadRoll;
 
   const panels = {
     controls: {
       component: BasicSettings,
-      props: { skipToPercentage },
+      props: { skipToPercentage, reloadRoll },
       icon: "sliders",
     },
     settings: { component: AdvancedSettings, icon: "cog" },

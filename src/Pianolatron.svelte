@@ -65,6 +65,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     userSettings,
+    expressionizer,
   } from "./stores";
   import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -178,16 +179,20 @@
     holesByTickInterval = new IntervalTree();
   };
 
-  const loadRoll = (roll) => {
+  const loadRoll = (roll, doReset = true) => {
     appWaiting = true;
-    mididataReady = fetch(`./midi/${roll.druid}.mid`)
+    mididataReady = fetch(
+      `./${$expressionizer === "FROM_MIDI" ? "midi" : "note_midi"}/${
+        roll.druid
+      }.mid`,
+    )
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
         throw new Error("Error fetching MIDI file! (Operation cancelled)");
       })
       .then((mididataArrayBuffer) => {
-        resetApp();
+        if (doReset) resetApp();
         midiSamplePlayer.loadArrayBuffer(mididataArrayBuffer);
       })
       .catch((err) => {
@@ -205,7 +210,7 @@
         currentRoll = previousRoll;
       });
 
-    Promise.all([mididataReady, metadataReady, pianoReady]).then(
+    return Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
         metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
         holeData = metadataJson.holeData;
@@ -227,6 +232,19 @@
         }
       },
     );
+  };
+
+  const reloadRoll = () => {
+    const savedTick = $currentTick;
+    let startPlayer = false;
+    if (midiSamplePlayer.isPlaying()) {
+      pausePlayback();
+      startPlayer = true;
+    }
+    loadRoll(currentRoll, false).then(() => {
+      skipToTick(savedTick);
+      if (startPlayer) startPlayback();
+    });
   };
 
   const setCurrentRollFromUrl = () => {
@@ -318,7 +336,7 @@
       {/if}
     </div>
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} {reloadRoll} />
     </FlexCollapsible>
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
