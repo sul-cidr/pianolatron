@@ -1,9 +1,4 @@
 <style lang="scss">
-  header {
-    font-size: 1.4em;
-    line-height: 1.5;
-  }
-
   .setting {
     margin: 1em 0;
   }
