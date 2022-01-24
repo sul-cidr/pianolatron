@@ -8,6 +8,8 @@
   export let toggleSustain;
   export let toggleSoft;
 
+  let mediaAccess;
+
   const midiBytes = {
     NOTE_ON: 0x90, // = the event code (0x90) + channel (0)
     NOTE_OFF: 0x80,
@@ -65,33 +67,55 @@
     }
   };
 
-  const updatePorts = (midi) => {
-    $midiInputs = [...midi.inputs]
+  const initializePorts = () => {
+    $midiInputs = [...mediaAccess.inputs]
       .filter(([, input]) => input.state === "connected")
       .map(([, input]) => input);
 
-    $midiOutputs = [...midi.outputs]
+    $midiOutputs = [...mediaAccess.outputs]
       .filter(([, input]) => input.state === "connected")
       .map(([, output]) => output);
 
     $midiInputs.forEach((input) => {
-      if (input.onmidimessage === null)
-        input.addEventListener("midimessage", receiveMidiMsg);
+      input.addEventListener("midimessage", receiveMidiMsg);
     });
+  };
+
+  const midiStateChange = ({ port }) => {
+    if (port instanceof MIDIInput) {
+      if (port.state === "connected" && !$midiInputs.includes(port)) {
+        port.addEventListener("midimessage", receiveMidiMsg);
+        midiInputs.update((v) => [...v, port]);
+      }
+      if (port.state === "disconnected") {
+        port.removeEventListener("midimessage", receiveMidiMsg);
+        midiInputs.update((v) => v.filter((p) => p !== port));
+      }
+    }
+    if (port instanceof MIDIOutput) {
+      if (port.state === "connected" && !$midiOutputs.includes(port)) {
+        midiOutputs.update((v) => [...v, port]);
+      }
+      if (port.state === "disconnected") {
+        midiOutputs.update((v) => v.filter((p) => p !== port));
+      }
+    }
   };
 
   onMount(() => {
     if (navigator.requestMIDIAccess) {
       navigator.requestMIDIAccess().then((midi) => {
-        updatePorts(midi);
-        midi.onstatechange = () => updatePorts(midi);
+        mediaAccess = midi;
+        initializePorts();
+        mediaAccess.addEventListener("statechange", midiStateChange);
       });
     }
 
     return () => {
-      $midiInputs.forEach((input) =>
-        input.removeEventListener("midimessage", receiveMidiMsg),
-      );
+      mediaAccess.removeEventListener("statechange", midiStateChange);
+      $midiInputs.forEach((input) => {
+        input.removeEventListener("midimessage", receiveMidiMsg);
+      });
     };
   });
 
