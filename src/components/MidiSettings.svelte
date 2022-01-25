@@ -50,14 +50,14 @@
       </div>
 
       {#if $userSettings.useWebMidi}
-        <p class="list-header">Connected Inputs:</p>
+        <p class="list-header" transition:fade>Connected Inputs:</p>
         <ul>
           {#each $midiInputs as input}
             <li transition:fade>{input.name} {input.manufacturer}</li>
           {/each}
         </ul>
 
-        <p class="list-header">Connected Outputs:</p>
+        <p class="list-header" transition:fade>Connected Outputs:</p>
         <ul>
           {#each $midiOutputs as output}
             <li transition:fade>{output.name} {output.manufacturer}</li>
