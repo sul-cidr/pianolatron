@@ -191,7 +191,7 @@
   let mouseDown = false;
   let playing = new Set();
   const stopPlaying = () => {
-    playing.forEach(stopNote);
+    playing.forEach((midiNumber) => stopNote(midiNumber));
     playing = new Set();
   };
 </script>

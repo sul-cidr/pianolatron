@@ -86,6 +86,7 @@
 
   import catalog from "./config/catalog.json";
 
+  let firstLoad = true;
   let appReady = false;
   let appWaiting = true;
   let mididataReady;
@@ -167,7 +168,7 @@
   const resetApp = () => {
     rollViewer?.$destroy();
     mididataReady = false;
-    clearNotification();
+    if (!firstLoad) clearNotification();
     appReady = false;
     pausePlayback();
     resetPlayback();
@@ -214,6 +215,7 @@
         $rollPedalingOnOff = $isReproducingRoll;
         appReady = true;
         appWaiting = false;
+        firstLoad = false;
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -285,8 +287,8 @@
         {/if}
       {/if}
     </FlexCollapsible>
-    {#if appReady}
-      <div id="roll">
+    <div id="roll">
+      {#if appReady}
         <RollViewer
           bind:this={rollViewer}
           imageUrl={currentRoll.image_url}
@@ -294,16 +296,16 @@
           {holesByTickInterval}
           {skipToTick}
         />
-        {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
-          <div id="keyboard-overlay" transition:fade>
-            <Keyboard keyCount="88" {startNote} {stopNote} />
-          </div>
-        {/if}
-      </div>
-      <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-        <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
-      </FlexCollapsible>
-    {/if}
+      {/if}
+      {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
+        <div id="keyboard-overlay" transition:fade>
+          <Keyboard keyCount="88" {startNote} {stopNote} />
+        </div>
+      {/if}
+    </div>
+    <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+    </FlexCollapsible>
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>

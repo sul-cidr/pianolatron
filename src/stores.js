@@ -36,6 +36,8 @@ export const scrollDownwards = derived(
 export const softOnOff = createStore(false);
 export const sustainOnOff = createStore(false);
 export const accentOnOff = createStore(false);
+export const sustainFromExternalMidi = createStore(false);
+export const softFromExternalMidi = createStore(false);
 
 // Playback Settings
 export const volumeCoefficient = createStore(1.5);
@@ -70,6 +72,10 @@ export const velocityCurveHigh = createPersistedStore(
   new KeyboardRegion(79, 108),
 );
 
+// MIDI Devices
+export const midiInputs = createStore([]);
+export const midiOutputs = createStore([]);
+
 // Playback State
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
@@ -84,6 +90,7 @@ export const userSettings = createPersistedStore("userSettings", {
   showKeyboard: true,
   overlayKeyboard: false,
   welcomeScreenInhibited: false,
+  useWebMidi: false,
 });
 
 // Browser State

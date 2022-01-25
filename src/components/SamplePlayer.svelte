@@ -15,6 +15,8 @@
     tempoCoefficient,
     playExpressionsOnOff,
     rollPedalingOnOff,
+    sustainFromExternalMidi,
+    softFromExternalMidi,
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
@@ -24,7 +26,11 @@
     velocityCurveLow,
     velocityCurveMid,
     velocityCurveHigh,
+    userSettings,
   } from "../stores";
+  import WebMidi from "./WebMidi.svelte";
+
+  let webMidi;
 
   let tempoMap;
   let pedalingMap;
@@ -70,6 +76,27 @@
       if (i >= tempoMap.length) break;
     }
     return tempo;
+  };
+
+  const toggleSustain = (onOff, fromMidi) => {
+    if (onOff) {
+      piano.pedalDown();
+    } else {
+      piano.pedalUp();
+    }
+    if (fromMidi && $sustainFromExternalMidi) {
+      $sustainOnOff = onOff;
+    } else if (!fromMidi && !$sustainFromExternalMidi) {
+      webMidi?.sendMidiMsg("CONTROLLER", "SUSTAIN", onOff);
+    }
+  };
+
+  const toggleSoft = (onOff, fromMidi) => {
+    if (fromMidi && $softFromExternalMidi) {
+      $softOnOff = onOff;
+    } else if (!fromMidi && !$softFromExternalMidi) {
+      webMidi?.sendMidiMsg("CONTROLLER", "SOFT", onOff);
+    }
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
@@ -147,7 +174,8 @@
     loadSampleVelocities();
   };
 
-  const startNote = (noteNumber, velocity) => {
+  const startNote = (noteNumber, velocity, fromMidi) => {
+    activeNotes.add(noteNumber);
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
     [$velocityCurveLow, $velocityCurveMid, $velocityCurveHigh].forEach(
@@ -164,28 +192,42 @@
         }
       },
     );
-    const modifiedVelocity =
+    // Note: SOFT_PEDAL_RATIO is only applied when calling piano.keyDown() as
+    //       @tonejs/piano has so built-in soft pedaling and so we emulate in
+    //       software.  For WebMIDI outputs we send soft pedal controller
+    //       events and note velocities that are not modified for softness.
+    const modifiedVelocity = Math.min(
       baseVelocity *
-      (($softOnOff && SOFT_PEDAL_RATIO) || 1) *
-      (($accentOnOff && ACCENT_BUMP) || 1) *
-      $volumeCoefficient *
-      (noteNumber < HALF_BOUNDARY
-        ? $bassVolumeCoefficient
-        : $trebleVolumeCoefficient);
+        (($accentOnOff && ACCENT_BUMP) || 1) *
+        $volumeCoefficient *
+        (noteNumber < HALF_BOUNDARY
+          ? $bassVolumeCoefficient
+          : $trebleVolumeCoefficient),
+      1,
+    );
     if (modifiedVelocity) {
       piano.keyDown({
         midi: noteNumber,
-        velocity: Math.min(modifiedVelocity, 1),
+        velocity: modifiedVelocity * (($softOnOff && SOFT_PEDAL_RATIO) || 1),
       });
+    }
+    if (!fromMidi) {
+      webMidi?.sendMidiMsg("NOTE_ON", noteNumber, modifiedVelocity);
     }
   };
 
-  const stopNote = (noteNumber) => piano.keyUp({ midi: noteNumber });
+  const stopNote = (noteNumber, fromMidi) => {
+    activeNotes.delete(noteNumber);
+    piano.keyUp({ midi: noteNumber });
+    if (!fromMidi) {
+      webMidi?.sendMidiMsg("NOTE_OFF", noteNumber, 0);
+    }
+  };
 
   const stopAllNotes = () => {
     piano.pedalUp();
+    $activeNotes.forEach((midiNumber) => stopNote(midiNumber));
     if ($sustainOnOff) piano.pedalDown();
-    $activeNotes.forEach(stopNote);
   };
 
   const resetPlayback = () => {
@@ -303,10 +345,8 @@
       if (name === "Note on") {
         if (velocity === 0) {
           stopNote(noteNumber);
-          activeNotes.delete(noteNumber);
         } else {
           startNote(noteNumber, velocity);
-          activeNotes.add(noteNumber);
         }
       } else if (name === "Controller Change" && $rollPedalingOnOff) {
         if (number === SUSTAIN_PEDAL) {
@@ -323,7 +363,8 @@
   midiSamplePlayer.on("endOfFile", pausePlayback);
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: $sustainOnOff ? piano.pedalDown() : piano.pedalUp();
+  $: toggleSustain($sustainOnOff);
+  $: toggleSoft($softOnOff);
   $: $tempoCoefficient, updatePlayer();
   $: $useMidiTempoEventsOnOff, updatePlayer();
   $: $rollPedalingOnOff, updatePlayer();
@@ -342,3 +383,13 @@
     resetPlayback,
   };
 </script>
+
+{#if $userSettings.useWebMidi}
+  <WebMidi
+    bind:this={webMidi}
+    {startNote}
+    {stopNote}
+    {toggleSustain}
+    {toggleSoft}
+  />
+{/if}
