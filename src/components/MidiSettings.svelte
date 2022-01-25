@@ -67,17 +67,14 @@
       </div>
 
       {#if $userSettings.useWebMidi}
-        <fieldset>
-          <legend>Pedal Settings</legend>
-          <div class="setting">
-            Sustain from External MIDI:
-            <input type="checkbox" bind:checked={$sustainFromExternalMidi} />
-          </div>
-          <div class="setting">
-            Soft from External MIDI:
-            <input type="checkbox" bind:checked={$softFromExternalMidi} />
-          </div>
-        </fieldset>
+        <div class="setting" transition:fade>
+          Sustain from External MIDI:
+          <input type="checkbox" bind:checked={$sustainFromExternalMidi} />
+        </div>
+        <div class="setting" transition:fade>
+          Soft from External MIDI:
+          <input type="checkbox" bind:checked={$softFromExternalMidi} />
+        </div>
 
         <p class="list-header" transition:fade>Connected Inputs:</p>
         <ul>
