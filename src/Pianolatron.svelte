@@ -65,7 +65,6 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     userSettings,
-    midiRecordingEnabled,
   } from "./stores";
   import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -76,7 +75,6 @@
   import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
-  import RecordingControls from "./components/RecordingControls.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
   import Notification, {
@@ -109,6 +107,7 @@
   let pausePlayback;
   let startPlayback;
   let resetPlayback;
+  let midiRecording;
 
   let rollViewer;
   let updateTickByViewportIncrement;
@@ -179,6 +178,10 @@
     bassVolumeCoefficient.reset();
     trebleVolumeCoefficient.reset();
     holesByTickInterval = new IntervalTree();
+  };
+
+  const recordingControl = (action) => {
+    midiRecording(action);
   };
 
   const loadRoll = (roll) => {
@@ -262,6 +265,7 @@
       pausePlayback,
       startPlayback,
       resetPlayback,
+      midiRecording,
     } = samplePlayer);
 
     setCurrentRollFromUrl();
@@ -281,9 +285,6 @@
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
-        {#if $midiRecordingEnabled}
-          <RecordingControls {samplePlayer} />
-        {/if}
         {#if !holesByTickInterval.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
@@ -309,7 +310,12 @@
       {/if}
     </div>
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+      <TabbedPanel
+        {playPauseApp}
+        {stopApp}
+        {skipToPercentage}
+        {recordingControl}
+      />
     </FlexCollapsible>
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}

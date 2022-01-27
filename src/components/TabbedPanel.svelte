@@ -51,6 +51,7 @@
   export let playPauseApp;
   export let skipToPercentage;
   export let stopApp;
+  export let recordingControl;
 
   const panels = {
     controls: {
@@ -60,7 +61,11 @@
     },
     settings: { component: AdvancedSettings, icon: "cog" },
     audio: { component: AudioSettings, icon: "piano" },
-    midi: { component: MidiSettings, icon: "midi" },
+    midi: {
+      component: MidiSettings,
+      props: { recordingControl },
+      icon: "midi",
+    },
   };
 
   let selectedPanel = "controls";

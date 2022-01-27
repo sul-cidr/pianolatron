@@ -27,6 +27,22 @@
   li {
     padding: 0.25em 0;
   }
+
+  #recording-controls {
+    margin: 0 0.5em;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  button {
+    @include button;
+
+    &.recording-on {
+      background-color: yellow;
+      border-color: var(--primary-accent);
+      color: var(--primary-accent);
+    }
+  }
 </style>
 
 <script>
@@ -39,12 +55,16 @@
     softOnOff,
     sustainFromExternalMidi,
     softFromExternalMidi,
+    recordingOnOff,
+    recordingInBuffer,
   } from "../stores";
 
   const resetPedals = () => {
     $sustainOnOff = false;
     $softOnOff = false;
   };
+
+  export let recordingControl;
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainFromExternalMidi, resetPedals();
@@ -100,4 +120,38 @@
       </p>
     </fieldset>
   {/if}
+  <fieldset>
+    <legend>Record to a MIDI file</legend>
+
+    <div class="setting">
+      Enable MIDI Recording:
+      <input type="checkbox" bind:checked={$userSettings.recordMidi} />
+    </div>
+
+    {#if $userSettings.recordMidi}
+      <div id="recording-controls">
+        <button
+          type="button"
+          class:recording-on={$recordingOnOff}
+          aria-pressed={$recordingOnOff}
+          on:click={() => ($recordingOnOff = !$recordingOnOff)}
+          >Start/Pause</button
+        >
+        {#if $recordingInBuffer}
+          <br />
+          <button type="button" on:click={() => recordingControl("clear")}
+            >Clear
+          </button>
+          <button type="button" on:click={() => recordingControl("export")}
+            >Export
+          </button>
+        {/if}
+      </div>
+    {:else}
+      <p>
+        Enable this option to record the details of a roll performance to a
+        downloadable MIDI file.
+      </p>
+    {/if}
+  </fieldset>
 </section>

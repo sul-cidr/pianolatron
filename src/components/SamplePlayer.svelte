@@ -362,8 +362,8 @@
   midiSamplePlayer.on("endOfFile", pausePlayback);
 
   const midiRecording = (action) => {
-    if (action == "clear") webMidi.clearRecording();
-    else if (action == "export") webMidi.exportRecording();
+    if (action === "clear") webMidi.clearRecording();
+    else if (action === "export") webMidi.exportRecording();
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
@@ -385,14 +385,11 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
-    activeNotes,
-    toggleSustain,
-    toggleSoft,
     midiRecording,
   };
 </script>
 
-{#if $userSettings.useWebMidi || $userSettings.recordWebMidi}
+{#if $userSettings.useWebMidi || $userSettings.recordMidi}
   <WebMidi
     bind:this={webMidi}
     {startNote}
