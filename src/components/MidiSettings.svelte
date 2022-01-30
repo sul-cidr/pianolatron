@@ -71,9 +71,9 @@
   $: $softFromExternalMidi, resetPedals();
 </script>
 
-<section>
-  {#if navigator.requestMIDIAccess}
-    <fieldset>
+<div id="midi-settings">
+  <fieldset>
+    {#if navigator.requestMIDIAccess}
       <legend>MIDI in/out available</legend>
 
       <p>
@@ -110,48 +110,33 @@
           {/each}
         </ul>
       {/if}
-    </fieldset>
-  {:else}
-    <fieldset>
+    {:else}
       <legend>MIDI in/out not available</legend>
       <p>
         This browser does not support connecting to a digital piano or other
         MIDI device.
       </p>
-    </fieldset>
-  {/if}
-  <fieldset>
-    <legend>Record to a MIDI file</legend>
-
-    <div class="setting">
-      Enable MIDI Recording:
-      <input type="checkbox" bind:checked={$userSettings.recordMidi} />
-    </div>
-
-    {#if $userSettings.recordMidi}
-      <div id="recording-controls">
-        <button
-          type="button"
-          class:recording-on={$recordingOnOff}
-          aria-pressed={$recordingOnOff}
-          on:click={() => ($recordingOnOff = !$recordingOnOff)}
-          >Start/Pause</button
-        >
-        {#if $recordingInBuffer}
-          <br />
-          <button type="button" on:click={() => recordingControl("clear")}
-            >Clear
-          </button>
-          <button type="button" on:click={() => recordingControl("export")}
-            >Export
-          </button>
-        {/if}
-      </div>
-    {:else}
-      <p>
-        Enable this option to record the details of a roll performance to a
-        downloadable MIDI file.
-      </p>
     {/if}
   </fieldset>
-</section>
+  <fieldset>
+    <legend>Record to a MIDI file</legend>
+    <div id="recording-controls">
+      <button
+        type="button"
+        class:recording-on={$recordingOnOff}
+        aria-pressed={$recordingOnOff}
+        on:click={() => ($recordingOnOff = !$recordingOnOff)}
+        >Start/Pause</button
+      >
+      {#if $recordingInBuffer}
+        <br />
+        <button type="button" on:click={() => recordingControl("clear")}
+          >Clear
+        </button>
+        <button type="button" on:click={() => recordingControl("export")}
+          >Export
+        </button>
+      {/if}
+    </div>
+  </fieldset>
+</div>

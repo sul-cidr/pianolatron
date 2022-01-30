@@ -26,7 +26,6 @@
     velocityCurveLow,
     velocityCurveMid,
     velocityCurveHigh,
-    userSettings,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -389,12 +388,10 @@
   };
 </script>
 
-{#if $userSettings.useWebMidi || $userSettings.recordMidi}
-  <WebMidi
-    bind:this={webMidi}
-    {startNote}
-    {stopNote}
-    {toggleSustain}
-    {toggleSoft}
-  />
-{/if}
+<WebMidi
+  bind:this={webMidi}
+  {startNote}
+  {stopNote}
+  {toggleSustain}
+  {toggleSoft}
+/>
