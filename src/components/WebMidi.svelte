@@ -41,33 +41,27 @@
   };
 
   const exportRecording = () => {
-    $recordingOnOff = false;
-
     const tempo = 60.0;
     // midi-writer-js seems to use ticks per beat/quarter = 128
-    // const ticksPerSecond = samplePlayer.midiSamplePlayer.division;
     const ticksPerSecond = 128;
 
     trackData = new MidiWriter.Track();
     trackData.addEvent(new MidiWriter.ProgramChangeEvent({ instrument: 1 }));
     trackData.setTempo(tempo);
 
-    console.log(eventsByTime);
-
     Object.keys(eventsByTime)
       .sort()
       .forEach((time) => {
+        const startTick = parseInt(
+          ((parseInt(time, 10) - recordingStartTime) / 1000) * ticksPerSecond,
+          10,
+        );
         eventsByTime[time].forEach((event) => {
+          const durationInTicks = parseInt(
+            (event[2] / 1000) * ticksPerSecond,
+            10,
+          );
           if (event[0] === "NOTE") {
-            const startTick = parseInt(
-              ((parseInt(time, 10) - recordingStartTime) / 1000) *
-                ticksPerSecond,
-              10,
-            );
-            const durationInTicks = parseInt(
-              (event[2] / 1000) * ticksPerSecond,
-              10,
-            );
             trackData.addEvent(
               new MidiWriter.NoteEvent({
                 pitch: event[1],
@@ -76,16 +70,21 @@
                 velocity: event[3],
               }),
             );
-          } else if (["SUSTAIN", "SOFT"].includes(event[0])) {
-            trackData.controllerChange(
-              event[0] === "SUSTAIN" ? midiBytes.SUSTAIN : midiBytes.SOFT,
-              event[1],
+          } else if (event[0] === "CONTROLLER") {
+            trackData.addEvent(
+              new MidiWriter.ControllerEvent({
+                controllerNumber:
+                  event[1] === "SUSTAIN" ? midiBytes.SUSTAIN : midiBytes.SOFT,
+                startTick,
+                duration: `t${durationInTicks}`,
+                controllerValue: event[3],
+              }),
             );
           }
         });
       });
 
-    // trackData.addEvent(new MidiWriter.EndTrackEvent()); // This doesn't work, for unclear reasons
+    trackData.addEvent(new MidiWriter.EndTrackEvent());
     const writer = new MidiWriter.Writer(trackData);
     const midiDataURI = writer.dataUri();
 
@@ -96,8 +95,6 @@
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
-
-    clearRecording();
   };
 
   const sendMidiMsg = (msgType, entity, value) => {
@@ -107,30 +104,6 @@
       clamp(parseInt(value * 127, 10), 0, 127),
     ];
     $midiOutputs.forEach((output) => output.send(msg));
-    /*
-    if (msgType === "NOTE_ON" && $recordingOnOff) {
-      trackData.addEvent(
-        new MidiWriter.NoteOnEvent({
-          pitch: entity,
-          velocity: clamp(parseInt(value * 127, 10), 0, 127),
-        }),
-      );
-    } else if (msgType === "NOTE_OFF" && $recordingOnOff) {
-      trackData.addEvent(
-        new MidiWriter.NoteOffEvent({
-          pitch: entity,
-          velocity: 0,
-        }),
-      );
-    } else if (msgType === "CONTROLLER" && $recordingOnOff) {
-      if (entity === "SUSTAIN")
-        trackData.controllerChange(midiBytes.SUSTAIN, (value ? 1 : 0) * 127);
-      else if (entity === "SOFT")
-        trackData.controllerChange(midiBytes.SOFT, (value ? 1 : 0) * 127);
-      else if (!(entity in heldDown))
-        heldDown[entity] = [now, parseInt(value * 100, 10)]; // midi-writer-js uses velocity 1-100 (???)
-    }
-    */
     if ($recordingOnOff) {
       const now = Date.now();
       if (msgType === "NOTE_ON" && !(entity in heldDown)) {
@@ -145,17 +118,19 @@
           eventsByTime[startTime] = [event];
         }
         delete heldDown[entity];
-      } else if (
-        msgType === "CONTROLLER" &&
-        ["SUSTAIN", "SOFT"].includes(entity)
-      ) {
-        // Control change events (pedal on/off) have no duration
-        const event = [entity, (value ? 1 : 0) * 127];
-        const startTime = now;
-        if (startTime in eventsByTime && eventsByTime[startTime].length) {
-          eventsByTime[startTime].push(event);
-        } else {
-          eventsByTime[startTime] = [event];
+      } else if (msgType === "CONTROLLER") {
+        if (value && !(entity in heldDown)) {
+          heldDown[entity] = [now, parseInt(+value * 127, 10)]; // is this the correct range?
+        } else if (value === false && entity in heldDown) {
+          const startTime = heldDown[entity][0];
+          const duration = now - startTime;
+          const event = ["CONTROLLER", entity, duration, heldDown[entity][1]];
+          if (startTime in eventsByTime && eventsByTime[startTime].length) {
+            eventsByTime[startTime].push(event);
+          } else {
+            eventsByTime[startTime] = [event];
+          }
+          delete heldDown[entity];
         }
       }
     }
