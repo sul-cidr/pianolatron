@@ -11,7 +11,6 @@
   export let toggleSoft;
 
   let mediaAccess;
-  let trackData = null;
   let recordingStartTime = null;
   let heldDown = {};
   let eventsByTime = {};
@@ -41,7 +40,6 @@
   };
 
   const clearRecording = () => {
-    trackData = null;
     $recordingOnOff = false;
     $recordingInBuffer = false;
     recordingStartTime = null;
@@ -54,7 +52,7 @@
     // midi-writer-js seems to use ticks per beat/quarter = 128
     const ticksPerSecond = 128;
 
-    trackData = new MidiWriter.Track();
+    const trackData = new MidiWriter.Track();
     trackData.addEvent(new MidiWriter.ProgramChangeEvent({ instrument: 1 }));
     trackData.setTempo(tempo);
 
