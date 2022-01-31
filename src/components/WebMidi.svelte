@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import MidiWriter from "midi-writer-js";
   import { clamp } from "../lib/utils";
-  import { midiInputs, midiOutputs } from "../stores";
+  import { midiInputs, midiOutputs, sustainOnOff, softOnOff } from "../stores";
   import { rollMetadata, recordingOnOff, recordingInBuffer } from "../stores";
 
   export let startNote;
@@ -27,7 +27,16 @@
   const startPauseRecording = (onOff) => {
     if (onOff) {
       $recordingInBuffer = true;
-      if (!recordingStartTime) recordingStartTime = Date.now();
+      const now = Date.now();
+      if (!recordingStartTime) recordingStartTime = now;
+      // Register when a pedal is held down at the start of recording -- a
+      // legitimate possibilty. Doing the same for held notes, however, is much
+      // less likely to be helpeful and is not implemented.
+      if ($sustainOnOff) {
+        heldDown.SUSTAIN = [now, 127];
+      } else if ($softOnOff) {
+        heldDown.SOFT = [now, 127];
+      }
     }
   };
 
