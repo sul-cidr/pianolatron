@@ -213,7 +213,12 @@
       ([, metadataJson]) => {
         metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
         holeData = metadataJson.holeData;
-        annotateHoleData(holeData, $rollMetadata, $scrollDownwards);
+        annotateHoleData(
+          holeData,
+          $rollMetadata,
+          $scrollDownwards,
+          $expressionizer,
+        );
         buildHolesIntervalTree();
         $playExpressionsOnOff = $isReproducingRoll;
         $rollPedalingOnOff = $isReproducingRoll;
@@ -241,6 +246,8 @@
       startPlayer = true;
     }
     loadRoll(currentRoll, false).then(() => {
+      rollViewer.partitionHolesOverlaySvgs();
+      rollViewer.updateVisibleSvgPartitions();
       skipToTick(savedTick);
       if (startPlayer) startPlayback();
     });
