@@ -262,32 +262,6 @@
         return _tempoMap;
       }, []);
 
-  const buildPedalingMap = (eventsTrack) => {
-    const _pedalingMap = new IntervalTree();
-    const controllerEvents = eventsTrack.filter(
-      (event) => event.name === "Controller Change",
-    );
-
-    const enterEvents = (eventNumber) => {
-      let tickOn = false;
-      controllerEvents
-        .filter(({ number }) => number === eventNumber)
-        .forEach(({ value, tick }) => {
-          if (value === 0) {
-            if (tickOn) _pedalingMap.insert(tickOn, tick, eventNumber);
-            tickOn = false;
-          } else if (value === 127) {
-            if (!tickOn) tickOn = tick;
-          }
-        });
-    };
-
-    enterEvents(SOFT_PEDAL);
-    enterEvents(SUSTAIN_PEDAL);
-
-    return _pedalingMap;
-  };
-
   const buildNotesMap = (musicTracks) => {
     const _notesMap = new IntervalTree();
     musicTracks.forEach((track) => {
@@ -329,6 +303,9 @@
       ),
     );
 
+    const expressionBoxType = "expressiveMidi";
+    const expressionBox = expressionBoxes[expressionBoxType];
+    const { buildPedalingMap, buildNoteVelocitiesMap } = expressionBox;
     tempoMap = buildTempoMap(metadataTrack);
 
     // where two or more "music tracks" exist, pedal events are expected to have
@@ -337,9 +314,7 @@
 
     notesMap = buildNotesMap(musicTracks);
 
-    const expressionBox = "expressiveMidi";
-    notesVelocitiesMap =
-      expressionBoxes[expressionBox].buildNoteVelocitiesMap(midiSamplePlayer);
+    notesVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer);
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
