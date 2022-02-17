@@ -1,6 +1,5 @@
 <script>
   import MidiPlayer from "midi-player-js";
-  import IntervalTree from "node-interval-tree";
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
@@ -262,24 +261,6 @@
         return _tempoMap;
       }, []);
 
-  const buildNotesMap = (musicTracks) => {
-    const _notesMap = new IntervalTree();
-    musicTracks.forEach((track) => {
-      const tickOn = {};
-      track
-        .filter((event) => event.name === "Note on")
-        .forEach(({ noteNumber, velocity, tick }) => {
-          if (velocity === 0) {
-            if (noteNumber in tickOn) {
-              _notesMap.insert(tickOn[noteNumber], tick, noteNumber);
-              delete tickOn[noteNumber];
-            }
-          } else if (!(noteNumber in tickOn)) tickOn[noteNumber] = tick;
-        });
-    });
-    return _notesMap;
-  };
-
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -305,7 +286,8 @@
 
     const expressionBoxType = "expressiveMidi";
     const expressionBox = expressionBoxes[expressionBoxType];
-    const { buildPedalingMap, buildNoteVelocitiesMap } = expressionBox;
+    const { buildPedalingMap, buildNotesMap, buildNoteVelocitiesMap } =
+      expressionBox;
     tempoMap = buildTempoMap(metadataTrack);
 
     // where two or more "music tracks" exist, pedal events are expected to have
