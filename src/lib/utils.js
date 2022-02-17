@@ -123,21 +123,34 @@ export const annotateHoleData = (
   holeData,
   { ROLL_TYPE: rollType, IMAGE_LENGTH: imageLength },
   scrollDownwards,
+  expressionizer,
 ) => {
-  const velocities = holeData.map(({ v }) => v).filter((v) => v);
-  const minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
-  const maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
+  let velocities;
+  let minNoteVelocity;
+  let maxNoteVelocity;
+  let getNoteHoleColor;
 
-  const getNoteHoleColor = ({ v: velocity }) =>
-    holeColorMap[
-      Math.round(
-        mapToRange(
-          normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-          0,
-          holeColorMap.length - 1,
-        ),
-      )
-    ];
+  if (expressionizer === "FROM_MIDI") {
+    velocities = holeData.map(({ v }) => v).filter((v) => v);
+    minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
+    maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
+
+    getNoteHoleColor = ({ v: velocity }) =>
+      holeColorMap[
+        Math.round(
+          mapToRange(
+            normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+            0,
+            holeColorMap.length - 1,
+          ),
+        )
+      ];
+  } else {
+    minNoteVelocity = 64;
+    maxNoteVelocity = 64;
+    getNoteHoleColor = () =>
+      holeColorMap[Math.round(mapToRange(0.5, 0, holeColorMap.length - 1))];
+  }
 
   const imageLengthPx = parseInt(imageLength, 10);
   holeData.forEach((hole) => {
