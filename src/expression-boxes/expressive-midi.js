@@ -46,4 +46,22 @@ const buildPedalingMap = (eventsTrack) => {
   return _pedalingMap;
 };
 
-export { buildNoteVelocitiesMap, buildPedalingMap };
+const buildNotesMap = (musicTracks) => {
+  const _notesMap = new IntervalTree();
+  musicTracks.forEach((track) => {
+    const tickOn = {};
+    track
+      .filter((event) => event.name === "Note on")
+      .forEach(({ noteNumber, velocity, tick }) => {
+        if (velocity === 0) {
+          if (noteNumber in tickOn) {
+            _notesMap.insert(tickOn[noteNumber], tick, noteNumber);
+            delete tickOn[noteNumber];
+          }
+        } else if (!(noteNumber in tickOn)) tickOn[noteNumber] = tick;
+      });
+  });
+  return _notesMap;
+};
+
+export { buildNoteVelocitiesMap, buildPedalingMap, buildNotesMap };
