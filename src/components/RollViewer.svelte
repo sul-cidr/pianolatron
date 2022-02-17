@@ -576,7 +576,12 @@
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
       parseInt($rollMetadata.LAST_HOLE, 10);
 
-  export { updateTickByViewportIncrement, panHorizontal };
+  export {
+    updateTickByViewportIncrement,
+    panHorizontal,
+    partitionHolesOverlaySvgs,
+    updateVisibleSvgPartitions,
+  };
 </script>
 
 <div
