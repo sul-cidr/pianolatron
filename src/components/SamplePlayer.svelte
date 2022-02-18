@@ -36,7 +36,6 @@
   let tempoMap;
   let pedalingMap;
   let notesMap;
-  let notesVelocitiesMap;
 
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
@@ -286,7 +285,7 @@
 
     const expressionBoxType = "expressiveMidi";
     const expressionBox = expressionBoxes[expressionBoxType];
-    const { buildPedalingMap, buildNotesMap, buildNoteVelocitiesMap } =
+    const { buildPedalingMap, buildNotesMap, buildMidiEventHandler } =
       expressionBox;
     tempoMap = buildTempoMap(metadataTrack);
 
@@ -296,35 +295,15 @@
 
     notesMap = buildNotesMap(musicTracks);
 
-    notesVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer);
+    midiSamplePlayer.on(
+      "midiEvent",
+      buildMidiEventHandler(startNote, stopNote, midiSamplePlayer),
+    );
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
     if (tick <= midiSamplePlayer.totalTicks) currentTick.set(tick);
   });
-
-  midiSamplePlayer.on(
-    "midiEvent",
-    ({ name, value, number, noteNumber, velocity, data, tick }) => {
-      if (name === "Note on") {
-        if (velocity === 0) {
-          stopNote(noteNumber);
-        } else {
-          const expressionizedVelocity = notesVelocitiesMap[tick][noteNumber];
-          startNote(noteNumber, expressionizedVelocity);
-          activeNotes.add(noteNumber);
-        }
-      } else if (name === "Controller Change" && $rollPedalingOnOff) {
-        if (number === SUSTAIN_PEDAL) {
-          sustainOnOff.set(!!value);
-        } else if (number === SOFT_PEDAL) {
-          softOnOff.set(!!value);
-        }
-      } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-        midiSamplePlayer.setTempo(data * $tempoCoefficient);
-      }
-    },
-  );
 
   midiSamplePlayer.on("endOfFile", pausePlayback);
 
