@@ -1,4 +1,13 @@
+import { get } from "svelte/store";
 import IntervalTree from "node-interval-tree";
+import {
+  activeNotes,
+  rollPedalingOnOff,
+  softOnOff,
+  sustainOnOff,
+  tempoCoefficient,
+  useMidiTempoEventsOnOff,
+} from "../stores";
 
 const SOFT_PEDAL = 67;
 const SUSTAIN_PEDAL = 64;
@@ -64,4 +73,27 @@ const buildNotesMap = (musicTracks) => {
   return _notesMap;
 };
 
-export { buildNoteVelocitiesMap, buildPedalingMap, buildNotesMap };
+const buildMidiEventHandler = (startNote, stopNote, midiSamplePlayer) => {
+  const notesVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer);
+  return ({ name, value, number, noteNumber, velocity, data, tick }) => {
+    if (name === "Note on") {
+      if (velocity === 0) {
+        stopNote(noteNumber);
+      } else {
+        const expressionizedVelocity = notesVelocitiesMap[tick][noteNumber];
+        startNote(noteNumber, expressionizedVelocity);
+        activeNotes.add(noteNumber);
+      }
+    } else if (name === "Controller Change" && get(rollPedalingOnOff)) {
+      if (number === SUSTAIN_PEDAL) {
+        sustainOnOff.set(!!value);
+      } else if (number === SOFT_PEDAL) {
+        softOnOff.set(!!value);
+      }
+    } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
+      midiSamplePlayer.setTempo(data * get(tempoCoefficient));
+    }
+  };
+};
+
+export { buildPedalingMap, buildNotesMap, buildMidiEventHandler };
