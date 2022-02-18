@@ -51,6 +51,7 @@
       viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel)),
     )}
     iconName="plus"
+    label="Zoom In"
     height="24"
     width="24"
   />
@@ -61,6 +62,7 @@
       viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel)),
     )}
     iconName="minus"
+    label="Zoom Out"
     height="24"
     width="24"
   />
@@ -72,6 +74,7 @@
       centerRoll();
     }}
     iconName="fit-width"
+    label="Zoom to Roll Width"
     height="24"
     width="24"
   />
@@ -82,6 +85,7 @@
       updateTickByViewportIncrement(/* up = */ true),
     )}
     iconName="arrow-up"
+    label="Pan Up"
     height="24"
     width="24"
   />
@@ -92,6 +96,7 @@
       updateTickByViewportIncrement(/* up = */ false),
     )}
     iconName="arrow-down"
+    label="Pan Down"
     height="24"
     width="24"
   />
@@ -100,6 +105,7 @@
     disabled={false}
     on:mousedown={mousedownRepeatAction(() => panHorizontal(/* left = */ true))}
     iconName="arrow-left"
+    label="Pan Left"
     height="24"
     width="24"
   />
@@ -110,6 +116,7 @@
       panHorizontal(/* left = */ false),
     )}
     iconName="arrow-right"
+    label="Pan Right"
     height="24"
     width="24"
   />

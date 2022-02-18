@@ -190,6 +190,7 @@
 
 <input
   type="range"
+  id={name}
   bind:value
   on:input
   on:change

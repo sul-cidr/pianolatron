@@ -1,3 +1,8 @@
 :root {
   --navigator-width: 40px;
+
+  // Lightest possible grey that (on white) still produces
+  // a 4.5:1 contrast ratio as specified by WCAG 2.1
+  // https://www.w3.org/TR/WCAG21/#contrast-minimum
+  --light-grey: #767676;
 }

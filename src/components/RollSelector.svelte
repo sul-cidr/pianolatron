@@ -1,6 +1,6 @@
 <style lang="scss">
   :global(small) {
-    color: grey;
+    color: var(--light-grey);
     display: inline-block;
     text-align: right;
     margin-right: 1ch;
@@ -11,7 +11,7 @@
   }
 
   :global(.place-holder) {
-    color: grey;
+    color: var(--light-grey);
   }
 </style>
 
