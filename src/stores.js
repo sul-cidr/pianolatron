@@ -23,7 +23,7 @@ export const rollHasExpressions = derived(
   ($rollMetadata) => $rollMetadata.ROLL_TYPE !== "65-note",
 );
 export const isReproducingRoll = derived(rollMetadata, ($rollMetadata) =>
-  ["welte-red", "welte-green", "welte-licensee"].includes(
+  ["welte-red", "welte-green", "welte-licensee", "duo-art"].includes(
     $rollMetadata.ROLL_TYPE,
   ),
 );

@@ -113,10 +113,9 @@
   let panHorizontal;
 
   const rollListItems = catalog.map((item) => {
-    const [number, label] = item.label.split(" ");
     return {
       ...item,
-      _label: `${number} ${item.title}${label ? ` [${label}]` : ""}`,
+      _label: `${item.number} ${item.title} [${item.publisher}]`,
     };
   });
 

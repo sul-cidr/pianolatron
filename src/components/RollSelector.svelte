@@ -30,5 +30,5 @@
   facetFieldName="type"
   placeHolder="<span class='place-holder'>Select a roll...</span>"
   postMarkup={(str) =>
-    str.replace(/^(?:[\d.]|<\/?mark>)+|\[[^\]]+\]$/g, "<small>$&</small>")}
+    str.replace(/^(?:[\S.]|<\/?mark>)+|\[[^\]]+\]$/g, "<small>$&</small>")}
 />
