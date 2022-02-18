@@ -80,7 +80,8 @@ const buildMidiEventHandler = (startNote, stopNote, midiSamplePlayer) => {
       if (velocity === 0) {
         stopNote(noteNumber);
       } else {
-        const expressionizedVelocity = notesVelocitiesMap[tick][noteNumber];
+        const expressionizedVelocity =
+          notesVelocitiesMap[tick]?.[noteNumber] || velocity;
         startNote(noteNumber, expressionizedVelocity);
         activeNotes.add(noteNumber);
       }
