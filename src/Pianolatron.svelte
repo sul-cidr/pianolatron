@@ -112,12 +112,10 @@
   let updateTickByViewportIncrement;
   let panHorizontal;
 
-  const rollListItems = catalog.map((item) => {
-    return {
-      ...item,
-      _label: `${item.number} ${item.title} [${item.publisher}]`,
-    };
-  });
+  const rollListItems = catalog.map((item) => ({
+    ...item,
+    _label: `${item.number} ${item.title} [${item.publisher}]`,
+  }));
 
   const slide = (node, { delay = 0, duration = 300 }) => {
     const o = parseInt(getComputedStyle(node).height, 10);
