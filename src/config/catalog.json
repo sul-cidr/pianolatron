@@ -2,3256 +2,3841 @@
   {
     "druid": "my670qk6863",
     "image_url": "https://stacks.stanford.edu/image/iiif/my670qk6863%2Fmy670qk6863_0001/info.json",
-    "label": "2673 Welte-Mignon",
+    "number": "2673",
+    "publisher": "Welte-Mignon",
     "title": "Adam - Hymns",
     "type": "welte-red"
   },
   {
     "druid": "sj617nc3041",
     "image_url": "https://stacks.stanford.edu/image/iiif/sj617nc3041%2Fsj617nc3041_0001/info.json",
-    "label": "2543 Welte-Mignon",
-    "title": "Adam/Bernick - Si j'étais roi. ouverture",
+    "number": "2543",
+    "publisher": "Welte-Mignon",
+    "title": "Adam/Bernick - Si j'étais roi: Ouverture",
     "type": "welte-red"
   },
   {
     "druid": "sz948zd1422",
     "image_url": "https://stacks.stanford.edu/image/iiif/sz948zd1422%2Fsz948zd1422_0002/info.json",
-    "label": "4538 Princesa",
-    "title": "Akst - Dinah: charlestón",
+    "number": "4538",
+    "publisher": "Princesa",
+    "title": "Akst - Dinah: Charlestón",
     "type": "88-note"
   },
   {
     "druid": "ty610zx2946",
     "image_url": "https://stacks.stanford.edu/image/iiif/ty610zx2946%2Fty610zx2946_0001/info.json",
-    "label": "416 Welte-Mignon",
+    "number": "416",
+    "publisher": "Welte-Mignon",
     "title": "Albert/Albert - Tiefland ballade",
     "type": "welte-red"
   },
   {
     "druid": "mb915gc4689",
     "image_url": "https://stacks.stanford.edu/image/iiif/mb915gc4689%2Fmb915gc4689_0001/info.json",
-    "label": "520 Welte-Mignon",
+    "number": "520",
+    "publisher": "Welte-Mignon",
     "title": "Alkan/Petri - Ancienne melodie de la synagogue a. d. präludien: op. 31",
     "type": "welte-red"
   },
   {
     "druid": "xn196fs1128",
     "image_url": "https://stacks.stanford.edu/image/iiif/xn196fs1128%2Fxn196fs1128_0002/info.json",
-    "label": "4652 Princesa",
-    "title": "Alonso - La parranda. ronda de las solteras",
+    "number": "4652",
+    "publisher": "Princesa",
+    "title": "Alonso - La Parranda: Ronda de las solteras",
     "type": "88-note"
   },
   {
     "druid": "cy287wz7683",
     "image_url": "https://stacks.stanford.edu/image/iiif/cy287wz7683%2Fcy287wz7683_0002/info.json",
-    "label": "653 P.O.C.H.",
-    "title": "Alonso - Las castigadoras. charlestón",
+    "number": "653",
+    "publisher": "P.O.C.H.",
+    "title": "Alonso - Las Castigadoras: Charlestón",
     "type": "88-note"
   },
   {
     "druid": "nw222vm1898",
     "image_url": "https://stacks.stanford.edu/image/iiif/nw222vm1898%2Fnw222vm1898_0002/info.json",
-    "label": "4566 Princesa",
-    "title": "Alonso - Las castigadoras. pasodoble",
+    "number": "4566",
+    "publisher": "Princesa",
+    "title": "Alonso - Las Castigadoras: Pasodoble",
     "type": "88-note"
   },
   {
     "druid": "pz594dj8436",
     "image_url": "https://stacks.stanford.edu/image/iiif/pz594dj8436%2Fpz594dj8436_0002/info.json",
-    "label": "4391 Princesa",
-    "title": "Alonso - Las corsarias: selecciones",
+    "number": "4391",
+    "publisher": "Princesa",
+    "title": "Alonso - Las Corsarias: selecciones",
     "type": "88-note"
   },
   {
     "druid": "tn412mq0486",
     "image_url": "https://stacks.stanford.edu/image/iiif/tn412mq0486%2Ftn412mq0486_0002/info.json",
-    "label": "40076 Princesa",
-    "title": "Alonso - Por si las moscas. schotis",
+    "number": "40076",
+    "publisher": "Princesa",
+    "title": "Alonso - Por si las moscas: Schotis",
     "type": "88-note"
   },
   {
     "druid": "rs892mq5364",
     "image_url": "https://stacks.stanford.edu/image/iiif/rs892mq5364%2Frs892mq5364_0002/info.json",
-    "label": "40008 Princesa",
+    "number": "40008",
+    "publisher": "Princesa",
     "title": "Barta - Rosa de madrid: schotis",
     "type": "88-note"
   },
   {
     "druid": "ch984dr4932",
     "image_url": "https://stacks.stanford.edu/image/iiif/ch984dr4932%2Fch984dr4932_0002/info.json",
-    "label": "1894",
-    "title": "Beethoven - Cuarteto op. 130. iii, andante con moto ma non troppo",
+    "number": "1894",
+    "publisher": "N/A",
+    "title": "Beethoven - Cuarteto op. 130: III: Andante con moto ma non troppo",
     "type": "88-note"
   },
   {
     "druid": "vz386xg9451",
     "image_url": "https://stacks.stanford.edu/image/iiif/vz386xg9451%2Fvz386xg9451_0002/info.json",
-    "label": "4155 Victoria",
-    "title": "Beethoven - Sonata op. 31, no 1: rondó",
+    "number": "4155",
+    "publisher": "Victoria",
+    "title": "Beethoven - Sonata op. 31, no 1: Rondó",
     "type": "88-note"
   },
   {
     "druid": "hb523vs3190",
     "image_url": "https://stacks.stanford.edu/image/iiif/hb523vs3190%2Fhb523vs3190_0002/info.json",
-    "label": "4108 Victoria",
+    "number": "4108",
+    "publisher": "Victoria",
     "title": "Beethoven - Sonata, op. 2, no 1, en fa menor: minuetto",
     "type": "88-note"
   },
   {
+    "druid": "bc072xf6791",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bc072xf6791%2Fbc072xf6791_0001/info.json",
+    "number": "443",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven-Liszt/Busoni - Adelaïde: (transcription)",
+    "type": "welte-red"
+  },
+  {
     "druid": "bq744nq5945",
     "image_url": "https://stacks.stanford.edu/image/iiif/bq744nq5945%2Fbq744nq5945_0001/info.json",
-    "label": "1462 Welte-Mignon",
-    "title": "Beethoven/Bloomfield-Zeisler - Sonata op. 111, c minor. 1st movement",
+    "number": "1462",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Bloomfield-Zeisler - Sonata op. 111, c minor: 1st movement",
     "type": "welte-red"
   },
   {
     "druid": "yt974cv2625",
     "image_url": "https://stacks.stanford.edu/image/iiif/yt974cv2625%2Fyt974cv2625_0001/info.json",
-    "label": "1463 Welte-Mignon",
-    "title": "Beethoven/Bloomfield-Zeisler - Sonate op. 111, c-moll. ii. teil",
-    "type": "welte-red"
-  },
-  {
-    "druid": "bc072xf6791",
-    "image_url": "https://stacks.stanford.edu/image/iiif/bc072xf6791%2Fbc072xf6791_0001/info.json",
-    "label": "443 Welte-Mignon",
-    "title": "Beethoven/Busoni - Adelaïde: (transcription)",
+    "number": "1463",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Bloomfield-Zeisler - Sonate op. 111, c-moll: II. Teil",
     "type": "welte-red"
   },
   {
     "druid": "qz671pq0609",
     "image_url": "https://stacks.stanford.edu/image/iiif/qz671pq0609%2Fqz671pq0609_0001/info.json",
-    "label": "372 Welte-Mignon",
-    "title": "Beethoven/Carreño - Sonate c-dur, op. 53: (waldstein). 1. teil",
+    "number": "372",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Carreño - Sonate c-dur, op. 53: (Waldstein): 1. Teil",
     "type": "welte-red"
   },
   {
     "druid": "kg263bn9176",
     "image_url": "https://stacks.stanford.edu/image/iiif/kg263bn9176%2Fkg263bn9176_0001/info.json",
-    "label": "373 Welte-Mignon",
-    "title": "Beethoven/Carreño - Waldstein sonata. (2nd movement)",
+    "number": "373",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Carreño - Waldstein sonata: (2nd movement)",
     "type": "welte-red"
   },
   {
     "druid": "ph692rh6823",
     "image_url": "https://stacks.stanford.edu/image/iiif/ph692rh6823%2Fph692rh6823_0001/info.json",
-    "label": "2311 Welte-Mignon",
-    "title": "Beethoven/Del Grande - Symphonie eroica. i. satz",
+    "number": "2311",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Del Grande - Symphonie eroica: I. Satz",
     "type": "welte-red"
   },
   {
     "druid": "dz112ky5575",
     "image_url": "https://stacks.stanford.edu/image/iiif/dz112ky5575%2Fdz112ky5575_0001/info.json",
-    "label": "2312 Welte-Mignon",
-    "title": "Beethoven/Del Grande - Symphonie eroica. ii. satz",
+    "number": "2312",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Del Grande - Symphonie eroica: II. Satz",
     "type": "welte-red"
   },
   {
     "druid": "ht339gy6128",
     "image_url": "https://stacks.stanford.edu/image/iiif/ht339gy6128%2Fht339gy6128_0001/info.json",
-    "label": "2313 Welte-Mignon",
-    "title": "Beethoven/Del Grande - Symphonie eroica. iii. satz",
+    "number": "2313",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Del Grande - Symphonie eroica: III. Satz",
     "type": "welte-red"
   },
   {
     "druid": "ks452px2704",
     "image_url": "https://stacks.stanford.edu/image/iiif/ks452px2704%2Fks452px2704_0001/info.json",
-    "label": "2314 Welte-Mignon",
-    "title": "Beethoven/Del Grande - Symphonie eroica. iv. satz",
+    "number": "2314",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Del Grande - Symphonie eroica: IV. Satz",
     "type": "welte-red"
   },
   {
     "druid": "xx766cn9843",
     "image_url": "https://stacks.stanford.edu/image/iiif/xx766cn9843%2Fxx766cn9843_0001/info.json",
-    "label": "1326 Welte-Mignon",
+    "number": "1326",
+    "publisher": "Welte-Mignon",
     "title": "Beethoven/Fryer - Menuett es-dur",
     "type": "welte-red"
   },
   {
     "druid": "ty382mw3181",
     "image_url": "https://stacks.stanford.edu/image/iiif/ty382mw3181%2Fty382mw3181_0001/info.json",
-    "label": "3026 Welte-Mignon",
-    "title": "Beethoven/Hofmann - Sonate a-dur, op. 101. i. und ii. teil",
+    "number": "3026",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Hofmann - Sonate a-dur, op. 101: I. und II. Teil",
     "type": "welte-red"
   },
   {
     "druid": "jk842rg9750",
     "image_url": "https://stacks.stanford.edu/image/iiif/jk842rg9750%2Fjk842rg9750_0001/info.json",
-    "label": "3027 Welte-Mignon",
-    "title": "Beethoven/Hofmann - Sonate op. 103. iii. und iv. teil",
+    "number": "3027",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Hofmann - Sonate op. 103: III. und IV. Teil",
     "type": "welte-red"
   },
   {
     "druid": "mw870hc7232",
     "image_url": "https://stacks.stanford.edu/image/iiif/mw870hc7232%2Fmw870hc7232_0001/info.json",
-    "label": "3156 Welte-Mignon",
-    "title": "Beethoven/Kiek - 2nd symphony. movements 2 & 3",
+    "number": "3156",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Kiek - 2nd symphony: Movements 2 & 3",
     "type": "welte-red"
   },
   {
     "druid": "ch718mg2581",
     "image_url": "https://stacks.stanford.edu/image/iiif/ch718mg2581%2Fch718mg2581_0001/info.json",
-    "label": "284 Welte-Mignon",
+    "number": "284",
+    "publisher": "Welte-Mignon",
     "title": "Beethoven/Lambrino - Menuett (from sonata op. 31 e flat major)",
     "type": "welte-red"
   },
   {
     "druid": "wt621xq0875",
     "image_url": "https://stacks.stanford.edu/image/iiif/wt621xq0875%2Fwt621xq0875_0001/info.json",
-    "label": "561 Welte-Mignon",
-    "title": "Beethoven/Lamond - Sonate pathétique. ii. satz",
+    "number": "561",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Lamond - Sonate pathétique: II. Satz",
     "type": "welte-red"
   },
   {
     "druid": "kr397bv2881",
     "image_url": "https://stacks.stanford.edu/image/iiif/kr397bv2881%2Fkr397bv2881_0001/info.json",
-    "label": "562 Welte-Mignon",
+    "number": "562",
+    "publisher": "Welte-Mignon",
     "title": "Beethoven/Lamond - Sonate pathétique: op. 13, 3rd movement",
     "type": "welte-red"
   },
   {
     "druid": "dx555xv9093",
     "image_url": "https://stacks.stanford.edu/image/iiif/dx555xv9093%2Fdx555xv9093_0001/info.json",
-    "label": "1246 Welte-Mignon",
-    "title": "Beethoven/Paderewski - Moonlight sonata: c sharp minor. 1st & 2nd movements",
+    "number": "1246",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Paderewski - Moonlight sonata: C sharp minor: 1st & 2nd movements",
     "type": "welte-red"
   },
   {
     "druid": "xm993qd2681",
     "image_url": "https://stacks.stanford.edu/image/iiif/xm993qd2681%2Fxm993qd2681_0001/info.json",
-    "label": "1247 Welte-Mignon",
-    "title": "Beethoven/Paderewski - Sonata c sharp minor: (moonlight). part 3",
+    "number": "1247",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Paderewski - Sonata c sharp minor: (moonlight): Part 3",
     "type": "welte-red"
   },
   {
     "druid": "yb187qn0290",
     "image_url": "https://stacks.stanford.edu/image/iiif/yb187qn0290%2Fyb187qn0290_0001/info.json",
-    "label": "1246 Welte-Mignon",
-    "title": "Beethoven/Paderewski - Sonate cis-moll: (mondschein). i. und ii. teil",
+    "number": "1246",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Paderewski - Sonate cis-moll: (Mondschein): I. und II. Teil",
     "type": "welte-red"
   },
   {
     "druid": "wp877mn0317",
     "image_url": "https://stacks.stanford.edu/image/iiif/wp877mn0317%2Fwp877mn0317_0001/info.json",
-    "label": "1247 Welte-Mignon",
-    "title": "Beethoven/Paderewski - Sonate cis-moll: (mondschein). iii. teil",
+    "number": "1247",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Paderewski - Sonate cis-moll: (Mondschein): III. Teil",
     "type": "welte-red"
+  },
+  {
+    "druid": "ch918dn4026",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ch918dn4026%2Fch918dn4026_0001/info.json",
+    "number": "3270",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Pembaur - Fantasia op. 77, g minor",
+    "type": "welte-green"
   },
   {
     "druid": "wk295jd5289",
     "image_url": "https://stacks.stanford.edu/image/iiif/wk295jd5289%2Fwk295jd5289_0001/info.json",
-    "label": "527 Welte-Mignon",
-    "title": "Beethoven/Petri - 32 variationen: c-moll",
+    "number": "527",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Petri - 32 variationen: c-Moll",
     "type": "welte-red"
   },
   {
     "druid": "pv279zy5193",
     "image_url": "https://stacks.stanford.edu/image/iiif/pv279zy5193%2Fpv279zy5193_0001/info.json",
-    "label": "1505 Welte-Mignon",
-    "title": "Beethoven/Pückler - Sonata appassionata. ii. u. iii. teil",
+    "number": "1505",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Pückler - Sonata appassionata: II. u. III. Teil",
     "type": "welte-red"
+  },
+  {
+    "druid": "ns119ny6089",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ns119ny6089%2Fns119ny6089_0001/info.json",
+    "number": "184",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Reinecke - Ecossaisen",
+    "type": "welte-green"
   },
   {
     "druid": "tt435dd2897",
     "image_url": "https://stacks.stanford.edu/image/iiif/tt435dd2897%2Ftt435dd2897_0001/info.json",
-    "label": "326 Welte-Mignon",
-    "title": "Beethoven/Reisenauer - Rondo capriccioso: g-dur, op. 129: (die wut über den verlorenen groschen)",
+    "number": "326",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Reisenauer - Rondo capriccioso: G-Dur, op. 129: (Die Wut über den verlorenen Groschen)",
     "type": "welte-red"
   },
   {
     "druid": "wb381qd3151",
     "image_url": "https://stacks.stanford.edu/image/iiif/wb381qd3151%2Fwb381qd3151_0001/info.json",
-    "label": "330 Welte-Mignon",
+    "number": "330",
+    "publisher": "Welte-Mignon",
     "title": "Beethoven/Reisenauer - Rondo op. 51",
     "type": "welte-red"
   },
   {
     "druid": "dp801zr4347",
     "image_url": "https://stacks.stanford.edu/image/iiif/dp801zr4347%2Fdp801zr4347_0001/info.json",
-    "label": "3130 Welte-Mignon",
+    "number": "3130",
+    "publisher": "Welte-Mignon",
     "title": "Beethoven/Ritter - Leonora no. 3 overture",
     "type": "welte-red"
   },
   {
     "druid": "gm170gy7498",
     "image_url": "https://stacks.stanford.edu/image/iiif/gm170gy7498%2Fgm170gy7498_0001/info.json",
-    "label": "239 Welte-Mignon",
-    "title": "Beethoven/Scharwenka - Sonata appassionata, op. 57. part 1",
-    "type": "welte-red"
-  },
-  {
-    "druid": "mh156nr8259",
-    "image_url": "https://stacks.stanford.edu/image/iiif/mh156nr8259%2Fmh156nr8259_0001/info.json",
-    "label": "1442 Welte-Mignon",
-    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, f minor. 1st movement",
+    "number": "239",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Scharwenka - Sonata appassionata, op. 57: Part 1",
     "type": "welte-red"
   },
   {
     "druid": "bf074nj8801",
     "image_url": "https://stacks.stanford.edu/image/iiif/bf074nj8801%2Fbf074nj8801_0001/info.json",
-    "label": "1443 Welte-Mignon",
-    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, f minor. 2nd and 3rd movements",
+    "number": "1443",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, F Minor: 2nd and 3rd movements",
     "type": "welte-red"
   },
   {
     "druid": "fz215xr4723",
     "image_url": "https://stacks.stanford.edu/image/iiif/fz215xr4723%2Ffz215xr4723_0001/info.json",
-    "label": "1443 Welte-Mignon",
-    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, f minor. 2nd and 3rd movements",
+    "number": "1443",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, F Minor: 2nd and 3rd movements",
+    "type": "welte-red"
+  },
+  {
+    "druid": "mh156nr8259",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mh156nr8259%2Fmh156nr8259_0001/info.json",
+    "number": "1442",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, F minor: 1st movement",
     "type": "welte-red"
   },
   {
     "druid": "pp798fc0175",
     "image_url": "https://stacks.stanford.edu/image/iiif/pp798fc0175%2Fpp798fc0175_0001/info.json",
-    "label": "5667 Welte-Mignon",
+    "number": "5667",
+    "publisher": "Welte-Mignon",
     "title": "Berlin/Haass - All alone: waltz",
     "type": "welte-red"
   },
   {
     "druid": "bz327kz4744",
     "image_url": "https://stacks.stanford.edu/image/iiif/bz327kz4744%2Fbz327kz4744_0001/info.json",
-    "label": "5634 Welte-Mignon",
+    "number": "5634",
+    "publisher": "Welte-Mignon",
     "title": "Berlin/Hare - What'll i do: waltz",
     "type": "welte-red"
   },
   {
     "druid": "dr971dy1221",
     "image_url": "https://stacks.stanford.edu/image/iiif/dr971dy1221%2Fdr971dy1221_0001/info.json",
-    "label": "965 Welte-Mignon",
-    "title": "Berlioz/Landowska - Ballet des sylves",
+    "number": "965",
+    "publisher": "Welte-Mignon",
+    "title": "Berlioz-Liszt/Landowska - Ballet des sylves",
     "type": "welte-red"
   },
   {
     "druid": "kt852zf4103",
     "image_url": "https://stacks.stanford.edu/image/iiif/kt852zf4103%2Fkt852zf4103_0001/info.json",
-    "label": "137 Welte-Mignon",
+    "number": "137",
+    "publisher": "Welte-Mignon",
     "title": "Bizet/Adam-Benard - Carmens lied: tralalala",
     "type": "welte-red"
   },
   {
     "druid": "tp747vf1137",
     "image_url": "https://stacks.stanford.edu/image/iiif/tp747vf1137%2Ftp747vf1137_0001/info.json",
-    "label": "163 Welte-Mignon",
-    "title": "Bizet/Adam-Benard - Lied des don josé und duo aus carmen: 2. akt (carmens tanz)",
+    "number": "163",
+    "publisher": "Welte-Mignon",
+    "title": "Bizet/Adam-Benard - Lied des don josé und duo aus carmen: 2. Akt (Carmens Tanz)",
     "type": "welte-red"
   },
   {
     "druid": "gr034qm4805",
     "image_url": "https://stacks.stanford.edu/image/iiif/gr034qm4805%2Fgr034qm4805_0001/info.json",
-    "label": "1593 Welte-Mignon",
+    "number": "1593",
+    "publisher": "Welte-Mignon",
     "title": "Bizet/Francklyn - Carmen: selection",
     "type": "welte-red"
   },
   {
     "druid": "xg976jt9573",
     "image_url": "https://stacks.stanford.edu/image/iiif/xg976jt9573%2Fxg976jt9573_0001/info.json",
-    "label": "5521 Welte-Mignon",
+    "number": "5521",
+    "publisher": "Welte-Mignon",
     "title": "Blaufuss/Dark - My isle of golden dreams: waltz",
     "type": "welte-red"
   },
   {
     "druid": "ps108fn1431",
     "image_url": "https://stacks.stanford.edu/image/iiif/ps108fn1431%2Fps108fn1431_0001/info.json",
-    "label": "1288 Welte-Mignon",
-    "title": "Borel-Clerc/Fichter - La mattchiche",
+    "number": "1288",
+    "publisher": "Welte-Mignon",
+    "title": "Borel-Clerc/Fichter - La Mattchiche",
     "type": "welte-red"
   },
   {
     "druid": "rk591jt8964",
     "image_url": "https://stacks.stanford.edu/image/iiif/rk591jt8964%2Frk591jt8964_0001/info.json",
-    "label": "1148 Welte-Mignon",
+    "number": "1148",
+    "publisher": "Welte-Mignon",
     "title": "Brahms/Carreño - Sonata f minor, op. 5, 1st movement",
     "type": "welte-red"
   },
   {
     "druid": "jj589sc7898",
     "image_url": "https://stacks.stanford.edu/image/iiif/jj589sc7898%2Fjj589sc7898_0001/info.json",
-    "label": "497 Welte-Mignon",
+    "number": "497",
+    "publisher": "Welte-Mignon",
     "title": "Brahms/Dohnányi - Cappriccio op. 76, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "yw484ky7093",
     "image_url": "https://stacks.stanford.edu/image/iiif/yw484ky7093%2Fyw484ky7093_0001/info.json",
-    "label": "589 Welte-Mignon",
+    "number": "589",
+    "publisher": "Welte-Mignon",
     "title": "Brahms/Galston - Waltzes op. 39, 6 and 11",
     "type": "welte-red"
   },
   {
     "druid": "tx437pj1389",
     "image_url": "https://stacks.stanford.edu/image/iiif/tx437pj1389%2Ftx437pj1389_0001/info.json",
-    "label": "1108 Welte-Mignon",
-    "title": "Brahms/Ney - Sonata f minor, op. 5. 2nd movement",
+    "number": "1108",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Ney - Sonata f minor, op. 5: 2nd movement",
     "type": "welte-red"
   },
   {
     "druid": "dc661yr7679",
     "image_url": "https://stacks.stanford.edu/image/iiif/dc661yr7679%2Fdc661yr7679_0001/info.json",
-    "label": "1085 Welte-Mignon",
-    "title": "Brahms/Nikisch - Ungarischer tanz. no. 1",
+    "number": "1085",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Nikisch - Ungarischer tanz: No. 1",
     "type": "welte-red"
   },
   {
     "druid": "jf938sf5847",
     "image_url": "https://stacks.stanford.edu/image/iiif/jf938sf5847%2Fjf938sf5847_0001/info.json",
-    "label": "2555 Welte-Mignon",
+    "number": "2555",
+    "publisher": "Welte-Mignon",
     "title": "Brahms/Paur - Intermezzo op. 76, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "rk796xd9697",
     "image_url": "https://stacks.stanford.edu/image/iiif/rk796xd9697%2Frk796xd9697_0001/info.json",
-    "label": "1476 Welte-Mignon",
+    "number": "1476",
+    "publisher": "Welte-Mignon",
     "title": "Brahms/Samaroff Stokowski - Ii. rhapsodie",
-    "type": "welte-red"
-  },
-  {
-    "druid": "dj406yq6980",
-    "image_url": "https://stacks.stanford.edu/image/iiif/dj406yq6980%2Fdj406yq6980_0001/info.json",
-    "label": "663 Welte-Mignon",
-    "title": "Brassin/Hofmann - Feuerzauber",
     "type": "welte-red"
   },
   {
     "druid": "ht999gf1829",
     "image_url": "https://stacks.stanford.edu/image/iiif/ht999gf1829%2Fht999gf1829_0002/info.json",
-    "label": "2191 Princesa",
+    "number": "2191",
+    "publisher": "Princesa",
     "title": "Caballero - Gigantes y cabezudos: selección",
     "type": "88-note"
   },
   {
+    "druid": "rv703vf3503",
+    "image_url": "https://stacks.stanford.edu/image/iiif/rv703vf3503%2Frv703vf3503_0001/info.json",
+    "number": "3042",
+    "publisher": "Welte-Mignon",
+    "title": "Cady/Ganz - Song of the boatmen of the volga =: (Schifferlied auf der Wolga)",
+    "type": "welte-red"
+  },
+  {
     "druid": "jc718cb5784",
     "image_url": "https://stacks.stanford.edu/image/iiif/jc718cb5784%2Fjc718cb5784_0001/info.json",
-    "label": "2594 Welte-Mignon",
-    "title": "Chaminade/Bloomfield-Zeisler - Le retour",
+    "number": "2594",
+    "publisher": "Welte-Mignon",
+    "title": "Chaminade/Bloomfield-Zeisler - Le Retour",
     "type": "welte-red"
   },
   {
     "druid": "cd435bw2771",
     "image_url": "https://stacks.stanford.edu/image/iiif/cd435bw2771%2Fcd435bw2771_0001/info.json",
-    "label": "2539 Welte-Mignon",
+    "number": "2539",
+    "publisher": "Welte-Mignon",
     "title": "Chaminade/Mero - Arlequine",
     "type": "welte-red"
   },
   {
     "druid": "rx933wn3761",
     "image_url": "https://stacks.stanford.edu/image/iiif/rx933wn3761%2Frx933wn3761_0001/info.json",
-    "label": "2537 Welte-Mignon",
+    "number": "2537",
+    "publisher": "Welte-Mignon",
     "title": "Chaminade/Mero - Automne: op. 35, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "cw378sb0125",
     "image_url": "https://stacks.stanford.edu/image/iiif/cw378sb0125%2Fcw378sb0125_0001/info.json",
-    "label": "2538 Welte-Mignon",
+    "number": "2538",
+    "publisher": "Welte-Mignon",
     "title": "Chaminade/Mero - Elevation: op. 76, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "tm408mz6807",
     "image_url": "https://stacks.stanford.edu/image/iiif/tm408mz6807%2Ftm408mz6807_0001/info.json",
-    "label": "2538 Welte-Mignon",
+    "number": "2538",
+    "publisher": "Welte-Mignon",
     "title": "Chaminade/Mero - Elévation: romance sans paroles: op. 76, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "tr243mz6407",
     "image_url": "https://stacks.stanford.edu/image/iiif/tr243mz6407%2Ftr243mz6407_0001/info.json",
-    "label": "2540 Welte-Mignon",
-    "title": "Chaminade/Mero - La lisonjera",
+    "number": "2540",
+    "publisher": "Welte-Mignon",
+    "title": "Chaminade/Mero - La Lisonjera",
     "type": "welte-red"
   },
   {
     "druid": "zf037wk3650",
     "image_url": "https://stacks.stanford.edu/image/iiif/zf037wk3650%2Fzf037wk3650_0001/info.json",
-    "label": "1127 Welte-Mignon",
+    "number": "1127",
+    "publisher": "Welte-Mignon",
     "title": "Chaminade/Uzielli - Pierrette: air de ballet, op. 41",
     "type": "welte-red"
   },
   {
     "druid": "ms604gp1206",
     "image_url": "https://stacks.stanford.edu/image/iiif/ms604gp1206%2Fms604gp1206_0002/info.json",
-    "label": "4466 Princesa",
-    "title": "Chapí - El puñao de rosas: selecciones",
+    "number": "4466",
+    "publisher": "Princesa",
+    "title": "Chapí - El Puñao de rosas: selecciones",
     "type": "88-note"
   },
   {
     "druid": "br351xc9456",
     "image_url": "https://stacks.stanford.edu/image/iiif/br351xc9456%2Fbr351xc9456_0002/info.json",
-    "label": "1944 Princesa",
-    "title": "Chapí - La tempestad: valses sobre varios motivos",
+    "number": "1944",
+    "publisher": "Princesa",
+    "title": "Chapí - La Tempestad: valses sobre varios motivos",
     "type": "88-note"
   },
   {
     "druid": "wx138dx1211",
     "image_url": "https://stacks.stanford.edu/image/iiif/wx138dx1211%2Fwx138dx1211_0002/info.json",
-    "label": "4108 Victoria",
+    "number": "4108",
+    "publisher": "Victoria",
     "title": "Chopin - Nocturno, op. 15, no 1, en fa",
     "type": "88-note"
   },
   {
+    "druid": "zp866tm4852",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zp866tm4852%2Fzp866tm4852_0001/info.json",
+    "number": "3310",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin-Backhaus/Backhaus - Pianoforte concerto op. ii, e minor: 2nd movement",
+    "type": "welte-red"
+  },
+  {
+    "druid": "qd784zj3903",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qd784zj3903%2Fqd784zj3903_0001/info.json",
+    "number": "3310",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin-Backhaus/Backhaus - Romanze a. e-moll konzert: II. Satz",
+    "type": "welte-red"
+  },
+  {
     "druid": "nq628rc4181",
     "image_url": "https://stacks.stanford.edu/image/iiif/nq628rc4181%2Fnq628rc4181_0001/info.json",
-    "label": "83 Welte-Mignon",
+    "number": "83",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Adam-Benard - Nocturne op. 9, no. 2, e flat major",
     "type": "welte-red"
   },
   {
     "druid": "gf160gq3516",
     "image_url": "https://stacks.stanford.edu/image/iiif/gf160gq3516%2Fgf160gq3516_0001/info.json",
-    "label": "2979 Welte-Mignon",
+    "number": "2979",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Albert - Nocturne op. 9, no. 1, b-flat minor",
     "type": "welte-red"
   },
   {
     "druid": "fr853pn6519",
     "image_url": "https://stacks.stanford.edu/image/iiif/fr853pn6519%2Ffr853pn6519_0001/info.json",
-    "label": "419 Welte-Mignon",
+    "number": "419",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Albert - Polonaise op. 53, a flat",
-    "type": "welte-red"
-  },
-  {
-    "druid": "zp866tm4852",
-    "image_url": "https://stacks.stanford.edu/image/iiif/zp866tm4852%2Fzp866tm4852_0001/info.json",
-    "label": "3310 Welte-Mignon",
-    "title": "Chopin/Backhaus - Pianoforte concerto op. ii, e minor. 2nd movement",
-    "type": "welte-red"
-  },
-  {
-    "druid": "qd784zj3903",
-    "image_url": "https://stacks.stanford.edu/image/iiif/qd784zj3903%2Fqd784zj3903_0001/info.json",
-    "label": "3310 Welte-Mignon",
-    "title": "Chopin/Backhaus - Romanze a. e-moll konzert. ii. satz",
     "type": "welte-red"
   },
   {
     "druid": "pj688nx2384",
     "image_url": "https://stacks.stanford.edu/image/iiif/pj688nx2384%2Fpj688nx2384_0001/info.json",
-    "label": "1464 Welte-Mignon",
+    "number": "1464",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Bloomfield-Zeisler - Scherzo b-moll",
     "type": "welte-red"
   },
   {
     "druid": "fh358rd2268",
     "image_url": "https://stacks.stanford.edu/image/iiif/fh358rd2268%2Ffh358rd2268_0001/info.json",
-    "label": "2586 Welte-Mignon",
-    "title": "Chopin/Bloomfield-Zeisler - Sonata op. 35, b minor. part 1",
+    "number": "2586",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Bloomfield-Zeisler - Sonata op. 35, b minor: Part 1",
     "type": "welte-red"
   },
   {
     "druid": "kw738fg7467",
     "image_url": "https://stacks.stanford.edu/image/iiif/kw738fg7467%2Fkw738fg7467_0001/info.json",
-    "label": "2588 Welte-Mignon",
-    "title": "Chopin/Bloomfield-Zeisler - Sonata op. 35. funeralmarch and presto",
+    "number": "2588",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Bloomfield-Zeisler - Sonata op. 35: Funeralmarch and Presto",
     "type": "welte-red"
   },
   {
     "druid": "zw904vm6502",
     "image_url": "https://stacks.stanford.edu/image/iiif/zw904vm6502%2Fzw904vm6502_0001/info.json",
-    "label": "1465 Welte-Mignon",
+    "number": "1465",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Bloomfield-Zeisler - Waltz, op. 70, no. 1",
     "type": "welte-red"
   },
   {
     "druid": "wz719qg6993",
     "image_url": "https://stacks.stanford.edu/image/iiif/wz719qg6993%2Fwz719qg6993_0001/info.json",
-    "label": "441 Welte-Mignon",
+    "number": "441",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Busoni - Nocturne op. 15, no. 2, fis-dur",
     "type": "welte-red"
   },
   {
     "druid": "gc795vb4435",
     "image_url": "https://stacks.stanford.edu/image/iiif/gc795vb4435%2Fgc795vb4435_0001/info.json",
-    "label": "1319 Welte-Mignon",
+    "number": "1319",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Busoni - Prelude op. 28, nr. 15, d flat",
     "type": "welte-red"
   },
   {
     "druid": "sn610pr8684",
     "image_url": "https://stacks.stanford.edu/image/iiif/sn610pr8684%2Fsn610pr8684_0001/info.json",
-    "label": "3184 Welte-Mignon",
-    "title": "Chopin/Carreras - Preludes. no. 3, g major ; no. 6, b minor",
+    "number": "3184",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Carreras - Preludes: No. 3, G major; No. 6, B minor",
     "type": "welte-red"
   },
   {
     "druid": "bj606rp8160",
     "image_url": "https://stacks.stanford.edu/image/iiif/bj606rp8160%2Fbj606rp8160_0001/info.json",
-    "label": "367 Welte-Mignon",
+    "number": "367",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Carreño - Ballade op. 23, g minor",
     "type": "welte-red"
   },
   {
     "druid": "rj799hj0968",
     "image_url": "https://stacks.stanford.edu/image/iiif/rj799hj0968%2Frj799hj0968_0001/info.json",
-    "label": "364 Welte-Mignon",
+    "number": "364",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Carreño - Nocturne g major, op. 37, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "st828pc9818",
     "image_url": "https://stacks.stanford.edu/image/iiif/st828pc9818%2Fst828pc9818_0001/info.json",
-    "label": "364 Welte-Mignon",
+    "number": "364",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Carreño - Nocturne op. 37, no. 2, g major",
     "type": "welte-red"
   },
   {
     "druid": "gs556hk6631",
     "image_url": "https://stacks.stanford.edu/image/iiif/gs556hk6631%2Fgs556hk6631_0001/info.json",
-    "label": "366 Welte-Mignon",
+    "number": "366",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Carreño - Nocturne op. 48, no. 1, c minor",
     "type": "welte-red"
   },
   {
     "druid": "wg598sj1504",
     "image_url": "https://stacks.stanford.edu/image/iiif/wg598sj1504%2Fwg598sj1504_0001/info.json",
-    "label": "2621 Welte-Mignon",
-    "title": "Chopin/Di Benici - Etude ges dur, op. 10, no. 5. (schwarze tasten)",
+    "number": "2621",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Di Benici - Etude ges dur, op. 10, no. 5: (Schwarze Tasten)",
     "type": "welte-red"
   },
   {
     "druid": "jm300wy4714",
     "image_url": "https://stacks.stanford.edu/image/iiif/jm300wy4714%2Fjm300wy4714_0001/info.json",
-    "label": "2622 Welte-Mignon",
+    "number": "2622",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Di Benici - Prelude op. 28, no. 18, f minor",
     "type": "welte-red"
   },
   {
     "druid": "nf733yv1324",
     "image_url": "https://stacks.stanford.edu/image/iiif/nf733yv1324%2Fnf733yv1324_0001/info.json",
-    "label": "498 Welte-Mignon",
+    "number": "498",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Dohnányi - Valse op. 64, no. 2, cis-moll",
     "type": "welte-red"
   },
   {
     "druid": "kv601my2750",
     "image_url": "https://stacks.stanford.edu/image/iiif/kv601my2750%2Fkv601my2750_0001/info.json",
-    "label": "1077 Welte-Mignon",
+    "number": "1077",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Esipova - Prelude, a flat major",
     "type": "welte-red"
   },
   {
     "druid": "gs573tj9547",
     "image_url": "https://stacks.stanford.edu/image/iiif/gs573tj9547%2Fgs573tj9547_0001/info.json",
-    "label": "1328 Welte-Mignon",
+    "number": "1328",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Fryer - Preludes op. 28, nos. 6 & 11",
     "type": "welte-red"
   },
   {
     "druid": "mj416dn1432",
     "image_url": "https://stacks.stanford.edu/image/iiif/mj416dn1432%2Fmj416dn1432_0001/info.json",
-    "label": "594 Welte-Mignon",
-    "title": "Chopin/Galston - Etude op. 10, no. 12: (revolutions-etude)",
+    "number": "594",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Galston - Etude op. 10, no. 12: (Revolutions-Etude)",
     "type": "welte-red"
   },
   {
     "druid": "qf640sj3141",
     "image_url": "https://stacks.stanford.edu/image/iiif/qf640sj3141%2Fqf640sj3141_0001/info.json",
-    "label": "2159 Welte-Mignon",
-    "title": "Chopin/Goraïnoff - Concert e-moll, op. 11. 1. teil",
+    "number": "2159",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Goraïnoff - Concert e-moll, op. 11: 1. Teil",
     "type": "welte-red"
   },
   {
     "druid": "bs279zc9206",
     "image_url": "https://stacks.stanford.edu/image/iiif/bs279zc9206%2Fbs279zc9206_0001/info.json",
-    "label": "2160 Welte-Mignon",
-    "title": "Chopin/Goraïnoff - Concerto e minor. part ii",
+    "number": "2160",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Goraïnoff - Concerto e minor: Part II",
     "type": "welte-red"
   },
   {
     "druid": "yk477xx5343",
     "image_url": "https://stacks.stanford.edu/image/iiif/yk477xx5343%2Fyk477xx5343_0001/info.json",
-    "label": "2161 Welte-Mignon",
-    "title": "Chopin/Goraïnoff - Concerto op. 11, e minor. 3rd movement",
+    "number": "2161",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Goraïnoff - Concerto op. 11, e minor: 3rd movement",
     "type": "welte-red"
   },
   {
     "druid": "gg384dv5303",
     "image_url": "https://stacks.stanford.edu/image/iiif/gg384dv5303%2Fgg384dv5303_0001/info.json",
-    "label": "194 Welte-Mignon",
+    "number": "194",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Grünfeld - Nocturne h-dur op. 32",
     "type": "welte-red"
   },
   {
     "druid": "wj177bx9196",
     "image_url": "https://stacks.stanford.edu/image/iiif/wj177bx9196%2Fwj177bx9196_0001/info.json",
-    "label": "931 Welte-Mignon",
+    "number": "931",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Hambourg - Mazurka a-moll: (posthume)",
     "type": "welte-red"
   },
   {
     "druid": "vs167qc5364",
     "image_url": "https://stacks.stanford.edu/image/iiif/vs167qc5364%2Fvs167qc5364_0001/info.json",
-    "label": "668 Welte-Mignon",
+    "number": "668",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Hofmann - Nocturne, d flat major, op. 27, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "qq244fh1388",
     "image_url": "https://stacks.stanford.edu/image/iiif/qq244fh1388%2Fqq244fh1388_0001/info.json",
-    "label": "669 Welte-Mignon",
+    "number": "669",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Hofmann - Polonaise op. 44, fis-moll",
     "type": "welte-red"
   },
   {
     "druid": "xm418xm6937",
     "image_url": "https://stacks.stanford.edu/image/iiif/xm418xm6937%2Fxm418xm6937_0001/info.json",
-    "label": "3976 Welte-Mignon",
-    "title": "Chopin/Koczalski - Concerto op. 11, e minor, 1st movement. allegro maestoso",
+    "number": "3976",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Koczalski - Concerto op. 11, e minor, 1st movement: Allegro maestoso",
     "type": "welte-red"
   },
   {
     "druid": "nf274ng7905",
     "image_url": "https://stacks.stanford.edu/image/iiif/nf274ng7905%2Fnf274ng7905_0001/info.json",
-    "label": "209 Welte-Mignon",
+    "number": "209",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Krah - Nocturne op. 55, no. 2, e flat major",
     "type": "welte-red"
   },
   {
     "druid": "kt780tm7975",
     "image_url": "https://stacks.stanford.edu/image/iiif/kt780tm7975%2Fkt780tm7975_0001/info.json",
-    "label": "568 Welte-Mignon",
+    "number": "568",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Lamond - Valse op. 70",
     "type": "welte-red"
   },
   {
     "druid": "bm016sg7202",
     "image_url": "https://stacks.stanford.edu/image/iiif/bm016sg7202%2Fbm016sg7202_0001/info.json",
-    "label": "1671 Welte-Mignon",
+    "number": "1671",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Margolies - Polonaise: (polonaise militaire): op. 40, no. 1",
     "type": "welte-red"
   },
   {
     "druid": "ym117yd8356",
     "image_url": "https://stacks.stanford.edu/image/iiif/ym117yd8356%2Fym117yd8356_0001/info.json",
-    "label": "1670 Welte-Mignon",
-    "title": "Chopin/Margolies - Sonata b-moll, op. 35. parts 2, 3, & 4",
+    "number": "1670",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Margolies - Sonata b-moll, op. 35: Parts 2, 3, & 4",
     "type": "welte-red"
   },
   {
     "druid": "xc665jf8254",
     "image_url": "https://stacks.stanford.edu/image/iiif/xc665jf8254%2Fxc665jf8254_0001/info.json",
-    "label": "719 Welte-Mignon",
+    "number": "719",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Motta - Scherzo e-dur, op. 54",
     "type": "welte-red"
   },
   {
     "druid": "ky458kj7325",
     "image_url": "https://stacks.stanford.edu/image/iiif/ky458kj7325%2Fky458kj7325_0001/info.json",
-    "label": "2882 Welte-Mignon",
+    "number": "2882",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Novaes - Ballade, op. 47, a major",
     "type": "welte-red"
   },
   {
     "druid": "wq296df7434",
     "image_url": "https://stacks.stanford.edu/image/iiif/wq296df7434%2Fwq296df7434_0001/info.json",
-    "label": "1212 Welte-Mignon",
+    "number": "1212",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Pachmann - Prelude op. 28, no. 16, b-flat minor",
     "type": "welte-red"
   },
   {
     "druid": "fn111kx0654",
     "image_url": "https://stacks.stanford.edu/image/iiif/fn111kx0654%2Ffn111kx0654_0001/info.json",
-    "label": "1213 Welte-Mignon",
+    "number": "1213",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Pachmann - Prélude op. 28, no. 20, c-moll",
     "type": "welte-red"
   },
   {
     "druid": "cw078rn1143",
     "image_url": "https://stacks.stanford.edu/image/iiif/cw078rn1143%2Fcw078rn1143_0001/info.json",
-    "label": "1220 Welte-Mignon",
+    "number": "1220",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Pachmann - Waltz, d flat major, op. 64, no. 1",
     "type": "welte-red"
   },
   {
     "druid": "hc229ht1024",
     "image_url": "https://stacks.stanford.edu/image/iiif/hc229ht1024%2Fhc229ht1024_0001/info.json",
-    "label": "1249 Welte-Mignon",
+    "number": "1249",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Paderewski - Ballade op. 47, a flat major",
     "type": "welte-red"
   },
   {
     "druid": "qv334zb6243",
     "image_url": "https://stacks.stanford.edu/image/iiif/qv334zb6243%2Fqv334zb6243_0001/info.json",
-    "label": "1254 Welte-Mignon",
+    "number": "1254",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Paderewski - Etude e-dur, op. 10, no. 3",
     "type": "welte-red"
   },
   {
     "druid": "ft746ns5736",
     "image_url": "https://stacks.stanford.edu/image/iiif/ft746ns5736%2Fft746ns5736_0001/info.json",
-    "label": "1253 Welte-Mignon",
+    "number": "1253",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Paderewski - Etude op. 25, no. 9, g flat",
     "type": "welte-red"
   },
   {
     "druid": "sm246yb9650",
     "image_url": "https://stacks.stanford.edu/image/iiif/sm246yb9650%2Fsm246yb9650_0001/info.json",
-    "label": "1256 Welte-Mignon",
+    "number": "1256",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Paderewski - Polonaise a flat major, op. 53",
     "type": "welte-red"
   },
   {
     "druid": "zc614qh7060",
     "image_url": "https://stacks.stanford.edu/image/iiif/zc614qh7060%2Fzc614qh7060_0001/info.json",
-    "label": "545 Welte-Mignon",
-    "title": "Chopin/Pugno - Grande polonaise: op. 22, es-dur",
+    "number": "545",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Pugno - Grande polonaise: op. 22, Es-Dur",
     "type": "welte-red"
   },
   {
     "druid": "vm423wb2944",
     "image_url": "https://stacks.stanford.edu/image/iiif/vm423wb2944%2Fvm423wb2944_0001/info.json",
-    "label": "548 Welte-Mignon",
+    "number": "548",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Pugno - Nocturn op. 15, no. 2, fis-dur",
     "type": "welte-red"
   },
   {
     "druid": "bj021jc9795",
     "image_url": "https://stacks.stanford.edu/image/iiif/bj021jc9795%2Fbj021jc9795_0001/info.json",
-    "label": "328 Welte-Mignon",
+    "number": "328",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Reisenauer - Berceuse",
     "type": "welte-red"
   },
   {
     "druid": "mv259zt7103",
     "image_url": "https://stacks.stanford.edu/image/iiif/mv259zt7103%2Fmv259zt7103_0001/info.json",
-    "label": "325 Welte-Mignon",
-    "title": "Chopin/Reisenauer - Chant polonais. (des mädchens wunsch)",
+    "number": "325",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Reisenauer - Chant polonais: (Des Mädchens Wunsch)",
     "type": "welte-red"
   },
   {
     "druid": "tx963yw9164",
     "image_url": "https://stacks.stanford.edu/image/iiif/tx963yw9164%2Ftx963yw9164_0001/info.json",
-    "label": "807 Welte-Mignon",
+    "number": "807",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Saint-Saëns - Nocturne f sharp, op. 15, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "dw559kr7002",
     "image_url": "https://stacks.stanford.edu/image/iiif/dw559kr7002%2Fdw559kr7002_0001/info.json",
-    "label": "1472 Welte-Mignon",
-    "title": "Chopin/Samaroff Stokowski - Sonata b minor. 1st and 2nd movement",
+    "number": "1472",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Samaroff Stokowski - Sonata b minor: 1st and 2nd movement",
     "type": "welte-red"
   },
   {
     "druid": "wz252pk3255",
     "image_url": "https://stacks.stanford.edu/image/iiif/wz252pk3255%2Fwz252pk3255_0001/info.json",
-    "label": "1473 Welte-Mignon",
-    "title": "Chopin/Samaroff Stokowski - Sonata b minor. 3rd and 4th movement",
+    "number": "1473",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Samaroff Stokowski - Sonata b minor: 3rd and 4th movement",
     "type": "welte-red"
   },
   {
     "druid": "ch197br4742",
     "image_url": "https://stacks.stanford.edu/image/iiif/ch197br4742%2Fch197br4742_0001/info.json",
-    "label": "881 Welte-Mignon",
+    "number": "881",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Sauer - Etude op. 25, no. 9: (staccato)",
     "type": "welte-red"
   },
   {
     "druid": "rp390kt0160",
     "image_url": "https://stacks.stanford.edu/image/iiif/rp390kt0160%2Frp390kt0160_0001/info.json",
-    "label": "879 Welte-Mignon",
+    "number": "879",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Sauer - Nocturne des-dur, op. 27, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "vy018tw5237",
     "image_url": "https://stacks.stanford.edu/image/iiif/vy018tw5237%2Fvy018tw5237_0001/info.json",
-    "label": "245 Welte-Mignon",
+    "number": "245",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Scharwenka - Valse op. 42 as-dur",
     "type": "welte-red"
   },
   {
     "druid": "kg488qt3887",
     "image_url": "https://stacks.stanford.edu/image/iiif/kg488qt3887%2Fkg488qt3887_0001/info.json",
-    "label": "1447 Welte-Mignon",
-    "title": "Chopin/Schelling - 2 préludes: op. 28, nr. 1, c-dur u. nr. 21, b-dur",
+    "number": "1447",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Schelling - 2 préludes: op. 28, Nr. 1, C-Dur u. Nr. 21, B-Dur",
     "type": "welte-red"
+  },
+  {
+    "druid": "jg886ps8946",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jg886ps8946%2Fjg886ps8946_0001/info.json",
+    "number": "1445",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Schelling - Etude op. 10, no. 10, a flat",
+    "type": "welte-green"
   },
   {
     "druid": "pz175wg5571",
     "image_url": "https://stacks.stanford.edu/image/iiif/pz175wg5571%2Fpz175wg5571_0001/info.json",
-    "label": "1447 Welte-Mignon",
+    "number": "1447",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Schelling - Préludes, op. 28, no. 1, c major, op. 28, no. 21, b flat",
     "type": "welte-red"
   },
   {
     "druid": "st755cm2486",
     "image_url": "https://stacks.stanford.edu/image/iiif/st755cm2486%2Fst755cm2486_0001/info.json",
-    "label": "390 Welte-Mignon",
+    "number": "390",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Schnabel - Etude op. 10, no. 5, ges-dur",
     "type": "welte-red"
   },
   {
     "druid": "ww627mg3287",
     "image_url": "https://stacks.stanford.edu/image/iiif/ww627mg3287%2Fww627mg3287_0001/info.json",
-    "label": "1035 Welte-Mignon",
-    "title": "Chopin/Stavenhagen - Chant polonaise: ges-dur: (nach persönlichen erinnerungen)",
+    "number": "1035",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Stavenhagen - Chant polonaise: Ges-Dur: (nach persönlichen Erinnerungen)",
     "type": "welte-red"
   },
   {
     "druid": "kv921kh0629",
     "image_url": "https://stacks.stanford.edu/image/iiif/kv921kh0629%2Fkv921kh0629_0001/info.json",
-    "label": "1039 Welte-Mignon",
+    "number": "1039",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Stavenhagen - Valse op. 69, no. 1, as-dur",
     "type": "welte-red"
   },
   {
     "druid": "jh069yf5255",
     "image_url": "https://stacks.stanford.edu/image/iiif/jh069yf5255%2Fjh069yf5255_0001/info.json",
-    "label": "704 Welte-Mignon",
+    "number": "704",
+    "publisher": "Welte-Mignon",
     "title": "Chopin/Wurmser - Waltz op. 64, no. 2, c-sharp minor",
     "type": "welte-red"
   },
   {
     "druid": "vy941zv8672",
     "image_url": "https://stacks.stanford.edu/image/iiif/vy941zv8672%2Fvy941zv8672_0001/info.json",
-    "label": "470 Welte-Mignon",
-    "title": "Chopin/Zadora - Preludes. nos. 2, 4, 9, 13 and 22",
+    "number": "470",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Zadora - Preludes: Nos. 2, 4, 9, 13 and 22",
     "type": "welte-red"
   },
   {
     "druid": "vc943nk4921",
     "image_url": "https://stacks.stanford.edu/image/iiif/vc943nk4921%2Fvc943nk4921_0002/info.json",
-    "label": "4319 Princesa",
-    "title": "Chueca - La alegría de la huerta: selecciones",
+    "number": "4319",
+    "publisher": "Princesa",
+    "title": "Chueca - La Alegría de la huerta: selecciones",
     "type": "88-note"
   },
   {
     "druid": "rh357hg0211",
     "image_url": "https://stacks.stanford.edu/image/iiif/rh357hg0211%2Frh357hg0211_0002/info.json",
-    "label": "4301 Princesa",
+    "number": "4301",
+    "publisher": "Princesa",
     "title": "Clará - Modern pericón",
     "type": "88-note"
   },
   {
     "druid": "kz454tt7354",
     "image_url": "https://stacks.stanford.edu/image/iiif/kz454tt7354%2Fkz454tt7354_0002/info.json",
-    "label": "4629 Princesa",
-    "title": "Clará - Qué mujer, qué mujer!: vals de la revista bis bis",
+    "number": "4629",
+    "publisher": "Princesa",
+    "title": "Clará - Qué mujer, qué mujer!: vals de la Revista Bis Bis",
     "type": "88-note"
   },
   {
     "druid": "cg834ff4729",
     "image_url": "https://stacks.stanford.edu/image/iiif/cg834ff4729%2Fcg834ff4729_0001/info.json",
-    "label": "3647 Welte-Mignon",
+    "number": "3647",
+    "publisher": "Welte-Mignon",
     "title": "Cuvillier/Heineck - Lilac domino: hesitation waltz",
     "type": "welte-red"
   },
   {
     "druid": "wn516xn5163",
     "image_url": "https://stacks.stanford.edu/image/iiif/wn516xn5163%2Fwn516xn5163_0001/info.json",
-    "label": "2430 Welte-Mignon",
+    "number": "2430",
+    "publisher": "Welte-Mignon",
     "title": "Czerny/Lhévinne - Oktavenetude: op. 740, no. 5",
     "type": "welte-red"
   },
   {
     "druid": "rq642tt1626",
     "image_url": "https://stacks.stanford.edu/image/iiif/rq642tt1626%2Frq642tt1626_0001/info.json",
-    "label": "2580 Welte-Mignon",
-    "title": "D'Egville/D'Egville - A canadian rondo: a passing-fancy",
+    "number": "2580",
+    "publisher": "Welte-Mignon",
+    "title": "D'Egville/D'Egville - A Canadian rondo: a passing-fancy",
     "type": "welte-red"
   },
   {
     "druid": "wp666fn2104",
     "image_url": "https://stacks.stanford.edu/image/iiif/wp666fn2104%2Fwp666fn2104_0001/info.json",
-    "label": "5537 Welte-Mignon",
-    "title": "Daly/Coach - Oh gee! oh gosh!: from stop flirting: fox-trot",
+    "number": "5537",
+    "publisher": "Welte-Mignon",
+    "title": "Daly/Coach - Oh gee! oh gosh!: from Stop flirting: fox-trot",
     "type": "welte-red"
   },
   {
     "druid": "jh696my0069",
     "image_url": "https://stacks.stanford.edu/image/iiif/jh696my0069%2Fjh696my0069_0001/info.json",
-    "label": "1765 Welte-Mignon",
+    "number": "1765",
+    "publisher": "Welte-Mignon",
     "title": "Debussy/Buhlig - Poissons d'or",
     "type": "welte-red"
   },
   {
     "druid": "dc920rk8870",
     "image_url": "https://stacks.stanford.edu/image/iiif/dc920rk8870%2Fdc920rk8870_0001/info.json",
-    "label": "2733 Welte-Mignon",
+    "number": "2733",
+    "publisher": "Welte-Mignon",
     "title": "Debussy/Debussy - Children's corner",
     "type": "welte-red"
   },
   {
     "druid": "ws250sr1272",
     "image_url": "https://stacks.stanford.edu/image/iiif/ws250sr1272%2Fws250sr1272_0001/info.json",
-    "label": "2739 Welte-Mignon",
-    "title": "Debussy/Debussy - Preludes. le vent dans la plaine ; minstrels",
+    "number": "2739",
+    "publisher": "Welte-Mignon",
+    "title": "Debussy/Debussy - Preludes: Le vent dans la plaine; Minstrels",
     "type": "welte-red"
   },
   {
     "druid": "tq268fs9721",
     "image_url": "https://stacks.stanford.edu/image/iiif/tq268fs9721%2Ftq268fs9721_0001/info.json",
-    "label": "3045 Welte-Mignon",
-    "title": "Debussy/Ganz - Preludes. la fille aux cheveux de lin ; la puerto del vino",
+    "number": "3045",
+    "publisher": "Welte-Mignon",
+    "title": "Debussy/Ganz - Preludes: La fille aux cheveux de lin; La puerto del vino",
     "type": "welte-red"
   },
   {
     "druid": "dw005gw3358",
     "image_url": "https://stacks.stanford.edu/image/iiif/dw005gw3358%2Fdw005gw3358_0001/info.json",
-    "label": "1450 Welte-Mignon",
-    "title": "Debussy/Schelling - La soirée dane granade",
+    "number": "1450",
+    "publisher": "Welte-Mignon",
+    "title": "Debussy/Schelling - La Soirée dane granade",
     "type": "welte-red"
   },
   {
     "druid": "rg591sj4242",
     "image_url": "https://stacks.stanford.edu/image/iiif/rg591sj4242%2Frg591sj4242_0001/info.json",
-    "label": "1451 Welte-Mignon",
+    "number": "1451",
+    "publisher": "Welte-Mignon",
     "title": "Debussy/Schelling - Toccata",
     "type": "welte-red"
   },
   {
     "druid": "bs533ns1949",
     "image_url": "https://stacks.stanford.edu/image/iiif/bs533ns1949%2Fbs533ns1949_0001/info.json",
-    "label": "3398 Welte-Mignon",
-    "title": "Delibes/Blumen - Naïla: walzer",
+    "number": "3398",
+    "publisher": "Welte-Mignon",
+    "title": "Delibes-Dohnányi/Blumen - \"naïla\": Walzer",
     "type": "welte-red"
   },
   {
     "druid": "xn585zh2707",
     "image_url": "https://stacks.stanford.edu/image/iiif/xn585zh2707%2Fxn585zh2707_0001/info.json",
-    "label": "2805 Welte-Mignon",
-    "title": "Delibes/Gayraud - Lakmé: fantasie i",
+    "number": "2805",
+    "publisher": "Welte-Mignon",
+    "title": "Delibes/Gayraud - Lakmé: Fantasie I",
     "type": "welte-red"
   },
   {
     "druid": "fz632cv0288",
     "image_url": "https://stacks.stanford.edu/image/iiif/fz632cv0288%2Ffz632cv0288_0001/info.json",
-    "label": "1828 Welte-Mignon",
+    "number": "1828",
+    "publisher": "Welte-Mignon",
     "title": "Dohnányi/Mero - Rhapsody, c major, op. 11, no. 3",
     "type": "welte-red"
   },
   {
     "druid": "bp952tr1116",
     "image_url": "https://stacks.stanford.edu/image/iiif/bp952tr1116%2Fbp952tr1116_0001/info.json",
-    "label": "399 Welte-Mignon",
+    "number": "399",
+    "publisher": "Welte-Mignon",
     "title": "Dohnányi/Weiss - Ii rhapsodie op. 11",
-    "type": "welte-red"
-  },
-  {
-    "druid": "hh429fw8081",
-    "image_url": "https://stacks.stanford.edu/image/iiif/hh429fw8081%2Fhh429fw8081_0001/info.json",
-    "label": "274 Welte-Mignon",
-    "title": "Droucker - Gnomenreigen",
     "type": "welte-red"
   },
   {
     "druid": "xy699sy1462",
     "image_url": "https://stacks.stanford.edu/image/iiif/xy699sy1462%2Fxy699sy1462_0001/info.json",
-    "label": "1324 Welte-Mignon",
+    "number": "1324",
+    "publisher": "Welte-Mignon",
     "title": "Dvořák/Fryer - Humoreske op. 10, no. 7",
     "type": "welte-red"
   },
   {
     "druid": "dy191sv5188",
     "image_url": "https://stacks.stanford.edu/image/iiif/dy191sv5188%2Fdy191sv5188_0001/info.json",
-    "label": "2261 Welte-Mignon",
-    "title": "Epstein - Wiener walzer",
+    "number": "2261",
+    "publisher": "Welte-Mignon",
+    "title": "Epstein/Epstein - Wiener walzer",
     "type": "welte-red"
   },
   {
     "druid": "nt812xg8796",
     "image_url": "https://stacks.stanford.edu/image/iiif/nt812xg8796%2Fnt812xg8796_0001/info.json",
-    "label": "3567 Welte-Mignon",
+    "number": "3567",
+    "publisher": "Welte-Mignon",
     "title": "Europe/Europe - Castle house rag: one-step",
     "type": "welte-red"
   },
   {
     "druid": "mv647hz9361",
     "image_url": "https://stacks.stanford.edu/image/iiif/mv647hz9361%2Fmv647hz9361_0001/info.json",
-    "label": "5669 Welte-Mignon",
+    "number": "5669",
+    "publisher": "Welte-Mignon",
     "title": "Fall/Black - Sergeant percy: one-step",
     "type": "welte-red"
   },
   {
     "druid": "qk926qc7779",
     "image_url": "https://stacks.stanford.edu/image/iiif/qk926qc7779%2Fqk926qc7779_0001/info.json",
-    "label": "5728 Welte-Mignon",
+    "number": "5728",
+    "publisher": "Welte-Mignon",
     "title": "Fall/Haass - Was machst du mit dem knie, lieber hans?: paso doble",
     "type": "welte-red"
   },
   {
     "druid": "hj604wr7502",
     "image_url": "https://stacks.stanford.edu/image/iiif/hj604wr7502%2Fhj604wr7502_0001/info.json",
-    "label": "1526 Welte-Mignon",
+    "number": "1526",
+    "publisher": "Welte-Mignon",
     "title": "Fall/Utz - Potpourri aus \"der fidele bauer\"",
     "type": "welte-red"
   },
   {
     "druid": "mw139zj5450",
     "image_url": "https://stacks.stanford.edu/image/iiif/mw139zj5450%2Fmw139zj5450_0002/info.json",
-    "label": "4420 Aeolian Co.",
-    "title": "Font y de Anta - El organillo y... yo: schotish",
+    "number": "4420",
+    "publisher": "Aeolian",
+    "title": "Font y de Anta - El Organillo y... yo: schotish",
     "type": "88-note"
   },
   {
     "druid": "jt036qh8967",
     "image_url": "https://stacks.stanford.edu/image/iiif/jt036qh8967%2Fjt036qh8967_0001/info.json",
-    "label": "3549 Welte-Mignon",
-    "title": "Foster/Merrigan - Old black joe: old folks at home: (way upon the swanee river)",
+    "number": "3549",
+    "publisher": "Welte-Mignon",
+    "title": "Foster/Merrigan - Old black joe: Old folks at home: (way upon the Swanee River)",
     "type": "welte-red"
   },
   {
     "druid": "xz373zg4809",
     "image_url": "https://stacks.stanford.edu/image/iiif/xz373zg4809%2Fxz373zg4809_0002/info.json",
-    "label": "40.007 Princesa",
+    "number": "40.007",
+    "publisher": "Princesa",
     "title": "Franco Ribate - Gitanillo de triana: pasodoble",
     "type": "88-note"
   },
   {
     "druid": "vd312rr8990",
     "image_url": "https://stacks.stanford.edu/image/iiif/vd312rr8990%2Fvd312rr8990_0001/info.json",
-    "label": "3568 Welte-Mignon",
-    "title": "Friml/Europe - Ting-a-ling-a-ling: (from \"high jinks\")",
+    "number": "3568",
+    "publisher": "Welte-Mignon",
+    "title": "Friml/Europe - Ting-a-ling-a-ling: (from \"High Jinks\")",
     "type": "welte-red"
   },
   {
     "druid": "zk082zq3962",
     "image_url": "https://stacks.stanford.edu/image/iiif/zk082zq3962%2Fzk082zq3962_0001/info.json",
-    "label": "5707 Welte-Mignon",
-    "title": "Friml/Johnson - Rose marie: fox-trot: from the musical play \"rose marie\"",
+    "number": "5707",
+    "publisher": "Welte-Mignon",
+    "title": "Friml/Johnson - Rose marie: fox-trot: from the musical play \"Rose Marie\"",
     "type": "welte-red"
   },
   {
     "druid": "kz819wb8990",
     "image_url": "https://stacks.stanford.edu/image/iiif/kz819wb8990%2Fkz819wb8990_0001/info.json",
-    "label": "3505 Welte-Mignon",
-    "title": "Friml/Savino - Sympathy: (waltz song): from the comedy-opera \"the firefly\"",
+    "number": "3505",
+    "publisher": "Welte-Mignon",
+    "title": "Friml/Savino - Sympathy: (waltz song): from the comedy-opera \"The Firefly\"",
     "type": "welte-red"
   },
   {
     "druid": "wq696jd1149",
     "image_url": "https://stacks.stanford.edu/image/iiif/wq696jd1149%2Fwq696jd1149_0002/info.json",
-    "label": "4663 Princesa",
+    "number": "4663",
+    "publisher": "Princesa",
     "title": "Fugazot - Barrio reo: tango",
     "type": "88-note"
   },
   {
     "druid": "zn339mg3395",
     "image_url": "https://stacks.stanford.edu/image/iiif/zn339mg3395%2Fzn339mg3395_0001/info.json",
-    "label": "297 Welte-Mignon",
+    "number": "297",
+    "publisher": "Welte-Mignon",
     "title": "Gabrilowitsch/Gabrilowitsch - Caprice-burlesque op. 3",
-    "type": "welte-red"
-  },
-  {
-    "druid": "rv703vf3503",
-    "image_url": "https://stacks.stanford.edu/image/iiif/rv703vf3503%2Frv703vf3503_0001/info.json",
-    "label": "3042 Welte-Mignon",
-    "title": "Ganz - Song of the boatmen of the volga =: (schifferlied auf der wolga)",
     "type": "welte-red"
   },
   {
     "druid": "dk418xy4378",
     "image_url": "https://stacks.stanford.edu/image/iiif/dk418xy4378%2Fdk418xy4378_0002/info.json",
-    "label": "4668 Princesa",
-    "title": "García Ibáñez - Félix rodríguez. pasodoble flamenco",
+    "number": "4668",
+    "publisher": "Princesa",
+    "title": "García Ibáñez - Félix rodríguez: Pasodoble flamenco",
     "type": "88-note"
   },
   {
     "druid": "qd424rx3516",
     "image_url": "https://stacks.stanford.edu/image/iiif/qd424rx3516%2Fqd424rx3516_0001/info.json",
-    "label": "3671 Welte-Mignon",
+    "number": "3671",
+    "publisher": "Welte-Mignon",
     "title": "German/La Forge - Three dances from henry viii",
     "type": "welte-red"
   },
   {
     "druid": "ry050yb9492",
     "image_url": "https://stacks.stanford.edu/image/iiif/ry050yb9492%2Fry050yb9492_0001/info.json",
-    "label": "2525 Welte-Mignon",
-    "title": "Gilbert/Ebenstein - Die keusche susanna: potpourri",
+    "number": "2525",
+    "publisher": "Welte-Mignon",
+    "title": "Gilbert/Ebenstein - Die Keusche susanna: Potpourri",
     "type": "welte-red"
   },
   {
     "druid": "zm791gz4425",
     "image_url": "https://stacks.stanford.edu/image/iiif/zm791gz4425%2Fzm791gz4425_0002/info.json",
-    "label": "4490 Princesa",
-    "title": "Giménez - El barbero de sevilla: selecciones: zarzuela española",
+    "number": "4490",
+    "publisher": "Princesa",
+    "title": "Giménez - El Barbero de sevilla: (zarzuela española): selecciones",
     "type": "88-note"
   },
   {
     "druid": "qd454gb9111",
     "image_url": "https://stacks.stanford.edu/image/iiif/qd454gb9111%2Fqd454gb9111_0002/info.json",
-    "label": "4514 Princesa",
-    "title": "Giménez - La tempranica: selecciones",
+    "number": "4514",
+    "publisher": "Princesa",
+    "title": "Giménez - La Tempranica: selecciones",
     "type": "88-note"
+  },
+  {
+    "druid": "fn744pq2157",
+    "image_url": "https://stacks.stanford.edu/image/iiif/fn744pq2157%2Ffn744pq2157_0001/info.json",
+    "number": "1990",
+    "publisher": "Welte-Mignon",
+    "title": "Glazunov-Blumenfeld/Lemba - Grande valse de concert: op. 47, D major",
+    "type": "welte-red"
   },
   {
     "druid": "nz678zw1579",
     "image_url": "https://stacks.stanford.edu/image/iiif/nz678zw1579%2Fnz678zw1579_0001/info.json",
-    "label": "1939 Welte-Mignon",
-    "title": "Glazunov/Glazunov - 1. sonata op. 74, b flat. 2nd movement, andante",
+    "number": "1939",
+    "publisher": "Welte-Mignon",
+    "title": "Glazunov/Glazunov - 1. sonata op. 74, b flat: 2nd movement, Andante",
     "type": "welte-red"
   },
   {
     "druid": "dq276yn8963",
     "image_url": "https://stacks.stanford.edu/image/iiif/dq276yn8963%2Fdq276yn8963_0001/info.json",
-    "label": "1945 Welte-Mignon",
-    "title": "Glazunov/Glazunov - Les saisons, ballet",
+    "number": "1945",
+    "publisher": "Welte-Mignon",
+    "title": "Glazunov/Glazunov - Les Saisons, ballet",
     "type": "welte-red"
   },
   {
     "druid": "vs880hb3425",
     "image_url": "https://stacks.stanford.edu/image/iiif/vs880hb3425%2Fvs880hb3425_0001/info.json",
-    "label": "1942 Welte-Mignon",
+    "number": "1942",
+    "publisher": "Welte-Mignon",
     "title": "Glazunov/Glazunov - Raymonda",
     "type": "welte-red"
   },
   {
     "druid": "kx293yk2859",
     "image_url": "https://stacks.stanford.edu/image/iiif/kx293yk2859%2Fkx293yk2859_0001/info.json",
-    "label": "1996 Welte-Mignon",
+    "number": "1996",
+    "publisher": "Welte-Mignon",
     "title": "Glazunov/Hoffmann - Theme and variations, f sharp minor",
     "type": "welte-red"
   },
   {
     "druid": "kq892pn7618",
     "image_url": "https://stacks.stanford.edu/image/iiif/kq892pn7618%2Fkq892pn7618_0001/info.json",
-    "label": "1968 Welte-Mignon",
+    "number": "1968",
+    "publisher": "Welte-Mignon",
     "title": "Glazunov/Kimontt-Jacynowa - Grand valse de concert: op. 41",
-    "type": "welte-red"
-  },
-  {
-    "druid": "fn744pq2157",
-    "image_url": "https://stacks.stanford.edu/image/iiif/fn744pq2157%2Ffn744pq2157_0001/info.json",
-    "label": "1990 Welte-Mignon",
-    "title": "Glazunov/Lemba - Grande valse de concert: op. 47, d major",
     "type": "welte-red"
   },
   {
     "druid": "xb072rc7617",
     "image_url": "https://stacks.stanford.edu/image/iiif/xb072rc7617%2Fxb072rc7617_0001/info.json",
-    "label": "4028 Welte-Mignon",
-    "title": "Gomes/Haass - Il guarany: fantasie",
+    "number": "4028",
+    "publisher": "Welte-Mignon",
+    "title": "Gomes/Haass - Il Guarany: fantasie",
     "type": "welte-red"
+  },
+  {
+    "druid": "hj502vv5162",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hj502vv5162%2Fhj502vv5162_0001/info.json",
+    "number": "B-6294",
+    "publisher": "De Luxe",
+    "title": "Gottschalk/Hart - Ricordati",
+    "type": "welte-licensee"
   },
   {
     "druid": "jy277ht0636",
     "image_url": "https://stacks.stanford.edu/image/iiif/jy277ht0636%2Fjy277ht0636_0001/info.json",
-    "label": "1819 Welte-Mignon",
-    "title": "Gottschalk/Utz - The last hope: (meditation réligieuse)",
+    "number": "1819",
+    "publisher": "Welte-Mignon",
+    "title": "Gottschalk/Utz - The Last hope: (meditation réligieuse)",
+    "type": "welte-red"
+  },
+  {
+    "druid": "xq762nt7491",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xq762nt7491%2Fxq762nt7491_0001/info.json",
+    "number": "26",
+    "publisher": "Welte-Mignon",
+    "title": "Gounod-Liszt/Adam-Benard - Faust-walzer",
     "type": "welte-red"
   },
   {
     "druid": "hm373bm3807",
     "image_url": "https://stacks.stanford.edu/image/iiif/hm373bm3807%2Fhm373bm3807_0001/info.json",
-    "label": "57 Welte-Mignon",
+    "number": "57",
+    "publisher": "Welte-Mignon",
     "title": "Gounod/Adam-Benard - Faust prelude",
     "type": "welte-red"
   },
   {
     "druid": "py987gg6088",
     "image_url": "https://stacks.stanford.edu/image/iiif/py987gg6088%2Fpy987gg6088_0001/info.json",
-    "label": "57 Welte-Mignon",
+    "number": "57",
+    "publisher": "Welte-Mignon",
     "title": "Gounod/Adam-Benard - Faust prelude",
     "type": "welte-red"
   },
   {
     "druid": "hr679fk5315",
     "image_url": "https://stacks.stanford.edu/image/iiif/hr679fk5315%2Fhr679fk5315_0001/info.json",
-    "label": "2172 Welte-Mignon",
+    "number": "2172",
+    "publisher": "Welte-Mignon",
     "title": "Gounod/Adam-Benard - Nazareth: sacred song",
     "type": "welte-red"
   },
   {
     "druid": "rg931dy5023",
     "image_url": "https://stacks.stanford.edu/image/iiif/rg931dy5023%2Frg931dy5023_0001/info.json",
-    "label": "2944 Welte-Mignon",
+    "number": "2944",
+    "publisher": "Welte-Mignon",
     "title": "Gounod/Cor de Las - Faust reminiscenzen a. d. iii. und iv. akt",
     "type": "welte-red"
   },
   {
     "druid": "sj582bt2976",
     "image_url": "https://stacks.stanford.edu/image/iiif/sj582bt2976%2Fsj582bt2976_0001/info.json",
-    "label": "2799 Welte-Mignon",
-    "title": "Gounod/Gayraud - Faust: selection i",
+    "number": "2799",
+    "publisher": "Welte-Mignon",
+    "title": "Gounod/Gayraud - Faust: Selection I",
+    "type": "welte-red"
+  },
+  {
+    "druid": "gs012fx5529",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gs012fx5529%2Fgs012fx5529_0001/info.json",
+    "number": "1343",
+    "publisher": "Welte-Mignon",
+    "title": "Gounod/Starke - Romeo and juliette: potpourri",
     "type": "welte-red"
   },
   {
     "druid": "nw765mr4994",
     "image_url": "https://stacks.stanford.edu/image/iiif/nw765mr4994%2Fnw765mr4994_0001/info.json",
-    "label": "3790 Welte-Mignon",
-    "title": "Grainger/Haass - British folkmusic. settings nr. 4, \"shepherd's hey\"",
+    "number": "3790",
+    "publisher": "Welte-Mignon",
+    "title": "Grainger/Haass - British folkmusic: Settings Nr. 4: \"Shepherd's hey\"",
     "type": "welte-red"
   },
   {
     "druid": "qv976bq3639",
     "image_url": "https://stacks.stanford.edu/image/iiif/qv976bq3639%2Fqv976bq3639_0001/info.json",
-    "label": "3791 Welte-Mignon",
-    "title": "Grainger/Haass - British folkmusic. settings nr. 6, irish tune from county derry",
+    "number": "3791",
+    "publisher": "Welte-Mignon",
+    "title": "Grainger/Haass - British folkmusic: Settings Nr. 6: Irish tune from County Derry",
     "type": "welte-red"
+  },
+  {
+    "druid": "df354sy6634",
+    "image_url": "https://stacks.stanford.edu/image/iiif/df354sy6634%2Fdf354sy6634_0001/info.json",
+    "number": "3379",
+    "publisher": "Welte-Mignon",
+    "title": "Grieg/Berend - Peer gynt ii, op. 55, no. 4: Solvejgs Lied",
+    "type": "welte-green"
   },
   {
     "druid": "jw822wm2644",
     "image_url": "https://stacks.stanford.edu/image/iiif/jw822wm2644%2Fjw822wm2644_0001/info.json",
-    "label": "1275 Welte-Mignon",
+    "number": "1275",
+    "publisher": "Welte-Mignon",
     "title": "Grieg/Grieg - Butterfly: op. 43, no. 1",
     "type": "welte-red"
   },
   {
     "druid": "mh255vw4599",
     "image_url": "https://stacks.stanford.edu/image/iiif/mh255vw4599%2Fmh255vw4599_0001/info.json",
-    "label": "1276 Welte-Mignon",
+    "number": "1276",
+    "publisher": "Welte-Mignon",
     "title": "Grieg/Grieg - Norwegischer brautzug im vorüberziehen",
     "type": "welte-red"
   },
   {
     "druid": "zf882fv0052",
     "image_url": "https://stacks.stanford.edu/image/iiif/zf882fv0052%2Fzf882fv0052_0001/info.json",
-    "label": "1277 Welte-Mignon",
+    "number": "1277",
+    "publisher": "Welte-Mignon",
     "title": "Grieg/Grieg - Vögelein a. lyrische stücke, op. 43",
     "type": "welte-red"
   },
   {
     "druid": "kj344bw3083",
     "image_url": "https://stacks.stanford.edu/image/iiif/kj344bw3083%2Fkj344bw3083_0001/info.json",
-    "label": "1307 Welte-Mignon",
-    "title": "Grieg/Pugno - An den frühling: op. 43, no. 1: (lyrische stücke)",
+    "number": "1307",
+    "publisher": "Welte-Mignon",
+    "title": "Grieg/Pugno - An Den frühling: op. 43, no. 1: (Lyrische Stücke)",
     "type": "welte-red"
   },
   {
     "druid": "yr522jf5585",
     "image_url": "https://stacks.stanford.edu/image/iiif/yr522jf5585%2Fyr522jf5585_0001/info.json",
-    "label": "1478 Welte-Mignon",
+    "number": "1478",
+    "publisher": "Welte-Mignon",
     "title": "Grieg/Samaroff Stokowski - Concerto a minor, op. 16",
     "type": "welte-red"
   },
   {
     "druid": "ym773gh2267",
     "image_url": "https://stacks.stanford.edu/image/iiif/ym773gh2267%2Fym773gh2267_0001/info.json",
-    "label": "1478 Welte-Mignon",
-    "title": "Grieg/Samaroff Stokowski - Concerto a minor. 1st movement",
+    "number": "1478",
+    "publisher": "Welte-Mignon",
+    "title": "Grieg/Samaroff Stokowski - Concerto a minor: 1st movement",
     "type": "welte-red"
   },
   {
     "druid": "bf644yy6536",
     "image_url": "https://stacks.stanford.edu/image/iiif/bf644yy6536%2Fbf644yy6536_0001/info.json",
-    "label": "1480 Welte-Mignon",
+    "number": "1480",
+    "publisher": "Welte-Mignon",
     "title": "Grieg/Samaroff Stokowski - Peer gynt suite ii",
     "type": "welte-red"
   },
   {
     "druid": "vz717bq6543",
     "image_url": "https://stacks.stanford.edu/image/iiif/vz717bq6543%2Fvz717bq6543_0001/info.json",
-    "label": "1480 Welte-Mignon",
-    "title": "Grieg/Samaroff Stokowski - Peer gynt suite. no. 1",
+    "number": "1480",
+    "publisher": "Welte-Mignon",
+    "title": "Grieg/Samaroff Stokowski - Peer gynt suite: No. 1",
     "type": "welte-red"
   },
   {
     "druid": "hk155fw7898",
     "image_url": "https://stacks.stanford.edu/image/iiif/hk155fw7898%2Fhk155fw7898_0001/info.json",
-    "label": "1005 Welte-Mignon",
+    "number": "1005",
+    "publisher": "Welte-Mignon",
     "title": "Grieg/Stebel - Schmetterling",
     "type": "welte-red"
   },
   {
     "druid": "hs635sh6729",
     "image_url": "https://stacks.stanford.edu/image/iiif/hs635sh6729%2Fhs635sh6729_0001/info.json",
-    "label": "378 Welte-Mignon",
+    "number": "378",
+    "publisher": "Welte-Mignon",
     "title": "Grieg/Wendling - Hochzeitstag auf troldhangen op. 65 no. 1",
     "type": "welte-red"
   },
   {
     "druid": "km927sd2616",
     "image_url": "https://stacks.stanford.edu/image/iiif/km927sd2616%2Fkm927sd2616_0002/info.json",
-    "label": "4323 Caecilia",
-    "title": "Guerrero - Don quintín el amargao. java",
+    "number": "4323",
+    "publisher": "Caecilia",
+    "title": "Guerrero - Don quintín el amargao: Java",
     "type": "88-note"
   },
   {
     "druid": "gn803sk7089",
     "image_url": "https://stacks.stanford.edu/image/iiif/gn803sk7089%2Fgn803sk7089_0002/info.json",
-    "label": "4504 Princesa",
-    "title": "Guerrero - El huésped del sevillano. lagarteranas",
+    "number": "5404",
+    "publisher": "Princesa",
+    "title": "Guerrero - El Huésped del sevillano: Lagarteranas",
     "type": "88-note"
   },
   {
     "druid": "vk572hg6636",
     "image_url": "https://stacks.stanford.edu/image/iiif/vk572hg6636%2Fvk572hg6636_0002/info.json",
-    "label": "4540 Princesa",
-    "title": "Guerrero - El sobre verde. bombones de chocolate",
+    "number": "4540",
+    "publisher": "Princesa",
+    "title": "Guerrero - El Sobre verde: Bombones de chocolate",
     "type": "88-note"
   },
   {
     "druid": "hx789sg2918",
     "image_url": "https://stacks.stanford.edu/image/iiif/hx789sg2918%2Fhx789sg2918_0001/info.json",
-    "label": "3376 Welte-Mignon",
-    "title": "Halévy/Berend - Die jüdin",
+    "number": "3376",
+    "publisher": "Welte-Mignon",
+    "title": "Halévy/Berend - Die Jüdin",
     "type": "welte-red"
   },
   {
     "druid": "sw740gd4329",
     "image_url": "https://stacks.stanford.edu/image/iiif/sw740gd4329%2Fsw740gd4329_0001/info.json",
-    "label": "76 Welte-Mignon",
+    "number": "76",
+    "publisher": "Welte-Mignon",
     "title": "Handel/Adam-Benard - Largo",
     "type": "welte-red"
   },
   {
     "druid": "hx184ww0780",
     "image_url": "https://stacks.stanford.edu/image/iiif/hx184ww0780%2Fhx184ww0780_0001/info.json",
-    "label": "10 Welte-Mignon",
-    "title": "Handel/Adam-Benard - The harmonius blacksmith: e major, 5th suite = le forgeron harmonieux",
+    "number": "10",
+    "publisher": "Welte-Mignon",
+    "title": "Handel/Adam-Benard - The Harmonius blacksmith: E major, 5th suite = Le forgeron harmonieux",
     "type": "welte-red"
   },
   {
     "druid": "cw965qx3168",
     "image_url": "https://stacks.stanford.edu/image/iiif/cw965qx3168%2Fcw965qx3168_0001/info.json",
-    "label": "5661 Welte-Mignon",
+    "number": "5661",
+    "publisher": "Welte-Mignon",
     "title": "Henderson/Johnson - Follow the swallow: fox-trot",
     "type": "welte-red"
   },
   {
     "druid": "fb623cd1247",
     "image_url": "https://stacks.stanford.edu/image/iiif/fb623cd1247%2Ffb623cd1247_0001/info.json",
-    "label": "1654 Welte-Mignon",
+    "number": "1654",
+    "publisher": "Welte-Mignon",
     "title": "Henselt/Cory - Si oiseau j'étais",
     "type": "welte-red"
   },
   {
     "druid": "sc787kg5664",
     "image_url": "https://stacks.stanford.edu/image/iiif/sc787kg5664%2Fsc787kg5664_0001/info.json",
-    "label": "1654 Welte-Mignon",
+    "number": "1654",
+    "publisher": "Welte-Mignon",
     "title": "Henselt/Cory - Si oiseau j'étais",
     "type": "welte-red"
   },
   {
     "druid": "kr645mg0298",
     "image_url": "https://stacks.stanford.edu/image/iiif/kr645mg0298%2Fkr645mg0298_0001/info.json",
-    "label": "1405 Welte-Mignon",
+    "number": "1405",
+    "publisher": "Welte-Mignon",
     "title": "Holzmann/Orlando - Love land",
     "type": "welte-red"
   },
   {
     "druid": "sb388kg1678",
     "image_url": "https://stacks.stanford.edu/image/iiif/sb388kg1678%2Fsb388kg1678_0002/info.json",
-    "label": "40019 Princesa",
-    "title": "Hoyos - El carrerito: tango argentino",
+    "number": "40019",
+    "publisher": "Princesa",
+    "title": "Hoyos - El Carrerito: tango argentino",
     "type": "88-note"
   },
   {
     "druid": "rt308hy9235",
     "image_url": "https://stacks.stanford.edu/image/iiif/rt308hy9235%2Frt308hy9235_0001/info.json",
-    "label": "646 Welte-Mignon",
+    "number": "646",
+    "publisher": "Welte-Mignon",
     "title": "Humperdinck/Humperdinck - Traumscene a. hänsel und gretel",
     "type": "welte-red"
   },
   {
     "druid": "fb100cb2366",
     "image_url": "https://stacks.stanford.edu/image/iiif/fb100cb2366%2Ffb100cb2366_0001/info.json",
-    "label": "2948 Welte-Mignon",
+    "number": "2948",
+    "publisher": "Welte-Mignon",
     "title": "Humperdinck/Sommer - Selections from \"hansel & gretel\"",
     "type": "welte-red"
   },
   {
     "druid": "zy618kz1670",
     "image_url": "https://stacks.stanford.edu/image/iiif/zy618kz1670%2Fzy618kz1670_0002/info.json",
-    "label": "4677 Victoria",
-    "title": "Joyce - Remembrance",
+    "number": "4677",
+    "publisher": "Victoria",
+    "title": "Joyce - Remembrance: valse",
     "type": "88-note"
   },
   {
     "druid": "fr859hh7893",
     "image_url": "https://stacks.stanford.edu/image/iiif/fr859hh7893%2Ffr859hh7893_0001/info.json",
-    "label": "3524 Welte-Mignon",
+    "number": "3524",
+    "publisher": "Welte-Mignon",
     "title": "Joyce/Dyck - Dreaming: waltz",
     "type": "welte-red"
   },
   {
     "druid": "mr400mf6531",
     "image_url": "https://stacks.stanford.edu/image/iiif/mr400mf6531%2Fmr400mf6531_0001/info.json",
-    "label": "5662 Welte-Mignon",
+    "number": "5662",
+    "publisher": "Welte-Mignon",
     "title": "Keefer/Johnson - Dream daddy: fox-trot",
     "type": "welte-red"
   },
   {
     "druid": "gm296rz0673",
     "image_url": "https://stacks.stanford.edu/image/iiif/gm296rz0673%2Fgm296rz0673_0001/info.json",
-    "label": "3055 Welte-Mignon",
-    "title": "Korngold/Ganz - Sonate e-dur, op. 2, no. 2. i. und ii. satz",
+    "number": "3055",
+    "publisher": "Welte-Mignon",
+    "title": "Korngold/Ganz - Sonate e-dur, op. 2, no. 2: I. und II. Satz",
     "type": "welte-red"
   },
   {
     "druid": "rb861vm6094",
     "image_url": "https://stacks.stanford.edu/image/iiif/rb861vm6094%2Frb861vm6094_0001/info.json",
-    "label": "3056 Welte-Mignon",
-    "title": "Korngold/Ganz - Sonate e-dur, op. 2, no. 2. iii. und iv. satz",
+    "number": "3056",
+    "publisher": "Welte-Mignon",
+    "title": "Korngold/Ganz - Sonate e-dur, op. 2, no. 2: III. und IV. Satz",
     "type": "welte-red"
   },
   {
     "druid": "ct503bz7189",
     "image_url": "https://stacks.stanford.edu/image/iiif/ct503bz7189%2Fct503bz7189_0001/info.json",
-    "label": "3842 Welte-Mignon",
-    "title": "Korngold/Heinemann - Märchenbilder. 5-7",
+    "number": "3842",
+    "publisher": "Welte-Mignon",
+    "title": "Korngold/Heinemann - Märchenbilder: 5-7",
     "type": "welte-red"
   },
   {
     "druid": "xh403hj3866",
     "image_url": "https://stacks.stanford.edu/image/iiif/xh403hj3866%2Fxh403hj3866_0001/info.json",
-    "label": "384 Welte-Mignon",
+    "number": "384",
+    "publisher": "Welte-Mignon",
     "title": "Kreisler/Schnabel - Old vienna waltzes",
     "type": "welte-red"
   },
   {
     "druid": "ft113cg5195",
     "image_url": "https://stacks.stanford.edu/image/iiif/ft113cg5195%2Fft113cg5195_0001/info.json",
-    "label": "2810 Welte-Mignon",
-    "title": "Lecocq/Gayraud - La fille de madame angot: (fantasie mosaïque)",
+    "number": "2810",
+    "publisher": "Welte-Mignon",
+    "title": "Lecocq/Gayraud - La Fille de madame angot: (fantasie mosaïque)",
     "type": "welte-red"
   },
   {
     "druid": "pc364sy7115",
     "image_url": "https://stacks.stanford.edu/image/iiif/pc364sy7115%2Fpc364sy7115_0001/info.json",
-    "label": "2609 Welte-Mignon",
-    "title": "Lehár/Goodall - Graf von luxemburg: selektion i",
+    "number": "2609",
+    "publisher": "Welte-Mignon",
+    "title": "Lehár/Goodall - Graf von luxemburg: Selektion I",
     "type": "welte-red"
   },
   {
     "druid": "wj488tq5861",
     "image_url": "https://stacks.stanford.edu/image/iiif/wj488tq5861%2Fwj488tq5861_0001/info.json",
-    "label": "1338 Welte-Mignon",
-    "title": "Lehár/Starke - Die lustige witwe: ii. potpourri",
+    "number": "1338",
+    "publisher": "Welte-Mignon",
+    "title": "Lehár/Starke - Die Lustige witwe: II. Potpourri",
     "type": "welte-red"
   },
   {
     "druid": "jg699wz4435",
     "image_url": "https://stacks.stanford.edu/image/iiif/jg699wz4435%2Fjg699wz4435_0001/info.json",
-    "label": "106 Welte-Mignon",
+    "number": "106",
+    "publisher": "Welte-Mignon",
     "title": "Leoncavallo/Adam-Benard - Prolog a. bajazzo",
     "type": "welte-red"
   },
   {
     "druid": "zw751nw0097",
     "image_url": "https://stacks.stanford.edu/image/iiif/zw751nw0097%2Fzw751nw0097_0001/info.json",
-    "label": "1023 Welte-Mignon",
-    "title": "Leoncavallo/Leoncavallo - Valse de musette: a. ii. act \"die bohème\"",
+    "number": "1023",
+    "publisher": "Welte-Mignon",
+    "title": "Leoncavallo/Leoncavallo - Valse de musette: a. II. Act \"die Bohème\"",
     "type": "welte-red"
   },
   {
     "druid": "ts972sy8288",
     "image_url": "https://stacks.stanford.edu/image/iiif/ts972sy8288%2Fts972sy8288_0001/info.json",
-    "label": "1196 Welte-Mignon",
+    "number": "1196",
+    "publisher": "Welte-Mignon",
     "title": "Leschetizky/Leschetizky - Barcarolle op. 39, no. 1",
     "type": "welte-red"
   },
   {
     "druid": "ws749sk4778",
     "image_url": "https://stacks.stanford.edu/image/iiif/ws749sk4778%2Fws749sk4778_0001/info.json",
-    "label": "1203 Welte-Mignon",
-    "title": "Leschetizky/Leschetizky - The two larks",
+    "number": "1203",
+    "publisher": "Welte-Mignon",
+    "title": "Leschetizky/Leschetizky - The Two larks",
     "type": "welte-red"
   },
   {
     "druid": "xk500gs5691",
     "image_url": "https://stacks.stanford.edu/image/iiif/xk500gs5691%2Fxk500gs5691_0001/info.json",
-    "label": "337 Welte-Mignon",
-    "title": "Lincke/Kupfernagel - Berliner luft: marsch",
+    "number": "337",
+    "publisher": "Welte-Mignon",
+    "title": "Lincke/Kupfernagel - Berliner luft: Marsch",
     "type": "welte-red"
   },
   {
     "druid": "fw547rc7021",
     "image_url": "https://stacks.stanford.edu/image/iiif/fw547rc7021%2Ffw547rc7021_0001/info.json",
-    "label": "1396 Welte-Mignon",
-    "title": "Lincke/Orlando - Luna-walzer: a. d. operette \"frau luna\"",
+    "number": "1396",
+    "publisher": "Welte-Mignon",
+    "title": "Lincke/Orlando - Luna-walzer: a. d. Operette \"Frau Luna\"",
     "type": "welte-red"
   },
   {
-    "druid": "xq762nt7491",
-    "image_url": "https://stacks.stanford.edu/image/iiif/xq762nt7491%2Fxq762nt7491_0001/info.json",
-    "label": "26 Welte-Mignon",
-    "title": "Liszt/Adam-Benard - Faust-walzer",
+    "druid": "jg717nb8731",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jg717nb8731%2Fjg717nb8731_0001/info.json",
+    "number": "2703",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt-Vetter/Lohr - Ii. ungarische rhapsodie: mit Cadenz von Prof. H. Vetter",
     "type": "welte-red"
   },
   {
     "druid": "vs059bb4318",
     "image_url": "https://stacks.stanford.edu/image/iiif/vs059bb4318%2Fvs059bb4318_0001/info.json",
-    "label": "104 Welte-Mignon",
+    "number": "104",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Adam-Benard - Nocturne no. 2",
     "type": "welte-red"
   },
   {
     "druid": "gg920pz0818",
     "image_url": "https://stacks.stanford.edu/image/iiif/gg920pz0818%2Fgg920pz0818_0001/info.json",
-    "label": "415 Welte-Mignon",
+    "number": "415",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Albert - Loves dream",
     "type": "welte-red"
   },
   {
     "druid": "ky445sz4630",
     "image_url": "https://stacks.stanford.edu/image/iiif/ky445sz4630%2Fky445sz4630_0001/info.json",
-    "label": "412 Welte-Mignon",
-    "title": "Liszt/Albert - Soirée de vienne. i [i.e., 2]",
-    "type": "welte-red"
-  },
-  {
-    "druid": "yj598pj2879",
-    "image_url": "https://stacks.stanford.edu/image/iiif/yj598pj2879%2Fyj598pj2879_0001/info.json",
-    "label": "412 Welte-Mignon",
-    "title": "Liszt/Albert - Soirée de vienne. i [i.e., 2]",
+    "number": "412",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Albert - Soirée de vienne: I [i.e., 2]",
     "type": "welte-red"
   },
   {
     "druid": "vy193qr6005",
     "image_url": "https://stacks.stanford.edu/image/iiif/vy193qr6005%2Fvy193qr6005_0001/info.json",
-    "label": "2988 Welte-Mignon",
+    "number": "2988",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Albert - Sonata b minor, 2nd part",
     "type": "welte-red"
   },
   {
     "druid": "gy310qs3678",
     "image_url": "https://stacks.stanford.edu/image/iiif/gy310qs3678%2Fgy310qs3678_0001/info.json",
-    "label": "2987 Welte-Mignon",
+    "number": "2987",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Albert - Sonata b minor, part 1",
     "type": "welte-red"
   },
   {
     "druid": "kv550vj8954",
     "image_url": "https://stacks.stanford.edu/image/iiif/kv550vj8954%2Fkv550vj8954_0001/info.json",
-    "label": "444 Welte-Mignon",
-    "title": "Liszt/Busoni - La campanella: paganini etude no. 3",
+    "number": "444",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Busoni - La Campanella: Paganini etude no. 3",
     "type": "welte-red"
   },
   {
     "druid": "tp302mb4101",
     "image_url": "https://stacks.stanford.edu/image/iiif/tp302mb4101%2Ftp302mb4101_0001/info.json",
-    "label": "1321 Welte-Mignon",
-    "title": "Liszt/Busoni - Norma: fantasie",
-    "type": "welte-red"
-  },
-  {
-    "druid": "mf443ns5829",
-    "image_url": "https://stacks.stanford.edu/image/iiif/mf443ns5829%2Fmf443ns5829_0001/info.json",
-    "label": "445 Welte-Mignon",
-    "title": "Liszt/Busoni - Rigoletto: (paraphrase)",
+    "number": "1321",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Busoni - Norma: Fantasie",
     "type": "welte-red"
   },
   {
     "druid": "yx536mq2915",
     "image_url": "https://stacks.stanford.edu/image/iiif/yx536mq2915%2Fyx536mq2915_0001/info.json",
-    "label": "365 Welte-Mignon",
+    "number": "365",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Carreño - 6th hungarian rhapsody",
+    "type": "welte-red"
+  },
+  {
+    "druid": "yj598pj2879",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yj598pj2879%2Fyj598pj2879_0001/info.json",
+    "number": "360",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Carreño - Soirée de vienne, no. 6",
     "type": "welte-red"
   },
   {
     "druid": "yc867qr9425",
     "image_url": "https://stacks.stanford.edu/image/iiif/yc867qr9425%2Fyc867qr9425_0001/info.json",
-    "label": "2456 Welte-Mignon",
+    "number": "2456",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Danziger - Gondoliera from venezia e napoli",
     "type": "welte-red"
   },
   {
     "druid": "bg098gg3899",
     "image_url": "https://stacks.stanford.edu/image/iiif/bg098gg3899%2Fbg098gg3899_0001/info.json",
-    "label": "494 Welte-Mignon",
+    "number": "494",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Dohnányi - 13th rhapsody",
     "type": "welte-red"
   },
   {
     "druid": "dp563zh2166",
     "image_url": "https://stacks.stanford.edu/image/iiif/dp563zh2166%2Fdp563zh2166_0001/info.json",
-    "label": "492 Welte-Mignon",
+    "number": "492",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Dohnányi - Rakoczy-marsch",
     "type": "welte-red"
   },
   {
     "druid": "hn488rk0690",
     "image_url": "https://stacks.stanford.edu/image/iiif/hn488rk0690%2Fhn488rk0690_0001/info.json",
-    "label": "496 Welte-Mignon",
+    "number": "496",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Dohnányi - Soiree de vienne, no. 4",
+    "type": "welte-red"
+  },
+  {
+    "druid": "hh429fw8081",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hh429fw8081%2Fhh429fw8081_0001/info.json",
+    "number": "274",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Droucker - Gnomenreigen",
     "type": "welte-red"
   },
   {
     "druid": "tb707nd8515",
     "image_url": "https://stacks.stanford.edu/image/iiif/tb707nd8515%2Ftb707nd8515_0001/info.json",
-    "label": "993 Welte-Mignon",
+    "number": "993",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Elvyn - Widmung",
     "type": "welte-red"
   },
   {
     "druid": "mx460bt7026",
     "image_url": "https://stacks.stanford.edu/image/iiif/mx460bt7026%2Fmx460bt7026_0001/info.json",
-    "label": "198 Welte-Mignon",
+    "number": "198",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Friedheim - Xii rhapsodie",
     "type": "welte-red"
   },
   {
     "druid": "ch401rm7382",
     "image_url": "https://stacks.stanford.edu/image/iiif/ch401rm7382%2Fch401rm7382_0001/info.json",
-    "label": "3058 Welte-Mignon",
+    "number": "3058",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Ganz - Mignon's lied",
     "type": "welte-red"
   },
   {
     "druid": "jf649gs2184",
     "image_url": "https://stacks.stanford.edu/image/iiif/jf649gs2184%2Fjf649gs2184_0001/info.json",
-    "label": "936 Welte-Mignon",
+    "number": "936",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Hambourg - Polonaise e major",
     "type": "welte-red"
   },
   {
     "druid": "cv806rf2664",
     "image_url": "https://stacks.stanford.edu/image/iiif/cv806rf2664%2Fcv806rf2664_0001/info.json",
-    "label": "3410 Welte-Mignon",
-    "title": "Liszt/Kwast-Hodapp - Wilde jagd: etude",
+    "number": "3410",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Kwast-Hodapp - Wilde jagd: Etude",
     "type": "welte-red"
   },
   {
     "druid": "rb625rv7300",
     "image_url": "https://stacks.stanford.edu/image/iiif/rb625rv7300%2Frb625rv7300_0001/info.json",
-    "label": "569 Welte-Mignon",
+    "number": "569",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Lamond - Etude no. 3, des-dur",
     "type": "welte-red"
   },
   {
     "druid": "kz379jn2491",
     "image_url": "https://stacks.stanford.edu/image/iiif/kz379jn2491%2Fkz379jn2491_0001/info.json",
-    "label": "570 Welte-Mignon",
+    "number": "570",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Lamond - Liebestraum",
     "type": "welte-red"
   },
   {
     "druid": "ng103jj1150",
     "image_url": "https://stacks.stanford.edu/image/iiif/ng103jj1150%2Fng103jj1150_0001/info.json",
-    "label": "570 Welte-Mignon",
-    "title": "Liszt/Lamond - Liebestraum: nocturn no. 3",
+    "number": "570",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Lamond - Liebestraum: Nocturn No. 3",
     "type": "welte-red"
   },
   {
     "druid": "dw083wh0675",
     "image_url": "https://stacks.stanford.edu/image/iiif/dw083wh0675%2Fdw083wh0675_0001/info.json",
-    "label": "1302 Welte-Mignon",
+    "number": "1302",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Lhévinne - Loreley",
-    "type": "welte-red"
-  },
-  {
-    "druid": "jg717nb8731",
-    "image_url": "https://stacks.stanford.edu/image/iiif/jg717nb8731%2Fjg717nb8731_0001/info.json",
-    "label": "2703 Welte-Mignon",
-    "title": "Liszt/Lohr - Ii. ungarische rhapsodie: mit cadenz von prof. h. vetter",
     "type": "welte-red"
   },
   {
     "druid": "jy572md2211",
     "image_url": "https://stacks.stanford.edu/image/iiif/jy572md2211%2Fjy572md2211_0001/info.json",
-    "label": "3333 Welte-Mignon",
-    "title": "Liszt/Lászlò - Piano-concert e major. 1st movement",
+    "number": "3333",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Lászlò - Piano-concert e major: 1st movement",
     "type": "welte-red"
   },
   {
     "druid": "zk440mh1715",
     "image_url": "https://stacks.stanford.edu/image/iiif/zk440mh1715%2Fzk440mh1715_0001/info.json",
-    "label": "757 Welte-Mignon",
+    "number": "757",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Mero - 2nd hungarian rhapsody",
     "type": "welte-red"
   },
   {
     "druid": "hg174cq6672",
     "image_url": "https://stacks.stanford.edu/image/iiif/hg174cq6672%2Fhg174cq6672_0001/info.json",
-    "label": "757 Welte-Mignon",
+    "number": "757",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Mero - Ii. ungarische rhapsodie",
     "type": "welte-red"
   },
   {
     "druid": "cz847th6835",
     "image_url": "https://stacks.stanford.edu/image/iiif/cz847th6835%2Fcz847th6835_0001/info.json",
-    "label": "1112 Welte-Mignon",
+    "number": "1112",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Ney - Viii. rhapsodie",
     "type": "welte-red"
   },
   {
     "druid": "wp442mf3514",
     "image_url": "https://stacks.stanford.edu/image/iiif/wp442mf3514%2Fwp442mf3514_0001/info.json",
-    "label": "1216 Welte-Mignon",
-    "title": "Liszt/Pachmann - Etude de concert: no. 2, f-moll",
+    "number": "1216",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Pachmann - Etude de concert: no. 2, f-Moll",
     "type": "welte-red"
   },
   {
     "druid": "zv884mc0794",
     "image_url": "https://stacks.stanford.edu/image/iiif/zv884mc0794%2Fzv884mc0794_0001/info.json",
-    "label": "1259 Welte-Mignon",
+    "number": "1259",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Paderewski - 10th hungarian rhapsody",
     "type": "welte-red"
   },
   {
     "druid": "qg121rz6125",
     "image_url": "https://stacks.stanford.edu/image/iiif/qg121rz6125%2Fqg121rz6125_0001/info.json",
-    "label": "1259 Welte-Mignon",
+    "number": "1259",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Paderewski - X. rhapsodie",
     "type": "welte-red"
   },
   {
     "druid": "gz430tm0196",
     "image_url": "https://stacks.stanford.edu/image/iiif/gz430tm0196%2Fgz430tm0196_0001/info.json",
-    "label": "844 Welte-Mignon",
+    "number": "844",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Pauer - Harmonie du soir",
     "type": "welte-red"
   },
   {
     "druid": "fd761bx2206",
     "image_url": "https://stacks.stanford.edu/image/iiif/fd761bx2206%2Ffd761bx2206_0001/info.json",
-    "label": "518 Welte-Mignon",
-    "title": "Liszt/Petri - Années de pélerinage, iii, no. 4: les jeux d'eaux de la villa d'este",
+    "number": "518",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Petri - Années de pélerinage, iii, no. 4: les jeux d'eaux de la Villa d'Este",
     "type": "welte-red"
   },
   {
     "druid": "qq914np5449",
     "image_url": "https://stacks.stanford.edu/image/iiif/qq914np5449%2Fqq914np5449_0001/info.json",
-    "label": "324 Welte-Mignon",
+    "number": "324",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Reisenauer - X ung. rhapsodie",
     "type": "welte-red"
   },
   {
     "druid": "zw755dp8285",
     "image_url": "https://stacks.stanford.edu/image/iiif/zw755dp8285%2Fzw755dp8285_0001/info.json",
-    "label": "483 Welte-Mignon",
+    "number": "483",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Ripper - Faust-walzer",
     "type": "welte-red"
   },
   {
     "druid": "fv104hn7521",
     "image_url": "https://stacks.stanford.edu/image/iiif/fv104hn7521%2Ffv104hn7521_0001/info.json",
-    "label": "304 Welte-Mignon",
-    "title": "Liszt/Rössel - V. hungarian rhapsody: (heroide elegique)",
+    "number": "304",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Rössel - V. hungarian rhapsody: (Heroide elegique)",
     "type": "welte-red"
   },
   {
     "druid": "ns598kr8616",
     "image_url": "https://stacks.stanford.edu/image/iiif/ns598kr8616%2Fns598kr8616_0001/info.json",
-    "label": "1474 Welte-Mignon",
+    "number": "1474",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Samaroff Stokowski - Tannhauser march",
     "type": "welte-red"
   },
   {
     "druid": "fj448by1666",
     "image_url": "https://stacks.stanford.edu/image/iiif/fj448by1666%2Ffj448by1666_0001/info.json",
-    "label": "1474 Welte-Mignon",
+    "number": "1474",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Samaroff Stokowski - Tannhäuser-marsch",
     "type": "welte-red"
   },
   {
     "druid": "rq927dq9061",
     "image_url": "https://stacks.stanford.edu/image/iiif/rq927dq9061%2Frq927dq9061_0001/info.json",
-    "label": "951 Welte-Mignon",
-    "title": "Liszt/Sapellnikoff - Nocturne. no. 1, \"hohe liebe\"",
+    "number": "951",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Sapellnikoff - Nocturne: No. 1: \"Hohe Liebe\"",
     "type": "welte-red"
   },
   {
     "druid": "hm523dq5554",
     "image_url": "https://stacks.stanford.edu/image/iiif/hm523dq5554%2Fhm523dq5554_0001/info.json",
-    "label": "876 Welte-Mignon",
-    "title": "Liszt/Sauer - Don juan: fantasie",
+    "number": "876",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Sauer - Don juan: Fantasie",
     "type": "welte-red"
   },
   {
     "druid": "yt837kd6607",
     "image_url": "https://stacks.stanford.edu/image/iiif/yt837kd6607%2Fyt837kd6607_0001/info.json",
-    "label": "244 Welte-Mignon",
+    "number": "244",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Scharwenka - Ricordanza",
     "type": "welte-red"
   },
   {
     "druid": "ny706rg1119",
     "image_url": "https://stacks.stanford.edu/image/iiif/ny706rg1119%2Fny706rg1119_0001/info.json",
-    "label": "895 Welte-Mignon",
+    "number": "895",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Schnitzer - Ix. rhapsodie",
     "type": "welte-red"
   },
   {
     "druid": "st011pr3757",
     "image_url": "https://stacks.stanford.edu/image/iiif/st011pr3757%2Fst011pr3757_0001/info.json",
-    "label": "738 Welte-Mignon",
+    "number": "738",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Schumann - Waldesrauschen: 1st concert étude",
     "type": "welte-red"
   },
   {
     "druid": "bx815rz0622",
     "image_url": "https://stacks.stanford.edu/image/iiif/bx815rz0622%2Fbx815rz0622_0001/info.json",
-    "label": "1033 Welte-Mignon",
-    "title": "Liszt/Stavenhagen - 12th hungarian rhapsody: (as played by liszt)",
+    "number": "1033",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Stavenhagen - 12th hungarian rhapsody: (as played by Liszt)",
     "type": "welte-red"
   },
   {
     "druid": "ry948sf9078",
     "image_url": "https://stacks.stanford.edu/image/iiif/ry948sf9078%2Fry948sf9078_0001/info.json",
-    "label": "1032 Welte-Mignon",
-    "title": "Liszt/Stavenhagen - Ii. legende. der hl. franziskus über die wogen schreitend",
+    "number": "1032",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Stavenhagen - Ii. legende: Der hl. Franziskus über die Wogen schreitend",
     "type": "welte-red"
   },
   {
     "druid": "hg282mg9396",
     "image_url": "https://stacks.stanford.edu/image/iiif/hg282mg9396%2Fhg282mg9396_0001/info.json",
-    "label": "1033 Welte-Mignon",
-    "title": "Liszt/Stavenhagen - Xii. ungar. rapsodie: (nach persönlicher erinnerung an liszt = (played by as liszt)",
+    "number": "1033",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Stavenhagen - Xii. ungar. rapsodie: (nach persönlicher Erinnerung an Liszt = (played by as Liszt)",
     "type": "welte-red"
   },
   {
     "druid": "np829dt9039",
     "image_url": "https://stacks.stanford.edu/image/iiif/np829dt9039%2Fnp829dt9039_0001/info.json",
-    "label": "1386 Welte-Mignon",
+    "number": "1386",
+    "publisher": "Welte-Mignon",
     "title": "Liszt/Timanoff - I. ungarische rhapsodie",
     "type": "welte-red"
   },
   {
     "druid": "sr504pc8797",
     "image_url": "https://stacks.stanford.edu/image/iiif/sr504pc8797%2Fsr504pc8797_0001/info.json",
-    "label": "376 Welte-Mignon",
-    "title": "Liszt/Wendling - Lohengrin. elsa's bridal procession",
+    "number": "376",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Wendling - Lohengrin: Elsa's bridal procession",
     "type": "welte-red"
   },
   {
     "druid": "gx118hr0306",
     "image_url": "https://stacks.stanford.edu/image/iiif/gx118hr0306%2Fgx118hr0306_0001/info.json",
-    "label": "1957 Welte-Mignon",
+    "number": "1957",
+    "publisher": "Welte-Mignon",
     "title": "Li͡apunov/Drozdov - Carillon",
     "type": "welte-red"
   },
   {
     "druid": "gv741wj6162",
     "image_url": "https://stacks.stanford.edu/image/iiif/gv741wj6162%2Fgv741wj6162_0002/info.json",
-    "label": "4478 Princesa",
+    "number": "4478",
+    "publisher": "Princesa",
     "title": "Lope - Gallito: paso doble flamenco",
     "type": "88-note"
   },
   {
-    "druid": "gx107hd3026",
-    "image_url": "https://stacks.stanford.edu/image/iiif/gx107hd3026%2Fgx107hd3026_0001/info.json",
-    "label": "3316 Welte-Mignon",
-    "title": "Lászlò - 8th symphony b minor. 2nd movement: andante con motto (unfinished)",
-    "type": "welte-red"
-  },
-  {
     "druid": "xy812vy7103",
     "image_url": "https://stacks.stanford.edu/image/iiif/xy812vy7103%2Fxy812vy7103_0001/info.json",
-    "label": "3681 Welte-Mignon",
-    "title": "MacDowell/Cone - An old love story: op. 61, no. 1",
+    "number": "3681",
+    "publisher": "Welte-Mignon",
+    "title": "MacDowell/Cone - An Old love story: op. 61, no. 1",
     "type": "welte-red"
   },
   {
     "druid": "fk269mx8427",
     "image_url": "https://stacks.stanford.edu/image/iiif/fk269mx8427%2Ffk269mx8427_0001/info.json",
-    "label": "2998 Welte-Mignon",
+    "number": "2998",
+    "publisher": "Welte-Mignon",
     "title": "MacDowell/Winogradoff-Gorges - Polonaise e minor, op. 46, no. 12",
     "type": "welte-red"
   },
   {
     "druid": "dp497dz1055",
     "image_url": "https://stacks.stanford.edu/image/iiif/dp497dz1055%2Fdp497dz1055_0001/info.json",
-    "label": "469 Welte-Mignon",
+    "number": "469",
+    "publisher": "Welte-Mignon",
     "title": "MacDowell/Zadora - Hexentanz: op. 17, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "md908xy8241",
     "image_url": "https://stacks.stanford.edu/image/iiif/md908xy8241%2Fmd908xy8241_0001/info.json",
-    "label": "5551 Welte-Mignon",
-    "title": "Malderen/Schrempp - Tango du rêve: (traum tango)",
+    "number": "5551",
+    "publisher": "Welte-Mignon",
+    "title": "Malderen/Schrempp - Tango du rêve: (Traum Tango)",
     "type": "welte-red"
   },
   {
     "druid": "qh464nj1973",
     "image_url": "https://stacks.stanford.edu/image/iiif/qh464nj1973%2Fqh464nj1973_0002/info.json",
-    "label": "4671 Princesa",
+    "number": "4671",
+    "publisher": "Princesa",
     "title": "Marquina - Ecos españoles: pasodoble",
     "type": "88-note"
   },
   {
     "druid": "jp202jq5812",
     "image_url": "https://stacks.stanford.edu/image/iiif/jp202jq5812%2Fjp202jq5812_0002/info.json",
-    "label": "1606 Caecilia",
-    "title": "Martínez Valls - Serenata poética, en forma de fox trot",
+    "number": "1606",
+    "publisher": "Caecilia",
+    "title": "Martínez Valls - Serenata poética: en forma de fox trot",
     "type": "88-note"
   },
   {
     "druid": "ps751km7125",
     "image_url": "https://stacks.stanford.edu/image/iiif/ps751km7125%2Fps751km7125_0001/info.json",
-    "label": "814 Welte-Mignon",
-    "title": "Marx-Goldschmidt/Marx-Goldschmidt - Rhapsodie hongroise: nach sarasates zigeunerweisen",
+    "number": "814",
+    "publisher": "Welte-Mignon",
+    "title": "Marx-Goldschmidt/Marx-Goldschmidt - Rhapsodie hongroise: nach Sarasates Zigeunerweisen",
     "type": "welte-red"
+  },
+  {
+    "druid": "ny606dc0992",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ny606dc0992%2Fny606dc0992_0001/info.json",
+    "number": "B-6239",
+    "publisher": "De Luxe",
+    "title": "Mascagni/Davis - Cavelleria rusticana",
+    "type": "welte-licensee"
   },
   {
     "druid": "vm351pv9656",
     "image_url": "https://stacks.stanford.edu/image/iiif/vm351pv9656%2Fvm351pv9656_0001/info.json",
-    "label": "253 Welte-Mignon",
+    "number": "253",
+    "publisher": "Welte-Mignon",
     "title": "Mascagni/Zscherneck - Intermezzo aus cavalleria rusticana",
     "type": "welte-red"
   },
   {
     "druid": "jd052zg1047",
     "image_url": "https://stacks.stanford.edu/image/iiif/jd052zg1047%2Fjd052zg1047_0001/info.json",
-    "label": "2685 Welte-Mignon",
+    "number": "2685",
+    "publisher": "Welte-Mignon",
     "title": "Mason/Adam - Nearer my god to thee",
     "type": "welte-red"
   },
   {
     "druid": "fm197wc9522",
     "image_url": "https://stacks.stanford.edu/image/iiif/fm197wc9522%2Ffm197wc9522_0001/info.json",
-    "label": "2908 Welte-Mignon",
+    "number": "2908",
+    "publisher": "Welte-Mignon",
     "title": "Massenet/Epstein - Manon: selection",
     "type": "welte-red"
   },
   {
     "druid": "rs765sm2000",
     "image_url": "https://stacks.stanford.edu/image/iiif/rs765sm2000%2Frs765sm2000_0001/info.json",
-    "label": "2822 Welte-Mignon",
+    "number": "2822",
+    "publisher": "Welte-Mignon",
     "title": "Massenet/Gayraud - Thaïs: fantasia mosaïc",
     "type": "welte-red"
   },
   {
     "druid": "zr938kz3902",
     "image_url": "https://stacks.stanford.edu/image/iiif/zr938kz3902%2Fzr938kz3902_0001/info.json",
-    "label": "2823 Welte-Mignon",
-    "title": "Massenet/Gayraud - Werther: fantasia, part i",
+    "number": "2823",
+    "publisher": "Welte-Mignon",
+    "title": "Massenet/Gayraud - Werther: fantasia, part I",
     "type": "welte-red"
   },
   {
     "druid": "nz852nk6103",
     "image_url": "https://stacks.stanford.edu/image/iiif/nz852nk6103%2Fnz852nk6103_0001/info.json",
-    "label": "2556 Welte-Mignon",
+    "number": "2556",
+    "publisher": "Welte-Mignon",
     "title": "Massenet/Paur - Thais, meditation",
+    "type": "welte-red"
+  },
+  {
+    "druid": "hh361xy4933",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hh361xy4933%2Fhh361xy4933_0001/info.json",
+    "number": "C-6893",
+    "publisher": "De Luxe",
+    "title": "Mendelssohn-Bartholdy-Hutcheson/Bacon - Scherzo (midsummer night's dream)",
+    "type": "welte-licensee"
+  },
+  {
+    "druid": "xp003dy0437",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xp003dy0437%2Fxp003dy0437_0001/info.json",
+    "number": "882",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy-Liszt/Sauer - Auf flügeln des gesangs",
     "type": "welte-red"
   },
   {
     "druid": "xn796bh4368",
     "image_url": "https://stacks.stanford.edu/image/iiif/xn796bh4368%2Fxn796bh4368_0001/info.json",
-    "label": "216 Welte-Mignon",
-    "title": "Mendelssohn-Bartholdy/Adam-Benard - Lied ohne worte. moderato, no. 4",
+    "number": "216",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Adam-Benard - Lied ohne worte: Moderato, No. 4",
     "type": "welte-red"
   },
   {
     "druid": "mx599qs6329",
     "image_url": "https://stacks.stanford.edu/image/iiif/mx599qs6329%2Fmx599qs6329_0001/info.json",
-    "label": "40 Welte-Mignon",
-    "title": "Mendelssohn-Bartholdy/Adam-Benard - Lied ohne worte. volkslied, no. 23",
+    "number": "40",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Adam-Benard - Lied ohne worte: Volkslied, No. 23",
     "type": "welte-red"
   },
   {
     "druid": "jk702cg2022",
     "image_url": "https://stacks.stanford.edu/image/iiif/jk702cg2022%2Fjk702cg2022_0001/info.json",
-    "label": "1466 Welte-Mignon",
+    "number": "1466",
+    "publisher": "Welte-Mignon",
     "title": "Mendelssohn-Bartholdy/Bloomfield-Zeisler - Frühlingslied",
     "type": "welte-red"
   },
   {
     "druid": "cw427tw4145",
     "image_url": "https://stacks.stanford.edu/image/iiif/cw427tw4145%2Fcw427tw4145_0001/info.json",
-    "label": "2000 Welte-Mignon",
+    "number": "2000",
+    "publisher": "Welte-Mignon",
     "title": "Mendelssohn-Bartholdy/Goraïnoff - Rondo capriccioso",
     "type": "welte-red"
   },
   {
     "druid": "cd381jt9273",
     "image_url": "https://stacks.stanford.edu/image/iiif/cd381jt9273%2Fcd381jt9273_0001/info.json",
-    "label": "3172 Welte-Mignon",
-    "title": "Mendelssohn-Bartholdy/Kiek - 3th symphony. allegro vivacissimo",
+    "number": "3172",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Kiek - 3th symphony: Allegro vivacissimo",
     "type": "welte-red"
   },
   {
     "druid": "bd915bs0646",
     "image_url": "https://stacks.stanford.edu/image/iiif/bd915bs0646%2Fbd915bs0646_0001/info.json",
-    "label": "3162 Welte-Mignon",
+    "number": "3162",
+    "publisher": "Welte-Mignon",
     "title": "Mendelssohn-Bartholdy/Kiek - Capriccio brilliante b major",
     "type": "welte-red"
   },
   {
     "druid": "zv706jf8277",
     "image_url": "https://stacks.stanford.edu/image/iiif/zv706jf8277%2Fzv706jf8277_0001/info.json",
-    "label": "458 Welte-Mignon",
-    "title": "Mendelssohn-Bartholdy/Kleeberg - Duetto: (song without words): a flat major",
+    "number": "458",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Kleeberg - Duetto: (Song without words): A flat major",
     "type": "welte-red"
   },
   {
     "druid": "ym420hv4366",
     "image_url": "https://stacks.stanford.edu/image/iiif/ym420hv4366%2Fym420hv4366_0001/info.json",
-    "label": "231 Welte-Mignon",
+    "number": "231",
+    "publisher": "Welte-Mignon",
     "title": "Mendelssohn-Bartholdy/Möhle - Lied ohne worte, op. 62, [no. 4], no. 28",
-    "type": "welte-red"
-  },
-  {
-    "druid": "xp003dy0437",
-    "image_url": "https://stacks.stanford.edu/image/iiif/xp003dy0437%2Fxp003dy0437_0001/info.json",
-    "label": "882 Welte-Mignon",
-    "title": "Mendelssohn-Bartholdy/Sauer - Auf flügeln des gesangs",
     "type": "welte-red"
   },
   {
     "druid": "mz508vq7890",
     "image_url": "https://stacks.stanford.edu/image/iiif/mz508vq7890%2Fmz508vq7890_0001/info.json",
-    "label": "232 Welte-Mignon",
+    "number": "232",
+    "publisher": "Welte-Mignon",
     "title": "Mendelssohn-Bartholdy/Scharwenka - Scherzo e-moll",
     "type": "welte-red"
   },
   {
     "druid": "sg713kb1834",
     "image_url": "https://stacks.stanford.edu/image/iiif/sg713kb1834%2Fsg713kb1834_0001/info.json",
-    "label": "3548 Welte-Mignon",
+    "number": "3548",
+    "publisher": "Welte-Mignon",
     "title": "Merrigan - Carry me back to ole virginny",
     "type": "welte-red"
   },
   {
     "druid": "rf416pb7833",
     "image_url": "https://stacks.stanford.edu/image/iiif/rf416pb7833%2Frf416pb7833_0001/info.json",
-    "label": "3452 Welte-Mignon",
+    "number": "3452",
+    "publisher": "Welte-Mignon",
     "title": "Meyer-Helmund/Haass - Zauberlied",
     "type": "welte-red"
   },
   {
     "druid": "sq235zh0909",
     "image_url": "https://stacks.stanford.edu/image/iiif/sq235zh0909%2Fsq235zh0909_0001/info.json",
-    "label": "612 Welte-Mignon",
+    "number": "612",
+    "publisher": "Welte-Mignon",
     "title": "Meyer-Helmund/Meyer-Helmund - Dein gedenk ich, margarethe",
     "type": "welte-red"
   },
   {
     "druid": "qf152xr6941",
     "image_url": "https://stacks.stanford.edu/image/iiif/qf152xr6941%2Fqf152xr6941_0002/info.json",
-    "label": "4660 Princesa",
-    "title": "Moreno Torroba - La marchenera. petenera",
+    "number": "4660",
+    "publisher": "Princesa",
+    "title": "Moreno Torroba - La Marchenera: Petenera",
     "type": "88-note"
   },
   {
     "druid": "mn110mt1775",
     "image_url": "https://stacks.stanford.edu/image/iiif/mn110mt1775%2Fmn110mt1775_0001/info.json",
-    "label": "3556 Welte-Mignon",
-    "title": "Moszkowski/Danziger - Barcarole: (from tales of hoffman)",
+    "number": "3556",
+    "publisher": "Welte-Mignon",
+    "title": "Moszkowski/Danziger - Barcarole: (from Tales of Hoffman)",
     "type": "welte-red"
   },
   {
     "druid": "hq933dq4264",
     "image_url": "https://stacks.stanford.edu/image/iiif/hq933dq4264%2Fhq933dq4264_0001/info.json",
-    "label": "449 Welte-Mignon",
-    "title": "Moszkowski/Kleeberg - Liebes walzer: op. 57 no. 5 = (love's waltz)",
+    "number": "449",
+    "publisher": "Welte-Mignon",
+    "title": "Moszkowski/Kleeberg - Liebes walzer: op. 57 no. 5 = (Love's waltz)",
     "type": "welte-red"
   },
   {
     "druid": "jx095ty1753",
     "image_url": "https://stacks.stanford.edu/image/iiif/jx095ty1753%2Fjx095ty1753_0001/info.json",
-    "label": "1204 Welte-Mignon",
+    "number": "1204",
+    "publisher": "Welte-Mignon",
     "title": "Mozart/Pachmann - Sonate, a-dur, nr. 9",
     "type": "welte-red"
   },
   {
     "druid": "zb497jz4405",
     "image_url": "https://stacks.stanford.edu/image/iiif/zb497jz4405%2Fzb497jz4405_0001/info.json",
-    "label": "182 Welte-Mignon",
+    "number": "182",
+    "publisher": "Welte-Mignon",
     "title": "Mozart/Reinecke - Türkischer marsch",
     "type": "welte-red"
   },
   {
     "druid": "dq126tp4234",
     "image_url": "https://stacks.stanford.edu/image/iiif/dq126tp4234%2Fdq126tp4234_0001/info.json",
-    "label": "3143 Welte-Mignon",
-    "title": "Mozart/Ritter - Don juan. overture",
+    "number": "3143",
+    "publisher": "Welte-Mignon",
+    "title": "Mozart/Ritter - Don juan: Overture",
     "type": "welte-red"
   },
   {
     "druid": "zx785pg9042",
     "image_url": "https://stacks.stanford.edu/image/iiif/zx785pg9042%2Fzx785pg9042_0002/info.json",
-    "label": "4636 Princesa",
-    "title": "Muñoz Aceña - La cieguita: tango-canción",
+    "number": "4636",
+    "publisher": "Princesa",
+    "title": "Muñoz Aceña - La Cieguita: tango-canción",
     "type": "88-note"
   },
   {
     "druid": "tr981xw2871",
     "image_url": "https://stacks.stanford.edu/image/iiif/tr981xw2871%2Ftr981xw2871_0001/info.json",
-    "label": "1613 Welte-Mignon",
+    "number": "1613",
+    "publisher": "Welte-Mignon",
     "title": "Offenbach/Francklyn - Tales of hoffmann: selection",
     "type": "welte-red"
   },
   {
     "druid": "jf942gh3232",
     "image_url": "https://stacks.stanford.edu/image/iiif/jf942gh3232%2Fjf942gh3232_0001/info.json",
-    "label": "258 Welte-Mignon",
+    "number": "258",
+    "publisher": "Welte-Mignon",
     "title": "Offenbach/Zscherneck - Barcarole aus \"hoffmann's erzählungen\"",
     "type": "welte-red"
   },
   {
     "druid": "pd354nj6106",
     "image_url": "https://stacks.stanford.edu/image/iiif/pd354nj6106%2Fpd354nj6106_0001/info.json",
-    "label": "1454 Welte-Mignon",
+    "number": "1454",
+    "publisher": "Welte-Mignon",
     "title": "Orlando - God save the king: (national anthem)",
     "type": "welte-red"
   },
   {
     "druid": "qb477sd2923",
     "image_url": "https://stacks.stanford.edu/image/iiif/qb477sd2923%2Fqb477sd2923_0001/info.json",
-    "label": "1226 Welte-Mignon",
+    "number": "1226",
+    "publisher": "Welte-Mignon",
     "title": "Pachmann/Pachmann - Improvisation on \"the maiden's prayer\"",
     "type": "welte-red"
   },
   {
     "druid": "dw479gk0103",
     "image_url": "https://stacks.stanford.edu/image/iiif/dw479gk0103%2Fdw479gk0103_0001/info.json",
-    "label": "1263 Welte-Mignon",
+    "number": "1263",
+    "publisher": "Welte-Mignon",
     "title": "Paderewski/Paderewski - Minuett g major",
     "type": "welte-red"
   },
   {
     "druid": "qt363fp0799",
     "image_url": "https://stacks.stanford.edu/image/iiif/qt363fp0799%2Fqt363fp0799_0001/info.json",
-    "label": "1262 Welte-Mignon",
+    "number": "1262",
+    "publisher": "Welte-Mignon",
     "title": "Paderewski/Paderewski - Nocturne op. 16, no. 4",
     "type": "welte-red"
   },
   {
     "druid": "sb487jm2092",
     "image_url": "https://stacks.stanford.edu/image/iiif/sb487jm2092%2Fsb487jm2092_0001/info.json",
-    "label": "1262 Welte-Mignon",
+    "number": "1262",
+    "publisher": "Welte-Mignon",
     "title": "Paderewski/Paderewski - Nocturno op. 16, no. 4",
     "type": "welte-red"
   },
   {
     "druid": "bp752qs6053",
     "image_url": "https://stacks.stanford.edu/image/iiif/bp752qs6053%2Fbp752qs6053_0002/info.json",
-    "label": "4291 Princesa",
+    "number": "4291",
+    "publisher": "Princesa",
     "title": "Pancho Pérez - Grana y oro: pasodoble",
     "type": "88-note"
   },
   {
     "druid": "qj765hb3428",
     "image_url": "https://stacks.stanford.edu/image/iiif/qj765hb3428%2Fqj765hb3428_0002/info.json",
-    "label": "40059 Princesa",
+    "number": "40059",
+    "publisher": "Princesa",
     "title": "Patiño - Suspiro flamenco: pasodoble",
     "type": "88-note"
   },
   {
     "druid": "rx870zt5437",
     "image_url": "https://stacks.stanford.edu/image/iiif/rx870zt5437%2Frx870zt5437_0002/info.json",
-    "label": "4394 Princesa",
+    "number": "4394",
+    "publisher": "Princesa",
     "title": "Pettorossi - Galleguita: tango argentino",
     "type": "88-note"
   },
   {
     "druid": "mf940cg4339",
     "image_url": "https://stacks.stanford.edu/image/iiif/mf940cg4339%2Fmf940cg4339_0001/info.json",
-    "label": "1468 Welte-Mignon",
+    "number": "1468",
+    "publisher": "Welte-Mignon",
     "title": "Poldini/Bloomfield-Zeisler - Poupée valsante",
     "type": "welte-red"
   },
   {
     "druid": "ms935qj0194",
     "image_url": "https://stacks.stanford.edu/image/iiif/ms935qj0194%2Fms935qj0194_0001/info.json",
-    "label": "2255 Welte-Mignon",
-    "title": "Puccini/Epstein - La boheme: selection",
+    "number": "2255",
+    "publisher": "Welte-Mignon",
+    "title": "Puccini/Epstein - La Boheme: selection",
     "type": "welte-red"
   },
   {
     "druid": "fk036vh7282",
     "image_url": "https://stacks.stanford.edu/image/iiif/fk036vh7282%2Ffk036vh7282_0001/info.json",
-    "label": "2254 Welte-Mignon",
+    "number": "2254",
+    "publisher": "Welte-Mignon",
     "title": "Puccini/Epstein - Madam butterfly: selection",
     "type": "welte-red"
   },
   {
     "druid": "pf050rx0162",
     "image_url": "https://stacks.stanford.edu/image/iiif/pf050rx0162%2Fpf050rx0162_0001/info.json",
-    "label": "2254 Welte-Mignon",
+    "number": "2254",
+    "publisher": "Welte-Mignon",
     "title": "Puccini/Epstein - Madam butterfly: selektion",
     "type": "welte-red"
   },
   {
     "druid": "rr990ym0199",
     "image_url": "https://stacks.stanford.edu/image/iiif/rr990ym0199%2Frr990ym0199_0001/info.json",
-    "label": "2560 Welte-Mignon",
+    "number": "2560",
+    "publisher": "Welte-Mignon",
     "title": "Puccini/Paur - Tosca, fantasia",
     "type": "welte-red"
   },
   {
     "druid": "jg489yw0942",
     "image_url": "https://stacks.stanford.edu/image/iiif/jg489yw0942%2Fjg489yw0942_0002/info.json",
-    "label": "4309 Princesa",
-    "title": "Pérez Soriano - El guitarrico. jota",
+    "number": "4309",
+    "publisher": "Princesa",
+    "title": "Pérez Soriano - El Guitarrico: Jota",
     "type": "88-note"
   },
   {
     "druid": "kj388dj3308",
     "image_url": "https://stacks.stanford.edu/image/iiif/kj388dj3308%2Fkj388dj3308_0001/info.json",
-    "label": "2079 Welte-Mignon",
+    "number": "2079",
+    "publisher": "Welte-Mignon",
     "title": "Rachmaninoff/Hill - Prelude op. 3, no. 2, c sharp minor",
     "type": "welte-red"
   },
   {
+    "druid": "bh573cc4821",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bh573cc4821%2Fbh573cc4821_0001/info.json",
+    "number": "X-6622",
+    "publisher": "De Luxe",
+    "title": "Rachmaninoff/Leonardi - Prelude (op. 32, no. 12)",
+    "type": "welte-licensee"
+  },
+  {
     "druid": "pr464zk8674",
     "image_url": "https://stacks.stanford.edu/image/iiif/pr464zk8674%2Fpr464zk8674_0001/info.json",
-    "label": "1567 Welte-Mignon",
+    "number": "1567",
+    "publisher": "Welte-Mignon",
     "title": "Rachmaninoff/Pintel - Prélude d-dur",
     "type": "welte-red"
   },
   {
     "druid": "yg250xz9762",
     "image_url": "https://stacks.stanford.edu/image/iiif/yg250xz9762%2Fyg250xz9762_0001/info.json",
-    "label": "1571 Welte-Mignon",
+    "number": "1571",
+    "publisher": "Welte-Mignon",
     "title": "Rachmaninoff/Pintel - Prélude g minor",
     "type": "welte-red"
   },
   {
     "druid": "qj203cn5343",
     "image_url": "https://stacks.stanford.edu/image/iiif/qj203cn5343%2Fqj203cn5343_0001/info.json",
-    "label": "1959 Welte-Mignon",
+    "number": "1959",
+    "publisher": "Welte-Mignon",
     "title": "Rachmaninoff/Pouishnoff - Polichenelle: op. 3, no. 4",
     "type": "welte-red"
   },
   {
     "druid": "jy320zw1102",
     "image_url": "https://stacks.stanford.edu/image/iiif/jy320zw1102%2Fjy320zw1102_0002/info.json",
-    "label": "4486 Victoria",
+    "number": "4486",
+    "publisher": "Victoria",
     "title": "Raff - Valse impromptu",
     "type": "88-note"
   },
   {
     "druid": "kw215gn3365",
     "image_url": "https://stacks.stanford.edu/image/iiif/kw215gn3365%2Fkw215gn3365_0001/info.json",
-    "label": "3357 Welte-Mignon",
+    "number": "3357",
+    "publisher": "Welte-Mignon",
     "title": "Raff/Flohr - Cachoucha",
     "type": "welte-red"
   },
   {
     "druid": "hh466mq4616",
     "image_url": "https://stacks.stanford.edu/image/iiif/hh466mq4616%2Fhh466mq4616_0001/info.json",
-    "label": "296 Welte-Mignon",
+    "number": "296",
+    "publisher": "Welte-Mignon",
     "title": "Raff/Gabrilowitsch - Rigaudon d-dur",
     "type": "welte-red"
   },
   {
     "druid": "vq227vv6345",
     "image_url": "https://stacks.stanford.edu/image/iiif/vq227vv6345%2Fvq227vv6345_0001/info.json",
-    "label": "424 Welte-Mignon",
-    "title": "Raff/Wendling - La fileuse: op. 157, no. 2",
+    "number": "424",
+    "publisher": "Welte-Mignon",
+    "title": "Raff/Wendling - La Fileuse: op. 157, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "rd899zb5188",
     "image_url": "https://stacks.stanford.edu/image/iiif/rd899zb5188%2Frd899zb5188_0001/info.json",
-    "label": "5608 Welte-Mignon",
-    "title": "Rimsky-Korsakov/Black - Play that song of india again: fox-trot-song after \"korsakow's sadko\"",
+    "number": "5608",
+    "publisher": "Welte-Mignon",
+    "title": "Rimsky-Korsakov-Whiteman/Black - Play that song of india again: fox-trot-song after \"Korsakow's Sadko\"",
     "type": "welte-red"
   },
   {
     "druid": "rv790qz2532",
     "image_url": "https://stacks.stanford.edu/image/iiif/rv790qz2532%2Frv790qz2532_0001/info.json",
-    "label": "226 Welte-Mignon",
-    "title": "Rosenzweig/Popper - Sei mir gut: walzerlied",
+    "number": "226",
+    "publisher": "Welte-Mignon",
+    "title": "Rosenzweig/Popper - Sei mir gut: Walzerlied",
     "type": "welte-red"
   },
   {
     "druid": "xr433hz5827",
     "image_url": "https://stacks.stanford.edu/image/iiif/xr433hz5827%2Fxr433hz5827_0001/info.json",
-    "label": "5718 Welte-Mignon",
+    "number": "5718",
+    "publisher": "Welte-Mignon",
     "title": "Rosoff/Johnson - When you and i were seventeen",
     "type": "welte-red"
   },
   {
     "druid": "sb158jt0685",
     "image_url": "https://stacks.stanford.edu/image/iiif/sb158jt0685%2Fsb158jt0685_0001/info.json",
-    "label": "953 Welte-Mignon",
-    "title": "Rossini/Sapellnikoff - William tell. overture",
+    "number": "953",
+    "publisher": "Welte-Mignon",
+    "title": "Rossini-Liszt/Sapellnikoff - William tell: Overture",
     "type": "welte-red"
   },
   {
     "druid": "dv468zh8208",
     "image_url": "https://stacks.stanford.edu/image/iiif/dv468zh8208%2Fdv468zh8208_0002/info.json",
-    "label": "4246 Princesa",
-    "title": "Rouget de Lisle - La marsellesa: himno francés",
+    "number": "4246",
+    "publisher": "Pricesa",
+    "title": "Rouget de Lisle - La Marsellesa: himno francés",
     "type": "88-note"
   },
   {
     "druid": "dt352gh2011",
     "image_url": "https://stacks.stanford.edu/image/iiif/dt352gh2011%2Fdt352gh2011_0001/info.json",
-    "label": "2457 Welte-Mignon",
-    "title": "Rubinstein/Danziger - Kamennoi ostrow: op. 10, nr. 22",
+    "number": "2457",
+    "publisher": "Welte-Mignon",
+    "title": "Rubinstein/Danziger - Kamennoi ostrow: op. 10, Nr. 22",
     "type": "welte-red"
   },
   {
     "druid": "xr682fm1233",
     "image_url": "https://stacks.stanford.edu/image/iiif/xr682fm1233%2Fxr682fm1233_0001/info.json",
-    "label": "660 Welte-Mignon",
+    "number": "660",
+    "publisher": "Welte-Mignon",
     "title": "Rubinstein/Hofmann - Melodie op. 3, f major",
     "type": "welte-red"
   },
   {
     "druid": "td134mh2760",
     "image_url": "https://stacks.stanford.edu/image/iiif/td134mh2760%2Ftd134mh2760_0001/info.json",
-    "label": "660 Welte-Mignon",
+    "number": "660",
+    "publisher": "Welte-Mignon",
     "title": "Rubinstein/Hofmann - Melodie op. 3, f-dur",
     "type": "welte-red"
   },
   {
     "druid": "zc568zf0361",
     "image_url": "https://stacks.stanford.edu/image/iiif/zc568zf0361%2Fzc568zf0361_0001/info.json",
-    "label": "661 Welte-Mignon",
+    "number": "661",
+    "publisher": "Welte-Mignon",
     "title": "Rubinstein/Hofmann - Valse allemande",
     "type": "welte-red"
   },
   {
     "druid": "wv641dn9264",
     "image_url": "https://stacks.stanford.edu/image/iiif/wv641dn9264%2Fwv641dn9264_0001/info.json",
-    "label": "1304 Welte-Mignon",
+    "number": "1304",
+    "publisher": "Welte-Mignon",
     "title": "Rubinstein/Lhévinne - Polka a. \"le bal\"",
     "type": "welte-red"
   },
   {
     "druid": "cp145vd3423",
     "image_url": "https://stacks.stanford.edu/image/iiif/cp145vd3423%2Fcp145vd3423_0001/info.json",
-    "label": "1382 Welte-Mignon",
+    "number": "1382",
+    "publisher": "Welte-Mignon",
     "title": "Rubinstein/Timanoff - Sérénade espagnole: op. 16, no 3",
     "type": "welte-red"
   },
   {
     "druid": "cp259ms0085",
     "image_url": "https://stacks.stanford.edu/image/iiif/cp259ms0085%2Fcp259ms0085_0001/info.json",
-    "label": "2260 Welte-Mignon",
-    "title": "Saint-Saëns/Epstein - Samson and delilah. cantabile du grand duo",
+    "number": "2260",
+    "publisher": "Welte-Mignon",
+    "title": "Saint-Saëns/Epstein - Samson and delilah: Cantabile du grand duo",
     "type": "welte-red"
   },
   {
     "druid": "pc276zv7038",
     "image_url": "https://stacks.stanford.edu/image/iiif/pc276zv7038%2Fpc276zv7038_0001/info.json",
-    "label": "2260 Welte-Mignon",
-    "title": "Saint-Saëns/Epstein - Samson and delilah. cantabile du grand duo",
+    "number": "2260",
+    "publisher": "Welte-Mignon",
+    "title": "Saint-Saëns/Epstein - Samson and delilah: Cantabile du grand duo",
     "type": "welte-red"
   },
   {
     "druid": "fy803vj4057",
     "image_url": "https://stacks.stanford.edu/image/iiif/fy803vj4057%2Ffy803vj4057_0001/info.json",
-    "label": "799 Welte-Mignon",
+    "number": "799",
+    "publisher": "Welte-Mignon",
     "title": "Saint-Saëns/Saint-Saëns - Mazurka, no. 3",
     "type": "welte-red"
   },
   {
     "druid": "pk349zj4179",
     "image_url": "https://stacks.stanford.edu/image/iiif/pk349zj4179%2Fpk349zj4179_0001/info.json",
-    "label": "797 Welte-Mignon",
-    "title": "Saint-Saëns/Saint-Saëns - Samson and delilah. finale, act 1",
+    "number": "797",
+    "publisher": "Welte-Mignon",
+    "title": "Saint-Saëns/Saint-Saëns - Samson and delilah: Finale, Act 1",
     "type": "welte-red"
   },
   {
     "druid": "zk199jz1564",
     "image_url": "https://stacks.stanford.edu/image/iiif/zk199jz1564%2Fzk199jz1564_0002/info.json",
-    "label": "4670 Princesa",
+    "number": "4670",
+    "publisher": "Princesa",
     "title": "Sanders - Adiós muchachos: tango",
     "type": "88-note"
   },
   {
     "druid": "cz952kx0008",
     "image_url": "https://stacks.stanford.edu/image/iiif/cz952kx0008%2Fcz952kx0008_0001/info.json",
-    "label": "1453 Welte-Mignon",
+    "number": "1453",
+    "publisher": "Welte-Mignon",
     "title": "Schelling/Schelling - Romanze cis-moll",
     "type": "welte-red"
   },
   {
     "druid": "sz207mm8382",
     "image_url": "https://stacks.stanford.edu/image/iiif/sz207mm8382%2Fsz207mm8382_0001/info.json",
-    "label": "1296 Welte-Mignon",
+    "number": "1296",
+    "publisher": "Welte-Mignon",
     "title": "Schlözer/Lhévinne - Etude de concert e flat",
     "type": "welte-red"
   },
   {
     "druid": "sq640bh1919",
     "image_url": "https://stacks.stanford.edu/image/iiif/sq640bh1919%2Fsq640bh1919_0001/info.json",
-    "label": "1296 Welte-Mignon",
+    "number": "1296",
+    "publisher": "Welte-Mignon",
     "title": "Schlözer/Lhévinne - Etude e flat major",
-    "type": "welte-red"
-  },
-  {
-    "druid": "gb034mq5877",
-    "image_url": "https://stacks.stanford.edu/image/iiif/gb034mq5877%2Fgb034mq5877_0001/info.json",
-    "label": "422 Welte-Mignon",
-    "title": "Schubert/Albert - Impromptu g major, op. 90, no. 3",
     "type": "welte-red"
   },
   {
     "druid": "gq401ng9171",
     "image_url": "https://stacks.stanford.edu/image/iiif/gq401ng9171%2Fgq401ng9171_0001/info.json",
-    "label": "3309 Welte-Mignon",
-    "title": "Schubert/Backhaus - Military march e-flat",
+    "number": "3309",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Backhaus/Backhaus - Military march e-flat",
     "type": "welte-red"
   },
   {
     "druid": "jq774vx6544",
     "image_url": "https://stacks.stanford.edu/image/iiif/jq774vx6544%2Fjq774vx6544_0001/info.json",
-    "label": "3309 Welte-Mignon",
-    "title": "Schubert/Backhaus - Militärmarsch in es-dur",
+    "number": "3309",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Backhaus/Backhaus - Militärmarsch in es-dur",
     "type": "welte-red"
   },
   {
     "druid": "kf903tz5142",
     "image_url": "https://stacks.stanford.edu/image/iiif/kf903tz5142%2Fkf903tz5142_0001/info.json",
-    "label": "3312 Welte-Mignon",
-    "title": "Schubert/Backhaus - Wanderer-fantasie. 1st and 2nd movements",
-    "type": "welte-red"
-  },
-  {
-    "druid": "cm852bp8620",
-    "image_url": "https://stacks.stanford.edu/image/iiif/cm852bp8620%2Fcm852bp8620_0001/info.json",
-    "label": "3313 Welte-Mignon",
-    "title": "Schubert/Backhaus - Wanderer-fantasie. iii. und iv. satz",
-    "type": "welte-red"
-  },
-  {
-    "druid": "rc749wx0227",
-    "image_url": "https://stacks.stanford.edu/image/iiif/rc749wx0227%2Frc749wx0227_0001/info.json",
-    "label": "1471 Welte-Mignon",
-    "title": "Schubert/Bloomfield-Zeisler - Militär-marsch =: (military march)",
+    "number": "3312",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Backhaus/Backhaus - Wanderer-fantasie: 1st and 2nd movements",
     "type": "welte-red"
   },
   {
     "druid": "md331fy4209",
     "image_url": "https://stacks.stanford.edu/image/iiif/md331fy4209%2Fmd331fy4209_0001/info.json",
-    "label": "723 Welte-Mignon",
-    "title": "Schubert/Burmeister - Ave maria",
+    "number": "723",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Liszt/Burmeister - Ave maria",
     "type": "welte-red"
   },
   {
     "druid": "sx417qf9868",
     "image_url": "https://stacks.stanford.edu/image/iiif/sx417qf9868%2Fsx417qf9868_0001/info.json",
-    "label": "723 Welte-Mignon",
-    "title": "Schubert/Burmeister - Ave maria",
+    "number": "723",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Liszt/Burmeister - Ave maria",
     "type": "welte-red"
   },
   {
     "druid": "yg667ds7662",
     "image_url": "https://stacks.stanford.edu/image/iiif/yg667ds7662%2Fyg667ds7662_0001/info.json",
-    "label": "446 Welte-Mignon",
-    "title": "Schubert/Busoni - Hungarian march: (hungarian melodies)",
+    "number": "446",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Liszt/Busoni - Hungarian march: (Hungarian melodies)",
     "type": "welte-red"
   },
   {
     "druid": "gq898yv9510",
     "image_url": "https://stacks.stanford.edu/image/iiif/gq898yv9510%2Fgq898yv9510_0001/info.json",
-    "label": "665 Welte-Mignon",
-    "title": "Schubert/Hofmann - Erlkönig",
+    "number": "665",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Liszt/Hofmann - Erlkönig",
+    "type": "welte-red"
+  },
+  {
+    "druid": "sc188ff2842",
+    "image_url": "https://stacks.stanford.edu/image/iiif/sc188ff2842%2Fsc188ff2842_0001/info.json",
+    "number": "1260",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Liszt/Paderewski - The Erl king",
+    "type": "welte-red"
+  },
+  {
+    "druid": "rc749wx0227",
+    "image_url": "https://stacks.stanford.edu/image/iiif/rc749wx0227%2Frc749wx0227_0001/info.json",
+    "number": "1471",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Tausig/Bloomfield-Zeisler - Militär-marsch =: (Military march)",
+    "type": "welte-red"
+  },
+  {
+    "druid": "gb034mq5877",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gb034mq5877%2Fgb034mq5877_0001/info.json",
+    "number": "422",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert/Albert - Impromptu g major, op. 90, no. 3",
+    "type": "welte-red"
+  },
+  {
+    "druid": "cm852bp8620",
+    "image_url": "https://stacks.stanford.edu/image/iiif/cm852bp8620%2Fcm852bp8620_0001/info.json",
+    "number": "3313",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert/Backhaus - Wanderer-fantasie: III. und IV. Satz",
+    "type": "welte-red"
+  },
+  {
+    "druid": "gx107hd3026",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gx107hd3026%2Fgx107hd3026_0001/info.json",
+    "number": "3316",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert/Lászlò - 8th symphony b minor: 2nd movement: Andante con motto (unfinished)",
     "type": "welte-red"
   },
   {
     "druid": "fg074rf2950",
     "image_url": "https://stacks.stanford.edu/image/iiif/fg074rf2950%2Ffg074rf2950_0001/info.json",
-    "label": "2386 Welte-Mignon",
+    "number": "2386",
+    "publisher": "Welte-Mignon",
     "title": "Schubert/Mackle - Am meer",
     "type": "welte-red"
   },
   {
     "druid": "sk832rf0203",
     "image_url": "https://stacks.stanford.edu/image/iiif/sk832rf0203%2Fsk832rf0203_0001/info.json",
-    "label": "2388 Welte-Mignon",
-    "title": "Schubert/Mackle - Der wanderer",
+    "number": "2388",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert/Mackle - Der Wanderer",
     "type": "welte-red"
   },
   {
     "druid": "tj337qh7786",
     "image_url": "https://stacks.stanford.edu/image/iiif/tj337qh7786%2Ftj337qh7786_0001/info.json",
-    "label": "1211 Welte-Mignon",
-    "title": "Schubert/Pachmann - Moment musical: op. 94, no. 3, f minor",
+    "number": "1211",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert/Pachmann - Moment musical: op. 94, no. 3, F minor",
     "type": "welte-red"
   },
   {
     "druid": "jv484vp9065",
     "image_url": "https://stacks.stanford.edu/image/iiif/jv484vp9065%2Fjv484vp9065_0001/info.json",
-    "label": "1248 Welte-Mignon",
+    "number": "1248",
+    "publisher": "Welte-Mignon",
     "title": "Schubert/Paderewski - Impromptu op. 142, b-dur",
-    "type": "welte-red"
-  },
-  {
-    "druid": "sc188ff2842",
-    "image_url": "https://stacks.stanford.edu/image/iiif/sc188ff2842%2Fsc188ff2842_0001/info.json",
-    "label": "1260 Welte-Mignon",
-    "title": "Schubert/Paderewski - The erl king",
     "type": "welte-red"
   },
   {
     "druid": "vc908xz3554",
     "image_url": "https://stacks.stanford.edu/image/iiif/vc908xz3554%2Fvc908xz3554_0002/info.json",
-    "label": "7822 Ideal",
+    "number": "7822",
+    "publisher": "Ideal",
     "title": "Schulhoff - Carnaval de venezia",
     "type": "88-note"
   },
   {
     "druid": "yn137rt9938",
     "image_url": "https://stacks.stanford.edu/image/iiif/yn137rt9938%2Fyn137rt9938_0001/info.json",
-    "label": "1305 Welte-Mignon",
+    "number": "1305",
+    "publisher": "Welte-Mignon",
     "title": "Schulz-Evler/Lhévinne - Arabesque über \"an der schönen blauen donau\"",
     "type": "welte-red"
   },
   {
     "druid": "tc493dq4498",
     "image_url": "https://stacks.stanford.edu/image/iiif/tc493dq4498%2Ftc493dq4498_0002/info.json",
-    "label": "3020 Victoria",
-    "title": "Schumann - Fantaisiestück, op. 12. n. 8, amici, comedia finita est",
+    "number": "3020",
+    "publisher": "Victoria",
+    "title": "Schumann - Fantaisiestück, op. 12: N. 8: Amici, comedia finita est",
     "type": "88-note"
   },
   {
     "druid": "rt595wj4442",
     "image_url": "https://stacks.stanford.edu/image/iiif/rt595wj4442%2Frt595wj4442_0001/info.json",
-    "label": "28 Welte-Mignon",
-    "title": "Schumann/Adam-Benard - Klavierconcert a-moll, op. 54. allegro affectuoso, allegro molto",
+    "number": "28",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Adam-Benard - Klavierconcert a-moll, op. 54: Allegro affectuoso, allegro molto",
     "type": "welte-red"
   },
   {
     "druid": "bj093nh2591",
     "image_url": "https://stacks.stanford.edu/image/iiif/bj093nh2591%2Fbj093nh2591_0001/info.json",
-    "label": "28 Welte-Mignon",
-    "title": "Schumann/Adam-Benard - Piano concerto op. 54, a minor. allegro affectuoso, allegro molto",
+    "number": "28",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Adam-Benard - Piano concerto op. 54, a minor: Allegro affectuoso, allegro molto",
     "type": "welte-red"
   },
   {
     "druid": "ps931qh5746",
     "image_url": "https://stacks.stanford.edu/image/iiif/ps931qh5746%2Fps931qh5746_0001/info.json",
-    "label": "2591 Welte-Mignon",
+    "number": "2591",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Bloomfield-Zeisler - Caprice e dur",
     "type": "welte-red"
   },
   {
     "druid": "vw531zy4220",
     "image_url": "https://stacks.stanford.edu/image/iiif/vw531zy4220%2Fvw531zy4220_0001/info.json",
-    "label": "2591 Welte-Mignon",
+    "number": "2591",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Bloomfield-Zeisler - Caprice e dur",
     "type": "welte-red"
   },
   {
     "druid": "gf569df0451",
     "image_url": "https://stacks.stanford.edu/image/iiif/gf569df0451%2Fgf569df0451_0001/info.json",
-    "label": "361 Welte-Mignon",
-    "title": "Schumann/Carreño - Fantasia op. 17, c-major. part 1",
+    "number": "361",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Carreño - Fantasia op. 17, c-major: Part 1",
     "type": "welte-red"
   },
   {
     "druid": "vm096df0179",
     "image_url": "https://stacks.stanford.edu/image/iiif/vm096df0179%2Fvm096df0179_0001/info.json",
-    "label": "363 Welte-Mignon",
-    "title": "Schumann/Carreño - Fantasie c-dur, op. 17. iii. satz",
+    "number": "363",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Carreño - Fantasie c-dur, op. 17: III. Satz",
     "type": "welte-red"
   },
   {
     "druid": "kx034vy1374",
     "image_url": "https://stacks.stanford.edu/image/iiif/kx034vy1374%2Fkx034vy1374_0001/info.json",
-    "label": "362 Welte-Mignon",
-    "title": "Schumann/Carreño - Fantasie op. 17, c-dur. ii. satz",
+    "number": "362",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Carreño - Fantasie op. 17, c-dur: II. Satz",
     "type": "welte-red"
   },
   {
     "druid": "kq525dc4373",
     "image_url": "https://stacks.stanford.edu/image/iiif/kq525dc4373%2Fkq525dc4373_0001/info.json",
-    "label": "1755 Welte-Mignon",
-    "title": "Schumann/Collins - Widmung =: (devotion)",
+    "number": "1755",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Collins - Widmung =: (Devotion)",
     "type": "welte-red"
   },
   {
     "druid": "jb107tz1859",
     "image_url": "https://stacks.stanford.edu/image/iiif/jb107tz1859%2Fjb107tz1859_0001/info.json",
-    "label": "1772 Welte-Mignon",
-    "title": "Schumann/Davies - Kinderscenen. 1-6",
+    "number": "1772",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Davies - Kinderscenen: 1-6",
     "type": "welte-red"
   },
   {
     "druid": "ds710xd1794",
     "image_url": "https://stacks.stanford.edu/image/iiif/ds710xd1794%2Fds710xd1794_0001/info.json",
-    "label": "1773 Welte-Mignon",
-    "title": "Schumann/Davies - Scenes from childhood. no. 7-13",
+    "number": "1773",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Davies - Scenes from childhood: No. 7-13",
     "type": "welte-red"
   },
   {
     "druid": "nk632jz1564",
     "image_url": "https://stacks.stanford.edu/image/iiif/nk632jz1564%2Fnk632jz1564_0001/info.json",
-    "label": "501 Welte-Mignon",
+    "number": "501",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Dohnányi - Romance op. 28, no. 2, fis-dur",
     "type": "welte-red"
   },
   {
     "druid": "ph502kz9777",
     "image_url": "https://stacks.stanford.edu/image/iiif/ph502kz9777%2Fph502kz9777_0001/info.json",
-    "label": "270 Welte-Mignon",
+    "number": "270",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Droucker - Arabesque c major op. 18",
     "type": "welte-red"
   },
   {
     "druid": "sk293jg8184",
     "image_url": "https://stacks.stanford.edu/image/iiif/sk293jg8184%2Fsk293jg8184_0001/info.json",
-    "label": "1063 Welte-Mignon",
-    "title": "Schumann/Grosz - 2nd sonata, op. 22, no. 2, g minor. adantino",
+    "number": "1063",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Grosz - 2nd sonata, op. 22, no. 2, g minor: Adantino",
     "type": "welte-red"
   },
   {
     "druid": "hn285vs3930",
     "image_url": "https://stacks.stanford.edu/image/iiif/hn285vs3930%2Fhn285vs3930_0001/info.json",
-    "label": "1064 Welte-Mignon",
+    "number": "1064",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Grosz - 2nd sonata, op. 22, no. 2, g minor: scherzo, rondo, presto",
     "type": "welte-red"
   },
   {
     "druid": "yg150mb0559",
     "image_url": "https://stacks.stanford.edu/image/iiif/yg150mb0559%2Fyg150mb0559_0001/info.json",
-    "label": "207 Welte-Mignon",
+    "number": "207",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Grünfeld - Des abends op. 12",
     "type": "welte-red"
   },
   {
     "druid": "wv912mm2332",
     "image_url": "https://stacks.stanford.edu/image/iiif/wv912mm2332%2Fwv912mm2332_0001/info.json",
-    "label": "225 Welte-Mignon",
+    "number": "225",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Grünfeld - Traumerei: op. 15, no. 7",
     "type": "welte-red"
   },
   {
     "druid": "mf320jq4997",
     "image_url": "https://stacks.stanford.edu/image/iiif/mf320jq4997%2Fmf320jq4997_0001/info.json",
-    "label": "225 Welte-Mignon",
+    "number": "225",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Grünfeld - Träumerei",
     "type": "welte-red"
   },
   {
     "druid": "kx695yq4528",
     "image_url": "https://stacks.stanford.edu/image/iiif/kx695yq4528%2Fkx695yq4528_0001/info.json",
-    "label": "1301 Welte-Mignon",
+    "number": "1301",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Lhévinne - Toccata c major, op. 7",
     "type": "welte-red"
   },
   {
     "druid": "cw211cn1219",
     "image_url": "https://stacks.stanford.edu/image/iiif/cw211cn1219%2Fcw211cn1219_0001/info.json",
-    "label": "691 Welte-Mignon",
+    "number": "691",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Neitzel - Davidsbündler dances",
     "type": "welte-red"
   },
   {
     "druid": "qw257qp8232",
     "image_url": "https://stacks.stanford.edu/image/iiif/qw257qp8232%2Fqw257qp8232_0001/info.json",
-    "label": "690 Welte-Mignon",
+    "number": "690",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Neitzel - Symphonische etüde",
     "type": "welte-red"
   },
   {
     "druid": "xj540rr2929",
     "image_url": "https://stacks.stanford.edu/image/iiif/xj540rr2929%2Fxj540rr2929_0001/info.json",
-    "label": "1208 Welte-Mignon",
+    "number": "1208",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Pachmann - Vogel als prophet",
     "type": "welte-red"
   },
   {
     "druid": "jk211zx0169",
     "image_url": "https://stacks.stanford.edu/image/iiif/jk211zx0169%2Fjk211zx0169_0001/info.json",
-    "label": "525 Welte-Mignon",
+    "number": "525",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Petri - Abegg varationen: op. 1",
     "type": "welte-red"
   },
   {
     "druid": "xw872bc8052",
     "image_url": "https://stacks.stanford.edu/image/iiif/xw872bc8052%2Fxw872bc8052_0001/info.json",
-    "label": "321 Welte-Mignon",
+    "number": "321",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Reisenauer - Carneval part. 1",
     "type": "welte-red"
   },
   {
     "druid": "zt739gs4926",
     "image_url": "https://stacks.stanford.edu/image/iiif/zt739gs4926%2Fzt739gs4926_0001/info.json",
-    "label": "321 Welte-Mignon",
-    "title": "Schumann/Reisenauer - Carneval. part. 1",
+    "number": "321",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Reisenauer - Carneval: Part. 1",
     "type": "welte-red"
   },
   {
     "druid": "wk320bj4724",
     "image_url": "https://stacks.stanford.edu/image/iiif/wk320bj4724%2Fwk320bj4724_0001/info.json",
-    "label": "322 Welte-Mignon",
-    "title": "Schumann/Reisenauer - Carneval. part. 2",
+    "number": "322",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Reisenauer - Carneval: Part. 2",
     "type": "welte-red"
   },
   {
     "druid": "cs175wr2428",
     "image_url": "https://stacks.stanford.edu/image/iiif/cs175wr2428%2Fcs175wr2428_0001/info.json",
-    "label": "248 Welte-Mignon",
+    "number": "248",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Scharwenka - Kreisleriana",
     "type": "welte-red"
   },
   {
     "druid": "hy749gh2331",
     "image_url": "https://stacks.stanford.edu/image/iiif/hy749gh2331%2Fhy749gh2331_0001/info.json",
-    "label": "2086 Welte-Mignon",
+    "number": "2086",
+    "publisher": "Welte-Mignon",
     "title": "Schumann/Schorr - Schlummerlied",
     "type": "welte-red"
   },
   {
     "druid": "dz678wd2724",
     "image_url": "https://stacks.stanford.edu/image/iiif/dz678wd2724%2Fdz678wd2724_0001/info.json",
-    "label": "970 Welte-Mignon",
+    "number": "970",
+    "publisher": "Welte-Mignon",
     "title": "Schytte/Schytte - Berceuse op. 26, nr. 7",
     "type": "welte-red"
   },
   {
     "druid": "pb026mb0704",
     "image_url": "https://stacks.stanford.edu/image/iiif/pb026mb0704%2Fpb026mb0704_0001/info.json",
-    "label": "921 Welte-Mignon",
+    "number": "921",
+    "publisher": "Welte-Mignon",
     "title": "Schütt/Conne - Kunstlerleben waltz: concert paraphrase",
     "type": "welte-red"
   },
   {
     "druid": "ny937ph6981",
     "image_url": "https://stacks.stanford.edu/image/iiif/ny937ph6981%2Fny937ph6981_0001/info.json",
-    "label": "3745 Welte-Mignon",
+    "number": "3745",
+    "publisher": "Welte-Mignon",
     "title": "Schütt/Danziger - Romance op. 38, no. 2",
     "type": "welte-red"
   },
   {
     "druid": "sp773vt2651",
     "image_url": "https://stacks.stanford.edu/image/iiif/sp773vt2651%2Fsp773vt2651_0001/info.json",
-    "label": "3695 Welte-Mignon",
+    "number": "3695",
+    "publisher": "Welte-Mignon",
     "title": "Schütt/Seckendorf Popper - Carnaval mignon: scènes pantomimiques: op. 48",
     "type": "welte-red"
   },
   {
     "druid": "vq862qw5039",
     "image_url": "https://stacks.stanford.edu/image/iiif/vq862qw5039%2Fvq862qw5039_0002/info.json",
-    "label": "40011 Princesa",
+    "number": "40011",
+    "publisher": "Princesa",
     "title": "Sciammarella - No te engañes corazón: tango",
     "type": "88-note"
   },
   {
     "druid": "vf252dc4872",
     "image_url": "https://stacks.stanford.edu/image/iiif/vf252dc4872%2Fvf252dc4872_0001/info.json",
-    "label": "1697 Welte-Mignon",
-    "title": "Scott/Scott - A song from the east: danse nègre",
+    "number": "1697",
+    "publisher": "Welte-Mignon",
+    "title": "Scott/Scott - A Song from the east: Danse nègre",
     "type": "welte-red"
+  },
+  {
+    "druid": "br324td1538",
+    "image_url": "https://stacks.stanford.edu/image/iiif/br324td1538%2Fbr324td1538_0001/info.json",
+    "number": "C7602",
+    "publisher": "De Luxe",
+    "title": "Scriabin/Pouishnoff - Poeme op. 32, no. 1",
+    "type": "welte-licensee"
   },
   {
     "druid": "zf673fy4620",
     "image_url": "https://stacks.stanford.edu/image/iiif/zf673fy4620%2Fzf673fy4620_0001/info.json",
-    "label": "2068 Welte-Mignon",
+    "number": "2068",
+    "publisher": "Welte-Mignon",
     "title": "Scriabin/Scriabin - Poême: op. 32, no. 1",
     "type": "welte-red"
   },
   {
     "druid": "sk925fn6049",
     "image_url": "https://stacks.stanford.edu/image/iiif/sk925fn6049%2Fsk925fn6049_0001/info.json",
-    "label": "2021 Welte-Mignon",
+    "number": "2021",
+    "publisher": "Welte-Mignon",
     "title": "Scriabin/Vengerova - Prelude für die linke hand",
     "type": "welte-red"
   },
   {
+    "druid": "vg335rq3648",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vg335rq3648%2Fvg335rq3648_0001/info.json",
+    "number": "2634",
+    "publisher": "Welte-Mignon",
+    "title": "Sibelius/Di Benici - Caprice f minor",
+    "type": "welte-green"
+  },
+  {
     "druid": "vp438dy0628",
     "image_url": "https://stacks.stanford.edu/image/iiif/vp438dy0628%2Fvp438dy0628_0001/info.json",
-    "label": "3356 Welte-Mignon",
+    "number": "3356",
+    "publisher": "Welte-Mignon",
     "title": "Sibelius/Flohr - Finlandia",
     "type": "welte-red"
   },
   {
     "druid": "zw828tx0197",
     "image_url": "https://stacks.stanford.edu/image/iiif/zw828tx0197%2Fzw828tx0197_0001/info.json",
-    "label": "3537 Welte-Mignon",
-    "title": "Silésu/Daly - Un peu d'amour: popular song",
+    "number": "3537",
+    "publisher": "Welte-Mignon",
+    "title": "Silésu/Daly - Un Peu d'amour: popular song",
     "type": "welte-red"
   },
   {
     "druid": "qg041hb4569",
     "image_url": "https://stacks.stanford.edu/image/iiif/qg041hb4569%2Fqg041hb4569_0001/info.json",
-    "label": "2993 Welte-Mignon",
+    "number": "2993",
+    "publisher": "Welte-Mignon",
     "title": "Sinding/Albert - March grotesque",
     "type": "welte-red"
   },
   {
     "druid": "qk333zc6515",
     "image_url": "https://stacks.stanford.edu/image/iiif/qk333zc6515%2Fqk333zc6515_0001/info.json",
-    "label": "2637 Welte-Mignon",
+    "number": "2637",
+    "publisher": "Welte-Mignon",
     "title": "Sinding/Di Benici - Frühlingsrauschen: op. 32, no. 3",
     "type": "welte-red"
   },
   {
     "druid": "gq990gn6753",
     "image_url": "https://stacks.stanford.edu/image/iiif/gq990gn6753%2Fgq990gn6753_0001/info.json",
-    "label": "375 Welte-Mignon",
+    "number": "375",
+    "publisher": "Welte-Mignon",
     "title": "Sinding/Wendling - Rustle of spring: op. 32, no. 3",
-    "type": "welte-red"
-  },
-  {
-    "druid": "gs012fx5529",
-    "image_url": "https://stacks.stanford.edu/image/iiif/gs012fx5529%2Fgs012fx5529_0001/info.json",
-    "label": "1343 Welte-Mignon",
-    "title": "Starke - Romeo and juliette: potpourri",
     "type": "welte-red"
   },
   {
     "druid": "fr396nf3639",
     "image_url": "https://stacks.stanford.edu/image/iiif/fr396nf3639%2Ffr396nf3639_0001/info.json",
-    "label": "1539 Welte-Mignon",
+    "number": "1539",
+    "publisher": "Welte-Mignon",
     "title": "Steinway/Brightwell - Madeleine: valse poetique",
     "type": "welte-red"
   },
   {
     "druid": "jt308hp0877",
     "image_url": "https://stacks.stanford.edu/image/iiif/jt308hp0877%2Fjt308hp0877_0001/info.json",
-    "label": "2198 Welte-Mignon",
-    "title": "Straus/Burkard - Walzer: der tapfere soldat",
+    "number": "2198",
+    "publisher": "Welte-Mignon",
+    "title": "Straus/Burkard - Walzer: der tapfere Soldat",
     "type": "welte-red"
   },
   {
     "druid": "qp421cd7297",
     "image_url": "https://stacks.stanford.edu/image/iiif/qp421cd7297%2Fqp421cd7297_0001/info.json",
-    "label": "2613 Welte-Mignon",
-    "title": "Straus/Goodall - The chocolate soldier: selection 1",
+    "number": "2613",
+    "publisher": "Welte-Mignon",
+    "title": "Straus/Goodall - The Chocolate soldier: selection 1",
+    "type": "welte-red"
+  },
+  {
+    "druid": "sv842td3290",
+    "image_url": "https://stacks.stanford.edu/image/iiif/sv842td3290%2Fsv842td3290_0001/info.json",
+    "number": "4190",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss-Grünfeld/Serkin - Delirien-walzer",
+    "type": "welte-red"
+  },
+  {
+    "druid": "kp368nb7707",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kp368nb7707%2Fkp368nb7707_0001/info.json",
+    "number": "532",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss-Tausig/Zadora - Man lives but once",
     "type": "welte-red"
   },
   {
     "druid": "rn154dd5329",
     "image_url": "https://stacks.stanford.edu/image/iiif/rn154dd5329%2Frn154dd5329_0001/info.json",
-    "label": "357 Welte-Mignon",
+    "number": "357",
+    "publisher": "Welte-Mignon",
     "title": "Strauss/Brzeziński - An der schönen blauen donau",
     "type": "welte-red"
   },
   {
     "druid": "sj250cc6451",
     "image_url": "https://stacks.stanford.edu/image/iiif/sj250cc6451%2Fsj250cc6451_0001/info.json",
-    "label": "277 Welte-Mignon",
+    "number": "277",
+    "publisher": "Welte-Mignon",
     "title": "Strauss/Brzeziński - Rosen a. d. süden",
     "type": "welte-red"
   },
   {
     "druid": "sk565bp3463",
     "image_url": "https://stacks.stanford.edu/image/iiif/sk565bp3463%2Fsk565bp3463_0001/info.json",
-    "label": "349 Welte-Mignon",
-    "title": "Strauss/Kupfernagel - Wiener blut: walzer",
+    "number": "349",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss/Kupfernagel - Wiener blut: Walzer",
     "type": "welte-red"
   },
   {
     "druid": "qp506dy4541",
     "image_url": "https://stacks.stanford.edu/image/iiif/qp506dy4541%2Fqp506dy4541_0001/info.json",
-    "label": "1398 Welte-Mignon",
-    "title": "Strauss/Orlando - Du und du: aus fledermaus: walzer",
+    "number": "1398",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss/Orlando - Du und du: aus Fledermaus: Walzer",
     "type": "welte-red"
   },
   {
     "druid": "kt568yb8982",
     "image_url": "https://stacks.stanford.edu/image/iiif/kt568yb8982%2Fkt568yb8982_0001/info.json",
-    "label": "382 Welte-Mignon",
+    "number": "382",
+    "publisher": "Welte-Mignon",
     "title": "Strauss/Schnabel - Village swallows",
-    "type": "welte-red"
-  },
-  {
-    "druid": "sv842td3290",
-    "image_url": "https://stacks.stanford.edu/image/iiif/sv842td3290%2Fsv842td3290_0001/info.json",
-    "label": "4190 Welte-Mignon",
-    "title": "Strauss/Serkin - Delirien-walzer",
     "type": "welte-red"
   },
   {
     "druid": "zw485gh6070",
     "image_url": "https://stacks.stanford.edu/image/iiif/zw485gh6070%2Fzw485gh6070_0001/info.json",
-    "label": "1184 Welte-Mignon",
+    "number": "1184",
+    "publisher": "Welte-Mignon",
     "title": "Strauss/Strauss - Liebesscene a. \"heldenleben\"",
     "type": "welte-red"
   },
   {
-    "druid": "kp368nb7707",
-    "image_url": "https://stacks.stanford.edu/image/iiif/kp368nb7707%2Fkp368nb7707_0001/info.json",
-    "label": "532 Welte-Mignon",
-    "title": "Strauss/Zadora - Man lives but once",
-    "type": "welte-red"
+    "druid": "ds528dg7725",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ds528dg7725%2Fds528dg7725_0001/info.json",
+    "number": "D-759",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: First series: To 'The fire-bird,' in six rolls",
+    "type": "duo-art"
+  },
+  {
+    "druid": "gk717vy6323",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gk717vy6323%2Fgk717vy6323_0001/info.json",
+    "number": "D-759",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: First series: To 'The fire-bird,' in six rolls",
+    "type": "duo-art"
+  },
+  {
+    "druid": "kk651ck1593",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kk651ck1593%2Fkk651ck1593_0001/info.json",
+    "number": "D-759",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: First series: To 'The fire-bird,' in six rolls",
+    "type": "duo-art"
+  },
+  {
+    "druid": "rb863nd0220",
+    "image_url": "https://stacks.stanford.edu/image/iiif/rb863nd0220%2Frb863nd0220_0001/info.json",
+    "number": "D-759",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: First series: To 'The fire-bird,' in six rolls",
+    "type": "duo-art"
+  },
+  {
+    "druid": "zc672fb8379",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zc672fb8379%2Fzc672fb8379_0001/info.json",
+    "number": "D-759",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: First series: To 'The fire-bird,' in six rolls",
+    "type": "duo-art"
   },
   {
     "druid": "rh801bs4556",
     "image_url": "https://stacks.stanford.edu/image/iiif/rh801bs4556%2Frh801bs4556_0001/info.json",
-    "label": "2615 Welte-Mignon",
-    "title": "Sullivan/Goodall - The gondoliers, or the king of barataria",
+    "number": "2615",
+    "publisher": "Welte-Mignon",
+    "title": "Sullivan/Goodall - The Gondoliers, or the king of barataria",
     "type": "welte-red"
   },
   {
     "druid": "xg228jc5213",
     "image_url": "https://stacks.stanford.edu/image/iiif/xg228jc5213%2Fxg228jc5213_0001/info.json",
-    "label": "2616 Welte-Mignon",
-    "title": "Sullivan/Goodall - The mikado, or the town of titibu: i (selection)",
+    "number": "2616",
+    "publisher": "Welte-Mignon",
+    "title": "Sullivan/Goodall - The Mikado, or the town of titibu: I (Selection)",
     "type": "welte-red"
   },
   {
     "druid": "zp424ps8426",
     "image_url": "https://stacks.stanford.edu/image/iiif/zp424ps8426%2Fzp424ps8426_0001/info.json",
-    "label": "2617 Welte-Mignon",
-    "title": "Sullivan/Goodall - The mikado, or the town of titibu: ii (selection)",
+    "number": "2617",
+    "publisher": "Welte-Mignon",
+    "title": "Sullivan/Goodall - The Mikado, or the town of titibu: II (Selection)",
     "type": "welte-red"
   },
   {
     "druid": "fg895gs1373",
     "image_url": "https://stacks.stanford.edu/image/iiif/fg895gs1373%2Ffg895gs1373_0001/info.json",
-    "label": "2618 Welte-Mignon",
-    "title": "Sullivan/Goodall - The yeomen of the guard, or the merry man and his maid",
+    "number": "2618",
+    "publisher": "Welte-Mignon",
+    "title": "Sullivan/Goodall - The Yeomen of the guard, or the merry man and his maid",
     "type": "welte-red"
   },
   {
     "druid": "zc118hn1152",
     "image_url": "https://stacks.stanford.edu/image/iiif/zc118hn1152%2Fzc118hn1152_0001/info.json",
-    "label": "2995 Welte-Mignon",
+    "number": "2995",
+    "publisher": "Welte-Mignon",
     "title": "Tchaikovsky/Albert - Casse noisette suite op. 71, i. teil",
     "type": "welte-red"
   },
   {
     "druid": "fk960pq3086",
     "image_url": "https://stacks.stanford.edu/image/iiif/fk960pq3086%2Ffk960pq3086_0001/info.json",
-    "label": "2995 Welte-Mignon",
+    "number": "2995",
+    "publisher": "Welte-Mignon",
     "title": "Tchaikovsky/Albert - Casse noisette suite: op. 71, part 1",
     "type": "welte-red"
   },
   {
     "druid": "hk752ck1008",
     "image_url": "https://stacks.stanford.edu/image/iiif/hk752ck1008%2Fhk752ck1008_0001/info.json",
-    "label": "3330 Welte-Mignon",
+    "number": "3330",
+    "publisher": "Welte-Mignon",
     "title": "Tchaikovsky/Lászlò - Symphonic pathétic op. 74, no. 6, part ii",
     "type": "welte-red"
   },
   {
     "druid": "bk297ff8944",
     "image_url": "https://stacks.stanford.edu/image/iiif/bk297ff8944%2Fbk297ff8944_0001/info.json",
-    "label": "3329 Welte-Mignon",
+    "number": "3329",
+    "publisher": "Welte-Mignon",
     "title": "Tchaikovsky/Lászlò - Symphonic pathétic op. 74, part. i (final)",
     "type": "welte-red"
   },
   {
     "druid": "rv766dc1369",
     "image_url": "https://stacks.stanford.edu/image/iiif/rv766dc1369%2Frv766dc1369_0001/info.json",
-    "label": "3328 Welte-Mignon",
+    "number": "3328",
+    "publisher": "Welte-Mignon",
     "title": "Tchaikovsky/Lászlò - Symphony pathétique op. 74, no. 6, part i",
     "type": "welte-red"
   },
   {
     "druid": "gr136pc5388",
     "image_url": "https://stacks.stanford.edu/image/iiif/gr136pc5388%2Fgr136pc5388_0001/info.json",
-    "label": "3331 Welte-Mignon",
+    "number": "3331",
+    "publisher": "Welte-Mignon",
     "title": "Tchaikovsky/Lászlò - Symphony pathétique op. 74, no. 6, part iii",
     "type": "welte-red"
   },
   {
     "druid": "qm069fy5200",
     "image_url": "https://stacks.stanford.edu/image/iiif/qm069fy5200%2Fqm069fy5200_0001/info.json",
-    "label": "3332 Welte-Mignon",
+    "number": "3332",
+    "publisher": "Welte-Mignon",
     "title": "Tchaikovsky/Lászlò - Symphony pathétique op. 74, no. 6, part iv",
     "type": "welte-red"
   },
   {
     "druid": "jv485mx5227",
     "image_url": "https://stacks.stanford.edu/image/iiif/jv485mx5227%2Fjv485mx5227_0002/info.json",
-    "label": "40003 Princesa",
+    "number": "40003",
+    "publisher": "Princesa",
     "title": "Texidor - Amparito roca: pasodoble",
     "type": "88-note"
   },
   {
     "druid": "vj052cw2158",
     "image_url": "https://stacks.stanford.edu/image/iiif/vj052cw2158%2Fvj052cw2158_0001/info.json",
-    "label": "1534 Welte-Mignon",
+    "number": "1534",
+    "publisher": "Welte-Mignon",
     "title": "Thalberg/Brightwell - Home sweet home",
     "type": "welte-red"
   },
   {
     "druid": "xg924dm1245",
     "image_url": "https://stacks.stanford.edu/image/iiif/xg924dm1245%2Fxg924dm1245_0001/info.json",
-    "label": "3430 Welte-Mignon",
+    "number": "3430",
+    "publisher": "Welte-Mignon",
     "title": "Toselli/Haass - Serenade",
     "type": "welte-red"
   },
   {
     "druid": "cw746gb6753",
     "image_url": "https://stacks.stanford.edu/image/iiif/cw746gb6753%2Fcw746gb6753_0002/info.json",
-    "label": "473 Princesa",
-    "title": "Verdi - Aida. acto ii, marcha triunfal",
+    "number": "473",
+    "publisher": "Princesa",
+    "title": "Verdi - Aida: Acto II: Gran marcha triunfal",
     "type": "88-note"
   },
   {
-    "druid": "sr577gv4813",
-    "image_url": "https://stacks.stanford.edu/image/iiif/sr577gv4813%2Fsr577gv4813_0001/info.json",
-    "label": "2844 Welte-Mignon",
-    "title": "Verdi/Gayraud - Rigoletto: fantasia",
+    "druid": "mf443ns5829",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mf443ns5829%2Fmf443ns5829_0001/info.json",
+    "number": "445",
+    "publisher": "Welte-Mignon",
+    "title": "Verdi-Liszt/Busoni - Rigoletto: (paraphrase)",
     "type": "welte-red"
   },
   {
     "druid": "np204br1080",
     "image_url": "https://stacks.stanford.edu/image/iiif/np204br1080%2Fnp204br1080_0001/info.json",
-    "label": "2844 Welte-Mignon",
-    "title": "Verdi/Gayraud - Rigoletto: fantasie",
+    "number": "2844",
+    "publisher": "Welte-Mignon",
+    "title": "Verdi/Gayraud - Rigoletto: Fantasie",
+    "type": "welte-red"
+  },
+  {
+    "druid": "sr577gv4813",
+    "image_url": "https://stacks.stanford.edu/image/iiif/sr577gv4813%2Fsr577gv4813_0001/info.json",
+    "number": "2844",
+    "publisher": "Welte-Mignon",
+    "title": "Verdi/Gayraud - Rigoletto: fantasia",
     "type": "welte-red"
   },
   {
     "druid": "nq190zp1066",
     "image_url": "https://stacks.stanford.edu/image/iiif/nq190zp1066%2Fnq190zp1066_0001/info.json",
-    "label": "1341 Welte-Mignon",
-    "title": "Verdi/Starke - Aïda: fantasie",
+    "number": "1341",
+    "publisher": "Welte-Mignon",
+    "title": "Verdi/Starke - Aïda: Fantasie",
     "type": "welte-red"
   },
   {
     "druid": "nx970yn7253",
     "image_url": "https://stacks.stanford.edu/image/iiif/nx970yn7253%2Fnx970yn7253_0001/info.json",
-    "label": "1339 Welte-Mignon",
-    "title": "Verdi/Starke - La traviata: fantasie",
+    "number": "1339",
+    "publisher": "Welte-Mignon",
+    "title": "Verdi/Starke - La Traviata: fantasie",
     "type": "welte-red"
   },
   {
     "druid": "tw054jm0773",
     "image_url": "https://stacks.stanford.edu/image/iiif/tw054jm0773%2Ftw054jm0773_0001/info.json",
-    "label": "1339 Welte-Mignon",
-    "title": "Verdi/Starke - La traviata: fantasie",
+    "number": "1339",
+    "publisher": "Welte-Mignon",
+    "title": "Verdi/Starke - La Traviata: fantasie",
     "type": "welte-red"
   },
   {
     "druid": "vr247rd6766",
     "image_url": "https://stacks.stanford.edu/image/iiif/vr247rd6766%2Fvr247rd6766_0002/info.json",
-    "label": "4312 Princesa",
+    "number": "4312",
+    "publisher": " Princesa",
     "title": "Vidal - Porque era negro: tango",
     "type": "88-note"
   },
   {
     "druid": "tp613xb9088",
     "image_url": "https://stacks.stanford.edu/image/iiif/tp613xb9088%2Ftp613xb9088_0002/info.json",
-    "label": "4518 Princesa",
-    "title": "Viladomat - El tango de la cocaína",
+    "number": "4518",
+    "publisher": "Princesa",
+    "title": "Viladomat - El Tango de la cocaína",
     "type": "88-note"
   },
   {
     "druid": "ps866sb0637",
     "image_url": "https://stacks.stanford.edu/image/iiif/ps866sb0637%2Fps866sb0637_0002/info.json",
-    "label": "2841 Victoria",
-    "title": "Villa - Cantos asturianos, no 1. andante, allegro non molto",
+    "number": "2841",
+    "publisher": "Princesa",
+    "title": "Villa - Cantos asturianos: no. 1: Andante, allegro non molto",
     "type": "88-note"
   },
   {
     "druid": "sm344xv2220",
     "image_url": "https://stacks.stanford.edu/image/iiif/sm344xv2220%2Fsm344xv2220_0002/info.json",
-    "label": "357 Princesa",
-    "title": "Vives - Bohemios. escena y coro",
+    "number": "357",
+    "publisher": "Princesa",
+    "title": "Vives - Bohemios: Escena y coro",
     "type": "88-note"
   },
   {
     "druid": "gh208gz5033",
     "image_url": "https://stacks.stanford.edu/image/iiif/gh208gz5033%2Fgh208gz5033_0001/info.json",
-    "label": "763 Welte-Mignon",
+    "number": "763",
+    "publisher": "Welte-Mignon",
     "title": "Vogrich/Mero - Staccato caprice",
     "type": "welte-red"
   },
   {
-    "druid": "yr287jf4422",
-    "image_url": "https://stacks.stanford.edu/image/iiif/yr287jf4422%2Fyr287jf4422_0001/info.json",
-    "label": "144 Welte-Mignon",
-    "title": "Wagner/Adam-Benard - Lied a. d. abendstern: a. tannhäuser op. 94",
-    "type": "welte-red"
-  },
-  {
-    "druid": "ys288dd6430",
-    "image_url": "https://stacks.stanford.edu/image/iiif/ys288dd6430%2Fys288dd6430_0001/info.json",
-    "label": "118 Welte-Mignon",
-    "title": "Wagner/Adam-Benard - Schwanenlied aus lohengrin",
+    "druid": "dj406yq6980",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dj406yq6980%2Fdj406yq6980_0001/info.json",
+    "number": "663",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner-Brassin/Hofmann - Feuerzauber",
     "type": "welte-red"
   },
   {
     "druid": "fd660zf8362",
     "image_url": "https://stacks.stanford.edu/image/iiif/fd660zf8362%2Ffd660zf8362_0001/info.json",
-    "label": "990 Welte-Mignon",
-    "title": "Wagner/Elvyn - Meistersinger von nürnberg: vorspiel",
+    "number": "990",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner-Bülow/Elvyn - Meistersinger von nürnberg: Vorspiel",
     "type": "welte-red"
   },
   {
     "druid": "bs173rx9307",
     "image_url": "https://stacks.stanford.edu/image/iiif/bs173rx9307%2Fbs173rx9307_0001/info.json",
-    "label": "188 Welte-Mignon",
-    "title": "Wagner/Grünfeld - Isoldens liebestod",
+    "number": "188",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner-Liszt/Grünfeld - Isoldens liebestod",
     "type": "welte-red"
   },
   {
     "druid": "qf751dd5412",
     "image_url": "https://stacks.stanford.edu/image/iiif/qf751dd5412%2Fqf751dd5412_0001/info.json",
-    "label": "662 Welte-Mignon",
-    "title": "Wagner/Hofmann - Tannhauser overture",
+    "number": "662",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner-Liszt/Hofmann - Tannhauser overture",
     "type": "welte-red"
   },
   {
     "druid": "hh095vc8073",
     "image_url": "https://stacks.stanford.edu/image/iiif/hh095vc8073%2Fhh095vc8073_0001/info.json",
-    "label": "662 Welte-Mignon",
-    "title": "Wagner/Hofmann - Tannhäuser overture",
-    "type": "welte-red"
-  },
-  {
-    "druid": "dr835xg3992",
-    "image_url": "https://stacks.stanford.edu/image/iiif/dr835xg3992%2Fdr835xg3992_0001/info.json",
-    "label": "3335 Welte-Mignon",
-    "title": "Wagner/Lászlò - Rienzi: ouverture",
-    "type": "welte-red"
-  },
-  {
-    "druid": "rp146dk0477",
-    "image_url": "https://stacks.stanford.edu/image/iiif/rp146dk0477%2Frp146dk0477_0001/info.json",
-    "label": "1352 Welte-Mignon",
-    "title": "Wagner/Mottl - Am stillen herd zur winterszeit: a. die meistersinger von nürnberg",
-    "type": "welte-red"
-  },
-  {
-    "druid": "mg285ps6787",
-    "image_url": "https://stacks.stanford.edu/image/iiif/mg285ps6787%2Fmg285ps6787_0001/info.json",
-    "label": "1352 Welte-Mignon",
-    "title": "Wagner/Mottl - Die meistersinger von nürnberg. am stillen herd zur winterszeit",
-    "type": "welte-red"
-  },
-  {
-    "druid": "jn038xx9588",
-    "image_url": "https://stacks.stanford.edu/image/iiif/jn038xx9588%2Fjn038xx9588_0001/info.json",
-    "label": "1348 Welte-Mignon",
-    "title": "Wagner/Mottl - Lohengrin. bridal chorus",
-    "type": "welte-red"
-  },
-  {
-    "druid": "dt046tz6296",
-    "image_url": "https://stacks.stanford.edu/image/iiif/dt046tz6296%2Fdt046tz6296_0001/info.json",
-    "label": "1349 Welte-Mignon",
-    "title": "Wagner/Mottl - Lohengrin. elsa's dream",
-    "type": "welte-red"
-  },
-  {
-    "druid": "nn203bm7432",
-    "image_url": "https://stacks.stanford.edu/image/iiif/nn203bm7432%2Fnn203bm7432_0001/info.json",
-    "label": "1347 Welte-Mignon",
-    "title": "Wagner/Mottl - Tristan und isolde. vorspiel",
-    "type": "welte-red"
-  },
-  {
-    "druid": "xx912rs1788",
-    "image_url": "https://stacks.stanford.edu/image/iiif/xx912rs1788%2Fxx912rs1788_0001/info.json",
-    "label": "1346 Welte-Mignon",
-    "title": "Wagner/Mottl - Vorspiel zu parsival",
+    "number": "662",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner-Liszt/Hofmann - Tannhäuser overture",
     "type": "welte-red"
   },
   {
     "druid": "hg709nf1997",
     "image_url": "https://stacks.stanford.edu/image/iiif/hg709nf1997%2Fhg709nf1997_0001/info.json",
-    "label": "3019 Welte-Mignon",
-    "title": "Wagner/Rybner - Die meistersinger von nürnberg: konzert-paraphrase",
+    "number": "3019",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner-Rybner/Rybner - Die Meistersinger von nürnberg: Konzert-Paraphrase",
+    "type": "welte-red"
+  },
+  {
+    "druid": "yr287jf4422",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yr287jf4422%2Fyr287jf4422_0001/info.json",
+    "number": "144",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner-Spindler/Adam-Benard - Lied a. d. abendstern: a. Tannhäuser op. 94",
+    "type": "welte-red"
+  },
+  {
+    "druid": "ys288dd6430",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ys288dd6430%2Fys288dd6430_0001/info.json",
+    "number": "118",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Adam-Benard - Schwanenlied aus lohengrin",
+    "type": "welte-red"
+  },
+  {
+    "druid": "dr835xg3992",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dr835xg3992%2Fdr835xg3992_0001/info.json",
+    "number": "3335",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Lászlò - Rienzi: Ouverture",
+    "type": "welte-red"
+  },
+  {
+    "druid": "rp146dk0477",
+    "image_url": "https://stacks.stanford.edu/image/iiif/rp146dk0477%2Frp146dk0477_0001/info.json",
+    "number": "1352",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Mottl - Am stillen herd zur winterszeit: a. die Meistersinger von Nürnberg",
+    "type": "welte-red"
+  },
+  {
+    "druid": "mg285ps6787",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mg285ps6787%2Fmg285ps6787_0001/info.json",
+    "number": "1352",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Mottl - Die Meistersinger von nürnberg: Am stillen Herd zur Winterszeit",
+    "type": "welte-red"
+  },
+  {
+    "druid": "jn038xx9588",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jn038xx9588%2Fjn038xx9588_0001/info.json",
+    "number": "1348",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Mottl - Lohengrin: Bridal chorus",
+    "type": "welte-red"
+  },
+  {
+    "druid": "dt046tz6296",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dt046tz6296%2Fdt046tz6296_0001/info.json",
+    "number": "1349",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Mottl - Lohengrin: Elsa's dream",
+    "type": "welte-red"
+  },
+  {
+    "druid": "nn203bm7432",
+    "image_url": "https://stacks.stanford.edu/image/iiif/nn203bm7432%2Fnn203bm7432_0001/info.json",
+    "number": "1347",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Mottl - Tristan und isolde: Vorspiel",
+    "type": "welte-red"
+  },
+  {
+    "druid": "xx912rs1788",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xx912rs1788%2Fxx912rs1788_0001/info.json",
+    "number": "1346",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Mottl - Vorspiel zu parsival",
     "type": "welte-red"
   },
   {
     "druid": "xy736dn5214",
     "image_url": "https://stacks.stanford.edu/image/iiif/xy736dn5214%2Fxy736dn5214_0002/info.json",
-    "label": "2539",
+    "number": "2539",
+    "publisher": "N/A",
     "title": "Waldteufel - Très jolie: suite de valses",
-    "type": "65-note"
+    "type": "88-note"
   },
   {
     "druid": "xg670df7262",
     "image_url": "https://stacks.stanford.edu/image/iiif/xg670df7262%2Fxg670df7262_0001/info.json",
-    "label": "2466 Welte-Mignon",
-    "title": "Waldteufel/Dubois - Immer oder nimmer: walzer",
+    "number": "2466",
+    "publisher": "Welte-Mignon",
+    "title": "Waldteufel/Dubois - Immer oder nimmer: Walzer",
     "type": "welte-red"
   },
   {
     "druid": "jn782fq7439",
     "image_url": "https://stacks.stanford.edu/image/iiif/jn782fq7439%2Fjn782fq7439_0001/info.json",
-    "label": "134 Welte-Mignon",
+    "number": "134",
+    "publisher": "Welte-Mignon",
     "title": "Weber/Adam-Benard - Rondo brillante op. 62",
     "type": "welte-red"
   },
   {
     "druid": "jd143sb1087",
     "image_url": "https://stacks.stanford.edu/image/iiif/jd143sb1087%2Fjd143sb1087_0001/info.json",
-    "label": "5553 Welte-Mignon",
+    "number": "5553",
+    "publisher": "Welte-Mignon",
     "title": "Whiteman/Wolf - Wonderful one: waltz song",
     "type": "welte-red"
   },
   {
     "druid": "sx275gw8801",
     "image_url": "https://stacks.stanford.edu/image/iiif/sx275gw8801%2Fsx275gw8801_0001/info.json",
-    "label": "5675 Welte-Mignon",
+    "number": "5675",
+    "publisher": "Welte-Mignon",
     "title": "Youmans/Johnson - Tea for two: fox-trot",
     "type": "welte-red"
   },
   {
     "druid": "yk645sm6970",
     "image_url": "https://stacks.stanford.edu/image/iiif/yk645sm6970%2Fyk645sm6970_0001/info.json",
-    "label": "5905 Welte-Mignon",
-    "title": "Youmans/Sommer - Hallelujah!: fox-trot from \"hit the deck\"",
+    "number": "5905",
+    "publisher": "Welte-Mignon",
+    "title": "Youmans/Sommer - Hallelujah!: fox-trot from \"Hit the deck\"",
     "type": "welte-red"
   }
 ]
