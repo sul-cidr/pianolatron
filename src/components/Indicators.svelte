@@ -1,23 +1,11 @@
 <style lang="scss">
   button {
-    display: inline-block;
-    padding: 0.35em 0.8em;
-    border: 0.1em solid #ffffff;
-    margin: 0;
-    border-radius: 0.25em;
-    color: #ffffff;
-    transition: all 0.2s;
-    background-color: var(--primary-accent);
-
-    &:hover,
-    &.pedal-on {
-      color: var(--primary-accent);
-      border-color: var(--primary-accent);
-      background-color: #ffffff;
-    }
+    @include button;
 
     &.pedal-on {
       background-color: yellow;
+      border-color: var(--primary-accent);
+      color: var(--primary-accent);
     }
 
     kbd {
@@ -28,6 +16,7 @@
 
 <script>
   import { softOnOff, sustainOnOff } from "../stores";
+  import { keyMap } from "./KeyboardShortcuts.svelte";
 </script>
 
 <button
@@ -36,7 +25,7 @@
   aria-pressed={$softOnOff}
   on:click={() => ($softOnOff = !$softOnOff)}
   >Soft
-  <kbd class:depressed={$softOnOff}>q</kbd></button
+  <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
 >
 <button
   type="button"
@@ -44,5 +33,5 @@
   aria-pressed={$sustainOnOff}
   on:click={() => ($sustainOnOff = !$sustainOnOff)}
   >Sustain
-  <kbd class:depressed={$sustainOnOff}>c</kbd></button
+  <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
 >
