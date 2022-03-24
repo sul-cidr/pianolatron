@@ -7,6 +7,7 @@
   import { notify } from "../ui-components/Notification.svelte";
   import { getPathJoiner, NoteSource, RecordingActions } from "../lib/utils";
   import {
+    isPlaying,
     rollMetadata,
     softOnOff,
     sustainOnOff,
@@ -343,13 +344,14 @@
     softOnOff.reset();
     sustainOnOff.reset();
     accentOnOff.reset();
-    midiSamplePlayer.triggerPlayerEvent("stop");
+    $isPlaying = false;
   };
 
   const pausePlayback = () => {
     midiSamplePlayer.pause();
     midiSamplePlayer.triggerPlayerEvent("pause");
     stopAllNotes();
+    $isPlaying = false;
   };
 
   const pausePlaybackOrLoop = async () => {
@@ -367,6 +369,7 @@
     if ($currentTick < 0) resetPlayback();
     updatePlayer();
     midiSamplePlayer.play();
+    $isPlaying = true;
   };
 
   const buildTempoMap = (metadataTrack) =>
@@ -500,7 +503,7 @@
         audioRecorder.exportRecording();
         break;
       default:
-        console.log("Unknown recording action: " + action)
+        console.log("Unknown recording action: " + action);
     }
   };
 

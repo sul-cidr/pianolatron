@@ -88,6 +88,7 @@ export const recordingInBuffer = createStore(false);
 export const recordingDuration = createStore(0);
 
 // Playback State
+export const isPlaying = createStore(false);
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
 export const playbackProgressStart = createStore();
