@@ -167,6 +167,18 @@
       `,
       attribs: { viewBox: "0 0 712 266", fill: "currentColor" },
     },
+    play: {
+      svg: `<path d="M7 4v16l13 -8z" />`,
+    },
+    pause: {
+      svg: `
+        <rect x="6" y="5" width="4" height="14" rx="1" />
+        <rect x="14" y="5" width="4" height="14" rx="1" />
+      `,
+    },
+    stop: {
+      svg: `<rect x="5" y="5" width="14" height="14" rx="2" />`,
+    },
   };
   const { attribs, svg } = icons[name];
 </script>
