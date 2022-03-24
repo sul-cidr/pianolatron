@@ -38,7 +38,10 @@ const buildNoteVelocitiesMap = (midiSamplePlayer) => {
   return noteVelocitiesMap;
 };
 
-const buildPedalingMap = (eventsTrack) => {
+const buildPedalingMap = (musicTracks) => {
+  // where two or more "music tracks" exist, pedal events are expected to have
+  //  been duplicated across tracks, so we read only from the first one.
+  const eventsTrack = musicTracks[0];
   const _pedalingMap = new IntervalTree();
   const controllerEvents = eventsTrack.filter(
     (event) => event.name === "Controller Change",
