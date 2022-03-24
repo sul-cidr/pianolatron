@@ -15,9 +15,12 @@
 
       :global(kbd) {
         bottom: 0.35rem;
-        opacity: 0.4;
         position: absolute;
         right: 0rem;
+      }
+
+      :global(kbd:not(.depressed)) {
+        opacity: 0.6;
       }
 
       &:hover :global(kbd) {
