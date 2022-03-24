@@ -12,6 +12,15 @@ import {
 const SOFT_PEDAL = 67;
 const SUSTAIN_PEDAL = 64;
 
+const buildTempoMap = (metadataTrack) =>
+  metadataTrack
+    .filter((event) => event.name === "Set Tempo")
+    .reduce((_tempoMap, { tick, data }) => {
+      if (!_tempoMap.map(([, _data]) => _data).includes(data))
+        _tempoMap.push([tick, data]);
+      return _tempoMap;
+    }, []);
+
 const buildNoteVelocitiesMap = (midiSamplePlayer) => {
   const noteVelocitiesMap = {};
 
@@ -97,4 +106,9 @@ const buildMidiEventHandler = (startNote, stopNote, midiSamplePlayer) => {
   };
 };
 
-export { buildPedalingMap, buildNotesMap, buildMidiEventHandler };
+export {
+  buildTempoMap,
+  buildPedalingMap,
+  buildNotesMap,
+  buildMidiEventHandler,
+};
