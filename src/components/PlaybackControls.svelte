@@ -1,6 +1,24 @@
 <style lang="scss">
   #playback-controls {
     margin: 0 0.5em;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    padding: 8px;
+
+    :global(.overlay) {
+      position: relative;
+
+      :global(kbd) {
+        position: absolute;
+        bottom: 0.35rem;
+        right: 0rem;
+        opacity: 0.4;
+      }
+
+      &:hover :global(kbd) {
+        opacity: 1;
+      }
+    }
   }
 
   button {
@@ -20,40 +38,46 @@
 
 <script>
   import { keyMap } from "./KeyboardShortcuts.svelte";
-  import { softOnOff, sustainOnOff, accentOnOff } from "../stores";
+  import { isPlaying, accentOnOff } from "../stores";
+  import IconButton from "../ui-components/IconButton.svelte";
 
   export let playPauseApp;
   export let stopApp;
+
+  $: console.log("isPlaying", $isPlaying);
 </script>
 
 <div id="playback-controls">
-  <button type="button" on:click={playPauseApp}
-    >Play/Pause
-    <kbd class:depressed={$keyMap.PLAY_PAUSE.active}
-      >{$keyMap.PLAY_PAUSE.key}</kbd
-    ></button
+  {#key $isPlaying}
+    <IconButton
+      class="overlay"
+      disabled={false}
+      on:click={playPauseApp}
+      iconName={$isPlaying ? "pause" : "play"}
+      label={$isPlaying ? "Pause" : "Play"}
+      tooltip={$isPlaying ? "Pause (key: 7)" : "Play (key: 7)"}
+      height="48"
+      width="48"
+    >
+      <kbd class:depressed={$keyMap.PLAY_PAUSE.active}
+        >{$keyMap.PLAY_PAUSE.key}</kbd
+      >
+    </IconButton>
+  {/key}
+
+  <IconButton
+    class="overlay"
+    disabled={false}
+    on:click={stopApp}
+    iconName="stop"
+    label="Stop/Rewind"
+    tooltip="Stop/Rewind (key: backspace)"
+    height="48"
+    width="48"
   >
-  <button type="button" on:click={stopApp}
-    >Rewind
-    <kbd class:depressed={$keyMap.REWIND.active}>{$keyMap.REWIND.key}</kbd
-    ></button
-  >
-  <button
-    type="button"
-    class:pedal-on={$softOnOff}
-    aria-pressed={$softOnOff}
-    on:click={() => ($softOnOff = !$softOnOff)}
-    >Soft
-    <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
-  >
-  <button
-    type="button"
-    class:pedal-on={$sustainOnOff}
-    aria-pressed={$sustainOnOff}
-    on:click={() => ($sustainOnOff = !$sustainOnOff)}
-    >Sustain
-    <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
-  >
+    <kbd class:depressed={$keyMap.REWIND.active}>{$keyMap.REWIND.key}</kbd>
+  </IconButton>
+
   <br />
   <button
     type="button"

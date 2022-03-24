@@ -5,6 +5,7 @@
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
   import {
+    isPlaying,
     rollMetadata,
     softOnOff,
     sustainOnOff,
@@ -237,17 +238,20 @@
     softOnOff.reset();
     sustainOnOff.reset();
     accentOnOff.reset();
+    $isPlaying = false;
   };
 
   const pausePlayback = () => {
     midiSamplePlayer.pause();
     stopAllNotes();
+    $isPlaying = false;
   };
 
   const startPlayback = () => {
     if ($currentTick < 0) resetPlayback();
     updatePlayer();
     midiSamplePlayer.play();
+    $isPlaying = true;
   };
 
   const buildTempoMap = (metadataTrack) =>

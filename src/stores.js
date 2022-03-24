@@ -77,6 +77,7 @@ export const midiInputs = createStore([]);
 export const midiOutputs = createStore([]);
 
 // Playback State
+export const isPlaying = createStore(false);
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
 export const activeNotes = createSetStore();
