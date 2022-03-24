@@ -29,6 +29,7 @@
     velocityCurveHigh,
     userSettings,
     noteVelocitiesMap,
+    expressionizer,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -277,7 +278,9 @@
       ),
     );
 
-    const expressionBoxType = "expressiveMidi";
+    const expressionBoxType = ["FROM_MIDI", "NONE"].includes($expressionizer)
+      ? "expressiveMidi"
+      : $expressionizer;
     const expressionBox = expressionBoxes[expressionBoxType];
     const {
       buildTempoMap,
@@ -300,6 +303,7 @@
         stopNote,
         $noteVelocitiesMap,
         midiSamplePlayer,
+        tempoMap,
       ),
     );
   });
