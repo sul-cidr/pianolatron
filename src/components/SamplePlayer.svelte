@@ -285,10 +285,7 @@
 
     tempoMap = buildTempoMap(metadataTrack);
 
-    // where two or more "music tracks" exist, pedal events are expected to have
-    //  been duplicated across tracks, so we read only from the first one.
-    pedalingMap = buildPedalingMap(musicTracks[0]);
-
+    pedalingMap = buildPedalingMap(musicTracks);
     notesMap = buildNotesMap(musicTracks);
 
     midiSamplePlayer.on(
