@@ -101,5 +101,6 @@
   <select bind:value={$expressionizer} on:change={reloadRoll}>
     <option value="NONE">None?</option>
     <option value="FROM_MIDI">From Expressionized MIDI file</option>
+    <option value="welteRed">welte-red</option>
   </select>
 </div>
