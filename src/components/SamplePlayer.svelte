@@ -251,15 +251,6 @@
     midiSamplePlayer.play();
   };
 
-  const buildTempoMap = (metadataTrack) =>
-    metadataTrack
-      .filter((event) => event.name === "Set Tempo")
-      .reduce((_tempoMap, { tick, data }) => {
-        if (!_tempoMap.map(([, _data]) => _data).includes(data))
-          _tempoMap.push([tick, data]);
-        return _tempoMap;
-      }, []);
-
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -285,8 +276,13 @@
 
     const expressionBoxType = "expressiveMidi";
     const expressionBox = expressionBoxes[expressionBoxType];
-    const { buildPedalingMap, buildNotesMap, buildMidiEventHandler } =
-      expressionBox;
+    const {
+      buildTempoMap,
+      buildPedalingMap,
+      buildNotesMap,
+      buildMidiEventHandler,
+    } = expressionBox;
+
     tempoMap = buildTempoMap(metadataTrack);
 
     // where two or more "music tracks" exist, pedal events are expected to have
