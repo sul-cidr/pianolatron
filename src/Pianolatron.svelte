@@ -89,6 +89,7 @@
   let firstLoad = true;
   let appReady = false;
   let appWaiting = false;
+  let appLoaded = false;
   let rollImageReady = false;
   let mididataReady;
   let metadataReady;
@@ -280,6 +281,7 @@
         document.getElementById("loading").remove(),
       );
     document.getElementById("loading").classList.add("fade-out");
+    appLoaded = true;
   }
 </script>
 
@@ -325,7 +327,7 @@
   {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
-  <LoadingSpinner showLoadingSpinner={appWaiting} />
+  <LoadingSpinner showLoadingSpinner={appLoaded && appWaiting} />
 </div>
 <SamplePlayer
   bind:this={samplePlayer}
