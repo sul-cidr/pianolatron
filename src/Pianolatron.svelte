@@ -275,6 +275,7 @@
   $: if (rollViewer)
     ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
   $: if (rollImageReady) {
+    document.querySelector("#loading span").textContent = "Loading complete!";
     document
       .getElementById("loading")
       .addEventListener("transitionend", () =>

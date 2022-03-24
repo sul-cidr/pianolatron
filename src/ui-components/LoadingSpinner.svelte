@@ -1,14 +1,16 @@
 <style lang="scss">
   $aspect-ratio: 2.848;
-  $container-height: 40vh;
-  $container-width: 80vw;
+  $container-height: 20vh;
+  $container-width: min(800px, 80vw);
 
   #loading {
-    background-color: rgba(white, 0.6);
+    background-color: rgba(white, 0.2);
     color: var(--primary-accent);
+    display: grid;
     font-size: 1.4em;
     height: 100%;
     left: 0;
+    place-content: center;
     pointer-events: none;
     position: absolute;
     text-align: center;
@@ -18,24 +20,34 @@
     z-index: 9;
 
     > div {
-      height: $container-height;
-      margin: max(15%, 100px) auto 10px;
-      overflow: hidden;
-      position: relative;
+      background-color: rgba(white, 0.6);
+      border-radius: 0.5em;
+      box-shadow: 0 0 10px white;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      padding: 1em;
+      transform: translate3d(0, -50%, 0);
       width: $container-width;
 
       > div {
-        animation: scroll 10s linear infinite;
-        background-color: var(--primary-accent-semiopaque);
-        height: calc(
-          (#{$container-width} * #{$aspect-ratio}) + #{$container-height}
-        );
-        left: 0;
-        mask: url(/loader.svg) 0 0 / 100% repeat-y;
-        position: absolute;
-        top: 0;
-        transform: translate3d(0, 0, 0);
-        width: 100%;
+        height: $container-height;
+        overflow: hidden;
+        position: relative;
+
+        > div {
+          animation: scroll 10s linear infinite;
+          background-color: var(--primary-accent-semiopaque);
+          height: calc(
+            (#{$container-width} * #{$aspect-ratio}) + #{$container-height}
+          );
+          left: 0;
+          mask: url(/loader.svg) 0 0 / 100% repeat-y;
+          position: absolute;
+          top: 0;
+          transform: translate3d(0, 0, 0);
+          width: 100%;
+        }
       }
     }
 
@@ -52,17 +64,9 @@
   }
 
   span {
-    position: absolute;
-    display: block;
-    top: 40vh;
-    left: 50%;
-    transform: translate(-50%);
-    text-shadow: 0px 0px 8px white;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 1em;
-    padding: 1em 3em;
+    text-shadow: 0px 0px 8px white;
   }
 </style>
 
@@ -75,7 +79,9 @@
 
 {#if showLoadingSpinner}
   <div id="loading" transition:fade>
-    <div><div /></div>
-    <span>{loadingSpinnerText}</span>
+    <div>
+      <div><div /></div>
+      <span>{loadingSpinnerText}</span>
+    </div>
   </div>
 {/if}
