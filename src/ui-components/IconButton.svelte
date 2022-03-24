@@ -69,4 +69,5 @@
   bind:this={ref}
 >
   <Icon name={iconName} {height} {width} aria-hidden="true" focusable="false" />
+  <slot />
 </button>
