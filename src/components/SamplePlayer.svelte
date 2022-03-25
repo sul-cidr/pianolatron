@@ -296,8 +296,10 @@
     notesMap = buildNotesMap(musicTracks);
     $noteVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer);
 
-    midiSamplePlayer.on(
-      "midiEvent",
+    // This is a tiny bit hacky (in the sense that it's using an undocumented
+    //  api), but it's a simple way to ensure that only one midiEventHandler
+    //  is registered.
+    midiSamplePlayer.eventListeners.midiEvent = [
       buildMidiEventHandler(
         startNote,
         stopNote,
@@ -305,7 +307,7 @@
         midiSamplePlayer,
         tempoMap,
       ),
-    );
+    ];
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
