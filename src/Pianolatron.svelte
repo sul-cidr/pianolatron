@@ -66,6 +66,7 @@
     rollPedalingOnOff,
     userSettings,
     expressionizer,
+    noteVelocitiesMap,
   } from "./stores";
   import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -218,7 +219,7 @@
           holeData,
           $rollMetadata,
           $scrollDownwards,
-          $expressionizer,
+          $noteVelocitiesMap,
         );
         buildHolesIntervalTree();
         $playExpressionsOnOff = $isReproducingRoll;
