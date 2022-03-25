@@ -288,8 +288,8 @@ const buildPedalingMap = (musicTracks) => {
       });
   };
 
-  registerPedalEvents(musicTracks[0], SOFT_PEDAL_ON, SOFT_PEDAL_OFF);
-  registerPedalEvents(musicTracks[1], SUSTAIN_PEDAL_ON, SUSTAIN_PEDAL_OFF);
+  registerPedalEvents(musicTracks[2], SOFT_PEDAL_ON, SOFT_PEDAL_OFF);
+  registerPedalEvents(musicTracks[3], SUSTAIN_PEDAL_ON, SUSTAIN_PEDAL_OFF);
 
   return _pedalingMap;
 };
@@ -304,7 +304,8 @@ const buildNotesMap = (musicTracks) => {
       // The beginning of a note has velocity=1, end is velocity=0
       .filter(
         ({ name, noteNumber }) =>
-          name === "Note on" && getHoleType(noteNumber, rollType) === "note",
+          name === "Note on" &&
+          getHoleType({ m: noteNumber }, rollType) === "note",
       )
       .forEach(({ noteNumber, velocity, tick }) => {
         if (velocity === 0) {
@@ -316,8 +317,8 @@ const buildNotesMap = (musicTracks) => {
       });
   };
 
-  registerNoteEvents(musicTracks[2]);
-  registerNoteEvents(musicTracks[3]);
+  registerNoteEvents(musicTracks[0]);
+  registerNoteEvents(musicTracks[1]);
 
   return _notesMap;
 };
