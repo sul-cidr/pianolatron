@@ -3,7 +3,7 @@ module.exports = {
   plugins: ["svelte3"],
   extends: ["airbnb-base", "prettier"],
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2022,
     sourceType: "module",
   },
   env: {
@@ -27,6 +27,11 @@ module.exports = {
     "import/no-mutable-exports": "off",
     "import/prefer-default-export": "off",
     "import/no-duplicates": "off",
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { exceptAfterSingleLine: true },
+    ],
   },
   settings: {
     "svelte3/ignore-styles": (attribs) => "lang" in attribs,
