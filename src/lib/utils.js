@@ -156,7 +156,7 @@ export const annotateHoleData = (
     hole.endY = scrollDownwards ? hole.y + hole.h : imageLengthPx - hole.y;
 
     const tickOn = hole.y - firstHolePx;
-    hole.v = noteVelocitiesMap[tickOn]?.[hole.m];
+    hole.v = enforcePrecision(noteVelocitiesMap[tickOn]?.[hole.m], 2);
 
     switch (getHoleType(hole, rollType)) {
       case "pedal":
