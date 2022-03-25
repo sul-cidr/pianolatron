@@ -10,7 +10,7 @@ export const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 // Return a float between 0 and 1 proportional to value's position between min
 // and max
 export const normalizeInRange = (value, min, max) => {
-  if (max - min === 0) return 0;
+  if (max - min === 0) return 0.5;
   return (value - min) / (max - min);
 };
 
@@ -121,37 +121,31 @@ const pedalHoleColor = "39, 100%, 50%"; // orange;
 
 export const annotateHoleData = (
   holeData,
-  { ROLL_TYPE: rollType, IMAGE_LENGTH: imageLength },
+  { ROLL_TYPE: rollType, IMAGE_LENGTH: imageLength, FIRST_HOLE: firstHole },
   scrollDownwards,
-  expressionizer,
+  noteVelocitiesMap,
 ) => {
-  let velocities;
-  let minNoteVelocity;
-  let maxNoteVelocity;
-  let getNoteHoleColor;
+  const velocities = Object.values(noteVelocitiesMap).reduce(
+    (acc, v) => new Set([...acc, ...Object.values(v)]),
+    [],
+  );
+  const minNoteVelocity = velocities.size ? Math.min(...velocities) : 50;
+  const maxNoteVelocity = velocities.size ? Math.max(...velocities) : 50;
 
-  if (expressionizer === "FROM_MIDI") {
-    velocities = holeData.map(({ v }) => v).filter((v) => v);
-    minNoteVelocity = velocities.length ? Math.min(...velocities) : 64;
-    maxNoteVelocity = velocities.length ? Math.max(...velocities) : 64;
+  const getNoteHoleColor = ({ v: velocity }) => {
+    if (!velocity) return defaultHoleColor;
+    return holeColorMap[
+      Math.round(
+        mapToRange(
+          normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+          0,
+          holeColorMap.length - 1,
+        ),
+      )
+    ];
+  };
 
-    getNoteHoleColor = ({ v: velocity }) =>
-      holeColorMap[
-        Math.round(
-          mapToRange(
-            normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-            0,
-            holeColorMap.length - 1,
-          ),
-        )
-      ];
-  } else {
-    minNoteVelocity = 64;
-    maxNoteVelocity = 64;
-    getNoteHoleColor = () =>
-      holeColorMap[Math.round(mapToRange(0.5, 0, holeColorMap.length - 1))];
-  }
-
+  const firstHolePx = parseInt(firstHole, 10);
   const imageLengthPx = parseInt(imageLength, 10);
   holeData.forEach((hole) => {
     // hole.y is the coordinate of the beginning of the hole *in the direction
@@ -160,6 +154,9 @@ export const annotateHoleData = (
     //  some arithmetic is required for rolls that scroll upwards.
     hole.startY = scrollDownwards ? hole.y : imageLengthPx - hole.y - hole.h;
     hole.endY = scrollDownwards ? hole.y + hole.h : imageLengthPx - hole.y;
+
+    const tickOn = hole.y - firstHolePx;
+    hole.v = noteVelocitiesMap[tickOn]?.[hole.m];
 
     switch (getHoleType(hole, rollType)) {
       case "pedal":
