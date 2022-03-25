@@ -131,6 +131,7 @@
   };
 
   const buildHolesIntervalTree = () => {
+    holesByTickInterval = new IntervalTree();
     const { FIRST_HOLE } = $rollMetadata;
 
     const firstHolePx = parseInt(FIRST_HOLE, 10);
