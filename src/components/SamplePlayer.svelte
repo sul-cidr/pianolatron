@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <script>
   import MidiPlayer from "midi-player-js";
   import { createEventDispatcher } from "svelte";
@@ -26,6 +28,7 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
+    noteVelocitiesMap,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -280,6 +283,7 @@
       buildTempoMap,
       buildPedalingMap,
       buildNotesMap,
+      buildNoteVelocitiesMap,
       buildMidiEventHandler,
     } = expressionBox;
 
@@ -287,10 +291,16 @@
 
     pedalingMap = buildPedalingMap(musicTracks);
     notesMap = buildNotesMap(musicTracks);
+    $noteVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer);
 
     midiSamplePlayer.on(
       "midiEvent",
-      buildMidiEventHandler(startNote, stopNote, midiSamplePlayer),
+      buildMidiEventHandler(
+        startNote,
+        stopNote,
+        $noteVelocitiesMap,
+        midiSamplePlayer,
+      ),
     );
   });
 
