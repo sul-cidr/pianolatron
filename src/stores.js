@@ -51,6 +51,7 @@ export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
 
 export const expressionizer = createStore("FROM_MIDI");
+export const noteVelocitiesMap = createStore();
 
 // Piano Settings
 export const sampleVolumes = createPersistedStore("sampleVolumes", {

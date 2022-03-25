@@ -28,7 +28,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer) => {
 
   musicTracks.forEach((track) => {
     track
-      .filter(({ name, velocity }) => name === "Note on" && velocity > 0)
+      .filter(({ name, velocity }) => name === "Note on" && velocity > 1)
       .forEach(({ noteNumber, velocity, tick }) => {
         noteVelocitiesMap[tick] = noteVelocitiesMap[tick] || {};
         noteVelocitiesMap[tick][noteNumber] = velocity;
@@ -85,15 +85,15 @@ const buildNotesMap = (musicTracks) => {
   return _notesMap;
 };
 
-const buildMidiEventHandler = (startNote, stopNote, midiSamplePlayer) => {
-  const notesVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer);
-  return ({ name, value, number, noteNumber, velocity, data, tick }) => {
+const buildMidiEventHandler =
+  (startNote, stopNote, noteVelocitiesMap, midiSamplePlayer) =>
+  ({ name, value, number, noteNumber, velocity, data, tick }) => {
     if (name === "Note on") {
       if (velocity === 0) {
         stopNote(noteNumber);
       } else {
         const expressionizedVelocity =
-          notesVelocitiesMap[tick]?.[noteNumber] || velocity;
+          noteVelocitiesMap[tick]?.[noteNumber] || velocity;
         startNote(noteNumber, expressionizedVelocity);
         activeNotes.add(noteNumber);
       }
@@ -107,11 +107,11 @@ const buildMidiEventHandler = (startNote, stopNote, midiSamplePlayer) => {
       midiSamplePlayer.setTempo(data * get(tempoCoefficient));
     }
   };
-};
 
 export {
   buildTempoMap,
   buildPedalingMap,
   buildNotesMap,
+  buildNoteVelocitiesMap,
   buildMidiEventHandler,
 };
