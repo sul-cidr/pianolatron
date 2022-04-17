@@ -44,7 +44,13 @@ export default class Expressionizer {
         .filter(({ name, velocity }) => name === "Note on" && velocity > 1)
         .forEach(({ noteNumber, velocity, tick }) => {
           noteVelocitiesMap[tick] = noteVelocitiesMap[tick] || {};
-          noteVelocitiesMap[tick][noteNumber] = velocity;
+          // midi-player-js converts velocity values to integers between 0 and
+          // 99, which is problematic and probably should be changed via a fork.
+          // But for now they need to be rescaled to be between 0 and 127 to
+          // (almost) match the original velocity values in the expressive MIDI.
+          noteVelocitiesMap[tick][noteNumber] = Math.round(
+            (velocity / 100.0) * 127.0,
+          );
         });
     });
     return noteVelocitiesMap;
