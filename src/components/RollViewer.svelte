@@ -97,6 +97,10 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     playbackProgress,
+    expressionizer,
+    bassExpCurve,
+    trebleExpCurve,
+    expressionParameters,
   } from "../stores";
   import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -129,6 +133,7 @@
   let svgPartitions;
   let visibleSvgs = [];
   let entireViewportRectangle;
+  let expressionCurvesSvg;
 
   const createMark = (hole) => {
     const {
@@ -169,6 +174,102 @@
     );
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
+  };
+
+  const drawExpressionCurves = (bassExpC, trebleExpC, express) => {
+    const drawExpCurvePL = (expCurve, pl, expSvg) => {
+      for (let i = 0; i < expCurve.length; i += 1) {
+        const point = expSvg.createSVGPoint();
+        point.x = expCurve[i][1];
+        point.y = expCurve[i][0];
+        pl.points.appendItem(point);
+      }
+    };
+
+    const drawGuidesAndCurve = (guides, expCurve, g, svg, transformation) => {
+      Object.values(guides).forEach((value) => {
+        const guideLine = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line",
+        );
+        guideLine.setAttribute(
+          "style",
+          "stroke:palegreen;fill:none;stroke-width:1;opacity:25%;",
+        );
+        guideLine.setAttribute("x1", value);
+        guideLine.setAttribute("x2", value);
+        guideLine.setAttribute("y1", 0);
+        guideLine.setAttribute("y2", imageLength - firstHolePx);
+        guideLine.setAttribute("transform", transformation);
+        g.appendChild(guideLine);
+      });
+      const curvePL = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "polyline",
+      );
+      curvePL.setAttribute("style", "stroke:green;fill:none;stroke-width:2;");
+      drawExpCurvePL(expCurve, curvePL, svg);
+      curvePL.setAttribute("transform", transformation);
+      g.appendChild(curvePL);
+    };
+
+    if (expressionCurvesSvg !== undefined) {
+      viewport.viewer.removeOverlay(expressionCurvesSvg);
+    }
+
+    if (
+      viewport === undefined ||
+      bassExpC == null ||
+      trebleExpC == null ||
+      ["NONE", "FROM_MIDI"].includes(express)
+    )
+      return;
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    svg.setAttribute("width", imageWidth);
+    svg.setAttribute("height", imageLength);
+    svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+    svg.setAttribute("style", "pointer-events: none;"); // needed?
+    svg.appendChild(g);
+
+    // Roll images are slightly offset to the right (sigh). This could be used
+    // to compensate. But at present, it's just being used as a kluge to push
+    // the expression curves closer to the center of the viewer
+    const scanOffset = 150;
+    const horizOffset = Math.round(imageWidth / 2);
+    const curveRegionWidth = Math.round(imageWidth / 2);
+    const horizScale = Math.round(curveRegionWidth / 127);
+    const vertOffset = scrollDownwards
+      ? firstHolePx
+      : imageLength - firstHolePx;
+    const vertScale = scrollDownwards ? 1 : -1;
+    const expParams = $expressionParameters;
+    if (expParams === null) return;
+    const guides = {
+      p: parseInt(expParams.welte_p, 10),
+      mf: parseInt(expParams.welte_mf, 10),
+      f: parseInt(expParams.welte_f, 10),
+    };
+    drawGuidesAndCurve(
+      guides,
+      bassExpC,
+      g,
+      svg,
+      `translate(${scanOffset} ${vertOffset}) scale(${horizScale} ${vertScale})`,
+    );
+    drawGuidesAndCurve(
+      guides,
+      trebleExpC,
+      g,
+      svg,
+      `translate(${
+        horizOffset * 2 - scanOffset
+      } ${vertOffset}) scale(${-horizScale} ${vertScale})`,
+    );
+
+    expressionCurvesSvg = svg;
+    viewport.viewer.addOverlay(svg, entireViewportRectangle);
   };
 
   const createHolesOverlaySvg = (holes) => {
@@ -483,6 +584,7 @@
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
       partitionHolesOverlaySvgs();
+      drawExpressionCurves($bassExpCurve, $trebleExpCurve, $expressionizer);
       updateViewportFromTick(0);
     });
 
@@ -566,6 +668,7 @@
 
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
+  $: drawExpressionCurves($bassExpCurve, $trebleExpCurve, $expressionizer);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
