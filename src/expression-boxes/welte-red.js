@@ -9,6 +9,9 @@ import {
   tempoCoefficient,
   useMidiTempoEventsOnOff,
   playExpressionsOnOff,
+  bassExpCurve,
+  trebleExpCurve,
+  expressionParameters,
 } from "../stores";
 import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
@@ -195,7 +198,9 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   const [, ...musicTracks] = midiSamplePlayer.events;
 
-  const expressionParameters = getExpressionParams(rollType);
+  const expParams = getExpressionParams(rollType);
+
+  expressionParameters.set(expParams);
 
   const _expressionMap = {};
 
@@ -204,7 +209,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
     const expressionCurve = [];
 
-    expState.velocity = expressionParameters.welte_p;
+    expState.velocity = expParams.welte_p;
 
     const panMsgs = ctrlTrackMsgs
       .filter(({ name }) => name === "Note on")
@@ -231,7 +236,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         // Only apply adjustment (if at all) on the external (played)
         // velocities, not the interally stored/computed expressions
         const noteVelocity =
-          getVelocityAtTime(msgTime, expState, expressionParameters) + adjust;
+          getVelocityAtTime(msgTime, expState, expParams) + adjust;
 
         if (tick in _expressionMap) {
           _expressionMap[tick][midiNumber] = noteVelocity;
@@ -245,6 +250,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
           return;
         }
         const panVelocity = getVelocityAtTime(msgTime, expState, expParams);
+        const trackerExtensionSeconds = TRACKER_EXTENSION / ticksPerSecond;
         if (ctrlFunc === "mf_on" && velocity > 0) {
           expState.mf_start = msgTime;
         } else if (ctrlFunc === "mf_off" && velocity > 0) {
@@ -289,14 +295,12 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
   };
 
   // bass notes and control holes
-  const bassExpCurve = buildPanExpMap(
-    musicTracks[0],
-    musicTracks[2],
-    expressionParameters.left_adjust,
+  bassExpCurve.set(
+    buildPanExpMap(musicTracks[0], musicTracks[2], expParams.left_adjust),
   );
 
   // treble notes and control holes
-  const trebleExpCurve = buildPanExpMap(musicTracks[1], musicTracks[3], 0);
+  trebleExpCurve.set(buildPanExpMap(musicTracks[1], musicTracks[3], 0));
 
   return _expressionMap;
 };
