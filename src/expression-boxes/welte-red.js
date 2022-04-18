@@ -13,7 +13,13 @@ import {
 import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
 
-const TRACKER_EXTENSION = 0;
+const TRACKERBAR_DIAMETER = 16.7; // in ticks (px), try AVG_HOLE_WIDTH instead?
+const PUNCH_EXTENSION_FRACTION = 0.75;
+const TRACKER_EXTENSION = parseInt(
+  TRACKERBAR_DIAMETER * PUNCH_EXTENSION_FRACTION,
+  10,
+);
+
 const DEFAULT_TEMPO = 60;
 
 const getKeyByValue = (object, value) => {
@@ -40,7 +46,7 @@ const getExpressionParams = (rollType) => {
       welte_mf: 60.0,
       welte_f: 90.0,
       welte_loud: 75.0,
-      left_adjust: -5.0,
+      left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
       cresc_rate: 1.0,
       slow_decay_rate: 2380, // Probably this is 1 velocity step in 2.38s
       fastC_decay_rate: 300,
@@ -77,10 +83,20 @@ const getExpressionStateBox = (rollType) => {
 };
 
 const getVelocityAtTime = (time, expState, expParams) => {
+  // To begin, the new velocity is set to the previous level
   let newVelocity = expState.velocity;
-  // XXX What if this crosses an acceleration tempo change?
   const msFromLastDynamic = time - expState.time;
 
+  // Active cresc/descresc controls: slow cresc, fast cresc/decresc
+  // Slow descresc is on by default if none of slow cresc, fast cresc/decresc
+  // is enabled
+  // MF hook on prevents velocity from crossing welte_mf from soft or loud side
+
+  // Determine fast crescendo and decrescendo states at this time, handling
+  // cases in which the fast change is still happening (the hole hasn't ended
+  // yet) or we know when the fast change ends, but the current time is before
+  // that (this can occur due to the tracker width emulation extending the
+  // effective duration of the hole beyond its physical length).
   const isFastCrescOn =
     (expState.fast_cresc_start !== null && expState.fast_cresc_stop === null) ||
     (expState.fast_cresc_start !== null &&
@@ -93,6 +109,7 @@ const getVelocityAtTime = (time, expState, expParams) => {
       expState.fast_decresc_stop !== null &&
       expState.fast_decresc_stop > time);
 
+  // Default state (no active controls: only slow descresc)
   if (
     expState.slow_cresc_start === null &&
     !isFastCrescOn &&
@@ -100,6 +117,8 @@ const getVelocityAtTime = (time, expState, expParams) => {
   ) {
     newVelocity -= msFromLastDynamic * expParams.slow_step;
   } else {
+    // Otherwise new target velocity will be a combination of the
+    // active control effects
     newVelocity +=
       expState.slow_cresc_start !== null
         ? msFromLastDynamic * expParams.slow_step
@@ -110,14 +129,16 @@ const getVelocityAtTime = (time, expState, expParams) => {
       : 0;
   }
 
+  // Handle the MF hook
   const velocityDelta = newVelocity - expState.velocity;
-
   if (expState.mf_start !== null) {
+    // If the previous velocity was above MF, keep it there
     if (expState.velocity > expParams.welte_mf) {
       newVelocity =
         velocityDelta < 0
           ? Math.max(expParams.welte_mf + 0.001, newVelocity)
           : Math.min(expParams.welte_f, newVelocity);
+      // If the previous velcoity was below MF, keep it there
     } else if (expState.velocity < expParams.welte_mf) {
       newVelocity =
         velocityDelta > 0
@@ -129,9 +150,12 @@ const getVelocityAtTime = (time, expState, expParams) => {
     !isFastCrescOn &&
     expState.velocity < expParams.welte_loud
   ) {
+    // If no MF hook and only slow crescendo is on, velocity should never
+    // exceed welte_loud (which is lower than welte_f)
     newVelocity = Math.min(newVelocity, expParams.welte_loud - 0.001);
   }
 
+  // Make sure the velocity always stays between welte_p and welte_f
   newVelocity = clamp(newVelocity, expParams.welte_p, expParams.welte_f);
 
   return newVelocity;
@@ -140,6 +164,34 @@ const getVelocityAtTime = (time, expState, expParams) => {
 const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const midiTPQ = midiSamplePlayer.getDivision().division;
+
+  const getMillisecondsAtTick = (tick) => {
+    if (!tempoMap || !get(useMidiTempoEventsOnOff))
+      return (parseFloat(tick) / midiTPQ) * 1000;
+    let lastTime = 0.0;
+    let lastTick = 0;
+    let lastTempo = DEFAULT_TEMPO;
+    let tempo;
+    let i = 0;
+    while (tempoMap[i][0] <= tick) {
+      [, tempo] = tempoMap[i];
+      if (i !== 0) {
+        const lastTicksPerSecond = (parseFloat(lastTempo) * midiTPQ) / 60.0;
+        const ticksAtLastTempo = parseFloat(tempoMap[i][0] - lastTick);
+        const timeAtLastTempo = (ticksAtLastTempo / lastTicksPerSecond) * 1000;
+        lastTime += timeAtLastTempo;
+      }
+      lastTempo = tempo;
+      [lastTick] = tempoMap[i];
+      i += 1;
+      if (i >= tempoMap.length) break;
+    }
+    const lastTicksPerSecond = (parseFloat(lastTempo) * midiTPQ) / 60.0;
+    const ticksAtLastTempo = parseFloat(tick - lastTick);
+    const timeAtLastTempo = (ticksAtLastTempo / lastTicksPerSecond) * 1000;
+    lastTime += timeAtLastTempo;
+    return lastTime;
+  };
 
   const [, ...musicTracks] = midiSamplePlayer.events;
 
@@ -164,11 +216,16 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
       .sort((a, b) => (a.tick > b.tick ? 1 : -1));
 
     panMsgs.forEach(({ noteNumber: midiNumber, velocity, tick }) => {
-      const ticksPerSecond = (getTempoAtTick(tick, tempoMap) * midiTPQ) / 60.0;
-      const msgTime =
-        expState.time + ((tick - expState.tick) / ticksPerSecond) * 1000;
+      const tempo = getTempoAtTick(tick, tempoMap);
+      const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
+      const trackerExtensionSeconds = TRACKER_EXTENSION / ticksPerSecond;
+      // This is needed to handle expressions that cross tempo changes
+      const msgTime = getMillisecondsAtTick(tick);
 
       const holeType = getHoleType({ m: midiNumber }, rollType);
+
+      // This is only applied if we're at the end of a fast cresc or decresc
+      let applyTrackerExtension = false;
 
       if (holeType === "note") {
         // Only apply adjustment (if at all) on the external (played)
@@ -187,12 +244,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         if (velocity === 0 && !["sf_on", "sf_off"].includes(ctrlFunc)) {
           return;
         }
-        const panVelocity = getVelocityAtTime(
-          msgTime,
-          expState,
-          expressionParameters,
-        );
-        const trackerExtensionSeconds = TRACKER_EXTENSION / ticksPerSecond;
+        const panVelocity = getVelocityAtTime(msgTime, expState, expParams);
         if (ctrlFunc === "mf_on" && velocity > 0) {
           expState.mf_start = msgTime;
         } else if (ctrlFunc === "mf_off" && velocity > 0) {
@@ -208,6 +260,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
             expState.fast_cresc_start = msgTime;
             expState.fast_cresc_stop = null;
           } else {
+            applyTrackerExtension = true;
             expState.fast_cresc_stop =
               msgTime + trackerExtensionSeconds * 1000.0;
           }
@@ -216,14 +269,20 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
             expState.fast_decresc_start = msgTime;
             expState.fast_decresc_stop = null;
           } else {
+            applyTrackerExtension = true;
             expState.fast_decresc_stop =
               msgTime + trackerExtensionSeconds * 1000.0;
           }
         }
-        expState.tick = tick;
+
+        let expressionTick = tick;
+
+        if (applyTrackerExtension === true) expressionTick += TRACKER_EXTENSION;
+
+        expState.tick = expressionTick;
         expState.time = msgTime;
         expState.velocity = panVelocity;
-        expressionCurve.push([tick, panVelocity]);
+        expressionCurve.push([expressionTick, panVelocity, msgTime]);
       }
     });
     return expressionCurve;
