@@ -294,7 +294,8 @@
 
     pedalingMap = buildPedalingMap(musicTracks);
     notesMap = buildNotesMap(musicTracks);
-    $noteVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer);
+    // buildNoteVelocitiesMap needs a full tempoMap for tracker width emulation
+    $noteVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer, tempoMap);
 
     // This is a tiny bit hacky (in the sense that it's using an undocumented
     //  api), but it's a simple way to ensure that only one midiEventHandler
