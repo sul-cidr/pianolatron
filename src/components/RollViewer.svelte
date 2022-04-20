@@ -186,6 +186,12 @@
       }
     };
 
+    // XXX Drawing these can freeze up the roll viewer for quite a while on
+    // long rolls (e.g., hm523dq5554) though they don't seem to cause the same
+    // lag problems when being scrolled as the hole highlights do on some
+    // systems. Even so, it's worth trying to segment them and only display
+    // the portions that are visible in the view window, as is done with the
+    // hole highlights.
     const drawGuidesAndCurve = (guides, expCurve, g, svg, transformation) => {
       Object.values(guides).forEach((value) => {
         const guideLine = document.createElementNS(
