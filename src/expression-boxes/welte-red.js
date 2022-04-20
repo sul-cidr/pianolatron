@@ -16,13 +16,6 @@ import {
 import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
 
-const TRACKERBAR_DIAMETER = 16.7; // in ticks (px), try AVG_HOLE_WIDTH instead?
-const PUNCH_EXTENSION_FRACTION = 0.75;
-const TRACKER_EXTENSION = parseInt(
-  TRACKERBAR_DIAMETER * PUNCH_EXTENSION_FRACTION,
-  10,
-);
-
 const DEFAULT_TEMPO = 60;
 
 const getKeyByValue = (object, value) => {
@@ -54,6 +47,9 @@ const getExpressionParams = (rollType) => {
       slow_decay_rate: 2380, // Probably this is 1 velocity step in 2.38s
       fastC_decay_rate: 300,
       fastD_decay_rate: 400,
+      trackerbar_diameter: 16.7, // in ticks (px = 1/300 in)
+      punch_extension_fraction: 0.75,
+      accelFtPerMin2: 0.3147,
     };
     expParams.slow_step =
       (expParams.welte_mf - expParams.welte_p) / expParams.slow_decay_rate;
@@ -61,6 +57,10 @@ const getExpressionParams = (rollType) => {
       (expParams.welte_mf - expParams.welte_p) / expParams.fastC_decay_rate;
     expParams.fastD_step =
       -(expParams.welte_f - expParams.welte_p) / expParams.fastD_decay_rate;
+    expParams.tracker_extension = parseInt(
+      expParams.trackerbar_diameter * expParams.punch_extension_fraction,
+      10,
+    );
   }
   return expParams;
 };
@@ -223,7 +223,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
     panMsgs.forEach(({ noteNumber: midiNumber, velocity, tick }) => {
       const tempo = getTempoAtTick(tick, tempoMap);
       const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
-      const trackerExtensionSeconds = TRACKER_EXTENSION / ticksPerSecond;
+
       // This is needed to handle expressions that cross tempo changes
       const msgTime = getMillisecondsAtTick(tick);
 
@@ -250,7 +250,8 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
           return;
         }
         const panVelocity = getVelocityAtTime(msgTime, expState, expParams);
-        const trackerExtensionSeconds = TRACKER_EXTENSION / ticksPerSecond;
+        const trackerExtensionSeconds =
+          expParams.tracker_extension / ticksPerSecond;
         if (ctrlFunc === "mf_on" && velocity > 0) {
           expState.mf_start = msgTime;
         } else if (ctrlFunc === "mf_off" && velocity > 0) {
@@ -283,7 +284,8 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
         let expressionTick = tick;
 
-        if (applyTrackerExtension === true) expressionTick += TRACKER_EXTENSION;
+        if (applyTrackerExtension === true)
+          expressionTick += expParams.tracker_extension;
 
         expState.tick = expressionTick;
         expState.time = msgTime;
@@ -305,14 +307,38 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
   return _expressionMap;
 };
 
-const buildTempoMap = (metadataTrack) =>
-  metadataTrack
-    .filter((event) => event.name === "Set Tempo")
-    .reduce((_tempoMap, { tick, data }) => {
-      if (!_tempoMap.map(([, _data]) => _data).includes(data))
-        _tempoMap.push([tick, data]);
-      return _tempoMap;
-    }, []);
+// Note MIDI files usually don't include simulated acceleration via tempo
+// events, but theoretically they can. Use those events, or just compute
+// everything manually here? Going with the latter for now.
+const buildTempoMap = () => {
+  const _tempoMap = [];
+  const midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
+
+  const expParams = getExpressionParams(get(rollMetadata).ROLL_TYPE);
+
+  const lengthPPI = 300; // Could get scan PPI from MIDI/metadata
+  const ticksPerFt = lengthPPI * 12.0;
+  let tempo = DEFAULT_TEMPO; // This probably should be an exp param, too
+  const minuteDiv = 0.1; // how often the tempo is updated, could be param
+  const startSpeed = (midiTPQ * tempo) / ticksPerFt;
+  let speed = startSpeed;
+  let minute = 0.0;
+  let tick = 0;
+
+  // The acceleration emulation *could* begin at the very start of the roll
+  // (well above the first hole), but let's just assume that the roll reaches
+  // the default tempo right at the first hole.
+  _tempoMap.push([tick, tempo]);
+  while (tick < get(rollMetadata).IMAGE_LENGTH - get(rollMetadata).FIRST_HOLE) {
+    minute += minuteDiv;
+    tick += parseInt(speed * minuteDiv * ticksPerFt, 10);
+    speed = startSpeed + minute * expParams.accelFtPerMin2;
+    tempo = (speed * ticksPerFt) / midiTPQ;
+    _tempoMap.push([tick, tempo]);
+  }
+
+  return _tempoMap;
+};
 
 /*
  * Builds a map of pedal events, where each key is the tick of the event, and
@@ -395,22 +421,25 @@ const buildMidiEventHandler = (
 ) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const { ctrlMap } = rollProfile[rollType];
+  const expParams = getExpressionParams(rollType);
 
   const DEFAULT_NOTE_VELOCITY = 50.0;
   const midiTPQ = midiSamplePlayer.getDivision().division;
 
   return ({ name: msgType, noteNumber: midiNumber, velocity, data, tick }) => {
+    const tempo = getTempoAtTick(tick, tempoMap);
+    // Note MIDI files won't have embedded tempo events. Need to check tempoMap
+    // which should include tempo events to emulate roll acceleration.
+    // XXX Maybe include a setting to toggle using "artificial" accel events?
+    midiSamplePlayer.setTempo(tempo * get(tempoCoefficient));
     if (msgType === "Note on") {
       const holeType = getHoleType({ m: midiNumber }, rollType);
       if (holeType === "note") {
-        const tempo = getTempoAtTick(tick, tempoMap);
-
-        // const thisTime = getMillisecondsAtTick(tick);
-
         if (velocity === 0) {
           const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
           // At 591 TPQ & 60bpm, this is ~.02s, drops slowly due to accel
-          const trackerExtensionSeconds = TRACKER_EXTENSION / ticksPerSecond;
+          const trackerExtensionSeconds =
+            expParams.tracker_extension / ticksPerSecond;
           stopNote(midiNumber, `+${trackerExtensionSeconds}`);
           activeNotes.delete(midiNumber);
         } else {
