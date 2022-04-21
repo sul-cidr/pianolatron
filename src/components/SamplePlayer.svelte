@@ -28,21 +28,13 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
-    noteVelocitiesMap,
+    expressionBox,
     expressionizer,
   } from "../stores";
+  import expressionBoxes from "../expression-boxes";
   import WebMidi from "./WebMidi.svelte";
 
   let webMidi;
-
-  import expressionBoxes from "../expression-boxes";
-
-  let tempoMap;
-  let pedalingMap;
-  let notesMap;
-
-  const SOFT_PEDAL = 67;
-  const SUSTAIN_PEDAL = 64;
 
   const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
@@ -72,6 +64,7 @@
   const pianoReady = piano.load();
 
   const getTempoAtTick = (tick) => {
+    const { tempoMap } = $expressionBox;
     if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
     let tempo;
     let i = 0;
@@ -105,14 +98,15 @@
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
+    const { pedalingMap, notesMap, midiSoftOn, midiSustOn } = $expressionBox;
     if (midiSamplePlayer.tracks[0])
       midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
     midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
 
     if (pedalingMap && $rollPedalingOnOff) {
       const pedals = pedalingMap.search($currentTick, $currentTick);
-      sustainOnOff.set(pedals.includes(SUSTAIN_PEDAL));
-      softOnOff.set(pedals.includes(SOFT_PEDAL));
+      sustainOnOff.set(pedals.includes(midiSustOn));
+      softOnOff.set(pedals.includes(midiSoftOn));
     } else {
       sustainOnOff.set(false);
       softOnOff.set(false);
@@ -263,7 +257,7 @@
           String.fromCodePoint(parseInt(num, 16)),
         );
 
-    const [metadataTrack, ...musicTracks] = midiSamplePlayer.events;
+    const [metadataTrack] = midiSamplePlayer.events;
 
     rollMetadata.set(
       Object.fromEntries(
@@ -281,32 +275,13 @@
     const expressionBoxType = ["FROM_MIDI", "NONE"].includes($expressionizer)
       ? "expressiveMidi"
       : $expressionizer;
-    const expressionBox = expressionBoxes[expressionBoxType];
-    const {
-      buildTempoMap,
-      buildPedalingMap,
-      buildNotesMap,
-      buildNoteVelocitiesMap,
-      buildMidiEventHandler,
-    } = expressionBox;
-
-    tempoMap = buildTempoMap(metadataTrack);
-
-    pedalingMap = buildPedalingMap(musicTracks);
-    notesMap = buildNotesMap(musicTracks);
-    $noteVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer);
+    $expressionBox = new expressionBoxes[expressionBoxType](midiSamplePlayer);
 
     // This is a tiny bit hacky (in the sense that it's using an undocumented
     //  api), but it's a simple way to ensure that only one midiEventHandler
     //  is registered.
     midiSamplePlayer.eventListeners.midiEvent = [
-      buildMidiEventHandler(
-        startNote,
-        stopNote,
-        $noteVelocitiesMap,
-        midiSamplePlayer,
-        tempoMap,
-      ),
+      $expressionBox.buildMidiEventHandler(startNote, stopNote),
     ];
   });
 
