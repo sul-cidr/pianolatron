@@ -123,7 +123,7 @@ export const annotateHoleData = (
   holeData,
   { ROLL_TYPE: rollType, IMAGE_LENGTH: imageLength, FIRST_HOLE: firstHole },
   scrollDownwards,
-  noteVelocitiesMap,
+  { noteVelocitiesMap },
 ) => {
   const [minNoteVelocity, maxNoteVelocity] = Object.values(
     noteVelocitiesMap,
