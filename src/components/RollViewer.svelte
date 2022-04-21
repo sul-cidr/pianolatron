@@ -1,3 +1,5 @@
+<svelte:options accessors />
+
 <style lang="scss">
   // See styles/hole-highlighting.scss for all the <mark/> and <rect/> styling
 
@@ -104,6 +106,7 @@
   export let holeData;
   export let holesByTickInterval;
   export let skipToTick;
+  export let rollImageReady;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -113,7 +116,6 @@
   let openSeadragon;
   let viewport;
   let firstHolePx;
-  let rollImageReady;
   let marks = [];
   let hoveredMark;
   let showControls;

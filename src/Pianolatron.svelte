@@ -88,7 +88,9 @@
 
   let firstLoad = true;
   let appReady = false;
-  let appWaiting = true;
+  let appWaiting = false;
+  let appLoaded = false;
+  let rollImageReady = false;
   let mididataReady;
   let metadataReady;
   let currentRoll;
@@ -177,6 +179,7 @@
   };
 
   const loadRoll = (roll) => {
+    appWaiting = true;
     mididataReady = fetch(`./midi/${roll.druid}.mid`)
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
@@ -213,6 +216,8 @@
         appReady = true;
         appWaiting = false;
         firstLoad = false;
+        document.querySelector("#loading span").textContent =
+          "Loading roll image...";
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -247,7 +252,8 @@
   };
 
   onMount(async () => {
-    document.getElementById("loading").remove();
+    document.querySelector("#loading span").textContent =
+      "Loading resources...";
     ({
       midiSamplePlayer,
       pianoReady,
@@ -268,6 +274,16 @@
   );
   $: if (rollViewer)
     ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
+  $: if (rollImageReady) {
+    document.querySelector("#loading span").textContent = "Loading complete!";
+    document
+      .getElementById("loading")
+      .addEventListener("transitionend", () =>
+        document.getElementById("loading").remove(),
+      );
+    document.getElementById("loading").classList.add("fade-out");
+    appLoaded = true;
+  }
 </script>
 
 <div id="app">
@@ -288,6 +304,7 @@
       {#if appReady}
         <RollViewer
           bind:this={rollViewer}
+          bind:rollImageReady
           imageUrl={currentRoll.image_url}
           {holeData}
           {holesByTickInterval}
@@ -311,7 +328,7 @@
   {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
-  <LoadingSpinner showLoadingSpinner={appWaiting} />
+  <LoadingSpinner showLoadingSpinner={appLoaded && appWaiting} />
 </div>
 <SamplePlayer
   bind:this={samplePlayer}
