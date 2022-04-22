@@ -1,7 +1,7 @@
 import ExpressiveMidiExpressionizer from "./expressive-midi";
-import * as welteRed from "./welte-red";
+import WelteRedExpressionizer from "./welte-red";
 
 export default {
   expressiveMidi: ExpressiveMidiExpressionizer,
-  welteRed,
+  welteRed: WelteRedExpressionizer,
 };
