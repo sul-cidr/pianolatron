@@ -102,5 +102,6 @@
     <option value="NONE">None?</option>
     <option value="FROM_MIDI">From Expressionized MIDI file</option>
     <option value="welteRed">welte-red</option>
+    <option value="standard">88-note</option>
   </select>
 </div>

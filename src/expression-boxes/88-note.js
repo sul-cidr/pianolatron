@@ -4,7 +4,6 @@ import { rollMetadata } from "../stores";
 import {
   activeNotes,
   rollPedalingOnOff,
-  softOnOff,
   sustainOnOff,
   tempoCoefficient,
   useMidiTempoEventsOnOff,
@@ -14,13 +13,12 @@ import {
   expressionParameters,
 } from "../stores";
 import { rollProfile } from "../config/roll-config";
-import { clamp, getHoleType } from "../lib/utils";
+import { getHoleType } from "../lib/utils";
 
 const DEFAULT_TEMPO = 60;
 
-const getKeyByValue = (object, value) => {
+const getKeyByValue = (object, value) =>
   Object.keys(object).find((key) => object[key] === value);
-};
 
 const getTempoAtTick = (tick, tempoMap) => {
   if (!tempoMap || !get(useMidiTempoEventsOnOff)) return DEFAULT_TEMPO;
@@ -36,27 +34,15 @@ const getTempoAtTick = (tick, tempoMap) => {
 
 const getExpressionParams = (rollType) => {
   let expParams = null;
-  if (rollType === "welte-red") {
+  if (rollType === "88-note") {
     expParams = {
-      welte_p: 35.0,
-      welte_mf: 60.0,
-      welte_f: 90.0,
-      welte_loud: 75.0,
-      left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
-      cresc_rate: 1.0,
-      slow_decay_rate: 2380, // Probably this is 1 velocity step in 2.38s
-      fastC_decay_rate: 300,
-      fastD_decay_rate: 400,
+      default_mf: 75,
+      accent_f: 95, // snakebite velocity
+      snakebite_extension: 200, // extension (in ms) before and after snakebite
       trackerbar_diameter: 16.7, // in ticks (px = 1/300 in)
       punch_extension_fraction: 0.75,
-      accelFtPerMin2: 0.3147,
+      accelFtPerMin2: 0.2,
     };
-    expParams.slow_step =
-      (expParams.welte_mf - expParams.welte_p) / expParams.slow_decay_rate;
-    expParams.fastC_step =
-      (expParams.welte_mf - expParams.welte_p) / expParams.fastC_decay_rate;
-    expParams.fastD_step =
-      -(expParams.welte_f - expParams.welte_p) / expParams.fastD_decay_rate;
     expParams.tracker_extension = parseInt(
       expParams.trackerbar_diameter * expParams.punch_extension_fraction,
       10,
@@ -67,115 +53,54 @@ const getExpressionParams = (rollType) => {
 
 const getExpressionStateBox = (rollType) => {
   let expState = null;
-  if (rollType === "welte-red") {
+  if (rollType === "88-note") {
     expState = {
-      velocity: 0.0, // Velocity at last cresc/decresc event
-      time: 0.0, // Time (in ms) at last cresc/decresc event
-      mf_start: null,
-      slow_cresc_start: null,
-      slow_decresc_start: null,
-      fast_cresc_start: null,
-      fast_cresc_stop: null, // Can be in the future due to tracker extension
-      fast_decresc_start: null,
-      fast_decresc_stop: null,
-      tick: 0,
+      velocity: 0, // Velocity at last expression event
+      time: 0.0, // Time (in ms) at last expression event
+      snakebite_start: null,
+      snakebite_stop: null, // Can be in the future due to tracker extension
     };
   }
   return expState;
 };
 
 const getVelocityAtTime = (time, expState, expParams) => {
-  // To begin, the new velocity is set to the previous level
-  let newVelocity = expState.velocity;
-  const msFromLastDynamic = time - expState.time;
+  // XXX This probably can be simplified -- really need to check all the nulls?
+  const isSnakebiteOn =
+    (expState.snakebite_start !== null && expState.snakebite_stop === null) ||
+    (expState.snakebite_start !== null &&
+      expState.snakebite_stop !== null &&
+      expState.snakebite_stop > time);
 
-  // Active cresc/descresc controls: slow cresc, fast cresc/decresc
-  // Slow descresc is on by default if none of slow cresc, fast cresc/decresc
-  // is enabled
-  // MF hook on prevents velocity from crossing welte_mf from soft or loud side
-
-  // Determine fast crescendo and decrescendo states at this time, handling
-  // cases in which the fast change is still happening (the hole hasn't ended
-  // yet) or we know when the fast change ends, but the current time is before
-  // that (this can occur due to the tracker width emulation extending the
-  // effective duration of the hole beyond its physical length).
-  const isFastCrescOn =
-    (expState.fast_cresc_start !== null && expState.fast_cresc_stop === null) ||
-    (expState.fast_cresc_start !== null &&
-      expState.fast_cresc_stop !== null &&
-      expState.fast_cresc_stop > time);
-  const isFastDecrescOn =
-    (expState.fast_decresc_start !== null &&
-      expState.fast_decresc_stop === null) ||
-    (expState.fast_decresc_start !== null &&
-      expState.fast_decresc_stop !== null &&
-      expState.fast_decresc_stop > time);
-
-  // Default state (no active controls: only slow descresc)
-  if (
-    expState.slow_cresc_start === null &&
-    !isFastCrescOn &&
-    !isFastDecrescOn
-  ) {
-    newVelocity -= msFromLastDynamic * expParams.slow_step;
-  } else {
-    // Otherwise new target velocity will be a combination of the
-    // active control effects
-    newVelocity +=
-      expState.slow_cresc_start !== null
-        ? msFromLastDynamic * expParams.slow_step
-        : 0;
-    newVelocity += isFastCrescOn ? msFromLastDynamic * expParams.fastC_step : 0;
-    newVelocity += isFastDecrescOn
-      ? msFromLastDynamic * expParams.fastD_step
-      : 0;
-  }
-
-  // Handle the MF hook
-  const velocityDelta = newVelocity - expState.velocity;
-  if (expState.mf_start !== null) {
-    // If the previous velocity was above MF, keep it there
-    if (expState.velocity > expParams.welte_mf) {
-      newVelocity =
-        velocityDelta < 0
-          ? Math.max(expParams.welte_mf + 0.001, newVelocity)
-          : Math.min(expParams.welte_f, newVelocity);
-      // If the previous velcoity was below MF, keep it there
-    } else if (expState.velocity < expParams.welte_mf) {
-      newVelocity =
-        velocityDelta > 0
-          ? Math.min(expParams.welte_mf - 0.001, newVelocity)
-          : Math.max(expParams.welte_p, newVelocity);
-    }
-  } else if (
-    expState.slow_cresc_start !== null &&
-    !isFastCrescOn &&
-    expState.velocity < expParams.welte_loud
-  ) {
-    // If no MF hook and only slow crescendo is on, velocity should never
-    // exceed welte_loud (which is lower than welte_f)
-    newVelocity = Math.min(newVelocity, expParams.welte_loud - 0.001);
-  }
-
-  // Make sure the velocity always stays between welte_p and welte_f
-  newVelocity = clamp(newVelocity, expParams.welte_p, expParams.welte_f);
-
-  return newVelocity;
+  return isSnakebiteOn ? expParams.accent_f : expParams.default_mf;
 };
 
 const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const midiTPQ = midiSamplePlayer.getDivision().division;
 
-  const getMillisecondsAtTick = (tick) => {
-    if (!tempoMap || !get(useMidiTempoEventsOnOff))
-      return (parseFloat(tick) / midiTPQ) * 1000;
+  const convertTicksAndTime = (input, target) => {
+    let wanted = target;
+    if (wanted == null) wanted = "time";
+
+    if (!tempoMap || !get(useMidiTempoEventsOnOff)) {
+      if (wanted === "time") {
+        return (parseFloat(input) / midiTPQ) * 1000;
+      }
+      if (wanted === "tick") {
+        return parseInt((input * midiTPQ) / 1000, 10);
+      }
+    }
+
     let lastTime = 0.0;
     let lastTick = 0;
     let lastTempo = DEFAULT_TEMPO;
     let tempo;
     let i = 0;
-    while (tempoMap[i][0] <= tick) {
+    while (
+      (wanted === "time" && lastTick <= input) ||
+      (wanted === "tick" && lastTime <= input)
+    ) {
       [, tempo] = tempoMap[i];
       if (i !== 0) {
         const lastTicksPerSecond = (parseFloat(lastTempo) * midiTPQ) / 60.0;
@@ -188,11 +113,25 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
       i += 1;
       if (i >= tempoMap.length) break;
     }
+
     const lastTicksPerSecond = (parseFloat(lastTempo) * midiTPQ) / 60.0;
-    const ticksAtLastTempo = parseFloat(tick - lastTick);
-    const timeAtLastTempo = (ticksAtLastTempo / lastTicksPerSecond) * 1000;
-    lastTime += timeAtLastTempo;
-    return lastTime;
+
+    if (wanted === "tick") {
+      const timeAtLastTempo = input - lastTime;
+      const ticksAtLastTempo = parseInt(
+        (timeAtLastTempo * lastTicksPerSecond) / 1000,
+        10,
+      );
+      lastTick += ticksAtLastTempo;
+      return lastTick;
+    }
+    if (wanted === "time") {
+      const ticksAtLastTempo = parseFloat(input - lastTick);
+      const timeAtLastTempo = (ticksAtLastTempo / lastTicksPerSecond) * 1000;
+      lastTime += timeAtLastTempo;
+      return lastTime;
+    }
+    return null;
   };
 
   const [, ...musicTracks] = midiSamplePlayer.events;
@@ -203,12 +142,17 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   const _expressionMap = {};
 
-  const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs, adjust) => {
+  const buildPanExpMap = (
+    noteTrackMsgs,
+    ctrlTrackMsgs,
+    adjust,
+    bassOrTreble,
+  ) => {
     const expState = getExpressionStateBox(rollType);
 
-    const expressionCurve = [];
+    expState.velocity = expParams.default_mf;
 
-    expState.velocity = expParams.welte_p;
+    const expressionCurve = [];
 
     const panMsgs = ctrlTrackMsgs
       .filter(({ name }) => name === "Note on")
@@ -224,12 +168,9 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
       const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
 
       // This is needed to handle expressions that cross tempo changes
-      const msgTime = getMillisecondsAtTick(tick);
+      const msgTime = convertTicksAndTime(tick);
 
       const holeType = getHoleType({ m: midiNumber }, rollType);
-
-      // This is only applied if we're at the end of a fast cresc or decresc
-      let applyTrackerExtension = false;
 
       if (holeType === "note") {
         // Only apply adjustment (if at all) on the external (played)
@@ -245,63 +186,97 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         }
       } else if (holeType === "control") {
         const ctrlFunc = rollProfile[rollType].ctrlMap[midiNumber];
-        if (velocity === 0 && !["sf_on", "sf_off"].includes(ctrlFunc)) {
-          return;
-        }
+        if (ctrlFunc == null) return; // Usually these are damage holes
+
         const panVelocity = getVelocityAtTime(msgTime, expState, expParams);
         const trackerExtensionSeconds =
           expParams.tracker_extension / ticksPerSecond;
-        if (ctrlFunc === "mf_on" && velocity > 0) {
-          expState.mf_start = msgTime;
-        } else if (ctrlFunc === "mf_off" && velocity > 0) {
-          expState.mf_start = null;
-        } else if (ctrlFunc === "cresc_on" && velocity > 0) {
-          expState.slow_cresc_start = msgTime;
-          expState.slow_decresc_start = null;
-        } else if (ctrlFunc === "cresc_off" && velocity > 0) {
-          expState.slow_cresc_start = null;
-          expState.slow_decresc_start = msgTime;
-        } else if (ctrlFunc === "sf_on") {
+        if (ctrlFunc === "acc") {
+          // Snakebite accents tend to be doubled -- do anything about this?
           if (velocity > 0) {
-            expState.fast_cresc_start = msgTime;
-            expState.fast_cresc_stop = null;
+            expState.snakebite_start = Math.max(
+              0,
+              msgTime - expParams.snakebite_extension,
+            );
+            // Snakebite accents can affect note holes that begin *before* they
+            // do (ugh) so need to adjust the expressionMap values for the
+            // notes in that range, on this side of the keyboard only
+            const snakebiteExtensionStartTick = convertTicksAndTime(
+              expState.snakebite_start,
+              "tick",
+            );
+            const snakebiteExtensionEndTick = convertTicksAndTime(
+              msgTime,
+              "tick",
+            );
+            Object.keys(_expressionMap)
+              .filter(
+                (expTick) =>
+                  expTick >= snakebiteExtensionStartTick &&
+                  expTick <= snakebiteExtensionEndTick,
+              )
+              .forEach((noteTick) =>
+                Object.keys(_expressionMap[noteTick]).forEach((noteNumber) => {
+                  if (
+                    (noteNumber < rollProfile[rollType].trebleNotesBegin &&
+                      bassOrTreble === "bass") ||
+                    (noteNumber >= rollProfile[rollType].trebleNotesBegin &&
+                      bassOrTreble === "treble")
+                  ) {
+                    _expressionMap[noteTick][noteNumber] = expParams.accent_f;
+                  }
+                }),
+              );
+            expressionCurve.push([
+              snakebiteExtensionStartTick,
+              expParams.default_mf,
+              expState.snakebite_start,
+            ]);
+            expressionCurve.push([
+              snakebiteExtensionStartTick,
+              expParams.accent_f,
+              expState.snakebite_start,
+            ]);
+            expState.snakebite_stop = null;
           } else {
-            applyTrackerExtension = true;
-            expState.fast_cresc_stop =
-              msgTime + trackerExtensionSeconds * 1000.0;
-          }
-        } else if (ctrlFunc === "sf_off") {
-          if (velocity > 0) {
-            expState.fast_decresc_start = msgTime;
-            expState.fast_decresc_stop = null;
-          } else {
-            applyTrackerExtension = true;
-            expState.fast_decresc_stop =
-              msgTime + trackerExtensionSeconds * 1000.0;
+            expState.snakebite_stop =
+              msgTime +
+              trackerExtensionSeconds * 1000.0 +
+              expParams.snakebite_extension;
+
+            const snakebiteExtensionEndTick = convertTicksAndTime(
+              expState.snakebite_stop,
+              "tick",
+            );
+
+            expressionCurve.push([
+              snakebiteExtensionEndTick + expParams.tracker_extension,
+              expParams.accent_f,
+              msgTime,
+            ]);
+
+            expressionCurve.push([
+              snakebiteExtensionEndTick + expParams.tracker_extension,
+              expParams.default_mf,
+              msgTime,
+            ]);
           }
         }
 
-        let expressionTick = tick;
-
-        if (applyTrackerExtension === true)
-          expressionTick += expParams.tracker_extension;
-
-        expState.tick = expressionTick;
         expState.time = msgTime;
         expState.velocity = panVelocity;
-        expressionCurve.push([expressionTick, panVelocity, msgTime]);
       }
     });
     return expressionCurve;
   };
 
   // bass notes and control holes
-  bassExpCurve.set(
-    buildPanExpMap(musicTracks[0], musicTracks[2], expParams.left_adjust),
-  );
+  bassExpCurve.set(buildPanExpMap(musicTracks[0], musicTracks[2], 0, "bass"));
 
   // treble notes and control holes
-  trebleExpCurve.set(buildPanExpMap(musicTracks[1], musicTracks[3], 0));
+  trebleExpCurve.set(
+    buildPanExpMap(musicTracks[1], musicTracks[3], 0, "treble"),
+  );
 
   return _expressionMap;
 };
@@ -351,33 +326,30 @@ const buildPedalingMap = (musicTracks) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const { ctrlMap } = rollProfile[rollType];
 
-  const SOFT_PEDAL_ON = getKeyByValue(ctrlMap, "soft_on");
-  const SOFT_PEDAL_OFF = getKeyByValue(ctrlMap, "soft_off");
-  const SUSTAIN_PEDAL_ON = getKeyByValue(ctrlMap, "sust_on");
-  const SUSTAIN_PEDAL_OFF = getKeyByValue(ctrlMap, "sust_off");
+  const SUSTAIN_PEDAL = getKeyByValue(ctrlMap, "sust");
   const _pedalingMap = new IntervalTree();
 
   // For 65-note rolls, or any weird MIDI input file with only 1 note track
   if (musicTracks.length === 1) return _pedalingMap;
 
-  const registerPedalEvents = (track, pedalOn, pedalOff) => {
+  const registerPedalEvents = (track, pedalOn) => {
     let tickOn = false;
     track
-      // Only want beginning of note holes for lock & cancel type expression
-      // mechanisms (works for Welte red and Licensee, not 88 or Welte green)
-      .filter(({ name, velocity }) => name === "Note on" && velocity === 1)
-      .forEach(({ noteNumber, tick }) => {
-        if (noteNumber === pedalOff) {
-          if (tickOn) _pedalingMap.insert(tickOn, tick, pedalOn);
-          tickOn = false;
-        } else if (noteNumber === pedalOn) {
-          if (!tickOn) tickOn = tick;
+      // Pedal is on as long as the punch is present
+      .filter(({ name }) => name === "Note on")
+      .forEach(({ noteNumber, tick, velocity }) => {
+        if (noteNumber === pedalOn) {
+          if (velocity === 0) {
+            if (tickOn) _pedalingMap.insert(tickOn, tick, pedalOn);
+            tickOn = false;
+          } else if (velocity === 1) {
+            if (!tickOn) tickOn = tick;
+          }
         }
       });
   };
 
-  registerPedalEvents(musicTracks[2], SOFT_PEDAL_ON, SOFT_PEDAL_OFF);
-  registerPedalEvents(musicTracks[3], SUSTAIN_PEDAL_ON, SUSTAIN_PEDAL_OFF);
+  registerPedalEvents(musicTracks[2], SUSTAIN_PEDAL);
 
   return _pedalingMap;
 };
@@ -454,19 +426,8 @@ const buildMidiEventHandler = (
           activeNotes.add(midiNumber);
         }
       } else if (holeType === "pedal" && get(rollPedalingOnOff)) {
-        if (velocity === 0) {
-          // Length of pedal control holes doesn't matter for red Welte
-          // (but it does for green Welte...)
-          return;
-        }
-        if (ctrlMap[midiNumber] === "sust_on") {
-          sustainOnOff.set(true);
-        } else if (ctrlMap[midiNumber] === "sust_off") {
-          sustainOnOff.set(false);
-        } else if (ctrlMap[midiNumber] === "soft_on") {
-          softOnOff.set(true);
-        } else if (ctrlMap[midiNumber] === "soft_off") {
-          softOnOff.set(false);
+        if (ctrlMap[midiNumber] === "sust") {
+          sustainOnOff.set(!!velocity);
         }
       }
     } else if (msgType === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
