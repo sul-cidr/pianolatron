@@ -204,8 +204,13 @@
         );
         guideLine.setAttribute("x1", value);
         guideLine.setAttribute("x2", value);
-        guideLine.setAttribute("y1", 0);
-        guideLine.setAttribute("y2", imageLength - firstHolePx);
+        if ($scrollDownwards) {
+          guideLine.setAttribute("y1", 0);
+          guideLine.setAttribute("y2", imageLength - firstHolePx);
+        } else {
+          guideLine.setAttribute("y1", firstHolePx);
+          guideLine.setAttribute("y2", 0);
+        }
         guideLine.setAttribute("transform", transformation);
         g.appendChild(guideLine);
       });
@@ -246,17 +251,23 @@
     const horizOffset = Math.round(imageWidth / 2);
     const curveRegionWidth = Math.round(imageWidth / 2);
     const horizScale = Math.round(curveRegionWidth / 127);
-    const vertOffset = scrollDownwards
-      ? firstHolePx
-      : imageLength - firstHolePx;
-    const vertScale = scrollDownwards ? 1 : -1;
+    const vertOffset = $scrollDownwards ? firstHolePx : firstHolePx;
+    const vertScale = $scrollDownwards ? 1 : -1;
     const expParams = $expressionParameters;
     if (expParams === null) return;
-    const guides = {
-      p: parseInt(expParams.welte_p, 10),
-      mf: parseInt(expParams.welte_mf, 10),
-      f: parseInt(expParams.welte_f, 10),
-    };
+    let guides = {};
+    if ($rollMetadata.ROLL_TYPE === "welte-red") {
+      guides = {
+        p: parseInt(expParams.welte_p, 10),
+        mf: parseInt(expParams.welte_mf, 10),
+        f: parseInt(expParams.welte_f, 10),
+      };
+    } else if ($rollMetadata.ROLL_TYPE === "88-note") {
+      guides = {
+        mf: 75,
+        f: 95,
+      };
+    }
     drawGuidesAndCurve(
       guides,
       bassExpC,
