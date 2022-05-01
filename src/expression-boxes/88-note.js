@@ -142,49 +142,23 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   const _expressionMap = {};
 
-  const buildPanExpMap = (
-    noteTrackMsgs,
-    ctrlTrackMsgs,
-    adjust,
-    bassOrTreble,
-  ) => {
-    const expState = getExpressionStateBox(rollType);
-
-    expState.velocity = expParams.default_mf;
+  const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs) => {
+    const _panExpMap = new IntervalTree();
 
     const expressionCurve = [];
 
-    const panMsgs = ctrlTrackMsgs
+    const expState = getExpressionStateBox(rollType);
+    expState.velocity = expParams.default_mf;
+
+    // First build the velocity expression map from the control track only
+    ctrlTrackMsgs
       .filter(({ name }) => name === "Note on")
-      .concat(
-        noteTrackMsgs.filter(
-          ({ name, velocity }) => name === "Note on" && !!velocity,
-        ),
-      )
-      .sort((a, b) => (a.tick > b.tick ? 1 : -1));
+      .forEach(({ noteNumber: midiNumber, velocity, tick }) => {
+        const tempo = getTempoAtTick(tick, tempoMap);
+        const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
+        const msgTime = convertTicksAndTime(tick);
 
-    panMsgs.forEach(({ noteNumber: midiNumber, velocity, tick }) => {
-      const tempo = getTempoAtTick(tick, tempoMap);
-      const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
-
-      // This is needed to handle expressions that cross tempo changes
-      const msgTime = convertTicksAndTime(tick);
-
-      const holeType = getHoleType({ m: midiNumber }, rollType);
-
-      if (holeType === "note") {
-        // Only apply adjustment (if at all) on the external (played)
-        // velocities, not the interally stored/computed expressions
-        const noteVelocity =
-          getVelocityAtTime(msgTime, expState, expParams) + adjust;
-
-        if (tick in _expressionMap) {
-          _expressionMap[tick][midiNumber] = noteVelocity;
-        } else {
-          _expressionMap[tick] = {};
-          _expressionMap[tick][midiNumber] = noteVelocity;
-        }
-      } else if (holeType === "control") {
+        // We know these are all control holes
         const ctrlFunc = rollProfile[rollType].ctrlMap[midiNumber];
         if (ctrlFunc == null) return; // Usually these are damage holes
 
@@ -198,45 +172,20 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
               0,
               msgTime - expParams.snakebite_extension,
             );
-            // Snakebite accents can affect note holes that begin *before* they
-            // do (ugh) so need to adjust the expressionMap values for the
-            // notes in that range, on this side of the keyboard only
-            const snakebiteExtensionStartTick = convertTicksAndTime(
-              expState.snakebite_start,
-              "tick",
-            );
-            const snakebiteExtensionEndTick = convertTicksAndTime(
-              msgTime,
-              "tick",
-            );
-            Object.keys(_expressionMap)
-              .filter(
-                (expTick) =>
-                  expTick >= snakebiteExtensionStartTick &&
-                  expTick <= snakebiteExtensionEndTick,
-              )
-              .forEach((noteTick) =>
-                Object.keys(_expressionMap[noteTick]).forEach((noteNumber) => {
-                  if (
-                    (noteNumber < rollProfile[rollType].trebleNotesBegin &&
-                      bassOrTreble === "bass") ||
-                    (noteNumber >= rollProfile[rollType].trebleNotesBegin &&
-                      bassOrTreble === "treble")
-                  ) {
-                    _expressionMap[noteTick][noteNumber] = expParams.accent_f;
-                  }
-                }),
+
+            // Add an entry to the expression Interval Tree for the previous
+            // interval (when the velocity was lower)
+            if (
+              expState.snakebite_stop !== null &&
+              expState.snakebite_start > expState.snakebite_stop
+            ) {
+              _panExpMap.insert(
+                expState.snakebite_stop,
+                expState.snakebite_start,
+                panVelocity,
               );
-            expressionCurve.push([
-              snakebiteExtensionStartTick,
-              expParams.default_mf,
-              expState.snakebite_start,
-            ]);
-            expressionCurve.push([
-              snakebiteExtensionStartTick,
-              expParams.accent_f,
-              expState.snakebite_start,
-            ]);
+            }
+
             expState.snakebite_stop = null;
           } else {
             expState.snakebite_stop =
@@ -244,29 +193,66 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
               trackerExtensionSeconds * 1000.0 +
               expParams.snakebite_extension;
 
-            const snakebiteExtensionEndTick = convertTicksAndTime(
-              expState.snakebite_stop,
-              "tick",
-            );
-
-            expressionCurve.push([
-              snakebiteExtensionEndTick + expParams.tracker_extension,
-              expParams.accent_f,
-              msgTime,
-            ]);
-
-            expressionCurve.push([
-              snakebiteExtensionEndTick + expParams.tracker_extension,
-              expParams.default_mf,
-              msgTime,
-            ]);
+            if (expState.snakebite_start < expState.snakebite_stop) {
+              _panExpMap.insert(
+                expState.snakebite_start,
+                expState.snakebite_stop,
+                panVelocity,
+              );
+            }
           }
+          expState.time = msgTime;
+          expState.velocity = panVelocity;
+        }
+      });
+
+    // Then update the _expressionMap with velocities for the note events
+    noteTrackMsgs
+      .filter(({ name, velocity }) => name === "Note on" && !!velocity)
+      .forEach(({ noteNumber: midiNumber, tick }) => {
+        const msgTime = convertTicksAndTime(tick);
+
+        let noteVelocity = _panExpMap.search(msgTime, msgTime)[0];
+        if (noteVelocity == null) {
+          noteVelocity = expParams.default_mf;
         }
 
-        expState.time = msgTime;
-        expState.velocity = panVelocity;
+        if (tick in _expressionMap) {
+          _expressionMap[tick][midiNumber] = noteVelocity;
+        } else {
+          _expressionMap[tick] = {};
+          _expressionMap[tick][midiNumber] = noteVelocity;
+        }
+      });
+
+    // Build the expression curve, which uses ticks
+    let expVelocity = null;
+    const intervals = Array.from(_panExpMap.inOrder());
+    Object.values(intervals).forEach((interval) => {
+      const expStartTick = convertTicksAndTime(interval.low, "tick");
+      const expEndTick = convertTicksAndTime(interval.high, "tick");
+      const thisVelocity = interval.data;
+
+      // Add a segment of the curve at the default velocity from the start of
+      // the piece to the first velocity control event.
+      // XXX Also should do this from the final velocity control event to the
+      // end of the piece (final tick)
+      if (expVelocity === null) {
+        expressionCurve.push([0, expParams.default_mf, 0]);
+        expressionCurve.push([
+          expStartTick,
+          expParams.default_mf,
+          interval.low,
+        ]);
+        expVelocity = expParams.default_mf;
       }
+      if (thisVelocity !== expVelocity) {
+        expressionCurve.push([expStartTick, thisVelocity, interval.low]);
+      }
+      expressionCurve.push([expEndTick, thisVelocity, interval.high]);
+      expVelocity = thisVelocity;
     });
+
     return expressionCurve;
   };
 
