@@ -78,7 +78,6 @@ const getExpressionStateBox = (rollType) => {
       fast_cresc_stop: null, // Can be in the future due to tracker extension
       fast_decresc_start: null,
       fast_decresc_stop: null,
-      tick: 0,
     };
   }
   return expState;
@@ -167,15 +166,28 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const midiTPQ = midiSamplePlayer.getDivision().division;
 
-  const getMillisecondsAtTick = (tick) => {
-    if (!tempoMap || !get(useMidiTempoEventsOnOff))
-      return (parseFloat(tick) / midiTPQ) * 1000;
+  const convertTicksAndTime = (input, target) => {
+    let wanted = target;
+    if (wanted == null) wanted = "time";
+
+    if (!tempoMap || !get(useMidiTempoEventsOnOff)) {
+      if (wanted === "time") {
+        return (parseFloat(input) / midiTPQ) * 1000;
+      }
+      if (wanted === "tick") {
+        return parseInt((input * midiTPQ) / 1000, 10);
+      }
+    }
+
     let lastTime = 0.0;
     let lastTick = 0;
     let lastTempo = DEFAULT_TEMPO;
     let tempo;
     let i = 0;
-    while (tempoMap[i][0] <= tick) {
+    while (
+      (wanted === "time" && lastTick <= input) ||
+      (wanted === "tick" && lastTime <= input)
+    ) {
       [, tempo] = tempoMap[i];
       if (i !== 0) {
         const lastTicksPerSecond = (parseFloat(lastTempo) * midiTPQ) / 60.0;
@@ -188,11 +200,25 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
       i += 1;
       if (i >= tempoMap.length) break;
     }
+
     const lastTicksPerSecond = (parseFloat(lastTempo) * midiTPQ) / 60.0;
-    const ticksAtLastTempo = parseFloat(tick - lastTick);
-    const timeAtLastTempo = (ticksAtLastTempo / lastTicksPerSecond) * 1000;
-    lastTime += timeAtLastTempo;
-    return lastTime;
+
+    if (wanted === "tick") {
+      const timeAtLastTempo = input - lastTime;
+      const ticksAtLastTempo = parseInt(
+        (timeAtLastTempo * lastTicksPerSecond) / 1000,
+        10,
+      );
+      lastTick += ticksAtLastTempo;
+      return lastTick;
+    }
+    if (wanted === "time") {
+      const ticksAtLastTempo = parseFloat(input - lastTick);
+      const timeAtLastTempo = (ticksAtLastTempo / lastTicksPerSecond) * 1000;
+      lastTime += timeAtLastTempo;
+      return lastTime;
+    }
+    return null;
   };
 
   const [, ...musicTracks] = midiSamplePlayer.events;
@@ -204,53 +230,37 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
   const _expressionMap = {};
 
   const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs, adjust) => {
-    const expState = getExpressionStateBox(rollType);
+    const _panExpMap = new IntervalTree();
 
     const expressionCurve = [];
 
+    const expState = getExpressionStateBox(rollType);
+
     expState.velocity = expParams.welte_p;
 
-    const panMsgs = ctrlTrackMsgs
+    // First build the velocity expression map from the control track only
+    ctrlTrackMsgs
       .filter(({ name }) => name === "Note on")
-      .concat(
-        noteTrackMsgs.filter(
-          ({ name, velocity }) => name === "Note on" && !!velocity,
-        ),
-      )
-      .sort((a, b) => (a.tick > b.tick ? 1 : -1));
-
-    panMsgs.forEach(({ noteNumber: midiNumber, velocity, tick }) => {
-      const tempo = getTempoAtTick(tick, tempoMap);
-      const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
-
-      // This is needed to handle expressions that cross tempo changes
-      const msgTime = getMillisecondsAtTick(tick);
-
-      const holeType = getHoleType({ m: midiNumber }, rollType);
-
-      // This is only applied if we're at the end of a fast cresc or decresc
-      let applyTrackerExtension = false;
-
-      if (holeType === "note") {
-        // Only apply adjustment (if at all) on the external (played)
-        // velocities, not the interally stored/computed expressions
-        const noteVelocity =
-          getVelocityAtTime(msgTime, expState, expParams) + adjust;
-
-        if (tick in _expressionMap) {
-          _expressionMap[tick][midiNumber] = noteVelocity;
-        } else {
-          _expressionMap[tick] = {};
-          _expressionMap[tick][midiNumber] = noteVelocity;
-        }
-      } else if (holeType === "control") {
+      .forEach(({ noteNumber: midiNumber, velocity, tick }) => {
+        // We know these are all control holes
         const ctrlFunc = rollProfile[rollType].ctrlMap[midiNumber];
+
+        if (ctrlFunc == null) return; // Usually these are damage holes
+
+        // Fast crescendo and decrescendo controls are the only ones for which
+        // the length of the perforation matters
         if (velocity === 0 && !["sf_on", "sf_off"].includes(ctrlFunc)) {
           return;
         }
+
+        const tempo = getTempoAtTick(tick, tempoMap);
+        const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
+        const msgTime = convertTicksAndTime(tick);
+
         const panVelocity = getVelocityAtTime(msgTime, expState, expParams);
         const trackerExtensionSeconds =
           expParams.tracker_extension / ticksPerSecond;
+
         if (ctrlFunc === "mf_on" && velocity > 0) {
           expState.mf_start = msgTime;
         } else if (ctrlFunc === "mf_off" && velocity > 0) {
@@ -266,7 +276,6 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
             expState.fast_cresc_start = msgTime;
             expState.fast_cresc_stop = null;
           } else {
-            applyTrackerExtension = true;
             expState.fast_cresc_stop =
               msgTime + trackerExtensionSeconds * 1000.0;
           }
@@ -275,23 +284,57 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
             expState.fast_decresc_start = msgTime;
             expState.fast_decresc_stop = null;
           } else {
-            applyTrackerExtension = true;
             expState.fast_decresc_stop =
               msgTime + trackerExtensionSeconds * 1000.0;
           }
         }
 
-        let expressionTick = tick;
+        _panExpMap.insert(expState.time, msgTime, [
+          expState.velocity,
+          panVelocity,
+          expState.time,
+          msgTime,
+        ]);
 
-        if (applyTrackerExtension === true)
-          expressionTick += expParams.tracker_extension;
-
-        expState.tick = expressionTick;
         expState.time = msgTime;
         expState.velocity = panVelocity;
-        expressionCurve.push([expressionTick, panVelocity, msgTime]);
-      }
+      });
+
+    // Then update the _expressionMap with velocities for the note events
+    noteTrackMsgs
+      .filter(({ name, velocity }) => name === "Note on" && !!velocity)
+      .forEach(({ noteNumber: midiNumber, tick }) => {
+        const msgTime = convertTicksAndTime(tick);
+
+        const [startVelocity, endVelocity, startTime, endTime] =
+          _panExpMap.search(msgTime, msgTime)[0];
+
+        const notePositionInInterval =
+          (msgTime - startTime) / (endTime - startTime);
+
+        const noteVelocity =
+          startVelocity +
+          (endVelocity - startVelocity) * notePositionInInterval;
+
+        if (tick in _expressionMap) {
+          _expressionMap[tick][midiNumber] = noteVelocity + adjust;
+        } else {
+          _expressionMap[tick] = {};
+          _expressionMap[tick][midiNumber] = noteVelocity + adjust;
+        }
+      });
+
+    // Build the expression curve, which uses ticks
+    const intervals = Array.from(_panExpMap.inOrder());
+    Object.values(intervals).forEach((interval) => {
+      const expStartTick = convertTicksAndTime(interval.low, "tick");
+      const expEndTick = convertTicksAndTime(interval.high, "tick");
+      const [startVelocity, endVelocity, startTime, endTime] = interval.data;
+
+      expressionCurve.push([expStartTick, startVelocity, startTime]);
+      expressionCurve.push([expEndTick, endVelocity, endTime]);
     });
+
     return expressionCurve;
   };
 
