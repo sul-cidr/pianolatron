@@ -17,6 +17,7 @@ import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
 
 const DEFAULT_TEMPO = 60;
+const DEFAULT_NOTE_VELOCITY = 64;
 
 const getKeyByValue = (object, value) => {
   Object.keys(object).find((key) => object[key] === value);
@@ -95,20 +96,11 @@ const getVelocityAtTime = (time, expState, expParams) => {
 
   // Determine fast crescendo and decrescendo states at this time, handling
   // cases in which the fast change is still happening (the hole hasn't ended
-  // yet) or we know when the fast change ends, but the current time is before
-  // that (this can occur due to the tracker width emulation extending the
-  // effective duration of the hole beyond its physical length).
+  // yet).
   const isFastCrescOn =
-    (expState.fast_cresc_start !== null && expState.fast_cresc_stop === null) ||
-    (expState.fast_cresc_start !== null &&
-      expState.fast_cresc_stop !== null &&
-      expState.fast_cresc_stop > time);
+    expState.fast_cresc_start !== null && expState.fast_cresc_stop === null;
   const isFastDecrescOn =
-    (expState.fast_decresc_start !== null &&
-      expState.fast_decresc_stop === null) ||
-    (expState.fast_decresc_start !== null &&
-      expState.fast_decresc_stop !== null &&
-      expState.fast_decresc_stop > time);
+    expState.fast_decresc_start !== null && expState.fast_decresc_stop === null;
 
   // Default state (no active controls: only slow descresc)
   if (
@@ -130,7 +122,7 @@ const getVelocityAtTime = (time, expState, expParams) => {
       : 0;
   }
 
-  // Handle the MF hook
+  // Handle the mezzo-forte hook
   const velocityDelta = newVelocity - expState.velocity;
   if (expState.mf_start !== null) {
     // If the previous velocity was above MF, keep it there
@@ -229,6 +221,32 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   const _expressionMap = {};
 
+  const applyTrackerExtension = (ctrlTrackMsgs) =>
+    ctrlTrackMsgs
+      .map((item) => {
+        // We know these are all control holes
+        const ctrlFunc = rollProfile[rollType].ctrlMap[item.noteNumber];
+
+        // We're only interested in the ends of control holes, and specifically
+        // only the ends of fast cresc or decresc holes
+        if (
+          ctrlFunc == null ||
+          item.name !== "Note on" ||
+          item.velocity !== 0 ||
+          !["sf_on", "sf_off"].includes(ctrlFunc)
+        )
+          return item;
+
+        // Note that the delta values for all subsequent events would need to
+        // change, if we wanted to generate valid MIDI (in JSON form)
+        item.tick += expParams.tracker_extension;
+
+        return item;
+      })
+      // Adding the tracker extension ticks to the ends of the fast cresc/
+      // decresc holes will result in unordered events; resort them.
+      .sort((a, b) => (a.tick > b.tick ? 1 : -1));
+
   const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs, adjust) => {
     const _panExpMap = new IntervalTree();
 
@@ -238,14 +256,34 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
     expState.velocity = expParams.welte_p;
 
+    const extendedCtrlTrackMsgs = applyTrackerExtension(ctrlTrackMsgs);
+
+    const finalTick = Math.max(
+      noteTrackMsgs[noteTrackMsgs.length - 1].tick,
+      ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
+    );
+
     // First build the velocity expression map from the control track only
-    ctrlTrackMsgs
+    extendedCtrlTrackMsgs
       .filter(({ name }) => name === "Note on")
       .forEach(({ noteNumber: midiNumber, velocity, tick }) => {
         // We know these are all control holes
         const ctrlFunc = rollProfile[rollType].ctrlMap[midiNumber];
 
-        if (ctrlFunc == null) return; // Usually these are damage holes
+        // Ignore control holes that don't affect playback (most roll types
+        // will have some of these), or are likely to be damage holes
+        if (
+          ctrlFunc == null ||
+          ![
+            "sf_on",
+            "sf_off",
+            "cresc_on",
+            "cresc_off",
+            "mf_on",
+            "mf_off",
+          ].includes(ctrlFunc)
+        )
+          return; // Usually these are damage holes
 
         // Fast crescendo and decrescendo controls are the only ones for which
         // the length of the perforation matters
@@ -253,13 +291,9 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
           return;
         }
 
-        const tempo = getTempoAtTick(tick, tempoMap);
-        const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
         const msgTime = convertTicksAndTime(tick);
 
         const panVelocity = getVelocityAtTime(msgTime, expState, expParams);
-        const trackerExtensionSeconds =
-          expParams.tracker_extension / ticksPerSecond;
 
         if (ctrlFunc === "mf_on" && velocity > 0) {
           expState.mf_start = msgTime;
@@ -276,16 +310,14 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
             expState.fast_cresc_start = msgTime;
             expState.fast_cresc_stop = null;
           } else {
-            expState.fast_cresc_stop =
-              msgTime + trackerExtensionSeconds * 1000.0;
+            expState.fast_cresc_stop = msgTime;
           }
         } else if (ctrlFunc === "sf_off") {
           if (velocity > 0) {
             expState.fast_decresc_start = msgTime;
             expState.fast_decresc_stop = null;
           } else {
-            expState.fast_decresc_stop =
-              msgTime + trackerExtensionSeconds * 1000.0;
+            expState.fast_decresc_stop = msgTime;
           }
         }
 
@@ -299,6 +331,24 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         expState.time = msgTime;
         expState.velocity = panVelocity;
       });
+
+    // Extend the expression map so that it extends from the last control hole
+    // to the final note on this half of the roll (if needed)
+    const finalTime = convertTicksAndTime(finalTick);
+
+    if (finalTime > expState.time) {
+      const finalPanVelocity = getVelocityAtTime(
+        finalTime,
+        expState,
+        expParams,
+      );
+      _panExpMap.insert(expState.time, finalTime, [
+        expState.velocity,
+        finalPanVelocity,
+        expState.time,
+        finalTime,
+      ]);
+    }
 
     // Then update the _expressionMap with velocities for the note events
     noteTrackMsgs
@@ -324,7 +374,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         }
       });
 
-    // Build the expression curve, which uses ticks
+    // Build the expression curve, which uses ticks (not ms)
     const intervals = Array.from(_panExpMap.inOrder());
     Object.values(intervals).forEach((interval) => {
       const expStartTick = convertTicksAndTime(interval.low, "tick");
@@ -385,7 +435,6 @@ const buildTempoMap = () => {
 /*
  * Builds a map of pedal events, where each key is the tick of the event, and
  * the value is an object with keys of the pedal on and off events.
- *
  */
 
 // Get pedal events from track 0 (bass control = soft pedal) and
@@ -465,7 +514,6 @@ const buildMidiEventHandler = (
   const { ctrlMap } = rollProfile[rollType];
   const expParams = getExpressionParams(rollType);
 
-  const DEFAULT_NOTE_VELOCITY = 50.0;
   const midiTPQ = midiSamplePlayer.getDivision().division;
 
   return ({ name: msgType, noteNumber: midiNumber, velocity, data, tick }) => {
@@ -513,7 +561,9 @@ const buildMidiEventHandler = (
         }
       }
     } else if (msgType === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
-      // XXX Recalculate expressions when user changes the tempo coefficient?
+      // This only happens if the note MIDI has tempo events to emulate
+      // acceleration. Usually this is not done, but the MIDI will however
+      // have one event at the beginning, setting the default tempo (60).
       const newTempo = data * get(tempoCoefficient);
       midiSamplePlayer.setTempo(newTempo);
     }
