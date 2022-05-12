@@ -41,8 +41,8 @@
   let pedalingMap;
   let notesMap;
 
-  const SOFT_PEDAL = 67;
-  const SUSTAIN_PEDAL = 64;
+  const SOFT_PEDAL_MIDI = 67;
+  const SUSTAIN_PEDAL_MIDI = 64;
 
   const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
@@ -104,8 +104,8 @@
 
     if (pedalingMap && $rollPedalingOnOff) {
       const pedals = pedalingMap.search($currentTick, $currentTick);
-      sustainOnOff.set(pedals.includes(SUSTAIN_PEDAL));
-      softOnOff.set(pedals.includes(SOFT_PEDAL));
+      sustainOnOff.set(pedals.includes(SUSTAIN_PEDAL_MIDI));
+      softOnOff.set(pedals.includes(SOFT_PEDAL_MIDI));
     } else {
       sustainOnOff.set(false);
       softOnOff.set(false);
