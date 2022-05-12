@@ -23,17 +23,10 @@ const getKeyByValue = (object, value) => {
   Object.keys(object).find((key) => object[key] === value);
 };
 
-const getTempoAtTick = (tick, tempoMap) => {
-  if (!tempoMap || !get(useMidiTempoEventsOnOff)) return DEFAULT_TEMPO;
-  let tempo;
-  let i = 0;
-  while (tempoMap[i][0] <= tick) {
-    [, tempo] = tempoMap[i];
-    i += 1;
-    if (i >= tempoMap.length) break;
-  }
-  return tempo;
-};
+const getTempoAtTick = (tick, tempoMap) =>
+  !tempoMap || !get(useMidiTempoEventsOnOff)
+    ? DEFAULT_TEMPO
+    : tempoMap.search(tick, tick)[0];
 
 const getExpressionParams = (rollType) => {
   let expParams = null;
@@ -173,42 +166,44 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
     let lastTime = 0.0;
     let lastTick = 0;
-    let lastTempo = DEFAULT_TEMPO;
-    let tempo;
-    let i = 0;
-    while (
-      (wanted === "time" && lastTick <= input) ||
-      (wanted === "tick" && lastTime <= input)
-    ) {
-      [, tempo] = tempoMap[i];
-      if (i !== 0) {
-        const lastTicksPerSecond = (parseFloat(lastTempo) * midiTPQ) / 60.0;
-        const ticksAtLastTempo = parseFloat(tempoMap[i][0] - lastTick);
-        const timeAtLastTempo = (ticksAtLastTempo / lastTicksPerSecond) * 1000;
+    let tempo = DEFAULT_TEMPO;
+    let ticksPerSecond = 0;
+    let ticksAtLastTempo = 0;
+    let timeAtLastTempo = 0;
+
+    const intervals = Array.from(tempoMap.inOrder());
+
+    Object.values(intervals).every((interval) => {
+      tempo = interval.data;
+      ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
+
+      if (wanted === "time" && interval.high > input) {
+        ticksAtLastTempo = input - lastTick;
+        timeAtLastTempo = (ticksAtLastTempo / ticksPerSecond) * 1000;
         lastTime += timeAtLastTempo;
+        return false;
       }
-      lastTempo = tempo;
-      [lastTick] = tempoMap[i];
-      i += 1;
-      if (i >= tempoMap.length) break;
-    }
-
-    const lastTicksPerSecond = (parseFloat(lastTempo) * midiTPQ) / 60.0;
-
-    if (wanted === "tick") {
-      const timeAtLastTempo = input - lastTime;
-      const ticksAtLastTempo = parseInt(
-        (timeAtLastTempo * lastTicksPerSecond) / 1000,
-        10,
-      );
-      lastTick += ticksAtLastTempo;
-      return lastTick;
-    }
-    if (wanted === "time") {
-      const ticksAtLastTempo = parseFloat(input - lastTick);
-      const timeAtLastTempo = (ticksAtLastTempo / lastTicksPerSecond) * 1000;
+      ticksAtLastTempo = parseFloat(interval.high - interval.low);
+      timeAtLastTempo = (ticksAtLastTempo / ticksPerSecond) * 1000;
+      if (wanted === "tick" && lastTime + timeAtLastTempo > input) {
+        timeAtLastTempo = input - lastTime;
+        ticksAtLastTempo = parseInt(
+          (timeAtLastTempo * ticksPerSecond) / 1000,
+          10,
+        );
+        lastTick += ticksAtLastTempo;
+        return false;
+      }
       lastTime += timeAtLastTempo;
+      lastTick = interval.high;
+      return true;
+    });
+
+    if (wanted === "time") {
       return lastTime;
+    }
+    if (wanted === "tick") {
+      return lastTick;
     }
     return null;
   };
@@ -228,7 +223,12 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         const ctrlFunc = rollProfile[rollType].ctrlMap[item.noteNumber];
 
         // We're only interested in the ends of control holes, and specifically
-        // only the ends of fast cresc or decresc holes
+        // only the ends of fast cresc or decresc holes (for now)
+        // NOTE that the extension is applied to the note holes during playback
+        // in the MidiEventHandler, but a modified version of this function
+        // could be used to apply the extension prior to playback.
+        // Note also that no extension is applied to pedal events, but this
+        // could be done as well.
         if (
           ctrlFunc == null ||
           item.name !== "Note on" ||
@@ -403,7 +403,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 // events, but theoretically they can. Use those events, or just compute
 // everything manually here? Going with the latter for now.
 const buildTempoMap = () => {
-  const _tempoMap = [];
+  const _tempoMap = new IntervalTree();
   const midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
 
   const expParams = getExpressionParams(get(rollMetadata).ROLL_TYPE);
@@ -416,18 +416,23 @@ const buildTempoMap = () => {
   let speed = startSpeed;
   let minute = 0.0;
   let tick = 0;
+  let nextTempo = DEFAULT_TEMPO;
+  let nextTick = 0;
 
   // The acceleration emulation *could* begin at the very start of the roll
   // (well above the first hole), but let's just assume that the roll reaches
   // the default tempo right at the first hole.
-  _tempoMap.push([tick, tempo]);
   while (tick < get(rollMetadata).IMAGE_LENGTH - get(rollMetadata).FIRST_HOLE) {
     minute += minuteDiv;
-    tick += parseInt(speed * minuteDiv * ticksPerFt, 10);
+    nextTick = tick + parseInt(speed * minuteDiv * ticksPerFt, 10);
     speed = startSpeed + minute * expParams.accelFtPerMin2;
-    tempo = (speed * ticksPerFt) / midiTPQ;
-    _tempoMap.push([tick, tempo]);
+    nextTempo = (speed * ticksPerFt) / midiTPQ;
+    _tempoMap.insert(tick, nextTick, tempo);
+    tick = nextTick;
+    tempo = nextTempo;
   }
+  // This ensures that there are no tempo map "misses" at the ery end
+  _tempoMap.insert(tick, Infinity, tempo);
 
   return _tempoMap;
 };
