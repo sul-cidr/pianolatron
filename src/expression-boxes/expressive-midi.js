@@ -12,14 +12,23 @@ import {
 const SOFT_PEDAL = 67;
 const SUSTAIN_PEDAL = 64;
 
-const buildTempoMap = (metadataTrack) =>
+const buildTempoMap = (metadataTrack) => {
+  const _tempoMap = new IntervalTree();
+  let lastTempo = null;
+  let lastTick = 0;
+
   metadataTrack
     .filter((event) => event.name === "Set Tempo")
-    .reduce((_tempoMap, { tick, data }) => {
-      if (!_tempoMap.map(([, _data]) => _data).includes(data))
-        _tempoMap.push([tick, data]);
-      return _tempoMap;
-    }, []);
+    .forEach(({ tick, tempo }) => {
+      if (tick === lastTick || tempo === lastTempo) return;
+      _tempoMap.insert(lastTick, tick, lastTempo);
+      lastTempo = tempo;
+      lastTick = tick;
+    });
+
+  _tempoMap.insert(lastTick, Infinity, lastTempo);
+  return _tempoMap;
+};
 
 const buildNoteVelocitiesMap = (midiSamplePlayer) => {
   const noteVelocitiesMap = {};
@@ -110,6 +119,7 @@ const buildMidiEventHandler =
         softOnOff.set(!!value);
       }
     } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
+      // XXX Need to update tempo when panning the roll!
       midiSamplePlayer.setTempo(data * get(tempoCoefficient));
     }
   };

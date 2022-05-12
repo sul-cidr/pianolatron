@@ -71,17 +71,10 @@
 
   const pianoReady = piano.load();
 
-  const getTempoAtTick = (tick) => {
-    if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
-    let tempo;
-    let i = 0;
-    while (tempoMap[i][0] <= tick) {
-      [, tempo] = tempoMap[i];
-      i += 1;
-      if (i >= tempoMap.length) break;
-    }
-    return tempo;
-  };
+  const getTempoAtTick = (tick, tempoAtTickMap) =>
+    !tempoAtTickMap || !$useMidiTempoEventsOnOff
+      ? DEFAULT_TEMPO
+      : tempoAtTickMap.search(tick, tick)[0];
 
   const toggleSustain = (onOff, fromMidi) => {
     if (onOff) {
