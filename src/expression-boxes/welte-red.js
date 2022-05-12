@@ -19,9 +19,13 @@ import { clamp, getHoleType } from "../lib/utils";
 const DEFAULT_TEMPO = 60;
 const DEFAULT_NOTE_VELOCITY = 64;
 
-const getKeyByValue = (object, value) => {
+// Pedal event codes are identical for all expression boxes (because they are
+// read by the MIDI sample player), so definitely should be superclassed.
+const SOFT_PEDAL_MIDI = 67;
+const SUSTAIN_PEDAL_MIDI = 64;
+
+const getKeyByValue = (object, value) =>
   Object.keys(object).find((key) => object[key] === value);
-};
 
 const getTempoAtTick = (tick, tempoMap) =>
   !tempoMap || !get(useMidiTempoEventsOnOff)
@@ -448,16 +452,16 @@ const buildPedalingMap = (musicTracks) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const { ctrlMap } = rollProfile[rollType];
 
-  const SOFT_PEDAL_ON = getKeyByValue(ctrlMap, "soft_on");
-  const SOFT_PEDAL_OFF = getKeyByValue(ctrlMap, "soft_off");
-  const SUSTAIN_PEDAL_ON = getKeyByValue(ctrlMap, "sust_on");
-  const SUSTAIN_PEDAL_OFF = getKeyByValue(ctrlMap, "sust_off");
+  const SOFT_PEDAL_ON = parseInt(getKeyByValue(ctrlMap, "soft_on"), 10);
+  const SOFT_PEDAL_OFF = parseInt(getKeyByValue(ctrlMap, "soft_off"), 10);
+  const SUSTAIN_PEDAL_ON = parseInt(getKeyByValue(ctrlMap, "sust_on"), 10);
+  const SUSTAIN_PEDAL_OFF = parseInt(getKeyByValue(ctrlMap, "sust_off"), 10);
   const _pedalingMap = new IntervalTree();
 
   // For 65-note rolls, or any weird MIDI input file with only 1 note track
   if (musicTracks.length === 1) return _pedalingMap;
 
-  const registerPedalEvents = (track, pedalOn, pedalOff) => {
+  const registerPedalEvents = (track, pedalOn, pedalOff, eventNumber) => {
     let tickOn = false;
     track
       // Only want beginning of note holes for lock & cancel type expression
@@ -465,7 +469,8 @@ const buildPedalingMap = (musicTracks) => {
       .filter(({ name, velocity }) => name === "Note on" && velocity === 1)
       .forEach(({ noteNumber, tick }) => {
         if (noteNumber === pedalOff) {
-          if (tickOn) _pedalingMap.insert(tickOn, tick, pedalOn);
+          // Holes can legitimately begin on tick 0
+          if (tickOn !== false) _pedalingMap.insert(tickOn, tick, eventNumber);
           tickOn = false;
         } else if (noteNumber === pedalOn) {
           if (!tickOn) tickOn = tick;
@@ -473,8 +478,18 @@ const buildPedalingMap = (musicTracks) => {
       });
   };
 
-  registerPedalEvents(musicTracks[2], SOFT_PEDAL_ON, SOFT_PEDAL_OFF);
-  registerPedalEvents(musicTracks[3], SUSTAIN_PEDAL_ON, SUSTAIN_PEDAL_OFF);
+  registerPedalEvents(
+    musicTracks[2],
+    SOFT_PEDAL_ON,
+    SOFT_PEDAL_OFF,
+    SOFT_PEDAL_MIDI,
+  );
+  registerPedalEvents(
+    musicTracks[3],
+    SUSTAIN_PEDAL_ON,
+    SUSTAIN_PEDAL_OFF,
+    SUSTAIN_PEDAL_MIDI,
+  );
 
   return _pedalingMap;
 };

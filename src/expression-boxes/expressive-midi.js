@@ -9,8 +9,10 @@ import {
   useMidiTempoEventsOnOff,
 } from "../stores";
 
-const SOFT_PEDAL = 67;
-const SUSTAIN_PEDAL = 64;
+// Pedal event codes are identical for all expression boxes (because they are
+// read by the MIDI sample player), so definitely should be superclassed.
+const SOFT_PEDAL_MIDI = 67;
+const SUSTAIN_PEDAL_MIDI = 64;
 
 const buildTempoMap = (metadataTrack) => {
   const _tempoMap = new IntervalTree();
@@ -68,7 +70,7 @@ const buildPedalingMap = (musicTracks) => {
       .filter(({ number }) => number === eventNumber)
       .forEach(({ value, tick }) => {
         if (value === 0) {
-          if (tickOn) _pedalingMap.insert(tickOn, tick, eventNumber);
+          if (tickOn !== false) _pedalingMap.insert(tickOn, tick, eventNumber);
           tickOn = false;
         } else if (value === 127) {
           if (!tickOn) tickOn = tick;
@@ -76,8 +78,8 @@ const buildPedalingMap = (musicTracks) => {
       });
   };
 
-  enterEvents(SOFT_PEDAL);
-  enterEvents(SUSTAIN_PEDAL);
+  enterEvents(SOFT_PEDAL_MIDI);
+  enterEvents(SUSTAIN_PEDAL_MIDI);
 
   return _pedalingMap;
 };
@@ -113,9 +115,9 @@ const buildMidiEventHandler =
         activeNotes.add(noteNumber);
       }
     } else if (name === "Controller Change" && get(rollPedalingOnOff)) {
-      if (number === SUSTAIN_PEDAL) {
+      if (number === SUSTAIN_PEDAL_MIDI) {
         sustainOnOff.set(!!value);
-      } else if (number === SOFT_PEDAL) {
+      } else if (number === SOFT_PEDAL_MIDI) {
         softOnOff.set(!!value);
       }
     } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {

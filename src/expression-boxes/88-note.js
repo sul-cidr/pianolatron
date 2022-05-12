@@ -18,6 +18,10 @@ import { getHoleType } from "../lib/utils";
 const DEFAULT_TEMPO = 60;
 const DEFAULT_NOTE_VELOCITY = 50;
 
+// Pedal event codes are identical for all expression boxes (because they are
+// read by the MIDI sample player), so definitely should be superclassed.
+const SUSTAIN_PEDAL_MIDI = 64;
+
 const getKeyByValue = (object, value) =>
   Object.keys(object).find((key) => object[key] === value);
 
@@ -339,13 +343,13 @@ const buildPedalingMap = (musicTracks) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const { ctrlMap } = rollProfile[rollType];
 
-  const SUSTAIN_PEDAL = getKeyByValue(ctrlMap, "sust");
+  const SUSTAIN_PEDAL_ON = parseInt(getKeyByValue(ctrlMap, "sust"), 10);
   const _pedalingMap = new IntervalTree();
 
   // For 65-note rolls, or any weird MIDI input file with only 1 note track
   if (musicTracks.length === 1) return _pedalingMap;
 
-  const registerPedalEvents = (track, pedalOn) => {
+  const registerPedalEvents = (track, pedalOn, eventNumber) => {
     let tickOn = false;
     track
       // Pedal is on as long as the punch is present
@@ -353,7 +357,9 @@ const buildPedalingMap = (musicTracks) => {
       .forEach(({ noteNumber, tick, velocity }) => {
         if (noteNumber === pedalOn) {
           if (velocity === 0) {
-            if (tickOn) _pedalingMap.insert(tickOn, tick, pedalOn);
+            // Holes can legitimately begin on tick 0
+            if (tickOn !== false)
+              _pedalingMap.insert(tickOn, tick, eventNumber);
             tickOn = false;
           } else if (velocity === 1) {
             if (!tickOn) tickOn = tick;
@@ -362,7 +368,7 @@ const buildPedalingMap = (musicTracks) => {
       });
   };
 
-  registerPedalEvents(musicTracks[2], SUSTAIN_PEDAL);
+  registerPedalEvents(musicTracks[2], SUSTAIN_PEDAL_ON, SUSTAIN_PEDAL_MIDI);
 
   return _pedalingMap;
 };
