@@ -21,8 +21,14 @@ const buildTempoMap = (metadataTrack) => {
 
   metadataTrack
     .filter((event) => event.name === "Set Tempo")
-    .forEach(({ tick, tempo }) => {
-      if (tick === lastTick || tempo === lastTempo) return;
+    .forEach(({ tick, data: tempo }) => {
+      if (tick === lastTick || tempo === lastTempo) {
+        return;
+      }
+      if (lastTempo == null) {
+        lastTempo = tempo;
+        return;
+      }
       _tempoMap.insert(lastTick, tick, lastTempo);
       lastTempo = tempo;
       lastTick = tick;
@@ -121,7 +127,6 @@ const buildMidiEventHandler =
         softOnOff.set(!!value);
       }
     } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
-      // XXX Need to update tempo when panning the roll!
       midiSamplePlayer.setTempo(data * get(tempoCoefficient));
     }
   };
