@@ -177,15 +177,6 @@
   };
 
   const drawExpressionCurves = (bassExpC, trebleExpC, express) => {
-    const drawExpCurvePL = (expCurve, pl, expSvg) => {
-      for (let i = 0; i < expCurve.length; i += 1) {
-        const point = expSvg.createSVGPoint();
-        point.x = expCurve[i][1];
-        point.y = expCurve[i][0];
-        pl.points.appendItem(point);
-      }
-    };
-
     // XXX Drawing these can freeze up the roll viewer for quite a while on
     // long rolls (e.g., hm523dq5554) though they don't seem to cause the same
     // lag problems when being scrolled as the hole highlights do on some
@@ -193,35 +184,39 @@
     // the portions that are visible in the view window, as is done with the
     // hole highlights.
     const drawGuidesAndCurve = (guides, expCurve, g, svg, transformation) => {
-      Object.values(guides).forEach((value) => {
-        const guideLine = document.createElementNS(
+      for (let i = 0; i < expCurve.length - 1; i += 1) {
+        const curveLine = document.createElementNS(
           "http://www.w3.org/2000/svg",
           "line",
         );
-        guideLine.setAttribute(
+        curveLine.setAttribute(
           "style",
-          "stroke:palegreen;fill:none;stroke-width:1;opacity:25%;",
+          "stroke:green;fill:none;stroke-width:2;",
         );
-        guideLine.setAttribute("x1", value);
-        guideLine.setAttribute("x2", value);
-        if ($scrollDownwards) {
-          guideLine.setAttribute("y1", 0);
-          guideLine.setAttribute("y2", imageLength - firstHolePx);
-        } else {
-          guideLine.setAttribute("y1", firstHolePx);
-          guideLine.setAttribute("y2", 0);
-        }
-        guideLine.setAttribute("transform", transformation);
-        g.appendChild(guideLine);
-      });
-      const curvePL = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "polyline",
-      );
-      curvePL.setAttribute("style", "stroke:green;fill:none;stroke-width:2;");
-      drawExpCurvePL(expCurve, curvePL, svg);
-      curvePL.setAttribute("transform", transformation);
-      g.appendChild(curvePL);
+        curveLine.setAttribute("x1", expCurve[i][1]);
+        curveLine.setAttribute("x2", expCurve[i + 1][1]);
+        curveLine.setAttribute("y1", expCurve[i][0]);
+        curveLine.setAttribute("y2", expCurve[i + 1][0]);
+        curveLine.setAttribute("transform", transformation);
+        g.appendChild(curveLine);
+
+        Object.values(guides).forEach((value) => {
+          const guideLine = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line",
+          );
+          guideLine.setAttribute(
+            "style",
+            "stroke:palegreen;fill:none;stroke-width:1;opacity:25%;",
+          );
+          guideLine.setAttribute("x1", value);
+          guideLine.setAttribute("x2", value);
+          guideLine.setAttribute("y1", expCurve[i][0]);
+          guideLine.setAttribute("y2", expCurve[i + 1][0]);
+          guideLine.setAttribute("transform", transformation);
+          g.appendChild(guideLine);
+        });
+      }
     };
 
     if (expressionCurvesSvg !== undefined) {
@@ -231,7 +226,9 @@
     if (
       viewport === undefined ||
       bassExpC == null ||
+      bassExpC.length === 0 ||
       trebleExpC == null ||
+      trebleExpC.length === 0 ||
       ["NONE", "FROM_MIDI"].includes(express)
     )
       return;
@@ -257,15 +254,21 @@
     if (expParams === null) return;
     let guides = {};
     if ($rollMetadata.ROLL_TYPE === "welte-red") {
+      // Sometimes this runs before $expressionMap updates (when changing
+      // between roll types), meaning the guide overlay coords are NaNs.
+      // Fortunately it runs again later after they've updated, ensuring the
+      // overlays are drawn, but ideally it shouldn't happen this way.
+      if (!("welte_mf" in expParams)) return;
       guides = {
         p: parseInt(expParams.welte_p, 10),
         mf: parseInt(expParams.welte_mf, 10),
         f: parseInt(expParams.welte_f, 10),
       };
     } else if ($rollMetadata.ROLL_TYPE === "88-note") {
+      if (!("default_mf" in expParams)) return;
       guides = {
-        mf: 75,
-        f: 95,
+        mf: parseInt(expParams.default_mf, 10),
+        f: parseInt(expParams.accent_f, 10),
       };
     }
     drawGuidesAndCurve(
