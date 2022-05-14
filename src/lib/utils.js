@@ -125,12 +125,15 @@ export const annotateHoleData = (
   scrollDownwards,
   noteVelocitiesMap,
 ) => {
-  const velocities = Object.values(noteVelocitiesMap).reduce(
-    (acc, v) => new Set([...acc, ...Object.values(v)]),
-    [],
+  const [minNoteVelocity, maxNoteVelocity] = Object.values(
+    noteVelocitiesMap,
+  ).reduce(
+    (acc, v) => [
+      Math.min(Object.values(v)) < acc[0] ? Math.min(Object.values(v)) : acc[0],
+      Math.max(Object.values(v)) > acc[1] ? Math.max(Object.values(v)) : acc[1],
+    ],
+    [Infinity, -Infinity],
   );
-  const minNoteVelocity = velocities.size ? Math.min(...velocities) : 50;
-  const maxNoteVelocity = velocities.size ? Math.max(...velocities) : 50;
 
   const getNoteHoleColor = ({ v: velocity }) => {
     if (!velocity) return defaultHoleColor;
