@@ -32,34 +32,32 @@ const getTempoAtTick = (tick, tempoMap) =>
     ? DEFAULT_TEMPO
     : tempoMap.search(tick, tick)[0];
 
-const getExpressionParams = (rollType) => {
+const getExpressionParams = () => {
   let expParams = null;
-  if (rollType === "welte-red") {
-    expParams = {
-      welte_p: 35.0,
-      welte_mf: 60.0,
-      welte_f: 90.0,
-      welte_loud: 75.0,
-      left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
-      cresc_rate: 1.0,
-      slow_decay_rate: 2380, // Probably this is 1 velocity step in 2.38s
-      fastC_decay_rate: 300,
-      fastD_decay_rate: 400,
-      trackerbar_diameter: 16.7, // in ticks (px = 1/300 in)
-      punch_extension_fraction: 0.75,
-      accelFtPerMin2: 0.3147,
-    };
-    expParams.slow_step =
-      (expParams.welte_mf - expParams.welte_p) / expParams.slow_decay_rate;
-    expParams.fastC_step =
-      (expParams.welte_mf - expParams.welte_p) / expParams.fastC_decay_rate;
-    expParams.fastD_step =
-      -(expParams.welte_f - expParams.welte_p) / expParams.fastD_decay_rate;
-    expParams.tracker_extension = parseInt(
-      expParams.trackerbar_diameter * expParams.punch_extension_fraction,
-      10,
-    );
-  }
+  expParams = {
+    welte_p: 35.0,
+    welte_mf: 60.0,
+    welte_f: 90.0,
+    welte_loud: 75.0,
+    left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
+    cresc_rate: 1.0,
+    slow_decay_rate: 2380, // Probably this is 1 velocity step in 2.38s
+    fastC_decay_rate: 300,
+    fastD_decay_rate: 400,
+    trackerbar_diameter: 16.7, // in ticks (px = 1/300 in)
+    punch_extension_fraction: 0.75,
+    accelFtPerMin2: 0.3147,
+  };
+  expParams.slow_step =
+    (expParams.welte_mf - expParams.welte_p) / expParams.slow_decay_rate;
+  expParams.fastC_step =
+    (expParams.welte_mf - expParams.welte_p) / expParams.fastC_decay_rate;
+  expParams.fastD_step =
+    -(expParams.welte_f - expParams.welte_p) / expParams.fastD_decay_rate;
+  expParams.tracker_extension = parseInt(
+    expParams.trackerbar_diameter * expParams.punch_extension_fraction,
+    10,
+  );
   return expParams;
 };
 
@@ -214,7 +212,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   const [, ...musicTracks] = midiSamplePlayer.events;
 
-  const expParams = getExpressionParams(rollType);
+  const expParams = getExpressionParams();
 
   expressionParameters.set(expParams);
 
@@ -410,7 +408,7 @@ const buildTempoMap = () => {
   const _tempoMap = new IntervalTree();
   const midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
 
-  const expParams = getExpressionParams(get(rollMetadata).ROLL_TYPE);
+  const expParams = getExpressionParams();
 
   const lengthPPI = 300; // Could get scan PPI from MIDI/metadata
   const ticksPerFt = lengthPPI * 12.0;
@@ -532,7 +530,7 @@ const buildMidiEventHandler = (
 ) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const { ctrlMap } = rollProfile[rollType];
-  const expParams = getExpressionParams(rollType);
+  const expParams = getExpressionParams();
 
   const midiTPQ = midiSamplePlayer.getDivision().division;
 
@@ -596,4 +594,5 @@ export {
   buildNotesMap,
   buildNoteVelocitiesMap,
   buildMidiEventHandler,
+  getExpressionParams,
 };

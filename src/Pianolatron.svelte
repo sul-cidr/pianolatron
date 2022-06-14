@@ -197,7 +197,7 @@
         midiSamplePlayer.loadArrayBuffer(mididataArrayBuffer);
       })
       .catch((err) => {
-        notify({ title: "Error!", message: err, type: "error" });
+        notify({ title: "MIDI Data Error!", message: err, type: "error" });
         currentRoll = previousRoll;
       });
 
@@ -207,7 +207,7 @@
         throw new Error("Error fetching metadata file! (Operation cancelled)");
       })
       .catch((err) => {
-        notify({ title: "Error!", message: err, type: "error" });
+        notify({ title: "Metadata Error!", message: err, type: "error" });
         currentRoll = previousRoll;
       });
 

@@ -30,22 +30,20 @@ const getTempoAtTick = (tick, tempoMap) =>
     ? DEFAULT_TEMPO
     : tempoMap.search(tick, tick)[0];
 
-const getExpressionParams = (rollType) => {
+const getExpressionParams = () => {
   let expParams = null;
-  if (rollType === "88-note") {
-    expParams = {
-      default_mf: 75,
-      accent_f: 95, // snakebite velocity
-      snakebite_extension: 200, // extension (in ms) before and after snakebite
-      trackerbar_diameter: 16.7, // in ticks (px = 1/300 in)
-      punch_extension_fraction: 0.75,
-      accelFtPerMin2: 0.2,
-    };
-    expParams.tracker_extension = parseInt(
-      expParams.trackerbar_diameter * expParams.punch_extension_fraction,
-      10,
-    );
-  }
+  expParams = {
+    default_mf: 75,
+    accent_f: 95, // snakebite velocity
+    snakebite_extension: 200, // extension (in ms) before and after snakebite
+    trackerbar_diameter: 16.7, // in ticks (px = 1/300 in)
+    punch_extension_fraction: 0.75,
+    accelFtPerMin2: 0.2,
+  };
+  expParams.tracker_extension = parseInt(
+    expParams.trackerbar_diameter * expParams.punch_extension_fraction,
+    10,
+  );
   return expParams;
 };
 
@@ -136,7 +134,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   const [, ...musicTracks] = midiSamplePlayer.events;
 
-  const expParams = getExpressionParams(rollType);
+  const expParams = getExpressionParams();
 
   expressionParameters.set(expParams);
 
@@ -300,7 +298,7 @@ const buildTempoMap = () => {
   const _tempoMap = new IntervalTree();
   const midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
 
-  const expParams = getExpressionParams(get(rollMetadata).ROLL_TYPE);
+  const expParams = getExpressionParams();
 
   const lengthPPI = 300; // Could get scan PPI from MIDI/metadata
   const ticksPerFt = lengthPPI * 12.0;
@@ -411,7 +409,7 @@ const buildMidiEventHandler = (
 ) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const { ctrlMap } = rollProfile[rollType];
-  const expParams = getExpressionParams(rollType);
+  const expParams = getExpressionParams();
   const midiTPQ = midiSamplePlayer.getDivision().division;
 
   return ({ name: msgType, noteNumber: midiNumber, velocity, data, tick }) => {
@@ -461,4 +459,5 @@ export {
   buildNotesMap,
   buildNoteVelocitiesMap,
   buildMidiEventHandler,
+  getExpressionParams,
 };
