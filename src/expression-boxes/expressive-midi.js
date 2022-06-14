@@ -14,6 +14,8 @@ import {
 const SOFT_PEDAL_MIDI = 67;
 const SUSTAIN_PEDAL_MIDI = 64;
 
+const getExpressionParams = () => null;
+
 const buildTempoMap = (metadataTrack) => {
   const _tempoMap = new IntervalTree();
   let lastTempo = null;
@@ -137,4 +139,5 @@ export {
   buildNotesMap,
   buildNoteVelocitiesMap,
   buildMidiEventHandler,
+  getExpressionParams,
 };

@@ -23,6 +23,18 @@
       `,
       attribs: { "stroke-width": 1.5 },
     },
+    exp_curves: {
+      svg: `
+        <line x1="8" y1="4" x2="10" y2="10" />
+        <line x1="10" y1="10" x2="5" y2="15" />
+        <line x1="5" y1="15" x2="4" y2="17" />
+        <line x1="4" y1="17" x2="6" y2="20" />
+        <line x1="16" y1="4" x2="20" y2="8" />
+        <line x1="20" y1="8" x2="14" y2="19" />
+        <line x1="14" y1="19" x2="13" y2="20" />
+      `,
+      attribs: { "stroke-width": 1.5 },
+    },
     sliders: {
       svg: `
         <circle cx="14" cy="6" r="2" />
