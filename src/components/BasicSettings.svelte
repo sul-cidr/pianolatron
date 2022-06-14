@@ -6,13 +6,11 @@
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
-    expressionizer,
   } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
 
   export let skipToPercentage;
-  export let reloadRoll;
 </script>
 
 <div id="playback-settings">
@@ -97,11 +95,4 @@
       >{($playbackProgress * 100).toFixed(2)}%</svelte:fragment
     >
   </SliderControl>
-
-  <select bind:value={$expressionizer} on:change={reloadRoll}>
-    <option value="NONE">None?</option>
-    <option value="FROM_MIDI">From Expressionized MIDI file</option>
-    <option value="welteRed">welte-red</option>
-    <option value="standard">88-note</option>
-  </select>
 </div>

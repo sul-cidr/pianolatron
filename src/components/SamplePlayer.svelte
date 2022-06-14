@@ -30,6 +30,7 @@
     userSettings,
     noteVelocitiesMap,
     expressionizer,
+    defaultExpressionParameters,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -37,6 +38,12 @@
 
   import expressionBoxes from "../expression-boxes";
 
+  let buildTempoMap;
+  let buildPedalingMap;
+  let buildNotesMap;
+  let buildNoteVelocitiesMap;
+  let buildMidiEventHandler;
+  let getExpressionParams;
   let tempoMap;
   let pedalingMap;
   let notesMap;
@@ -277,13 +284,16 @@
       ? "expressiveMidi"
       : $expressionizer;
     const expressionBox = expressionBoxes[expressionBoxType];
-    const {
+    ({
       buildTempoMap,
       buildPedalingMap,
       buildNotesMap,
       buildNoteVelocitiesMap,
       buildMidiEventHandler,
-    } = expressionBox;
+      getExpressionParams,
+    } = expressionBox);
+
+    $defaultExpressionParameters = getExpressionParams();
 
     tempoMap = buildTempoMap(metadataTrack);
 
@@ -331,6 +341,7 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
+    getExpressionParams,
   };
 </script>
 
