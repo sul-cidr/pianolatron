@@ -52,7 +52,7 @@ a:hover {
 
 body {
   margin: max(1em, 5vh) auto;
-  width: clamp(80vw, 800px, 100vw);
+  width: clamp(80vw, 800px, 95vw);
 }
 
 header {
