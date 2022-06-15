@@ -1,19 +1,52 @@
-<!DOCTYPE html><html lang="en"><head prefix="dcterms: http://purl.org/dc/terms/#"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="version" content="f798e756"><meta name="dcterms.modified" content="2022-05-19T20:42:56.959Z"><meta name="description" content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection."><title>Pianolatron</title><script>
-      const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
-      theme && document.documentElement.setAttribute("data-theme", theme);
-    </script><link rel="preload" href="https://pianolatron.stanford.edu/cidr.trsp.300x176.png" as="image"><link rel="stylesheet" href="https://pianolatron.stanford.edu/_astro/index-Z18IQco.css" type="text/css"></head><body><div id="loading" class="svelte-e8jsj0"><div class="svelte-e8jsj0"><div class="svelte-e8jsj0"><div class="svelte-e8jsj0"></div></div>
-      <span class="svelte-e8jsj0">Loading application...</span></div></div><astro-root uid="M"></astro-root>
-<script type="module">
-import setup from 'https://pianolatron.stanford.edu/_astro_frontend/hydrate/only.js';
-setup("M", {}, async () => {
-  
-  const [{ default: Component }, { default: hydrate }] = await Promise.all([import("https://pianolatron.stanford.edu/_astro/src/Pianolatron.svelte.js"), import("https://pianolatron.stanford.edu/_snowpack/pkg/@astrojs.renderer-svelte.client.v0.1.2.js")]);
-  return (el, children) => hydrate(el)(Component, {}, children);
+<!DOCTYPE html>
+<html lang="en">
 
-});
-</script><footer><a href="http://cidr.stanford.edu/" title="Center for Interdisciplinary Digital Research @ Stanford Libraries"><img src="https://pianolatron.stanford.edu/cidr_i.8x25.png" height="25" width="8" alt="CIDR logo">
-    Powered by CIDR
-  </a><a href="https://github.com/sul-cidr/pianolatron" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%"></rect><path d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16
-    1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67
-    0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18
-    24 18 48l-1 70c0 6 3 12 16 12z"></path></svg>GitHub</a></footer></body></html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection.">
+  <title>Pianolatron @ Stanford</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header>Welcome to the Pianolatron</header>
+  <p>
+    The Pianolatron app is currently under development.<br>
+    For more information about the project, see the <a href="https://github.com/sul-cidr/pianolatron" target="_blank"
+      rel="noopener">
+      <svg xmlns="http://www.w3.org/2000/svg" aria-label="GitHub" role="img" viewBox="0 0 512 512">
+        <rect fill="grey" width="512" height="512" rx="15%"></rect>
+        <path fill="white" d="M335 499c14 0 12 17 12 17H165s-2-17 12-17c13 0 16-6 16-12l-1-50c-71 16-86-28-86-28-12-30-28-37-28-37-24-16
+          1-16 1-16 26 2 40 26 40 26 22 39 59 28 74 22 2-17 9-28 16-35-57-6-116-28-116-126 0-28 10-51 26-69-3-6-11-32 3-67
+          0 0 21-7 70 26 42-12 86-12 128 0 49-33 70-26 70-26 14 35 6 61 3 67 16 18 26 41 26 69 0 98-60 120-117 126 10 8 18
+          24 18 48l-1 70c0 6 3 12 16 12z"></path>
+      </svg> source repository</a> or write to <a href="mailto:contact-cidr@stanford.edu">contact-cidr@stanford.edu</a>.
+  </p>
+
+  <section class="screenshot">
+    <img src="pianolatron_2.png" alt="CCRMA logo">
+  </section>
+
+  <section class="orgs">
+    <a href="https://ccrma.stanford.edu/"
+      title="Center for Computer Research in Music and Acoustics @ Stanford University">
+      <img src="ccrma_logo.png" alt="CCRMA logo">
+    </a>
+
+    <a href="https://music.stanford.edu/" title="Department of Music @ Stanford University">
+      <img src="music_at_stanford.png" alt="Music at Stanford">
+    </a>
+
+    <a href="http://cidr.stanford.edu/" title="Center for Interdisciplinary Digital Research @ Stanford Libraries">
+      <img src="cidr.trsp.300x176.png" alt="CIDR logo">
+    </a>
+    <a href="https://library.stanford.edu/" title="Stanford Libraries">
+      <img src="sul-logo.svg" alt="SUL logo">
+    </a>
+
+  </section>
+</body>
+
+</html>
