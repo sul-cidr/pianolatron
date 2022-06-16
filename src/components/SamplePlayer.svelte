@@ -28,9 +28,11 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
-    noteVelocitiesMap,
     expressionizer,
+    expressionParameters,
     defaultExpressionParameters,
+    expBoxType,
+    noteVelocitiesMap,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -44,6 +46,7 @@
   let buildNoteVelocitiesMap;
   let buildMidiEventHandler;
   let getExpressionParams;
+
   let tempoMap;
   let pedalingMap;
   let notesMap;
@@ -257,6 +260,22 @@
     midiSamplePlayer.play();
   };
 
+  const updateVelocitiesMap = () => {
+    if (!buildNoteVelocitiesMap) return;
+
+    buildNoteVelocitiesMap(midiSamplePlayer, tempoMap);
+
+    midiSamplePlayer.eventListeners.midiEvent = [
+      buildMidiEventHandler(
+        startNote,
+        stopNote,
+        $noteVelocitiesMap,
+        midiSamplePlayer,
+        tempoMap,
+      ),
+    ];
+  };
+
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -284,6 +303,7 @@
       ? "expressiveMidi"
       : $expressionizer;
     const expressionBox = expressionBoxes[expressionBoxType];
+
     ({
       buildTempoMap,
       buildPedalingMap,
@@ -295,12 +315,19 @@
 
     $defaultExpressionParameters = getExpressionParams();
 
+    if ($expBoxType === null) {
+      $expBoxType = expressionBoxType;
+    } else if ($expBoxType !== expressionBoxType) {
+      $expressionParameters = getExpressionParams();
+      $expBoxType = expressionBoxType;
+    }
+
     tempoMap = buildTempoMap(metadataTrack);
 
     pedalingMap = buildPedalingMap(musicTracks);
     notesMap = buildNotesMap(musicTracks);
     // buildNoteVelocitiesMap needs a full tempoMap for tracker width emulation
-    $noteVelocitiesMap = buildNoteVelocitiesMap(midiSamplePlayer, tempoMap);
+    buildNoteVelocitiesMap(midiSamplePlayer, tempoMap);
 
     // This is a tiny bit hacky (in the sense that it's using an undocumented
     //  api), but it's a simple way to ensure that only one midiEventHandler
@@ -331,6 +358,7 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
+  $: $expressionParameters, updateVelocitiesMap();
 
   export {
     midiSamplePlayer,

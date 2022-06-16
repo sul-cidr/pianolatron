@@ -11,6 +11,7 @@ import {
   bassExpCurve,
   trebleExpCurve,
   expressionParameters,
+  noteVelocitiesMap,
 } from "../stores";
 import { rollProfile } from "../config/roll-config";
 import { getHoleType } from "../lib/utils";
@@ -134,9 +135,16 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   const [, ...musicTracks] = midiSamplePlayer.events;
 
-  const expParams = getExpressionParams();
+  // const expParams = getExpressionParams();
+  // expressionParameters.set(expParams);
 
-  expressionParameters.set(expParams);
+  let expParams = get(expressionParameters);
+
+  // XXX Need to reset this somehow when the roll type changes
+  if (Object.keys(expParams).length === 0) {
+    expressionParameters.set(getExpressionParams());
+    expParams = get(expressionParameters);
+  }
 
   const _expressionMap = {};
 
@@ -288,6 +296,8 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
     buildPanExpMap(musicTracks[1], musicTracks[3], 0, "treble"),
   );
 
+  noteVelocitiesMap.set(_expressionMap);
+
   return _expressionMap;
 };
 
@@ -403,7 +413,7 @@ const buildNotesMap = (musicTracks) => {
 const buildMidiEventHandler = (
   startNote,
   stopNote,
-  noteVelocitiesMap,
+  velocitiesMap,
   midiSamplePlayer,
   tempoMap,
 ) => {
@@ -434,8 +444,8 @@ const buildMidiEventHandler = (
           activeNotes.delete(midiNumber);
         } else {
           const noteVelocity =
-            get(playExpressionsOnOff) && noteVelocitiesMap !== null
-              ? noteVelocitiesMap[tick][midiNumber]
+            get(playExpressionsOnOff) && velocitiesMap !== null
+              ? velocitiesMap[tick]?.[midiNumber] || velocity
               : DEFAULT_NOTE_VELOCITY;
           startNote(midiNumber, noteVelocity);
           activeNotes.add(midiNumber);
