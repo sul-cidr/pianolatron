@@ -84,6 +84,7 @@ export const bassExpCurve = createStore();
 export const trebleExpCurve = createStore();
 export const expressionParameters = createStore({});
 export const defaultExpressionParameters = createStore({});
+export const expBoxType = createStore(null);
 
 // Playback State
 export const currentTick = createStore(0);

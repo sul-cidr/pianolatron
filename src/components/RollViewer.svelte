@@ -250,14 +250,14 @@
       // between roll types), meaning the guide overlay coords are NaNs.
       // Fortunately it runs again later after they've updated, ensuring the
       // overlays are drawn, but ideally it shouldn't happen this way.
-      if (!("welte_mf" in expParams)) return;
+      if (expParams === undefined || !("welte_mf" in expParams)) return;
       guides = {
         p: parseInt(expParams.welte_p, 10),
         mf: parseInt(expParams.welte_mf, 10),
         f: parseInt(expParams.welte_f, 10),
       };
     } else if ($rollMetadata.ROLL_TYPE === "88-note") {
-      if (!("default_mf" in expParams)) return;
+      if (expParams === undefined || !("default_mf" in expParams)) return;
       guides = {
         mf: parseInt(expParams.default_mf, 10),
         f: parseInt(expParams.accent_f, 10),

@@ -12,6 +12,7 @@ import {
   bassExpCurve,
   trebleExpCurve,
   expressionParameters,
+  noteVelocitiesMap,
 } from "../stores";
 import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
@@ -212,12 +213,19 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   const [, ...musicTracks] = midiSamplePlayer.events;
 
-  const expParams = getExpressionParams();
+  // const expParams = getExpressionParams();
+  // expressionParameters.set(expParams);
 
-  expressionParameters.set(expParams);
+  let expParams = get(expressionParameters);
+
+  if (Object.keys(expParams).length === 0) {
+    expressionParameters.set(getExpressionParams());
+    expParams = get(expressionParameters);
+  }
 
   const _expressionMap = {};
 
+  // XXX THIS CAN ONLY BE DONE ONCE PER ROLL!
   const applyTrackerExtension = (ctrlTrackMsgs) =>
     ctrlTrackMsgs
       .map((item) => {
@@ -258,7 +266,13 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
     expState.velocity = expParams.welte_p;
 
-    const extendedCtrlTrackMsgs = applyTrackerExtension(ctrlTrackMsgs);
+    // The tracker extension should be applied to a true copy of the control
+    // track messages; otherwise multiple tweaks to the expression settings
+    // will result in the end modified off ticks of the control holes being
+    // extended further and further...
+    const extendedCtrlTrackMsgs = applyTrackerExtension(
+      JSON.parse(JSON.stringify(ctrlTrackMsgs)),
+    );
 
     const finalTick = Math.max(
       noteTrackMsgs[noteTrackMsgs.length - 1].tick,
@@ -398,6 +412,8 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
   // treble notes and control holes
   trebleExpCurve.set(buildPanExpMap(musicTracks[1], musicTracks[3], 0));
 
+  noteVelocitiesMap.set(_expressionMap);
+
   return _expressionMap;
 };
 
@@ -524,7 +540,7 @@ const buildNotesMap = (musicTracks) => {
 const buildMidiEventHandler = (
   startNote,
   stopNote,
-  noteVelocitiesMap,
+  velocitiesMap,
   midiSamplePlayer,
   tempoMap,
 ) => {
@@ -556,8 +572,8 @@ const buildMidiEventHandler = (
           activeNotes.delete(midiNumber);
         } else {
           const noteVelocity =
-            get(playExpressionsOnOff) && noteVelocitiesMap !== null
-              ? noteVelocitiesMap[tick][midiNumber]
+            get(playExpressionsOnOff) && velocitiesMap !== null
+              ? velocitiesMap[tick]?.[midiNumber] || velocity
               : DEFAULT_NOTE_VELOCITY;
           startNote(midiNumber, noteVelocity);
           activeNotes.add(midiNumber);
