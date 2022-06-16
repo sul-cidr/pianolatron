@@ -13,10 +13,9 @@
     expressionizer,
   } from "../stores";
 
-  let expressionParams = null;
-
   let useExpressiveMidiFile = $expressionizer === "FROM_MIDI";
   let useInAppExpression = $expressionizer !== "FROM_MIDI";
+  let expressionParams = $expressionParameters;
 
   const updateExpressionParams = () => {
     expressionParams = $expressionParameters;
@@ -26,6 +25,7 @@
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $expressionParameters, updateExpressionParams();
+  $: $rollMetadata, updateExpressionParams();
 </script>
 
 <div id="expression-panel">
@@ -69,7 +69,7 @@
       </div>
     </fieldset>
 
-    {#if $expressionizer !== "FROM_MIDI" && expressionParams}
+    {#if $expressionizer !== "FROM_MIDI" && expressionParams !== undefined}
       <fieldset>
         <legend>Expression Settings</legend>
         {#each Object.keys(expressionParams) as expressionParam}
@@ -79,10 +79,16 @@
               <input
                 type="number"
                 name={expressionParam}
-                bind:value={expressionParams[expressionParam]}
-                on:change={() =>
-                  ($expressionParameters[expressionParam] =
-                    expressionParams[expressionParam])}
+                value={expressionParams[expressionParam]}
+                on:change={(e) => {
+                  $expressionParameters[expressionParam] = parseFloat(
+                    e.target.value,
+                  );
+                  expressionParameters[expressionParam] = parseFloat(
+                    e.target.value,
+                  );
+                  reloadRoll();
+                }}
               />
             </label>
           </div>
@@ -98,7 +104,6 @@
                 $expressionParameters = JSON.parse(
                   JSON.stringify($defaultExpressionParameters),
                 );
-                expressionParams = $expressionParameters;
               }
             }}>Reset to Defaults</button
           >

@@ -183,6 +183,13 @@
 
   const loadRoll = (roll, doReset = true) => {
     appWaiting = true;
+    if ($expressionizer !== "FROM_MIDI") {
+      if (roll.type === "welte-red") {
+        $expressionizer = "welteRed";
+      } else if (roll.type === "88-note") {
+        $expressionizer = "standard";
+      }
+    }
     mididataReady = fetch(
       `./${$expressionizer === "FROM_MIDI" ? "midi" : "note_midi"}/${
         roll.druid
