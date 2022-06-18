@@ -2,6 +2,13 @@
   button {
     @include button;
   }
+  .exp-param {
+    align-self: center;
+    margin: 0 10px 0 0;
+  }
+  .param-value {
+    max-width: 100px;
+  }
 </style>
 
 <script>
@@ -33,7 +40,7 @@
     <fieldset>
       <legend>Emulation Type</legend>
 
-      <div class="setting">
+      <div>
         Expression MIDI:
         <input
           type="checkbox"
@@ -48,7 +55,7 @@
           }}
         />
       </div>
-      <div class="setting">
+      <div>
         In-App Expression:
         <input
           type="checkbox"
@@ -69,28 +76,31 @@
       </div>
     </fieldset>
 
-    {#if $expressionizer !== "FROM_MIDI" && expressionParams !== undefined}
+    {#if $expressionizer !== "FROM_MIDI" && expressionParams !== undefined && expressionParams.tunable !== undefined}
       <fieldset>
         <legend>Expression Settings</legend>
-        {#each Object.keys(expressionParams) as expressionParam}
+        {#each Object.keys(expressionParams.tunable) as expressionParam}
           <div>
-            <label
-              >{expressionParam}
+            <label class="exp-param" for={"input_" + expressionParam}
+              >{expressionParam}</label
+            >
+            <div>
               <input
+                class="param-value"
+                id={"input_" + expressionParam}
                 type="number"
-                name={expressionParam}
-                value={expressionParams[expressionParam]}
+                value={expressionParams.tunable[expressionParam]}
                 on:change={(e) => {
-                  $expressionParameters[expressionParam] = parseFloat(
+                  $expressionParameters.tunable[expressionParam] = parseFloat(
                     e.target.value,
                   );
-                  expressionParameters[expressionParam] = parseFloat(
+                  expressionParams.tunable[expressionParam] = parseFloat(
                     e.target.value,
                   );
                   reloadRoll();
                 }}
               />
-            </label>
+            </div>
           </div>
         {/each}
         <div id="reset-control">

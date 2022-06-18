@@ -34,17 +34,27 @@ const getTempoAtTick = (tick, tempoMap) =>
 const getExpressionParams = () => {
   let expParams = null;
   expParams = {
-    default_mf: 75,
-    accent_f: 95, // snakebite velocity
-    snakebite_extension: 200, // extension (in ms) before and after snakebite
-    trackerbar_diameter: 16.7, // in ticks (px = 1/300 in)
-    punch_extension_fraction: 0.75,
-    accelFtPerMin2: 0.2,
+    tunable: {
+      default_mf: 75,
+      accent_f: 95, // snakebite velocity
+      snakebite_extension: 200, // extension (in ms) before and after snakebite
+      tracker_diameter: 16.7, // in ticks (px = 1/300 in)
+      punch_ext_ratio: 0.75,
+      accelFtPerMin2: 0.2,
+    },
   };
+
+  expParams = getDerivedExpressionParams(expParams);
+
+  return expParams;
+};
+
+const getDerivedExpressionParams = (expParams) => {
   expParams.tracker_extension = parseInt(
-    expParams.trackerbar_diameter * expParams.punch_extension_fraction,
+    expParams.tunable.tracker_diameter * expParams.tunable.punch_ext_ratio,
     10,
   );
+
   return expParams;
 };
 
@@ -69,7 +79,9 @@ const getVelocityAtTime = (time, expState, expParams) => {
       expState.snakebite_stop !== null &&
       expState.snakebite_stop > time);
 
-  return isSnakebiteOn ? expParams.accent_f : expParams.default_mf;
+  return isSnakebiteOn
+    ? expParams.tunable.accent_f
+    : expParams.tunable.default_mf;
 };
 
 const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
@@ -185,7 +197,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
     const expressionCurve = [];
 
     const expState = getExpressionStateBox(rollType);
-    expState.velocity = expParams.default_mf;
+    expState.velocity = expParams.tunable.default_mf;
 
     const extendedCtrlTrackMsgs = applyTrackerExtension(ctrlTrackMsgs);
 
@@ -205,7 +217,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
           if (velocity > 0) {
             expState.snakebite_start = Math.max(
               0,
-              msgTime - expParams.snakebite_extension,
+              msgTime - expParams.tunable.snakebite_extension,
             );
 
             // Add an entry to the expression Interval Tree for the previous
@@ -223,7 +235,8 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
             expState.snakebite_stop = null;
           } else {
-            expState.snakebite_stop = msgTime + expParams.snakebite_extension;
+            expState.snakebite_stop =
+              msgTime + expParams.tunable.snakebite_extension;
 
             if (expState.snakebite_start < expState.snakebite_stop) {
               _panExpMap.insert(
@@ -246,7 +259,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
         let noteVelocity = _panExpMap.search(msgTime, msgTime)[0];
         if (noteVelocity == null) {
-          noteVelocity = expParams.default_mf;
+          noteVelocity = expParams.tunable.default_mf;
         }
 
         if (tick in _expressionMap) {
@@ -270,13 +283,13 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
       // XXX Also should do this from the final velocity control event to the
       // end of the piece (final tick)
       if (expVelocity === null) {
-        expressionCurve.push([0, expParams.default_mf, 0]);
+        expressionCurve.push([0, expParams.tunable.default_mf, 0]);
         expressionCurve.push([
           expStartTick,
-          expParams.default_mf,
+          expParams.tunable.default_mf,
           interval.low,
         ]);
-        expVelocity = expParams.default_mf;
+        expVelocity = expParams.tunable.default_mf;
       }
       if (thisVelocity !== expVelocity) {
         expressionCurve.push([expStartTick, thisVelocity, interval.low]);
@@ -327,7 +340,7 @@ const buildTempoMap = () => {
   while (tick < get(rollMetadata).IMAGE_LENGTH - get(rollMetadata).FIRST_HOLE) {
     minute += minuteDiv;
     nextTick = tick + parseInt(speed * minuteDiv * ticksPerFt, 10);
-    speed = startSpeed + minute * expParams.accelFtPerMin2;
+    speed = startSpeed + minute * expParams.tunable.accelFtPerMin2;
     nextTempo = (speed * ticksPerFt) / midiTPQ;
     _tempoMap.insert(tick, nextTick, tempo);
     tick = nextTick;
