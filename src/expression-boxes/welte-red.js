@@ -36,27 +36,39 @@ const getTempoAtTick = (tick, tempoMap) =>
 const getExpressionParams = () => {
   let expParams = null;
   expParams = {
-    welte_p: 35.0,
-    welte_mf: 60.0,
-    welte_f: 90.0,
-    welte_loud: 75.0,
-    left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
-    cresc_rate: 1.0,
-    slow_decay_rate: 2380, // Probably this is 1 velocity step in 2.38s
-    fastC_decay_rate: 300,
-    fastD_decay_rate: 400,
-    trackerbar_diameter: 16.7, // in ticks (px = 1/300 in)
-    punch_extension_fraction: 0.75,
-    accelFtPerMin2: 0.3147,
+    tunable: {
+      welte_p: 35.0,
+      welte_mf: 60.0,
+      welte_f: 90.0,
+      welte_loud: 75.0,
+      left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
+      slow_decay_rate: 2380, // Probably this is 1 velocity step in 2.38s
+      fastC_decay_rate: 300,
+      fastD_decay_rate: 400,
+      tracker_diameter: 16.7, // in ticks (px = 1/300 in)
+      punch_ext_ratio: 0.75,
+      accelFtPerMin2: 0.3147,
+    },
   };
+  expParams = getDerivedExpressionParams(expParams);
+
+  return expParams;
+};
+
+const getDerivedExpressionParams = (expParams) => {
+  // These are the derived parameters, used to compute velocities, but should
+  // not be adjusted via the expression controls
   expParams.slow_step =
-    (expParams.welte_mf - expParams.welte_p) / expParams.slow_decay_rate;
+    (expParams.tunable.welte_mf - expParams.tunable.welte_p) /
+    expParams.tunable.slow_decay_rate;
   expParams.fastC_step =
-    (expParams.welte_mf - expParams.welte_p) / expParams.fastC_decay_rate;
+    (expParams.tunable.welte_mf - expParams.tunable.welte_p) /
+    expParams.tunable.fastC_decay_rate;
   expParams.fastD_step =
-    -(expParams.welte_f - expParams.welte_p) / expParams.fastD_decay_rate;
+    -(expParams.tunable.welte_f - expParams.tunable.welte_p) /
+    expParams.tunable.fastD_decay_rate;
   expParams.tracker_extension = parseInt(
-    expParams.trackerbar_diameter * expParams.punch_extension_fraction,
+    expParams.tunable.tracker_diameter * expParams.tunable.punch_ext_ratio,
     10,
   );
   return expParams;
@@ -122,30 +134,34 @@ const getVelocityAtTime = (time, expState, expParams) => {
   const velocityDelta = newVelocity - expState.velocity;
   if (expState.mf_start !== null) {
     // If the previous velocity was above MF, keep it there
-    if (expState.velocity > expParams.welte_mf) {
+    if (expState.velocity > expParams.tunable.welte_mf) {
       newVelocity =
         velocityDelta < 0
-          ? Math.max(expParams.welte_mf + 0.001, newVelocity)
-          : Math.min(expParams.welte_f, newVelocity);
+          ? Math.max(expParams.tunable.welte_mf + 0.001, newVelocity)
+          : Math.min(expParams.tunable.welte_f, newVelocity);
       // If the previous velcoity was below MF, keep it there
-    } else if (expState.velocity < expParams.welte_mf) {
+    } else if (expState.velocity < expParams.tunable.welte_mf) {
       newVelocity =
         velocityDelta > 0
-          ? Math.min(expParams.welte_mf - 0.001, newVelocity)
-          : Math.max(expParams.welte_p, newVelocity);
+          ? Math.min(expParams.tunable.welte_mf - 0.001, newVelocity)
+          : Math.max(expParams.tunable.welte_p, newVelocity);
     }
   } else if (
     expState.slow_cresc_start !== null &&
     !isFastCrescOn &&
-    expState.velocity < expParams.welte_loud
+    expState.velocity < expParams.tunable.welte_loud
   ) {
     // If no MF hook and only slow crescendo is on, velocity should never
     // exceed welte_loud (which is lower than welte_f)
-    newVelocity = Math.min(newVelocity, expParams.welte_loud - 0.001);
+    newVelocity = Math.min(newVelocity, expParams.tunable.welte_loud - 0.001);
   }
 
   // Make sure the velocity always stays between welte_p and welte_f
-  newVelocity = clamp(newVelocity, expParams.welte_p, expParams.welte_f);
+  newVelocity = clamp(
+    newVelocity,
+    expParams.tunable.welte_p,
+    expParams.tunable.welte_f,
+  );
 
   return newVelocity;
 };
@@ -264,7 +280,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
     const expState = getExpressionStateBox(rollType);
 
-    expState.velocity = expParams.welte_p;
+    expState.velocity = expParams.tunable.welte_p;
 
     // The tracker extension should be applied to a true copy of the control
     // track messages; otherwise multiple tweaks to the expression settings
@@ -406,7 +422,11 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
   // bass notes and control holes
   bassExpCurve.set(
-    buildPanExpMap(musicTracks[0], musicTracks[2], expParams.left_adjust),
+    buildPanExpMap(
+      musicTracks[0],
+      musicTracks[2],
+      expParams.tunable.left_adjust,
+    ),
   );
 
   // treble notes and control holes
@@ -443,7 +463,7 @@ const buildTempoMap = () => {
   while (tick < get(rollMetadata).IMAGE_LENGTH - get(rollMetadata).FIRST_HOLE) {
     minute += minuteDiv;
     nextTick = tick + parseInt(speed * minuteDiv * ticksPerFt, 10);
-    speed = startSpeed + minute * expParams.accelFtPerMin2;
+    speed = startSpeed + minute * expParams.tunable.accelFtPerMin2;
     nextTempo = (speed * ticksPerFt) / midiTPQ;
     _tempoMap.insert(tick, nextTick, tempo);
     tick = nextTick;
