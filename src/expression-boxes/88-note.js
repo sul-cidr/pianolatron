@@ -31,6 +31,15 @@ const getTempoAtTick = (tick, tempoMap) =>
     ? DEFAULT_TEMPO
     : tempoMap.search(tick, tick)[0];
 
+const computeDerivedExpressionParams = (expParams) => {
+  expParams.tracker_extension = parseInt(
+    expParams.tunable.tracker_diameter * expParams.tunable.punch_ext_ratio,
+    10,
+  );
+
+  return expParams;
+};
+
 const getExpressionParams = () => {
   let expParams = null;
   expParams = {
@@ -44,16 +53,7 @@ const getExpressionParams = () => {
     },
   };
 
-  expParams = getDerivedExpressionParams(expParams);
-
-  return expParams;
-};
-
-const getDerivedExpressionParams = (expParams) => {
-  expParams.tracker_extension = parseInt(
-    expParams.tunable.tracker_diameter * expParams.tunable.punch_ext_ratio,
-    10,
-  );
+  expParams = computeDerivedExpressionParams(expParams);
 
   return expParams;
 };
@@ -483,4 +483,5 @@ export {
   buildNoteVelocitiesMap,
   buildMidiEventHandler,
   getExpressionParams,
+  computeDerivedExpressionParams,
 };

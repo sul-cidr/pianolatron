@@ -81,13 +81,13 @@
         <legend>Expression Settings</legend>
         {#each Object.keys(expressionParams.tunable) as expressionParam}
           <div>
-            <label class="exp-param" for={"input_" + expressionParam}
+            <label class="exp-param" for={`"input_"{expressionParam}`}
               >{expressionParam}</label
             >
             <div>
               <input
                 class="param-value"
-                id={"input_" + expressionParam}
+                id={`"input_"{expressionParam}`}
                 type="number"
                 value={expressionParams.tunable[expressionParam]}
                 on:change={(e) => {
