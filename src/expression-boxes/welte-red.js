@@ -33,6 +33,25 @@ const getTempoAtTick = (tick, tempoMap) =>
     ? DEFAULT_TEMPO
     : tempoMap.search(tick, tick)[0];
 
+const computeDerivedExpressionParams = (expParams) => {
+  // These are the derived parameters, used to compute velocities, but should
+  // not be adjusted via the expression controls
+  expParams.slow_step =
+    (expParams.tunable.welte_mf - expParams.tunable.welte_p) /
+    expParams.tunable.slow_decay_rate;
+  expParams.fastC_step =
+    (expParams.tunable.welte_mf - expParams.tunable.welte_p) /
+    expParams.tunable.fastC_decay_rate;
+  expParams.fastD_step =
+    -(expParams.tunable.welte_f - expParams.tunable.welte_p) /
+    expParams.tunable.fastD_decay_rate;
+  expParams.tracker_extension = parseInt(
+    expParams.tunable.tracker_diameter * expParams.tunable.punch_ext_ratio,
+    10,
+  );
+  return expParams;
+};
+
 const getExpressionParams = () => {
   let expParams = null;
   expParams = {
@@ -50,27 +69,8 @@ const getExpressionParams = () => {
       accelFtPerMin2: 0.3147,
     },
   };
-  expParams = getDerivedExpressionParams(expParams);
+  expParams = computeDerivedExpressionParams(expParams);
 
-  return expParams;
-};
-
-const getDerivedExpressionParams = (expParams) => {
-  // These are the derived parameters, used to compute velocities, but should
-  // not be adjusted via the expression controls
-  expParams.slow_step =
-    (expParams.tunable.welte_mf - expParams.tunable.welte_p) /
-    expParams.tunable.slow_decay_rate;
-  expParams.fastC_step =
-    (expParams.tunable.welte_mf - expParams.tunable.welte_p) /
-    expParams.tunable.fastC_decay_rate;
-  expParams.fastD_step =
-    -(expParams.tunable.welte_f - expParams.tunable.welte_p) /
-    expParams.tunable.fastD_decay_rate;
-  expParams.tracker_extension = parseInt(
-    expParams.tunable.tracker_diameter * expParams.tunable.punch_ext_ratio,
-    10,
-  );
   return expParams;
 };
 
@@ -631,4 +631,5 @@ export {
   buildNoteVelocitiesMap,
   buildMidiEventHandler,
   getExpressionParams,
+  computeDerivedExpressionParams,
 };
