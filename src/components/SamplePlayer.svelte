@@ -46,6 +46,7 @@
   let buildNoteVelocitiesMap;
   let buildMidiEventHandler;
   let getExpressionParams;
+  let computeDerivedExpressionParams;
 
   let tempoMap;
   let pedalingMap;
@@ -276,6 +277,16 @@
     ];
   };
 
+  const recomputeVelocities = () => {
+    if (!computeDerivedExpressionParams) return;
+
+    $expressionParameters = computeDerivedExpressionParams(
+      $expressionParameters,
+    );
+
+    updateVelocitiesMap();
+  };
+
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -311,6 +322,7 @@
       buildNoteVelocitiesMap,
       buildMidiEventHandler,
       getExpressionParams,
+      computeDerivedExpressionParams,
     } = expressionBox);
 
     $defaultExpressionParameters = getExpressionParams();
@@ -358,7 +370,7 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
-  $: $expressionParameters, updateVelocitiesMap();
+  $: $expressionParameters, recomputeVelocities(); // updateVelocitiesMap();
 
   export {
     midiSamplePlayer,
