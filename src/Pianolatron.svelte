@@ -183,11 +183,15 @@
 
   const loadRoll = (roll, doReset = true) => {
     appWaiting = true;
+    // Perhaps there should be a global mapping somehwere from the roll type
+    // values listed in metadata to the names of the expression box modules
     if ($expressionizer !== "FROM_MIDI") {
       if (roll.type === "welte-red") {
         $expressionizer = "welteRed";
       } else if (roll.type === "88-note") {
         $expressionizer = "standard";
+      } else {
+        $expressionizer = "FROM_MIDI";
       }
     }
     mididataReady = fetch(
@@ -230,8 +234,10 @@
           $noteVelocitiesMap,
         );
         buildHolesIntervalTree();
-        $playExpressionsOnOff = $isReproducingRoll;
-        $rollPedalingOnOff = $isReproducingRoll;
+        if (doReset) {
+          $playExpressionsOnOff = $isReproducingRoll;
+          $rollPedalingOnOff = $isReproducingRoll;
+        }
         appReady = true;
         appWaiting = false;
         firstLoad = false;
