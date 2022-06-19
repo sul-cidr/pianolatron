@@ -20,9 +20,9 @@
     expressionizer,
   } from "../stores";
 
-  let useExpressiveMidiFile = $expressionizer === "FROM_MIDI";
-  let useInAppExpression = $expressionizer !== "FROM_MIDI";
   let expressionParams = $expressionParameters;
+  let expressionType =
+    $expressionizer === "FROM_MIDI" ? "Expression MIDI" : "In-App Expression";
 
   const updateExpressionParams = () => {
     expressionParams = $expressionParameters;
@@ -39,41 +39,22 @@
   {#if !$rollHasExpressions || $rollMetadata.ROLL_TYPE === "welte-red" || $rollMetadata.ROLL_TYPE === "88-note"}
     <fieldset>
       <legend>Emulation Type</legend>
-
-      <div>
-        Expression MIDI:
-        <input
-          type="checkbox"
-          bind:checked={useExpressiveMidiFile}
-          on:click={() => {
-            if ($expressionizer !== "FROM_MIDI") {
-              $expressionizer = "FROM_MIDI";
-              useExpressiveMidiFile = true;
-              useInAppExpression = false;
-              reloadRoll();
-            }
-          }}
-        />
-      </div>
-      <div>
-        In-App Expression:
-        <input
-          type="checkbox"
-          bind:checked={useInAppExpression}
-          on:click={() => {
-            if ($expressionizer === "FROM_MIDI") {
-              if ($rollMetadata.ROLL_TYPE === "welte-red") {
-                $expressionizer = "welteRed";
-              } else if ($rollMetadata.ROLL_TYPE === "88-note") {
-                $expressionizer = "standard";
-              }
-              useExpressiveMidiFile = false;
-              useInAppExpression = true;
-              reloadRoll();
-            }
-          }}
-        />
-      </div>
+      <select
+        bind:value={expressionType}
+        on:change={() => {
+          if (expressionType === "Expression MIDI") {
+            $expressionizer = "FROM_MIDI";
+          } else if ($rollMetadata.ROLL_TYPE === "welte-red") {
+            $expressionizer = "welteRed";
+          } else if ($rollMetadata.ROLL_TYPE === "88-note") {
+            $expressionizer = "standard";
+          }
+          reloadRoll();
+        }}
+      >
+        <option value="Expression MIDI">Expression MIDI</option>
+        <option value="In-App Expression">In-App Expression</option>
+      </select>
     </fieldset>
 
     {#if $expressionizer !== "FROM_MIDI" && expressionParams !== undefined && expressionParams.tunable !== undefined}
