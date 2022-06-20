@@ -53,7 +53,7 @@ export const getNoteName = (midiNumber) => {
   return `${name}${octave}`;
 };
 
-export const getHoleLabel = (midiNumber, rollType = "welte-red") => {
+export const getHoleLabel = (midiNumber, rollType) => {
   const {
     bassNotesBegin: notesBegin,
     trebleNotesEnd: notesEnd,

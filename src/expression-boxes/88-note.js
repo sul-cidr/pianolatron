@@ -358,8 +358,7 @@ const buildTempoMap = () => {
  *
  */
 
-// Get pedal events from track 0 (bass control = soft pedal) and
-// track 1 (treble control = sustain pedal)
+// Get sustain pedal events from track 2 (bass control = sustain pedal)
 const buildPedalingMap = (musicTracks) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const { ctrlMap } = rollProfile[rollType];
