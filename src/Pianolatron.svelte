@@ -185,6 +185,8 @@
     if ($expressionizer !== "FROM_MIDI") {
       if (roll.type === "welte-red") {
         $expressionizer = "welteRed";
+      } else if (roll.type === "welte-green") {
+        $expressionizer = "welteGreen";
       } else if (roll.type === "88-note") {
         $expressionizer = "standard";
       } else {
