@@ -36,7 +36,7 @@
 </script>
 
 <div id="expression-panel">
-  {#if !$rollHasExpressions || $rollMetadata.ROLL_TYPE === "welte-red" || $rollMetadata.ROLL_TYPE === "88-note"}
+  {#if !$rollHasExpressions || ["welte-red", "welte-green", "88-note"].includes($rollMetadata.ROLL_TYPE)}
     <fieldset>
       <legend>Emulation Type</legend>
       <select
@@ -46,6 +46,8 @@
             $expressionizer = "FROM_MIDI";
           } else if ($rollMetadata.ROLL_TYPE === "welte-red") {
             $expressionizer = "welteRed";
+          } else if ($rollMetadata.ROLL_TYPE === "welte-green") {
+            $expressionizer = "welteGreen";
           } else if ($rollMetadata.ROLL_TYPE === "88-note") {
             $expressionizer = "standard";
           }

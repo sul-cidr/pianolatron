@@ -61,12 +61,12 @@ const getExpressionParams = () => {
       welte_f: 90.0,
       welte_loud: 75.0,
       left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
-      slow_decay_rate: 2380, // Probably this is 1 velocity step in 2.38s
-      fastC_decay_rate: 300,
-      fastD_decay_rate: 400,
+      slow_decay_rate: 2455, // Probably this is 1 velocity step in 2.455s
+      fastC_decay_rate: 245,
+      fastD_decay_rate: 269,
       tracker_diameter: 16.7, // in ticks (px = 1/300 in)
       punch_ext_ratio: 0.75,
-      accelFtPerMin2: 0.3147,
+      accelFtPerMin2: 0.2, // XXX Double check
     },
   };
   expParams = computeDerivedExpressionParams(expParams);
@@ -76,7 +76,7 @@ const getExpressionParams = () => {
 
 const getExpressionStateBox = (rollType) => {
   let expState = null;
-  if (rollType === "welte-red") {
+  if (rollType === "welte-green") {
     expState = {
       velocity: 0.0, // Velocity at last cresc/decresc event
       time: 0.0, // Time (in ms) at last cresc/decresc event
@@ -84,7 +84,7 @@ const getExpressionStateBox = (rollType) => {
       slow_cresc_start: null,
       slow_decresc_start: null,
       fast_cresc_start: null,
-      fast_cresc_stop: null, // Can be in the future due to tracker extension
+      fast_cresc_stop: null,
       fast_decresc_start: null,
       fast_decresc_stop: null,
     };
@@ -248,18 +248,14 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         // We know these are all control holes
         const ctrlFunc = rollProfile[rollType].ctrlMap[item.noteNumber];
 
-        // We're only interested in the ends of control holes, and specifically
-        // only the ends of fast cresc or decresc holes (for now)
-        // NOTE that the extension is applied to the note holes during playback
-        // in the MidiEventHandler, but a modified version of this function
-        // could be used to apply the extension prior to playback.
-        // Note also that no extension is applied to pedal events, but this
-        // could be done as well.
+        // We're only interested in the ends of control holes.
+        // No extension is applied to pedal events, but this could be done
+        // as well.
         if (
           ctrlFunc == null ||
           item.name !== "Note on" ||
           item.velocity !== 0 ||
-          !["sf_on", "sf_off"].includes(ctrlFunc)
+          !["sfp", "mf", "cresc", "sff"].includes(ctrlFunc)
         )
           return item;
 
@@ -306,50 +302,44 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         // will have some of these), or are likely to be damage holes
         if (
           ctrlFunc == null ||
-          ![
-            "sf_on",
-            "sf_off",
-            "cresc_on",
-            "cresc_off",
-            "mf_on",
-            "mf_off",
-          ].includes(ctrlFunc)
+          !["sfp", "mf", "cresc", "sff"].includes(ctrlFunc)
         )
           return; // Usually these are damage holes
 
-        // Fast crescendo and decrescendo controls are the only ones for which
-        // the length of the perforation matters
-        if (velocity === 0 && !["sf_on", "sf_off"].includes(ctrlFunc)) {
-          return;
-        }
-
+        // The length of the perforation matters for all control holes
         const msgTime = convertTicksAndTime(tick);
 
         const panVelocity = getVelocityAtTime(msgTime, expState, expParams);
 
-        if (ctrlFunc === "mf_on" && velocity > 0) {
-          expState.mf_start = msgTime;
-        } else if (ctrlFunc === "mf_off" && velocity > 0) {
-          expState.mf_start = null;
-        } else if (ctrlFunc === "cresc_on" && velocity > 0) {
-          expState.slow_cresc_start = msgTime;
-          expState.slow_decresc_start = null;
-        } else if (ctrlFunc === "cresc_off" && velocity > 0) {
-          expState.slow_cresc_start = null;
-          expState.slow_decresc_start = msgTime;
-        } else if (ctrlFunc === "sf_on") {
+        // These are all quite regular -- how to de-boilerplate this?
+        if (ctrlFunc === "mf") {
           if (velocity > 0) {
-            expState.fast_cresc_start = msgTime;
-            expState.fast_cresc_stop = null;
+            expState.mf_start = msgTime;
+            expState.mf_stop = null;
           } else {
-            expState.fast_cresc_stop = msgTime;
+            expState.mf_stop = msgTime;
           }
-        } else if (ctrlFunc === "sf_off") {
+        } else if (ctrlFunc === "sfp") {
           if (velocity > 0) {
             expState.fast_decresc_start = msgTime;
             expState.fast_decresc_stop = null;
           } else {
             expState.fast_decresc_stop = msgTime;
+          }
+        } else if (ctrlFunc === "cresc") {
+          if (velocity > 0) {
+            expState.slow_cresc_start = msgTime;
+            expState.slow_decresc_start = null;
+          } else {
+            expState.slow_cresc_start = null;
+            expState.slow_decresc_start = msgTime;
+          }
+        } else if (ctrlFunc === "sff") {
+          if (velocity > 0) {
+            expState.fast_cresc_start = msgTime;
+            expState.fast_cresc_stop = null;
+          } else {
+            expState.fast_cresc_stop = msgTime;
           }
         }
 
@@ -486,44 +476,35 @@ const buildPedalingMap = (musicTracks) => {
   const rollType = get(rollMetadata).ROLL_TYPE;
   const { ctrlMap } = rollProfile[rollType];
 
-  const SOFT_PEDAL_ON = parseInt(getKeyByValue(ctrlMap, "soft_on"), 10);
-  const SOFT_PEDAL_OFF = parseInt(getKeyByValue(ctrlMap, "soft_off"), 10);
-  const SUSTAIN_PEDAL_ON = parseInt(getKeyByValue(ctrlMap, "sust_on"), 10);
-  const SUSTAIN_PEDAL_OFF = parseInt(getKeyByValue(ctrlMap, "sust_off"), 10);
+  const SUSTAIN_PEDAL_ON = parseInt(getKeyByValue(ctrlMap, "sust"), 10);
+  const SOFT_PEDAL_ON = parseInt(getKeyByValue(ctrlMap, "sust"), 10);
+
   const _pedalingMap = new IntervalTree();
 
   // For 65-note rolls, or any weird MIDI input file with only 1 note track
   if (musicTracks.length === 1) return _pedalingMap;
 
-  const registerPedalEvents = (track, pedalOn, pedalOff, eventNumber) => {
+  const registerPedalEvents = (track, pedalOn, eventNumber) => {
     let tickOn = false;
     track
-      // Only want beginning of note holes for lock & cancel type expression
-      // mechanisms (works for Welte red and Licensee, not 88 or Welte green)
-      .filter(({ name, velocity }) => name === "Note on" && velocity === 1)
-      .forEach(({ noteNumber, tick }) => {
-        if (noteNumber === pedalOff) {
-          // Holes can legitimately begin on tick 0
-          if (tickOn !== false) _pedalingMap.insert(tickOn, tick, eventNumber);
-          tickOn = false;
-        } else if (noteNumber === pedalOn) {
-          if (!tickOn) tickOn = tick;
+      // Pedal is on as long as the punch is present
+      .filter(({ name }) => name === "Note on")
+      .forEach(({ noteNumber, tick, velocity }) => {
+        if (noteNumber === pedalOn) {
+          if (velocity === 0) {
+            // Holes can legitimately begin on tick 0
+            if (tickOn !== false)
+              _pedalingMap.insert(tickOn, tick, eventNumber);
+            tickOn = false;
+          } else if (velocity === 1) {
+            if (!tickOn) tickOn = tick;
+          }
         }
       });
   };
 
-  registerPedalEvents(
-    musicTracks[2],
-    SOFT_PEDAL_ON,
-    SOFT_PEDAL_OFF,
-    SOFT_PEDAL_MIDI,
-  );
-  registerPedalEvents(
-    musicTracks[3],
-    SUSTAIN_PEDAL_ON,
-    SUSTAIN_PEDAL_OFF,
-    SUSTAIN_PEDAL_MIDI,
-  );
+  registerPedalEvents(musicTracks[2], SUSTAIN_PEDAL_ON, SUSTAIN_PEDAL_MIDI);
+  registerPedalEvents(musicTracks[3], SOFT_PEDAL_ON, SOFT_PEDAL_MIDI);
 
   return _pedalingMap;
 };
@@ -585,7 +566,6 @@ const buildMidiEventHandler = (
       if (holeType === "note") {
         if (velocity === 0) {
           const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
-          // At 591 TPQ & 60bpm, this is ~.02s, drops slowly due to accel
           const trackerExtensionSeconds =
             expParams.tracker_extension / ticksPerSecond;
           stopNote(midiNumber, `+${trackerExtensionSeconds}`);
@@ -599,19 +579,10 @@ const buildMidiEventHandler = (
           activeNotes.add(midiNumber);
         }
       } else if (holeType === "pedal" && get(rollPedalingOnOff)) {
-        if (velocity === 0) {
-          // Length of pedal control holes doesn't matter for red Welte
-          // (but it does for green Welte...)
-          return;
-        }
-        if (ctrlMap[midiNumber] === "sust_on") {
-          sustainOnOff.set(true);
-        } else if (ctrlMap[midiNumber] === "sust_off") {
-          sustainOnOff.set(false);
-        } else if (ctrlMap[midiNumber] === "soft_on") {
-          softOnOff.set(true);
-        } else if (ctrlMap[midiNumber] === "soft_off") {
-          softOnOff.set(false);
+        if (ctrlMap[midiNumber] === "sust") {
+          sustainOnOff.set(!!velocity);
+        } else if (ctrlMap[midiNumber] === "soft") {
+          softOnOff.set(!!velocity);
         }
       }
     } else if (msgType === "Set Tempo" && get(useMidiTempoEventsOnOff)) {

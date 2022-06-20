@@ -247,7 +247,10 @@
     const expParams = $expressionParameters;
     if (expParams === null) return;
     let guides = {};
-    if ($rollMetadata.ROLL_TYPE === "welte-red") {
+    if (
+      $rollMetadata.ROLL_TYPE === "welte-red" ||
+      $rollMetadata.ROLL_TYPE === "welte-green"
+    ) {
       // Sometimes this runs before $expressionMap updates (when changing
       // between roll types), meaning the guide overlay coords are NaNs.
       // Fortunately it runs again later after they've updated, ensuring the
