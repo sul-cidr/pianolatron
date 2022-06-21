@@ -248,8 +248,9 @@
     if (expParams === null) return;
     let guides = {};
     if (
-      $rollMetadata.ROLL_TYPE === "welte-red" ||
-      $rollMetadata.ROLL_TYPE === "welte-green"
+      ["welte-red", "welte-green", "welte-licensee"].includes(
+        $rollMetadata.ROLL_TYPE,
+      )
     ) {
       // Sometimes this runs before $expressionMap updates (when changing
       // between roll types), meaning the guide overlay coords are NaNs.
