@@ -191,6 +191,8 @@
         $expressionizer = "welteGreen";
       } else if (roll.type === "welte-licensee") {
         $expressionizer = "welteLicensee";
+      } else if (roll.type === "duo-art") {
+        $expressionizer = "duoArt";
       } else if (roll.type === "88-note") {
         $expressionizer = "standard";
       } else {

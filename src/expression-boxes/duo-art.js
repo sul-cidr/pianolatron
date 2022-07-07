@@ -15,7 +15,7 @@ import {
   noteVelocitiesMap,
 } from "../stores";
 import { rollProfile } from "../config/roll-config";
-import { clamp, getHoleType } from "../lib/utils";
+import { getHoleType } from "../lib/utils";
 
 const DEFAULT_TEMPO = 60;
 const DEFAULT_NOTE_VELOCITY = 64;
@@ -34,17 +34,6 @@ const getTempoAtTick = (tick, tempoMap) =>
     : tempoMap.search(tick, tick)[0];
 
 const computeDerivedExpressionParams = (expParams) => {
-  // These are the derived parameters, used to compute velocities, but should
-  // not be adjusted via the expression controls
-  expParams.slow_step =
-    (expParams.tunable.welte_mf - expParams.tunable.welte_p) /
-    expParams.tunable.slow_decay_rate;
-  expParams.fastC_step =
-    (expParams.tunable.welte_mf - expParams.tunable.welte_p) /
-    expParams.tunable.fastC_decay_rate;
-  expParams.fastD_step =
-    -(expParams.tunable.welte_f - expParams.tunable.welte_p) /
-    expParams.tunable.fastD_decay_rate;
   expParams.tracker_extension = parseInt(
     expParams.tunable.tracker_diameter * expParams.tunable.punch_ext_ratio,
     10,
@@ -56,17 +45,21 @@ const getExpressionParams = () => {
   let expParams = null;
   expParams = {
     tunable: {
+      // Should get rid of the "welte" for these, or hardcode them
+      // into the overlay viz module if they shouldn't affect the emulation
       welte_p: 35.0,
       welte_mf: 60.0,
       welte_f: 90.0,
-      welte_loud: 75.0,
+
+      // NOTE that the effect of the "theme" holes also extends 10% of this
+      // length *before* the hole, for reasons
+      theme_extent: 200, // effective ms after theme selector snakebites
+
       left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
-      slow_decay_rate: 2455, // Probably this is 1 velocity step in 2.455s
-      fastC_decay_rate: 245,
-      fastD_decay_rate: 269,
+
       tracker_diameter: 16.7, // in ticks (px = 1/300 in)
       punch_ext_ratio: 0.75,
-      accelFtPerMin2: 0.2, // XXX Double check
+      accelFtPerMin2: 0.2,
     },
   };
   expParams = computeDerivedExpressionParams(expParams);
@@ -76,92 +69,104 @@ const getExpressionParams = () => {
 
 const getExpressionStateBox = (rollType) => {
   let expState = null;
-  if (rollType === "welte-green") {
+  if (rollType === "duo-art") {
     expState = {
       velocity: 0.0, // Velocity at last cresc/decresc event
       time: 0.0, // Time (in ms) at last cresc/decresc event
-      mf_start: null,
-      slow_cresc_start: null,
-      slow_decresc_start: null,
-      fast_cresc_start: null,
-      fast_cresc_stop: null,
-      fast_decresc_start: null,
-      fast_decresc_stop: null,
+      theme_start: null,
+      theme_stop: null,
+      vol1_start: null,
+      vol1_stop: null,
+      vol2_start: null,
+      vol2_stop: null,
+      vol4_start: null,
+      vol4_stop: null,
+      vol8_start: null,
+      vol8_stop: null,
     };
   }
   return expState;
 };
 
-const getVelocityAtTime = (time, expState, expParams) => {
-  // To begin, the new velocity is set to the previous level
-  let newVelocity = expState.velocity;
-  const msFromLastDynamic = time - expState.time;
+const getVelocityAtTime = (time, expState) => {
+  const convertStepToPressure = (step, isTheme) => {
+    // Mappings from volume "steps" to pressure values are from
+    // https://www.youtube.com/watch?v=w-XrDw04P2M&t=218s
+    const accompanimentStepMap = {
+      0: 4,
+      1: 5,
+      2: 7,
+      3: 9,
+      4: 10,
+      5: 12,
+      6: 13,
+      7: 14,
+      8: 15,
+      9: 16,
+      10: 18,
+      11: 20,
+      12: 21,
+      13: 23,
+      14: 25,
+      15: 27,
+    };
+    const themeStepMap = {
+      0: 5,
+      1: 6,
+      2: 8,
+      3: 9,
+      4: 10,
+      5: 13,
+      6: 14,
+      7: 16,
+      8: 18,
+      9: 20,
+      10: 23,
+      11: 25,
+      12: 26,
+      13: 29,
+      14: 31,
+      15: 33, // Could be 40???
+    };
 
-  // Active cresc/descresc controls: slow cresc, fast cresc/decresc
-  // Slow descresc is on by default if none of slow cresc, fast cresc/decresc
-  // is enabled
-  // MF hook on prevents velocity from crossing welte_mf from soft or loud side
-
-  // Determine fast crescendo and decrescendo states at this time, handling
-  // cases in which the fast change is still happening (the hole hasn't ended
-  // yet).
-  const isFastCrescOn =
-    expState.fast_cresc_start !== null && expState.fast_cresc_stop === null;
-  const isFastDecrescOn =
-    expState.fast_decresc_start !== null && expState.fast_decresc_stop === null;
-
-  // Default state (no active controls: only slow descresc)
-  if (
-    expState.slow_cresc_start === null &&
-    !isFastCrescOn &&
-    !isFastDecrescOn
-  ) {
-    newVelocity -= msFromLastDynamic * expParams.slow_step;
-  } else {
-    // Otherwise new target velocity will be a combination of the
-    // active control effects
-    newVelocity +=
-      expState.slow_cresc_start !== null
-        ? msFromLastDynamic * expParams.slow_step
-        : 0;
-    newVelocity += isFastCrescOn ? msFromLastDynamic * expParams.fastC_step : 0;
-    newVelocity += isFastDecrescOn
-      ? msFromLastDynamic * expParams.fastD_step
-      : 0;
-  }
-
-  // Handle the mezzo-forte hook
-  const velocityDelta = newVelocity - expState.velocity;
-  if (expState.mf_start !== null) {
-    // If the previous velocity was above MF, keep it there
-    if (expState.velocity > expParams.tunable.welte_mf) {
-      newVelocity =
-        velocityDelta < 0
-          ? Math.max(expParams.tunable.welte_mf + 0.001, newVelocity)
-          : Math.min(expParams.tunable.welte_f, newVelocity);
-      // If the previous velcoity was below MF, keep it there
-    } else if (expState.velocity < expParams.tunable.welte_mf) {
-      newVelocity =
-        velocityDelta > 0
-          ? Math.min(expParams.tunable.welte_mf - 0.001, newVelocity)
-          : Math.max(expParams.tunable.welte_p, newVelocity);
+    if (!isTheme) {
+      return accompanimentStepMap[step];
     }
-  } else if (
-    expState.slow_cresc_start !== null &&
-    !isFastCrescOn &&
-    expState.velocity < expParams.tunable.welte_loud
-  ) {
-    // If no MF hook and only slow crescendo is on, velocity should never
-    // exceed welte_loud (which is lower than welte_f)
-    newVelocity = Math.min(newVelocity, expParams.tunable.welte_loud - 0.001);
+    return themeStepMap[step];
+  };
+
+  let newVelocity = expState.velocity;
+
+  const isTheme =
+    (expState.theme_start !== null && expState.theme_stop === null) ||
+    (expState.theme_start !== null &&
+      expState.theme_stop !== null &&
+      expState.theme_stop > time);
+
+  let step = 0;
+
+  if (expState.vol1_start !== null) {
+    step += 1.0;
+  }
+  if (expState.vol2_start !== null) {
+    step += 2.0;
+  }
+  if (expState.vol4_start !== null) {
+    step += 4.0;
+  }
+  if (expState.vol8_start !== null) {
+    step += 8.0;
   }
 
-  // Make sure the velocity always stays between welte_p and welte_f
-  newVelocity = clamp(
-    newVelocity,
-    expParams.tunable.welte_p,
-    expParams.tunable.welte_f,
-  );
+  const pressure = convertStepToPressure(step, isTheme);
+
+  if (pressure <= 10) {
+    newVelocity = pressure * 5.8 + 6.0;
+  } else if (pressure > 10 && pressure <= 25) {
+    newVelocity = pressure * 1.4 + 50;
+  } else {
+    newVelocity = 90;
+  }
 
   return newVelocity;
 };
@@ -230,7 +235,6 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
   const [, ...musicTracks] = midiSamplePlayer.events;
 
   let expParams = get(expressionParameters);
-
   if (Object.keys(expParams).length === 0) {
     expressionParameters.set(getExpressionParams());
     expParams = get(expressionParameters);
@@ -245,14 +249,17 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         // We know these are all control holes
         const ctrlFunc = rollProfile[rollType].ctrlMap[item.noteNumber];
 
-        // We're only interested in the ends of control holes.
-        // No extension is applied to pedal events, but this could be done
-        // as well.
+        // We're only interested in the ends of control holes affecting volume
+        // NOTE that the extension is applied to the note holes during playback
+        // in the MidiEventHandler, but a modified version of this function
+        // could be used to apply the extension prior to playback.
+        // Note also that no extension is applied to pedal events, but this
+        // could be done as well.
         if (
           ctrlFunc == null ||
           item.name !== "Note on" ||
           item.velocity !== 0 ||
-          !["sfp", "mf", "cresc", "sff"].includes(ctrlFunc)
+          !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc)
         )
           return item;
 
@@ -299,48 +306,66 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         // will have some of these), or are likely to be damage holes
         if (
           ctrlFunc == null ||
-          !["sfp", "mf", "cresc", "sff"].includes(ctrlFunc)
+          !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc)
         )
-          return; // Usually these are damage holes
+          return;
 
-        // The length of the perforation matters for all control holes
         const msgTime = convertTicksAndTime(tick);
 
-        const panVelocity = getVelocityAtTime(msgTime, expState, expParams);
-
-        // These are all quite regular -- how to de-boilerplate this?
-        if (ctrlFunc === "mf") {
+        if (ctrlFunc === "acc") {
           if (velocity > 0) {
-            expState.mf_start = msgTime;
-            expState.mf_stop = null;
+            expState.theme_start = Math.max(
+              0,
+              msgTime - expParams.tunable.theme_extent * 0.1,
+            );
+            expState.theme_stop = null;
           } else {
-            expState.mf_stop = msgTime;
+            expState.theme_stop = msgTime + expParams.tunable.theme_extent;
           }
-        } else if (ctrlFunc === "sfp") {
+        } else if (ctrlFunc === "vol+1") {
           if (velocity > 0) {
-            expState.fast_decresc_start = msgTime;
-            expState.fast_decresc_stop = null;
+            expState.vol1_start = msgTime;
+            expState.vol1_stop = null;
           } else {
-            expState.fast_decresc_stop = msgTime;
+            expState.vol1_start = null;
+            expState.vol1_stop = msgTime;
           }
-        } else if (ctrlFunc === "cresc") {
+        } else if (ctrlFunc === "vol+2") {
           if (velocity > 0) {
-            expState.slow_cresc_start = msgTime;
-            expState.slow_decresc_start = null;
+            expState.vol2_start = msgTime;
+            expState.vol2_stop = null;
           } else {
-            expState.slow_cresc_start = null;
-            expState.slow_decresc_start = msgTime;
+            expState.vol2_start = null;
+            expState.vol2_stop = msgTime;
           }
-        } else if (ctrlFunc === "sff") {
+        } else if (ctrlFunc === "vol+4") {
           if (velocity > 0) {
-            expState.fast_cresc_start = msgTime;
-            expState.fast_cresc_stop = null;
+            expState.vol4_start = msgTime;
+            expState.vol4_stop = null;
           } else {
-            expState.fast_cresc_stop = msgTime;
+            expState.vol4_start = null;
+            expState.vol4_stop = msgTime;
+          }
+        } else if (ctrlFunc === "vol+8") {
+          if (velocity > 0) {
+            expState.vol8_start = msgTime;
+            expState.vol8_stop = null;
+          } else {
+            expState.vol8_start = null;
+            expState.vol8_stop = msgTime;
           }
         }
 
+        const panVelocity = getVelocityAtTime(msgTime, expState);
+
         _panExpMap.insert(expState.time, msgTime, [
+          expState.velocity,
+          expState.velocity,
+          expState.time,
+          msgTime,
+        ]);
+
+        _panExpMap.insert(msgTime, msgTime, [
           expState.velocity,
           panVelocity,
           expState.time,
@@ -356,11 +381,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
     const finalTime = convertTicksAndTime(finalTick);
 
     if (finalTime > expState.time) {
-      const finalPanVelocity = getVelocityAtTime(
-        finalTime,
-        expState,
-        expParams,
-      );
+      const finalPanVelocity = getVelocityAtTime(finalTime, expState);
       _panExpMap.insert(expState.time, finalTime, [
         expState.velocity,
         finalPanVelocity,
@@ -563,6 +584,7 @@ const buildMidiEventHandler = (
       if (holeType === "note") {
         if (velocity === 0) {
           const ticksPerSecond = (parseFloat(tempo) * midiTPQ) / 60.0;
+          // At 591 TPQ & 60bpm, this is ~.02s, drops slowly due to accel
           const trackerExtensionSeconds =
             expParams.tracker_extension / ticksPerSecond;
           stopNote(midiNumber, `+${trackerExtensionSeconds}`);

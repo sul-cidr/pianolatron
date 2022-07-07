@@ -248,7 +248,7 @@
     if (expParams === null) return;
     let guides = {};
     if (
-      ["welte-red", "welte-green", "welte-licensee"].includes(
+      ["welte-red", "welte-green", "welte-licensee", "duo-art"].includes(
         $rollMetadata.ROLL_TYPE,
       )
     ) {
