@@ -1,7 +1,7 @@
 <style lang="scss">
   $aspect-ratio: 2.848;
   $container-height: 20vh;
-  $container-width: min(800px, 80vw);
+  $container-width: unquote("min(800px, 80vw)");
 
   #loading {
     background-color: rgba(white, 0.2);
