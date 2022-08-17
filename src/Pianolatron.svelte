@@ -270,7 +270,7 @@
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
   $: playbackProgress.update(() =>
-    clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1),
+    clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1),
   );
   $: if (rollViewer)
     ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
