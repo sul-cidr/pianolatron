@@ -124,6 +124,7 @@
   let pausePlayback;
   let startPlayback;
   let resetPlayback;
+  let audioRecording;
   let skipToTick;
 
   let rollViewer;
@@ -192,6 +193,10 @@
     bassVolumeCoefficient.reset();
     trebleVolumeCoefficient.reset();
     holesByTickInterval = new IntervalTree();
+  };
+
+  const recordingControl = (action) => {
+    audioRecording(action);
   };
 
   const loadRoll = (roll) => {
@@ -320,6 +325,7 @@
       pausePlayback,
       startPlayback,
       resetPlayback,
+      audioRecording,
       skipToTick,
     } = samplePlayer);
 
@@ -386,7 +392,12 @@
     </div>
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
       {#if isPerform}
-        <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+        <TabbedPanel
+        {playPauseApp}
+        {stopApp}
+        {skipToPercentage}
+        {recordingControl}
+      />
       {:else}
         <ListenerPanel {playPauseApp} {stopApp} />
       {/if}

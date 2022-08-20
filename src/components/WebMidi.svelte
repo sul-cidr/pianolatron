@@ -1,14 +1,25 @@
 <script>
   import { onMount } from "svelte";
   import { clamp } from "../lib/utils";
-  import { midiInputs, midiOutputs } from "../stores";
+  import {
+    midiInputs,
+    midiOutputs,
+    recordingOnOff,
+    recordingInBuffer,
+    recordingDuration,
+    rollMetadata,
+  } from "../stores";
 
   export let startNote;
   export let stopNote;
   export let toggleSustain;
   export let toggleSoft;
+  export let recordingDestination;
 
   let mediaAccess = null;
+  let mediaRecorder = null;
+  let lastRecordingTime = null;
+  let recordingLengthUpdateInterval = null;
 
   const midiBytes = {
     NOTE_ON: 0x90, // = the event code (0x90) + channel (0)
@@ -22,8 +33,8 @@
 
   const startPauseRecording = (onOff) => {
     if (onOff && mediaRecorder) {
-      mediaRecorder.start();
       $recordingInBuffer = true;
+      mediaRecorder.start();
       lastRecordingTime = Date.now();
       recordingLengthUpdateInterval = setInterval(() => {
         const now = Date.now();
@@ -110,6 +121,7 @@
   };
 
   const initializePorts = () => {
+    if (!mediaAccess) return;
     $midiInputs = [...mediaAccess.inputs]
       .filter(([, input]) => input.state === "connected")
       .map(([, input]) => input);
@@ -153,13 +165,21 @@
       });
     }
 
+    mediaRecorder = new MediaRecorder(recordingDestination.stream);
+    mediaRecorder.ondataavailable = (e) => {
+      chunks.push(e.data);
+    };
+
     return () => {
-      mediaAccess.removeEventListener("statechange", midiStateChange);
+      if (mediaAccess)
+        mediaAccess.removeEventListener("statechange", midiStateChange);
       $midiInputs.forEach((input) => {
         input.removeEventListener("midimessage", receiveMidiMsg);
       });
     };
   });
 
-  export { sendMidiMsg };
+  $: startPauseRecording($recordingOnOff);
+
+  export { sendMidiMsg, exportRecording, clearRecording };
 </script>
