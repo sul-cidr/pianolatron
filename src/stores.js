@@ -77,6 +77,11 @@ export const velocityCurveHigh = createPersistedStore(
 export const midiInputs = createStore([]);
 export const midiOutputs = createStore([]);
 
+// Recording State
+export const recordingOnOff = createStore(false);
+export const recordingInBuffer = createStore(false);
+export const recordingDuration = createStore(0);
+
 // Playback State
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);

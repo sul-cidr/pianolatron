@@ -41,6 +41,7 @@
   let webMidi;
   let audioRecorder;
   let recordingDestination;
+  let recordingDestination;
 
   let tempoMap;
   let pedalingMap;
@@ -83,6 +84,9 @@
   });
 
   const pianoReady = piano.load();
+
+  recordingDestination = piano.context.createMediaStreamDestination();
+  piano.connect(recordingDestination);
 
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
@@ -471,6 +475,11 @@
 
   midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
+  const audioRecording = (action) => {
+    if (action === "clear") webMidi.clearRecording();
+    else if (action === "export") webMidi.exportRecording();
+  };
+
   const updateTranspose = () => {
     // if we're playing just dump everything and let the updates roll in
     if ($isPlaying) {
@@ -510,6 +519,7 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
+    audioRecording,
     skipToTick,
     skipToPercentage,
   };
@@ -522,6 +532,7 @@
     {stopNote}
     {toggleSustain}
     {toggleSoft}
+    {recordingDestination}
   />
 {/if}
 
