@@ -34,4 +34,11 @@ $cardinal: #8c1515; // "cardinal"
     border-color: var(--primary-accent);
     background-color: #ffffff;
   }
+
+  &:disabled {
+    color: var(--primary-accent-semiopaque);
+    border-color: var(--primary-accent-semiopaque);
+    background-color: lightgray;
+    cursor: default;
+  }
 }
