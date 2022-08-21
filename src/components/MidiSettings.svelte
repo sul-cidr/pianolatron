@@ -100,4 +100,32 @@
       </p>
     </fieldset>
   {/if}
-</section>
+  <fieldset>
+    <legend>Record an Audio File</legend>
+    <div id="recording-controls">
+      <button
+        type="button"
+        class:recording-on={$recordingOnOff}
+        aria-pressed={$recordingOnOff}
+        disabled={$recordingInBuffer && !$recordingOnOff}
+        on:click={() => ($recordingOnOff = !$recordingOnOff)}>Start/Stop</button
+      >
+      <br />
+      <button
+        type="button"
+        disabled={!$recordingInBuffer || $recordingOnOff}
+        on:click={() => recordingControl("clear")}
+        >Clear
+      </button>
+      <button
+        type="button"
+        disabled={!$recordingInBuffer || $recordingOnOff}
+        on:click={() => recordingControl("export")}
+        >Export
+      </button>
+      <p>
+        {recordingTime}
+      </p>
+    </div>
+  </fieldset>
+</div>
