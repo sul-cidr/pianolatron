@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { clamp, NoteSource } from "../lib/utils";
+  import { clamp } from "../lib/utils";
   import { midiInputs, midiOutputs } from "../stores";
 
   export let startNote;
@@ -8,7 +8,7 @@
   export let toggleSustain;
   export let toggleSoft;
 
-  let mediaAccess;
+  let mediaAccess = null;
 
   const midiBytes = {
     NOTE_ON: 0x90, // = the event code (0x90) + channel (0)
