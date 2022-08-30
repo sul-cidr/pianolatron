@@ -28,32 +28,17 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
+    expressionBox,
     expressionizer,
     expressionParameters,
     defaultExpressionParameters,
     expBoxType,
-    noteVelocitiesMap,
+    // noteVelocitiesMap,
   } from "../stores";
+  import expressionBoxes from "../expression-boxes";
   import WebMidi from "./WebMidi.svelte";
 
   let webMidi;
-
-  import expressionBoxes from "../expression-boxes";
-
-  let buildTempoMap;
-  let buildPedalingMap;
-  let buildNotesMap;
-  let buildNoteVelocitiesMap;
-  let buildMidiEventHandler;
-  let getExpressionParams;
-  let computeDerivedExpressionParams;
-
-  let tempoMap;
-  let pedalingMap;
-  let notesMap;
-
-  const SOFT_PEDAL_MIDI = 67;
-  const SUSTAIN_PEDAL_MIDI = 64;
 
   const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
@@ -83,10 +68,9 @@
   const pianoReady = piano.load();
 
   const getTempoAtTick = (tick) => {
-    if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
-    const tempoSearch = tempoMap.search(tick, tick)[0];
-    if (!tempoSearch) return DEFAULT_TEMPO;
-    return tempoSearch;
+    if (!$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
+    const { tempoMap } = $expressionBox;
+    return tempoMap.search(tick, tick)[0] || DEFAULT_TEMPO;
   };
 
   const toggleSustain = (onOff, fromMidi) => {
@@ -111,14 +95,15 @@
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
+    const { pedalingMap, notesMap, midiSoftOn, midiSustOn } = $expressionBox;
     if (midiSamplePlayer.tracks[0])
       midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
     midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
 
     if (pedalingMap && $rollPedalingOnOff) {
       const pedals = pedalingMap.search($currentTick, $currentTick);
-      sustainOnOff.set(pedals.includes(SUSTAIN_PEDAL_MIDI));
-      softOnOff.set(pedals.includes(SOFT_PEDAL_MIDI));
+      sustainOnOff.set(pedals.includes(midiSustOn));
+      softOnOff.set(pedals.includes(midiSoftOn));
     } else {
       sustainOnOff.set(false);
       softOnOff.set(false);
@@ -261,22 +246,6 @@
     midiSamplePlayer.play();
   };
 
-  const updateVelocitiesMap = () => {
-    if (!buildNoteVelocitiesMap) return;
-
-    buildNoteVelocitiesMap(midiSamplePlayer, tempoMap);
-
-    midiSamplePlayer.eventListeners.midiEvent = [
-      buildMidiEventHandler(
-        startNote,
-        stopNote,
-        $noteVelocitiesMap,
-        midiSamplePlayer,
-        tempoMap,
-      ),
-    ];
-  };
-
   const recomputeVelocities = () => {
     if (!computeDerivedExpressionParams) return;
 
@@ -284,7 +253,10 @@
       $expressionParameters,
     );
 
-    updateVelocitiesMap();
+    $expressionBox.buildNoteVelocitiesMap();
+    midiSamplePlayer.eventListeners.midiEvent = [
+      $expressionBox.buildMidiEventHandler(startNote, stopNote),
+    ];
   };
 
   midiSamplePlayer.on("fileLoaded", () => {
@@ -295,7 +267,7 @@
           String.fromCodePoint(parseInt(num, 16)),
         );
 
-    const [metadataTrack, ...musicTracks] = midiSamplePlayer.events;
+    const [metadataTrack] = midiSamplePlayer.events;
 
     rollMetadata.set(
       Object.fromEntries(
@@ -313,45 +285,13 @@
     const expressionBoxType = ["FROM_MIDI", "NONE"].includes($expressionizer)
       ? "expressiveMidi"
       : $expressionizer;
-    const expressionBox = expressionBoxes[expressionBoxType];
-
-    ({
-      buildTempoMap,
-      buildPedalingMap,
-      buildNotesMap,
-      buildNoteVelocitiesMap,
-      buildMidiEventHandler,
-      getExpressionParams,
-      computeDerivedExpressionParams,
-    } = expressionBox);
-
-    $defaultExpressionParameters = getExpressionParams();
-
-    if ($expBoxType === null) {
-      $expBoxType = expressionBoxType;
-    } else if ($expBoxType !== expressionBoxType) {
-      $expressionParameters = getExpressionParams();
-      $expBoxType = expressionBoxType;
-    }
-
-    tempoMap = buildTempoMap(metadataTrack);
-
-    pedalingMap = buildPedalingMap(musicTracks);
-    notesMap = buildNotesMap(musicTracks);
-    // buildNoteVelocitiesMap needs a full tempoMap for tracker width emulation
-    buildNoteVelocitiesMap(midiSamplePlayer, tempoMap);
+    $expressionBox = new expressionBoxes[expressionBoxType](midiSamplePlayer);
 
     // This is a tiny bit hacky (in the sense that it's using an undocumented
     //  api), but it's a simple way to ensure that only one midiEventHandler
     //  is registered.
     midiSamplePlayer.eventListeners.midiEvent = [
-      buildMidiEventHandler(
-        startNote,
-        stopNote,
-        $noteVelocitiesMap,
-        midiSamplePlayer,
-        tempoMap,
-      ),
+      $expressionBox.buildMidiEventHandler(startNote, stopNote),
     ];
   });
 
@@ -370,7 +310,7 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
-  $: $expressionParameters, recomputeVelocities(); // updateVelocitiesMap();
+  // TODO: $: $expressionParameters, recomputeVelocities(); // updateVelocitiesMap();
 
   export {
     midiSamplePlayer,
@@ -381,7 +321,8 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
-    getExpressionParams,
+    // TODO:
+    // getExpressionParams,
   };
 </script>
 

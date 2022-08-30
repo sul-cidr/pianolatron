@@ -50,8 +50,8 @@ export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
 
-export const expressionizer = createStore("FROM_MIDI");
-export const noteVelocitiesMap = createStore();
+export const expressionizer = createStore("FROM_MIDI"); // tmp
+export const expressionBox = createStore();
 
 // Piano Settings
 export const sampleVolumes = createPersistedStore("sampleVolumes", {
