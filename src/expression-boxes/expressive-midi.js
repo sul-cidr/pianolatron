@@ -9,7 +9,7 @@ import {
   useMidiTempoEventsOnOff,
 } from "../stores";
 
-export default class Expressionizer {
+export default class ExpressiveMidiExpressionizer {
   midiSoftOn = 67;
   midiSustOn = 64;
 
