@@ -13,25 +13,25 @@ export default class Expressionizer {
   midiSoftOn = 67;
   midiSustOn = 64;
 
-  metadataTrack;
-  musicTracks;
+  #metadataTrack;
+  #musicTracks;
 
   constructor(midiSamplePlayer) {
     this.midiSamplePlayer = midiSamplePlayer;
-    [this.metadataTrack, ...this.musicTracks] = midiSamplePlayer.events;
+    [this.#metadataTrack, ...this.#musicTracks] = midiSamplePlayer.events;
 
-    this.tempoMap = this.buildTempoMap();
-    this.noteVelocitiesMap = this.buildNoteVelocitiesMap();
-    this.pedalingMap = this.buildPedalingMap();
-    this.notesMap = this.buildNotesMap();
+    this.tempoMap = this.#buildTempoMap();
+    this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
+    this.pedalingMap = this.#buildPedalingMap();
+    this.notesMap = this.#buildNotesMap();
   }
 
-  buildTempoMap = () => {
+  #buildTempoMap = () => {
     const _tempoMap = new IntervalTree();
     let lastTempo = null;
     let lastTick = 0;
 
-    this.metadataTrack
+    this.#metadataTrack
       .filter((event) => event.name === "Set Tempo")
       .forEach(({ tick, data: tempo }) => {
         if (tick === lastTick || tempo === lastTempo) {
@@ -50,9 +50,9 @@ export default class Expressionizer {
     return _tempoMap;
   };
 
-  buildNoteVelocitiesMap = () => {
+  #buildNoteVelocitiesMap = () => {
     const noteVelocitiesMap = {};
-    this.musicTracks.forEach((track) => {
+    this.#musicTracks.forEach((track) => {
       track
         .filter(({ name, velocity }) => name === "Note on" && velocity > 1)
         .forEach(({ noteNumber, velocity, tick }) => {
@@ -69,10 +69,10 @@ export default class Expressionizer {
     return noteVelocitiesMap;
   };
 
-  buildPedalingMap = () => {
+  #buildPedalingMap = () => {
     // where two or more "music tracks" exist, pedal events are expected to have
     //  been duplicated across tracks, so we read only from the first one.
-    const [eventsTrack] = this.musicTracks;
+    const [eventsTrack] = this.#musicTracks;
     const _pedalingMap = new IntervalTree();
     const controllerEvents = eventsTrack.filter(
       ({ name }) => name === "Controller Change",
@@ -98,9 +98,9 @@ export default class Expressionizer {
     return _pedalingMap;
   };
 
-  buildNotesMap = () => {
+  #buildNotesMap = () => {
     const _notesMap = new IntervalTree();
-    this.musicTracks.forEach((track) => {
+    this.#musicTracks.forEach((track) => {
       const tickOn = {};
       track
         .filter((event) => event.name === "Note on")
