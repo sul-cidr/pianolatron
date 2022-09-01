@@ -50,7 +50,7 @@ export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
 
-export const expressionizer = createStore("FROM_MIDI"); // tmp
+export const useInAppExpression = createStore(false);
 export const expressionBox = createStore();
 
 // Piano Settings

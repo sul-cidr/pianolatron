@@ -29,11 +29,8 @@
     velocityCurveHigh,
     userSettings,
     expressionBox,
-    expressionizer,
     expressionParameters,
-    defaultExpressionParameters,
-    expBoxType,
-    // noteVelocitiesMap,
+    useInAppExpression,
   } from "../stores";
   import expressionBoxes from "../expression-boxes";
   import WebMidi from "./WebMidi.svelte";
@@ -282,9 +279,9 @@
       ),
     );
 
-    const expressionBoxType = ["FROM_MIDI", "NONE"].includes($expressionizer)
-      ? "expressiveMidi"
-      : $expressionizer;
+    const expressionBoxType = $useInAppExpression
+      ? $rollMetadata.ROLL_TYPE
+      : "expressiveMidi";
     $expressionBox = new expressionBoxes[expressionBoxType](midiSamplePlayer);
 
     // This is a tiny bit hacky (in the sense that it's using an undocumented

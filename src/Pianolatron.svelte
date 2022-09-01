@@ -65,7 +65,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     userSettings,
-    expressionizer,
+    useInAppExpression,
     expressionBox,
   } from "./stores";
   import { annotateHoleData, clamp } from "./lib/utils";
@@ -183,27 +183,8 @@
 
   const loadRoll = (roll, doReset = true) => {
     appWaiting = true;
-    // Perhaps there should be a global mapping somehwere from the roll type
-    // values listed in metadata to the names of the expression box modules
-    if ($expressionizer !== "FROM_MIDI") {
-      if (roll.type === "welte-red") {
-        $expressionizer = "welteRed";
-      } else if (roll.type === "welte-green") {
-        $expressionizer = "welteGreen";
-      } else if (roll.type === "welte-licensee") {
-        $expressionizer = "welteLicensee";
-      } else if (roll.type === "duo-art") {
-        $expressionizer = "duoArt";
-      } else if (roll.type === "88-note") {
-        $expressionizer = "standard";
-      } else {
-        $expressionizer = "FROM_MIDI";
-      }
-    }
     mididataReady = fetch(
-      `./${$expressionizer === "FROM_MIDI" ? "midi" : "note_midi"}/${
-        roll.druid
-      }.mid`,
+      `./${$useInAppExpression ? "note_midi" : "midi"}/${roll.druid}.mid`,
     )
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)

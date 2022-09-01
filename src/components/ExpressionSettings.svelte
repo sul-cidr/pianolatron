@@ -17,12 +17,10 @@
     defaultExpressionParameters,
     rollHasExpressions,
     rollMetadata,
-    expressionizer,
+    useInAppExpression,
   } from "../stores";
 
   let expressionParams = $expressionParameters;
-  let expressionType =
-    $expressionizer === "FROM_MIDI" ? "Expression MIDI" : "In-App Expression";
 
   const updateExpressionParams = () => {
     expressionParams = $expressionParameters;
@@ -39,31 +37,13 @@
   {#if !$rollHasExpressions || ["welte-red", "welte-green", "welte-licensee", "duo-art", "88-note"].includes($rollMetadata.ROLL_TYPE)}
     <fieldset>
       <legend>Emulation Type</legend>
-      <select
-        bind:value={expressionType}
-        on:change={() => {
-          if (expressionType === "Expression MIDI") {
-            $expressionizer = "FROM_MIDI";
-          } else if ($rollMetadata.ROLL_TYPE === "welte-red") {
-            $expressionizer = "welteRed";
-          } else if ($rollMetadata.ROLL_TYPE === "welte-green") {
-            $expressionizer = "welteGreen";
-          } else if ($rollMetadata.ROLL_TYPE === "welte-licensee") {
-            $expressionizer = "welteLicensee";
-          } else if ($rollMetadata.ROLL_TYPE === "duo-art") {
-            $expressionizer = "duoArt";
-          } else if ($rollMetadata.ROLL_TYPE === "88-note") {
-            $expressionizer = "standard";
-          }
-          reloadRoll();
-        }}
-      >
-        <option value="Expression MIDI">Expression MIDI</option>
-        <option value="In-App Expression">In-App Expression</option>
+      <select bind:value={$useInAppExpression} on:change={reloadRoll}>
+        <option value={false}>Expression MIDI</option>
+        <option value={true}>In-App Expression</option>
       </select>
     </fieldset>
 
-    {#if $expressionizer !== "FROM_MIDI" && expressionParams !== undefined && expressionParams.tunable !== undefined}
+    {#if $useInAppExpression && expressionParams !== undefined && expressionParams.tunable !== undefined}
       <fieldset>
         <legend>Expression Settings</legend>
         {#each Object.keys(expressionParams.tunable) as expressionParam}
