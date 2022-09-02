@@ -44,12 +44,8 @@ export default class InAppExpressionizer {
   #midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
   #ctrlMap = rollProfile[this.#rollType].ctrlMap;
 
-  midiSoftOn = 67;
-  midiSustOn = 64;
-  SOFT_PEDAL_ON = getKeyByValue(this.#ctrlMap, "soft_on");
-  SOFT_PEDAL_OFF = getKeyByValue(this.#ctrlMap, "soft_off");
-  SUSTAIN_PEDAL_ON = getKeyByValue(this.#ctrlMap, "sust_on");
-  SUSTAIN_PEDAL_OFF = getKeyByValue(this.#ctrlMap, "sust_off");
+  midiSoftPedal = 67;
+  midiSustPedal = 64;
 
   #metadataTrack;
   #musicTracks;
@@ -247,15 +243,6 @@ export default class InAppExpressionizer {
   // =========================================================================
 
   constructor(midiSamplePlayer) {
-    console.log("midiSoftOn:", this.midiSoftOn);
-    console.log("midiSustOn:", this.midiSustOn);
-    console.log("SOFT_PEDAL_ON:", this.SOFT_PEDAL_ON);
-    console.log("SOFT_PEDAL_OFF:", this.SOFT_PEDAL_OFF);
-    console.log("SUSTAIN_PEDAL_ON:", this.SUSTAIN_PEDAL_ON);
-    console.log("SUSTAIN_PEDAL_OFF:", this.SUSTAIN_PEDAL_OFF);
-
-    console.log(get(rollMetadata));
-
     this.midiSamplePlayer = midiSamplePlayer;
     [this.#metadataTrack, ...this.#musicTracks] = midiSamplePlayer.events;
 
@@ -264,8 +251,6 @@ export default class InAppExpressionizer {
     this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
     this.pedalingMap = this.#buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
-
-    console.log("expParams", this.#expParams);
   }
 
   // ?NOTE: should be good for (at least) welte-red and welte-green
@@ -310,24 +295,12 @@ export default class InAppExpressionizer {
   };
 
   #buildNoteVelocitiesMap = () => {
-    // // const expParams = getExpressionParams();
-    // // expressionParameters.set(expParams);
-
-    // let expParams = get(expressionParameters);
-
-    // if (Object.keys(expParams).length === 0) {
-    //   expressionParameters.set(getExpressionParams());
-    //   expParams = get(expressionParameters);
-    // }
-
     const expressionMap = {};
 
     const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs, adjust) => {
       const _panExpMap = new IntervalTree();
 
       const expressionCurve = [];
-
-      // const expState = getExpressionStateBox(rollType);
 
       const expState = {
         velocity: this.#expParams.tunable.welte_p, // Velocity at last cresc/decresc event
@@ -365,7 +338,6 @@ export default class InAppExpressionizer {
           // Ignore control holes that don't affect playback (most roll types
           // will have some of these), or are likely to be damage holes
           if (
-            ctrlFunc == null ||
             ![
               "sf_on",
               "sf_off",
@@ -379,39 +351,50 @@ export default class InAppExpressionizer {
 
           // Fast crescendo and decrescendo controls are the only ones for which
           // the length of the perforation matters
-          if (velocity === 0 && !["sf_on", "sf_off"].includes(ctrlFunc)) {
-            return;
-          }
+          if (velocity === 0 && !["sf_on", "sf_off"].includes(ctrlFunc)) return;
 
           const msgTime = this.convertTicksAndTime(tick);
-
           const panVelocity = this.getVelocityAtTime(msgTime, expState);
 
-          // ? rewrite as switch?
-          if (ctrlFunc === "mf_on" && velocity > 0) {
-            expState.mf_start = msgTime;
-          } else if (ctrlFunc === "mf_off" && velocity > 0) {
-            expState.mf_start = null;
-          } else if (ctrlFunc === "cresc_on" && velocity > 0) {
-            expState.slow_cresc_start = msgTime;
-            expState.slow_decresc_start = null;
-          } else if (ctrlFunc === "cresc_off" && velocity > 0) {
-            expState.slow_cresc_start = null;
-            expState.slow_decresc_start = msgTime;
-          } else if (ctrlFunc === "sf_on") {
-            if (velocity > 0) {
-              expState.fast_cresc_start = msgTime;
-              expState.fast_cresc_stop = null;
-            } else {
-              expState.fast_cresc_stop = msgTime;
-            }
-          } else if (ctrlFunc === "sf_off") {
-            if (velocity > 0) {
-              expState.fast_decresc_start = msgTime;
-              expState.fast_decresc_stop = null;
-            } else {
-              expState.fast_decresc_stop = msgTime;
-            }
+          switch (ctrlFunc) {
+            case "mf_on":
+              expState.mf_start = msgTime;
+              break;
+
+            case "mf_off":
+              expState.mf_start = null;
+              break;
+
+            case "cresc_on":
+              expState.slow_cresc_start = msgTime;
+              expState.slow_decresc_start = null;
+              break;
+
+            case "cresc_off":
+              expState.slow_cresc_start = null;
+              expState.slow_decresc_start = msgTime;
+              break;
+
+            case "sf_on":
+              if (velocity > 0) {
+                expState.fast_cresc_start = msgTime;
+                expState.fast_cresc_stop = null;
+              } else {
+                expState.fast_cresc_stop = msgTime;
+              }
+              break;
+
+            case "sf_off":
+              if (velocity > 0) {
+                expState.fast_decresc_start = msgTime;
+                expState.fast_decresc_stop = null;
+              } else {
+                expState.fast_decresc_stop = msgTime;
+              }
+              break;
+
+            default:
+              break;
           }
 
           _panExpMap.insert(expState.time, msgTime, [
@@ -495,37 +478,11 @@ export default class InAppExpressionizer {
   };
 
   #buildPedalingMap = () => {
-    // // where two or more "music tracks" exist, pedal events are expected to have
-    // //  been duplicated across tracks, so we read only from the first one.
-    // const [eventsTrack] = this.#musicTracks;
-    // const _pedalingMap = new IntervalTree();
-    // const controllerEvents = eventsTrack.filter(
-    //   ({ name }) => name === "Controller Change",
-    // );
+    const midiSoftOn = getKeyByValue(this.#ctrlMap, "soft_on");
+    const midiSoftOff = getKeyByValue(this.#ctrlMap, "soft_off");
+    const midiSustOn = getKeyByValue(this.#ctrlMap, "sust_on");
+    const midiSustOff = getKeyByValue(this.#ctrlMap, "sust_off");
 
-    // const enterEvents = (eventNumber) => {
-    //   let tickOn = false;
-    //   controllerEvents
-    //     .filter(({ number }) => number === eventNumber)
-    //     .forEach(({ value, tick }) => {
-    //       if (value === 0) {
-    //         if (tickOn) _pedalingMap.insert(tickOn, tick, eventNumber);
-    //         tickOn = false;
-    //       } else if (value === 127) {
-    //         if (!tickOn) tickOn = tick;
-    //       }
-    //     });
-    // };
-
-    // enterEvents(this.midiSoftOn);
-    // enterEvents(this.midiSustOn);
-
-    // return _pedalingMap;
-
-    // const SOFT_PEDAL_ON = parseInt(getKeyByValue(this.#ctrlMap, "soft_on"), 10);
-    // const SOFT_PEDAL_OFF = parseInt(getKeyByValue(this.#ctrlMap, "soft_off"), 10);
-    // const SUSTAIN_PEDAL_ON = parseInt(getKeyByValue(this.#ctrlMap, "sust_on"), 10);
-    // const SUSTAIN_PEDAL_OFF = parseInt(getKeyByValue(this.#ctrlMap, "sust_off"), 10);
     const pedalingMap = new IntervalTree();
 
     // For 65-note rolls, or any weird MIDI input file with only 1 note track
@@ -550,15 +507,16 @@ export default class InAppExpressionizer {
 
     registerPedalEvents(
       this.#musicTracks[2],
-      this.SOFT_PEDAL_ON,
-      this.SOFT_PEDAL_OFF,
-      this.SOFT_PEDAL_MIDI,
+      midiSoftOn,
+      midiSoftOff,
+      this.midiSoftPedal,
     );
+
     registerPedalEvents(
       this.#musicTracks[3],
-      this.SUSTAIN_PEDAL_ON,
-      this.SUSTAIN_PEDAL_OFF,
-      this.SUSTAIN_PEDAL_MIDI,
+      midiSustOn,
+      midiSustOff,
+      this.midiSustPedal,
     );
 
     return pedalingMap;
@@ -566,8 +524,7 @@ export default class InAppExpressionizer {
 
   #buildNotesMap = () => {
     const _notesMap = new IntervalTree();
-    // should be just this.#musicTracks[0] and this.#musicTracks[1] ??
-    this.#musicTracks.forEach((track) => {
+    this.#musicTracks.slice(0, 2).forEach((track) => {
       const tickOn = {};
       track
         .filter(
@@ -600,9 +557,9 @@ export default class InAppExpressionizer {
           activeNotes.add(noteNumber);
         }
       } else if (name === "Controller Change" && get(rollPedalingOnOff)) {
-        if (number === this.midiSustOn) {
+        if (number === this.midiSustPedal) {
           sustainOnOff.set(!!value);
-        } else if (number === this.midiSoftOn) {
+        } else if (number === this.midiSoftPedal) {
           softOnOff.set(!!value);
         }
       } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
