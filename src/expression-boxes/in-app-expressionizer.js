@@ -48,7 +48,10 @@ export default class InAppExpressionizer {
   midiSustPedal = 64;
 
   #metadataTrack;
-  #musicTracks;
+  #bassNotesTrack;
+  #trebleNotesTrack;
+  #bassControlsTrack;
+  #trebleControlsTrack;
   #expParams;
 
   // ?NOTE: should be good for (at least) welte-red and welte-green
@@ -134,8 +137,6 @@ export default class InAppExpressionizer {
     return null;
   };
 
-  // ? wants looking at
-  // XXX THIS CAN ONLY BE DONE ONCE PER ROLL!
   applyTrackerExtension = (ctrlTrackMsgs) =>
     ctrlTrackMsgs
       .map((item) => {
@@ -165,7 +166,7 @@ export default class InAppExpressionizer {
       })
       // Adding the tracker extension ticks to the ends of the fast cresc/
       // decresc holes will result in unordered events; resort them.
-      .sort((a, b) => (a.tick > b.tick ? 1 : -1));
+      .sort((a, b) => a.tick - b.tick);
 
   getVelocityAtTime = (time, expState) => {
     const { slow_step, fastC_step, fastD_step, tunable } = this.#expParams;
@@ -175,8 +176,8 @@ export default class InAppExpressionizer {
     let newVelocity = expState.velocity;
     const msFromLastDynamic = time - expState.time;
 
-    // Active cresc/descresc controls: slow cresc, fast cresc/decresc
-    // Slow descresc is on by default if none of slow cresc, fast cresc/decresc
+    // Active cresc/decresc controls: slow cresc, fast cresc/decresc
+    // Slow decresc is on by default if none of slow cresc, fast cresc/decresc
     // is enabled
     // MF hook on prevents velocity from crossing welte_mf from soft or loud side
 
@@ -189,7 +190,7 @@ export default class InAppExpressionizer {
       expState.fast_decresc_start !== null &&
       expState.fast_decresc_stop === null;
 
-    // Default state (no active controls: only slow descresc)
+    // Default state (no active controls: only slow decresc)
     if (
       expState.slow_cresc_start === null &&
       !isFastCrescOn &&
@@ -214,7 +215,7 @@ export default class InAppExpressionizer {
           velocityDelta < 0
             ? Math.max(welte_mf + 0.001, newVelocity)
             : Math.min(welte_f, newVelocity);
-        // If the previous velcoity was below MF, keep it there
+        // If the previous velocity was below MF, keep it there
       } else if (expState.velocity < welte_mf) {
         newVelocity =
           velocityDelta > 0
@@ -244,7 +245,13 @@ export default class InAppExpressionizer {
 
   constructor(midiSamplePlayer) {
     this.midiSamplePlayer = midiSamplePlayer;
-    [this.#metadataTrack, ...this.#musicTracks] = midiSamplePlayer.events;
+    [
+      this.#metadataTrack,
+      this.#bassNotesTrack,
+      this.#trebleNotesTrack,
+      this.#bassControlsTrack,
+      this.#trebleControlsTrack,
+    ] = midiSamplePlayer.events;
 
     this.#expParams = this.computeDerivedExpressionParams();
     this.tempoMap = this.#buildTempoMap();
@@ -314,14 +321,7 @@ export default class InAppExpressionizer {
         fast_decresc_stop: null,
       };
 
-      // ? to look at
-      // The tracker extension should be applied to a true copy of the control
-      // track messages; otherwise multiple tweaks to the expression settings
-      // will result in the end modified off ticks of the control holes being
-      // extended further and further...
-      const extendedCtrlTrackMsgs = this.applyTrackerExtension(
-        JSON.parse(JSON.stringify(ctrlTrackMsgs)),
-      );
+      const extendedCtrlTrackMsgs = this.applyTrackerExtension(ctrlTrackMsgs);
 
       const finalTick = Math.max(
         noteTrackMsgs[noteTrackMsgs.length - 1].tick,
@@ -463,15 +463,15 @@ export default class InAppExpressionizer {
     // bass notes and control holes
     bassExpCurve.set(
       buildPanExpMap(
-        this.#musicTracks[0],
-        this.#musicTracks[2],
+        this.#bassNotesTrack,
+        this.#bassControlsTrack,
         this.#expParams.tunable.left_adjust,
       ),
     );
 
     // treble notes and control holes
     trebleExpCurve.set(
-      buildPanExpMap(this.#musicTracks[1], this.#musicTracks[3], 0),
+      buildPanExpMap(this.#trebleNotesTrack, this.#trebleControlsTrack, 0),
     );
 
     return expressionMap;
@@ -484,9 +484,6 @@ export default class InAppExpressionizer {
     const midiSustOff = getKeyByValue(this.#ctrlMap, "sust_off");
 
     const pedalingMap = new IntervalTree();
-
-    // For 65-note rolls, or any weird MIDI input file with only 1 note track
-    if (this.#musicTracks.length === 1) return pedalingMap;
 
     const registerPedalEvents = (track, pedalOn, pedalOff, eventNumber) => {
       let tickOn = false;
@@ -506,14 +503,14 @@ export default class InAppExpressionizer {
     };
 
     registerPedalEvents(
-      this.#musicTracks[2],
+      this.#bassControlsTrack,
       midiSoftOn,
       midiSoftOff,
       this.midiSoftPedal,
     );
 
     registerPedalEvents(
-      this.#musicTracks[3],
+      this.#trebleControlsTrack,
       midiSustOn,
       midiSustOff,
       this.midiSustPedal,
@@ -524,7 +521,7 @@ export default class InAppExpressionizer {
 
   #buildNotesMap = () => {
     const _notesMap = new IntervalTree();
-    this.#musicTracks.slice(0, 2).forEach((track) => {
+    [this.#bassNotesTrack, this.#trebleNotesTrack].forEach((track) => {
       const tickOn = {};
       track
         .filter(
