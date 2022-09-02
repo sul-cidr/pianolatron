@@ -92,15 +92,16 @@
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
-    const { pedalingMap, notesMap, midiSoftOn, midiSustOn } = $expressionBox;
+    const { pedalingMap, notesMap, midiSoftPedal, midiSustPedal } =
+      $expressionBox;
     if (midiSamplePlayer.tracks[0])
       midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
     midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
 
     if (pedalingMap && $rollPedalingOnOff) {
       const pedals = pedalingMap.search($currentTick, $currentTick);
-      sustainOnOff.set(pedals.includes(midiSustOn));
-      softOnOff.set(pedals.includes(midiSoftOn));
+      sustainOnOff.set(pedals.includes(midiSustPedal));
+      softOnOff.set(pedals.includes(midiSoftPedal));
     } else {
       sustainOnOff.set(false);
       softOnOff.set(false);

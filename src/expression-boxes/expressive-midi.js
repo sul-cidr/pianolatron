@@ -10,8 +10,8 @@ import {
 } from "../stores";
 
 export default class ExpressiveMidiExpressionizer {
-  midiSoftOn = 67;
-  midiSustOn = 64;
+  midiSoftPedal = 67;
+  midiSustPedal = 64;
 
   #metadataTrack;
   #musicTracks;
@@ -92,8 +92,8 @@ export default class ExpressiveMidiExpressionizer {
         });
     };
 
-    enterEvents(this.midiSoftOn);
-    enterEvents(this.midiSustOn);
+    enterEvents(this.midiSoftPedal);
+    enterEvents(this.midiSustPedal);
 
     return _pedalingMap;
   };
@@ -129,9 +129,9 @@ export default class ExpressiveMidiExpressionizer {
           activeNotes.add(noteNumber);
         }
       } else if (name === "Controller Change" && get(rollPedalingOnOff)) {
-        if (number === this.midiSustOn) {
+        if (number === this.midiSustPedal) {
           sustainOnOff.set(!!value);
-        } else if (number === this.midiSoftOn) {
+        } else if (number === this.midiSoftPedal) {
           softOnOff.set(!!value);
         }
       } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
