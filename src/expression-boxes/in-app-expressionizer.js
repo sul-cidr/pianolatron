@@ -13,6 +13,7 @@ import {
   rollMetadata,
   bassExpCurve,
   trebleExpCurve,
+  playExpressionsOnOff,
 } from "../stores";
 import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
@@ -22,6 +23,7 @@ const getKeyByValue = (object, value) =>
 
 export default class InAppExpressionizer {
   defaultTempo = 60;
+  defaultNoteVelocity = 64;
 
   // ?NOTE: different for each roll type
   defaultExpressionParams = {
@@ -136,6 +138,11 @@ export default class InAppExpressionizer {
     }
     return null;
   };
+
+  getTempoAtTick = (tick) =>
+    !get(useMidiTempoEventsOnOff)
+      ? this.defaultTempo
+      : this.tempoMap.search(tick, tick)[0];
 
   applyTrackerExtension = (ctrlTrackMsgs) =>
     ctrlTrackMsgs
@@ -543,24 +550,69 @@ export default class InAppExpressionizer {
 
   buildMidiEventHandler =
     (startNote, stopNote) =>
-    ({ name, value, number, noteNumber, velocity, data, tick }) => {
-      if (name === "Note on") {
-        if (velocity === 0) {
-          stopNote(noteNumber);
-        } else {
-          const expressionizedVelocity =
-            this.noteVelocitiesMap[tick]?.[noteNumber] || velocity;
-          startNote(noteNumber, expressionizedVelocity);
-          activeNotes.add(noteNumber);
+    ({ name: msgType, noteNumber: midiNumber, velocity, data, tick }) => {
+      // Note MIDI files won't have embedded tempo events. Need to check tempoMap
+      // which should include tempo events to emulate roll acceleration.
+      const tempo = this.getTempoAtTick(tick);
+
+      const playerTempo = tempo * get(tempoCoefficient);
+      if (this.midiSamplePlayer.tempo !== playerTempo) {
+        this.midiSamplePlayer.pause();
+        this.midiSamplePlayer.setTempo(playerTempo);
+        this.midiSamplePlayer.play();
+      }
+
+      if (msgType === "Note on") {
+        const holeType = getHoleType({ m: midiNumber }, this.#rollType);
+        if (holeType === "note") {
+          if (velocity === 0) {
+            const ticksPerSecond = (parseFloat(tempo) * this.midiTPQ) / 60.0;
+            // At 591 TPQ & 60bpm, this is ~.02s, drops slowly due to acceleration
+            const trackerExtensionSeconds =
+              this.#expParams.tracker_extension / ticksPerSecond;
+            stopNote(midiNumber, `+${trackerExtensionSeconds}`);
+            activeNotes.delete(midiNumber);
+          } else {
+            const noteVelocity = get(playExpressionsOnOff)
+              ? this.noteVelocitiesMap[tick]?.[midiNumber] || velocity
+              : this.defaultNoteVelocity;
+            startNote(midiNumber, noteVelocity);
+            activeNotes.add(midiNumber);
+          }
+        } else if (holeType === "pedal" && get(rollPedalingOnOff)) {
+          if (velocity === 0) {
+            // Length of pedal control holes doesn't matter for red Welte
+            // (but it does for green Welte...)
+            return;
+          }
+
+          switch (this.#ctrlMap[midiNumber]) {
+            case "sust_on":
+              sustainOnOff.set(true);
+              break;
+
+            case "sust_off":
+              sustainOnOff.set(false);
+              break;
+
+            case "soft_on":
+              softOnOff.set(true);
+              break;
+
+            case "soft_off":
+              softOnOff.set(false);
+              break;
+
+            default:
+              break;
+          }
         }
-      } else if (name === "Controller Change" && get(rollPedalingOnOff)) {
-        if (number === this.midiSustPedal) {
-          sustainOnOff.set(!!value);
-        } else if (number === this.midiSoftPedal) {
-          softOnOff.set(!!value);
-        }
-      } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
-        this.midiSamplePlayer.setTempo(data * get(tempoCoefficient));
+      } else if (msgType === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
+        // This only happens if the note MIDI has tempo events to emulate
+        // acceleration. Usually this is not done, but the MIDI will however
+        // have one event at the beginning, setting the default tempo (60).
+        const newTempo = data * get(tempoCoefficient);
+        this.midiSamplePlayer.setTempo(newTempo);
       }
     };
 }
