@@ -29,10 +29,7 @@
     velocityCurveHigh,
     userSettings,
     expressionBox,
-    expressionParameters,
-    useInAppExpression,
   } from "../stores";
-  import expressionBoxes from "../expression-boxes";
   import WebMidi from "./WebMidi.svelte";
 
   let webMidi;
@@ -244,19 +241,6 @@
     midiSamplePlayer.play();
   };
 
-  const recomputeVelocities = () => {
-    if (!computeDerivedExpressionParams) return;
-
-    $expressionParameters = computeDerivedExpressionParams(
-      $expressionParameters,
-    );
-
-    $expressionBox.buildNoteVelocitiesMap();
-    midiSamplePlayer.eventListeners.midiEvent = [
-      $expressionBox.buildMidiEventHandler(startNote, stopNote),
-    ];
-  };
-
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -279,18 +263,6 @@
           ),
       ),
     );
-
-    const expressionBoxType = $useInAppExpression
-      ? $rollMetadata.ROLL_TYPE
-      : "expressiveMidi";
-    $expressionBox = new expressionBoxes[expressionBoxType](midiSamplePlayer);
-
-    // This is a tiny bit hacky (in the sense that it's using an undocumented
-    //  api), but it's a simple way to ensure that only one midiEventHandler
-    //  is registered.
-    midiSamplePlayer.eventListeners.midiEvent = [
-      $expressionBox.buildMidiEventHandler(startNote, stopNote),
-    ];
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
@@ -308,7 +280,6 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
-  // TODO: $: $expressionParameters, recomputeVelocities(); // updateVelocitiesMap();
 
   export {
     midiSamplePlayer,
@@ -319,8 +290,6 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
-    // TODO:
-    // getExpressionParams,
   };
 </script>
 

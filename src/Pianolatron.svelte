@@ -68,6 +68,7 @@
     useInAppExpression,
     expressionBox,
   } from "./stores";
+  import expressionBoxes from "./expression-boxes";
   import { annotateHoleData, clamp } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
@@ -194,6 +195,18 @@
       .then((mididataArrayBuffer) => {
         if (doReset) resetApp();
         midiSamplePlayer.loadArrayBuffer(mididataArrayBuffer);
+      })
+      .then(() => {
+        // Configure and hook-up expression box
+        const expressionBoxType = $useInAppExpression
+          ? $rollMetadata.ROLL_TYPE
+          : "expressiveMidi";
+        $expressionBox = new expressionBoxes[expressionBoxType](
+          midiSamplePlayer,
+          startNote,
+          stopNote,
+        );
+        midiSamplePlayer.on("midiEvent", $expressionBox.midiEventHandler);
       })
       .catch((err) => {
         notify({ title: "MIDI Data Error!", message: err, type: "error" });

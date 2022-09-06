@@ -16,8 +16,11 @@ export default class ExpressiveMidiExpressionizer {
   #metadataTrack;
   #musicTracks;
 
-  constructor(midiSamplePlayer) {
+  constructor(midiSamplePlayer, startNote, stopNote) {
     this.midiSamplePlayer = midiSamplePlayer;
+    this.startNote = startNote;
+    this.stopNote = stopNote;
+
     [this.#metadataTrack, ...this.#musicTracks] = midiSamplePlayer.events;
 
     this.tempoMap = this.#buildTempoMap();
@@ -116,30 +119,32 @@ export default class ExpressiveMidiExpressionizer {
     return _notesMap;
   };
 
-  buildMidiEventHandler =
-    (startNote, stopNote) =>
-    ({ name, value, number, noteNumber, velocity, data, tick }) => {
-      if (name === "Note on") {
-        if (velocity === 0) {
-          stopNote(noteNumber);
-        } else {
-          const expressionizedVelocity =
-            this.noteVelocitiesMap[tick]?.[noteNumber] || velocity;
-          startNote(noteNumber, expressionizedVelocity);
-          activeNotes.add(noteNumber);
-        }
-      } else if (name === "Controller Change" && get(rollPedalingOnOff)) {
-        if (number === this.midiSustPedal) {
-          sustainOnOff.set(!!value);
-        } else if (number === this.midiSoftPedal) {
-          softOnOff.set(!!value);
-        }
-      } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
-        this.midiSamplePlayer.setTempo(data * get(tempoCoefficient));
+  midiEventHandler = ({
+    name,
+    value,
+    number,
+    noteNumber,
+    velocity,
+    data,
+    tick,
+  }) => {
+    if (name === "Note on") {
+      if (velocity === 0) {
+        this.stopNote(noteNumber);
+      } else {
+        const expressionizedVelocity =
+          this.noteVelocitiesMap[tick]?.[noteNumber] || velocity;
+        this.startNote(noteNumber, expressionizedVelocity);
+        activeNotes.add(noteNumber);
       }
-    };
+    } else if (name === "Controller Change" && get(rollPedalingOnOff)) {
+      if (number === this.midiSustPedal) {
+        sustainOnOff.set(!!value);
+      } else if (number === this.midiSoftPedal) {
+        softOnOff.set(!!value);
+      }
+    } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
+      this.midiSamplePlayer.setTempo(data * get(tempoCoefficient));
+    }
+  };
 }
-
-// TODO:
-// const getExpressionParams = () => {};
-// const computeDerivedExpressionParams = () => {};

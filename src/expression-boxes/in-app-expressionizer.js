@@ -254,8 +254,11 @@ export default class InAppExpressionizer {
   // ==  Constructor  ==
   // =========================================================================
 
-  constructor(midiSamplePlayer) {
+  constructor(midiSamplePlayer, startNote, stopNote) {
     this.midiSamplePlayer = midiSamplePlayer;
+    this.startNote = startNote;
+    this.stopNote = stopNote;
+
     [
       this.#metadataTrack,
       this.#bassNotesTrack,
@@ -264,11 +267,19 @@ export default class InAppExpressionizer {
       this.#trebleControlsTrack,
     ] = midiSamplePlayer.events;
 
-    this.updateExpressionParams();
+    if (!Object.keys(get(expressionParameters)).length)
+      expressionParameters.set(this.defaultExpressionParams);
+    this.#expParams = this.computeDerivedExpressionParams();
+
     this.tempoMap = this.#buildTempoMap();
     this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
     this.pedalingMap = this.#buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
+
+    expressionParameters.subscribe(() => {
+      this.#expParams = this.computeDerivedExpressionParams();
+      this.#buildNoteVelocitiesMap();
+    });
   }
 
   // ?NOTE: should be good for (at least) welte-red and welte-green
@@ -552,76 +563,75 @@ export default class InAppExpressionizer {
     return _notesMap;
   };
 
-  buildMidiEventHandler =
-    (startNote, stopNote) =>
-    ({ name: msgType, noteNumber: midiNumber, velocity, data, tick }) => {
-      // Note MIDI files won't have embedded tempo events. Need to check tempoMap
-      // which should include tempo events to emulate roll acceleration.
-      const tempo = this.getTempoAtTick(tick);
+  midiEventHandler = ({
+    name: msgType,
+    noteNumber: midiNumber,
+    velocity,
+    data,
+    tick,
+  }) => {
+    // Note MIDI files won't have embedded tempo events. Need to check tempoMap
+    // which should include tempo events to emulate roll acceleration.
+    const tempo = this.getTempoAtTick(tick);
 
-      const playerTempo = tempo * get(tempoCoefficient);
-      if (this.midiSamplePlayer.tempo !== playerTempo) {
-        this.midiSamplePlayer.pause();
-        this.midiSamplePlayer.setTempo(playerTempo);
-        this.midiSamplePlayer.play();
-      }
+    const playerTempo = tempo * get(tempoCoefficient);
+    if (this.midiSamplePlayer.tempo !== playerTempo) {
+      this.midiSamplePlayer.pause();
+      this.midiSamplePlayer.setTempo(playerTempo);
+      this.midiSamplePlayer.play();
+    }
 
-      if (msgType === "Note on") {
-        const holeType = getHoleType({ m: midiNumber }, this.#rollType);
-        if (holeType === "note") {
-          if (velocity === 0) {
-            const ticksPerSecond = (parseFloat(tempo) * this.midiTPQ) / 60.0;
-            // At 591 TPQ & 60bpm, this is ~.02s, drops slowly due to acceleration
-            const trackerExtensionSeconds =
-              this.#expParams.tracker_extension / ticksPerSecond;
-            stopNote(midiNumber, `+${trackerExtensionSeconds}`);
-            activeNotes.delete(midiNumber);
-          } else {
-            const noteVelocity = get(playExpressionsOnOff)
-              ? this.noteVelocitiesMap[tick]?.[midiNumber] || velocity
-              : this.defaultNoteVelocity;
-            startNote(midiNumber, noteVelocity);
-            activeNotes.add(midiNumber);
-          }
-        } else if (holeType === "pedal" && get(rollPedalingOnOff)) {
-          if (velocity === 0) {
-            // Length of pedal control holes doesn't matter for red Welte
-            // (but it does for green Welte...)
-            return;
-          }
-
-          switch (this.#ctrlMap[midiNumber]) {
-            case "sust_on":
-              sustainOnOff.set(true);
-              break;
-
-            case "sust_off":
-              sustainOnOff.set(false);
-              break;
-
-            case "soft_on":
-              softOnOff.set(true);
-              break;
-
-            case "soft_off":
-              softOnOff.set(false);
-              break;
-
-            default:
-              break;
-          }
+    if (msgType === "Note on") {
+      const holeType = getHoleType({ m: midiNumber }, this.#rollType);
+      if (holeType === "note") {
+        if (velocity === 0) {
+          const ticksPerSecond = (parseFloat(tempo) * this.midiTPQ) / 60.0;
+          // At 591 TPQ & 60bpm, this is ~.02s, drops slowly due to acceleration
+          const trackerExtensionSeconds =
+            this.#expParams.tracker_extension / ticksPerSecond;
+          this.stopNote(midiNumber, `+${trackerExtensionSeconds}`);
+          activeNotes.delete(midiNumber);
+        } else {
+          const noteVelocity = get(playExpressionsOnOff)
+            ? this.noteVelocitiesMap[tick]?.[midiNumber] || velocity
+            : this.defaultNoteVelocity;
+          this.startNote(midiNumber, noteVelocity);
+          activeNotes.add(midiNumber);
         }
-      } else if (msgType === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
-        // This only happens if the note MIDI has tempo events to emulate
-        // acceleration. Usually this is not done, but the MIDI will however
-        // have one event at the beginning, setting the default tempo (60).
-        const newTempo = data * get(tempoCoefficient);
-        this.midiSamplePlayer.setTempo(newTempo);
-      }
-    };
+      } else if (holeType === "pedal" && get(rollPedalingOnOff)) {
+        if (velocity === 0) {
+          // Length of pedal control holes doesn't matter for red Welte
+          // (but it does for green Welte...)
+          return;
+        }
 
-  updateExpressionParams = () => {
-    this.#expParams = this.computeDerivedExpressionParams();
-    expressionParameters.set(this.#expParams);
+        switch (this.#ctrlMap[midiNumber]) {
+          case "sust_on":
+            sustainOnOff.set(true);
+            break;
+
+          case "sust_off":
+            sustainOnOff.set(false);
+            break;
+
+          case "soft_on":
+            softOnOff.set(true);
+            break;
+
+          case "soft_off":
+            softOnOff.set(false);
+            break;
+
+          default:
+            break;
+        }
+      }
+    } else if (msgType === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
+      // This only happens if the note MIDI has tempo events to emulate
+      // acceleration. Usually this is not done, but the MIDI will however
+      // have one event at the beginning, setting the default tempo (60).
+      const newTempo = data * get(tempoCoefficient);
+      this.midiSamplePlayer.setTempo(newTempo);
+    }
   };
 }
