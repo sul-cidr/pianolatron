@@ -602,7 +602,6 @@
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
       partitionHolesOverlaySvgs();
-      drawExpressionCurves($bassExpCurve, $trebleExpCurve);
       updateViewportFromTick(0);
     });
 
@@ -686,7 +685,7 @@
 
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
-  $: drawExpressionCurves($bassExpCurve, $trebleExpCurve);
+  // $: drawExpressionCurves($bassExpCurve, $trebleExpCurve);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
