@@ -5,15 +5,16 @@ import { get } from "svelte/store";
 import IntervalTree from "node-interval-tree";
 import {
   activeNotes,
+  bassExpCurve,
+  expressionParameters,
+  playExpressionsOnOff,
+  rollMetadata,
   rollPedalingOnOff,
   softOnOff,
   sustainOnOff,
   tempoCoefficient,
-  useMidiTempoEventsOnOff,
-  rollMetadata,
-  bassExpCurve,
   trebleExpCurve,
-  playExpressionsOnOff,
+  useMidiTempoEventsOnOff,
 } from "../stores";
 import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
@@ -60,7 +61,10 @@ export default class InAppExpressionizer {
   computeDerivedExpressionParams = () => {
     // These are the derived parameters, used to compute velocities, but should
     // not be adjusted via the expression controls
-    const { tunable } = this.defaultExpressionParams;
+    const tunable =
+      get(expressionParameters)?.tunable ||
+      this.defaultExpressionParams.tunable;
+
     const {
       welte_f,
       welte_mf,
@@ -260,7 +264,7 @@ export default class InAppExpressionizer {
       this.#trebleControlsTrack,
     ] = midiSamplePlayer.events;
 
-    this.#expParams = this.computeDerivedExpressionParams();
+    this.updateExpressionParams();
     this.tempoMap = this.#buildTempoMap();
     this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
     this.pedalingMap = this.#buildPedalingMap();
@@ -615,4 +619,9 @@ export default class InAppExpressionizer {
         this.midiSamplePlayer.setTempo(newTempo);
       }
     };
+
+  updateExpressionParams = () => {
+    this.#expParams = this.computeDerivedExpressionParams();
+    expressionParameters.set(this.#expParams);
+  };
 }
