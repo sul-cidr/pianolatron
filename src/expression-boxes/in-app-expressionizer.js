@@ -280,118 +280,41 @@ export default class InAppExpressionizer {
     const expressionMap = {};
 
     const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs, adjust) => {
-      const _panExpMap = new IntervalTree();
-
       const expressionCurve = [];
 
-      const expState = {
-        velocity: this.expParams.tunable.welte_p, // Velocity at last cresc/decresc event
-        time: 0.0, // Time (in ms) at last cresc/decresc event
-        mf_start: null,
-        slow_cresc_start: null,
-        slow_decresc_start: null,
-        fast_cresc_start: null,
-        fast_cresc_stop: null, // Can be in the future due to tracker extension
-        fast_decresc_start: null,
-        fast_decresc_stop: null,
-      };
-
-      const finalTick = Math.max(
-        noteTrackMsgs[noteTrackMsgs.length - 1].tick,
-        ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
-      );
-
       // First build the velocity expression map from the control track only
-      ctrlTrackMsgs
+      const [panExpMap, expState] = ctrlTrackMsgs
         .filter(({ name }) => name === "Note on")
         .map(this.extendControlHoles)
         // Adding the tracker extension ticks to the ends of the fast cresc/
         // decresc holes will result in unordered events; resort them.
         .sort((a, b) => a.tick - b.tick)
-        .forEach(({ noteNumber: midiNumber, velocity, tick }) => {
-          // We know these are all control holes
-          const ctrlFunc = this.ctrlMap[midiNumber];
-
-          // Ignore control holes that don't affect playback (most roll types
-          // will have some of these), or are likely to be damage holes
-          if (
-            ![
-              "sf_on",
-              "sf_off",
-              "cresc_on",
-              "cresc_off",
-              "mf_on",
-              "mf_off",
-            ].includes(ctrlFunc)
-          )
-            return; // Usually these are damage holes
-
-          // Fast crescendo and decrescendo controls are the only ones for which
-          // the length of the perforation matters
-          if (velocity === 0 && !["sf_on", "sf_off"].includes(ctrlFunc)) return;
-
-          const msgTime = this.convertTicksAndTime(tick);
-          const panVelocity = this.getVelocityAtTime(msgTime, expState);
-
-          switch (ctrlFunc) {
-            case "mf_on":
-              expState.mf_start = msgTime;
-              break;
-
-            case "mf_off":
-              expState.mf_start = null;
-              break;
-
-            case "cresc_on":
-              expState.slow_cresc_start = msgTime;
-              expState.slow_decresc_start = null;
-              break;
-
-            case "cresc_off":
-              expState.slow_cresc_start = null;
-              expState.slow_decresc_start = msgTime;
-              break;
-
-            case "sf_on":
-              if (velocity > 0) {
-                expState.fast_cresc_start = msgTime;
-                expState.fast_cresc_stop = null;
-              } else {
-                expState.fast_cresc_stop = msgTime;
-              }
-              break;
-
-            case "sf_off":
-              if (velocity > 0) {
-                expState.fast_decresc_start = msgTime;
-                expState.fast_decresc_stop = null;
-              } else {
-                expState.fast_decresc_stop = msgTime;
-              }
-              break;
-
-            default:
-              break;
-          }
-
-          _panExpMap.insert(expState.time, msgTime, [
-            expState.velocity,
-            panVelocity,
-            expState.time,
-            msgTime,
-          ]);
-
-          expState.time = msgTime;
-          expState.velocity = panVelocity;
-        });
+        .reduce(this.panExpMapReducer, [
+          new IntervalTree(),
+          {
+            velocity: this.expParams.tunable.welte_p, // Velocity at last cresc/decresc event
+            time: 0.0, // Time (in ms) at last cresc/decresc event
+            mf_start: null,
+            slow_cresc_start: null,
+            slow_decresc_start: null,
+            fast_cresc_start: null,
+            fast_cresc_stop: null, // Can be in the future due to tracker extension
+            fast_decresc_start: null,
+            fast_decresc_stop: null,
+          },
+        ]);
 
       // Extend the expression map so that it extends from the last control hole
       // to the final note on this half of the roll (if needed)
+      const finalTick = Math.max(
+        noteTrackMsgs[noteTrackMsgs.length - 1].tick,
+        ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
+      );
       const finalTime = this.convertTicksAndTime(finalTick);
 
       if (finalTime > expState.time) {
         const finalPanVelocity = this.getVelocityAtTime(finalTime, expState);
-        _panExpMap.insert(expState.time, finalTime, [
+        panExpMap.insert(expState.time, finalTime, [
           expState.velocity,
           finalPanVelocity,
           expState.time,
@@ -406,7 +329,7 @@ export default class InAppExpressionizer {
           const msgTime = this.convertTicksAndTime(tick);
 
           const [startVelocity, endVelocity, startTime, endTime] =
-            _panExpMap.search(msgTime, msgTime)[0];
+            panExpMap.search(msgTime, msgTime)[0];
 
           const notePositionInInterval =
             (msgTime - startTime) / (endTime - startTime);
@@ -424,7 +347,7 @@ export default class InAppExpressionizer {
         });
 
       // Build the expression curve, which uses ticks (not ms)
-      const intervals = Array.from(_panExpMap.inOrder());
+      const intervals = Array.from(panExpMap.inOrder());
       Object.values(intervals).forEach((interval) => {
         const expStartTick = this.convertTicksAndTime(interval.low, "tick");
         const expEndTick = this.convertTicksAndTime(interval.high, "tick");

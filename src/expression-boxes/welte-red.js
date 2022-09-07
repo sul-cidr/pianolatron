@@ -42,6 +42,84 @@ export default class WelteRedExpressionizer extends InAppExpressionizer {
     return item;
   };
 
+  panExpMapReducer = (
+    [panExpMap, expState],
+    { noteNumber, velocity, tick },
+  ) => {
+    // We know these are all control holes
+    const ctrlFunc = this.ctrlMap[noteNumber];
+
+    // Ignore control holes that don't affect playback (most roll types
+    // will have some of these), or are likely to be damage holes
+    if (
+      !["sf_on", "sf_off", "cresc_on", "cresc_off", "mf_on", "mf_off"].includes(
+        ctrlFunc,
+      )
+    )
+      return [panExpMap, expState]; // Usually these are damage holes
+
+    // Fast crescendo and decrescendo controls are the only ones for which
+    // the length of the perforation matters
+    if (velocity === 0 && !["sf_on", "sf_off"].includes(ctrlFunc))
+      return [panExpMap, expState];
+
+    const msgTime = this.convertTicksAndTime(tick);
+    const panVelocity = this.getVelocityAtTime(msgTime, expState);
+
+    switch (ctrlFunc) {
+      case "mf_on":
+        expState.mf_start = msgTime;
+        break;
+
+      case "mf_off":
+        expState.mf_start = null;
+        break;
+
+      case "cresc_on":
+        expState.slow_cresc_start = msgTime;
+        expState.slow_decresc_start = null;
+        break;
+
+      case "cresc_off":
+        expState.slow_cresc_start = null;
+        expState.slow_decresc_start = msgTime;
+        break;
+
+      case "sf_on":
+        if (velocity > 0) {
+          expState.fast_cresc_start = msgTime;
+          expState.fast_cresc_stop = null;
+        } else {
+          expState.fast_cresc_stop = msgTime;
+        }
+        break;
+
+      case "sf_off":
+        if (velocity > 0) {
+          expState.fast_decresc_start = msgTime;
+          expState.fast_decresc_stop = null;
+        } else {
+          expState.fast_decresc_stop = msgTime;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    panExpMap.insert(expState.time, msgTime, [
+      expState.velocity,
+      panVelocity,
+      expState.time,
+      msgTime,
+    ]);
+
+    expState.time = msgTime;
+    expState.velocity = panVelocity;
+
+    return [panExpMap, expState];
+  };
+
   constructor(...args) {
     super(...args);
     this.initializeExpressionizer();
