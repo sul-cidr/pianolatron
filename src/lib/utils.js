@@ -14,6 +14,9 @@ export const normalizeInRange = (value, min, max) => {
   return (value - min) / (max - min);
 };
 
+export const getKeyByValue = (object, value) =>
+  Object.keys(object).find((key) => object[key] === value);
+
 export const getHoleType = ({ m: midiNumber }, rollType) => {
   const {
     bassNotesBegin: notesBegin,

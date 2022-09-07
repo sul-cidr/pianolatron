@@ -1,3 +1,5 @@
+import IntervalTree from "node-interval-tree";
+import { getKeyByValue } from "../lib/utils";
 import InAppExpressionizer from "./in-app-expressionizer";
 
 export default class WelteGreenExpressionizer extends InAppExpressionizer {
@@ -107,6 +109,37 @@ export default class WelteGreenExpressionizer extends InAppExpressionizer {
     expState.velocity = panVelocity;
 
     return [panExpMap, expState];
+  };
+
+  buildPedalingMap = () => {
+    const midiSoft = getKeyByValue(this.ctrlMap, "soft");
+    const midiSust = getKeyByValue(this.ctrlMap, "sust");
+
+    const pedalingMap = new IntervalTree();
+
+    const registerPedalEvents = (track, pedalOn, eventNumber) => {
+      let tickOn = false;
+      track
+        // Pedal is on as long as the punch is present
+        .filter(({ name }) => name === "Note on")
+        .forEach(({ noteNumber, tick, velocity }) => {
+          if (noteNumber === pedalOn) {
+            if (velocity === 0) {
+              // Holes can legitimately begin on tick 0
+              if (tickOn !== false)
+                pedalingMap.insert(tickOn, tick, eventNumber);
+              tickOn = false;
+            } else if (velocity === 1) {
+              if (!tickOn) tickOn = tick;
+            }
+          }
+        });
+    };
+
+    registerPedalEvents(this.bassControlsTrack, midiSoft, this.midiSoftPedal);
+    registerPedalEvents(this.trebleControlsTrack, midiSust, this.midiSustPedal);
+
+    return pedalingMap;
   };
 
   constructor(...args) {

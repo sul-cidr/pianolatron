@@ -19,9 +19,6 @@ import {
 import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
 
-const getKeyByValue = (object, value) =>
-  Object.keys(object).find((key) => object[key] === value);
-
 export default class InAppExpressionizer {
   #rollType = get(rollMetadata).ROLL_TYPE;
   #midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
@@ -34,11 +31,11 @@ export default class InAppExpressionizer {
 
   ctrlMap = rollProfile[this.#rollType].ctrlMap;
 
-  #metadataTrack;
-  #bassNotesTrack;
-  #trebleNotesTrack;
-  #bassControlsTrack;
-  #trebleControlsTrack;
+  metadataTrack;
+  bassNotesTrack;
+  trebleNotesTrack;
+  bassControlsTrack;
+  trebleControlsTrack;
 
   // ?NOTE: should be good for (at least) welte-red and welte-green
   computeDerivedExpressionParams = () => {
@@ -211,11 +208,11 @@ export default class InAppExpressionizer {
     this.stopNote = stopNote;
 
     [
-      this.#metadataTrack,
-      this.#bassNotesTrack,
-      this.#trebleNotesTrack,
-      this.#bassControlsTrack,
-      this.#trebleControlsTrack,
+      this.metadataTrack,
+      this.bassNotesTrack,
+      this.trebleNotesTrack,
+      this.bassControlsTrack,
+      this.trebleControlsTrack,
     ] = midiSamplePlayer.events;
   }
 
@@ -226,7 +223,7 @@ export default class InAppExpressionizer {
 
     this.tempoMap = this.#buildTempoMap();
     this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
-    this.pedalingMap = this.#buildPedalingMap();
+    this.pedalingMap = this.buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
 
     expressionParameters.subscribe(() => {
@@ -363,65 +360,23 @@ export default class InAppExpressionizer {
     // bass notes and control holes
     bassExpCurve.set(
       buildPanExpMap(
-        this.#bassNotesTrack,
-        this.#bassControlsTrack,
+        this.bassNotesTrack,
+        this.bassControlsTrack,
         this.expParams.tunable.left_adjust,
       ),
     );
 
     // treble notes and control holes
     trebleExpCurve.set(
-      buildPanExpMap(this.#trebleNotesTrack, this.#trebleControlsTrack, 0),
+      buildPanExpMap(this.trebleNotesTrack, this.trebleControlsTrack, 0),
     );
 
     return expressionMap;
   };
 
-  #buildPedalingMap = () => {
-    const midiSoftOn = getKeyByValue(this.ctrlMap, "soft_on");
-    const midiSoftOff = getKeyByValue(this.ctrlMap, "soft_off");
-    const midiSustOn = getKeyByValue(this.ctrlMap, "sust_on");
-    const midiSustOff = getKeyByValue(this.ctrlMap, "sust_off");
-
-    const pedalingMap = new IntervalTree();
-
-    const registerPedalEvents = (track, pedalOn, pedalOff, eventNumber) => {
-      let tickOn = false;
-      track
-        // Only want beginning of note holes for lock & cancel type expression
-        // mechanisms (works for Welte red and Licensee, not 88 or Welte green)
-        .filter(({ name, velocity }) => name === "Note on" && velocity === 1)
-        .forEach(({ noteNumber, tick }) => {
-          if (noteNumber === pedalOff) {
-            // Holes can legitimately begin on tick 0
-            if (tickOn !== false) pedalingMap.insert(tickOn, tick, eventNumber);
-            tickOn = false;
-          } else if (noteNumber === pedalOn) {
-            if (!tickOn) tickOn = tick;
-          }
-        });
-    };
-
-    registerPedalEvents(
-      this.#bassControlsTrack,
-      midiSoftOn,
-      midiSoftOff,
-      this.midiSoftPedal,
-    );
-
-    registerPedalEvents(
-      this.#trebleControlsTrack,
-      midiSustOn,
-      midiSustOff,
-      this.midiSustPedal,
-    );
-
-    return pedalingMap;
-  };
-
   #buildNotesMap = () => {
     const _notesMap = new IntervalTree();
-    [this.#bassNotesTrack, this.#trebleNotesTrack].forEach((track) => {
+    [this.bassNotesTrack, this.trebleNotesTrack].forEach((track) => {
       const tickOn = {};
       track
         .filter(
