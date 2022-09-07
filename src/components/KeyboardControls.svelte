@@ -43,6 +43,7 @@
     label="Show/Hide Piano Keyboard"
     height="24"
     width="24"
+    alt="Show/Hide Piano Keyboard"
   />
   {#if !outside}
     <IconButton
@@ -53,6 +54,7 @@
       label="Overlay Piano Keyboard on Roll Image"
       height="24"
       width="24"
+      alt="Overlay Piano Keyboard on Roll Image"
     />
   {/if}
 </div>

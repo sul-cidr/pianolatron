@@ -57,10 +57,11 @@
       component: BasicSettings,
       props: { skipToPercentage },
       icon: "sliders",
+      alt: "Settings",
     },
-    settings: { component: AdvancedSettings, icon: "cog" },
-    audio: { component: AudioSettings, icon: "piano" },
-    midi: { component: MidiSettings, icon: "midi" },
+    settings: { component: AdvancedSettings, icon: "cog", alt: "Advanced" },
+    audio: { component: AudioSettings, icon: "piano", alt: "Audio" },
+    midi: { component: MidiSettings, icon: "midi", alt: "MIDI" },
   };
 
   let selectedPanel = "controls";

@@ -54,6 +54,7 @@
     label="Zoom In"
     height="24"
     width="24"
+    alt="Zoom In"
   />
   <IconButton
     class="overlay"
@@ -65,6 +66,7 @@
     label="Zoom Out"
     height="24"
     width="24"
+    alt="Zoom Out"
   />
   <IconButton
     class="overlay"
@@ -77,6 +79,7 @@
     label="Zoom to Roll Width"
     height="24"
     width="24"
+    alt="Zoom to Roll Width"
   />
   <IconButton
     class="overlay"
@@ -88,6 +91,7 @@
     label="Pan Up"
     height="24"
     width="24"
+    alt="Pan Up"
   />
   <IconButton
     class="overlay"
@@ -99,6 +103,7 @@
     label="Pan Down"
     height="24"
     width="24"
+    alt="Pan Down"
   />
   <IconButton
     class="overlay"
@@ -108,6 +113,7 @@
     label="Pan Left"
     height="24"
     width="24"
+    alt="Pan Left"
   />
   <IconButton
     class="overlay"
@@ -119,6 +125,7 @@
     label="Pan Right"
     height="24"
     width="24"
+    alt="Pan Right"
   />
 </div>
 <svelte:window on:mouseup={() => actionInterval?.clear()} />

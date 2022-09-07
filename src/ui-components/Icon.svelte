@@ -3,6 +3,7 @@
   export let width = "1rem";
   export let height = "1rem";
   export let customAttribs = {};
+  export let alt = "";
 
   const defaultAttribs = {
     viewBox: "0 0 24 24",
@@ -169,13 +170,15 @@
     },
   };
   const { attribs, svg } = icons[name];
+  const htmlContent = `<title>${alt}</title>${svg}`;
 </script>
 
 <svg
+  role="img"
   {height}
   {width}
   {...defaultAttribs}
   {...attribs}
   {...customAttribs}
-  {...$$props}>{@html svg}</svg
+  {...$$props}>{@html htmlContent}</svg
 >

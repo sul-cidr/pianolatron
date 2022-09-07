@@ -56,6 +56,8 @@
   export let iconName;
   export let label;
 
+  export let alt = "";
+
   export let ref = undefined;
 </script>
 
@@ -68,5 +70,12 @@
   on:mousedown
   bind:this={ref}
 >
-  <Icon name={iconName} {height} {width} aria-hidden="true" focusable="false" />
+  <Icon
+    name={iconName}
+    {height}
+    {width}
+    aria-hidden="true"
+    focusable="false"
+    {alt}
+  />
 </button>
