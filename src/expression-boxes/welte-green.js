@@ -17,6 +17,27 @@ export default class WelteGreenExpressionizer extends InAppExpressionizer {
     },
   };
 
+  extendControlHoles = (item) => {
+    // We know these are all control holes
+    const ctrlFunc = this.ctrlMap[item.noteNumber];
+
+    // We're only interested in the ends of control holes.
+    // No extension is applied to pedal events, but this could be done
+    // as well.
+    if (
+      ctrlFunc == null ||
+      item.velocity !== 0 ||
+      !["sfp", "mf", "cresc", "sff"].includes(ctrlFunc)
+    )
+      return item;
+
+    // Note that the delta values for all subsequent events would need to
+    // change, if we wanted to generate valid MIDI (in JSON form)
+    item.tick += this.expParams.tracker_extension;
+
+    return item;
+  };
+
   constructor(...args) {
     super(...args);
     this.initializeExpressionizer();

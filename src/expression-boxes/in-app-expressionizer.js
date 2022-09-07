@@ -23,22 +23,22 @@ const getKeyByValue = (object, value) =>
   Object.keys(object).find((key) => object[key] === value);
 
 export default class InAppExpressionizer {
+  #rollType = get(rollMetadata).ROLL_TYPE;
+  #midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
+
   defaultTempo = 60;
   defaultNoteVelocity = 64;
 
-  #rollType = get(rollMetadata).ROLL_TYPE;
-  #midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
-  #ctrlMap = rollProfile[this.#rollType].ctrlMap;
-
   midiSoftPedal = 67;
   midiSustPedal = 64;
+
+  ctrlMap = rollProfile[this.#rollType].ctrlMap;
 
   #metadataTrack;
   #bassNotesTrack;
   #trebleNotesTrack;
   #bassControlsTrack;
   #trebleControlsTrack;
-  #expParams;
 
   // ?NOTE: should be good for (at least) welte-red and welte-green
   computeDerivedExpressionParams = () => {
@@ -131,39 +131,8 @@ export default class InAppExpressionizer {
       ? this.defaultTempo
       : this.tempoMap.search(tick, tick)[0];
 
-  applyTrackerExtension = (ctrlTrackMsgs) =>
-    ctrlTrackMsgs
-      .map((item) => {
-        // We know these are all control holes
-        const ctrlFunc = this.#ctrlMap[item.noteNumber];
-
-        // We're only interested in the ends of control holes, and specifically
-        // only the ends of fast cresc or decresc holes (for now)
-        // NOTE that the extension is applied to the note holes during playback
-        // in the MidiEventHandler, but a modified version of this function
-        // could be used to apply the extension prior to playback.
-        // Note also that no extension is applied to pedal events, but this
-        // could be done as well.
-        if (
-          ctrlFunc == null ||
-          item.name !== "Note on" ||
-          item.velocity !== 0 ||
-          !["sf_on", "sf_off"].includes(ctrlFunc)
-        )
-          return item;
-
-        // Note that the delta values for all subsequent events would need to
-        // change, if we wanted to generate valid MIDI (in JSON form)
-        item.tick += this.#expParams.tracker_extension;
-
-        return item;
-      })
-      // Adding the tracker extension ticks to the ends of the fast cresc/
-      // decresc holes will result in unordered events; resort them.
-      .sort((a, b) => a.tick - b.tick);
-
   getVelocityAtTime = (time, expState) => {
-    const { slow_step, fastC_step, fastD_step, tunable } = this.#expParams;
+    const { slow_step, fastC_step, fastD_step, tunable } = this.expParams;
     const { welte_f, welte_loud, welte_mf, welte_p } = tunable;
 
     // To begin, the new velocity is set to the previous level
@@ -253,7 +222,7 @@ export default class InAppExpressionizer {
   initializeExpressionizer = () => {
     if (!Object.keys(get(expressionParameters)).length)
       expressionParameters.set(this.defaultExpressionParams);
-    this.#expParams = this.computeDerivedExpressionParams();
+    this.expParams = this.computeDerivedExpressionParams();
 
     this.tempoMap = this.#buildTempoMap();
     this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
@@ -261,7 +230,7 @@ export default class InAppExpressionizer {
     this.notesMap = this.#buildNotesMap();
 
     expressionParameters.subscribe(() => {
-      this.#expParams = this.computeDerivedExpressionParams();
+      this.expParams = this.computeDerivedExpressionParams();
       this.#buildNoteVelocitiesMap();
     });
   };
@@ -294,7 +263,7 @@ export default class InAppExpressionizer {
     ) {
       minute += minuteDiv;
       nextTick = tick + parseInt(speed * minuteDiv * ticksPerFt, 10);
-      speed = startSpeed + minute * this.#expParams.tunable.accelFtPerMin2;
+      speed = startSpeed + minute * this.expParams.tunable.accelFtPerMin2;
       nextTempo = (speed * ticksPerFt) / this.#midiTPQ;
       tempoMap.insert(tick, nextTick, tempo);
       tick = nextTick;
@@ -316,7 +285,7 @@ export default class InAppExpressionizer {
       const expressionCurve = [];
 
       const expState = {
-        velocity: this.#expParams.tunable.welte_p, // Velocity at last cresc/decresc event
+        velocity: this.expParams.tunable.welte_p, // Velocity at last cresc/decresc event
         time: 0.0, // Time (in ms) at last cresc/decresc event
         mf_start: null,
         slow_cresc_start: null,
@@ -327,19 +296,21 @@ export default class InAppExpressionizer {
         fast_decresc_stop: null,
       };
 
-      const extendedCtrlTrackMsgs = this.applyTrackerExtension(ctrlTrackMsgs);
-
       const finalTick = Math.max(
         noteTrackMsgs[noteTrackMsgs.length - 1].tick,
         ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
       );
 
       // First build the velocity expression map from the control track only
-      extendedCtrlTrackMsgs
+      ctrlTrackMsgs
         .filter(({ name }) => name === "Note on")
+        .map(this.extendControlHoles)
+        // Adding the tracker extension ticks to the ends of the fast cresc/
+        // decresc holes will result in unordered events; resort them.
+        .sort((a, b) => a.tick - b.tick)
         .forEach(({ noteNumber: midiNumber, velocity, tick }) => {
           // We know these are all control holes
-          const ctrlFunc = this.#ctrlMap[midiNumber];
+          const ctrlFunc = this.ctrlMap[midiNumber];
 
           // Ignore control holes that don't affect playback (most roll types
           // will have some of these), or are likely to be damage holes
@@ -471,7 +442,7 @@ export default class InAppExpressionizer {
       buildPanExpMap(
         this.#bassNotesTrack,
         this.#bassControlsTrack,
-        this.#expParams.tunable.left_adjust,
+        this.expParams.tunable.left_adjust,
       ),
     );
 
@@ -484,10 +455,10 @@ export default class InAppExpressionizer {
   };
 
   #buildPedalingMap = () => {
-    const midiSoftOn = getKeyByValue(this.#ctrlMap, "soft_on");
-    const midiSoftOff = getKeyByValue(this.#ctrlMap, "soft_off");
-    const midiSustOn = getKeyByValue(this.#ctrlMap, "sust_on");
-    const midiSustOff = getKeyByValue(this.#ctrlMap, "sust_off");
+    const midiSoftOn = getKeyByValue(this.ctrlMap, "soft_on");
+    const midiSoftOff = getKeyByValue(this.ctrlMap, "soft_off");
+    const midiSustOn = getKeyByValue(this.ctrlMap, "sust_on");
+    const midiSustOff = getKeyByValue(this.ctrlMap, "sust_off");
 
     const pedalingMap = new IntervalTree();
 
@@ -572,7 +543,7 @@ export default class InAppExpressionizer {
           const ticksPerSecond = (parseFloat(tempo) * this.midiTPQ) / 60.0;
           // At 591 TPQ & 60bpm, this is ~.02s, drops slowly due to acceleration
           const trackerExtensionSeconds =
-            this.#expParams.tracker_extension / ticksPerSecond;
+            this.expParams.tracker_extension / ticksPerSecond;
           this.stopNote(midiNumber, `+${trackerExtensionSeconds}`);
           activeNotes.delete(midiNumber);
         } else {
@@ -589,7 +560,7 @@ export default class InAppExpressionizer {
           return;
         }
 
-        switch (this.#ctrlMap[midiNumber]) {
+        switch (this.ctrlMap[midiNumber]) {
           case "sust_on":
             sustainOnOff.set(true);
             break;
