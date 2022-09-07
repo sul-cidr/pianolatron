@@ -16,4 +16,9 @@ export default class WelteRedExpressionizer extends InAppExpressionizer {
       accelFtPerMin2: 0.3147,
     },
   };
+
+  constructor(...args) {
+    super(...args);
+    this.initializeExpressionizer();
+  }
 }

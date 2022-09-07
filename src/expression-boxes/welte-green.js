@@ -16,4 +16,9 @@ export default class WelteGreenExpressionizer extends InAppExpressionizer {
       accelFtPerMin2: 0.2, // XXX Double check
     },
   };
+
+  constructor(...args) {
+    super(...args);
+    this.initializeExpressionizer();
+  }
 }

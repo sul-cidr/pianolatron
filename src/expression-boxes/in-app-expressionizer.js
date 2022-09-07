@@ -236,7 +236,6 @@ export default class InAppExpressionizer {
   // =========================================================================
   // ==  Constructor  ==
   // =========================================================================
-
   constructor(midiSamplePlayer, startNote, stopNote) {
     this.midiSamplePlayer = midiSamplePlayer;
     this.startNote = startNote;
@@ -249,7 +248,9 @@ export default class InAppExpressionizer {
       this.#bassControlsTrack,
       this.#trebleControlsTrack,
     ] = midiSamplePlayer.events;
+  }
 
+  initializeExpressionizer = () => {
     if (!Object.keys(get(expressionParameters)).length)
       expressionParameters.set(this.defaultExpressionParams);
     this.#expParams = this.computeDerivedExpressionParams();
@@ -263,7 +264,7 @@ export default class InAppExpressionizer {
       this.#expParams = this.computeDerivedExpressionParams();
       this.#buildNoteVelocitiesMap();
     });
-  }
+  };
 
   // ?NOTE: should be good for (at least) welte-red and welte-green
   #buildTempoMap = () => {
