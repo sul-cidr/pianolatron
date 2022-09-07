@@ -1,4 +1,5 @@
 import IntervalTree from "node-interval-tree";
+import { softOnOff, sustainOnOff } from "../stores";
 import { getKeyByValue } from "../lib/utils";
 import InAppExpressionizer from "./in-app-expressionizer";
 
@@ -140,6 +141,21 @@ export default class WelteGreenExpressionizer extends InAppExpressionizer {
     registerPedalEvents(this.trebleControlsTrack, midiSust, this.midiSustPedal);
 
     return pedalingMap;
+  };
+
+  handlePedal = (velocity, midiNumber) => {
+    switch (this.ctrlMap[midiNumber]) {
+      case "sust":
+        sustainOnOff.set(!!velocity);
+        break;
+
+      case "soft":
+        softOnOff.set(!!velocity);
+        break;
+
+      default:
+        break;
+    }
   };
 
   constructor(...args) {

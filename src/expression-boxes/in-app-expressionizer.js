@@ -10,8 +10,6 @@ import {
   playExpressionsOnOff,
   rollMetadata,
   rollPedalingOnOff,
-  softOnOff,
-  sustainOnOff,
   tempoCoefficient,
   trebleExpCurve,
   useMidiTempoEventsOnOff,
@@ -432,32 +430,7 @@ export default class InAppExpressionizer {
           activeNotes.add(midiNumber);
         }
       } else if (holeType === "pedal" && get(rollPedalingOnOff)) {
-        if (velocity === 0) {
-          // Length of pedal control holes doesn't matter for red Welte
-          // (but it does for green Welte...)
-          return;
-        }
-
-        switch (this.ctrlMap[midiNumber]) {
-          case "sust_on":
-            sustainOnOff.set(true);
-            break;
-
-          case "sust_off":
-            sustainOnOff.set(false);
-            break;
-
-          case "soft_on":
-            softOnOff.set(true);
-            break;
-
-          case "soft_off":
-            softOnOff.set(false);
-            break;
-
-          default:
-            break;
-        }
+        this.handlePedal(velocity, midiNumber);
       }
     } else if (msgType === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
       // This only happens if the note MIDI has tempo events to emulate

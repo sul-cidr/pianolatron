@@ -1,4 +1,5 @@
 import IntervalTree from "node-interval-tree";
+import { softOnOff, sustainOnOff } from "../stores";
 import { getKeyByValue } from "../lib/utils";
 import InAppExpressionizer from "./in-app-expressionizer";
 
@@ -162,6 +163,35 @@ export default class WelteRedExpressionizer extends InAppExpressionizer {
     );
 
     return pedalingMap;
+  };
+
+  handlePedal = (velocity, midiNumber) => {
+    if (velocity === 0) {
+      // Length of pedal control holes doesn't matter for red Welte
+      // (but it does for green Welte...)
+      return;
+    }
+
+    switch (this.ctrlMap[midiNumber]) {
+      case "sust_on":
+        sustainOnOff.set(true);
+        break;
+
+      case "sust_off":
+        sustainOnOff.set(false);
+        break;
+
+      case "soft_on":
+        softOnOff.set(true);
+        break;
+
+      case "soft_off":
+        softOnOff.set(false);
+        break;
+
+      default:
+        break;
+    }
   };
 
   constructor(...args) {
