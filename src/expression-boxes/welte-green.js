@@ -1,9 +1,10 @@
 import InAppExpressionizer, {
+  ExpressionWelteMignon,
   PedalingContinuousInput,
 } from "./in-app-expressionizer";
 
-export default class WelteRedExpressionizer extends PedalingContinuousInput(
-  InAppExpressionizer,
+export default class WelteGreenExpressionizer extends ExpressionWelteMignon(
+  PedalingContinuousInput(InAppExpressionizer),
 ) {
   defaultExpressionParams = {
     tunable: {
