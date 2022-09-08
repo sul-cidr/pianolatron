@@ -69,6 +69,7 @@
   on:click
   on:mousedown
   bind:this={ref}
+  title={alt}
 >
   <Icon
     name={iconName}
