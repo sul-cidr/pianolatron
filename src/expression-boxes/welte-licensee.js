@@ -10,7 +10,7 @@ export default class WelteLicenseeExpressionizer extends WelteRedExpressionizer 
       welte_f: 90.0,
       welte_loud: 75.0,
       left_adjust: -5.0, // This is a kludge for the Disklavier, could be 0.0
-      slow_decay_rate: 2163, // Probably this is 1 velocity step in 2.38s
+      slow_decay_rate: 2163, // Probably this is 1 velocity step in 2.163s
       fastC_decay_rate: 220,
       fastD_decay_rate: 186,
       tracker_diameter: 16.7, // in ticks (px = 1/300 in)
