@@ -1,9 +1,6 @@
-import IntervalTree from "node-interval-tree";
-import { softOnOff, sustainOnOff } from "../stores";
-import { getKeyByValue } from "../lib/utils";
-import InAppExpressionizer from "./in-app-expressionizer";
+import { PedalsOnOffExpressionizer } from "./in-app-expressionizer";
 
-export default class WelteRedExpressionizer extends InAppExpressionizer {
+export default class WelteRedExpressionizer extends PedalsOnOffExpressionizer {
   defaultExpressionParams = {
     tunable: {
       welte_p: 35.0,
@@ -121,77 +118,6 @@ export default class WelteRedExpressionizer extends InAppExpressionizer {
     expState.velocity = panVelocity;
 
     return [panExpMap, expState];
-  };
-
-  buildPedalingMap = () => {
-    const midiSoftOn = getKeyByValue(this.ctrlMap, "soft_on");
-    const midiSoftOff = getKeyByValue(this.ctrlMap, "soft_off");
-    const midiSustOn = getKeyByValue(this.ctrlMap, "sust_on");
-    const midiSustOff = getKeyByValue(this.ctrlMap, "sust_off");
-
-    const pedalingMap = new IntervalTree();
-
-    const registerPedalEvents = (track, pedalOn, pedalOff, eventNumber) => {
-      let tickOn = false;
-      track
-        // Only want beginning of note holes for lock & cancel type expression
-        // mechanisms (works for Welte red and Licensee, not 88 or Welte green)
-        .filter(({ name, velocity }) => name === "Note on" && velocity === 1)
-        .forEach(({ noteNumber, tick }) => {
-          if (noteNumber === pedalOff) {
-            // Holes can legitimately begin on tick 0
-            if (tickOn !== false) pedalingMap.insert(tickOn, tick, eventNumber);
-            tickOn = false;
-          } else if (noteNumber === pedalOn) {
-            if (!tickOn) tickOn = tick;
-          }
-        });
-    };
-
-    registerPedalEvents(
-      this.bassControlsTrack,
-      midiSoftOn,
-      midiSoftOff,
-      this.midiSoftPedal,
-    );
-
-    registerPedalEvents(
-      this.trebleControlsTrack,
-      midiSustOn,
-      midiSustOff,
-      this.midiSustPedal,
-    );
-
-    return pedalingMap;
-  };
-
-  handlePedal = (velocity, midiNumber) => {
-    if (velocity === 0) {
-      // Length of pedal control holes doesn't matter for red Welte
-      // (but it does for green Welte...)
-      return;
-    }
-
-    switch (this.ctrlMap[midiNumber]) {
-      case "sust_on":
-        sustainOnOff.set(true);
-        break;
-
-      case "sust_off":
-        sustainOnOff.set(false);
-        break;
-
-      case "soft_on":
-        softOnOff.set(true);
-        break;
-
-      case "soft_off":
-        softOnOff.set(false);
-        break;
-
-      default:
-        break;
-    }
   };
 
   constructor(...args) {
