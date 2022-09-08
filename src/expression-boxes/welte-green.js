@@ -1,6 +1,10 @@
-import { PedalsPTTExpressionizer } from "./in-app-expressionizer";
+import InAppExpressionizer, {
+  PedalingContinuousInput,
+} from "./in-app-expressionizer";
 
-export default class WelteGreenExpressionizer extends PedalsPTTExpressionizer {
+export default class WelteRedExpressionizer extends PedalingContinuousInput(
+  InAppExpressionizer,
+) {
   defaultExpressionParams = {
     tunable: {
       welte_p: 35.0,

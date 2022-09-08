@@ -1,6 +1,10 @@
-import { PedalsOnOffExpressionizer } from "./in-app-expressionizer";
+import InAppExpressionizer, {
+  PedalingLockAndCancel,
+} from "./in-app-expressionizer";
 
-export default class WelteRedExpressionizer extends PedalsOnOffExpressionizer {
+export default class WelteRedExpressionizer extends PedalingLockAndCancel(
+  InAppExpressionizer,
+) {
   defaultExpressionParams = {
     tunable: {
       welte_p: 35.0,
