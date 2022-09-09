@@ -3,9 +3,8 @@ import IntervalTree from "node-interval-tree";
 import { get } from "svelte/store";
 import { bassExpCurve, expressionParameters, trebleExpCurve } from "../stores";
 
-import InAppExpressionizer, {
-  PedalingContinuousInput,
-} from "./in-app-expressionizer";
+import InAppExpressionizer from "./lib/in-app-expressionizer";
+import { PedalingContinuousInput } from "./lib/pedaling";
 
 export default class EightyEightNoteExpressionizer extends PedalingContinuousInput(
   InAppExpressionizer,

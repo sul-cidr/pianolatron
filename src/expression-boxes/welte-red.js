@@ -1,7 +1,6 @@
-import InAppExpressionizer, {
-  ExpressionWelteMignon,
-  PedalingLockAndCancel,
-} from "./in-app-expressionizer";
+import InAppExpressionizer from "./lib/in-app-expressionizer";
+import { ExpressionWelteMignon } from "./lib/expression-welte-mignon";
+import { PedalingLockAndCancel } from "./lib/pedaling";
 
 export default class WelteRedExpressionizer extends ExpressionWelteMignon(
   PedalingLockAndCancel(InAppExpressionizer),

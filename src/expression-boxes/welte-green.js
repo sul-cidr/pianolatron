@@ -1,7 +1,6 @@
-import InAppExpressionizer, {
-  ExpressionWelteMignon,
-  PedalingContinuousInput,
-} from "./in-app-expressionizer";
+import InAppExpressionizer from "./lib/in-app-expressionizer";
+import { ExpressionWelteMignon } from "./lib/expression-welte-mignon";
+import { PedalingContinuousInput } from "./lib/pedaling";
 
 export default class WelteGreenExpressionizer extends ExpressionWelteMignon(
   PedalingContinuousInput(InAppExpressionizer),

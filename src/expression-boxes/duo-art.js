@@ -2,9 +2,8 @@
 import { get } from "svelte/store";
 import { expressionParameters } from "../stores";
 
-import InAppExpressionizer, {
-  PedalingContinuousInput,
-} from "./in-app-expressionizer";
+import InAppExpressionizer from "./lib/in-app-expressionizer";
+import { PedalingContinuousInput } from "./lib/pedaling";
 
 export default class DuoArtExpressionizer extends PedalingContinuousInput(
   InAppExpressionizer,
