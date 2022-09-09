@@ -125,13 +125,13 @@ export default class InAppExpressionizer {
     this.expParams = this.computeDerivedExpressionParams();
 
     this.tempoMap = this.#buildTempoMap();
-    this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
+    this.noteVelocitiesMap = this.buildNoteVelocitiesMap();
     this.pedalingMap = this.buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
 
     expressionParameters.subscribe(() => {
       this.expParams = this.computeDerivedExpressionParams();
-      this.#buildNoteVelocitiesMap();
+      this.buildNoteVelocitiesMap();
     });
   }
 
@@ -176,7 +176,7 @@ export default class InAppExpressionizer {
     return tempoMap;
   };
 
-  #buildNoteVelocitiesMap = () => {
+  buildNoteVelocitiesMap = () => {
     const expressionMap = {};
 
     const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs, adjust) => {
