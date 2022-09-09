@@ -17,9 +17,9 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
       welte_mf: 60.0,
       welte_f: 90.0,
 
-      // NOTE that the effect of the "theme" holes also extends 10% of this
-      // length *before* the hole, for reasons
-      theme_extent: 200, // effective ms after theme selector snakebites
+      // XXX should the effect of the "theme" holes also extend *before* the
+      // beginning of the snakebite accent holes, as for 88-note rolls?
+      theme_extent: 20, // effective ms after theme selector snakebites
       left_adjust: -5.0, // This is a kludge for the Disklavier, could be 0.0
       tracker_diameter: 16.7, // in ticks (px = 1/300 in)
       punch_ext_ratio: 0.75,
@@ -109,11 +109,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
     let newVelocity = expState.velocity;
 
-    const isTheme =
-      (expState.theme_start !== null && expState.theme_stop === null) ||
-      (expState.theme_start !== null &&
-        expState.theme_stop !== null &&
-        expState.theme_stop > time);
+    const isTheme = expState.theme_start !== null;
 
     let step = 0;
 
@@ -146,6 +142,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
   extendControlHoles = (item) => {
     // We know these are all control holes
     const ctrlFunc = this.ctrlMap[item.noteNumber];
+    const { tunable: theme_extent, tracker_extension } = this.expParams;
 
     // We're only interested in the ends of control holes affecting volume
     // NOTE that the extension is applied to the note holes during playback
@@ -155,14 +152,21 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     // could be done as well.
     if (
       ctrlFunc == null ||
-      item.velocity !== 0 ||
       !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc)
     )
       return item;
 
     // Note that the delta values for all subsequent events would need to
     // change, if we wanted to generate valid MIDI (in JSON form)
-    item.tick += this.expParams.tracker_extension;
+    if (ctrlFunc === "acc") {
+      if (item.velocity !== 0) {
+        item.tick = Math.max(0, item.tick - theme_extent * 0.5);
+      } else {
+        item.tick += theme_extent;
+      }
+    } else if (item.velocity === 0) {
+      item.tick += tracker_extension;
+    }
 
     return item;
   };
@@ -230,6 +234,12 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     expState.velocity = panVelocity;
 
     return [panExpMap, expState];
+  };
+
+  initializeExpressionizer = () => {
+    this.startingExpState.velocity =
+      this.defaultExpressionParams.tunable.welte_p;
+    super.initializeExpressionizer();
   };
 
   constructor(...args) {
