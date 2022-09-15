@@ -13,7 +13,7 @@ export default class WelteLicenseeExpressionizer extends WelteRedExpressionizer 
       slow_decay_rate: 2163, // 1 velocity step in 2.163s
       fastC_decay_rate: 220,
       fastD_decay_rate: 186,
-      tracker_diameter: 16.7,
+      tracker_diameter: 10.8, // P. Phillips: .5 mm smaller than Welte-Mignon
       punch_ext_ratio: 0.75,
       accelFtPerMin2: 0.2,
     },
