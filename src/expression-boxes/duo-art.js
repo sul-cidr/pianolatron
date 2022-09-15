@@ -10,25 +10,25 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 ) {
   defaultExpressionParams = {
     tunable: {
-      // Should get rid of the "welte" for these, or hardcode them
-      // into the overlay viz module if they shouldn't affect the emulation
+      // TODO Should get rid of the "welte" for these, or hardcode them
+      //  into the overlay viz module if they shouldn't affect the emulation
       welte_p: 35.0,
       welte_mf: 60.0,
       welte_f: 90.0,
 
       // XXX should the effect of the "theme" holes also extend *before* the
-      // beginning of the snakebite accent holes, as for 88-note rolls?
+      //  beginning of the snakebite accent holes, as for 88-note rolls?
       theme_extent: 20, // effective ms after theme selector snakebites
-      left_adjust: -5.0, // This is a kludge for the Disklavier, could be 0.0
-      tracker_diameter: 16.7, // in ticks (px = 1/300 in)
+      left_adjust: -5.0, // used for Welte rolls, apply it here as well?
+      tracker_diameter: 16.7, // TODO get value from P. Phillips dissertation
       punch_ext_ratio: 0.75,
       accelFtPerMin2: 0.2,
     },
   };
 
   startingExpState = {
-    velocity: 0.0, // Velocity at last cresc/decresc event
-    time: 0.0, // Time (in ms) at last cresc/decresc event
+    velocity: 0.0, // velocity at last cresc/decresc event
+    time: 0.0, // time (in ms) at last cresc/decresc event
     theme_start: null,
     theme_stop: null,
     vol1_start: null,
@@ -42,8 +42,6 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
   };
 
   computeDerivedExpressionParams = () => {
-    // These are the derived parameters, used to compute velocities, but should
-    // not be adjusted via the expression controls
     const tunable =
       get(expressionParameters)?.tunable ||
       this.defaultExpressionParams.tunable;
@@ -139,24 +137,15 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
   };
 
   extendControlHoles = (item) => {
-    // We know these are all control holes
     const ctrlFunc = this.ctrlMap[item.noteNumber];
     const { tunable: theme_extent, tracker_extension } = this.expParams;
 
-    // We're only interested in the ends of control holes affecting volume
-    // NOTE that the extension is applied to the note holes during playback
-    // in the MidiEventHandler, but a modified version of this function
-    // could be used to apply the extension prior to playback.
-    // Note also that no extension is applied to pedal events, but this
-    // could be done as well.
     if (
       ctrlFunc == null ||
       !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc)
     )
       return item;
 
-    // Note that the delta values for all subsequent events would need to
-    // change, if we wanted to generate valid MIDI (in JSON form)
     if (ctrlFunc === "acc") {
       if (item.velocity !== 0) {
         item.tick = Math.max(0, item.tick - theme_extent * 0.5);
@@ -178,7 +167,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     const ctrlFunc = this.ctrlMap[noteNumber];
 
     // Ignore control holes that don't affect playback (most roll types
-    // will have some of these), or are likely to be damage holes
+    //  will have some of these), or are likely to be damage holes
     if (!["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc))
       return [panExpMap, expState]; // Usually these are damage holes
 

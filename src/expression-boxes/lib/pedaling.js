@@ -53,8 +53,9 @@ export const PedalingLockAndCancel = (SuperClass) =>
 
     handlePedal = (velocity, midiNumber) => {
       if (velocity === 0) {
-        // Length of pedal control holes doesn't matter for red Welte
-        // (but it does for green Welte...)
+        // Length of pedal control holes doesn't matter for red Welte (but it
+        //  does for green Welte, as well as Duo-Art, some 88-note rolls, and
+        //  others...)
         return;
       }
 

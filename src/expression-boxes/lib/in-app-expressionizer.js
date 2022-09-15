@@ -133,17 +133,18 @@ export default class InAppExpressionizer {
 
   // ?NOTE: should be good for (at least) welte-red and welte-green
   #buildTempoMap = () => {
-    // Note MIDI files usually don't include simulated acceleration via tempo
-    // events, but theoretically they can. Use those events, or just compute
-    // everything manually here? Going with the latter for now.
+    // It's possible for the note MIDI file to include tempo events that
+    //  emulate roll acceleration, just as expression MIDI files do. It is
+    //  preferable however to emulate roll acceleration for in-app expression
+    //  by building a tempo map directly within the app.
     const tempoMap = new IntervalTree();
 
-    const lengthPPI = 300; // Could get scan PPI from MIDI/metadata
+    const lengthPPI = 300; // scan resolution should always be 300ppi
     const ticksPerFt = lengthPPI * 12.0;
-    const minuteDiv = 0.1; // how often the tempo is updated, could be param
+    const minuteDiv = 0.1; // governs how often the tempo is updated
     const startSpeed = (this.#midiTPQ * this.defaultTempo) / ticksPerFt;
 
-    let tempo = this.defaultTempo; // This probably should be an exp param, too
+    let tempo = this.defaultTempo;
     let speed = startSpeed;
     let minute = 0.0;
     let tick = 0;
@@ -151,8 +152,9 @@ export default class InAppExpressionizer {
     let nextTick = 0;
 
     // The acceleration emulation *could* begin at the very start of the roll
-    // (well above the first hole), but let's just assume that the roll reaches
-    // the default tempo right at the first hole.
+    //  (well above the first hole), but in any case the rate is assumed to be
+    //  constant, so it makes sense just assume that the roll reaches the
+    //  default tempo right at the first hole.
     while (
       tick <
       get(rollMetadata).IMAGE_LENGTH - get(rollMetadata).FIRST_HOLE
@@ -166,7 +168,7 @@ export default class InAppExpressionizer {
       tempo = nextTempo;
     }
 
-    // This ensures that there are no tempo map "misses" at the very end
+    // This ensures that searches at the very end of the tempo map never "miss"
     tempoMap.insert(tick, Infinity, tempo);
 
     return tempoMap;
@@ -183,7 +185,7 @@ export default class InAppExpressionizer {
         .filter(({ name }) => name === "Note on")
         .map(this.extendControlHoles)
         // Adding the tracker extension ticks to the ends of the fast cresc/
-        // decresc holes will result in unordered events; resort them.
+        //  decresc holes can result in unordered events, so resort them.
         .sort((a, b) => a.tick - b.tick)
         .reduce(this.panExpMapReducer, [
           new IntervalTree(),
@@ -191,7 +193,7 @@ export default class InAppExpressionizer {
         ]);
 
       // Extend the expression map so that it extends from the last control hole
-      // to the final note on this half of the roll (if needed)
+      //  to the final note on this side of the roll (if needed)
       const finalTick = Math.max(
         noteTrackMsgs[noteTrackMsgs.length - 1].tick,
         ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
@@ -208,7 +210,7 @@ export default class InAppExpressionizer {
         ]);
       }
 
-      // Then update the expressionMap with velocities for the note events
+      // Update the expressionMap with velocities for the note events
       noteTrackMsgs
         .filter(({ name, velocity }) => name === "Note on" && !!velocity)
         .forEach(({ noteNumber: midiNumber, tick }) => {
@@ -246,7 +248,6 @@ export default class InAppExpressionizer {
       return expressionCurve;
     };
 
-    // bass notes and control holes
     bassExpCurve.set(
       buildPanExpMap(
         this.bassNotesTrack,
@@ -255,7 +256,6 @@ export default class InAppExpressionizer {
       ),
     );
 
-    // treble notes and control holes
     trebleExpCurve.set(
       buildPanExpMap(this.trebleNotesTrack, this.trebleControlsTrack, 0),
     );
@@ -292,8 +292,6 @@ export default class InAppExpressionizer {
     data,
     tick,
   }) => {
-    // Note MIDI files won't have embedded tempo events. Need to check tempoMap
-    // which should include tempo events to emulate roll acceleration.
     const tempo = this.getTempoAtTick(tick);
 
     const playerTempo = tempo * get(tempoCoefficient);
@@ -308,7 +306,6 @@ export default class InAppExpressionizer {
       if (holeType === "note") {
         if (velocity === 0) {
           const ticksPerSecond = (parseFloat(tempo) * this.midiTPQ) / 60.0;
-          // At 591 TPQ & 60bpm, this is ~.02s, drops slowly due to acceleration
           const trackerExtensionSeconds =
             this.expParams.tracker_extension / ticksPerSecond;
           this.stopNote(midiNumber, `+${trackerExtensionSeconds}`);
@@ -324,9 +321,12 @@ export default class InAppExpressionizer {
         this.handlePedal(velocity, midiNumber);
       }
     } else if (msgType === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
-      // This only happens if the note MIDI has tempo events to emulate
-      // acceleration. Usually this is not done, but the MIDI will however
-      // have one event at the beginning, setting the default tempo (60).
+      // This only happens if the note MIDI contains tempo events to emulate
+      //  acceleration. Usually this is not done, but for now, those events
+      //  will be enacted and thus override the in-app tempoMap if present.
+      //  Note also that note MIDI files with no embedded tempo events for
+      //  acceleration emulation still are likely have one tempo event at the
+      //  beginning that sets the starting tempo, usually to a default of 60.
       const newTempo = data * get(tempoCoefficient);
       this.midiSamplePlayer.setTempo(newTempo);
     }

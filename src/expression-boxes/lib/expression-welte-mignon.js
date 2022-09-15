@@ -6,13 +6,13 @@ import { clamp } from "../../lib/utils";
 export const ExpressionWelteMignon = (BaseClass) =>
   class extends BaseClass {
     startingExpState = {
-      velocity: 0.0, // Velocity at last cresc/decresc event
-      time: 0.0, // Time (in ms) at last cresc/decresc event
+      velocity: 0.0, // velocity at last cresc/decresc event
+      time: 0.0, // time (in ms) at last cresc/decresc event
       mf_start: null,
       slow_cresc_start: null,
       slow_decresc_start: null,
       fast_cresc_start: null,
-      fast_cresc_stop: null, // Can be in the future due to tracker extension
+      fast_cresc_stop: null,
       fast_decresc_start: null,
       fast_decresc_stop: null,
     };
@@ -24,8 +24,9 @@ export const ExpressionWelteMignon = (BaseClass) =>
     };
 
     computeDerivedExpressionParams = () => {
-      // These are the derived parameters, used to compute velocities, but should
-      // not be adjusted via the expression controls
+      // The derived parameters are computed from the tunable parameters and
+      //  are used to calculate the expression velocities, but cannot be
+      //  directly adjusted via the expression settings controls
       const tunable =
         get(expressionParameters)?.tunable ||
         this.defaultExpressionParams.tunable;
@@ -58,21 +59,17 @@ export const ExpressionWelteMignon = (BaseClass) =>
       let newVelocity = expState.velocity;
       const msFromLastDynamic = time - expState.time;
 
-      // Active cresc/decresc controls: slow cresc, fast cresc/decresc
-      // Slow decresc is on by default if none of slow cresc, fast cresc/decresc
-      // is enabled
-      // MF hook on prevents velocity from crossing welte_mf from soft or loud side
-
       // Determine fast crescendo and decrescendo states at this time, handling
-      // cases in which the fast change is still happening (the hole hasn't ended
-      // yet).
+      //  cases in which the fast change is still happening (the hole hasn't
+      //  ended yet).
       const isFastCrescOn =
         expState.fast_cresc_start !== null && expState.fast_cresc_stop === null;
       const isFastDecrescOn =
         expState.fast_decresc_start !== null &&
         expState.fast_decresc_stop === null;
 
-      // Default state (no active controls: only slow decresc)
+      // Slow decresc is on by default if none of slow cresc, fast cresc/decresc
+      //  is enabled
       if (
         expState.slow_cresc_start === null &&
         !isFastCrescOn &&
@@ -81,7 +78,7 @@ export const ExpressionWelteMignon = (BaseClass) =>
         newVelocity -= msFromLastDynamic * slow_step;
       } else {
         // Otherwise new target velocity will be a combination of the
-        // active control effects
+        // active control effects (slow cresc, fast cresc or fast decresc)
         newVelocity +=
           expState.slow_cresc_start !== null
             ? msFromLastDynamic * slow_step
@@ -90,7 +87,8 @@ export const ExpressionWelteMignon = (BaseClass) =>
         newVelocity += isFastDecrescOn ? msFromLastDynamic * fastD_step : 0;
       }
 
-      // Handle the mezzo-forte hook
+      // When enabled, the mezzo-forte hook prevents the velocity level from
+      //  crossing welte_mf during either a cresc or decrsec
       const velocityDelta = newVelocity - expState.velocity;
       if (expState.mf_start !== null) {
         // If the previous velocity was above MF, keep it there
@@ -111,12 +109,12 @@ export const ExpressionWelteMignon = (BaseClass) =>
         !isFastCrescOn &&
         expState.velocity < welte_loud
       ) {
-        // If no MF hook and only slow crescendo is on, velocity should never
-        // exceed welte_loud (which is lower than welte_f)
+        // If the MF hook is off and only slow crescendo is on, the velocity
+        //  should never exceed welte_loud (which is lower than welte_f)
         newVelocity = Math.min(newVelocity, welte_loud - 0.001);
       }
 
-      // Make sure the velocity always stays between welte_p and welte_f
+      // Ensure the velocity always stays between welte_p and welte_f
       newVelocity = clamp(newVelocity, welte_p, welte_f);
 
       return newVelocity;

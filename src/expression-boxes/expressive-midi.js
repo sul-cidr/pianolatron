@@ -61,9 +61,15 @@ export default class ExpressiveMidiExpressionizer {
         .forEach(({ noteNumber, velocity, tick }) => {
           noteVelocitiesMap[tick] = noteVelocitiesMap[tick] || {};
           // midi-player-js converts velocity values to integers between 0 and
-          // 99, which is problematic and probably should be changed via a fork.
-          // But for now they need to be rescaled to be between 0 and 127 to
-          // (almost) match the original velocity values in the expressive MIDI.
+          //  99. This is not ideal because it further reduces the granularity
+          //  of the velocity levels (the 128 levels in standard MIDI is
+          //  already too few), but we're stuck with it for now.
+          //  In any case, these values need to be rescaled to fall between 0
+          //  and 127 to (nearly) match the original velocity values in the
+          //  expressive MIDI.
+          //  Note also that all velocity values are eventually rescaled to an
+          //  arbitrary-precision float between 0 and 1 when being played by
+          //  the ToneJS sample-based piano synthesizer.
           noteVelocitiesMap[tick][noteNumber] = Math.round(
             (velocity / 100.0) * 127.0,
           );
@@ -73,7 +79,7 @@ export default class ExpressiveMidiExpressionizer {
   };
 
   #buildPedalingMap = () => {
-    // where two or more "music tracks" exist, pedal events are expected to have
+    // Where two or more "music tracks" exist, pedal events are expected to have
     //  been duplicated across tracks, so we read only from the first one.
     const [eventsTrack] = this.#musicTracks;
     const _pedalingMap = new IntervalTree();
