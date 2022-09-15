@@ -20,17 +20,7 @@
     useInAppExpression,
   } from "../stores";
 
-  let expressionParams = $expressionParameters;
-
-  const updateExpressionParams = () => {
-    expressionParams = $expressionParameters;
-  };
-
   export let reloadRoll;
-
-  /* eslint-disable no-unused-expressions, no-sequences */
-  $: $expressionParameters, updateExpressionParams();
-  $: $rollMetadata, updateExpressionParams();
 </script>
 
 <div id="expression-panel">
@@ -43,10 +33,10 @@
       </select>
     </fieldset>
 
-    {#if $useInAppExpression && expressionParams !== undefined && expressionParams.tunable !== undefined}
+    {#if $useInAppExpression}
       <fieldset>
         <legend>Expression Settings</legend>
-        {#each Object.keys(expressionParams.tunable) as expressionParam}
+        {#each Object.keys($expressionParameters.tunable || {}) as expressionParam}
           <div>
             <label class="exp-param" for={`"input_"{expressionParam}`}
               >{expressionParam}</label
@@ -56,12 +46,12 @@
                 class="param-value"
                 id={`"input_"{expressionParam}`}
                 type="number"
-                value={expressionParams.tunable[expressionParam]}
+                value={$expressionParameters.tunable[expressionParam]}
                 on:change={(e) => {
                   $expressionParameters.tunable[expressionParam] = parseFloat(
                     e.target.value,
                   );
-                  expressionParams.tunable[expressionParam] = parseFloat(
+                  $expressionParameters.tunable[expressionParam] = parseFloat(
                     e.target.value,
                   );
                   reloadRoll();
