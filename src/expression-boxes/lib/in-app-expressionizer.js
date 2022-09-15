@@ -14,7 +14,7 @@ import {
   useMidiTempoEventsOnOff,
 } from "../../stores";
 import { rollProfile } from "../../config/roll-config";
-import { getHoleType } from "../../lib/utils";
+import { getHoleType } from "../../lib/hole-data";
 
 export default class InAppExpressionizer {
   #rollType = get(rollMetadata).ROLL_TYPE;

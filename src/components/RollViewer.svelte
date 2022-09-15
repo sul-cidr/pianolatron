@@ -90,25 +90,24 @@
   import IntervalTree from "node-interval-tree";
   import OpenSeadragon from "openseadragon";
   import {
-    rollMetadata,
-    scrollDownwards,
-    currentTick,
-    userSettings,
-    playExpressionsOnOff,
-    rollPedalingOnOff,
-    playbackProgress,
     bassExpCurve,
-    trebleExpCurve,
+    currentTick,
     expressionParameters,
+    holesIntervalTree,
+    playbackProgress,
+    playExpressionsOnOff,
+    rollMetadata,
+    rollPedalingOnOff,
+    scrollDownwards,
+    trebleExpCurve,
     useInAppExpression,
+    userSettings,
   } from "../stores";
-  import { clamp, getHoleLabel } from "../lib/utils";
+  import { clamp } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
 
   export let imageUrl;
-  export let holeData;
-  export let holesByTickInterval;
   export let skipToTick;
   export let rollImageReady;
 
@@ -145,11 +144,11 @@
       v: velocity,
       color: holeColor,
       type: holeType,
+      label,
     } = hole;
     const mark = document.createElement("mark");
 
-    const holeLabel = getHoleLabel(midiKey, $rollMetadata.ROLL_TYPE);
-    mark.dataset.holeLabel = holeLabel;
+    mark.dataset.holeLabel = label;
     if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
 
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
@@ -337,7 +336,7 @@
   };
 
   const partitionHolesOverlaySvgs = () => {
-    if (!holeData) return;
+    if (!$holesIntervalTree.count) return;
 
     entireViewportRectangle = viewport.imageToViewportRectangle(
       0,
@@ -363,9 +362,11 @@
     ) {
       const rangeEndsPx = Math.min(rangeBeginsPx + rangeLengthPx, holesEndPx);
 
-      const holes = holeData.filter(
-        ({ startY }) => startY >= rangeBeginsPx && startY < rangeEndsPx,
-      );
+      const holes = $holesIntervalTree
+        .search(rangeBeginsPx - firstHolePx, rangeEndsPx - firstHolePx)
+        .filter(
+          ({ startY }) => startY >= rangeBeginsPx && startY < rangeEndsPx,
+        );
 
       if (holes.length) {
         const lastHoleEndsPx = Math.max(...holes.map(({ endY }) => endY));
@@ -403,7 +404,7 @@
   const highlightHoles = (tick) => {
     if (!openSeadragon) return;
 
-    const holes = holesByTickInterval.search(tick, tick);
+    const holes = $holesIntervalTree.search(tick, tick);
 
     marks = marks.filter(([hole, elem]) => {
       if (holes.includes(hole)) return true;

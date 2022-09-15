@@ -55,21 +55,23 @@
   import IntervalTree from "node-interval-tree";
   import {
     bassVolumeCoefficient,
-    trebleVolumeCoefficient,
-    tempoCoefficient,
-    playbackProgress,
     currentTick,
-    rollMetadata,
-    isReproducingRoll,
-    scrollDownwards,
-    playExpressionsOnOff,
-    rollPedalingOnOff,
-    userSettings,
-    useInAppExpression,
     expressionBox,
+    holesIntervalTree,
+    isReproducingRoll,
+    playbackProgress,
+    playExpressionsOnOff,
+    rollMetadata,
+    rollPedalingOnOff,
+    scrollDownwards,
+    tempoCoefficient,
+    trebleVolumeCoefficient,
+    useInAppExpression,
+    userSettings,
   } from "./stores";
   import expressionBoxes from "./expression-boxes";
-  import { annotateHoleData, clamp } from "./lib/utils";
+  import { clamp } from "./lib/utils";
+  import { processHoleData } from "./lib/hole-data";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -99,8 +101,6 @@
   let currentRoll;
   let previousRoll;
   let metadata;
-  let holeData;
-  let holesByTickInterval = new IntervalTree();
 
   let samplePlayer;
 
@@ -129,21 +129,6 @@
       duration,
       css: (t) => `height: ${quartInOut(t) * o}px`,
     };
-  };
-
-  const buildHolesIntervalTree = () => {
-    holesByTickInterval = new IntervalTree();
-    const { FIRST_HOLE } = $rollMetadata;
-
-    const firstHolePx = parseInt(FIRST_HOLE, 10);
-
-    holeData.forEach((hole) => {
-      const { y: offsetY, h: height } = hole;
-      const tickOn = offsetY - firstHolePx;
-      const tickOff = offsetY + height - firstHolePx;
-
-      holesByTickInterval.insert(tickOn, tickOff, hole);
-    });
   };
 
   const skipToTick = (tick) => {
@@ -179,7 +164,7 @@
     tempoCoefficient.reset();
     bassVolumeCoefficient.reset();
     trebleVolumeCoefficient.reset();
-    holesByTickInterval = new IntervalTree();
+    $holesIntervalTree = new IntervalTree();
   };
 
   const loadRoll = (roll, doReset = true) => {
@@ -231,14 +216,12 @@
     return Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
         metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
-        holeData = metadataJson.holeData;
-        annotateHoleData(
-          holeData,
+        $holesIntervalTree = processHoleData(
+          metadataJson.holeData,
           $rollMetadata,
           $scrollDownwards,
-          $expressionBox,
+          $expressionBox.noteVelocitiesMap,
         );
-        buildHolesIntervalTree();
         if (doReset) {
           $playExpressionsOnOff = $isReproducingRoll;
           $rollPedalingOnOff = $isReproducingRoll;
@@ -337,7 +320,7 @@
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
-        {#if !holesByTickInterval.count}
+        {#if !holesIntervalTree.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
             this time. Hole highlighting will not be enabled.
@@ -351,8 +334,6 @@
           bind:this={rollViewer}
           bind:rollImageReady
           imageUrl={currentRoll.image_url}
-          {holeData}
-          {holesByTickInterval}
           {skipToTick}
         />
       {/if}

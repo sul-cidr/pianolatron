@@ -59,7 +59,7 @@
   import { CanvasSpliner } from "CanvasSpliner";
   import Icon from "../ui-components/Icon.svelte";
   import { tooltip } from "../lib/tooltip-action";
-  import { getNoteName } from "../lib/utils";
+  import { getNoteName } from "../lib/hole-data";
 
   export let keyboardRegion;
   export let accentColor;

@@ -1,4 +1,4 @@
-import { derived } from "svelte/store";
+import { derived, writable } from "svelte/store";
 import {
   createStore,
   createSetStore,
@@ -31,6 +31,8 @@ export const scrollDownwards = derived(
   rollMetadata,
   ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
 );
+
+export const holesIntervalTree = writable();
 
 // Pedaling
 export const softOnOff = createStore(false);
