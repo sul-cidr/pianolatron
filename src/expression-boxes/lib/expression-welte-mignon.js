@@ -88,7 +88,7 @@ export const ExpressionWelteMignon = (BaseClass) =>
       }
 
       // When enabled, the mezzo-forte hook prevents the velocity level from
-      //  crossing welte_mf during either a cresc or decrsec
+      //  crossing welte_mf during either a cresc or decresc
       const velocityDelta = newVelocity - expState.velocity;
       if (expState.mf_start !== null) {
         // If the previous velocity was above MF, keep it there

@@ -48,10 +48,8 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
     const { snakebite_start, snakebite_stop } = expState;
 
     const isSnakebiteOn =
-      (snakebite_start !== null && snakebite_stop === null) ||
-      (snakebite_start !== null &&
-        snakebite_stop !== null &&
-        snakebite_stop > time);
+      snakebite_start !== null &&
+      (snakebite_stop === null || snakebite_stop > time);
 
     return isSnakebiteOn ? accent_f : default_mf;
   };
@@ -171,7 +169,7 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
         // Add a segment of the curve at the default velocity from the start of
         //  the piece to the first velocity control event.
         // ? XXX Should we also do this from the final velocity control event
-        // to the end of the piece (final tick)?
+        // ? to the end of the piece (final tick)?
         if (expVelocity === null) {
           expressionCurve.push([0, default_mf, 0]);
           expressionCurve.push([expStartTick, default_mf, interval.low]);
