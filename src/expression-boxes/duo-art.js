@@ -57,7 +57,7 @@ const getExpressionParams = () => {
 
       left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
 
-      tracker_diameter: 16.7, // in ticks (px = 1/300 in)
+      tracker_diameter: 10.8, // P. Phillips: .5 mm smaller than Welte-Mignon
       punch_ext_ratio: 0.75,
       accelFtPerMin2: 0.2,
     },
