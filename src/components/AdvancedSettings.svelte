@@ -29,6 +29,14 @@
     }
   }
 
+  .input-param {
+    align-self: center;
+    margin: 0 10px 0 0;
+  }
+  .input-value {
+    max-width: 100px;
+  }
+
   button.full-width {
     margin: 0;
     padding: 3px 0;
@@ -72,6 +80,17 @@
         type="checkbox"
         bind:checked={$userSettings.highlightEnabledHoles}
       />
+    </div>
+    <div>
+      <label class="input-param" for="vis_delay">Vis. delay (ticks)</label>
+      <div>
+        <input
+          class="input-value"
+          id={"vis_delay"}
+          type="number"
+          bind:value={$userSettings.visDelayInTicks}
+        />
+      </div>
     </div>
   </fieldset>
 
