@@ -51,9 +51,9 @@ const getExpressionParams = () => {
       welte_mf: 60.0,
       welte_f: 90.0,
 
-      // NOTE that the effect of the "theme" holes also extends 10% of this
-      // length *before* the hole, for reasons
-      theme_extent: 200, // effective ms after theme selector snakebites
+      // XXX should the effect of the "theme" holes also extend *before* the
+      // beginning of the snakebite accent holes, as for 88-note rolls?
+      theme_extent: 20, // effective ms after theme selector snakebites
 
       left_adjust: -5.0, // This is a kluge for the Disklavier, could be 0.0
 
@@ -137,11 +137,13 @@ const getVelocityAtTime = (time, expState) => {
 
   let newVelocity = expState.velocity;
 
-  const isTheme =
-    (expState.theme_start !== null && expState.theme_stop === null) ||
-    (expState.theme_start !== null &&
-      expState.theme_stop !== null &&
-      expState.theme_stop > time);
+  // XXX This can be simplified if we're applying the theme extension
+  // at the same time we apply the tracker extension
+  const isTheme = expState.theme_start !== null;
+  // (expState.theme_start !== null && expState.theme_stop === null) ||
+  // (expState.theme_start !== null &&
+  //   expState.theme_stop !== null &&
+  //   expState.theme_stop > time);
 
   let step = 0;
 
@@ -256,16 +258,28 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
         // Note also that no extension is applied to pedal events, but this
         // could be done as well.
         if (
-          ctrlFunc == null ||
+          ctrlFunc === null ||
           item.name !== "Note on" ||
-          item.velocity !== 0 ||
           !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc)
         )
           return item;
 
+        // XXX Trying something new here -- extending the snakebite "theme"
+        // accent in the same function
         // Note that the delta values for all subsequent events would need to
         // change, if we wanted to generate valid MIDI (in JSON form)
-        item.tick += expParams.tracker_extension;
+        if (ctrlFunc === "acc") {
+          if (item.velocity !== 0) {
+            item.tick = Math.max(
+              0,
+              item.tick - expParams.tunable.theme_extent * 0.5,
+            );
+          } else {
+            item.tick += expParams.tunable.theme_extent;
+          }
+        } else if (item.velocity === 0) {
+          item.tick += expParams.tracker_extension;
+        }
 
         return item;
       })
@@ -280,7 +294,7 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
     const expState = getExpressionStateBox(rollType);
 
-    expState.velocity = expParams.tunable.welte_p;
+    expState.velocity = expParams.tunable.welte_p + adjust;
 
     // The tracker extension should be applied to a true copy of the control
     // track messages; otherwise multiple tweaks to the expression settings
@@ -314,13 +328,16 @@ const buildNoteVelocitiesMap = (midiSamplePlayer, tempoMap) => {
 
         if (ctrlFunc === "acc") {
           if (velocity > 0) {
-            expState.theme_start = Math.max(
-              0,
-              msgTime - expParams.tunable.theme_extent * 0.1,
-            );
+            expState.theme_start = msgTime;
+            // expState.theme_start = Math.max(
+            //   0,
+            //   msgTime - expParams.tunable.theme_extent * 0.1,
+            // );
             expState.theme_stop = null;
           } else {
-            expState.theme_stop = msgTime + expParams.tunable.theme_extent;
+            // expState.theme_stop = msgTime + expParams.tunable.theme_extent;
+            expState.theme_start = null;
+            expState.theme_stop = msgTime;
           }
         } else if (ctrlFunc === "vol+1") {
           if (velocity > 0) {
