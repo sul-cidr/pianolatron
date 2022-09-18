@@ -101,6 +101,7 @@
     bassExpCurve,
     trebleExpCurve,
     expressionParameters,
+    expressionCurvesOnOff,
   } from "../stores";
   import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -176,7 +177,7 @@
     return mark;
   };
 
-  const drawExpressionCurves = (bassExpC, trebleExpC, express) => {
+  const drawExpressionCurves = (bassExpC, trebleExpC, express, onOff) => {
     const drawGuidesAndCurve = (guides, expCurve, g, svg, transformation) => {
       for (let i = 0; i < expCurve.length - 1; i += 1) {
         const curveLine = document.createElementNS(
@@ -223,7 +224,8 @@
       bassExpC.length === 0 ||
       trebleExpC == null ||
       trebleExpC.length === 0 ||
-      ["NONE", "FROM_MIDI"].includes(express)
+      ["NONE", "FROM_MIDI"].includes(express) ||
+      !onOff
     )
       return;
 
@@ -602,7 +604,12 @@
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
       partitionHolesOverlaySvgs();
-      drawExpressionCurves($bassExpCurve, $trebleExpCurve, $expressionizer);
+      drawExpressionCurves(
+        $bassExpCurve,
+        $trebleExpCurve,
+        $expressionizer,
+        $expressionCurvesOnOff,
+      );
       updateViewportFromTick(0);
     });
 
@@ -686,7 +693,12 @@
 
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
-  $: drawExpressionCurves($bassExpCurve, $trebleExpCurve, $expressionizer);
+  $: drawExpressionCurves(
+    $bassExpCurve,
+    $trebleExpCurve,
+    $expressionizer,
+    $expressionCurvesOnOff,
+  );
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
