@@ -18,6 +18,7 @@
     rollHasExpressions,
     rollMetadata,
     expressionizer,
+    expressionCurvesOnOff,
   } from "../stores";
 
   let expressionParams = $expressionParameters;
@@ -66,6 +67,11 @@
     {#if $expressionizer !== "FROM_MIDI" && expressionParams !== undefined && expressionParams.tunable !== undefined}
       <fieldset>
         <legend>Expression Settings</legend>
+        <div>
+          Draw Expression Curves:
+          <input type="checkbox" bind:checked={$expressionCurvesOnOff} />
+        </div>
+
         {#each Object.keys(expressionParams.tunable) as expressionParam}
           <div>
             <label class="exp-param" for={`"input_"{expressionParam}`}
