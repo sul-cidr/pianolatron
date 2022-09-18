@@ -405,7 +405,9 @@
   const highlightHoles = (tick) => {
     if (!openSeadragon) return;
 
-    const holes = holesByTickInterval.search(tick, tick);
+    const visTick = Math.max(0, tick - $userSettings.visDelayInTicks);
+
+    const holes = holesByTickInterval.search(visTick, visTick);
 
     marks = marks.filter(([hole, elem]) => {
       if (holes.includes(hole)) return true;
@@ -425,7 +427,10 @@
   //  the viewport.  Does not trigger an OSD `pan` event.
   const updateViewportFromTick = (tick) => {
     if (!openSeadragon) return;
-    const linePx = firstHolePx + ($scrollDownwards ? tick : -tick);
+
+    const visTick = Math.max(0, tick - $userSettings.visDelayInTicks);
+
+    const linePx = firstHolePx + ($scrollDownwards ? visTick : -visTick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 
     viewport.centerSpringY.springTo(lineViewport.y);

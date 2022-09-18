@@ -102,6 +102,7 @@ export const userSettings = createPersistedStore("userSettings", {
   overlayKeyboard: false,
   welcomeScreenInhibited: false,
   useWebMidi: false,
+  visDelayInTicks: 0,
 });
 
 // Browser State
