@@ -44,6 +44,7 @@ export const volumeCoefficient = createStore(1.5);
 export const bassVolumeCoefficient = createStore(1);
 export const trebleVolumeCoefficient = createStore(1);
 
+export const speedTicksPerSec = createStore(568); // default for welte red
 export const tempoCoefficient = createStore(1);
 
 export const playExpressionsOnOff = createStore(true);
@@ -102,7 +103,7 @@ export const userSettings = createPersistedStore("userSettings", {
   overlayKeyboard: false,
   welcomeScreenInhibited: false,
   useWebMidi: false,
-  visDelayInTicks: 0,
+  visDelayInMS: 0,
 });
 
 // Browser State

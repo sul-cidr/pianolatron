@@ -8,6 +8,7 @@ import {
   tempoCoefficient,
   useMidiTempoEventsOnOff,
   noteVelocitiesMap,
+  speedTicksPerSec,
 } from "../stores";
 
 // Pedal event codes are identical for all expression boxes (because they are
@@ -112,9 +113,14 @@ const buildNotesMap = (musicTracks) => {
   return _notesMap;
 };
 
-const buildMidiEventHandler =
-  (startNote, stopNote, noteVelocsMap, midiSamplePlayer) =>
-  ({ name, value, number, noteNumber, velocity, data, tick }) => {
+const buildMidiEventHandler = (
+  startNote,
+  stopNote,
+  noteVelocsMap,
+  midiSamplePlayer,
+) => {
+  const midiTPQ = midiSamplePlayer.getDivision().division;
+  return ({ name, value, number, noteNumber, velocity, data, tick }) => {
     if (name === "Note on") {
       if (velocity === 0) {
         stopNote(noteNumber);
@@ -131,9 +137,12 @@ const buildMidiEventHandler =
         softOnOff.set(!!value);
       }
     } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
-      midiSamplePlayer.setTempo(data * get(tempoCoefficient));
+      const newTempo = data * get(tempoCoefficient);
+      midiSamplePlayer.setTempo(newTempo);
+      speedTicksPerSec.set((parseFloat(newTempo) * midiTPQ) / 60.0);
     }
   };
+};
 
 export {
   buildTempoMap,
