@@ -82,13 +82,18 @@
       />
     </div>
     <div>
-      <label class="input-param" for="vis_delay">Vis. delay (ticks)</label>
+      <label class="input-param" for="vis_delay">Vis. delay (ms)</label>
       <div>
         <input
           class="input-value"
           id={"vis_delay"}
           type="number"
-          bind:value={$userSettings.visDelayInTicks}
+          step="100"
+          bind:value={$userSettings.visDelayInMS}
+          on:keydown|capture={(event) => {
+            event.stopPropagation();
+            return /[0-9-]/.test(event.key) ? event : null;
+          }}
         />
       </div>
     </div>

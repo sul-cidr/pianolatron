@@ -13,6 +13,7 @@ import {
   trebleExpCurve,
   expressionParameters,
   noteVelocitiesMap,
+  speedTicksPerSec,
 } from "../stores";
 import { rollProfile } from "../config/roll-config";
 import { clamp, getHoleType } from "../lib/utils";
@@ -578,6 +579,7 @@ const buildMidiEventHandler = (
     if (midiSamplePlayer.tempo !== playerTempo) {
       midiSamplePlayer.pause();
       midiSamplePlayer.setTempo(playerTempo);
+      speedTicksPerSec.set((parseFloat(playerTempo) * midiTPQ) / 60.0);
       midiSamplePlayer.play();
     }
     if (msgType === "Note on") {
@@ -620,6 +622,7 @@ const buildMidiEventHandler = (
       // have one event at the beginning, setting the default tempo (60).
       const newTempo = data * get(tempoCoefficient);
       midiSamplePlayer.setTempo(newTempo);
+      speedTicksPerSec.set((parseFloat(newTempo) * midiTPQ) / 60.0);
     }
   };
 };
