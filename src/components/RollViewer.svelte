@@ -406,11 +406,9 @@
   const highlightHoles = (tick) => {
     if (!openSeadragon) return;
 
-    const visTick = Math.max(
-      0,
+    const visTick =
       tick -
-        ($userSettings.visDelayInMS * parseFloat($speedTicksPerSec)) / 1000.0,
-    );
+      ($userSettings.visDelayInMS * parseFloat($speedTicksPerSec)) / 1000.0;
 
     const holes = holesByTickInterval.search(visTick, visTick);
 
@@ -433,11 +431,9 @@
   const updateViewportFromTick = (tick) => {
     if (!openSeadragon) return;
 
-    const visTick = Math.max(
-      0,
+    const visTick =
       tick -
-        ($userSettings.visDelayInMS * parseFloat($speedTicksPerSec)) / 1000.0,
-    );
+      ($userSettings.visDelayInMS * parseFloat($speedTicksPerSec)) / 1000.0;
 
     const linePx = firstHolePx + ($scrollDownwards ? visTick : -visTick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
