@@ -21,6 +21,8 @@
     expressionCurvesOnOff,
   } from "../stores";
 
+  export let reloadRoll;
+
   let expressionParams = $expressionParameters;
   let expressionType =
     $expressionizer === "FROM_MIDI" ? "Expression MIDI" : "In-App Expression";
@@ -29,7 +31,11 @@
     expressionParams = $expressionParameters;
   };
 
-  export let reloadRoll;
+  const applyExpParamChange = (expressionParam, paramValue) => {
+    $expressionParameters.tunable[expressionParam] = parseFloat(paramValue);
+    expressionParams.tunable[expressionParam] = parseFloat(paramValue);
+    reloadRoll();
+  };
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $expressionParameters, updateExpressionParams();
@@ -82,16 +88,27 @@
                 class="param-value"
                 id={`"input_"{expressionParam}`}
                 type="number"
+                step={/\./.test(
+                  expressionParams.tunable[expressionParam].toString(),
+                )
+                  ? 0.001
+                  : 1}
                 value={expressionParams.tunable[expressionParam]}
-                on:change={(e) => {
-                  $expressionParameters.tunable[expressionParam] = parseFloat(
-                    e.target.value,
-                  );
-                  expressionParams.tunable[expressionParam] = parseFloat(
-                    e.target.value,
-                  );
-                  reloadRoll();
+                on:keydown={(event) => {
+                  event.stopPropagation();
+                  if (event.key === "Enter" || event.key === "Return") {
+                    applyExpParamChange(expressionParam, event.target.value);
+                    return;
+                  }
+                  if (
+                    !/[0-9-.]|Backspace|Delete|ArrowLeft|ArrowRight/.test(
+                      event.key,
+                    )
+                  )
+                    event.preventDefault();
                 }}
+                on:change={(e) =>
+                  applyExpParamChange(expressionParam, e.target.value)}
               />
             </div>
           </div>
