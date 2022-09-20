@@ -92,7 +92,11 @@
           bind:value={$userSettings.visDelayInMS}
           on:keydown|capture={(event) => {
             event.stopPropagation();
-            return /[0-9-]/.test(event.key) ? event : null;
+            return /[0-9-]|Backspace|Delete|ArrowLeft|ArrowRight/.test(
+              event.key,
+            )
+              ? event
+              : event.preventDefault();
           }}
         />
       </div>
