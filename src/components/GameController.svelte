@@ -1,0 +1,120 @@
+<script>
+  import { clamp } from "../lib/utils";
+  import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
+  import {
+    gameController,
+    bassVolumeCoefficient,
+    trebleVolumeCoefficient,
+    tempoCoefficient,
+    softOnOff,
+    sustainOnOff,
+    accentOnOff,
+  } from "../stores";
+
+  export let playPauseApp;
+  export let stopApp;
+
+  const VOLUME_THROTTLE = 30;
+  const TEMPO_THROTTLE = 100;
+
+  let controllerLoop = null;
+  let lastControllerState = null;
+  let gamepad = null;
+
+  const buttonPressed = (b) => (typeof b === "object" ? b.pressed : b === 1.0);
+
+  const buttonToggled = (buttonIndex) =>
+    !lastControllerState ||
+    buttonPressed(lastControllerState.buttons[buttonIndex]) !==
+      buttonPressed(gamepad.buttons[buttonIndex]);
+
+  const buttonToggledOn = (buttonIndex) =>
+    !lastControllerState ||
+    (!buttonPressed(lastControllerState.buttons[buttonIndex]) &&
+      buttonPressed(gamepad.buttons[buttonIndex]));
+
+  const pollController = () => {
+    [gamepad] = navigator.getGamepads();
+
+    // Note that timestamp only updates if the status is checked DURING this loop!
+    if ("timestamp" in gamepad) {
+      if (
+        lastControllerState &&
+        gamepad.timestamp === lastControllerState.timestamp
+      )
+        return;
+    }
+
+    if (
+      !("timestamp" in gamepad) &&
+      JSON.stringify(gamepad) === JSON.stringify(lastControllerState)
+    )
+      return;
+
+    $bassVolumeCoefficient =
+      Math.round(
+        clamp(
+          $bassVolumeCoefficient - gamepad.axes[1] / VOLUME_THROTTLE,
+          controlsConfig.bassVolume.min,
+          controlsConfig.bassVolume.max,
+        ) * 100,
+      ) / 100;
+    $trebleVolumeCoefficient =
+      Math.round(
+        clamp(
+          $trebleVolumeCoefficient - gamepad.axes[3] / VOLUME_THROTTLE,
+          controlsConfig.trebleVolume.min,
+          controlsConfig.trebleVolume.max,
+        ) * 100,
+      ) / 100;
+    $tempoCoefficient =
+      Math.round(
+        clamp(
+          $tempoCoefficient +
+            (gamepad.buttons[7].value - gamepad.buttons[6].value) /
+              TEMPO_THROTTLE,
+          controlsConfig.tempo.min,
+          controlsConfig.tempo.max,
+        ) * 100,
+      ) / 100;
+
+    if (buttonToggled(4, lastControllerState, gamepad))
+      $softOnOff = buttonPressed(gamepad.buttons[4]);
+
+    if (buttonToggled(5, lastControllerState, gamepad))
+      $sustainOnOff = buttonPressed(gamepad.buttons[5]);
+
+    if (
+      buttonToggled(10, lastControllerState, gamepad) ||
+      buttonToggled(11, lastControllerState, gamepad)
+    )
+      $accentOnOff =
+        buttonPressed(gamepad.buttons[10]) ||
+        buttonPressed(gamepad.buttons[11]);
+
+    // For Play/Pause and Stop buttons, only trigger the function calls
+    //  if they were previously up at the last state update and are now down
+    if (buttonToggledOn(0, lastControllerState, gamepad)) playPauseApp();
+    if (buttonToggledOn(1, lastControllerState, gamepad)) stopApp();
+
+    lastControllerState = {
+      timestamp: "timestamp" in gamepad ? gamepad.timestamp : undefined,
+      axes: gamepad.axes,
+      buttons: gamepad.buttons,
+    };
+  };
+
+  if (navigator.getGamepads) {
+    window.addEventListener("gamepadconnected", (event) => {
+      $gameController = event.gamepad;
+      gamepad = event.gamepad;
+      controllerLoop = setInterval(pollController, 5);
+    });
+
+    window.addEventListener("gamepaddisconnected", () => {
+      controllerLoop = undefined;
+      $gameController = undefined;
+      gamepad = undefined;
+    });
+  }
+</script>

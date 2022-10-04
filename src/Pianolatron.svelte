@@ -77,6 +77,7 @@
   import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
+  import GameController from "./components/GameController.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
   import Notification, {
@@ -391,6 +392,7 @@
 <KeyboardShortcutEditor />
 <Notification />
 {#if $showWelcomeScreen}<Welcome />{/if}
+<GameController {playPauseApp} {stopApp} />
 
 <svelte:window
   on:popstate={({ state }) =>
