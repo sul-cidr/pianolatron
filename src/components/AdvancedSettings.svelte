@@ -45,6 +45,7 @@
 </style>
 
 <script>
+  import { fade } from "svelte/transition";
   import {
     rollHasExpressions,
     playExpressionsOnOff,
@@ -54,6 +55,7 @@
     sampleVolumes,
     sampleVelocities,
     reverbWetDry,
+    gameController,
   } from "../stores";
   import { toggleKeybindingsConfig } from "./KeyboardShortcutEditor.svelte";
   import { notify } from "../ui-components/Notification.svelte";
@@ -158,4 +160,20 @@
       });
     }}>Reset All Settings</button
   >
+
+  <fieldset>
+    <legend>Game Controller</legend>
+
+    {#if $gameController === undefined}
+      <p>
+        To use a gamepad device for tempo, volume and other controls, connect it
+        to the computer and press a button on the device.
+      </p>
+    {:else}
+      <p transition:fade>
+        {$gameController.id} Buttons: {$gameController.buttons.length} Axes: {$gameController
+          .axes.length}
+      </p>
+    {/if}
+  </fieldset>
 </div>
