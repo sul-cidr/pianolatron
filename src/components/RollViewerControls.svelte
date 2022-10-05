@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import OpenSeadragon from "openseadragon";
 
   import IconButton from "../ui-components/IconButton.svelte";
   import { easingInterval } from "../lib/utils";
@@ -11,20 +10,12 @@
   export let minZoomLevel;
   export let updateTickByViewportIncrement;
   export let panHorizontal;
+  export let adjustZoom;
 
   let actionInterval;
 
   const { viewport } = openSeadragon;
   let currentZoom = viewport.getZoom();
-
-  const centerRoll = () => {
-    const viewportBounds = viewport.getBounds();
-    const lineCenter = new OpenSeadragon.Point(
-      0.5,
-      viewportBounds.y + viewportBounds.height / 2,
-    );
-    viewport.panTo(lineCenter);
-  };
 
   const onZoom = () => (currentZoom = viewport.getZoom());
 
@@ -47,9 +38,7 @@
   <IconButton
     class="overlay"
     disabled={currentZoom >= maxZoomLevel}
-    on:mousedown={mousedownRepeatAction(() =>
-      viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel)),
-    )}
+    on:mousedown={mousedownRepeatAction(() => adjustZoom("zoomIn"))}
     iconName="plus"
     label="Zoom In"
     height="24"
@@ -58,9 +47,7 @@
   <IconButton
     class="overlay"
     disabled={currentZoom <= minZoomLevel}
-    on:mousedown={mousedownRepeatAction(() =>
-      viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel)),
-    )}
+    on:mousedown={mousedownRepeatAction(() => adjustZoom("zoomOut"))}
     iconName="minus"
     label="Zoom Out"
     height="24"
@@ -70,8 +57,7 @@
     class="overlay"
     disabled={currentZoom === 1}
     on:click={() => {
-      viewport.zoomTo(1);
-      centerRoll();
+      adjustZoom("resetZoom");
     }}
     iconName="fit-width"
     label="Zoom to Roll Width"

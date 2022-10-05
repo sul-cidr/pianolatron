@@ -114,6 +114,7 @@
   let rollViewer;
   let updateTickByViewportIncrement;
   let panHorizontal;
+  let adjustZoom;
 
   const rollListItems = catalog.map((item) => ({
     ...item,
@@ -314,7 +315,7 @@
     clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1),
   );
   $: if (rollViewer)
-    ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
+    ({ adjustZoom, updateTickByViewportIncrement, panHorizontal } = rollViewer);
 </script>
 
 <div id="app">
@@ -376,7 +377,13 @@
 <KeyboardShortcutEditor />
 <Notification />
 {#if $showWelcomeScreen}<Welcome />{/if}
-<GameController {playPauseApp} {stopApp} />
+<GameController
+  {playPauseApp}
+  {stopApp}
+  {updateTickByViewportIncrement}
+  {panHorizontal}
+  {adjustZoom}
+/>
 
 <svelte:window
   on:popstate={({ state }) =>
