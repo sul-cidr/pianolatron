@@ -116,6 +116,7 @@
   let rollViewer;
   let updateTickByViewportIncrement;
   let panHorizontal;
+  let adjustZoom;
 
   const rollListItems = catalog.map((item) => ({
     ...item,
@@ -319,17 +320,7 @@
     clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1),
   );
   $: if (rollViewer)
-    ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
-  $: if (rollImageReady) {
-    document.querySelector("#loading span").textContent = "Loading complete!";
-    document
-      .getElementById("loading")
-      .addEventListener("transitionend", () =>
-        document.getElementById("loading").remove(),
-      );
-    document.getElementById("loading").classList.add("fade-out");
-    appLoaded = true;
-  }
+    ({ adjustZoom, updateTickByViewportIncrement, panHorizontal } = rollViewer);
 </script>
 
 <div id="app">
@@ -392,7 +383,13 @@
 <KeyboardShortcutEditor />
 <Notification />
 {#if $showWelcomeScreen}<Welcome />{/if}
-<GameController {playPauseApp} {stopApp} />
+<GameController
+  {playPauseApp}
+  {stopApp}
+  {updateTickByViewportIncrement}
+  {panHorizontal}
+  {adjustZoom}
+/>
 
 <svelte:window
   on:popstate={({ state }) =>

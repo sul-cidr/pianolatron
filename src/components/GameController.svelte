@@ -9,13 +9,15 @@
     softOnOff,
     sustainOnOff,
     accentOnOff,
+    volumeSensitivity,
+    tempoSensitivity,
   } from "../stores";
 
   export let playPauseApp;
   export let stopApp;
-
-  const VOLUME_THROTTLE = 30;
-  const TEMPO_THROTTLE = 100;
+  export let updateTickByViewportIncrement;
+  export let panHorizontal;
+  export let adjustZoom;
 
   let controllerLoop = null;
   let lastControllerState = null;
@@ -36,25 +38,10 @@
   const pollController = () => {
     [gamepad] = navigator.getGamepads();
 
-    // Note that timestamp only updates if the status is checked DURING this loop!
-    if ("timestamp" in gamepad) {
-      if (
-        lastControllerState &&
-        gamepad.timestamp === lastControllerState.timestamp
-      )
-        return;
-    }
-
-    if (
-      !("timestamp" in gamepad) &&
-      JSON.stringify(gamepad) === JSON.stringify(lastControllerState)
-    )
-      return;
-
     $bassVolumeCoefficient =
       Math.round(
         clamp(
-          $bassVolumeCoefficient - gamepad.axes[1] / VOLUME_THROTTLE,
+          $bassVolumeCoefficient - gamepad.axes[1] / (100 - $volumeSensitivity),
           controlsConfig.bassVolume.min,
           controlsConfig.bassVolume.max,
         ) * 100,
@@ -62,7 +49,8 @@
     $trebleVolumeCoefficient =
       Math.round(
         clamp(
-          $trebleVolumeCoefficient - gamepad.axes[3] / VOLUME_THROTTLE,
+          $trebleVolumeCoefficient -
+            gamepad.axes[3] / (100 - $volumeSensitivity),
           controlsConfig.trebleVolume.min,
           controlsConfig.trebleVolume.max,
         ) * 100,
@@ -72,17 +60,28 @@
         clamp(
           $tempoCoefficient +
             (gamepad.buttons[7].value - gamepad.buttons[6].value) /
-              TEMPO_THROTTLE,
+              (100 - $tempoSensitivity),
           controlsConfig.tempo.min,
           controlsConfig.tempo.max,
         ) * 100,
       ) / 100;
+
+    // For Play/Pause and Stop buttons, only trigger the function calls
+    //  if they were previously up at the last state update and are now down
+    if (buttonToggledOn(0, lastControllerState, gamepad)) playPauseApp();
+    if (buttonToggledOn(1, lastControllerState, gamepad)) stopApp();
+
+    if (buttonPressed(gamepad.buttons[2])) adjustZoom("zoomIn");
+
+    if (buttonPressed(gamepad.buttons[3])) adjustZoom("zoomOut");
 
     if (buttonToggled(4, lastControllerState, gamepad))
       $softOnOff = buttonPressed(gamepad.buttons[4]);
 
     if (buttonToggled(5, lastControllerState, gamepad))
       $sustainOnOff = buttonPressed(gamepad.buttons[5]);
+
+    if (buttonPressed(gamepad.buttons[8])) adjustZoom("resetZoom");
 
     if (
       buttonToggled(10, lastControllerState, gamepad) ||
@@ -92,29 +91,30 @@
         buttonPressed(gamepad.buttons[10]) ||
         buttonPressed(gamepad.buttons[11]);
 
-    // For Play/Pause and Stop buttons, only trigger the function calls
-    //  if they were previously up at the last state update and are now down
-    if (buttonToggledOn(0, lastControllerState, gamepad)) playPauseApp();
-    if (buttonToggledOn(1, lastControllerState, gamepad)) stopApp();
+    if (buttonPressed(gamepad.buttons[12]))
+      updateTickByViewportIncrement(/* up = */ true);
+    if (buttonPressed(gamepad.buttons[13]))
+      updateTickByViewportIncrement(/* up - */ false);
+    if (buttonPressed(gamepad.buttons[14])) panHorizontal(/* left = */ true);
+    if (buttonPressed(gamepad.buttons[15])) panHorizontal(/* left = */ false);
 
     lastControllerState = {
-      timestamp: "timestamp" in gamepad ? gamepad.timestamp : undefined,
       axes: gamepad.axes,
       buttons: gamepad.buttons,
     };
   };
 
   if (navigator.getGamepads) {
-    window.addEventListener("gamepadconnected", (event) => {
+    addEventListener("gamepadconnected", (event) => {
       $gameController = event.gamepad;
       gamepad = event.gamepad;
-      controllerLoop = setInterval(pollController, 5);
+      controllerLoop = setInterval(pollController, 10);
     });
 
-    window.addEventListener("gamepaddisconnected", () => {
-      controllerLoop = undefined;
+    addEventListener("gamepaddisconnected", () => {
+      clearInterval(controllerLoop);
       $gameController = undefined;
-      gamepad = undefined;
+      gamepad = null;
     });
   }
 </script>

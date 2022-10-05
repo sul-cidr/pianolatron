@@ -525,6 +525,26 @@
     viewport.applyConstraints();
   };
 
+  const centerRoll = () => {
+    const viewportBounds = viewport.getBounds();
+    const lineCenter = new OpenSeadragon.Point(
+      0.5,
+      viewportBounds.y + viewportBounds.height / 2,
+    );
+    viewport.panTo(lineCenter);
+  };
+
+  const adjustZoom = (action = "zoomIn") => {
+    if (action === "zoomIn") {
+      viewport.zoomTo(Math.min(viewport.getZoom() * 1.1, maxZoomLevel));
+    } else if (action === "zoomOut") {
+      viewport.zoomTo(Math.max(viewport.getZoom() * 0.9, minZoomLevel));
+    } else if (action === "resetZoom") {
+      viewport.zoomTo(1);
+      centerRoll();
+    }
+  };
+
   onMount(() => {
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
@@ -722,6 +742,7 @@
       parseInt($rollMetadata.LAST_HOLE, 10);
 
   export {
+    adjustZoom,
     updateTickByViewportIncrement,
     panHorizontal,
     partitionHolesOverlaySvgs,
@@ -768,6 +789,7 @@
       {maxZoomLevel}
       {updateTickByViewportIncrement}
       {panHorizontal}
+      {adjustZoom}
     />
   {/if}
 </div>

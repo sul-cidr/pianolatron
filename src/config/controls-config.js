@@ -34,6 +34,16 @@ export const defaultControlsConfig = {
     augmentedDelta: 0.1,
     precision: 2,
   },
+  volumeSensitivity: {
+    min: 1,
+    max: 99,
+    delta: 1,
+  },
+  tempoSensitivity: {
+    min: 1,
+    max: 99,
+    delta: 1,
+  },
 };
 
 export const controlsStores = {

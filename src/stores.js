@@ -80,7 +80,10 @@ export const velocityCurveHigh = createPersistedStore(
 export const midiInputs = createStore([]);
 export const midiOutputs = createStore([]);
 
+// Gamepad controller
 export const gameController = createStore(undefined);
+export const volumeSensitivity = createStore(70);
+export const tempoSensitivity = createStore(30);
 
 // Expression Curves
 export const bassExpCurve = createStore();

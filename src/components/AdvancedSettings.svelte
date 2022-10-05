@@ -45,7 +45,6 @@
 </style>
 
 <script>
-  import { fade } from "svelte/transition";
   import {
     rollHasExpressions,
     playExpressionsOnOff,
@@ -56,9 +55,13 @@
     sampleVelocities,
     reverbWetDry,
     gameController,
+    volumeSensitivity,
+    tempoSensitivity,
   } from "../stores";
   import { toggleKeybindingsConfig } from "./KeyboardShortcutEditor.svelte";
   import { notify } from "../ui-components/Notification.svelte";
+  import SliderControl from "../ui-components/SliderControl.svelte";
+  import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
 
   const themes = ["cardinal", "blue", "green", "grey"];
 
@@ -170,10 +173,29 @@
         to the computer and press a button on the device.
       </p>
     {:else}
-      <p transition:fade>
+      <p>
         {$gameController.id} Buttons: {$gameController.buttons.length} Axes: {$gameController
           .axes.length}
       </p>
+      <br />
+      <SliderControl
+        bind:value={$volumeSensitivity}
+        min={controlsConfig.volumeSensitivity.min}
+        max={controlsConfig.volumeSensitivity.max}
+        step={controlsConfig.volumeSensitivity.delta}
+        name="volume-sensitivity"
+      >
+        <svelte:fragment slot="label">Volume Sensitivity:</svelte:fragment>
+      </SliderControl>
+      <SliderControl
+        bind:value={$tempoSensitivity}
+        min={controlsConfig.tempoSensitivity.min}
+        max={controlsConfig.tempoSensitivity.max}
+        step={controlsConfig.tempoSensitivity.delta}
+        name="tempo-sensitivity"
+      >
+        <svelte:fragment slot="label">Tempo Sensitivity:</svelte:fragment>
+      </SliderControl>
     {/if}
   </fieldset>
 </div>
