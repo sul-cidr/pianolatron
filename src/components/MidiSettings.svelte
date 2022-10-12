@@ -17,6 +17,10 @@
     }
   }
 
+  p {
+    margin: 0;
+  }
+
   ul {
     margin: 0.5em 0 0 1em;
     padding: 0;
