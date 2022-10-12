@@ -1,0 +1,55 @@
+---
+import Header from "./header.astro";
+import Footer from "./footer.astro";
+import { execSync } from "node:child_process";
+
+import "../styles/styles.scss";
+
+const { title } = Astro.props.content || Astro.props;
+const commit = execSync("git rev-parse --short HEAD").toString().trim();
+const datetime = new Date().toISOString();
+---
+
+<style>
+  body {
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 200;
+    color: var(--black-100);
+
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em 1em;
+    position: relative;
+
+    overflow-x: hidden;
+
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+  }
+</style>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="version" content={commit} />
+<meta name="dcterms.modified" content={datetime} />
+<meta
+  name="description"
+  content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection."
+/>
+<title>{title}</title>
+<script>
+  const { theme } =
+    JSON.parse(window.localStorage.getItem("userSettings")) || {};
+  theme && document.documentElement.setAttribute("data-theme", theme);
+</script>
+
+<body>
+  <Header {title} />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+</body>

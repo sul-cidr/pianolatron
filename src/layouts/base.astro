@@ -4,7 +4,7 @@ import { execSync } from "child_process";
 
 import "../styles/styles.scss";
 
-const { title } = Astro.props;
+const { title, bodyClass } = Astro.props.content || Astro.props;
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
 ---
@@ -28,7 +28,7 @@ const datetime = new Date().toISOString();
     </script>
     <link rel="preload" href="/cidr.trsp.300x176.png" as="image" />
   </head>
-  <body>
+  <body class={bodyClass}>
     <slot />
     <Footer />
   </body>
