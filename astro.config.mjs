@@ -2,6 +2,7 @@ import { defineConfig } from "astro/config";
 
 import svelte from "@astrojs/svelte";
 import preprocess from "svelte-preprocess";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   site: "https://pianolatron.stanford.edu/",
@@ -9,6 +10,7 @@ export default defineConfig({
   trailingSlash: "always",
   server: { port: 8080 },
   integrations: [
+    mdx(),
     svelte({
       preprocess: [
         preprocess.scss({
