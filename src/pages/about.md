@@ -3,7 +3,7 @@ layout: ../layouts/content.astro
 title: About the Pianolatron
 ---
 
-The Pianolatron is the result of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' [Player Piano Program](https://library.stanford.edu/projects/player-piano-program). The technical implementation of the Pianolatron app, carried out by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants and members of the international player piano and open source software communities.
+The Pianolatron is the product of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' <a href="https://library.stanford.edu/projects/player-piano-program" target="_blank">Player Piano Program</a>. The technical implementation of the Pianolatron app, carried out by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open source software community.
 
 ### Principal Investigators
 
@@ -12,9 +12,9 @@ The Pianolatron is the result of a large-scale collaborative partnership between
 
 ### Developer Team - Stanford Center for Interdisciplinary Digital Research (CIDR)
 
-- Vijoy Abraham
 - Peter Broadwell
 - Simon Wiles
+- Vijoy Abraham
 
 ### Research Contributors
 
@@ -38,7 +38,7 @@ The Pianolatron is the result of a large-scale collaborative partnership between
 
 The source code for the site is freely available under the MIT License at https://github.com/sul-cidr/pianolatron <a href="https://github.com/sul-cidr/pianolatron" target="_blank" rel="noopener"><img src="/github.svg" height="14" width="14" alt="Github" /></a>
 
-The Pianolatron makes significant use of software modules from the following open-source development projects:
+The Pianolatron makes significant use of modules from the following open-source software projects:
 
 - [@tonejs/piano](https://github.com/tambien/Piano), principal developer: Yotam Mann
 - [MidiPlayerJS](https://github.com/grimmdude/MidiPlayerJS), principal developer: Garret Grimm
