@@ -72,6 +72,7 @@
                   JSON.stringify($defaultExpressionParameters),
                 );
               }
+              reloadRoll();
             }}>Reset to Defaults</button
           >
         </div>
