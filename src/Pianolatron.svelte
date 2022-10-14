@@ -320,7 +320,7 @@
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
-        {#if !holesIntervalTree.count}
+        {#if !$holesIntervalTree.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
             this time. Hole highlighting will not be enabled.
