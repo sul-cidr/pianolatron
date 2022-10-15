@@ -21,6 +21,23 @@
   } from "../stores";
 
   export let reloadRoll;
+
+  let currentRollType = $rollMetadata.ROLL_TYPE;
+
+  const resetExpressionSettings = (forceReset) => {
+    // Load the defaults when the roll type changes or Reset button is clicked
+    if (!forceReset && $rollMetadata.ROLL_TYPE === currentRollType) return;
+
+    if ($defaultExpressionParameters !== null) {
+      $expressionParameters = JSON.parse(
+        JSON.stringify($defaultExpressionParameters),
+      );
+    }
+    currentRollType = $rollMetadata.ROLL_TYPE;
+  };
+
+  /* eslint-disable no-unused-expressions, no-sequences */
+  $: $rollMetadata, resetExpressionSettings(false);
 </script>
 
 <div id="expression-panel">
@@ -64,14 +81,7 @@
           <button
             type="button"
             on:click={() => {
-              // XXX Ideally this would use some fancier logic from stores.js to
-              // set the default values and revert to them when the reset button
-              // is pressed.
-              if ($defaultExpressionParameters !== null) {
-                $expressionParameters = JSON.parse(
-                  JSON.stringify($defaultExpressionParameters),
-                );
-              }
+              resetExpressionSettings(true);
               reloadRoll();
             }}>Reset to Defaults</button
           >
