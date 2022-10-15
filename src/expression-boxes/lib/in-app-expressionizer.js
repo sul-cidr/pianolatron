@@ -124,11 +124,6 @@ export default class InAppExpressionizer {
     this.noteVelocitiesMap = this.buildNoteVelocitiesMap();
     this.pedalingMap = this.buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
-
-    expressionParameters.subscribe(() => {
-      this.expParams = this.computeDerivedExpressionParams();
-      this.buildNoteVelocitiesMap();
-    });
   }
 
   // ?NOTE: should be good for (at least) welte-red and welte-green
