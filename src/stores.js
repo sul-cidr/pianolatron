@@ -87,6 +87,7 @@ export const trebleExpCurve = createStore();
 export const expressionParameters = createStore({});
 export const defaultExpressionParameters = createStore({});
 export const expBoxType = createStore(null);
+export const drawVelocityCurves = createStore(false);
 
 // Playback State
 export const currentTick = createStore(0);

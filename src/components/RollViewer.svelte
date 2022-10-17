@@ -102,6 +102,7 @@
     trebleExpCurve,
     useInAppExpression,
     userSettings,
+    drawVelocityCurves,
   } from "../stores";
   import { clamp } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -129,10 +130,11 @@
   let animationEaseInterval;
   let osdNavDisplayRegion;
   let ppi;
-  let svgPartitions;
-  let visibleSvgs = [];
+  let holesSvgPartitions;
+  let visibleHolesSvgs = [];
+  let expressionSvgPartitions;
+  let visibleExpressionSvgs = [];
   let entireViewportRectangle;
-  let expressionCurvesSvg;
 
   const createMark = (hole) => {
     const {
@@ -140,7 +142,7 @@
       startY: offsetY,
       w: width,
       h: height,
-      m: midiKey,
+      // m: midiKey,
       v: velocity,
       color: holeColor,
       type: holeType,
@@ -175,9 +177,100 @@
     return mark;
   };
 
-  const drawExpressionCurves = (bassExpC, trebleExpC) => {
-    const drawGuidesAndCurve = (guides, expCurve, g, svg, transformation) => {
+  const updateVisibleSvgPartitions = (svgPartitions, visibleSvgs) => {
+    if (viewport === undefined || svgPartitions === undefined)
+      return visibleSvgs;
+
+    const { y: firstImagePixel, height: viewportImageLength } =
+      viewport.viewportToImageRectangle(viewport.getBounds());
+
+    const lastImagePixel = firstImagePixel + viewportImageLength;
+    const svgs = svgPartitions.search(firstImagePixel, lastImagePixel);
+
+    // Remove any currently displayed SVG overlays that don't overlap with the
+    // viewer window
+    const updatedSvgs = visibleSvgs.filter((visibleSvg) => {
+      if (svgs.includes(visibleSvg)) return true;
+      viewport.viewer.removeOverlay(visibleSvg);
+      return false;
+    });
+
+    // Add SVG overlays that newly overlap with the viewer window
+    svgs.forEach((svg) => {
+      if (updatedSvgs.includes(svg)) return;
+      updatedSvgs.push(svg);
+      viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    });
+
+    return updatedSvgs;
+  };
+
+  const updateVisibleOverlays = () => {
+    visibleHolesSvgs = updateVisibleSvgPartitions(
+      holesSvgPartitions,
+      visibleHolesSvgs,
+    );
+    visibleExpressionSvgs = updateVisibleSvgPartitions(
+      expressionSvgPartitions,
+      visibleExpressionSvgs,
+    );
+  };
+
+  const partitionExpressionOverlaySvgs = (bassExpC, trebleExpC) => {
+    const partitionGuidesAndCurve = (
+      guides,
+      expCurve,
+      transformation,
+      vertScale,
+    ) => {
+      let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", imageWidth);
+      svg.setAttribute("height", imageLength);
+      svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+      svg.setAttribute("style", "pointer-events: none;");
+
+      let g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      svg.appendChild(g);
+
+      let rangeStartPx = null;
+      let rangeEndPx = null;
+      const rangeLengthPx = 1000;
+
       for (let i = 0; i < expCurve.length - 1; i += 1) {
+        // The start of the vertical pixel range of each partition of curve and
+        //  guide elements will be greater than the end of the range for rolls
+        //  that scroll downwards, hence the abs and min/max checks here.
+        if (Math.abs(rangeEndPx - rangeStartPx) > rangeLengthPx) {
+          expressionSvgPartitions.insert(
+            Math.min(rangeStartPx, rangeEndPx),
+            Math.max(rangeStartPx, rangeEndPx),
+            svg,
+          );
+
+          svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.setAttribute("width", imageWidth);
+          svg.setAttribute("height", imageLength);
+          svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+          svg.setAttribute("style", "pointer-events: none;");
+          g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          svg.appendChild(g);
+
+          rangeStartPx = null;
+        }
+
+        const curveStart = expCurve[i][0];
+        const curveEnd = expCurve[i + 1][0];
+
+        // Apply the same transformations as are applied to the SVG (y dim
+        //  only) to get the correct pixel positions of the curve elements
+        const curveStartPx = curveStart * vertScale + firstHolePx;
+        const curveEndPx = curveEnd * vertScale + firstHolePx;
+
+        if (rangeStartPx === null) {
+          rangeStartPx = curveStartPx;
+        }
+        rangeEndPx = curveEndPx;
+
         const curveLine = document.createElementNS(
           "http://www.w3.org/2000/svg",
           "line",
@@ -188,12 +281,12 @@
         );
         curveLine.setAttribute("x1", expCurve[i][1]);
         curveLine.setAttribute("x2", expCurve[i + 1][1]);
-        curveLine.setAttribute("y1", expCurve[i][0]);
-        curveLine.setAttribute("y2", expCurve[i + 1][0]);
+        curveLine.setAttribute("y1", curveStart);
+        curveLine.setAttribute("y2", curveEnd);
         curveLine.setAttribute("transform", transformation);
         g.appendChild(curveLine);
 
-        Object.values(guides).forEach((value) => {
+        const guideLines = Object.values(guides).map((value) => {
           const guideLine = document.createElementNS(
             "http://www.w3.org/2000/svg",
             "line",
@@ -204,44 +297,39 @@
           );
           guideLine.setAttribute("x1", value);
           guideLine.setAttribute("x2", value);
-          guideLine.setAttribute("y1", expCurve[i][0]);
-          guideLine.setAttribute("y2", expCurve[i + 1][0]);
+          guideLine.setAttribute("y1", curveStart);
+          guideLine.setAttribute("y2", curveEnd);
           guideLine.setAttribute("transform", transformation);
-          g.appendChild(guideLine);
+          return guideLine;
         });
+        for (let j = 0; j < guideLines.length; j += 1) {
+          g.appendChild(guideLines[j]);
+        }
       }
     };
 
-    if (viewport && expressionCurvesSvg !== undefined) {
-      viewport.viewer.removeOverlay(expressionCurvesSvg);
-    }
+    expressionSvgPartitions = new IntervalTree();
 
     if (
+      !$drawVelocityCurves ||
       !$useInAppExpression ||
-      viewport === undefined ||
       bassExpC == null ||
       bassExpC.length === 0 ||
       trebleExpC == null ||
-      trebleExpC.length === 0
-    )
+      trebleExpC.length === 0 ||
+      firstHolePx === undefined
+    ) {
+      updateVisibleOverlays(); // This removes any previously visible curves
       return;
-
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    svg.setAttribute("width", imageWidth);
-    svg.setAttribute("height", imageLength);
-    svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
-    svg.setAttribute("style", "pointer-events: none;"); // needed?
-    svg.appendChild(g);
+    }
 
     // Roll images are slightly offset to the right (sigh). This could be used
-    // to compensate. But at present, it's just being used as a kluge to push
-    // the expression curves closer to the center of the viewer
+    //  to compensate. But at present, it's just being used as a kluge to push
+    //  the expression curves closer to the center of the viewer
     const scanOffset = 150;
     const horizOffset = Math.round(imageWidth / 2);
     const curveRegionWidth = Math.round(imageWidth / 2);
     const horizScale = Math.round(curveRegionWidth / 127);
-    const vertOffset = $scrollDownwards ? firstHolePx : firstHolePx;
     const vertScale = $scrollDownwards ? 1 : -1;
     const expParams = $expressionParameters;
     if (expParams === null) return;
@@ -268,25 +356,22 @@
         f: parseInt(expParams.tunable.accent_f, 10),
       };
     }
-    drawGuidesAndCurve(
+    partitionGuidesAndCurve(
       guides,
       bassExpC,
-      g,
-      svg,
-      `translate(${scanOffset} ${vertOffset}) scale(${horizScale} ${vertScale})`,
+      `translate(${scanOffset} ${firstHolePx}) scale(${horizScale} ${vertScale})`,
+      vertScale,
     );
-    drawGuidesAndCurve(
+    partitionGuidesAndCurve(
       guides,
       trebleExpC,
-      g,
-      svg,
       `translate(${
         horizOffset * 2 - scanOffset
-      } ${vertOffset}) scale(${-horizScale} ${vertScale})`,
+      } ${firstHolePx}) scale(${-horizScale} ${vertScale})`,
+      vertScale,
     );
 
-    expressionCurvesSvg = svg;
-    viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    updateVisibleOverlays();
   };
 
   const createHolesOverlaySvg = (holes) => {
@@ -336,7 +421,7 @@
   };
 
   const partitionHolesOverlaySvgs = () => {
-    if (!$holesIntervalTree.count) return;
+    if (!viewport || !$holesIntervalTree.count) return;
 
     entireViewportRectangle = viewport.imageToViewportRectangle(
       0,
@@ -345,7 +430,7 @@
       imageLength,
     );
 
-    svgPartitions = new IntervalTree();
+    holesSvgPartitions = new IntervalTree();
 
     const rangeLengthPx = 1000;
 
@@ -387,34 +472,14 @@
         const lastHoleEndsPx = Math.max(...holes.map(({ endY }) => endY));
         const svg = createHolesOverlaySvg(holes);
 
-        svgPartitions.insert(firstHoleBeginsPx, lastHoleEndsPx, svg);
+        holesSvgPartitions.insert(firstHoleBeginsPx, lastHoleEndsPx, svg);
       }
     }
   };
 
-  const updateVisibleSvgPartitions = () => {
-    if (svgPartitions === undefined) return;
-
-    const { y: firstImagePixel, height: viewportImageLength } =
-      viewport.viewportToImageRectangle(viewport.getBounds());
-
-    const lastImagePixel = firstImagePixel + viewportImageLength;
-    const svgs = svgPartitions.search(firstImagePixel, lastImagePixel);
-
-    // Remove any currently displayed SVG overlays that don't overlap with the
-    // viewer window
-    visibleSvgs = visibleSvgs.filter((visibleSvg) => {
-      if (svgs.includes(visibleSvg)) return true;
-      viewport.viewer.removeOverlay(visibleSvg);
-      return false;
-    });
-
-    // Add SVG overlays that newly overlap with the viewer window
-    svgs.forEach((svg) => {
-      if (visibleSvgs.includes(svg)) return;
-      visibleSvgs.push(svg);
-      viewport.viewer.addOverlay(svg, entireViewportRectangle);
-    });
+  const partitionOverlaySvgs = () => {
+    partitionHolesOverlaySvgs();
+    partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
   };
 
   const highlightHoles = (tick) => {
@@ -451,7 +516,7 @@
       $scrollDownwards ? $playbackProgress > 0.5 : $playbackProgress < 0.5,
     );
 
-    updateVisibleSvgPartitions();
+    updateVisibleOverlays();
   };
 
   // Updates the application position by an amount proportional to the
@@ -531,6 +596,13 @@
   };
 
   onMount(() => {
+    // XXX The roll direction and first pixel values are needed from the roll
+    //  metadata to be able to draw the velocity curves. At present, this is
+    //  not guaranteed to be available when the roll viewer first loads, so
+    //  the velocity curves are always disabled by default (this may be the
+    //  preferred UX behavior anyway).
+    $drawVelocityCurves = false;
+
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
       showNavigationControl: false,
@@ -628,7 +700,7 @@
       const imageZoom = viewport.viewportToImageZoom(zoom);
       trackerbarHeight = Math.max(1, avgHoleWidth * imageZoom);
       ppi = imageZoom * 300;
-      updateVisibleSvgPartitions();
+      updateVisibleOverlays();
     });
 
     // disable OSD's own keyboard interactions
@@ -700,9 +772,11 @@
     openSeadragon.open(imageUrl);
   });
 
+  /* eslint-disable no-unused-expressions, no-sequences */
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
-  // $: drawExpressionCurves($bassExpCurve, $trebleExpCurve);
+  $: $drawVelocityCurves,
+    partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
@@ -718,8 +792,8 @@
   export {
     updateTickByViewportIncrement,
     panHorizontal,
-    partitionHolesOverlaySvgs,
-    updateVisibleSvgPartitions,
+    partitionOverlaySvgs,
+    updateVisibleOverlays,
   };
 </script>
 

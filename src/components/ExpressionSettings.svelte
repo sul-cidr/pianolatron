@@ -18,6 +18,7 @@
     rollHasExpressions,
     rollMetadata,
     useInAppExpression,
+    drawVelocityCurves,
   } from "../stores";
 
   export let reloadRoll;
@@ -85,6 +86,13 @@
               reloadRoll();
             }}>Reset to Defaults</button
           >
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Visualization Settings</legend>
+        <div>
+          Draw Velocity Curves
+          <input type="checkbox" bind:checked={$drawVelocityCurves} />
         </div>
       </fieldset>
     {/if}

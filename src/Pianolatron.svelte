@@ -250,8 +250,8 @@
       startPlayer = true;
     }
     loadRoll(currentRoll, false).then(() => {
-      rollViewer.partitionHolesOverlaySvgs();
-      rollViewer.updateVisibleSvgPartitions();
+      rollViewer.partitionOverlaySvgs();
+      rollViewer.updateVisibleOverlays();
       skipToTick(savedTick);
       if (startPlayer) startPlayback();
     });
