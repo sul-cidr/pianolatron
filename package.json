@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
+    "@types/watch": "^1.0.4",
     "CanvasSpliner": "jonathanlurie/CanvasSpliner",
     "midi-player-js": "^2.0.16",
     "node-interval-tree": "^2.0.1",
