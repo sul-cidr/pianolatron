@@ -3132,10 +3132,10 @@ onetime@^6.0.0:
   dependencies:
     mimic-fn "^4.0.0"
 
-openseadragon@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-3.1.0.tgz#152b1ed8b6b03296feeed4e0ddf084cea7d0c1f2"
-  integrity sha512-0zCbRIWUbCto7xm1tv2ZLEiSl84cDU659W/sfs2zqqTqVRa4CRHzhy7i9nsv6dHA1DryFR8IzjStjmWOqRs9Rg==
+openseadragon@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-4.1.0.tgz#194dce8c2c347d3dd45cdd5de4c278b41c8f5d3c"
+  integrity sha512-XMMzf5apmshvIvxvqMwiW9dJ07dol4zudvV1oFnoZuIpSZP3c3tlFjGbyOKHGhb1k4jmHQ7b7koG9vCHdKvC/A==
 
 optionator@^0.9.1:
   version "0.9.1"
