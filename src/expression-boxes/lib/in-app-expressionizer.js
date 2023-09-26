@@ -14,7 +14,7 @@ import {
   useMidiTempoEventsOnOff,
 } from "../../stores";
 import { rollProfile } from "../../config/roll-config";
-import { getHoleType } from "../../lib/hole-data";
+import { noteVelocitiesMap, getHoleType } from "../../lib/hole-data";
 
 export default class InAppExpressionizer {
   #rollType = get(rollMetadata).ROLL_TYPE;
@@ -121,13 +121,11 @@ export default class InAppExpressionizer {
     this.expParams = this.computeDerivedExpressionParams();
 
     this.tempoMap = this.#buildTempoMap();
-    this.noteVelocitiesMap = this.buildNoteVelocitiesMap();
     this.pedalingMap = this.buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
 
     expressionParameters.subscribe(() => {
       this.expParams = this.computeDerivedExpressionParams();
-      this.buildNoteVelocitiesMap();
     });
   }
 
@@ -312,7 +310,7 @@ export default class InAppExpressionizer {
           activeNotes.delete(midiNumber);
         } else {
           const noteVelocity = get(playExpressionsOnOff)
-            ? this.noteVelocitiesMap[tick]?.[midiNumber] || velocity
+            ? get(noteVelocitiesMap)[tick]?.[midiNumber] || velocity // TODO
             : this.defaultNoteVelocity;
           this.startNote(midiNumber, noteVelocity);
           activeNotes.add(midiNumber);

@@ -8,6 +8,7 @@ import {
   tempoCoefficient,
   useMidiTempoEventsOnOff,
 } from "../stores";
+import { noteVelocitiesMap } from "../lib/hole-data";
 
 export default class ExpressiveMidiExpressionizer {
   midiSoftPedal = 67;
@@ -24,7 +25,6 @@ export default class ExpressiveMidiExpressionizer {
     [this.#metadataTrack, ...this.#musicTracks] = midiSamplePlayer.events;
 
     this.tempoMap = this.#buildTempoMap();
-    this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
     this.pedalingMap = this.#buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
   }
@@ -53,13 +53,13 @@ export default class ExpressiveMidiExpressionizer {
     return _tempoMap;
   };
 
-  #buildNoteVelocitiesMap = () => {
-    const noteVelocitiesMap = {};
+  buildNoteVelocitiesMap = () => {
+    const _noteVelocitiesMap = {};
     this.#musicTracks.forEach((track) => {
       track
         .filter(({ name, velocity }) => name === "Note on" && velocity > 1)
         .forEach(({ noteNumber, velocity, tick }) => {
-          noteVelocitiesMap[tick] = noteVelocitiesMap[tick] || {};
+          _noteVelocitiesMap[tick] = _noteVelocitiesMap[tick] || {};
           // midi-player-js converts velocity values to integers between 0 and
           //  99. This is not ideal because it further reduces the granularity
           //  of the velocity levels (the 128 levels in standard MIDI is
@@ -70,12 +70,12 @@ export default class ExpressiveMidiExpressionizer {
           //  Note also that all velocity values are eventually rescaled to an
           //  arbitrary-precision float between 0 and 1 when being played by
           //  the ToneJS sample-based piano synthesizer.
-          noteVelocitiesMap[tick][noteNumber] = Math.round(
+          _noteVelocitiesMap[tick][noteNumber] = Math.round(
             (velocity / 100.0) * 127.0,
           );
         });
     });
-    return noteVelocitiesMap;
+    return _noteVelocitiesMap;
   };
 
   #buildPedalingMap = () => {
@@ -139,7 +139,7 @@ export default class ExpressiveMidiExpressionizer {
         this.stopNote(noteNumber);
       } else {
         const expressionizedVelocity =
-          this.noteVelocitiesMap[tick]?.[noteNumber] || velocity;
+          get(noteVelocitiesMap)[tick]?.[noteNumber] || velocity; // TODO
         this.startNote(noteNumber, expressionizedVelocity);
         activeNotes.add(noteNumber);
       }

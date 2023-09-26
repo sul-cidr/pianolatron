@@ -1,6 +1,15 @@
 import IntervalTree from "node-interval-tree";
+import { derived } from "svelte/store";
+
 import { rollProfile } from "../config/roll-config";
 import { enforcePrecision, mapToRange, normalizeInRange } from "./utils";
+import {
+  holeData,
+  rollMetadata,
+  scrollDownwards,
+  expressionBox,
+  expressionParameters,
+} from "../stores";
 
 // This is the "coolwarm" color map -- blue to red
 // RdYlBu (reversed) sort of works, but the yellows are too ambiguous
@@ -77,111 +86,98 @@ const getHoleLabel = (midiNumber, rollType) => {
   return `mid_${midiNumber}`;
 };
 
-const annotateHoleData = (
-  holeData,
-  rollType,
-  firstHolePx,
-  imageLengthPx,
-  scrollDownwards,
-  noteVelocitiesMap,
-) => {
-  const [minNoteVelocity, maxNoteVelocity] = Object.values(
-    noteVelocitiesMap,
-  ).reduce(
-    (acc, v) => [
-      Math.min(Object.values(v)) < acc[0] ? Math.min(Object.values(v)) : acc[0],
-      Math.max(Object.values(v)) > acc[1] ? Math.max(Object.values(v)) : acc[1],
-    ],
-    [Infinity, -Infinity],
-  );
+// roll
+export const noteVelocitiesMap = derived(
+  [expressionBox, expressionParameters],
+  ([$expressionBox, $expressionParameters]) =>
+    $expressionBox.buildNoteVelocitiesMap(),
+);
 
-  const getNoteHoleColor = ({ v: velocity }) => {
-    if (!velocity) return defaultHoleColor;
-    return holeColorMap[
-      Math.round(
-        mapToRange(
-          normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-          0,
-          holeColorMap.length - 1,
-        ),
-      )
-    ];
-  };
+export const holesIntervalTree = derived(
+  [holeData, rollMetadata, scrollDownwards, noteVelocitiesMap],
+  ([$holeData, $rollMetadata, $scrollDownwards, $noteVelocitiesMap]) => {
+    const {
+      ROLL_TYPE: rollType,
+      IMAGE_LENGTH: imageLength,
+      FIRST_HOLE: firstHole,
+    } = $rollMetadata;
 
-  return holeData.map((hole) => {
-    // hole.y is the coordinate of the beginning of the hole *in the direction
-    //  of scroll*, so to turn it into a an image coordinate with the usual
-    //  computer graphics coordinate system of (0,0) in the top left (.startY),
-    //  some arithmetic is required for rolls that scroll upwards.
-    hole.startY = scrollDownwards ? hole.y : imageLengthPx - hole.y - hole.h;
-    hole.endY = scrollDownwards ? hole.y + hole.h : imageLengthPx - hole.y;
+    const firstHolePx = parseInt(firstHole, 10);
+    const imageLengthPx = parseInt(imageLength, 10);
 
-    const tickOn = hole.y - firstHolePx;
-    hole.v = enforcePrecision(noteVelocitiesMap[tickOn]?.[hole.m], 2);
+    const [minNoteVelocity, maxNoteVelocity] = Object.values(
+      $noteVelocitiesMap,
+    ).reduce(
+      (acc, v) => [
+        Math.min(Object.values(v)) < acc[0]
+          ? Math.min(Object.values(v))
+          : acc[0],
+        Math.max(Object.values(v)) > acc[1]
+          ? Math.max(Object.values(v))
+          : acc[1],
+      ],
+      [Infinity, -Infinity],
+    );
 
-    hole.label = getHoleLabel(hole.m, rollType);
+    const _holesIntervalTree = new IntervalTree();
 
-    switch (getHoleType(hole, rollType)) {
-      case "pedal":
-        hole.color = pedalHoleColor;
-        hole.type = "pedal";
-        break;
+    const getNoteHoleColor = ({ v: velocity }) => {
+      if (!velocity) return defaultHoleColor;
+      return holeColorMap[
+        Math.round(
+          mapToRange(
+            normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+            0,
+            holeColorMap.length - 1,
+          ),
+        )
+      ];
+    };
+    const a = $holeData.map((hole) => {
+      // hole.y is the coordinate of the beginning of the hole *in the direction
+      //  of scroll*, so to turn it into a an image coordinate with the usual
+      //  computer graphics coordinate system of (0,0) in the top left (.startY),
+      //  some arithmetic is required for rolls that scroll upwards.
+      hole.startY = $scrollDownwards ? hole.y : imageLengthPx - hole.y - hole.h;
+      hole.endY = $scrollDownwards ? hole.y + hole.h : imageLengthPx - hole.y;
 
-      case "control":
-        hole.color = controlHoleColor;
-        hole.type = "control";
-        break;
+      const tickOn = hole.y - firstHolePx;
+      hole.v = enforcePrecision($noteVelocitiesMap[tickOn]?.[hole.m], 2);
 
-      case "note":
-        hole.color = getNoteHoleColor(hole);
-        hole.type = "note";
-        break;
+      hole.label = getHoleLabel(hole.m, rollType);
 
-      default:
-        hole.color = defaultHoleColor;
-    }
+      switch (getHoleType(hole, rollType)) {
+        case "pedal":
+          hole.color = pedalHoleColor;
+          hole.type = "pedal";
+          break;
 
-    return hole;
-  });
-};
+        case "control":
+          hole.color = controlHoleColor;
+          hole.type = "control";
+          break;
 
-const buildHolesIntervalTree = (holeData, firstHolePx) => {
-  const holesIntervalTree = new IntervalTree();
+        case "note":
+          hole.color = getNoteHoleColor(hole);
+          hole.type = "note";
+          break;
 
-  holeData.forEach((hole) => {
-    const { y: offsetY, h: height } = hole;
-    const tickOn = offsetY - firstHolePx;
-    const tickOff = offsetY + height - firstHolePx;
+        default:
+          hole.color = defaultHoleColor;
+      }
 
-    holesIntervalTree.insert(tickOn, tickOff, hole);
-  });
-  return holesIntervalTree;
-};
+      return hole;
+    });
 
-const processHoleData = (
-  holeData,
-  rollMetadata,
-  scrollDownwards,
-  noteVelocitiesMap,
-) => {
-  const {
-    ROLL_TYPE: rollType,
-    IMAGE_LENGTH: imageLength,
-    FIRST_HOLE: firstHole,
-  } = rollMetadata;
+    a.forEach((hole) => {
+      const { y: offsetY, h: height } = hole;
+      const tickOn = offsetY - firstHolePx;
+      const tickOff = offsetY + height - firstHolePx;
+      _holesIntervalTree.insert(tickOn, tickOff, hole);
+    });
 
-  const firstHolePx = parseInt(firstHole, 10);
-  const imageLengthPx = parseInt(imageLength, 10);
+    return _holesIntervalTree;
+  },
+);
 
-  const annotatedHoleData = annotateHoleData(
-    holeData,
-    rollType,
-    firstHolePx,
-    imageLengthPx,
-    scrollDownwards,
-    noteVelocitiesMap,
-  );
-  return buildHolesIntervalTree(annotatedHoleData, firstHolePx);
-};
-
-export { getNoteName, getHoleType, annotateHoleData, processHoleData };
+export { getNoteName, getHoleType };

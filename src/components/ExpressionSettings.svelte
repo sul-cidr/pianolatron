@@ -13,12 +13,14 @@
 
 <script>
   import {
-    expressionParameters,
     defaultExpressionParameters,
+    expressionBox,
+    expressionParameters,
     rollHasExpressions,
     rollMetadata,
     useInAppExpression,
   } from "../stores";
+  // import { holesIntervalTree } from "../lib/hole-data";
 
   export let reloadRoll;
 </script>
@@ -54,7 +56,7 @@
                   $expressionParameters.tunable[expressionParam] = parseFloat(
                     e.target.value,
                   );
-                  reloadRoll();
+                  $expressionBox.initializeExpressionizer();
                 }}
               />
             </div>

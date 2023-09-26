@@ -93,7 +93,6 @@
     bassExpCurve,
     currentTick,
     expressionParameters,
-    holesIntervalTree,
     playbackProgress,
     playExpressionsOnOff,
     rollMetadata,
@@ -103,6 +102,7 @@
     useInAppExpression,
     userSettings,
   } from "../stores";
+  import { holesIntervalTree } from "../lib/hole-data";
   import { clamp } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
@@ -336,7 +336,8 @@
   };
 
   const partitionHolesOverlaySvgs = () => {
-    if (!$holesIntervalTree.count) return;
+    if (!$holesIntervalTree?.count) return;
+    if (!viewport) return;
 
     entireViewportRectangle = viewport.imageToViewportRectangle(
       0,
@@ -698,6 +699,7 @@
     ? parseInt($rollMetadata.LAST_HOLE, 10)
     : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
       parseInt($rollMetadata.LAST_HOLE, 10);
+  $: $holesIntervalTree, partitionHolesOverlaySvgs();
 
   export {
     updateTickByViewportIncrement,

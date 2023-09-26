@@ -32,7 +32,7 @@ export const scrollDownwards = derived(
   ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
 );
 
-export const holesIntervalTree = writable();
+export const holeData = writable();
 
 // Pedaling
 export const softOnOff = createStore(false);

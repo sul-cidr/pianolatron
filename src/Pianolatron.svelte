@@ -57,7 +57,7 @@
     bassVolumeCoefficient,
     currentTick,
     expressionBox,
-    holesIntervalTree,
+    holeData,
     isReproducingRoll,
     playbackProgress,
     playExpressionsOnOff,
@@ -71,7 +71,8 @@
   } from "./stores";
   import expressionBoxes from "./expression-boxes";
   import { clamp } from "./lib/utils";
-  import { processHoleData } from "./lib/hole-data";
+  // import { processHoleData } from "./lib/hole-data";
+  import { holesIntervalTree } from "./lib/hole-data";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -163,8 +164,8 @@
     playbackProgress.reset();
     tempoCoefficient.reset();
     bassVolumeCoefficient.reset();
-    trebleVolumeCoefficient.reset();
-    $holesIntervalTree = new IntervalTree();
+    // trebleVolumeCoefficient.reset();
+    // $holesIntervalTree = new IntervalTree();
   };
 
   const loadRoll = (roll, doReset = true) => {
@@ -200,6 +201,7 @@
       })
       .catch((err) => {
         notify({ title: "MIDI Data Error!", message: err, type: "error" });
+        throw err;
         currentRoll = previousRoll;
       });
 
@@ -216,12 +218,7 @@
     return Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
         metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
-        $holesIntervalTree = processHoleData(
-          metadataJson.holeData,
-          $rollMetadata,
-          $scrollDownwards,
-          $expressionBox.noteVelocitiesMap,
-        );
+        $holeData = metadataJson.holeData;
         if (doReset) {
           $playExpressionsOnOff = $isReproducingRoll;
           $rollPedalingOnOff = $isReproducingRoll;
@@ -320,7 +317,7 @@
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
-        {#if !holesIntervalTree.count}
+        {#if !$holeData}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
             this time. Hole highlighting will not be enabled.
