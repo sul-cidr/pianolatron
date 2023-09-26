@@ -122,14 +122,14 @@ $highlight-hover-outline-offset: 4px;
   &.show-note-velocities {
     // ...label "flags" for note marks use the data-note-velocity value too
     mark.note:hover::after {
-      content: attr(data-hole-label) "\av:"attr(data-note-velocity);
+      content: attr(data-hole-label) "\av:" attr(data-note-velocity);
     }
 
     // ...and if "Show Details for Active Notes" is also on...
     &.active-note-details {
       // ..."tooltips" for note marks use the data-note-velocity value too
       mark.note.active::after {
-        content: attr(data-hole-label) "\av:"attr(data-note-velocity);
+        content: attr(data-hole-label) "\av:" attr(data-note-velocity);
       }
     }
 
