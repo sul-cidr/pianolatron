@@ -55,18 +55,24 @@
   import IntervalTree from "node-interval-tree";
   import {
     bassVolumeCoefficient,
-    trebleVolumeCoefficient,
-    tempoCoefficient,
-    playbackProgress,
     currentTick,
-    rollMetadata,
+    expressionBox,
+    holeData,
     isReproducingRoll,
-    scrollDownwards,
+    playbackProgress,
     playExpressionsOnOff,
+    rollMetadata,
     rollPedalingOnOff,
+    scrollDownwards,
+    tempoCoefficient,
+    trebleVolumeCoefficient,
+    useInAppExpression,
     userSettings,
   } from "./stores";
-  import { annotateHoleData, clamp } from "./lib/utils";
+  import expressionBoxes from "./expression-boxes";
+  import { clamp } from "./lib/utils";
+  // import { processHoleData } from "./lib/hole-data";
+  import { holesIntervalTree } from "./lib/hole-data";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -96,8 +102,6 @@
   let currentRoll;
   let previousRoll;
   let metadata;
-  let holeData;
-  let holesByTickInterval = new IntervalTree();
 
   let samplePlayer;
 
@@ -126,20 +130,6 @@
       duration,
       css: (t) => `height: ${quartInOut(t) * o}px`,
     };
-  };
-
-  const buildHolesIntervalTree = () => {
-    const { FIRST_HOLE } = $rollMetadata;
-
-    const firstHolePx = parseInt(FIRST_HOLE, 10);
-
-    holeData.forEach((hole) => {
-      const { y: offsetY, h: height } = hole;
-      const tickOn = offsetY - firstHolePx;
-      const tickOff = offsetY + height - firstHolePx;
-
-      holesByTickInterval.insert(tickOn, tickOff, hole);
-    });
   };
 
   const skipToTick = (tick) => {
@@ -174,24 +164,44 @@
     playbackProgress.reset();
     tempoCoefficient.reset();
     bassVolumeCoefficient.reset();
-    trebleVolumeCoefficient.reset();
-    holesByTickInterval = new IntervalTree();
+    // trebleVolumeCoefficient.reset();
+    // $holesIntervalTree = new IntervalTree();
   };
 
-  const loadRoll = (roll) => {
+  const loadRoll = (roll, doReset = true) => {
     appWaiting = true;
-    mididataReady = fetch(`./midi/${roll.druid}.mid`)
+    mididataReady = fetch(
+      `./${$useInAppExpression ? "note_midi" : "midi"}/${roll.druid}.mid`,
+    )
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
         throw new Error("Error fetching MIDI file! (Operation cancelled)");
       })
       .then((mididataArrayBuffer) => {
-        resetApp();
+        if (doReset) resetApp();
         midiSamplePlayer.loadArrayBuffer(mididataArrayBuffer);
       })
+      .then(() => {
+        // Configure and hook-up expression box
+        const expressionBoxType = $useInAppExpression
+          ? $rollMetadata.ROLL_TYPE
+          : "expressiveMidi";
+        $expressionBox = new expressionBoxes[expressionBoxType](
+          midiSamplePlayer,
+          startNote,
+          stopNote,
+        );
+        // This is a tiny bit hacky (in the sense that it's using an undocumented
+        //  api), but it's a simple way to ensure that only one midiEventHandler
+        //  is registered.
+        midiSamplePlayer.eventListeners.midiEvent = [
+          $expressionBox.midiEventHandler,
+        ];
+      })
       .catch((err) => {
-        notify({ title: "Error!", message: err, type: "error" });
+        notify({ title: "MIDI Data Error!", message: err, type: "error" });
+        throw err;
         currentRoll = previousRoll;
       });
 
@@ -201,18 +211,18 @@
         throw new Error("Error fetching metadata file! (Operation cancelled)");
       })
       .catch((err) => {
-        notify({ title: "Error!", message: err, type: "error" });
+        notify({ title: "Metadata Error!", message: err, type: "error" });
         currentRoll = previousRoll;
       });
 
-    Promise.all([mididataReady, metadataReady, pianoReady]).then(
+    return Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
         metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
-        holeData = metadataJson.holeData;
-        annotateHoleData(holeData, $rollMetadata, $scrollDownwards);
-        buildHolesIntervalTree();
-        $playExpressionsOnOff = $isReproducingRoll;
-        $rollPedalingOnOff = $isReproducingRoll;
+        $holeData = metadataJson.holeData;
+        if (doReset) {
+          $playExpressionsOnOff = $isReproducingRoll;
+          $rollPedalingOnOff = $isReproducingRoll;
+        }
         appReady = true;
         appWaiting = false;
         firstLoad = false;
@@ -227,6 +237,21 @@
         }
       },
     );
+  };
+
+  const reloadRoll = () => {
+    const savedTick = $currentTick;
+    let startPlayer = false;
+    if (midiSamplePlayer.isPlaying()) {
+      pausePlayback();
+      startPlayer = true;
+    }
+    loadRoll(currentRoll, false).then(() => {
+      rollViewer.partitionHolesOverlaySvgs();
+      rollViewer.updateVisibleSvgPartitions();
+      skipToTick(savedTick);
+      if (startPlayer) startPlayback();
+    });
   };
 
   const setCurrentRollFromUrl = () => {
@@ -292,7 +317,7 @@
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
-        {#if !holesByTickInterval.count}
+        {#if !$holeData}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
             this time. Hole highlighting will not be enabled.
@@ -306,8 +331,6 @@
           bind:this={rollViewer}
           bind:rollImageReady
           imageUrl={currentRoll.image_url}
-          {holeData}
-          {holesByTickInterval}
           {skipToTick}
         />
       {/if}
@@ -318,7 +341,7 @@
       {/if}
     </div>
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} {reloadRoll} />
     </FlexCollapsible>
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}

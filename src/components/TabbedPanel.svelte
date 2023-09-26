@@ -47,10 +47,12 @@
   import AdvancedSettings from "./AdvancedSettings.svelte";
   import AudioSettings from "./AudioSettings.svelte";
   import MidiSettings from "./MidiSettings.svelte";
+  import ExpressionSettings from "./ExpressionSettings.svelte";
 
   export let playPauseApp;
-  export let skipToPercentage;
   export let stopApp;
+  export let skipToPercentage;
+  export let reloadRoll;
 
   const panels = {
     controls: {
@@ -61,6 +63,11 @@
     settings: { component: AdvancedSettings, icon: "cog" },
     audio: { component: AudioSettings, icon: "piano" },
     midi: { component: MidiSettings, icon: "midi" },
+    expression: {
+      component: ExpressionSettings,
+      props: { reloadRoll },
+      icon: "exp_curves",
+    },
   };
 
   let selectedPanel = "controls";
