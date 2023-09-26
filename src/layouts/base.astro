@@ -9,7 +9,7 @@ const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head prefix="dcterms: http://purl.org/dc/terms/#">
     <meta charset="utf-8" />
@@ -26,11 +26,7 @@ const datetime = new Date().toISOString();
         JSON.parse(window.localStorage.getItem("userSettings")) || {};
       theme && document.documentElement.setAttribute("data-theme", theme);
     </script>
-    <link
-      rel="preload"
-      href={Astro.site.href + "cidr.trsp.300x176.png"}
-      as="image"
-    />
+    <link rel="preload" href="/cidr.trsp.300x176.png" as="image" />
   </head>
   <body>
     <slot />
