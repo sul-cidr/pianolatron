@@ -387,6 +387,12 @@
                 setActiveFacet(facet);
                 input.focus();
               }}
+              on:keypress={(event) => {
+                if (event.code === "Enter") {
+                  setActiveFacet(facet);
+                  input.focus();
+                }
+              }}
             >
               {facet}
             </li>
@@ -401,6 +407,11 @@
           <li
             class:selected={i === activeListItemIndex}
             on:click={() => selectListItem(listItem)}
+            on:keypress={(event) => {
+              if (event.code === "Enter") {
+                selectListItem(listItem);
+              }
+            }}
             on:pointerenter={() => (activeListItemIndex = i)}
           >
             {@html postMarkup(listItem.markedUp || listItem.label)}

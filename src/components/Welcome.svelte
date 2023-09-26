@@ -64,6 +64,9 @@
 <article
   transition:fly={{ y: -400 }}
   on:click={() => ($showWelcomeScreen = false)}
+  on:keypress={(event) => {
+    if (event.code === "Enter") $showWelcomeScreen = false;
+  }}
 >
   <header>Welcome to the Pianolatron</header>
   <p>
