@@ -1,6 +1,6 @@
 ---
 import Footer from "./footer.astro";
-import { execSync } from "node:child_process";
+import { execSync } from "child_process";
 
 import "../styles/styles.scss";
 
@@ -8,23 +8,28 @@ const { title } = Astro.props;
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
   <head prefix="dcterms: http://purl.org/dc/terms/#">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="version" content={commit}>
-    <meta name="dcterms.modified" content={datetime}>
-    <meta name="description" content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection.">
+    <meta name="version" content={commit} />
+    <meta name="dcterms.modified" content={datetime} />
+    <meta
+      name="description"
+      content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection."
+    />
     <title>{title}</title>
     <script>
-      const { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
+      const { theme } =
+        JSON.parse(window.localStorage.getItem("userSettings")) || {};
       theme && document.documentElement.setAttribute("data-theme", theme);
     </script>
-    <link rel="preload" href={Astro.site.href + "cidr.trsp.300x176.png"} as="image">
+    <link rel="preload" href="/cidr.trsp.300x176.png" as="image" />
   </head>
   <body>
-    <slot/>
-    <Footer/>
+    <slot />
+    <Footer />
   </body>
 </html>

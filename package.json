@@ -5,6 +5,7 @@
   "repository": "git@github.com:sul-cidr/pianolatron.git",
   "author": "CIDR <contact-cidr@stanford.edu>",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -13,26 +14,29 @@
     "lint": "astro check && prettier --check . && eslint src/ --ext svelte --ext js"
   },
   "devDependencies": {
-    "@astrojs/svelte": "^1.0.0",
-    "astro": "^1.0.6",
-    "autoprefixer": "^10.4.8",
-    "eslint": "^8.22.0",
+    "@astrojs/svelte": "^4.0.2",
+    "astro": "^3.1.4",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.50.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-svelte3": "^4.0.0",
-    "prettier": "~2.7.1",
-    "prettier-plugin-svelte": "^2.7.0",
-    "sass": "^1.54.4"
+    "prettier": "^3.0.3",
+    "prettier-plugin-svelte": "^3.0.3",
+    "sass": "^1.68.0"
   },
   "dependencies": {
-    "@popperjs/core": "^2.11.6",
+    "@astrojs/check": "^0.2.0",
+    "@popperjs/core": "^2.11.8",
+    "@types/watch": "^1.0.4",
     "CanvasSpliner": "jonathanlurie/CanvasSpliner",
     "midi-player-js": "^2.0.16",
-    "node-interval-tree": "^2.0.1",
+    "node-interval-tree": "^2.1.2",
     "openseadragon": "^4.1.0",
-    "svelte": "^3.49.0",
+    "svelte": "^3.59.2",
+    "svelte-preprocess": "^5.0.4",
     "tone": "^14.7.77",
-    "webmidi": "^2.5.3"
+    "typescript": "^5.2.2"
   }
 }
