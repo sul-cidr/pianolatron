@@ -112,7 +112,6 @@
   export let holeData;
   export let holesByTickInterval;
   export let skipToTick;
-  export let rollImageReady;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -127,6 +126,7 @@
   let showControls;
   let imageLength;
   let imageWidth;
+  let rollImageReady;
   let avgHoleWidth;
   let trackerbarHeight;
   let animationEaseInterval;

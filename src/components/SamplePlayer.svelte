@@ -381,7 +381,6 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
-    getExpressionParams,
   };
 </script>
 

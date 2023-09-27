@@ -91,9 +91,7 @@
 
   let firstLoad = true;
   let appReady = false;
-  let appWaiting = false;
-  let appLoaded = false;
-  let rollImageReady = false;
+  let appWaiting = true;
   let mididataReady;
   let metadataReady;
   let currentRoll;
@@ -248,8 +246,6 @@
         appReady = true;
         appWaiting = false;
         firstLoad = false;
-        document.querySelector("#loading span").textContent =
-          "Loading roll image...";
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -299,8 +295,7 @@
   };
 
   onMount(async () => {
-    document.querySelector("#loading span").textContent =
-      "Loading resources...";
+    document.getElementById("loading").remove();
     ({
       midiSamplePlayer,
       pianoReady,
@@ -317,7 +312,7 @@
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
   $: playbackProgress.update(() =>
-    clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1),
+    clamp($currentTick / midiSamplePlayer?.totalTicks, 0, 1),
   );
   $: if (rollViewer)
     ({ adjustZoom, updateTickByViewportIncrement, panHorizontal } = rollViewer);
@@ -341,7 +336,6 @@
       {#if appReady}
         <RollViewer
           bind:this={rollViewer}
-          bind:rollImageReady
           imageUrl={currentRoll.image_url}
           {holeData}
           {holesByTickInterval}
@@ -365,7 +359,7 @@
   {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
-  <LoadingSpinner showLoadingSpinner={appLoaded && appWaiting} />
+  <LoadingSpinner showLoadingSpinner={appWaiting} />
 </div>
 <SamplePlayer
   bind:this={samplePlayer}
