@@ -2,7 +2,11 @@
   "printWidth": 80,
   "semi": true,
   "singleQuote": false,
+  "svelteAllowShorthand": true,
+  "svelteSortOrder": "options-styles-scripts-markup",
+  "svelteStrictMode": false,
   "tabWidth": 2,
   "trailingComma": "all",
-  "useTabs": false
+  "useTabs": false,
+  "plugins": ["prettier-plugin-svelte"]
 }
