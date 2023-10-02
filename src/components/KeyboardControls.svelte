@@ -21,10 +21,6 @@
       border-radius: 0 4px 4px 0;
     }
   }
-
-  button {
-    border-radius: 4px 4px 0 0;
-  }
 </style>
 
 <script>

@@ -42,13 +42,8 @@
       stroke: grey;
     }
 
-    &:not([disabled]):hover :global(svg) {
+    &:hover :global(svg) {
       stroke: black;
-    }
-
-    &[disabled] {
-      cursor: default;
-      opacity: 0.5;
     }
   }
 </style>
