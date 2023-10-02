@@ -11,4 +11,8 @@ module.exports = {
     es2017: true,
     node: true,
   },
+  rules: {
+    "svelte/no-at-html-tags": "off",
+    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+  },
 };
