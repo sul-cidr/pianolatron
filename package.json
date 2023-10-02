@@ -34,7 +34,7 @@
     "midi-player-js": "^2.0.16",
     "node-interval-tree": "^2.1.2",
     "openseadragon": "^4.1.0",
-    "svelte": "^3.59.2",
+    "svelte": "^4.2.1",
     "svelte-preprocess": "^5.0.4",
     "tone": "^14.7.77",
     "typescript": "^5.2.2"
