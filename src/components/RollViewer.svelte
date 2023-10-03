@@ -102,6 +102,7 @@
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
 
+  export let showScaleBar = true;
   export let imageUrl;
   export let holeData;
   export let holesByTickInterval;
@@ -609,7 +610,7 @@
 >
   {#if !rollImageReady}
     <span class="roll-loading" transition:fade>Downloading roll image...</span>
-  {:else}
+  {:else if showScaleBar}
     <RollViewerScaleBar {ppi} />
   {/if}
   {#if showControls}

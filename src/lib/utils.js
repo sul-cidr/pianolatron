@@ -1,5 +1,10 @@
 import { rollProfile } from "../config/roll-config";
 
+export const getPathJoiner = (base) => {
+  const no_slash_base = base.replace(/[\/]+$/, "");
+  return (...parts) => [no_slash_base, ...parts].join("/");
+};
+
 export const enforcePrecision = (value, precision) => {
   const multiplier = 10 ** (precision || 0);
   return Math.round(value * multiplier) / multiplier;

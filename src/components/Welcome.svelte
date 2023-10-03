@@ -55,6 +55,7 @@
   import { writable, get } from "svelte/store";
   import { fly } from "svelte/transition";
   import { userSettings } from "../stores";
+  import { getPathJoiner } from "../lib/utils";
 
   export const showWelcomeScreen = writable(
     !get(userSettings).welcomeScreenInhibited,
@@ -78,7 +79,7 @@
       title="Center for Interdisciplinary Digital Research @ Stanford Libraries"
     >
       <img
-        src="cidr.trsp.300x176.png"
+        src="{getPathJoiner(import.meta.env.BASE_URL)("cidr.trsp.300x176.png")}"
         alt="CIDR logo"
         on:load={({ target }) => (target.style.opacity = 1)}
       />

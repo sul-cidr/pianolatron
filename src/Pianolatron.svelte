@@ -66,7 +66,7 @@
     rollPedalingOnOff,
     userSettings,
   } from "./stores";
-  import { annotateHoleData, clamp } from "./lib/utils";
+  import { annotateHoleData, clamp, getPathJoiner } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -85,6 +85,12 @@
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
 
   import catalog from "./config/catalog.json";
+
+  export let profile = "performer";
+
+  const joinPath = getPathJoiner(import.meta.env.BASE_URL);
+  const allowedProfiles = new Set([ "performer", "listener"]);
+  const isPerformer = profile == "performer" || !allowedProfiles.has(profile);
 
   let firstLoad = true;
   let appReady = false;
@@ -180,7 +186,7 @@
 
   const loadRoll = (roll) => {
     appWaiting = true;
-    mididataReady = fetch(`./midi/${roll.druid}.mid`)
+    mididataReady = fetch(joinPath("midi",`${roll.druid}.mid`))
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
@@ -195,7 +201,7 @@
         currentRoll = previousRoll;
       });
 
-    metadataReady = fetch(`./json/${roll.druid}.json`)
+    metadataReady = fetch(joinPath("json", `${roll.druid}.json`))
       .then((metadataResponse) => {
         if (metadataResponse.status === 200) return metadataResponse.json();
         throw new Error("Error fetching metadata file! (Operation cancelled)");
@@ -289,7 +295,7 @@
 <div id="app">
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw">
-      <RollSelector bind:currentRoll {rollListItems} />
+      {#if isPerformer}<RollSelector bind:currentRoll {rollListItems} />{/if}
       {#if appReady}
         <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
@@ -309,6 +315,7 @@
           {holeData}
           {holesByTickInterval}
           {skipToTick}
+          showScaleBar={isPerformer}
         />
       {/if}
       {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
@@ -317,9 +324,11 @@
         </div>
       {/if}
     </div>
-    <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
-    </FlexCollapsible>
+    {#if isPerformer }
+      <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+        <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+      </FlexCollapsible>
+    {/if}
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>
@@ -345,7 +354,7 @@
 />
 <KeyboardShortcutEditor />
 <Notification />
-{#if $showWelcomeScreen}<Welcome />{/if}
+{#if isPerformer && $showWelcomeScreen}<Welcome />{/if}
 
 <svelte:window
   on:popstate={({ state }) =>
