@@ -334,6 +334,8 @@
 
 <div class="filtered-select">
   <span
+    role="textbox"
+    tabindex="0"
     class="input"
     spellcheck="false"
     contenteditable="true"
@@ -381,20 +383,24 @@
       {#if facets}
         <ul>
           {#each facets as facet}
-            <li
-              class:active={facet === activeFacet}
-              on:click={() => {
-                setActiveFacet(facet);
-                input.focus();
-              }}
-              on:keypress={(event) => {
-                if (event.code === "Enter") {
+            <li class:active={facet === activeFacet}>
+              <span
+                role="checkbox"
+                tabindex="0"
+                aria-checked={facet === activeFacet}
+                on:click={() => {
                   setActiveFacet(facet);
                   input.focus();
-                }
-              }}
-            >
-              {facet}
+                }}
+                on:keypress={(event) => {
+                  if (event.code === "Enter") {
+                    setActiveFacet(facet);
+                    input.focus();
+                  }
+                }}
+              >
+                {facet}
+              </span>
             </li>
           {/each}
         </ul>
@@ -405,6 +411,8 @@
       {#if filteredListItems?.length}
         {#each filteredListItems as listItem, i}
           <li
+            role="option"
+            aria-selected={i === activeListItemIndex}
             class:selected={i === activeListItemIndex}
             on:click={() => selectListItem(listItem)}
             on:keypress={(event) => {
