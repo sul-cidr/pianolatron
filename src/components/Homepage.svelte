@@ -13,10 +13,11 @@
     display: flex;
     flex-direction: row;
     font-family: Garamond, serif;
-    justify-content: end;
+    justify-content: flex-end;
     .logo {
       display: flex;
       flex-direction: column;
+      padding-right: 5%;
       h1 {
         font-size: 4rem;
         line-height: 4rem;
@@ -29,18 +30,53 @@
       }
     }
   }
-  .want-container {
+  .page-container {
     display: flex;
     flex-direction: row;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif, sans-serif;
+    gap: 0.5rem;
+    height: 60%;
+    justify-content: center;
     .want {
       display: flex;
       flex-direction: column;
       flex-grow: 2;
+      max-width: 28%;
+      h2 {
+        font-size: 4.25rem;
+        font-style: italic;
+        margin: 0;
+        text-align: right;
+      }
+      p {
+        font-size: 20px;
+        line-height: 24px;
+        margin: 1rem auto;
+        text-align: right;
+        width: 65%;
+      }
     }
-    .navigation {
+    .navigation-container {
+      align-items: center;
       display: flex;
       flex-direction: row;
-      flex-grow: 3;
+      .navigation {
+        align-items: center;
+        column-gap: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr; 
+        row-gap: 2rem;
+        a{
+          color: #ffffff;
+          font-size: 70px;
+          text-decoration: none;
+          span {
+            display: block;
+            font-size: 16px;
+          }
+        }
+      }
     }
   }
 
@@ -53,17 +89,19 @@
       <h4>Stanford University Piano Roll Project</h4>
     </div>
   </div>
-  <div class="want-container">
+  <div class="page-container">
     <div class="want">
       <h2>I want to...</h2>
       <p>Pianolatron simulates a player piano. It plays piano rolls collected in the Stanford University piano roll archive, and you can control it in realtime with a game controller to give your own expressive performance.</p>
     </div>
 
-    <div class="navigation">
-      <h2>listen</h2>
-      <h2>perform</h2>
-      <h2>analyze</h2>
-      <h2>explore</h2>
+    <div class="navigation-container">
+      <div class="navigation">
+        <a href="#">listen<span>piano rolls</span></a>
+        <a href="#">perform<span>my own interpretation</span></a>
+        <a href="#">analyze<span>performances</span></a>
+        <a href="#">explore<span>the archive</span></a>
+      </div>
     </div>
   </div>  
 </div>
