@@ -166,6 +166,8 @@
         {#if notification.closable !== false}
           <div
             class="close"
+            role="button"
+            tabindex="0"
             on:click={() => clearNotification(notification.id)}
             on:keypress={(event) => {
               if (event.code === "Enter") clearNotification(notification.id);

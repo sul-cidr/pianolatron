@@ -1,5 +1,5 @@
 <style lang="scss">
-  article {
+  div {
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24);
@@ -61,7 +61,9 @@
   );
 </script>
 
-<article
+<div
+  role="button"
+  tabindex="0"
   transition:fly={{ y: -400 }}
   on:click={() => ($showWelcomeScreen = false)}
   on:keypress={(event) => {
@@ -90,7 +92,7 @@
       $showWelcomeScreen = false;
     }}>Dismiss, and don't show again</button
   >
-</article>
+</div>
 
 <svelte:window
   on:keydown={(event) => {
