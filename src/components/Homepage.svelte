@@ -67,7 +67,7 @@
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr; 
         row-gap: 2rem;
-        a{
+        a {
           color: #ffffff;
           font-size: 70px;
           text-decoration: none;
