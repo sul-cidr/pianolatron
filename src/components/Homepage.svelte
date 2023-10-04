@@ -96,10 +96,10 @@
 
     <div class="navigation-container">
       <div class="navigation">
-        <a href="#">listen<span>piano rolls</span></a>
-        <a href="#">perform<span>my own interpretation</span></a>
-        <a href="#">analyze<span>performances</span></a>
-        <a href="#">explore<span>the archive</span></a>
+        <a href="/">listen<span>piano rolls</span></a>
+        <a href="/">perform<span>my own interpretation</span></a>
+        <a href="/">analyze<span>performances</span></a>
+        <a href="/">explore<span>the archive</span></a>
       </div>
     </div>
   </div>  
