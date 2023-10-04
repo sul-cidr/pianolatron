@@ -1,9 +1,7 @@
 ---
-import Homepage from "../layouts/homepage.astro";
+import HomepageLayout from "../layouts/homepage.astro";
 import HomepageComponent from "../components/Homepage.svelte";
-import LoadingSpinner from "../ui-components/LoadingSpinner.svelte";
-
 ---
-<Homepage title="Pianolatron">
+<HomepageLayout title="Pianolatron">
   <HomepageComponent />
-</Homepage>
+</HomepageLayout>
