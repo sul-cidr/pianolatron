@@ -79,7 +79,6 @@
       }
     }
   }
-
 </style>
   
 <div class="background">
