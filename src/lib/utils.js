@@ -1,8 +1,12 @@
 import { rollProfile } from "../config/roll-config";
 
+const profiles = new Set(["performer", "listener"]);
+export const getProfile = (profile) =>
+  profiles.has(profile) ? profile : "performer";
+
 export const getPathJoiner = (base) => {
-  const no_slash_base = base.replace(/[\/]+$/, "");
-  return (...parts) => [no_slash_base, ...parts].join("/");
+  const noSlashBase = base.replace(/[/]+$/, "");
+  return (...parts) => [noSlashBase, ...parts].join("/");
 };
 
 export const enforcePrecision = (value, precision) => {

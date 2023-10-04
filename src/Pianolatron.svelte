@@ -66,7 +66,7 @@
     rollPedalingOnOff,
     userSettings,
   } from "./stores";
-  import { annotateHoleData, clamp, getPathJoiner } from "./lib/utils";
+  import { annotateHoleData, clamp, getPathJoiner, getProfile } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -76,6 +76,7 @@
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
+  import ListenerPanel from "./components/ListenerPanel.svelte";
   import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
   import Notification, {
     notify,
@@ -89,8 +90,7 @@
   export let profile = "performer";
 
   const joinPath = getPathJoiner(import.meta.env.BASE_URL);
-  const allowedProfiles = new Set([ "performer", "listener"]);
-  const isPerformer = profile == "performer" || !allowedProfiles.has(profile);
+  const isPerformer = getProfile(profile) === "performer";
 
   let firstLoad = true;
   let appReady = false;
@@ -324,11 +324,13 @@
         </div>
       {/if}
     </div>
-    {#if isPerformer }
-      <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+    <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+      {#if isPerformer }
         <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
-      </FlexCollapsible>
-    {/if}
+      {:else }
+        <ListenerPanel {playPauseApp} {stopApp} />
+      {/if}
+    </FlexCollapsible>
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>
