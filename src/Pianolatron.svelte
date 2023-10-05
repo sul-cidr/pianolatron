@@ -254,6 +254,9 @@
     } else {
       currentRoll =
         rollListItems[Math.floor(Math.random() * rollListItems.length)];
+      const url = new URL(window.location);
+      url.searchParams.set("druid", currentRoll.druid);
+      window.history.pushState({}, "", url);
     }
   };
 
