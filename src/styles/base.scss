@@ -11,6 +11,11 @@
   color: white;
 }
 
+:focus {
+  outline: 2px solid var(--primary-accent);
+  outline-offset: -4px;
+}
+
 body,
 h1,
 h2,

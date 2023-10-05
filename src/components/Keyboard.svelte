@@ -119,9 +119,13 @@
       }
     }
   }
-  div.pedal {
-    // SVG pedals are wrapped in <div/> tags because SVG animation performance sucks
+  
+  button.pedal {
+    // SVG pedals were previously wrapped in <div/> tags because SVG animation performance sucks
     //  so badly on Chromium-based browsers on Mac OS that the whole app suffers.
+    // A11y concerns mean button elements are probably mandated anyway, and serve the same function.
+    background: none;
+    border: none;
     filter: drop-shadow(0px 8px 3px black) saturate(0.4);
     margin: 0 4%;
     transform: rotate3d(1, 0, 0, 30deg);
@@ -199,6 +203,7 @@
 <div id="keyboard">
   <div
     id="keys"
+    role="presentation"
     on:mousedown|preventDefault={({ target }) => {
       const note = parseInt(target.dataset.key, 10);
       mouseDown = true;
@@ -227,6 +232,8 @@
         {#each key as { title, note }}
           <span
             {title}
+            role="button"
+            tabindex="0"
             data-key={note}
             class:depressed={$activeNotes.has(note) || playing.has(note)}
           />
@@ -269,7 +276,7 @@
   </symbol>
 </svg>
 
-<div
+<button
   class="pedal"
   on:mousedown={() => ($softOnOff = true)}
   on:mouseup={() => ($softOnOff = false)}
@@ -280,9 +287,9 @@
   <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
     <use href="#pedal" />
   </svg>
-</div>
+</button>
 
-<div
+<button
   class="pedal"
   on:mousedown={() => ($sustainOnOff = true)}
   on:mouseup={() => ($sustainOnOff = false)}
@@ -293,4 +300,4 @@
   <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
     <use href="#pedal" />
   </svg>
-</div>
+</button>

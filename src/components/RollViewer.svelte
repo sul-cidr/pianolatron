@@ -584,6 +584,7 @@
 
 <div
   id="roll-viewer"
+  role="presentation"
   on:mouseenter={() => (showControls = true)}
   on:mouseleave={() => (showControls = false)}
   on:wheel|capture|preventDefault={(event) => {
