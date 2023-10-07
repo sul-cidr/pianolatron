@@ -91,7 +91,7 @@
   <div class="page-container">
     <div class="want">
       <h2>I want to...</h2>
-      <p>Pianolatron simulates a player piano. It plays piano rolls collected in the Stanford University piano roll archive, and you can control it in realtime with a game controller to give your own expressive performance.</p>
+      <p>Pianolatron simulates a player piano. It plays piano rolls collected in the Stanford University piano roll archive, and you can control it in real time with a game controller or computer keyboard to give your own expressive performance.</p>
     </div>
 
     <div class="navigation-container">
