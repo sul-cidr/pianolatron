@@ -85,7 +85,7 @@
   <div class="logo-container">
     <div class="logo">
       <h1>Pianolatron</h1>
-      <h4>Stanford University Piano Roll Project</h4>
+      <h4>Piano Rolls in the Stanford University Archive</h4>
     </div>
   </div>
   <div class="page-container">
