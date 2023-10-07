@@ -96,10 +96,10 @@
 
     <div class="navigation-container">
       <div class="navigation">
-        <a href="/">listen<span>piano rolls</span></a>
-        <a href="/">perform<span>my own interpretation</span></a>
-        <a href="/">analyze<span>performances</span></a>
-        <a href="/">explore<span>the archive</span></a>
+        <a href="/?druid=qm069fy5200">listen<span>to piano rolls</span></a>
+        <a href="/perform/?druid=qm069fy5200">perform<span>my own interpretation</span></a>
+        <a href="https://exhibits.stanford.edu/supra">learn<span>about piano rolls</span></a>
+        <a href="/search/">explore<span>the archive</span></a>
       </div>
     </div>
   </div>  
