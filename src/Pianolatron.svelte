@@ -87,10 +87,10 @@
 
   import catalog from "./config/catalog.json";
 
-  export let profile = "performer";
+  export let profile = "perform";
 
   const joinPath = getPathJoiner(import.meta.env.BASE_URL);
-  const isPerformer = getProfile(profile) === "performer";
+  const isPerform = getProfile(profile) === "perform";
 
   let firstLoad = true;
   let appReady = false;
@@ -298,7 +298,7 @@
 <div id="app">
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw">
-      {#if isPerformer}<RollSelector bind:currentRoll {rollListItems} />{/if}
+      {#if isPerform}<RollSelector bind:currentRoll {rollListItems} />{/if}
       {#if appReady}
         <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
@@ -318,7 +318,7 @@
           {holeData}
           {holesByTickInterval}
           {skipToTick}
-          showScaleBar={isPerformer}
+          showScaleBar={isPerform}
         />
       {/if}
       {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
@@ -328,7 +328,7 @@
       {/if}
     </div>
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-      {#if isPerformer }
+      {#if isPerform }
         <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
       {:else }
         <ListenerPanel {playPauseApp} {stopApp} />
@@ -359,7 +359,7 @@
 />
 <KeyboardShortcutEditor />
 <Notification />
-{#if isPerformer && $showWelcomeScreen}<Welcome />{/if}
+{#if isPerform && $showWelcomeScreen}<Welcome />{/if}
 
 <svelte:window
   on:popstate={({ state }) =>

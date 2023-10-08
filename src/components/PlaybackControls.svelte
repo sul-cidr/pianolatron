@@ -25,7 +25,7 @@
   export let playPauseApp;
   export let stopApp;
   // Fewer controls for listener than performer
-  export let isPerformer = true;
+  export let isPerform = true;
 </script>
 
 <div id="playback-controls">
@@ -40,7 +40,7 @@
     <kbd class:depressed={$keyMap.REWIND.active}>{$keyMap.REWIND.key}</kbd
     ></button
   >
-  {#if isPerformer}
+  {#if isPerform}
     <button
       type="button"
       class:pedal-on={$softOnOff}

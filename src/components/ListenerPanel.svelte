@@ -53,7 +53,7 @@
 
   export let playPauseApp;
   export let stopApp;
-  const isPerformer = false;
+  const isPerform = false;
 
 </script>
 
@@ -77,4 +77,4 @@
     </SliderControl>
   </div>
 </div>
-<PlaybackControls {playPauseApp} {stopApp} {isPerformer} />
+<PlaybackControls {playPauseApp} {stopApp} {isPerform} />
