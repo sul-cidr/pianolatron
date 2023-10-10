@@ -16,13 +16,15 @@
 </style>
 
 <script>
+  import Search from "./Search.svelte";
   import FilteredSelect from "../ui-components/FilteredSelect.svelte";
 
   export let rollListItems;
   export let currentRoll = undefined;
 </script>
 
-<FilteredSelect
+<Search
+  uiComponent={FilteredSelect}
   items={rollListItems}
   bind:selectedItem={currentRoll}
   labelFieldName="_label"

@@ -121,102 +121,29 @@
 
   export let items = [];
   export let selectedItem = undefined;
+  export let itemFilter = () => {};
 
   export let labelFieldName;
-  export let searchFieldName = labelFieldName;
   export let facetFieldName;
 
   export let placeHolder = "Select an item...";
 
   export let postMarkup = (str) => str;
 
-  let listItems = [];
-  let filteredListItems;
-  let facets;
+  export let activeFacet;
+  export let setActiveFacet = (_) => {};
+  
+  export let listItems = [];
+  export let facets;
+  export let filteredListItems;
+
+  export let input;
 
   let open = false;
   let activeListItemIndex = -1;
-  let activeFacet;
 
-  let input;
   let dropdown;
   let list;
-
-  const unDecomposableMap = {
-    ł: "l",
-    ß: "ss",
-    æ: "ae",
-    ø: "o",
-  };
-
-  const unDecomposableRegex = new RegExp(
-    Object.keys(unDecomposableMap).join("|"),
-    "g",
-  );
-
-  const longSubstitutionsRegex = new RegExp(
-    Object.keys(unDecomposableMap)
-      .filter((k) => unDecomposableMap[k].length > 1)
-      .join("|"),
-    "gi",
-  );
-
-  const normalizeText = (str) =>
-    str
-      .toLowerCase()
-      .replace(/\s+/g, " ")
-      .replace(unDecomposableRegex, (m) => unDecomposableMap[m])
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .trim();
-
-  const startIdxAdjustment = (str, idx) =>
-    (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || [])
-      .length;
-
-  const endIdxAdjustment = (str, idx) =>
-    (
-      str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || []
-    ).reduce((adj, m) => adj + (unDecomposableMap[m].length - m.length), 0);
-
-  const markupMatches = (label, searchContent, searchParts) => {
-    const matchExtents = [];
-    const mergedExtents = [];
-    let markedUp = label;
-
-    searchParts.forEach((searchPart) => {
-      let idx = -1;
-      while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1) {
-        const _idx = idx - startIdxAdjustment(label, idx - 1);
-        const _idxEnd =
-          idx +
-          searchPart.length -
-          endIdxAdjustment(label, _idx + searchPart.length - 1);
-        matchExtents.push([_idx, _idxEnd]);
-      }
-    });
-
-    matchExtents
-      .sort((a, b) => a[0] - b[0])
-      .forEach(([start, end]) => {
-        const previousExtent = mergedExtents[mergedExtents.length - 1];
-        if (previousExtent && previousExtent[1] >= start) {
-          previousExtent[1] = Math.max(previousExtent[1], end);
-        } else {
-          mergedExtents.push([start, end]);
-        }
-      });
-
-    mergedExtents
-      .sort((a, b) => b[0] - a[0])
-      .forEach(([start, end]) => {
-        markedUp = `${markedUp.substring(0, start)}<mark>${markedUp.substring(
-          start,
-          end,
-        )}</mark>${markedUp.substring(end)}`;
-      });
-    return markedUp;
-  };
 
   const activateListItem = async (index) => {
     activeListItemIndex = clamp(index, 0, filteredListItems.length - 1);
@@ -237,54 +164,11 @@
 
   const search = async () => {
     open = true;
-    filteredListItems = listItems;
     activeListItemIndex = 0;
-
-    filteredListItems = listItems;
-
-    if (activeFacet)
-      filteredListItems = listItems.filter(
-        (listItem) => listItem.item[facetFieldName] === activeFacet,
-      );
-
-    if (!input.innerHTML) return;
-
-    const filteredText = normalizeText(
-      input.innerHTML.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
-    );
-
-    if (filteredText) {
-      const searchParts = filteredText.split(" ").slice(0, 8);
-
-      filteredListItems = filteredListItems
-        .filter((listItem) =>
-          searchParts.every((searchPart) =>
-            listItem.searchContent.includes(searchPart),
-          ),
-        )
-        .map((item) => ({
-          ...item,
-          markedUp: markupMatches(item.label, item.searchContent, searchParts),
-        }));
-    }
+    await itemFilter();
   };
 
-  const setActiveFacet = async (facet) => {
-    activeFacet = facet === activeFacet ? undefined : facet;
-    search();
-  };
 
-  const prepareListItems = () => {
-    listItems = items.map((item) => ({
-      searchContent: normalizeText(
-        searchFieldName ? item[searchFieldName] : item,
-      ),
-      label: labelFieldName ? item[labelFieldName] : item,
-      item,
-    }));
-    if (facetFieldName)
-      facets = [...new Set(items.map((item) => item[facetFieldName]))];
-  };
 
   const onSelectedItemChanged = () => {
     if (input) {
@@ -328,8 +212,10 @@
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: items, prepareListItems();
+  $: activeFacet, search(); 
   $: selectedItem, onSelectedItemChanged();
+  $: filteredListItems;
+
 </script>
 
 <div class="filtered-select">
