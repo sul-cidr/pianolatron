@@ -95,8 +95,8 @@
     width: 100vw;
     
     .su-global-footer {
-      background-color: #8c1515;
-      color: #ffffff;
+      background-color: var(--cardinal-red);
+      color: var(--white);
       padding: 2.6rem 0;
       width: 100%;
 
@@ -113,7 +113,6 @@
           
           .su-logo {
             display: inline-block;
-            /* font-family: Stanford,"Source Serif 4","Source Serif Pro",Georgia,Times,Times New Roman,serif; */
             font-family: Stanford, SourceSerif4, Georgia, 'Times New Roman', Times, serif;
             font-style: normal;
             font-weight: 400;
@@ -128,7 +127,7 @@
             font-variant-ligatures: discretionary-ligatures;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            color: #fff;
+            color: var(--white);
             font-size: 3.4rem;
           }
         }
@@ -143,7 +142,7 @@
 
 
           .su-global-footer__menu {
-            font-size: 1rem;
+            font-size: 1.25rem;
             list-style-type: none;
             margin: 0 0 1rem;
             padding: 0;
@@ -158,17 +157,21 @@
             text-align: left;
           }
           .su-global-footer__menu li a {
-            color: #ffffff;
+            color: var(--white);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 500;
           }
 
           .su-global-footer__menu--policy {
-            font-size: 0.9rem;
+            font-size: 1rem;
           }
           .su-global-footer__menu--policy li a {
-            font-weight: 400;
+            font-weight: 300;
           }
+        }
+        .su-global-footer__copyright {
+          color: var(--black);
+          font-size: 0.9rem;
         }
       }
     }
