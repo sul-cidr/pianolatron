@@ -4,6 +4,7 @@
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
+  import { getPathJoiner } from "../lib/utils";
   import {
     rollMetadata,
     softOnOff,
@@ -48,9 +49,10 @@
   const dispatch = createEventDispatcher();
 
   const midiSamplePlayer = new MidiPlayer.Player();
+  const joinPath = getPathJoiner(import.meta.env.BASE_URL);
 
   const piano = new Piano({
-    url: "samples/",
+    url: joinPath("samples/"),
     velocities: $sampleVelocities,
     release: true,
     pedal: true,
