@@ -103,11 +103,7 @@ const itemFilter = async () => {
       filteredListItems = listItems;
     }
 
-
-    console.log(input);
     if (!input || !input.innerHTML) return;
-
-    
     const filteredText = normalizeText(
       input.innerHTML.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );

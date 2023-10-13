@@ -1,4 +1,6 @@
 <style lang="scss">
+  @import "https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css";
+
   .search-box {
     height: 2.25em;
     position: relative;
@@ -14,9 +16,10 @@
     line-height: calc(2.25em - 10px);
     overflow: hidden;
     padding: 5px 2.5em 5px 11px;
+    margin: 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100%;
+    width: 30%;
   }
 
   div.facets {
@@ -72,6 +75,10 @@
 </style>
 
 <script>
+  import Grid from "gridjs-svelte"
+  import { SvelteWrapper } from "gridjs-svelte/plugins";
+  import { html } from "gridjs";
+
 
   export const items = [];
   export const selectedItem = undefined;
@@ -83,14 +90,14 @@
 
   export let placeHolder = "Select an item...";
 
-  export let postMarkup = (str) => str;
+  export const postMarkup = (str) => str;
 
   export let activeFacet;
   export let setActiveFacet = (_) => {};
   
   export let listItems = [];
-  export let facets;
-  export let filteredListItems;
+  export let facets = [];
+  export let filteredListItems = [];
 
   export let input;
   let list;
@@ -110,9 +117,41 @@
     input.focus();
   };
 
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: activeFacet, search(); 
-  $: filteredListItems;
+  $: filteredListItems
+
+  const getLinksForCell = (druid) => {
+    return html(`
+      <a href="/?druid=${druid}">Listen</a><br/>
+      <a href="/perform/?druid=${druid}">Perform</a>
+    `)
+  }
+
+  const columns = [
+    {
+      data: (r) => r.item.druid,
+      name: "",
+      formatter: (cell) => getLinksForCell(cell),
+      sort: false
+    },
+    {
+      data: (r) => r.item._label,
+      name: "Label",
+      sort: true
+    },
+    {
+      data: (r) => r.item.druid,
+      name: "Druid",
+      sort: false
+    },
+  ];
+
+  const pagination = {
+		enabled: true,
+		limit: 10
+	};
 
 </script>
 
@@ -156,16 +195,6 @@
       {/if}
       Filtered: {filteredListItems?.length} / {listItems.length}
     </div>
-    <ul class="items" class:open bind:this={list}>
-      {#if filteredListItems?.length}
-        {#each filteredListItems as listItem, _i}
-          <li>
-            {@html postMarkup(listItem.markedUp || listItem.label)}
-          </li>
-        {/each}
-      {:else}
-        <li>No results found</li>
-      {/if}
-    </ul>
+    <Grid data={filteredListItems} {columns}  {pagination} />
   </div>
 </div>
