@@ -58,6 +58,7 @@
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
+    playbackProgressEnd,
     currentTick,
     rollMetadata,
     isReproducingRoll,
@@ -84,7 +85,7 @@
   } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
-
+  import CopyUrlButton from "./ui-components/CopyUrlButton.svelte";
   import catalog from "./config/catalog.json";
 
   export let profile = "perform";
@@ -106,6 +107,8 @@
   let holesByTickInterval = new IntervalTree();
 
   let samplePlayer;
+
+  let rollStart;
 
   let midiSamplePlayer;
   let pianoReady;
@@ -235,6 +238,20 @@
     );
   };
 
+
+
+  const validateStartAndEnd = (start, end) => {
+    start = Number(start) / 100;
+    end = Number(end) / 100;
+    if ( start < 0 || start >= 1 ) {
+      start = 0;
+    }
+    if ( end <= 0 || end > 1 || start >= end  ) {
+      end = 1;
+    }
+    return [start, end];
+  }
+
   const setCurrentRollFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has("druid")) {
@@ -251,6 +268,7 @@
           closable: false,
         });
       }
+      [rollStart, $playbackProgressEnd] = validateStartAndEnd(params.get("start"), params.get("end"));
     } else {
       currentRoll =
         rollListItems[Math.floor(Math.random() * rollListItems.length)];
@@ -278,8 +296,12 @@
   });
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
-  $: playbackProgress.update(() =>
-    clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1),
+  $: playbackProgress.update(() => {
+    if ( appLoaded && $playbackProgress >= $playbackProgressEnd ) {
+      pausePlayback();
+    }
+    return clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1)
+  }
   );
   $: if (rollViewer)
     ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
@@ -293,6 +315,12 @@
     document.getElementById("loading").classList.add("fade-out");
     appLoaded = true;
   }
+  $: if (appLoaded) {
+    if ( rollStart ) {
+        skipToPercentage(rollStart);
+        playbackProgress.set(rollStart);
+    }
+  }
 </script>
 
 <div id="app">
@@ -300,6 +328,8 @@
     <FlexCollapsible id="left-sidebar" width="20vw">
       {#if isPerform}<RollSelector bind:currentRoll {rollListItems} />{/if}
       {#if appReady}
+        <CopyUrlButton  />
+        <CopyUrlButton withProgress={true} linkText="Copy URL With Timestamp"  />
         <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
           <p>
