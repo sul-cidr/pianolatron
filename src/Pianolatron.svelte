@@ -318,7 +318,7 @@
           {holeData}
           {holesByTickInterval}
           {skipToTick}
-          showScaleBar={isPerform}
+          showScaleBar={( isPerform && $userSettings.showRuler )}
         />
       {/if}
       {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
