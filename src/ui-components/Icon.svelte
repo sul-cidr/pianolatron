@@ -167,6 +167,21 @@
       `,
       attribs: { viewBox: "0 0 712 266", fill: "currentColor" },
     },
+    ff: {
+      svg: `
+        <path d="M21.0023 17H18.0023V7H21.0023V17Z"    />
+        <path d="M17.0023 12L10 17V7L17.0023 12Z"  />
+        <path d="M2 17L9.00232 12L2 7V17Z"  />
+      `,
+    },
+    rewind: {
+      svg: `
+        <path d="M2 7H5V17H2V7Z" />
+        <path d="M6 12L13.0023 7.00003V17L6 12Z" />
+        <path d="M21.0023 7.00003L14 12L21.0023 17V7.00003Z" />
+      `,
+
+    }
   };
   const { attribs, svg } = icons[name];
 </script>

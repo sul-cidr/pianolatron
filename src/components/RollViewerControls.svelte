@@ -11,6 +11,7 @@
   export let minZoomLevel;
   export let updateTickByViewportIncrement;
   export let panHorizontal;
+  export let skipFromCurrent;
 
   let actionInterval;
 
@@ -117,6 +118,28 @@
     )}
     iconName="arrow-right"
     label="Pan Right"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class="overlay"
+    disabled={false}
+    on:mousedown={mousedownRepeatAction(() =>
+      skipFromCurrent(-1500),
+    )}
+    iconName="rewind"
+    label="Skip Back"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class="overlay"
+    disabled={false}
+    on:mousedown={mousedownRepeatAction(() =>
+      skipFromCurrent(),
+    )}
+    iconName="ff"
+    label="Skip Ahead"
     height="24"
     width="24"
   />

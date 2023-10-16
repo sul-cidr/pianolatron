@@ -301,6 +301,10 @@
     });
   };
 
+  const skipFromCurrent = ( tickIncrement = 1500 ) => {
+    skipToTick($currentTick + tickIncrement);
+  }
+
   // Pan the viewer to bring the position of `@tick` to the center of
   //  the viewport.  Does not trigger an OSD `pan` event.
   const updateViewportFromTick = (tick) => {
@@ -621,6 +625,7 @@
       {maxZoomLevel}
       {updateTickByViewportIncrement}
       {panHorizontal}
+      {skipFromCurrent}
     />
   {/if}
 </div>
