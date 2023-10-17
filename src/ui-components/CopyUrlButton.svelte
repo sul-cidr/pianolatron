@@ -20,15 +20,21 @@
     export let linkText = "Copy URL";
     export let copiedText = "Copied";
     let copied = false;
+    let disabled = withProgress ? true : false;
 
     const copy = () => {
         const urlToCopy = new URL(window.location);
-        if ( withProgress ) {
-            const start = ($playbackProgress * 100).toFixed(2);
-            const end = ($playbackProgressEnd * 100).toFixed(2);
-            const params = Object.fromEntries(new URLSearchParams(urlToCopy.search));
-            urlToCopy.search = new URLSearchParams({...params, start, end});
+        const params = Object.fromEntries(new URLSearchParams(urlToCopy.search));
+        delete params.start;
+        delete params.end;
+
+        if ( withProgress && $playbackProgress > 0 ) {
+            params.start = ($playbackProgress * 100).toFixed(2);
         }
+        if ( withProgress && $playbackProgressEnd < 1 ) {
+            params.end = ($playbackProgressEnd * 100).toFixed(2);
+        }
+        urlToCopy.search = new URLSearchParams(params);
         window.navigator.clipboard.writeText(urlToCopy.toString()); 
         copied = true;
         setTimeout(function () {
@@ -36,10 +42,13 @@
         }, 1000);
     }
 
+    $: disabled = ( withProgress && !(  $playbackProgress > 0  || $playbackProgressEnd < 1 ) );
+
 </script>
 
 <button
   on:click="{copy}"
+  {disabled}
   class="{$$props.class} copy-button"
 >
     {#if !copied}
