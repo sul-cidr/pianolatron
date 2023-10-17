@@ -73,6 +73,13 @@
         bind:checked={$userSettings.highlightEnabledHoles}
       />
     </div>
+    <div class="setting">
+      Show Roll Viewer Scale Bar
+      <input
+        type="checkbox"
+        bind:checked={$userSettings.showRuler}
+      />
+    </div>
   </fieldset>
 
   <fieldset>
