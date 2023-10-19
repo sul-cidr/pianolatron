@@ -1208,6 +1208,11 @@ bl@^5.0.0:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
+boolean-parser@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/boolean-parser/-/boolean-parser-0.0.2.tgz#58721f1172e65fd132d6e6debbd00053deaffa12"
+  integrity sha512-e06Mqk6t7DOXaEo3s+RATvv7ZNt5brRQ2os4NUHVkVCzUD0Z7Gw4AL4AFA/gT3WaLhrobmGvRVh1/UuJiY3sKg==
+
 boxen@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/boxen/-/boxen-7.1.1.tgz#f9ba525413c2fec9cdb88987d835c4f7cad9c8f4"
@@ -2045,6 +2050,14 @@ fast-levenshtein@^2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
 
+fastbitset@^0.4.0:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/fastbitset/-/fastbitset-0.4.1.tgz#909db30facc2714646f706f8067a55249ffb6c27"
+  integrity sha512-QbHY1MNGq4A63g1Kuf0DhjlVlaT0GQiQBj1QMTR8TuxpU/+x0SBcNAM22J6NDxOnhP7MtDL248/nes8EURgLnQ==
+  dependencies:
+    bl "^4.0.3"
+    minimist "^1.2.5"
+
 fastq@^1.6.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.15.0.tgz#d04d07c6a2a68fe4599fea8d2e103a937fae6b3a"
@@ -2684,6 +2697,16 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+itemsjs@^2.1.22:
+  version "2.1.22"
+  resolved "https://registry.yarnpkg.com/itemsjs/-/itemsjs-2.1.22.tgz#0c9b8c25e9b853350fcf8fad744e41e1b815c1f0"
+  integrity sha512-aWoVfLFK2j38Sb0NUBN64hEDRndf54eXHrM2tc3c8Yq5dz5XJgTN/eSPHpbEiWbs1JbYjRNOWuzH6cQpG9QtQw==
+  dependencies:
+    boolean-parser "^0.0.2"
+    fastbitset "^0.4.0"
+    lodash "^4.17.21"
+    lunr "^1.0.0"
+
 js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -2820,6 +2843,11 @@ lodash.merge@^4.6.2:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
 log-symbols@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-5.1.0.tgz#a20e3b9a5f53fac6aeb8e2bb22c07cf2c8f16d93"
@@ -2853,6 +2881,11 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+lunr@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/lunr/-/lunr-1.0.0.tgz#5c9276c92c91ac35a9241b5018d46723d92e2f5f"
+  integrity sha512-vGgr9YUMBfL1izpsb4RASwPz58JSSdmcTocuCs2v0PyGU3e7CDJWuS5psl4O2m9t0CsNemeR+jhxu2xNkXCM2A==
 
 magic-string@^0.27.0:
   version "0.27.0"
@@ -3353,7 +3386,7 @@ minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.6:
+minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
