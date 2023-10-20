@@ -109,48 +109,35 @@
     ],
   };
 
-  export const compositions = itemsjs(catalog, configuration);
-  export let results = compositions.search({
+
+  const compositions = itemsjs(catalog, configuration);
+  let results;
+  const searchCompositons = ( sort = "", query = "" ) => {
+      results = compositions.search({
         per_page: 50,
-        sort: 'composer_desc'
+        sort,
+        query
       })
+  }
 
-  export let searchCompositons
-  export let textSearchCompositons
-
+  const textSearchCompositions = ( {target } ) => searchCompositons("composer_desc", target.value);
 	onMount(() => {
-    searchCompositons = val => {
-      results = compositions.search({
-        per_page: 50,
-        sort: val
-      })
-      return results;
-
-    }
-
-    textSearchCompositons = val => {
-      results = compositions.search({
-        per_page: 50,
-        query: val
-      })
-      return results;
-    }
+    searchCompositons("composer_desc");
+    console.log(results);
   })
 
-
+  $: results;
+  
 </script>
 
 <h1>Super Simple Sorted List</h1>
-  <input on:change={(e) => {
-    textSearchCompositons(e.target.val)
-  }} placeholder="Search" />
+  <input on:input={textSearchCompositions}
+  placeholder="Search" />
   <table class="search-table">
     <tr>
       <th>ID</th>
-      <th on:click={() => {
-        searchCompositons('title_asc');
-      }}>Title</th>
-      <th on:click={() => (searchCompositons('composer_asc'))}>Composer</th>
+      <th on:click={() => searchCompositons('title_asc') }>Title</th>
+      <th on:click={() => searchCompositons('composer_asc')}>Composer</th>
       <th>Arranger</th>
       <th>Performer</th>
       <th>Publisher</th>
