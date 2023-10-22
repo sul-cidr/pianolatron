@@ -84,7 +84,8 @@
   } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
-
+  import CopyUrlButton from "./ui-components/CopyUrlButton.svelte";
+  import RollPlayerControls from "./components/RollPlayerControls.svelte";
   import catalog from "./config/catalog.json";
 
   export let profile = "perform";
@@ -311,6 +312,9 @@
     </FlexCollapsible>
     <div id="roll">
       {#if appReady}
+        <RollPlayerControls 
+          {skipToTick}
+        />
         <RollViewer
           bind:this={rollViewer}
           bind:rollImageReady
