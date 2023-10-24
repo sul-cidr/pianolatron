@@ -121,6 +121,7 @@
   let startPlayback;
   let resetPlayback;
   let skipToTick;
+  let skipToPercentage;
   let isPlaying;
 
   let rollViewer;
@@ -157,8 +158,6 @@
   };
 
 
-  const skipToPercentage = (percentage = 0) =>
-    skipToTick(midiSamplePlayer.totalTicks * percentage);
 
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
@@ -291,6 +290,7 @@
       startPlayback,
       resetPlayback,
       skipToTick,
+      skipToPercentage,
       isPlaying
     } = samplePlayer);
 

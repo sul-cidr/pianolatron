@@ -74,6 +74,16 @@
 
   const isPlaying = () => midiSamplePlayer.isPlaying();
 
+
+  const skipToTick = (tick) => {
+    if (tick < 0) pausePlayback();
+    $currentTick = tick;
+    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
+  };
+
+  const skipToPercentage = (percentage = 0) =>
+    skipToTick(Math.floor( midiSamplePlayer.totalTicks * percentage));
+
   const getTempoAtTick = (tick) => {
     if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
     let tempo;
@@ -252,6 +262,17 @@
     stopAllNotes();
   };
 
+  const pausePlaybackOrLoop = async () => {
+    pausePlayback();
+    if ( $playRepeat ) {
+      // the midiplayer resets some things when it hits endOfFile.
+      // Let it reset, then go to the start point and restart.
+      await sweep();
+      skipToPercentage($playbackProgressStart);
+      startPlayback();
+    }
+  };
+
   const startPlayback = () => {
     if ($currentTick < 0) resetPlayback();
     updatePlayer();
@@ -390,6 +411,7 @@
     startPlayback,
     resetPlayback,
     skipToTick,
+    skipToPercentage,
     isPlaying,
   };
 </script>

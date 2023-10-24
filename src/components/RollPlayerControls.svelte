@@ -65,7 +65,7 @@
     width="24"
   />
 <IconButton
-    class="overlay"
+    class=""
     disabled={false}
     on:mousedown={resetPlayback}
     iconName="rewind"
@@ -113,7 +113,7 @@
     width="24"
   />
   <IconButton
-    class="overlay"
+    class=""
     disabled={false}
     on:mousedown={() => skipFromCurrent()}
     iconName="skipForward"
