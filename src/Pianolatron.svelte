@@ -58,6 +58,8 @@
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
+    playbackProgressStart,
+    playbackProgressEnd,
     currentTick,
     rollMetadata,
     isReproducingRoll,
@@ -65,6 +67,7 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     userSettings,
+    playRepeat
   } from "./stores";
   import { annotateHoleData, clamp, getPathJoiner, getProfile } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -108,6 +111,7 @@
 
   let samplePlayer;
 
+
   let midiSamplePlayer;
   let pianoReady;
   let updatePlayer;
@@ -116,10 +120,13 @@
   let pausePlayback;
   let startPlayback;
   let resetPlayback;
+  let skipToTick;
+  let isPlaying;
 
   let rollViewer;
   let updateTickByViewportIncrement;
   let panHorizontal;
+
 
   const rollListItems = catalog.map((item) => ({
     ...item,
@@ -149,13 +156,8 @@
     });
   };
 
-  const skipToTick = (tick) => {
-    if (tick < 0) pausePlayback();
-    $currentTick = tick;
-    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
-  };
 
-  const skipToPercentage = (percentage) =>
+  const skipToPercentage = (percentage = 0) =>
     skipToTick(midiSamplePlayer.totalTicks * percentage);
 
   const playPauseApp = () => {
@@ -236,6 +238,20 @@
     );
   };
 
+
+
+  const validateStartAndEnd = (start, end) => {
+    start = Number(start) / 100;
+    end = Number(end) / 100;
+    if ( start < 0 || start >= 1 ) {
+      start = 0;
+    }
+    if ( end <= 0 || end > 1 || start >= end  ) {
+      end = 1;
+    }
+    return [start, end];
+  }
+
   const setCurrentRollFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has("druid")) {
@@ -252,6 +268,7 @@
           closable: false,
         });
       }
+      [$playbackProgressStart, $playbackProgressEnd] = validateStartAndEnd(params.get("start"), params.get("end"));
     } else {
       currentRoll =
         rollListItems[Math.floor(Math.random() * rollListItems.length)];
@@ -273,15 +290,24 @@
       pausePlayback,
       startPlayback,
       resetPlayback,
+      skipToTick,
+      isPlaying
     } = samplePlayer);
 
     setCurrentRollFromUrl();
   });
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
-  $: playbackProgress.update(() =>
-    clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1),
+  $: if (appLoaded && $playbackProgressStart > 0 ) {
+      skipToPercentage($playbackProgressStart);
+  }
+  $: playbackProgress.update(() => {
+    return clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1)
+  }
   );
+  $: if ( appLoaded && $playbackProgress >= $playbackProgressEnd ) {
+      $playRepeat ? skipToPercentage($playbackProgressStart) : pausePlayback();
+    }
   $: if (rollViewer)
     ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
   $: if (rollImageReady) {
@@ -301,6 +327,8 @@
     <FlexCollapsible id="left-sidebar" width="20vw">
       {#if isPerform}<RollSelector bind:currentRoll {rollListItems} />{/if}
       {#if appReady}
+        <CopyUrlButton  />
+        <CopyUrlButton withProgress={true} linkText="Copy URL With Timestamp"  />
         <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
           <p>
@@ -314,6 +342,9 @@
       {#if appReady}
         <RollPlayerControls 
           {skipToTick}
+          {resetPlayback}
+          {playPauseApp}
+          {isPlaying}
         />
         <RollViewer
           bind:this={rollViewer}

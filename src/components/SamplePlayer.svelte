@@ -1,4 +1,5 @@
 <script>
+  import { tick as sweep } from "svelte";
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
   import { createEventDispatcher } from "svelte";
@@ -28,6 +29,9 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
+    playRepeat,
+    playbackProgress,
+    playbackProgressStart
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -67,6 +71,8 @@
   });
 
   const pianoReady = piano.load();
+
+  const isPlaying = () => midiSamplePlayer.isPlaying();
 
   const getTempoAtTick = (tick) => {
     if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
@@ -362,7 +368,7 @@
     },
   );
 
-  midiSamplePlayer.on("endOfFile", pausePlayback);
+  midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);
@@ -383,6 +389,8 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
+    skipToTick,
+    isPlaying,
   };
 </script>
 
