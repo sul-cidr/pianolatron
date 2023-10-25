@@ -31,7 +31,7 @@
     userSettings,
     playRepeat,
     playbackProgress,
-    playbackProgressStart
+    playbackProgressStart,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -74,7 +74,6 @@
 
   const isPlaying = () => midiSamplePlayer.isPlaying();
 
-
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
     $currentTick = tick;
@@ -82,7 +81,7 @@
   };
 
   const skipToPercentage = (percentage = 0) =>
-    skipToTick(Math.floor( midiSamplePlayer.totalTicks * percentage));
+    skipToTick(Math.floor(midiSamplePlayer.totalTicks * percentage));
 
   const getTempoAtTick = (tick) => {
     if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
@@ -264,7 +263,7 @@
 
   const pausePlaybackOrLoop = async () => {
     pausePlayback();
-    if ( $playRepeat ) {
+    if ($playRepeat) {
       // the midiplayer resets some things when it hits endOfFile.
       // Let it reset, then go to the start point and restart.
       await sweep();

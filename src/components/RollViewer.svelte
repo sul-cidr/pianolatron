@@ -625,7 +625,6 @@
       {maxZoomLevel}
       {updateTickByViewportIncrement}
       {panHorizontal}
-      {skipFromCurrent}
     />
   {/if}
 </div>
