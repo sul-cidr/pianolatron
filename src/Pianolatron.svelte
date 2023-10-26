@@ -131,10 +131,13 @@
   let updateTickByViewportIncrement;
   let panHorizontal;
 
+  const progressPercentageToTick = ( percentage = 0 ) =>
+    Math.floor(midiSamplePlayer.totalTicks * percentage);
+
   // redundant, but the way the BasicSettings comp is built requires we define the func
   // here, as it won't update the ref.
   const skipToPercentage = (percentage = 0) =>
-    skipToTick(Math.floor(midiSamplePlayer.totalTicks * percentage));
+    skipToTick(progressPercentageToTick(percentage));
 
   const rollListItems = catalog.map((item) => ({
     ...item,
@@ -357,6 +360,7 @@
           {holeData}
           {holesByTickInterval}
           {skipToTick}
+          {progressPercentageToTick}
           showScaleBar={isPerform && $userSettings.showRuler}
         />
       {/if}
