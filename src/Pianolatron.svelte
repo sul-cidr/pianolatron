@@ -66,7 +66,7 @@
     rollPedalingOnOff,
     userSettings,
   } from "./stores";
-  import { annotateHoleData, clamp } from "./lib/utils";
+  import { annotateHoleData, clamp, getPathJoiner, getProfile } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -76,6 +76,7 @@
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
+  import ListenerPanel from "./components/ListenerPanel.svelte";
   import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
   import Notification, {
     notify,
@@ -85,6 +86,11 @@
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
 
   import catalog from "./config/catalog.json";
+
+  export let profile = "perform";
+
+  const joinPath = getPathJoiner(import.meta.env.BASE_URL);
+  const isPerform = getProfile(profile) === "perform";
 
   let firstLoad = true;
   let appReady = false;
@@ -180,7 +186,7 @@
 
   const loadRoll = (roll) => {
     appWaiting = true;
-    mididataReady = fetch(`./midi/${roll.druid}.mid`)
+    mididataReady = fetch(joinPath("midi",`${roll.druid}.mid`))
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
@@ -195,7 +201,7 @@
         currentRoll = previousRoll;
       });
 
-    metadataReady = fetch(`./json/${roll.druid}.json`)
+    metadataReady = fetch(joinPath("json", `${roll.druid}.json`))
       .then((metadataResponse) => {
         if (metadataResponse.status === 200) return metadataResponse.json();
         throw new Error("Error fetching metadata file! (Operation cancelled)");
@@ -248,6 +254,9 @@
     } else {
       currentRoll =
         rollListItems[Math.floor(Math.random() * rollListItems.length)];
+      const url = new URL(window.location);
+      url.searchParams.set("druid", currentRoll.druid);
+      window.history.pushState({}, "", url);
     }
   };
 
@@ -289,7 +298,7 @@
 <div id="app">
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw">
-      <RollSelector bind:currentRoll {rollListItems} />
+      {#if isPerform}<RollSelector bind:currentRoll {rollListItems} />{/if}
       {#if appReady}
         <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
@@ -309,6 +318,7 @@
           {holeData}
           {holesByTickInterval}
           {skipToTick}
+          showScaleBar={( isPerform && $userSettings.showRuler )}
         />
       {/if}
       {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
@@ -318,7 +328,11 @@
       {/if}
     </div>
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-      <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+      {#if isPerform }
+        <TabbedPanel {playPauseApp} {stopApp} {skipToPercentage} />
+      {:else }
+        <ListenerPanel {playPauseApp} {stopApp} />
+      {/if}
     </FlexCollapsible>
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
@@ -345,7 +359,7 @@
 />
 <KeyboardShortcutEditor />
 <Notification />
-{#if $showWelcomeScreen}<Welcome />{/if}
+{#if isPerform && $showWelcomeScreen}<Welcome />{/if}
 
 <svelte:window
   on:popstate={({ state }) =>

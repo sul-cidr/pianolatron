@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../../layouts/base.astro";
+import Pianolatron from "../../Pianolatron.svelte";
+import LoadingSpinner from "../../ui-components/LoadingSpinner.svelte";
+---
+
+<BaseLayout title="Pianolatron">
+  <LoadingSpinner
+    showLoadingSpinner={true}
+    loadingSpinnerText="Loading application..."
+  />
+  <Pianolatron client:only profile="perform" />
+</BaseLayout>

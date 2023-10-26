@@ -1,5 +1,14 @@
 import { rollProfile } from "../config/roll-config";
 
+const profiles = new Set(["perform", "listen"]);
+export const getProfile = (profile) =>
+  profiles.has(profile) ? profile : "perform";
+
+export const getPathJoiner = (base) => {
+  const noSlashBase = base.replace(/[/]+$/, "");
+  return (...parts) => [noSlashBase, ...parts].join("/");
+};
+
 export const enforcePrecision = (value, precision) => {
   const multiplier = 10 ** (precision || 0);
   return Math.round(value * multiplier) / multiplier;
