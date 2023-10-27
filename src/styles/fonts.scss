@@ -8,3 +8,19 @@
     url("/fonts/barlow-v5-latin-regular.woff2") format("woff2"),
     url("/fonts/barlow-v5-latin-regular.woff") format("woff");
 }
+
+@font-face {
+  font-family: SourceSerif4;
+  src: url("fonts/SourceSerif4-VariableFont_opsz\,wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: SourceSans3;
+  src: url("fonts/SourceSans3-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Stanford;
+  src: url("fonts/stanford.woff") format("woff"),url("fonts/stanford.ttf") format("truetype");
+  font-weight: 300
+}

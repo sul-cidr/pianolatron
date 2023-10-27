@@ -1,0 +1,50 @@
+---
+import MarkdownHeader from "./markdownHeader.astro";
+import StanfordHeader from "./stanfordHeader.astro";
+import StanfordFooter from "./stanfordFooter.astro";
+import StanfordSubheader from "./stanfordSubheader.astro";
+import { execSync } from "node:child_process";
+
+import "../styles/styles.scss";
+
+const { title } = Astro.props.content || Astro.props;
+const commit = execSync("git rev-parse --short HEAD").toString().trim();
+const datetime = new Date().toISOString();
+---
+
+<style>
+  main {
+    color: var(--black-100);
+    font-family: "Source Sans Pro", sans-serif;
+    margin: 0 auto;
+    max-width: 80%;
+    min-height: calc(100vh - 90px - 69px - 193px);
+    padding: 1em 1em;
+    position: relative;
+  }
+</style>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="version" content={commit} />
+<meta name="dcterms.modified" content={datetime} />
+<meta
+  name="description"
+  content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection."
+/>
+<title>{title}</title>
+<script>
+  const { theme } =
+    JSON.parse(window.localStorage.getItem("userSettings")) || {};
+  theme && document.documentElement.setAttribute("data-theme", theme);
+</script>
+
+<body>
+  <StanfordHeader />
+  <StanfordSubheader />
+  <MarkdownHeader {title} />
+  <main>
+    <slot />
+  </main>
+  <StanfordFooter />
+</body>

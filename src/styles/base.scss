@@ -56,62 +56,6 @@ h1 {
   font-family: $primary-typeface;
 }
 
-body > footer {
-  bottom: 0;
-  display: flex;
-  gap: 2em;
-  justify-content: space-between;
-  left: 0;
-  opacity: 0.2;
-  padding: 0.4em 1em;
-  pointer-events: none;
-  position: absolute;
-  transition: all 0.3s ease;
-  width: 100vw;
-  z-index: z($main-context, footer);
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-    opacity: 1;
-
-    a {
-      color: white;
-    }
-  }
-
-  a {
-    display: flex;
-    vertical-align: bottom;
-    width: fit-content;
-    color: black;
-    text-decoration: none;
-    align-items: center;
-    line-height: 25px;
-    gap: 0.25em;
-    pointer-events: auto;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  img {
-    margin-top: -8px;
-  }
-
-  svg {
-    margin-top: -4px;
-    width: 1em;
-
-    path {
-      fill: white;
-    }
-
-    rect {
-      fill: grey;
-    }
-  }
-}
 
 kbd {
   background: linear-gradient(-225deg, #d5dbe4, #f8f8f8);
