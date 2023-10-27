@@ -92,103 +92,102 @@
     gap: 2em;
     justify-content: space-between;
     width: 100vw;
-    
-    .su-global-footer {
-      background-color: var(--cardinal-red);
-      color: var(--white);
-      padding: 2.6rem 0;
+  }
+
+  .su-global-footer {
+    background-color: var(--cardinal-red);
+    color: var(--white);
+    padding: 2.6rem 0;
+    width: 100%;
+  }
+
+  .su-global-footer__container {
+      display: flex;
+      margin: 0 auto;
+      max-width: calc(100% - 200px);
       width: 100%;
+  }
 
-      .su-global-footer__container {
-        display: flex;
-        margin: 0 auto;
-        max-width: calc(100% - 200px);
-        width: 100%;
+  .su-global-footer__brand {
+    margin-bottom: 0.9rem;
+    padding-top: 0.5rem;
+    text-align: center;
+  }
+  .su-logo {
+    display: inline-block;
+    font-family: Stanford, SourceSerif4, Georgia, 'Times New Roman', Times, serif;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    text-decoration: none;
+    line-height: .75;
+    transform: translateZ(0);
+    letter-spacing: 0;
+    -ms-font-feature-settings: "liga" 1;
+    font-feature-settings: "liga";
+    font-variant-ligatures: discretionary-ligatures;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--white);
+    font-size: 3.4rem;
+  }
 
-        .su-global-footer__brand {
-          margin-bottom: 0.9rem;
-          padding-top: 0.5rem;
-          text-align: center;
-          
-          .su-logo {
-            display: inline-block;
-            font-family: Stanford, SourceSerif4, Georgia, 'Times New Roman', Times, serif;
-            font-style: normal;
-            font-weight: 400;
-            font-variant: normal;
-            text-transform: none;
-            text-decoration: none;
-            line-height: .75;
-            transform: translateZ(0);
-            letter-spacing: 0;
-            -ms-font-feature-settings: "liga" 1;
-            font-feature-settings: "liga";
-            font-variant-ligatures: discretionary-ligatures;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            color: var(--white);
-            font-size: 3.4rem;
-          }
-        }
-        .su-global-footer__content {
-          flex-grow: 1;
-          padding-left: 5.2rem;
+  .su-global-footer__content {
+    flex-grow: 1;
+    padding-left: 5.2rem;
 
-        }
-        .su-global-footer__content nav {
-          display: block;
-          margin-bottom: 1.3rem;
+  }
+  .su-global-footer__content nav {
+    display: block;
+    margin-bottom: 1.3rem;
+  }
 
+  .su-global-footer__menu {
+    font-size: 1.25rem;
+    list-style-type: none;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+  .su-global-footer__menu li {
+    display: inline-block;
+    font-family: SourceSans3, sans-serif;
+    line-height: 1.1;
+    margin-right: 2.8rem;
+    padding: 0;
+    text-align: left;
+  }
+  .su-global-footer__menu li a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+  }
 
-          .su-global-footer__menu {
-            font-size: 1.25rem;
-            list-style-type: none;
-            margin: 0 0 1rem;
-            padding: 0;
+  .su-global-footer__menu--policy {
+    font-size: 1rem;
+  }
+  .su-global-footer__menu--policy li a {
+    font-weight: 300;
+  }
+  .su-global-footer__menu li a:hover,
+  .su-global-footer__menu--policy li a:hover {
+    text-decoration: underline;
+  }
+  .su-global-footer__copyright {
+    color: var(--white);
+    font-size: 0.9rem;
+  }
 
-          }
-          .su-global-footer__menu li {
-            display: inline-block;
-            font-family: SourceSans3, sans-serif;
-            line-height: 1.1;
-            margin-right: 2.8rem;
-            padding: 0;
-            text-align: left;
-          }
-          .su-global-footer__menu li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-          }
-
-          .su-global-footer__menu--policy {
-            font-size: 1rem;
-          }
-          .su-global-footer__menu--policy li a {
-            font-weight: 300;
-          }
-          .su-global-footer__menu li a:hover,
-          .su-global-footer__menu--policy li a:hover {
-            text-decoration: underline;
-          }
-        }
-        .su-global-footer__copyright {
-          color: var(--black);
-          font-size: 0.9rem;
-        }
-      }
-    }
-    .su-global-footer__link-a11y {
-          border: 0;
-          clip: rect(1px,1px,1px,1px);
-          -webkit-clip-path: inset(100%);
-          clip-path: inset(100%);
-          height: 1px;
-          overflow: hidden;
-          padding: 0;
-          position: absolute;
-          white-space: nowrap;
-          width: 1px;
-        }
+  .su-global-footer__link-a11y {
+    border: 0;
+    clip: rect(1px,1px,1px,1px);
+    -webkit-clip-path: inset(100%);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 </style>
