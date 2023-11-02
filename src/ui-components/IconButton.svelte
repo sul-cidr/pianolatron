@@ -17,27 +17,34 @@
       opacity: 0.5;
     }
 
-    &.overlay {
-      color: #ffffff;
+    &.player-button {
+      filter: drop-shadow(2px 2px 1px #a4a4a4);
       padding: 0.35em 0.8em;
+
+      &:active {
+        color: white;
+        filter: drop-shadow(1px 1px 1px #a4a4a4);
+      }
 
       &:focus,
       &:active {
         outline: 0;
       }
 
-      &:hover {
+      &:hover,
+      &.pause {
         color: white;
-        outline: 1px solid white;
-      }
-
-      &:active {
-        color: grey;
       }
 
       &:disabled {
         color: grey;
         cursor: not-allowed;
+      }
+
+      &.record:active,
+      &.record:hover,
+      &.record:focus {
+        color: red;
       }
     }
   }

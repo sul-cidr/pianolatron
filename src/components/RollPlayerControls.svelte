@@ -1,11 +1,8 @@
 <style>
-.player-buttons {
+.player-button-container {
     padding: 2px;
     text-align: center;
 }
-
-
-
 </style>
 
 <script>
@@ -54,9 +51,9 @@
 
 </script>
 
-<div class="player-buttons">
+<div class="player-button-container">
 <IconButton
-    class={ $playRepeat ? "overlay" : ""}
+    class={ $playRepeat ? "overlay player-button" : "player-button"}
     disabled={false}
     on:mousedown={togglePlayRepeat}
     iconName="replay"
@@ -65,7 +62,7 @@
     width="24"
   />
 <IconButton
-    class=""
+    class={"player-button"}
     disabled={false}
     on:mousedown={resetPlayback}
     iconName="rewind"
@@ -74,6 +71,7 @@
     width="24"
   />
  <IconButton
+    class={"player-button"}
     disabled={false}
     on:mousedown={() => {
       skipFromCurrent(-1500);
@@ -85,6 +83,7 @@
   />
  {#if !showPause }
  <IconButton
+    class={"player-button"}
     disabled={false}
     on:mousedown={togglePlayPause}
     iconName="play"
@@ -94,7 +93,7 @@
   />
  {:else }
  <IconButton
-    class="overlay"
+    class={"pause player-button"}
     disabled={false}
     on:mousedown={togglePlayPause}
     iconName="pause"
@@ -104,16 +103,17 @@
   />
  {/if}
  <IconButton
-    class={ isRecording ? "overlay" : "" }
+    class={ isRecording ? "overlay player-button record" : "player-button record" }
     disabled={false}
     on:mousedown={toggleRecording}
     iconName="record"
     label="Record"
     height="24"
     width="24"
+    title="Record"
   />
   <IconButton
-    class=""
+    class={"player-button"}
     disabled={false}
     on:mousedown={() => skipFromCurrent()}
     iconName="skipForward"
@@ -122,7 +122,7 @@
     width="24"
   />
   <IconButton
-    class={ startMarked ? "overlay" : "" }
+    class={ startMarked ? "overlay player-button" : "player-button" }
     disabled={false}
     on:mousedown={markStart}
     iconName="markStart"
@@ -131,7 +131,7 @@
     width="24"
   />
   <IconButton
-    class={ endMarked ? "overlay" : "" }
+    class={ endMarked ? "overlay player-button" : "player-button" }
     disabled={false}
     on:mousedown={markEnd}
     iconName="markEnd"
