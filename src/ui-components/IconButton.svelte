@@ -74,6 +74,7 @@
   on:click
   on:mousedown
   bind:this={ref}
+  title={label}
 >
   <Icon name={iconName} {height} {width} aria-hidden="true" focusable="false" />
 </button>
