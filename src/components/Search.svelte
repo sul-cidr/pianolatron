@@ -1,12 +1,10 @@
 <style lang="scss">
   @import "https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css";
 
-
   .search-box {
     height: 2.25em;
     position: relative;
     width: 100%;
-  
 
     &::after {
       border: 3px solid var(--primary-accent);
@@ -37,7 +35,7 @@
     width: 100%;
   }
 
- div.facets {
+  div.facets {
     text-align: right;
     padding: 5px 15px;
     display: flex;
@@ -68,9 +66,8 @@
 </style>
 
 <script>
-  import { beforeUpdate, afterUpdate } from "svelte";
+  import { beforeUpdate } from "svelte";
   import Grid from "gridjs-svelte";
-  import { SvelteWrapper } from "gridjs-svelte/plugins";
   import { html } from "gridjs";
   import catalog from "../config/catalog.json";
 
@@ -145,13 +142,12 @@
     await itemFilter();
   };
 
-  const facetFilter = (listItem) => listItem[listItem.length - 1] === activeFacet;
+  const facetFilter = (listItem) =>
+    listItem[listItem.length - 1] === activeFacet;
 
   const activateInput = () => {
     input.innerHTML = "";
-    filteredListItems = activeFacet
-      ? listItems.filter(facetFilter)
-      : listItems;
+    filteredListItems = activeFacet ? listItems.filter(facetFilter) : listItems;
     input.focus();
   };
 
@@ -176,35 +172,31 @@
       .replace(/[\u0300-\u036f]/g, "")
       .trim();
 
-
   const itemFilter = async () => {
     if (activeFacet) {
       filteredListItems = listItems.filter(facetFilter);
     } else {
       filteredListItems = listItems;
     }
-    if (!input || !input.innerHTML || input.innerHTML == placeHolder ) return;
+    if (!input || !input.innerHTML || input.innerHTML == placeHolder) return;
     const filteredText = normalizeText(
       input.innerHTML.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );
     if (filteredText) {
       console.log(filteredText);
       const searchParts = filteredText.split(" ").slice(0, 8);
-      filteredListItems = filteredListItems
-        .filter((listItem) =>
-          searchParts.every((searchPart) =>
-            listItem[0].includes(searchPart),
-          ),
-        )
+      filteredListItems = filteredListItems.filter((listItem) =>
+        searchParts.every((searchPart) => listItem[0].includes(searchPart)),
+      );
     }
   };
 
   const prepareListItems = () => {
     listItems = data.map((item) => {
-      const [ _label, ...arr ] = item;
-      return [ normalizeText(_label), ...arr];
+      const [_label, ...arr] = item;
+      return [normalizeText(_label), ...arr];
     });
-    facets = [...new Set(data.map((item) => item[ item.length - 1 ] ))];
+    facets = [...new Set(data.map((item) => item[item.length - 1]))];
   };
 
   const setActiveFacet = (facet) => {
