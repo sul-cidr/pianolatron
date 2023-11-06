@@ -93,6 +93,7 @@
     item.work,
     item.composer,
     item.performer,
+    item.publisher,
     item.type,
   ]);
 
@@ -114,7 +115,7 @@
       sort: false,
     },
     {
-      name: "Label",
+      name: "Title",
       sort: true,
     },
     {
@@ -126,10 +127,17 @@
       sort: true,
     },
     {
-      name: "Type",
+      name: "Publisher",
       sort: true,
     },
+    {
+      id: "_type",
+      hidden: true,
+    },
   ];
+
+  const style = {};
+
 
   const pagination = {
     enabled: true,
@@ -183,7 +191,6 @@
       input.innerHTML.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );
     if (filteredText) {
-      console.log(filteredText);
       const searchParts = filteredText.split(" ").slice(0, 8);
       filteredListItems = filteredListItems.filter((listItem) =>
         searchParts.every((searchPart) => listItem[0].includes(searchPart)),
@@ -246,6 +253,6 @@
       {/if}
       Filtered: {filteredListItems?.length} / {listItems.length}
     </div>
-    <Grid data={filteredListItems} {columns} {pagination} bind:this={grid} />
+    <Grid data={filteredListItems} {columns} {pagination} {style} bind:this={grid} />
   </div>
 </div>
