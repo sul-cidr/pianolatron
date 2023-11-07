@@ -2,7 +2,7 @@
   @import "https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css";
 
   #app {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -94,15 +94,19 @@
         `);
   };
 
-  const data = catalog.map((item) => [
-    `${item.number} ${item.title} ${item.performer} [${item.publisher}]`,
-    getLinksForCell(item.druid),
-    item.work,
-    item.composer,
-    item.performer,
-    item.publisher,
-    item.type,
-  ]);
+  const data = catalog.map((item) => {
+    // for the prepareListItems, we will additional keys with _, which will have the text
+    // normalized for search. There is also _markedup_ prefixed keys, which are used for
+    // display with hit highlights.
+    return {
+      druid: item.druid,
+      title: item.work,
+      composer: item.composer,
+      performer: item.performer,
+      publisher: item.publisher,
+      type: item.type,
+    };
+  });
 
   beforeUpdate(async () => {
     if (grid) {
@@ -113,33 +117,30 @@
 
   const columns = [
     {
-      id: "_label",
-      hidden: true,
-    },
-    {
-      id: "links",
+      id: "_links",
       name: "",
       sort: false,
+      data: (r) => r._links,
     },
     {
       name: "Title",
       sort: true,
+      data: (r) => r?._markedup_title || r.title,
     },
     {
       name: "Composer",
       sort: true,
+      data: (r) => r?._markedup_composer || r.composer,
     },
     {
       name: "Performer",
       sort: true,
+      data: (r) => r?._markedup_performer || r.performer,
     },
     {
       name: "Publisher",
       sort: true,
-    },
-    {
-      id: "_type",
-      hidden: true,
+      data: (r) => r?._markedup_publisher || r.publisher,
     },
   ];
 
@@ -156,8 +157,7 @@
     await itemFilter();
   };
 
-  const facetFilter = (listItem) =>
-    listItem[listItem.length - 1] === activeFacet;
+  const facetFilter = (listItem) => listItem._type === activeFacet;
 
   const activateInput = () => {
     input.innerHTML = "";
@@ -175,6 +175,13 @@
   const unDecomposableRegex = new RegExp(
     Object.keys(unDecomposableMap).join("|"),
     "g",
+  );
+
+  const longSubstitutionsRegex = new RegExp(
+    Object.keys(unDecomposableMap)
+      .filter((k) => unDecomposableMap[k].length > 1)
+      .join("|"),
+    "gi",
   );
 
   const normalizeText = (str) =>
@@ -198,22 +205,91 @@
     );
     if (filteredText) {
       const searchParts = filteredText.split(" ").slice(0, 8);
-      filteredListItems = filteredListItems.filter((listItem) =>
-        searchParts.every((searchPart) => listItem[0].includes(searchPart)),
-      );
+      filteredListItems = filteredListItems
+        .filter((listItem) =>
+          searchParts.every((searchPart) =>
+            listItem._search.includes(searchPart),
+          ),
+        )
+        .map((item) => {
+          const keys = Object.keys(item).filter((k) => !k.startsWith("_"));
+          keys.forEach(
+            (k) =>
+              (item[`_markedup_${k}`] = markupMatches(
+                item[k],
+                item[`_${k}`],
+                searchParts,
+              )),
+          );
+          return item;
+        });
     }
   };
-
+  [];
   const prepareListItems = () => {
     listItems = data.map((item) => {
-      const [_label, ...arr] = item;
-      return [normalizeText(_label), ...arr];
+      const searchArr = [];
+      const _links = getLinksForCell(item.druid);
+      Object.keys(item).forEach((k) => {
+        searchArr.push(item[k]);
+        item[`_${k}`] = normalizeText(item[k]);
+      });
+
+      return { ...item, _links, _search: normalizeText(searchArr.join("   ")) };
     });
-    facets = [...new Set(data.map((item) => item[item.length - 1]))];
+    facets = [...new Set(data.map((item) => item._type))];
   };
 
   const setActiveFacet = (facet) => {
     activeFacet = facet === activeFacet ? undefined : facet;
+  };
+
+  const startIdxAdjustment = (str, idx) =>
+    (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || [])
+      .length;
+
+  const endIdxAdjustment = (str, idx) =>
+    (
+      str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || []
+    ).reduce((adj, m) => adj + (unDecomposableMap[m].length - m.length), 0);
+
+  const markupMatches = (label, searchContent, searchParts) => {
+    const matchExtents = [];
+    const mergedExtents = [];
+    let markedUp = label;
+
+    searchParts.forEach((searchPart) => {
+      let idx = -1;
+      while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1) {
+        const _idx = idx - startIdxAdjustment(label, idx - 1);
+        const _idxEnd =
+          idx +
+          searchPart.length -
+          endIdxAdjustment(label, _idx + searchPart.length - 1);
+        matchExtents.push([_idx, _idxEnd]);
+      }
+    });
+
+    matchExtents
+      .sort((a, b) => a[0] - b[0])
+      .forEach(([start, end]) => {
+        const previousExtent = mergedExtents[mergedExtents.length - 1];
+        if (previousExtent && previousExtent[1] >= start) {
+          previousExtent[1] = Math.max(previousExtent[1], end);
+        } else {
+          mergedExtents.push([start, end]);
+        }
+      });
+
+    mergedExtents
+      .sort((a, b) => b[0] - a[0])
+      .forEach(([start, end]) => {
+        markedUp = `${markedUp.substring(0, start)}<mark>${markedUp.substring(
+          start,
+          end,
+        )}</mark>${markedUp.substring(end)}`;
+      });
+    return markedUp;
   };
 
   $: data, prepareListItems();
