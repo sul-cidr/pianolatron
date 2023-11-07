@@ -1,4 +1,5 @@
 <style lang="scss">
+
   dl {
     display: block;
     overflow: auto;
@@ -6,12 +7,12 @@
   }
 
   dt {
-    font-family: $primary-typeface;
+    color: var(--cardinal-red-dark);
+    font-family: SourceSerif4, serif;
     font-size: 0.9em;
     margin-top: 1em;
     margin-bottom: 0.2em;
     text-transform: uppercase;
-    color: rgba(black, 0.6);
     display: inline-block;
     width: 100%;
 
@@ -25,12 +26,13 @@
   }
 
   dd {
-    font-family: $primary-typeface;
+    color: var(--black);
+    font-family: SourceSans3, sans-serif;
     display: inline;
     overflow-wrap: anywhere;
 
     &.large {
-      font-size: 1.4em;
+      font-size: 1.6em;
       display: block;
     }
   }
@@ -55,10 +57,12 @@
   <dd class="large">
     {@html metadata.title || unavailable}
   </dd>
-  <dt>Performer</dt>
-  <dd class="large">
-    {@html metadata.performer || unavailable}
-  </dd>
+  {#if metadata.performer}
+    <dt>Performer</dt>
+    <dd class="large">
+      {@html metadata.performer || unavailable}
+    </dd>
+  {/if}
   <dt>Composer</dt>
   <dd class="large">
     {@html metadata.composer || unavailable}
@@ -69,10 +73,6 @@
   </dd>
   <dt>PURL</dt>
   <dd>
-    <a href={metadata.PURL}>{@html metadata.PURL || unavailable}</a>
-  </dd>
-  <dt>Call No</dt>
-  <dd>
-    {@html metadata.CALLNUM || unavailable}
+    <a href={metadata.PURL} target='_blank'>{@html metadata.PURL || unavailable}</a>
   </dd>
 </dl>
