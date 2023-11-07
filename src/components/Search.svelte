@@ -1,65 +1,72 @@
 <style lang="scss">
   @import "https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css";
 
-  .search-box {
-    height: 2.25em;
-    position: relative;
-    width: 100%;
-
-    &::after {
-      border: 3px solid var(--primary-accent);
-      border-right: 0;
-      border-top: 0;
-      border-radius: 2px;
-      display: block;
-      height: 0.625em;
-      margin-top: -0.4375em;
-      pointer-events: none;
-      position: absolute;
-      right: 1.125em;
-      top: 50%;
-      width: 0.625em;
-    }
-  }
-
-  span.input {
-    background: white;
-    cursor: pointer;
-    display: inline-block;
-    height: 100%;
-    line-height: calc(2.25em - 10px);
-    overflow: hidden;
-    padding: 5px 2.5em 5px 11px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-  }
-
-  div.facets {
-    text-align: right;
-    padding: 5px 15px;
+  #app {
+    height: 100vh;
     display: flex;
-    align-items: flex-end;
-    gap: 15px;
+    flex-direction: column;
+    overflow: hidden;
 
-    ul {
-      flex: 1 0 auto;
-      margin: 0;
-      text-align: left;
-      padding: 0;
+    .search-box {
+      height: 2.25em;
+      position: relative;
+      width: 100%;
+
+      &::after {
+        border: 3px solid var(--primary-accent);
+        border-right: 0;
+        border-top: 0;
+        border-radius: 2px;
+        display: block;
+        height: 0.625em;
+        margin-top: -0.4375em;
+        pointer-events: none;
+        position: absolute;
+        right: 1.125em;
+        top: 50%;
+        width: 0.625em;
+      }
     }
 
-    li {
-      display: inline-block;
-      border-radius: 6px;
-      background-color: grey; // var(--primary-accent);
-      color: white;
-      padding: 1px 8px;
-      margin: 0 4px;
+    span.input {
+      background: white;
       cursor: pointer;
+      display: inline-block;
+      height: 100%;
+      line-height: calc(2.25em - 10px);
+      overflow: hidden;
+      padding: 5px 2.5em 5px 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
 
-      &.active {
-        background-color: var(--primary-accent);
+    div.facets {
+      text-align: right;
+      padding: 5px 15px;
+      display: flex;
+      align-items: flex-end;
+      gap: 15px;
+
+      ul {
+        flex: 1 0 auto;
+        margin: 0;
+        text-align: left;
+        padding: 0;
+      }
+
+      li {
+        display: inline-block;
+        border-radius: 6px;
+        background-color: grey; // var(--primary-accent);
+        color: white;
+        padding: 1px 8px;
+        margin: 0 4px;
+        cursor: pointer;
+
+        &.active {
+          background-color: var(--primary-accent);
+        }
       }
     }
   }
@@ -138,7 +145,6 @@
 
   const style = {};
 
-
   const pagination = {
     enabled: true,
     limit: 10,
@@ -214,45 +220,54 @@
   $: activeFacet, search();
 </script>
 
-<div class="search-box">
-  <span
-    role="textbox"
-    tabindex="0"
-    class="input"
-    spellcheck="false"
-    contenteditable="true"
-    bind:this={input}
-    on:focus={activateInput}
-    on:input={search}
-    >{@html placeHolder}
-  </span>
-  <div>
-    <div class="facets">
-      {#if facets}
-        <ul>
-          {#each facets as facet}
-            <li class:active={facet === activeFacet}>
-              <span
-                role="checkbox"
-                tabindex="0"
-                aria-checked={facet === activeFacet}
-                on:click={() => {
-                  setActiveFacet(facet);
-                }}
-                on:keypress={(event) => {
-                  if (event.code === "Enter") {
-                    setActiveFacet(facet);
-                  }
-                }}
-              >
-                {facet}
-              </span>
-            </li>
-          {/each}
-        </ul>
-      {/if}
-      Filtered: {filteredListItems?.length} / {listItems.length}
-    </div>
-    <Grid data={filteredListItems} {columns} {pagination} {style} bind:this={grid} />
+<div id="app">
+  <div class="search-box">
+    <span
+      role="textbox"
+      tabindex="0"
+      class="input"
+      spellcheck="false"
+      contenteditable="true"
+      bind:this={input}
+      on:focus={activateInput}
+      on:input={search}
+      >{@html placeHolder}
+    </span>
   </div>
+  <!-- search-box -->
+  <div class="facets">
+    {#if facets}
+      <ul>
+        {#each facets as facet}
+          <li class:active={facet === activeFacet}>
+            <span
+              role="checkbox"
+              tabindex="0"
+              aria-checked={facet === activeFacet}
+              on:click={() => {
+                setActiveFacet(facet);
+              }}
+              on:keypress={(event) => {
+                if (event.code === "Enter") {
+                  setActiveFacet(facet);
+                }
+              }}
+            >
+              {facet}
+            </span>
+          </li>
+        {/each}
+      </ul>
+    {/if}
+    Filtered: {filteredListItems?.length} / {listItems.length}
+  </div>
+  <!-- facets -->
+  <Grid
+    data={filteredListItems}
+    {columns}
+    {pagination}
+    {style}
+    bind:this={grid}
+  />
 </div>
+<!-- app -->
