@@ -67,12 +67,28 @@
   <dd class="large">
     {@html metadata.composer || unavailable}
   </dd>
+  {#if metadata.arranger}
+    <dt>Arranger</dt>
+    <dd class="large">
+      {@html metadata.arranger || unavailable}
+    </dd>
+  {/if}
   <dt>Label</dt>
   <dd class="large">
     {@html metadata.label || unavailable}
+  </dd>
+  <dt>Publisher</dt>
+  <dd class="large">
+    {@html metadata.publisher || unavailable}
   </dd>
   <dt>PURL</dt>
   <dd>
     <a href={metadata.PURL} target='_blank'>{@html metadata.PURL || unavailable}</a>
   </dd>
+  {#if metadata.work}
+    <dt>Work</dt>
+    <dd class="large">
+      {@html metadata.work || unavailable}
+    </dd>
+  {/if}
 </dl>
