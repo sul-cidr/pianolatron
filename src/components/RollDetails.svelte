@@ -44,10 +44,35 @@
   dd :global(span) {
     opacity: 0.5;
   }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    line-height: 1rem;
+    padding: 0 0 10px;
+  }
+
+  li a {
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  li a:hover {
+    text-decoration: underline;
+  }
 </style>
 
 <script>
+  import catalog from '../config/catalog.json'
   export let metadata;
+
+  export const similarWorksByPerformer = catalog.filter(w => {
+    return w.performer === metadata.performer && w.druid !== metadata.druid;
+  })
 
   const unavailable = "<span>Unavailable</span>";
 </script>
@@ -81,6 +106,18 @@
   <dd class="large">
     {@html metadata.publisher || unavailable}
   </dd>
+  {#if similarWorksByPerformer.length > 0}
+    <dt>Similar Works By This Performer</dt>
+    <dd class="large">
+      <ul>
+        {#each similarWorksByPerformer as work}
+        <li>
+          <a href={`/?druid=${work.druid}`} target='_blank'>{@html work.title}</a>
+        </li>
+        {/each}
+      </ul>
+    </dd>
+  {/if}
   <dt>PURL</dt>
   <dd>
     <a href={metadata.PURL} target='_blank'>{@html metadata.PURL || unavailable}</a>
