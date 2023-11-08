@@ -81,11 +81,10 @@
   let grid = false;
   let input;
 
-  let listItems;
   let filteredListItems;
-
   let activeFacet;
-  let facets = [];
+
+  const searchFields = ["title", "composer", "performer", "publisher"];
 
   const getLinksForCell = (druid) => {
     return html(`
@@ -93,20 +92,6 @@
         <a href="/perform/?druid=${druid}">Perform</a>
         `);
   };
-
-  const data = catalog.map((item) => {
-    // for the prepareListItems, we will additional keys with _, which will have the text
-    // normalized for search. There is also _markedup_ prefixed keys, which are used for
-    // display with hit highlights.
-    return {
-      druid: item.druid,
-      title: item.work,
-      composer: item.composer,
-      performer: item.performer,
-      publisher: item.publisher,
-      type: item.type,
-    };
-  });
 
   beforeUpdate(async () => {
     if (grid) {
@@ -120,27 +105,27 @@
       id: "_links",
       name: "",
       sort: false,
-      data: (r) => r._links,
+      data: (r) => r._d_links,
     },
     {
       name: "Title",
       sort: true,
-      data: (r) => r?._markedup_title || r.title,
+      data: (r) => r._d_title,
     },
     {
       name: "Composer",
       sort: true,
-      data: (r) => r?._markedup_composer || r.composer,
+      data: (r) => r._d_composer,
     },
     {
       name: "Performer",
       sort: true,
-      data: (r) => r?._markedup_performer || r.performer,
+      data: (r) => r._d_performer,
     },
     {
       name: "Publisher",
       sort: true,
-      data: (r) => r?._markedup_publisher || r.publisher,
+      data: (r) => r._d_publisher,
     },
   ];
 
@@ -153,11 +138,7 @@
 
   let placeHolder = "SEARCH";
 
-  const search = async () => {
-    await itemFilter();
-  };
-
-  const facetFilter = (listItem) => listItem._type === activeFacet;
+  const facetFilter = (listItem) => listItem.type === activeFacet;
 
   const activateInput = () => {
     input.innerHTML = "";
@@ -199,10 +180,13 @@
     } else {
       filteredListItems = listItems;
     }
-    if (!input || !input.innerHTML || input.innerHTML == placeHolder) return;
+
+    if (!input || input.innerHTML == placeHolder) return;
+
     const filteredText = normalizeText(
       input.innerHTML.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );
+
     if (filteredText) {
       const searchParts = filteredText.split(" ").slice(0, 8);
       filteredListItems = filteredListItems
@@ -212,32 +196,23 @@
           ),
         )
         .map((item) => {
-          const keys = Object.keys(item).filter((k) => !k.startsWith("_"));
-          keys.forEach(
+          searchFields.forEach(
             (k) =>
-              (item[`_markedup_${k}`] = markupMatches(
+              (item[`_d_${k}`] = markupMatches(
                 item[k],
-                item[`_${k}`],
+                item[`_s_${k}`],
                 searchParts,
               )),
           );
           return item;
         });
-    }
-  };
-  [];
-  const prepareListItems = () => {
-    listItems = data.map((item) => {
-      const searchArr = [];
-      const _links = getLinksForCell(item.druid);
-      Object.keys(item).forEach((k) => {
-        searchArr.push(item[k]);
-        item[`_${k}`] = normalizeText(item[k]);
+    } else {
+      // no search term so we need to be sure to remove any hit highlights that might still be present.
+      filteredListItems = filteredListItems.map((item) => {
+        searchFields.forEach((k) => (item[`_d_${k}`] = item[k]));
+        return item;
       });
-
-      return { ...item, _links, _search: normalizeText(searchArr.join("   ")) };
-    });
-    facets = [...new Set(data.map((item) => item._type))];
+    }
   };
 
   const setActiveFacet = (facet) => {
@@ -289,11 +264,34 @@
           end,
         )}</mark>${markedUp.substring(end)}`;
       });
-    return markedUp;
+    return html(markedUp);
   };
 
-  $: data, prepareListItems();
-  $: activeFacet, search();
+  const listItems = catalog.map((item) => {
+    // _s_ prefix is for search ( normalizedText is called )
+    // _d_ prefix is for display (they can be marked up)
+    const listItem = {
+      druid: item.druid,
+      title: item.work,
+      composer: item.composer,
+      performer: item.performer,
+      publisher: item.publisher,
+      type: item.type,
+      _d_links: getLinksForCell(item.druid),
+    };
+    const searchArr = [];
+    searchFields.forEach((k) => {
+      searchArr.push(item[k]);
+      listItem[`_s_${k}`] = normalizeText(item[k]);
+      listItem[`_d_${k}`] = item[k];
+    });
+
+    return { ...listItem, _search: normalizeText(searchArr.join("   ")) };
+  });
+
+  const facets = [...new Set(listItems.map((item) => item.type))];
+
+  $: activeFacet, itemFilter();
 </script>
 
 <div id="app">
@@ -306,7 +304,7 @@
       contenteditable="true"
       bind:this={input}
       on:focus={activateInput}
-      on:input={search}
+      on:input={itemFilter}
       >{@html placeHolder}
     </span>
   </div>
