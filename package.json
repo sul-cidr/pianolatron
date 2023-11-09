@@ -31,6 +31,7 @@
     "@popperjs/core": "^2.11.8",
     "@types/watch": "^1.0.4",
     "CanvasSpliner": "jonathanlurie/CanvasSpliner",
+    "itemsjs": "^2.1.22",
     "midi-player-js": "^2.0.16",
     "node-interval-tree": "^2.1.2",
     "openseadragon": "^4.1.0",

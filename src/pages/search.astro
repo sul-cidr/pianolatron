@@ -1,0 +1,8 @@
+---
+import BaseLayout from "../layouts/base.astro";
+import SearchComponent from "../components/Search.svelte";
+---
+
+<BaseLayout title="Pianolatron">
+  <SearchComponent client:only />
+</BaseLayout>
