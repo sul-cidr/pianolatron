@@ -84,7 +84,13 @@
   let filteredListItems;
   let activeFacet;
 
-  const searchFields = ["title", "composer", "performer", "publisher"];
+  const searchFields = [
+    "title",
+    "composer",
+    "performer",
+    "arranger",
+    "publisher",
+  ];
 
   const getLinksForCell = (druid) => {
     return html(`
@@ -121,6 +127,11 @@
       name: "Performer",
       sort: true,
       data: (r) => r._d_performer,
+    },
+    {
+      name: "Arranger",
+      sort: true,
+      data: (r) => r._d_arranger,
     },
     {
       name: "Publisher",
@@ -275,15 +286,16 @@
       title: item.work,
       composer: item.composer,
       performer: item.performer,
-      publisher: item.publisher,
+      publisher: `${item.publisher} (${item.number})`,
+      arranger: item.arranger,
       type: item.type,
       _d_links: getLinksForCell(item.druid),
     };
     const searchArr = [];
     searchFields.forEach((k) => {
-      searchArr.push(item[k]);
-      listItem[`_s_${k}`] = normalizeText(item[k]);
-      listItem[`_d_${k}`] = item[k];
+      searchArr.push(listItem[k]);
+      listItem[`_s_${k}`] = normalizeText(listItem[k]);
+      listItem[`_d_${k}`] = listItem[k];
     });
 
     return { ...listItem, _search: normalizeText(searchArr.join("   ")) };
