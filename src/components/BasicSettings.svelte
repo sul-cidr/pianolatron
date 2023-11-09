@@ -5,6 +5,7 @@
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
+    transposeHalfStep,
     playbackProgress,
   } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
@@ -80,6 +81,15 @@
       <kbd class:depressed={$keyMap.TEMPO_UP.active}>{$keyMap.TEMPO_UP.key}</kbd
       >↑
     </svelte:fragment>
+  </SliderControl>
+  <SliderControl
+    bind:value={$transposeHalfStep}
+    min={controlsConfig.transpose.min}
+    max={controlsConfig.transpose.max}
+    step={controlsConfig.transpose.delta}
+    name="transpose"
+  >
+    <svelte:fragment slot="label">Transpose (half steps):</svelte:fragment>
   </SliderControl>
   <SliderControl
     value={$playbackProgress}

@@ -45,6 +45,7 @@ export const bassVolumeCoefficient = createStore(1);
 export const trebleVolumeCoefficient = createStore(1);
 
 export const tempoCoefficient = createStore(1);
+export const transposeHalfStep = createStore(0);
 
 export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
