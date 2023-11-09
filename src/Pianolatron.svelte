@@ -1,6 +1,6 @@
 <style lang="scss">
   #app {
-    height: 100vh;
+    height: calc(100vh - 60px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
