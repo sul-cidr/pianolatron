@@ -37,6 +37,13 @@
   let pedalingMap;
   let notesMap;
 
+  let playbackStartTick;
+  let playbackStartTime;
+  let midiTPQ;
+
+  let latencyThreshold = 1000;
+  let latentNotes = [];
+
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
 
@@ -101,10 +108,42 @@
     }
   };
 
+  const getElapsedTimeAtTick = (tick) => {
+    let ticksPerSecond;
+    let prevTempo = null;
+    let thisTick;
+    let thisTempo;
+    let i = 0;
+    let tempoStartTick;
+    let elapsedTime = 0;
+    while (tempoMap[i][0] <= tick) {
+      [thisTick, thisTempo] = tempoMap[i];
+      i += 1;
+      if (prevTempo === null) {
+        prevTempo = thisTempo;
+        tempoStartTick = thisTick;
+        continue;
+      }
+      if (thisTempo != prevTempo) {
+        ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
+        elapsedTime += (1 / ticksPerSecond) * (thisTick - 1 - tempoStartTick);
+        tempoStartTick = thisTick;
+        prevTempo = thisTempo;
+      }
+      if (i >= tempoMap.length) break;
+    }
+    ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
+    elapsedTime += (1 / ticksPerSecond) * (tick - tempoStartTick);
+    return elapsedTime;
+  };
+
   const setPlayerStateAtTick = (tick = $currentTick) => {
     if (midiSamplePlayer.tracks[0])
       midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
     midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
+
+    playbackStartTick = $currentTick;
+    playbackStartTime = Date.now();
 
     if (pedalingMap && $rollPedalingOnOff) {
       const pedals = pedalingMap.search($currentTick, $currentTick);
@@ -176,7 +215,7 @@
     loadSampleVelocities();
   };
 
-  const startNote = (noteNumber, velocity, fromMidi) => {
+  const startNote = (noteNumber, velocity, fromMidi, tick) => {
     activeNotes.add(noteNumber);
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
@@ -208,6 +247,27 @@
       1,
     );
     if (modifiedVelocity) {
+      if (notesMap.search(tick, tick).includes(noteNumber)) {
+        const thisTime = Date.now();
+        const elapsedTime = (thisTime - playbackStartTime) / 1000;
+        const expectedElapsedTime =
+          getElapsedTimeAtTick(tick) - getElapsedTimeAtTick(playbackStartTick);
+        const elapsedTimeDiff = elapsedTime - expectedElapsedTime;
+        if (elapsedTimeDiff > 0.1) {
+          latentNotes = [
+            ...latentNotes.filter((n) => n >= $currentTick - latencyThreshold),
+            tick,
+          ];
+        }
+      } else {
+        console.log(
+          "Couldn't find note",
+          noteNumber,
+          "at tick",
+          tick,
+          "in notesMap",
+        );
+      }
       piano.keyDown({
         midi: noteNumber,
         velocity: modifiedVelocity * (($softOnOff && SOFT_PEDAL_RATIO) || 1),
@@ -328,6 +388,7 @@
       ),
     );
 
+    midiTPQ = midiSamplePlayer.getDivision().division;
     tempoMap = buildTempoMap(metadataTrack);
 
     // where two or more "music tracks" exist, pedal events are expected to have
@@ -335,6 +396,8 @@
     pedalingMap = buildPedalingMap(musicTracks[0]);
 
     notesMap = buildNotesMap(musicTracks);
+
+    latencyThreshold = Math.floor(midiSamplePlayer.totalTicks * 0.1);
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
@@ -343,12 +406,12 @@
 
   midiSamplePlayer.on(
     "midiEvent",
-    ({ name, value, number, noteNumber, velocity, data }) => {
+    ({ name, value, number, noteNumber, velocity, data, tick }) => {
       if (name === "Note on") {
         if (velocity === 0) {
           stopNote(noteNumber);
         } else {
-          startNote(noteNumber, velocity);
+          startNote(noteNumber, velocity, false, tick);
         }
       } else if (name === "Controller Change" && $rollPedalingOnOff) {
         if (number === SUSTAIN_PEDAL) {
@@ -364,6 +427,12 @@
 
   midiSamplePlayer.on("endOfFile", pausePlayback);
 
+  const checkLatency = () => {
+    if (latentNotes.length > 10) {
+      console.log("We are Laggy! " + latentNotes.length);
+    }
+  };
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);
   $: toggleSoft($softOnOff);
@@ -373,6 +442,7 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
+  $: latentNotes, checkLatency();
 
   export {
     midiSamplePlayer,
