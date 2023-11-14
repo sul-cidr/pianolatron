@@ -97,10 +97,12 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     playbackProgress,
+    showLatencyWarning,
   } from "../stores";
   import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
+  import LatencyWarning from "../ui-components/LatencyWarning.svelte";
 
   export let showScaleBar = true;
   export let imageUrl;
@@ -623,4 +625,8 @@
       {panHorizontal}
     />
   {/if}
+  {#if $showLatencyWarning}
+    <LatencyWarning />
+  {/if}
+
 </div>

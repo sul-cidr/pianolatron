@@ -28,6 +28,7 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
+    showLatencyWarning,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -254,10 +255,9 @@
           getElapsedTimeAtTick(tick) - getElapsedTimeAtTick(playbackStartTick);
         const elapsedTimeDiff = elapsedTime - expectedElapsedTime;
         if (elapsedTimeDiff > 0.1) {
-          latentNotes = [
-            ...latentNotes.filter((n) => n >= $currentTick - latencyThreshold),
-            tick,
-          ];
+          latentNotes = [ ...latentNotes, tick ];
+        } else if ( $showLatencyWarning) {
+          latentNotes = latentNotes.filter((n) => n >= $currentTick - latencyThreshold);
         }
       } else {
         console.log(
@@ -429,7 +429,9 @@
 
   const checkLatency = () => {
     if (latentNotes.length > 10) {
-      console.log("We are Laggy! " + latentNotes.length);
+      $showLatencyWarning = true;
+    } else {
+      $showLatencyWarning = false;
     }
   };
 
