@@ -97,6 +97,8 @@
     playExpressionsOnOff,
     rollPedalingOnOff,
     playbackProgress,
+    playbackProgressStart,
+    playbackProgressEnd,
     showLatencyWarning,
   } from "../stores";
   import { clamp, getHoleLabel } from "../lib/utils";
@@ -110,6 +112,7 @@
   export let holesByTickInterval;
   export let skipToTick;
   export let rollImageReady;
+  export let progressPercentageToTick;
 
   const defaultZoomLevel = 1;
   const minZoomLevel = 0.1;
@@ -128,10 +131,19 @@
   let trackerbarHeight;
   let animationEaseInterval;
   let osdNavDisplayRegion;
+  let osdNavDisplayRegionContainer;
   let ppi;
   let svgPartitions;
   let visibleSvgs = [];
   let entireViewportRectangle;
+
+  const startMarker = document.createElement("div");
+  startMarker.id = "pianolatron-start-marker";
+  startMarker.style.position = "relative";
+
+  const endMarker = document.createElement("div");
+  endMarker.id = "pianolatron-end-marker";
+  endMarker.style.position = "relative";
 
   const createMark = (hole) => {
     const {
@@ -303,6 +315,10 @@
     });
   };
 
+  const skipFromCurrent = (tickIncrement = 1500) => {
+    skipToTick($currentTick + tickIncrement);
+  };
+
   // Pan the viewer to bring the position of `@tick` to the center of
   //  the viewport.  Does not trigger an OSD `pan` event.
   const updateViewportFromTick = (tick) => {
@@ -422,7 +438,10 @@
 
     const { navigator } = openSeadragon;
     ({ viewport } = openSeadragon);
-    ({ displayRegion: osdNavDisplayRegion } = navigator);
+    ({
+      displayRegion: osdNavDisplayRegion,
+      displayRegionContainer: osdNavDisplayRegionContainer,
+    } = navigator);
 
     // Directly set some OSD internals that aren't exposed in the constructor
     viewport.zoomSpring.animationTime = 1.2;
@@ -442,6 +461,9 @@
       backgroundColor: "rgba(255 255 255 / .6)",
       boxShadow: "0 0 4px var(--primary-accent)",
     });
+
+    osdNavDisplayRegionContainer.appendChild(startMarker);
+    osdNavDisplayRegionContainer.appendChild(endMarker);
 
     // Monkey-patch the navigator.update method to prevent the displayRegion element
     //  being resized to reflect the horizontal dimension of the viewport
@@ -467,6 +489,40 @@
 
         style.top = `${Math.round(topleft.y)}px`;
         style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
+
+        if ($playbackProgressStart > 0) {
+          const startTick = progressPercentageToTick($playbackProgressStart);
+          const startLinePx =
+            firstHolePx + ($scrollDownwards ? startTick : -startTick);
+          const startLineViewport = viewport.imageToViewportCoordinates(
+            0,
+            startLinePx,
+          );
+          const startTL = navViewport.pixelFromPointNoRotate(
+            startLineViewport,
+            false,
+          );
+          startMarker.style.top = `${Math.round(startTL.y)}px`;
+          startMarker.style.height = "2px";
+          startMarker.style.backgroundColor = "red";
+        }
+
+        if ($playbackProgressEnd < 1) {
+          const endTick = progressPercentageToTick($playbackProgressEnd);
+          const endLinePx =
+            firstHolePx + ($scrollDownwards ? endTick : -endTick);
+          const endLineViewport = viewport.imageToViewportCoordinates(
+            0,
+            endLinePx,
+          );
+          const endTL = navViewport.pixelFromPointNoRotate(
+            endLineViewport,
+            false,
+          );
+          endMarker.style.top = `${Math.round(endTL.y)}px`;
+          endMarker.style.height = "2px";
+          endMarker.style.backgroundColor = "blue";
+        }
       }
     };
 

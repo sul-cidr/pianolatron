@@ -1,10 +1,11 @@
 <script>
+  import { tick as sweep } from "svelte";
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
-  import { getPathJoiner } from "../lib/utils";
+  import { getPathJoiner, NoteSource } from "../lib/utils";
   import {
     rollMetadata,
     softOnOff,
@@ -28,6 +29,9 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
+    transposeHalfStep,
+    playRepeat,
+    playbackProgressStart,
     showLatencyWarning,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
@@ -75,6 +79,17 @@
   });
 
   const pianoReady = piano.load();
+
+  const isPlaying = () => midiSamplePlayer.isPlaying();
+
+  const skipToTick = (tick) => {
+    if (tick < 0) pausePlayback();
+    $currentTick = tick;
+    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
+  };
+
+  const skipToPercentage = (percentage = 0) =>
+    skipToTick(Math.floor(midiSamplePlayer.totalTicks * percentage));
 
   const getTempoAtTick = (tick) => {
     if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
@@ -216,7 +231,10 @@
     loadSampleVelocities();
   };
 
-  const startNote = (noteNumber, velocity, fromMidi, tick) => {
+  const startNote = (noteNumber, velocity, noteSource, tick) => {
+    if (noteSource == NoteSource.Midi) {
+      noteNumber = noteNumber + $transposeHalfStep;
+    }
     activeNotes.add(noteNumber);
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
@@ -273,15 +291,18 @@
         velocity: modifiedVelocity * (($softOnOff && SOFT_PEDAL_RATIO) || 1),
       });
     }
-    if (!fromMidi) {
+    if (noteSource != NoteSource.WebMidi) {
       webMidi?.sendMidiMsg("NOTE_ON", noteNumber, modifiedVelocity);
     }
   };
 
-  const stopNote = (noteNumber, fromMidi) => {
+  const stopNote = (noteNumber, noteSource) => {
+    if (noteSource == NoteSource.Midi) {
+      noteNumber = noteNumber + $transposeHalfStep;
+    }
     activeNotes.delete(noteNumber);
     piano.keyUp({ midi: noteNumber });
-    if (!fromMidi) {
+    if (noteSource != NoteSource.WebMidi) {
       webMidi?.sendMidiMsg("NOTE_OFF", noteNumber, 0);
     }
   };
@@ -304,6 +325,17 @@
   const pausePlayback = () => {
     midiSamplePlayer.pause();
     stopAllNotes();
+  };
+
+  const pausePlaybackOrLoop = async () => {
+    pausePlayback();
+    if ($playRepeat) {
+      // the midiplayer resets some things when it hits endOfFile.
+      // Let it reset, then go to the start point and restart.
+      await sweep();
+      skipToPercentage($playbackProgressStart);
+      startPlayback();
+    }
   };
 
   const startPlayback = () => {
@@ -409,9 +441,9 @@
     ({ name, value, number, noteNumber, velocity, data, tick }) => {
       if (name === "Note on") {
         if (velocity === 0) {
-          stopNote(noteNumber);
+          stopNote(noteNumber, NoteSource.Midi);
         } else {
-          startNote(noteNumber, velocity, false, tick);
+          startNote(noteNumber, velocity, NoteSource.Midi, tick);
         }
       } else if (name === "Controller Change" && $rollPedalingOnOff) {
         if (number === SUSTAIN_PEDAL) {
@@ -425,7 +457,7 @@
     },
   );
 
-  midiSamplePlayer.on("endOfFile", pausePlayback);
+  midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
   const checkLatency = () => {
     if (latentNotes.length > 10) {
@@ -444,6 +476,8 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
+  // Brutal but if we transpose while playing, notes will never get correct stopNote and will just hang.
+  $: $sampleVelocities, stopAllNotes();
   $: latentNotes, checkLatency();
 
   export {
@@ -455,6 +489,9 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
+    skipToTick,
+    skipToPercentage,
+    isPlaying,
   };
 </script>
 

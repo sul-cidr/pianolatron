@@ -1,5 +1,12 @@
 import { rollProfile } from "../config/roll-config";
 
+// An enum for where notes are coming from
+export const NoteSource = {
+  Keyboard: 0,
+  Midi: 1,
+  WebMidi: 2,
+};
+
 const profiles = new Set(["perform", "listen"]);
 export const getProfile = (profile) =>
   profiles.has(profile) ? profile : "perform";

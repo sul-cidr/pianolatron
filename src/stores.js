@@ -45,6 +45,7 @@ export const bassVolumeCoefficient = createStore(1);
 export const trebleVolumeCoefficient = createStore(1);
 
 export const tempoCoefficient = createStore(1);
+export const transposeHalfStep = createStore(0);
 
 export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
@@ -79,7 +80,10 @@ export const midiOutputs = createStore([]);
 // Playback State
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
+export const playbackProgressStart = createStore(0);
+export const playbackProgressEnd = createStore(1);
 export const activeNotes = createSetStore();
+export const playRepeat = createStore(false);
 
 // User Settings
 export const userSettings = createPersistedStore("userSettings", {
@@ -91,7 +95,7 @@ export const userSettings = createPersistedStore("userSettings", {
   overlayKeyboard: false,
   welcomeScreenInhibited: false,
   useWebMidi: false,
-  showRuler: false
+  showRuler: false,
 });
 
 // Browser State

@@ -40,7 +40,9 @@
       height: $felt-strip-height;
       left: 0;
       right: 0;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.7), 1px 0 1px rgba(0, 0, 0, 0.7),
+      box-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.7),
+        1px 0 1px rgba(0, 0, 0, 0.7),
         -1px 0 1px rgba(0, 0, 0, 0.7);
       z-index: 1;
     }
@@ -54,8 +56,12 @@
         background: linear-gradient(-30deg, #f5f5f5, #fff);
         border-radius: 0 0 4% 4%;
         border: 1px solid #ccc;
-        box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 #fff, inset 1px 0 0 #fff,
-          inset -1px 0 0 #fff, 0 4px 3px rgba(0, 0, 0, 0.7);
+        box-shadow:
+          inset 0 1px 0 #fff,
+          inset 0 -1px 0 #fff,
+          inset 1px 0 0 #fff,
+          inset -1px 0 0 #fff,
+          0 4px 3px rgba(0, 0, 0, 0.7);
         display: block;
         height: 100%;
       }
@@ -98,7 +104,8 @@
         border-radius: 0 0 3% 3%;
         border-style: solid;
         border-width: 1px 2px 7px;
-        box-shadow: inset 0 -1px 2px rgba(255, 255, 255, 0.4),
+        box-shadow:
+          inset 0 -1px 2px rgba(255, 255, 255, 0.4),
           0 2px 3px rgba(0, 0, 0, 0.4);
         height: 56%;
         left: 100%;
@@ -112,14 +119,16 @@
       :global(:nth-child(2).depressed) {
         background: $active-key-highlight;
         border-bottom-width: 2px;
-        box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.4),
-          0 1px 0 rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4),
+        box-shadow:
+          inset 0 -1px 1px rgba(255, 255, 255, 0.4),
+          0 1px 0 rgba(0, 0, 0, 0.8),
+          0 2px 2px rgba(0, 0, 0, 0.4),
           0 -1px 0 #000;
         height: 57%;
       }
     }
   }
-  
+
   button.pedal {
     // SVG pedals were previously wrapped in <div/> tags because SVG animation performance sucks
     //  so badly on Chromium-based browsers on Mac OS that the whole app suffers.
@@ -152,6 +161,7 @@
 <script>
   import KeyboardControls from "./KeyboardControls.svelte";
   import { activeNotes, softOnOff, sustainOnOff } from "../stores";
+  import { NoteSource } from "../lib/utils";
 
   export let keyCount = 88;
   export let startNote;
@@ -195,7 +205,9 @@
   let mouseDown = false;
   let playing = new Set();
   const stopPlaying = () => {
-    playing.forEach((midiNumber) => stopNote(midiNumber));
+    playing.forEach((midiNumber) =>
+      stopNote(midiNumber, undefined, NoteSource.Keyboard),
+    );
     playing = new Set();
   };
 </script>
@@ -208,13 +220,13 @@
       const note = parseInt(target.dataset.key, 10);
       mouseDown = true;
       playing = playing.add(note);
-      startNote(note);
+      startNote(note, undefined, NoteSource.Keyboard);
     }}
     on:mouseup|preventDefault={({ target }) => {
       const note = parseInt(target.dataset.key, 10);
       playing.delete(note);
       playing = playing;
-      stopNote(note);
+      stopNote(note, NoteSource.Keyboard);
     }}
     on:mousemove|preventDefault={({ target }) => {
       if (mouseDown) {
@@ -222,7 +234,7 @@
         if (note && !playing.has(note)) {
           stopPlaying();
           playing = playing.add(note);
-          startNote(note);
+          startNote(note, undefined, NoteSource.Keyboard);
         }
       }
     }}
