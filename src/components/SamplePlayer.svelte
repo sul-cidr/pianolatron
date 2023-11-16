@@ -1,4 +1,5 @@
 <script>
+  import { tick as sweep } from "svelte";
   import MidiPlayer from "midi-player-js";
   import IntervalTree from "node-interval-tree";
   import { createEventDispatcher } from "svelte";
@@ -28,6 +29,9 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
+    playRepeat,
+    playbackProgress,
+    playbackProgressStart,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -67,6 +71,17 @@
   });
 
   const pianoReady = piano.load();
+
+  const isPlaying = () => midiSamplePlayer.isPlaying();
+
+  const skipToTick = (tick) => {
+    if (tick < 0) pausePlayback();
+    $currentTick = tick;
+    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
+  };
+
+  const skipToPercentage = (percentage = 0) =>
+    skipToTick(Math.floor(midiSamplePlayer.totalTicks * percentage));
 
   const getTempoAtTick = (tick) => {
     if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
@@ -246,6 +261,17 @@
     stopAllNotes();
   };
 
+  const pausePlaybackOrLoop = async () => {
+    pausePlayback();
+    if ($playRepeat) {
+      // the midiplayer resets some things when it hits endOfFile.
+      // Let it reset, then go to the start point and restart.
+      await sweep();
+      skipToPercentage($playbackProgressStart);
+      startPlayback();
+    }
+  };
+
   const startPlayback = () => {
     if ($currentTick < 0) resetPlayback();
     updatePlayer();
@@ -362,7 +388,7 @@
     },
   );
 
-  midiSamplePlayer.on("endOfFile", pausePlayback);
+  midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);
@@ -383,6 +409,9 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
+    skipToTick,
+    skipToPercentage,
+    isPlaying,
   };
 </script>
 
