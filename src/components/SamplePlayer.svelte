@@ -5,7 +5,7 @@
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
-  import { getPathJoiner } from "../lib/utils";
+  import { getPathJoiner, NoteSource } from "../lib/utils";
   import {
     rollMetadata,
     softOnOff,
@@ -29,8 +29,8 @@
     velocityCurveMid,
     velocityCurveHigh,
     userSettings,
+    transposeHalfStep,
     playRepeat,
-    playbackProgress,
     playbackProgressStart,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
@@ -191,7 +191,10 @@
     loadSampleVelocities();
   };
 
-  const startNote = (noteNumber, velocity, fromMidi) => {
+  const startNote = (noteNumber, velocity, noteSource) => {
+    if (noteSource == NoteSource.Midi) {
+      noteNumber = noteNumber + $transposeHalfStep;
+    }
     activeNotes.add(noteNumber);
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
@@ -228,15 +231,18 @@
         velocity: modifiedVelocity * (($softOnOff && SOFT_PEDAL_RATIO) || 1),
       });
     }
-    if (!fromMidi) {
+    if (noteSource != NoteSource.WebMidi) {
       webMidi?.sendMidiMsg("NOTE_ON", noteNumber, modifiedVelocity);
     }
   };
 
-  const stopNote = (noteNumber, fromMidi) => {
+  const stopNote = (noteNumber, noteSource) => {
+    if (noteSource == NoteSource.Midi) {
+      noteNumber = noteNumber + $transposeHalfStep;
+    }
     activeNotes.delete(noteNumber);
     piano.keyUp({ midi: noteNumber });
-    if (!fromMidi) {
+    if (noteSource != NoteSource.WebMidi) {
       webMidi?.sendMidiMsg("NOTE_OFF", noteNumber, 0);
     }
   };
@@ -372,9 +378,9 @@
     ({ name, value, number, noteNumber, velocity, data }) => {
       if (name === "Note on") {
         if (velocity === 0) {
-          stopNote(noteNumber);
+          stopNote(noteNumber, NoteSource.Midi);
         } else {
-          startNote(noteNumber, velocity);
+          startNote(noteNumber, velocity, NoteSource.Midi);
         }
       } else if (name === "Controller Change" && $rollPedalingOnOff) {
         if (number === SUSTAIN_PEDAL) {
@@ -399,6 +405,8 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
+  // Brutal but if we transpose while playing, notes will never get correct stopNote and will just hang.
+  $: $sampleVelocities, stopAllNotes();
 
   export {
     midiSamplePlayer,

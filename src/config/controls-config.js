@@ -34,6 +34,13 @@ export const defaultControlsConfig = {
     augmentedDelta: 0.1,
     precision: 2,
   },
+  transpose: {
+    min: -6,
+    max: 6,
+    delta: 1,
+    augmentedDelta: 1,
+    precision: 0
+  }
 };
 
 export const controlsStores = {

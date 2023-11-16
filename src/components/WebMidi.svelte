@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { clamp } from "../lib/utils";
+  import { clamp, NoteSource } from "../lib/utils";
   import { midiInputs, midiOutputs } from "../stores";
 
   export let startNote;
@@ -54,13 +54,13 @@
           startNote(
             entity,
             parseInt((parseFloat(value) / 127) * 100, 10),
-            /* fromMidi = */ true,
+            NoteSource.WebMidi,
           );
         }
         break;
 
       case midiBytes.NOTE_OFF:
-        stopNote(entity, /* fromMidi = */ true);
+        stopNote(entity, NoteSource.WebMidi);
         break;
 
       default:
