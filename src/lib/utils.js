@@ -4,8 +4,8 @@ import { rollProfile } from "../config/roll-config";
 export const NoteSource = {
   Keyboard: 0,
   Midi: 1,
-  WebMidi: 2
-}
+  WebMidi: 2,
+};
 
 const profiles = new Set(["perform", "listen"]);
 export const getProfile = (profile) =>
@@ -146,13 +146,13 @@ export const annotateHoleData = (
 
   const getNoteHoleColor = ({ v: velocity }) =>
     holeColorMap[
-    Math.round(
-      mapToRange(
-        normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-        0,
-        holeColorMap.length - 1,
-      ),
-    )
+      Math.round(
+        mapToRange(
+          normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+          0,
+          holeColorMap.length - 1,
+        ),
+      )
     ];
 
   const imageLengthPx = parseInt(imageLength, 10);

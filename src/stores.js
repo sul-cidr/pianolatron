@@ -105,3 +105,5 @@ export const media = watchMedia({
   wide: "(min-width: 1400px)",
   hover: "(hover: hover)",
 });
+
+export const showLatencyWarning = createStore(false);
