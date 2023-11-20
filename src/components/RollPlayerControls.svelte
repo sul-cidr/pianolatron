@@ -53,7 +53,7 @@
 
 <div class="player-button-container">
 <IconButton
-    class={ $playRepeat ? "overlay player-button" : "player-button"}
+    class={ $playRepeat ? "enabled player-button" : "player-button"}
     disabled={false}
     on:mousedown={togglePlayRepeat}
     iconName="replay"

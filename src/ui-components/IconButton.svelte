@@ -32,6 +32,7 @@
       }
 
       &:hover,
+      &.enabled,
       &.pause {
         color: white;
       }
