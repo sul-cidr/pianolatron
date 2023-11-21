@@ -21,6 +21,7 @@
     softFromExternalMidi,
     useMidiTempoEventsOnOff,
     activeNotes,
+    isPlaying,
     currentTick,
     sampleVolumes,
     sampleVelocities,
@@ -79,8 +80,6 @@
   });
 
   const pianoReady = piano.load();
-
-  const isPlaying = () => midiSamplePlayer.isPlaying();
 
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
@@ -273,9 +272,11 @@
           getElapsedTimeAtTick(tick) - getElapsedTimeAtTick(playbackStartTick);
         const elapsedTimeDiff = elapsedTime - expectedElapsedTime;
         if (elapsedTimeDiff > 0.1) {
-          latentNotes = [ ...latentNotes, tick ];
-        } else if ( $latencyDetected) {
-          latentNotes = latentNotes.filter((n) => n >= $currentTick - latencyThreshold);
+          latentNotes = [...latentNotes, tick];
+        } else if ($latencyDetected) {
+          latentNotes = latentNotes.filter(
+            (n) => n >= $currentTick - latencyThreshold,
+          );
         }
       } else {
         console.log(
@@ -320,10 +321,12 @@
     softOnOff.reset();
     sustainOnOff.reset();
     accentOnOff.reset();
+    midiSamplePlayer.triggerPlayerEvent("stop");
   };
 
   const pausePlayback = () => {
     midiSamplePlayer.pause();
+    midiSamplePlayer.triggerPlayerEvent("pause");
     stopAllNotes();
   };
 
@@ -433,8 +436,12 @@
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
+    if (!$isPlaying) $isPlaying = true;
     if (tick <= midiSamplePlayer.totalTicks) currentTick.set(tick);
   });
+
+  midiSamplePlayer.on("pause", () => ($isPlaying = false));
+  midiSamplePlayer.on("stop", () => ($isPlaying = false));
 
   midiSamplePlayer.on(
     "midiEvent",
@@ -491,7 +498,6 @@
     resetPlayback,
     skipToTick,
     skipToPercentage,
-    isPlaying,
   };
 </script>
 

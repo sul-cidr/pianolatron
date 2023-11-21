@@ -84,6 +84,7 @@ export const playbackProgressStart = createStore(0);
 export const playbackProgressEnd = createStore(1);
 export const activeNotes = createSetStore();
 export const playRepeat = createStore(false);
+export const isPlaying = createStore(false);
 
 // User Settings
 export const userSettings = createPersistedStore("userSettings", {
@@ -106,4 +107,5 @@ export const media = watchMedia({
   hover: "(hover: hover)",
 });
 
-export const showLatencyWarning = createStore(false);
+export const latencyDetected = createStore(false);
+export const showLatencyWarning = createStore(true);
