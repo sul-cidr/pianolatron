@@ -32,7 +32,7 @@
     transposeHalfStep,
     playRepeat,
     playbackProgressStart,
-    showLatencyWarning,
+    latencyDetected,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -274,7 +274,7 @@
         const elapsedTimeDiff = elapsedTime - expectedElapsedTime;
         if (elapsedTimeDiff > 0.1) {
           latentNotes = [ ...latentNotes, tick ];
-        } else if ( $showLatencyWarning) {
+        } else if ( $latencyDetected) {
           latentNotes = latentNotes.filter((n) => n >= $currentTick - latencyThreshold);
         }
       } else {
@@ -461,9 +461,9 @@
 
   const checkLatency = () => {
     if (latentNotes.length > 10) {
-      $showLatencyWarning = true;
+      $latencyDetected = true;
     } else {
-      $showLatencyWarning = false;
+      $latencyDetected = false;
     }
   };
 

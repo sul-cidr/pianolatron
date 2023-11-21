@@ -99,6 +99,7 @@
     playbackProgress,
     playbackProgressStart,
     playbackProgressEnd,
+    latencyDetected,
     showLatencyWarning,
   } from "../stores";
   import { clamp, getHoleLabel } from "../lib/utils";
@@ -623,6 +624,8 @@
     openSeadragon.open(imageUrl);
   });
 
+  const closeLatencyWarning = () => $showLatencyWarning = false;
+
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
@@ -681,8 +684,8 @@
       {panHorizontal}
     />
   {/if}
-  {#if $showLatencyWarning}
-    <LatencyWarning />
+  {#if $latencyDetected && $showLatencyWarning}
+    <LatencyWarning { closeLatencyWarning }/>
   {/if}
 
 </div>
