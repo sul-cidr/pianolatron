@@ -39,8 +39,8 @@ export const defaultControlsConfig = {
     max: 6,
     delta: 1,
     augmentedDelta: 1,
-    precision: 0
-  }
+    precision: 0,
+  },
 };
 
 export const controlsStores = {

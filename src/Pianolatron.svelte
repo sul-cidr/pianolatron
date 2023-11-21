@@ -125,7 +125,6 @@
   let startPlayback;
   let resetPlayback;
   let skipToTick;
-  let isPlaying;
 
   let rollViewer;
   let updateTickByViewportIncrement;
@@ -298,8 +297,7 @@
       pausePlayback,
       startPlayback,
       resetPlayback,
-      skipToTick,
-      isPlaying,
+      skipToTick
     } = samplePlayer);
 
     setCurrentRollFromUrl();
@@ -351,7 +349,6 @@
           {skipToTick}
           {resetPlayback}
           {playPauseApp}
-          {isPlaying}
         />
         <RollViewer
           bind:this={rollViewer}

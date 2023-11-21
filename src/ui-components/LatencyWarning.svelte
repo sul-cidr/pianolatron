@@ -1,17 +1,15 @@
 <style lang="scss">
   $aspect-ratio: 2.848;
-  $container-height: 20vh;
+  $container-height: 25vh;
   $container-width: unquote("min(800px, 80vw)");
 
   #lag-warning {
-    background-color: rgba(white, 0.2);
     color: var(--primary-accent);
     display: grid;
     font-size: 1.4em;
     height: 100%;
     left: 0;
     place-content: center;
-    pointer-events: none;
     position: absolute;
     text-align: center;
     text-shadow: 0px 0px 8px white;
@@ -41,10 +39,6 @@
       opacity: 0;
       transition: opacity 1s ease;
     }
-
-    p {
-        z-index: 50;
-    }
   }
 
   @keyframes scroll {
@@ -62,17 +56,22 @@
 
 <script>
   import { fade } from "svelte/transition";
-
+  export let closeLatencyWarning;
 </script>
 
 <div id="lag-warning" transition:fade>
+  <div>
     <div>
-        <div>
-            <span>Latency Warning!</span>
-   <p>
-    Your web browser seems to be having difficulty playing this roll, and as a result some notes may not be sounding when they should. Please consider following the suggestions in <a href="google.com" target="blank">the documentation</a> to attempt to improve the performance.
-   </p>
-
-        </div>
+      <span>Latency Warning!</span>
+      <p>
+        Your web browser seems to be having difficulty playing this roll, and as
+        a result some notes may not be sounding when they should. Please
+        consider following the suggestions in <a
+          href="/"
+          target="blank">the documentation</a
+        > to attempt to improve the performance.
+      </p>
+      <button on:click={closeLatencyWarning}>Close</button>
     </div>
+  </div>
 </div>

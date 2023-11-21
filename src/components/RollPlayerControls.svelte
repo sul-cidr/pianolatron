@@ -10,6 +10,7 @@
     import IconButton from "../ui-components/IconButton.svelte";
     import {
         currentTick,
+        isPlaying,
         playRepeat,
         playbackProgress,
         playbackProgressEnd,
@@ -19,9 +20,7 @@
     export let skipToTick;
     export let resetPlayback;
     export let playPauseApp;
-    export let isPlaying;
 
-    let showPause = false;
     let isRecording = false;
 
     const toggleRecording = async () => {
@@ -32,7 +31,6 @@
     const togglePlayPause = async () => {
         playPauseApp();
         await sweep();
-        showPause = isPlaying();
     }
 
     const skipFromCurrent = ( tickIncrement = 1500 ) => {
@@ -53,7 +51,7 @@
 
 <div class="player-button-container">
 <IconButton
-    class={ $playRepeat ? "overlay player-button" : "player-button"}
+    class={ $playRepeat ? "enabled player-button" : "player-button"}
     disabled={false}
     on:mousedown={togglePlayRepeat}
     iconName="replay"
@@ -81,7 +79,7 @@
     height="24"
     width="24"
   />
- {#if !showPause }
+ {#if !$isPlaying }
  <IconButton
     class={"player-button"}
     disabled={false}
