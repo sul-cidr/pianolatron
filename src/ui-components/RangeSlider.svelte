@@ -28,7 +28,8 @@
   $ie-bottom-track-color: darken($track-color, $contrast);
 
   @mixin shadow($shadow-size, $shadow-blur, $shadow-color) {
-    box-shadow: $shadow-size $shadow-size $shadow-blur $shadow-color,
+    box-shadow:
+      $shadow-size $shadow-size $shadow-blur $shadow-color,
       0 0 $shadow-size lighten($shadow-color, 5%);
   }
 
@@ -55,6 +56,9 @@
   }
 
   [type="range"] {
+    &.ticked {
+    }
+
     -webkit-appearance: none;
     background: transparent;
     margin: math.div($thumb-height, 2) 0;
@@ -79,7 +83,6 @@
         background: lighten($track-color, $contrast);
       }
     }
-
     &::-webkit-slider-runnable-track {
       @include track;
       @include shadow(
@@ -164,6 +167,37 @@
       }
     }
   }
+
+  datalist {
+    z-index: 0;
+    pointer-events: none;
+    display: grid;
+    grid-auto-flow: column;
+    grid-row: 3;
+    place-self: start stretch;
+    width: 100%;
+    left: 0;
+    margin: 0;
+    padding: 2.5em 0 1em 0;
+    position: absolute;
+    top: 1;
+  }
+
+  option {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 10px;
+    text-align: center;
+
+    &::before {
+      align-self: center;
+      width: 2px;
+      height: 0.75rem;
+      background: rgb(189, 193, 198);
+      content: "";
+    }
+  }
 </style>
 
 <script>
@@ -173,6 +207,7 @@
   export let name;
   export let value;
   export let mousewheel = true;
+  export let ticked = false;
 
   const clamp = (_value) => Math.min(Math.max(_value, min), max);
 
@@ -186,11 +221,22 @@
       value = clamp((Number(value) - Number(step)).toFixed(precision));
     }
   };
+
+  // Tickmarks - generate datalist options based on min/max values
+  let tickmarks = [];
+  const setTicks = () => {
+    if (ticked == false) return;
+    tickmarks = Array.from({ length: max - min + 1 }, (_, i) => i + min);
+  };
+  if (ticked) setTicks();
 </script>
 
 <input
   type="range"
   id={name}
+  class={ticked ? "ticked" : ""}
+  list="tickmarks-{name}"
+  aria-label={name}
   bind:value
   on:input
   on:change
@@ -200,3 +246,11 @@
   {step}
   {name}
 />
+
+{#if ticked && tickmarks && tickmarks.length}
+  <datalist id="tickmarks-{name}" class="range-slider-ticks">
+    {#each tickmarks as tm}
+      <option value={tm} label={tm} />
+    {/each}
+  </datalist>
+{/if}

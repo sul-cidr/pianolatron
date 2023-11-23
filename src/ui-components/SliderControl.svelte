@@ -1,7 +1,7 @@
 <style>
   div {
     display: flex;
-    height: 3.5em;
+    min-height: 3.5em;
     justify-content: space-between;
     padding: 0 0.5em 0.5em;
     position: relative;
@@ -10,7 +10,7 @@
   div :global(input[type="range"]) {
     left: 0;
     margin: 0;
-    padding: 2.5em 0 1em 0;
+    padding: 2em 0 1em 0;
     position: absolute;
     top: 0;
   }
@@ -25,6 +25,7 @@
   export let step;
   export let name;
   export let mousewheel = true;
+  export let ticked = false;
 </script>
 
 <div>
@@ -37,6 +38,7 @@
     {step}
     {name}
     {mousewheel}
+    {ticked}
     on:input
     on:change
   />
