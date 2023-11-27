@@ -1,57 +1,97 @@
 <style>
-.player-button-container {
+  .player-button-container {
     padding: 2px;
     text-align: center;
-}
+  }
 </style>
 
 <script>
-    import { tick as sweep } from "svelte";
-    import IconButton from "../ui-components/IconButton.svelte";
-    import {
-        currentTick,
-        isPlaying,
-        playRepeat,
-        playbackProgress,
-        playbackProgressEnd,
-        playbackProgressStart
-    } from "../stores";
+  import { tick as sweep } from "svelte";
+  import IconButton from "../ui-components/IconButton.svelte";
+  import {
+    currentTick,
+    isPlaying,
+    playRepeat,
+    playbackProgress,
+    playbackProgressEnd,
+    playbackProgressStart,
+  } from "../stores";
 
-    export let skipToTick;
-    export let resetPlayback;
-    export let playPauseApp;
+  export let skipToTick;
+  export let resetPlayback;
+  export let playPauseApp;
 
-    let isRecording = false;
+  let isRecording = false;
 
-    const toggleRecording = async () => {
-        console.log("TBD");
-        isRecording = !isRecording;
+  let isBookmarked = false;
+  const bookmark = () => {
+    const urlToCopy = new URL(window.location);
+    const params = Object.fromEntries(new URLSearchParams(urlToCopy.search));
+    delete params.start;
+    delete params.end;
+
+    if ($playbackProgress > 0) {
+      params.start = ($playbackProgress * 100).toFixed(2);
     }
-    
-    const togglePlayPause = async () => {
-        playPauseApp();
-        await sweep();
+    if ($playbackProgressEnd < 1) {
+      params.end = ($playbackProgressEnd * 100).toFixed(2);
     }
+    urlToCopy.search = new URLSearchParams(params);
+    window.navigator.clipboard.writeText(urlToCopy.toString());
+    isBookmarked = true;
+    setTimeout(function () {
+      isBookmarked = false;
+    }, 1000);
+  };
 
-    const skipFromCurrent = ( tickIncrement = 1500 ) => {
-        skipToTick($currentTick + tickIncrement);
-    }
+  const toggleRecording = async () => {
+    console.log("TBD");
+    isRecording = !isRecording;
+  };
 
-    const markStart = () => playbackProgressStart.set($playbackProgress);
-    const markEnd = () => playbackProgressEnd.set($playbackProgress);
-    let startMarked;
-    let endMarked;
+  const togglePlayPause = async () => {
+    playPauseApp();
+    await sweep();
+  };
 
-    const togglePlayRepeat = () => playRepeat.set(!$playRepeat);
+  const skipFromCurrent = (tickIncrement = 1500) => {
+    skipToTick($currentTick + tickIncrement);
+  };
 
-    $: startMarked = $playbackProgressStart > 0;
-    $: endMarked = $playbackProgressEnd < 1;
+  const markStart = () => playbackProgressStart.set($playbackProgress);
+  const markEnd = () => playbackProgressEnd.set($playbackProgress);
+  let startMarked;
+  let endMarked;
 
+  const togglePlayRepeat = () => playRepeat.set(!$playRepeat);
+
+  $: startMarked = $playbackProgressStart > 0;
+  $: endMarked = $playbackProgressEnd < 1;
 </script>
 
 <div class="player-button-container">
-<IconButton
-    class={ $playRepeat ? "enabled player-button" : "player-button"}
+  {#if !isBookmarked}
+    <IconButton
+      class="player-button"
+      disabled={false}
+      on:mousedown={bookmark}
+      iconName="bookmark"
+      label="bookmark"
+      height="24"
+      width="24"
+    />
+  {:else}
+    <IconButton
+      class="player-button"
+      disabled={false}
+      iconName="check"
+      label="Bookmark Copied!"
+      height="24"
+      width="24"
+    />
+  {/if}
+  <IconButton
+    class={$playRepeat ? "enabled player-button" : "player-button"}
     disabled={false}
     on:mousedown={togglePlayRepeat}
     iconName="replay"
@@ -59,7 +99,7 @@
     height="24"
     width="24"
   />
-<IconButton
+  <IconButton
     class={"player-button"}
     disabled={false}
     on:mousedown={resetPlayback}
@@ -68,7 +108,7 @@
     height="24"
     width="24"
   />
- <IconButton
+  <IconButton
     class={"player-button"}
     disabled={false}
     on:mousedown={() => {
@@ -79,29 +119,31 @@
     height="24"
     width="24"
   />
- {#if !$isPlaying }
- <IconButton
-    class={"player-button"}
-    disabled={false}
-    on:mousedown={togglePlayPause}
-    iconName="play"
-    label="Play"
-    height="24"
-    width="24"
-  />
- {:else }
- <IconButton
-    class={"pause player-button"}
-    disabled={false}
-    on:mousedown={togglePlayPause}
-    iconName="pause"
-    label="Pause"
-    height="24"
-    width="24"
-  />
- {/if}
- <IconButton
-    class={ isRecording ? "overlay player-button record" : "player-button record" }
+  {#if !$isPlaying}
+    <IconButton
+      class={"player-button"}
+      disabled={false}
+      on:mousedown={togglePlayPause}
+      iconName="play"
+      label="Play"
+      height="24"
+      width="24"
+    />
+  {:else}
+    <IconButton
+      class={"pause player-button"}
+      disabled={false}
+      on:mousedown={togglePlayPause}
+      iconName="pause"
+      label="Pause"
+      height="24"
+      width="24"
+    />
+  {/if}
+  <IconButton
+    class={isRecording
+      ? "overlay player-button record"
+      : "player-button record"}
     disabled={false}
     on:mousedown={toggleRecording}
     iconName="record"
@@ -120,7 +162,7 @@
     width="24"
   />
   <IconButton
-    class={ startMarked ? "overlay player-button" : "player-button" }
+    class={startMarked ? "overlay player-button" : "player-button"}
     disabled={false}
     on:mousedown={markStart}
     iconName="markStart"
@@ -129,7 +171,7 @@
     width="24"
   />
   <IconButton
-    class={ endMarked ? "overlay player-button" : "player-button" }
+    class={endMarked ? "overlay player-button" : "player-button"}
     disabled={false}
     on:mousedown={markEnd}
     iconName="markEnd"

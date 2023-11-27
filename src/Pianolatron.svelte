@@ -92,7 +92,6 @@
   } from "./ui-components/Notification.svelte";
   import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
-  import CopyUrlButton from "./ui-components/CopyUrlButton.svelte";
   import RollPlayerControls from "./components/RollPlayerControls.svelte";
   import catalog from "./config/catalog.json";
 
@@ -130,7 +129,7 @@
   let updateTickByViewportIncrement;
   let panHorizontal;
 
-  const progressPercentageToTick = ( percentage = 0 ) =>
+  const progressPercentageToTick = (percentage = 0) =>
     Math.floor(midiSamplePlayer.totalTicks * percentage);
 
   // redundant, but the way the BasicSettings comp is built requires we define the func
@@ -297,7 +296,7 @@
       pausePlayback,
       startPlayback,
       resetPlayback,
-      skipToTick
+      skipToTick,
     } = samplePlayer);
 
     setCurrentRollFromUrl();
@@ -332,8 +331,6 @@
     <FlexCollapsible id="left-sidebar" width="20vw">
       {#if isPerform}<RollSelector bind:currentRoll {rollListItems} />{/if}
       {#if appReady}
-        <CopyUrlButton />
-        <CopyUrlButton withProgress={true} linkText="Copy URL With Timestamp" />
         <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
           <p>
@@ -345,11 +342,7 @@
     </FlexCollapsible>
     <div id="roll">
       {#if appReady}
-        <RollPlayerControls
-          {skipToTick}
-          {resetPlayback}
-          {playPauseApp}
-        />
+        <RollPlayerControls {skipToTick} {resetPlayback} {playPauseApp} />
         <RollViewer
           bind:this={rollViewer}
           bind:rollImageReady
