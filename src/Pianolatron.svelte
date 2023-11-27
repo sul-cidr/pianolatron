@@ -243,16 +243,20 @@
     );
   };
 
-  const validateStartAndEnd = (start, end) => {
+  const validateStartParam = (start) => {
     start = Number(start) / 100;
-    end = Number(end) / 100;
     if (start < 0 || start >= 1) {
       start = 0;
     }
+    return start;
+  };
+
+  const validateEndParam = (end, start) => {
+    end = Number(end) / 100;
     if (end <= 0 || end > 1 || start >= end) {
       end = 1;
     }
-    return [start, end];
+    return end;
   };
 
   const setCurrentRollFromUrl = () => {
@@ -271,10 +275,16 @@
           closable: false,
         });
       }
-      [$playbackProgressStart, $playbackProgressEnd] = validateStartAndEnd(
-        params.get("start"),
-        params.get("end"),
-      );
+
+      if (params.has("start")) {
+        playbackProgressStart.set(validateStartParam(params.get("start")));
+      }
+
+      if (params.has("end")) {
+        playbackProgressEnd.set(
+          validateEndParam(params.get("end"), $playbackProgressStart),
+        );
+      }
     } else {
       currentRoll =
         rollListItems[Math.floor(Math.random() * rollListItems.length)];

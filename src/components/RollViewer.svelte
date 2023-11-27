@@ -491,7 +491,7 @@
         style.top = `${Math.round(topleft.y)}px`;
         style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
 
-        if ($playbackProgressStart > 0) {
+        if ($playbackProgressStart >= 0) {
           const startTick = progressPercentageToTick($playbackProgressStart);
           const startLinePx =
             firstHolePx + ($scrollDownwards ? startTick : -startTick);
@@ -624,7 +624,7 @@
     openSeadragon.open(imageUrl);
   });
 
-  const closeLatencyWarning = () => $showLatencyWarning = false;
+  const closeLatencyWarning = () => ($showLatencyWarning = false);
 
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
@@ -685,7 +685,6 @@
     />
   {/if}
   {#if $latencyDetected && $showLatencyWarning}
-    <LatencyWarning { closeLatencyWarning }/>
+    <LatencyWarning {closeLatencyWarning} />
   {/if}
-
 </div>

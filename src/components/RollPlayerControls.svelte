@@ -30,7 +30,7 @@
     delete params.start;
     delete params.end;
 
-    if ($playbackProgress > 0) {
+    if ($playbackProgressStart >= 0) {
       params.start = ($playbackProgress * 100).toFixed(2);
     }
     if ($playbackProgressEnd < 1) {
@@ -58,14 +58,27 @@
     skipToTick($currentTick + tickIncrement);
   };
 
-  const markStart = () => playbackProgressStart.set($playbackProgress);
-  const markEnd = () => playbackProgressEnd.set($playbackProgress);
   let startMarked;
   let endMarked;
+  // mark if no mark, remove if marked.
+  const markStart = () => {
+    if (startMarked) {
+      playbackProgressStart.reset();
+    } else {
+      playbackProgressStart.set($playbackProgress);
+    }
+  };
+  const markEnd = () => {
+    if (endMarked) {
+      playbackProgressEnd.reset();
+    } else {
+      playbackProgressEnd.set($playbackProgress);
+    }
+  };
 
   const togglePlayRepeat = () => playRepeat.set(!$playRepeat);
 
-  $: startMarked = $playbackProgressStart > 0;
+  $: startMarked = $playbackProgressStart >= 0;
   $: endMarked = $playbackProgressEnd < 1;
 </script>
 
@@ -162,20 +175,20 @@
     width="24"
   />
   <IconButton
-    class={startMarked ? "overlay player-button" : "player-button"}
+    class={startMarked ? "enabled player-button" : "player-button"}
     disabled={false}
     on:mousedown={markStart}
     iconName="markStart"
-    label="Mark Start"
+    label={startMarked ? "Remove Start Mark" : "Mark Start"}
     height="24"
     width="24"
   />
   <IconButton
-    class={endMarked ? "overlay player-button" : "player-button"}
+    class={endMarked ? "enabled player-button" : "player-button"}
     disabled={false}
     on:mousedown={markEnd}
     iconName="markEnd"
-    label="Mark Start"
+    label={endMarked ? "Remove End Mark" : "Mark End"}
     height="24"
     width="24"
   />
