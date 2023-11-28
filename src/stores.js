@@ -40,7 +40,7 @@ export const sustainFromExternalMidi = createStore(false);
 export const softFromExternalMidi = createStore(false);
 
 // Playback Settings
-export const volumeCoefficient = createStore(1.5);
+export const volumeCoefficient = createStore(1);
 export const bassVolumeCoefficient = createStore(1);
 export const trebleVolumeCoefficient = createStore(1);
 
