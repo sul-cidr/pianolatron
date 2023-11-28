@@ -85,7 +85,6 @@
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import ListenerPanel from "./components/ListenerPanel.svelte";
-  import Welcome, { showWelcomeScreen } from "./components/Welcome.svelte";
   import Notification, {
     notify,
     clearNotification,
@@ -399,7 +398,6 @@
 />
 <KeyboardShortcutEditor />
 <Notification />
-{#if isPerform && $showWelcomeScreen}<Welcome />{/if}
 
 <svelte:window
   on:popstate={({ state }) =>
