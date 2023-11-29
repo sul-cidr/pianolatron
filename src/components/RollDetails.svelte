@@ -1,5 +1,4 @@
 <style lang="scss">
-
   dl {
     display: block;
     overflow: auto;
@@ -67,12 +66,12 @@
 </style>
 
 <script>
-  import catalog from '../config/catalog.json'
+  import catalog from "../config/catalog.json";
   export let metadata;
 
-  export const similarWorksByPerformer = catalog.filter(w => {
+  export const similarWorksByPerformer = catalog.filter((w) => {
     return w.performer === metadata.performer && w.druid !== metadata.druid;
-  })
+  });
 
   const unavailable = "<span>Unavailable</span>";
 </script>
@@ -111,16 +110,20 @@
     <dd class="large">
       <ul>
         {#each similarWorksByPerformer as work}
-        <li>
-          <a href={`/?druid=${work.druid}`} target='_blank'>{@html work.title}</a>
-        </li>
+          <li>
+            <a href={`/?druid=${work.druid}`} target="_blank"
+              >{@html work.title}</a
+            >
+          </li>
         {/each}
       </ul>
     </dd>
   {/if}
   <dt>PURL</dt>
   <dd>
-    <a href={metadata.PURL} target='_blank'>{@html metadata.PURL || unavailable}</a>
+    <a href={metadata.PURL} target="_blank"
+      >{@html metadata.PURL || unavailable}</a
+    >
   </dd>
   {#if metadata.work}
     <dt>Work</dt>
