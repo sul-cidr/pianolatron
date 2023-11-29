@@ -194,7 +194,8 @@
 
   const loadRoll = (roll) => {
     appWaiting = true;
-    mididataReady = fetch(joinPath("midi", `${roll.druid}.mid`))
+    const rollDruid = roll.druid;
+    mididataReady = fetch(joinPath("midi", `${rollDruid}.mid`))
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
@@ -209,7 +210,7 @@
         currentRoll = previousRoll;
       });
 
-    metadataReady = fetch(joinPath("json", `${roll.druid}.json`))
+    metadataReady = fetch(joinPath("json", `${rollDruid}.json`))
       .then((metadataResponse) => {
         if (metadataResponse.status === 200) return metadataResponse.json();
         throw new Error("Error fetching metadata file! (Operation cancelled)");
@@ -221,7 +222,7 @@
 
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
-        metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
+        metadata = (({ holeData: _, ...obj }) => obj)({...metadataJson, druid: rollDruid});
         holeData = metadataJson.holeData;
         annotateHoleData(holeData, $rollMetadata, $scrollDownwards);
         buildHolesIntervalTree();
