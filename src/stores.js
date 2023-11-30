@@ -95,7 +95,6 @@ export const playbackProgressStart = createStore();
 export const playbackProgressEnd = createStore(1);
 export const activeNotes = createSetStore();
 export const playRepeat = createStore(false);
-export const isPlaying = createStore(false);
 
 // User Settings
 export const userSettings = createPersistedStore("userSettings", {
