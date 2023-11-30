@@ -34,7 +34,7 @@
     flex-wrap: wrap;
 
     button {
-      @include button;
+      // @include button;
       flex-grow: 1;
       min-width: 120px;
       width: 50%;
@@ -59,70 +59,71 @@
 
   export let playPauseApp;
   export let stopApp;
+
   // Fewer controls for listener than performer
-  export let isPerform = true;
+  // Not entirely sure how this is supposed to work - commented out for now
+  // export let isPerform = true;
 </script>
 
 <div id="playback-controls">
-  <div>
-    {#key $isPlaying}
+  <!-- {#if isPerform} -->
+    <div>
+      {#key $isPlaying}
+        <IconButton
+          class="overlay"
+          disabled={false}
+          on:click={playPauseApp}
+          iconName={$isPlaying ? "pause" : "play"}
+          label={$isPlaying ? "Pause" : "Play"}
+          tooltip={$isPlaying ? "Pause (key: 7)" : "Play (key: 7)"}
+        >
+          <kbd class:depressed={$keyMap.PLAY_PAUSE.active}
+            >{$keyMap.PLAY_PAUSE.key}</kbd
+          >
+        </IconButton>
+      {/key}
+      </div>
+      <div>
       <IconButton
         class="overlay"
         disabled={false}
-        on:click={playPauseApp}
-        iconName={$isPlaying ? "pause" : "play"}
-        label={$isPlaying ? "Pause" : "Play"}
-        tooltip={$isPlaying ? "Pause (key: 7)" : "Play (key: 7)"}
-        height="48"
-        width="48"
+        on:click={stopApp}
+        iconName="stop"
+        label="Stop/Rewind"
+        tooltip="Stop/Rewind (key: backspace)"
       >
-        <kbd class:depressed={$keyMap.PLAY_PAUSE.active}
-          >{$keyMap.PLAY_PAUSE.key}</kbd
-        >
+        <kbd class:depressed={$keyMap.REWIND.active}>{$keyMap.REWIND.key}</kbd>
       </IconButton>
-    {/key}
+    </div>
 
-    <IconButton
-      class="overlay"
-      disabled={false}
-      on:click={stopApp}
-      iconName="stop"
-      label="Stop/Rewind"
-      tooltip="Stop/Rewind (key: backspace)"
-      height="48"
-      width="48"
-    >
-      <kbd class:depressed={$keyMap.REWIND.active}>{$keyMap.REWIND.key}</kbd>
-    </IconButton>
-  </div>
-
-  <div>
-    <button
-      type="button"
-      class:pedal-on={$softOnOff}
-      aria-pressed={$softOnOff}
-      on:click={() => ($softOnOff = !$softOnOff)}
-      >Soft
-      <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
-    >
-    <button
-      type="button"
-      class:pedal-on={$sustainOnOff}
-      aria-pressed={$sustainOnOff}
-      on:click={() => ($sustainOnOff = !$sustainOnOff)}
-      >Sustain
-      <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
-    >
-    <br />
-    <button
-      type="button"
-      style="width:100%"
-      class:pedal-on={$accentOnOff}
-      aria-pressed={$accentOnOff}
-      on:mousedown={() => ($accentOnOff = true)}
-      >Accent
-      <kbd class:depressed={$accentOnOff}>{$keyMap.ACCENT.key}</kbd></button
-    >
-  </div>
+    <div>
+      <button
+        type="button"
+        class:pedal-on={$softOnOff}
+        aria-pressed={$softOnOff}
+        on:click={() => ($softOnOff = !$softOnOff)}
+        >Soft
+        <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
+      >
+      <button
+        type="button"
+        class:pedal-on={$sustainOnOff}
+        aria-pressed={$sustainOnOff}
+        on:click={() => ($sustainOnOff = !$sustainOnOff)}
+        >Sustain
+        <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
+      >
+      <br />
+      <button
+        type="button"
+        style="width:100%"
+        class:pedal-on={$accentOnOff}
+        aria-pressed={$accentOnOff}
+        on:mousedown={() => ($accentOnOff = true)}
+        >Accent
+        <kbd class:depressed={$accentOnOff}>{$keyMap.ACCENT.key}</kbd></button
+      >
+    </div>
+  <!-- {/if} -->
 </div>
 <svelte:window on:mouseup={() => ($accentOnOff = false)} />
