@@ -8,6 +8,20 @@
     height: 100%;
     width: 100%;
 
+    :global(#nav-display-start-marker) {
+      height: var(--nav-bar-height);
+      background: red !important;
+      display: "block";
+      position: relative;
+    }
+
+    :global(#nav-display-end-marker) {
+      height: var(--nav-bar-height);
+      background: blue !important;
+      display: "block";
+      position: relative;
+    }
+
     // tracker bar
     &::before {
       background: linear-gradient(
@@ -138,13 +152,21 @@
   let visibleSvgs = [];
   let entireViewportRectangle;
 
-  const startMarker = document.createElement("div");
-  startMarker.id = "pianolatron-start-marker";
-  startMarker.style.position = "relative";
+  // these are the markers that go in the NavDisplay
+  const navDisplayMarkerHeight = 2;
+  const navDisplayStartMarker = document.createElement("div");
+  navDisplayStartMarker.id = "nav-display-start-marker";
+  navDisplayStartMarker.style.setProperty(
+    "--nav-bar-height",
+    `${navDisplayMarkerHeight}px`,
+  );
 
-  const endMarker = document.createElement("div");
-  endMarker.id = "pianolatron-end-marker";
-  endMarker.style.position = "relative";
+  const navDisplayEndMarker = document.createElement("div");
+  navDisplayEndMarker.id = "nav-display-end-marker";
+  navDisplayEndMarker.style.setProperty(
+    "--nav-bar-height",
+    `${navDisplayMarkerHeight}px`,
+  );
 
   const createMark = (hole) => {
     const {
@@ -316,10 +338,6 @@
     });
   };
 
-  const skipFromCurrent = (tickIncrement = 1500) => {
-    skipToTick($currentTick + tickIncrement);
-  };
-
   // Pan the viewer to bring the position of `@tick` to the center of
   //  the viewport.  Does not trigger an OSD `pan` event.
   const updateViewportFromTick = (tick) => {
@@ -414,6 +432,43 @@
     viewport.applyConstraints();
   };
 
+  const updateNavDisplayMarkers = (navViewport) => {
+    if ($playbackProgressStart >= 0) {
+      const startTick = progressPercentageToTick($playbackProgressStart);
+      const startLinePx =
+        firstHolePx + ($scrollDownwards ? startTick : -startTick);
+      const startLineViewport = viewport.imageToViewportCoordinates(
+        0,
+        startLinePx,
+      );
+      const startTL = navViewport.pixelFromPointNoRotate(
+        startLineViewport,
+        false,
+      );
+      navDisplayStartMarker.style.top = `${
+        Math.round(startTL.y) +
+        ($scrollDownwards ? -navDisplayMarkerHeight : navDisplayMarkerHeight)
+      }px`;
+      navDisplayStartMarker.style.display = "block";
+    } else {
+      navDisplayStartMarker.style.display = "none";
+    }
+
+    if ($playbackProgressEnd < 1) {
+      const endTick = progressPercentageToTick($playbackProgressEnd);
+      const endLinePx = firstHolePx + ($scrollDownwards ? endTick : -endTick);
+      const endLineViewport = viewport.imageToViewportCoordinates(0, endLinePx);
+      const endTL = navViewport.pixelFromPointNoRotate(endLineViewport, false);
+      navDisplayEndMarker.style.top = `${
+        Math.round(endTL.y) +
+        ($scrollDownwards ? navDisplayMarkerHeight : -navDisplayMarkerHeight)
+      }px`;
+      navDisplayEndMarker.style.display = "block";
+    } else {
+      navDisplayEndMarker.style.display = "none";
+    }
+  };
+
   onMount(() => {
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
@@ -463,8 +518,8 @@
       boxShadow: "0 0 4px var(--primary-accent)",
     });
 
-    osdNavDisplayRegionContainer.appendChild(startMarker);
-    osdNavDisplayRegionContainer.appendChild(endMarker);
+    osdNavDisplayRegionContainer.appendChild(navDisplayStartMarker);
+    osdNavDisplayRegionContainer.appendChild(navDisplayEndMarker);
 
     // Monkey-patch the navigator.update method to prevent the displayRegion element
     //  being resized to reflect the horizontal dimension of the viewport
@@ -491,39 +546,7 @@
         style.top = `${Math.round(topleft.y)}px`;
         style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
 
-        if ($playbackProgressStart >= 0) {
-          const startTick = progressPercentageToTick($playbackProgressStart);
-          const startLinePx =
-            firstHolePx + ($scrollDownwards ? startTick : -startTick);
-          const startLineViewport = viewport.imageToViewportCoordinates(
-            0,
-            startLinePx,
-          );
-          const startTL = navViewport.pixelFromPointNoRotate(
-            startLineViewport,
-            false,
-          );
-          startMarker.style.top = `${Math.round(startTL.y)}px`;
-          startMarker.style.height = "2px";
-          startMarker.style.backgroundColor = "red";
-        }
-
-        if ($playbackProgressEnd < 1) {
-          const endTick = progressPercentageToTick($playbackProgressEnd);
-          const endLinePx =
-            firstHolePx + ($scrollDownwards ? endTick : -endTick);
-          const endLineViewport = viewport.imageToViewportCoordinates(
-            0,
-            endLinePx,
-          );
-          const endTL = navViewport.pixelFromPointNoRotate(
-            endLineViewport,
-            false,
-          );
-          endMarker.style.top = `${Math.round(endTL.y)}px`;
-          endMarker.style.height = "2px";
-          endMarker.style.backgroundColor = "blue";
-        }
+        updateNavDisplayMarkers(navViewport);
       }
     };
 
@@ -626,6 +649,15 @@
 
   const closeLatencyWarning = () => ($showLatencyWarning = false);
 
+  const updateNavBar = () => {
+    if (openSeadragon == undefined) {
+      return;
+    }
+    updateNavDisplayMarkers(openSeadragon.navigator.viewport);
+  };
+
+  $: $playbackProgressStart, updateNavBar();
+  $: $playbackProgressEnd, updateNavBar();
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
