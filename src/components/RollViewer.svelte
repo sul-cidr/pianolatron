@@ -151,6 +151,7 @@
   let svgPartitions;
   let visibleSvgs = [];
   let entireViewportRectangle;
+  let selectionSvg;
 
   // these are the markers that go in the NavDisplay
   const navDisplayMarkerHeight = 2;
@@ -207,6 +208,99 @@
     );
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
+  };
+
+  // Adds an overlay that shows user selection in the roll viewer.
+  // If start and end markers are set, a rect is added to show the selected section.
+  const createSelectionOverlaySvg = (startPx, endPx) => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+    svg.setAttribute("width", imageWidth);
+    svg.setAttribute("height", imageLength);
+    svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+    svg.setAttribute("style", "pointer-events: none;");
+    svg.appendChild(g);
+
+    // start line
+    if (startPx >= 0) {
+      const startLine = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line",
+      );
+      startLine.setAttribute("id", "nav-start-line");
+      startLine.setAttribute("x1", 0);
+      startLine.setAttribute("y1", startPx);
+      startLine.setAttribute("x2", imageWidth);
+      startLine.setAttribute("y2", startPx);
+      startLine.setAttribute("stroke", "darkolivegreen");
+      startLine.setAttribute("stroke-width", 20);
+      startLine.setAttribute("stroke-opacity", "50%");
+      g.appendChild(startLine);
+    }
+
+    // end line
+    if (endPx >= 0) {
+      const endLine = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line",
+      );
+      endLine.setAttribute("id", "nav-end-line");
+      endLine.setAttribute("x1", 0);
+      endLine.setAttribute("y1", endPx);
+      endLine.setAttribute("x2", imageWidth);
+      endLine.setAttribute("y2", endPx);
+      endLine.setAttribute("stroke", "steelblue");
+      endLine.setAttribute("stroke-width", 20);
+      endLine.setAttribute("stroke-opacity", "50%");
+      g.appendChild(endLine);
+    }
+
+    // and in between
+    if (startPx >= 0 && endPx >= 0) {
+      const rect = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect",
+      );
+      rect.setAttribute("x", 0);
+      rect.setAttribute("y", startPx);
+      rect.setAttribute("width", "100%");
+      rect.setAttribute("height", endPx - startPx);
+      rect.setAttribute("rx", 10);
+      rect.setAttribute("ry", 10);
+      rect.setAttribute("fill", `hsla(304, 97%, 58%, 0.26)`);
+      rect.setAttribute("class", "selection");
+      g.appendChild(rect);
+    }
+
+    return svg;
+  };
+
+  // Selection Overlay in the image viewer
+  const updateSelectionOverlay = () => {
+    if (viewport === undefined) {
+      return;
+    }
+
+    if (selectionSvg !== undefined) {
+      svgPartitions.remove(firstHolePx, lastHolePx, selectionSvg);
+    }
+
+    let startLinePx = -1;
+    let endLinePx = -1;
+
+    if ($playbackProgressStart >= 0) {
+      const startTick = progressPercentageToTick($playbackProgressStart);
+      startLinePx = firstHolePx + ($scrollDownwards ? startTick : -startTick);
+    }
+
+    if ($playbackProgressEnd < 1) {
+      const endTick = progressPercentageToTick($playbackProgressEnd);
+      endLinePx = firstHolePx + ($scrollDownwards ? endTick : -endTick);
+    }
+
+    selectionSvg = createSelectionOverlaySvg(startLinePx, endLinePx);
+    svgPartitions.insert(firstHolePx, lastHolePx, selectionSvg);
   };
 
   const createHolesOverlaySvg = (holes) => {
@@ -432,6 +526,8 @@
     viewport.applyConstraints();
   };
 
+  // Updates selection markers in the nav viewer ( the strip next to image viewer)
+  // Currently these are just div lines that are moved in the nav
   const updateNavDisplayMarkers = (navViewport) => {
     if ($playbackProgressStart >= 0) {
       const startTick = progressPercentageToTick($playbackProgressStart);
@@ -566,6 +662,7 @@
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
       partitionHolesOverlaySvgs();
+      updateSelectionOverlay();
       updateViewportFromTick(0);
     });
 
@@ -649,15 +746,17 @@
 
   const closeLatencyWarning = () => ($showLatencyWarning = false);
 
-  const updateNavBar = () => {
+  const updateSelection = () => {
     if (openSeadragon == undefined) {
       return;
     }
     updateNavDisplayMarkers(openSeadragon.navigator.viewport);
+    updateSelectionOverlay();
+    updateVisibleSvgPartitions();
   };
 
-  $: $playbackProgressStart, updateNavBar();
-  $: $playbackProgressEnd, updateNavBar();
+  $: $playbackProgressStart, updateSelection();
+  $: $playbackProgressEnd, updateSelection();
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
