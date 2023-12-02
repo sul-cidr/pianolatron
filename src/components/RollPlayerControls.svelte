@@ -2,6 +2,7 @@
   .player-button-container {
     padding: 2px;
     text-align: center;
+    background-color: var(--background-color);
   }
 </style>
 
