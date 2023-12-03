@@ -160,7 +160,13 @@
 
 <script>
   import KeyboardControls from "./KeyboardControls.svelte";
-  import { activeNotes, softOnOff, sustainOnOff } from "../stores";
+  import {
+    activeNotes,
+    isPlaying,
+    softOnOff,
+    sustainOnOff,
+    transposeHalfStep,
+  } from "../stores";
   import { NoteSource } from "../lib/utils";
 
   export let keyCount = 88;
@@ -210,6 +216,20 @@
     );
     playing = new Set();
   };
+
+  // when playing, we dump the active notes and those incoming are transposed
+  // the keyboard doesn't need to do anythign with tranpose in that situation.
+  // if we're not playing, the activeNotes will stay in place ( untransposed )
+  // so the keyboard needs to update its depressed keys.
+  let transposeCoefficient = 0;
+  const updateTransposeCoefficient = () => {
+    if (!$isPlaying) {
+      transposeCoefficient = $transposeHalfStep;
+    }
+  };
+
+  $: $transposeHalfStep, updateTransposeCoefficient();
+  $: if ($isPlaying && transposeCoefficient != 0) transposeCoefficient = 0;
 </script>
 
 <div id="keyboard">
@@ -247,7 +267,8 @@
             role="button"
             tabindex="0"
             data-key={note}
-            class:depressed={$activeNotes.has(note) || playing.has(note)}
+            class:depressed={$activeNotes.has(note - transposeCoefficient) ||
+              playing.has(note)}
           />
         {/each}
       </div>

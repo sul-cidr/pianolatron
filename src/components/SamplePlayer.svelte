@@ -265,7 +265,9 @@
       1,
     );
     if (modifiedVelocity) {
-      if (notesMap.search(tick, tick).includes(noteNumber)) {
+      if (
+        notesMap.search(tick, tick).includes(noteNumber - $transposeHalfStep)
+      ) {
         const thisTime = Date.now();
         const elapsedTime = (thisTime - playbackStartTime) / 1000;
         const expectedElapsedTime =
@@ -466,6 +468,13 @@
 
   midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
+  const updateTranspose = () => {
+    // if we're playing just dump everything and let the updates roll in
+    if ($isPlaying) {
+      stopAllNotes();
+    }
+  };
+
   const checkLatency = () => {
     if (latentNotes.length > 10) {
       $latencyDetected = true;
@@ -483,8 +492,7 @@
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
   $: $sampleVelocities, updateSampleVelocities();
-  // Brutal but if we transpose while playing, notes will never get correct stopNote and will just hang.
-  $: $sampleVelocities, stopAllNotes();
+  $: $transposeHalfStep, updateTranspose();
   $: latentNotes, checkLatency();
 
   export {
