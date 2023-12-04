@@ -53,6 +53,7 @@
 
   export let playPauseApp;
   export let stopApp;
+  export let skipToTick;
   const isPerform = false;
 
 </script>
@@ -77,4 +78,4 @@
     </SliderControl>
   </div>
 </div>
-<PlaybackControls {playPauseApp} {stopApp} {isPerform} />
+<PlaybackControls {skipToTick} {playPauseApp} {stopApp} {isPerform} />

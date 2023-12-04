@@ -137,8 +137,10 @@
 
   // redundant, but the way the BasicSettings comp is built requires we define the func
   // here, as it won't update the ref.
-  const skipToPercentage = (percentage = 0) =>
+  const skipToPercentage = (percentage = 0) => {
+    console.log("skipping");
     skipToTick(progressPercentageToTick(percentage));
+  };
 
   const rollListItems = catalog.map((item) => ({
     ...item,
@@ -194,7 +196,6 @@
     trebleVolumeCoefficient.reset();
     holesByTickInterval = new IntervalTree();
   };
-
 
   const loadRoll = (roll) => {
     appWaiting = true;
@@ -403,7 +404,7 @@
             {recordingControl}
           />
         {:else}
-          <ListenerPanel {playPauseApp} {stopApp} />
+          <ListenerPanel {skipToTick} {playPauseApp} {stopApp} />
         {/if}
       {/if}
     </FlexCollapsible>

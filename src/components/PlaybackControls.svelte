@@ -1,109 +1,114 @@
 <style lang="scss">
-  #playback-controls {
-    margin: 0 0.5em;
-  }
 
-  #playback-controls > div:first-child {
-    background-color: var(--cardinal-red-light);
-    border-color: var(--cardinal-red);
-  }
+  #perform-controls {
+    :global(kbd) {
+      bottom: 0.35rem;
+      position: absolute;
+      right: 0rem;
+    }
 
-  #playback-controls {
-      :global(kbd) {
-        bottom: 0.35rem;
-        position: absolute;
-        right: 0rem;
-      }
+    :global(kbd:not(.depressed)) {
+      opacity: 0.6;
+    }
 
-      :global(kbd:not(.depressed)) {
-        opacity: 0.6;
-      }
+    &:hover :global(kbd) {
+      opacity: 1;
+    }
 
-      &:hover :global(kbd) {
-        opacity: 1;
-      }
+    font-family: SourceSans3, sans-serif;
 
-    &.is-perform {
-      display: flex;
-      flex-direction: column;
-
-      & .play-pause-button {
-        border-radius: 4px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        margin: 0 0 0.5rem;
-        position: relative;
-        cursor: pointer;
-      }
-
-      & .half {
+    & .play-pause-button, .accent-button {
+      background-color: var(--cardinal-red-light);
+      border-color: var(--cardinal-red);
+      border-radius: 4px;
       display: flex;
       flex-direction: row;
-      gap: 1rem;
       justify-content: center;
+      align-items: center;
       margin: 0 0 0.5rem;
-        & > div {
-          border-radius: 4px;
-          position: relative;
-          flex: 1;
-        }
-        & .record-button {
-          background-color: var(--cardinal-red-light);
-          border-color: var(--cardinal-red);
-        }
-        & .start-over-button {
-          background-color: var(--cool-grey);
-          border-color: var(--black);
-        }
-        & .skip-button {
-          background-color: var(--black);
-          border-color: var(--black);
-        }
-
-      }
-    }
-  }
-
-  #playback-controls > div:last-child {
-    display: flex;
-    flex-wrap: wrap;
-
-    button {
-      background-color: var(--cool-grey);
-      color: var(--white);
-      border-radius: 4px;
-      border-style: solid;
-      height: 2rem;
       position: relative;
-      flex-grow: 1;
-      min-width: 120px;
-      width: 50%;
+      cursor: pointer;
+    }
+
+    & .accent-button {
+      background-color: var(--cool-grey);
+      border-color: var(--cool-grey);
+      border-style: solid;
+      color: var(--white);
+      height: 2rem;
 
       &.pedal-on {
         background-color: var(--cool-grey);
         border-color: yellow;
         color: yellow;
+        font-weight: 500;
       }
+    }
 
-      kbd {
-        position: absolute;
-        right: 0rem;
-        bottom: 0.2rem;
+    & .half {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 0 0 0.5rem;
+
+      &.performer-accent-buttons {
+        & button {
+          background-color: var(--cool-grey);
+          border-radius: 4px;
+          border: 1px solid var(--cool-grey);
+          color: var(--white);
+          cursor: pointer;
+          flex-grow: 1;
+          height: 2rem;
+          min-width: 120px;
+          position: relative;
+          width: 100%;
+
+          &.pedal-on {
+            background-color: var(--cool-grey);
+            border-color: yellow;
+            color: yellow;
+            font-weight: 500;
+          }
+        }
+      }
+      & > div {
+        border-radius: 4px;
+        position: relative;
+        flex: 1;
+      }
+      & .record-button {
+        // if we have the ability to record, use this:
+        // background-color: var(--cardinal-red-light);
+        background-color: #ccc;
+        border: 1px solid var(--cardinal-red-light);
+      }
+      & .start-over-button {
+        background-color: var(--cool-grey);
+        border: 1px solid var(--cool-grey);
+      }
+      & .skip-button {
+        background-color: var(--black);
+        border: 1px solid var(--black);
       }
     }
   }
 </style>
 
 <script>
+  import { tick as sweep } from "svelte";
   import { keyMap } from "./KeyboardShortcuts.svelte";
-  import { currentTick, isPlaying, softOnOff, sustainOnOff, accentOnOff } from "../stores";
+  import { 
+    currentTick,
+    isPlaying, 
+    softOnOff, 
+    sustainOnOff, 
+    accentOnOff, } from "../stores";
   import IconButton from "../ui-components/IconButton.svelte";
 
   export let playPauseApp;
   export let stopApp;
-  export let resetPlayback;
   export let skipToTick;
 
   let isRecording = false;
@@ -116,12 +121,17 @@
     skipToTick($currentTick + tickIncrement);
   };
 
+  const togglePlayPause = async () => {
+    playPauseApp();
+    await sweep();
+  };
+
   // Fewer controls for listener than performer
   // Not entirely sure how this is supposed to work - commented out for now
   // export let isPerform = true;
 </script>
 
-<div id="playback-controls" class="is-perform">
+<div id="perform-controls">
   <!-- {#if isPerform} -->
     <div class="play-pause-button">
       {#key $isPlaying}
@@ -130,7 +140,7 @@
           disabled={false}
           height="48"
           width="48"
-          on:click={playPauseApp}
+          on:click={togglePlayPause}
           iconName={$isPlaying ? "pause" : "play"}
           label={$isPlaying ? "Pause" : "Play"}
           tooltip={$isPlaying ? `Pause (key: ${$keyMap.PLAY_PAUSE.key})` : `Play (key: ${$keyMap.PLAY_PAUSE.key})`}
@@ -147,12 +157,13 @@
           class={isRecording
             ? "overlay performer-button"
             : "performer-button"}
-          disabled={false}
+          disabled={true}
           on:mousedown={toggleRecording}
           iconName="record"
           label="Record"
           height="24"
           title="Record"
+          tooltip="Record (TBD)"
         />
       </div>
       <div class="start-over-button">
@@ -199,9 +210,7 @@
         </IconButton>
       </div>
     </div>
-
-    <div class="performer-accent-buttons">
-      <div class="half">
+    <div class="performer-accent-buttons half">
         <button
           type="button"
           class:pedal-on={$softOnOff}
@@ -220,10 +229,12 @@
         >
       </div>
 
+    <div class="performer-accent-buttons">
       <button
         type="button"
         style="width:100%"
         class:pedal-on={$accentOnOff}
+        class="accent-button"
         aria-pressed={$accentOnOff}
         on:mousedown={() => ($accentOnOff = true)}
         >Accent

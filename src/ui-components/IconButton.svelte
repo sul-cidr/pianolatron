@@ -56,12 +56,15 @@
       }
     }
     &.performer-button {
-      color: white;
-      padding: 0.35em 0.8em;
+      align-items: center;
+      color: var(--white);
+      display: flex;
+      justify-content: center;
+      padding: 0.5rem;
       width: 100%;
 
       &:active {
-        color: white;
+        color: var(--white);
       }
 
       &:focus,
@@ -72,11 +75,11 @@
       &:hover,
       &.enabled,
       &.pause {
-        color: white;
+        color: var(--white);
       }
 
       &:disabled {
-        color: grey;
+        color: var(--cool-grey);
         cursor: not-allowed;
       }
 
