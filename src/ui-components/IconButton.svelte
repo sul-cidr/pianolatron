@@ -55,6 +55,32 @@
         color: red;
       }
     }
+    &.performer-button {
+      color: white;
+      padding: 0.35em 0.8em;
+      width: 100%;
+
+      &:active {
+        color: white;
+      }
+
+      &:focus,
+      &:active {
+        outline: 0;
+      }
+
+      &:hover,
+      &.enabled,
+      &.pause {
+        color: white;
+      }
+
+      &:disabled {
+        color: grey;
+        cursor: not-allowed;
+      }
+
+    }
   }
 </style>
 
