@@ -205,7 +205,7 @@ $highlight-hover-outline-offset: 4px;
 
   // when "Highlight All Holes" is off, don't fill the hole <rect/> elements
   &:not(.highlight-enabled-holes) {
-    svg rect {
+    svg rect:not(.selection) {
       fill: none;
     }
   }

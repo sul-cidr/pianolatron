@@ -8,6 +8,20 @@
     height: 100%;
     width: 100%;
 
+    :global(#nav-display-start-marker) {
+      height: var(--nav-bar-height);
+      background: red !important;
+      display: "block";
+      position: relative;
+    }
+
+    :global(#nav-display-end-marker) {
+      height: var(--nav-bar-height);
+      background: blue !important;
+      display: "block";
+      position: relative;
+    }
+
     // tracker bar
     &::before {
       background: linear-gradient(
@@ -137,14 +151,23 @@
   let svgPartitions;
   let visibleSvgs = [];
   let entireViewportRectangle;
+  let selectionSvg;
 
-  const startMarker = document.createElement("div");
-  startMarker.id = "pianolatron-start-marker";
-  startMarker.style.position = "relative";
+  // these are the markers that go in the NavDisplay
+  const navDisplayMarkerHeight = 2;
+  const navDisplayStartMarker = document.createElement("div");
+  navDisplayStartMarker.id = "nav-display-start-marker";
+  navDisplayStartMarker.style.setProperty(
+    "--nav-bar-height",
+    `${navDisplayMarkerHeight}px`,
+  );
 
-  const endMarker = document.createElement("div");
-  endMarker.id = "pianolatron-end-marker";
-  endMarker.style.position = "relative";
+  const navDisplayEndMarker = document.createElement("div");
+  navDisplayEndMarker.id = "nav-display-end-marker";
+  navDisplayEndMarker.style.setProperty(
+    "--nav-bar-height",
+    `${navDisplayMarkerHeight}px`,
+  );
 
   const createMark = (hole) => {
     const {
@@ -185,6 +208,99 @@
     );
     viewport.viewer.addOverlay(mark, viewportRectangle);
     return mark;
+  };
+
+  // Adds an overlay that shows user selection in the roll viewer.
+  // If start and end markers are set, a rect is added to show the selected section.
+  const createSelectionOverlaySvg = (startPx, endPx) => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+    svg.setAttribute("width", imageWidth);
+    svg.setAttribute("height", imageLength);
+    svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
+    svg.setAttribute("style", "pointer-events: none;");
+    svg.appendChild(g);
+
+    // start line
+    if (startPx >= 0) {
+      const startLine = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line",
+      );
+      startLine.setAttribute("id", "nav-start-line");
+      startLine.setAttribute("x1", 0);
+      startLine.setAttribute("y1", startPx);
+      startLine.setAttribute("x2", imageWidth);
+      startLine.setAttribute("y2", startPx);
+      startLine.setAttribute("stroke", "darkolivegreen");
+      startLine.setAttribute("stroke-width", 20);
+      startLine.setAttribute("stroke-opacity", "50%");
+      g.appendChild(startLine);
+    }
+
+    // end line
+    if (endPx >= 0) {
+      const endLine = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line",
+      );
+      endLine.setAttribute("id", "nav-end-line");
+      endLine.setAttribute("x1", 0);
+      endLine.setAttribute("y1", endPx);
+      endLine.setAttribute("x2", imageWidth);
+      endLine.setAttribute("y2", endPx);
+      endLine.setAttribute("stroke", "steelblue");
+      endLine.setAttribute("stroke-width", 20);
+      endLine.setAttribute("stroke-opacity", "50%");
+      g.appendChild(endLine);
+    }
+
+    // and in between
+    if (startPx >= 0 && endPx >= 0) {
+      const rect = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect",
+      );
+      rect.setAttribute("x", 0);
+      rect.setAttribute("y", startPx);
+      rect.setAttribute("width", "100%");
+      rect.setAttribute("height", endPx - startPx);
+      rect.setAttribute("rx", 10);
+      rect.setAttribute("ry", 10);
+      rect.setAttribute("fill", `hsla(304, 97%, 58%, 0.26)`);
+      rect.setAttribute("class", "selection");
+      g.appendChild(rect);
+    }
+
+    return svg;
+  };
+
+  // Selection Overlay in the image viewer
+  const updateSelectionOverlay = () => {
+    if (viewport === undefined) {
+      return;
+    }
+
+    if (selectionSvg !== undefined) {
+      svgPartitions.remove(firstHolePx, lastHolePx, selectionSvg);
+    }
+
+    let startLinePx = -1;
+    let endLinePx = -1;
+
+    if ($playbackProgressStart >= 0) {
+      const startTick = progressPercentageToTick($playbackProgressStart);
+      startLinePx = firstHolePx + ($scrollDownwards ? startTick : -startTick);
+    }
+
+    if ($playbackProgressEnd < 1) {
+      const endTick = progressPercentageToTick($playbackProgressEnd);
+      endLinePx = firstHolePx + ($scrollDownwards ? endTick : -endTick);
+    }
+
+    selectionSvg = createSelectionOverlaySvg(startLinePx, endLinePx);
+    svgPartitions.insert(firstHolePx, lastHolePx, selectionSvg);
   };
 
   const createHolesOverlaySvg = (holes) => {
@@ -316,10 +432,6 @@
     });
   };
 
-  const skipFromCurrent = (tickIncrement = 1500) => {
-    skipToTick($currentTick + tickIncrement);
-  };
-
   // Pan the viewer to bring the position of `@tick` to the center of
   //  the viewport.  Does not trigger an OSD `pan` event.
   const updateViewportFromTick = (tick) => {
@@ -414,6 +526,45 @@
     viewport.applyConstraints();
   };
 
+  // Updates selection markers in the nav viewer ( the strip next to image viewer)
+  // Currently these are just div lines that are moved in the nav
+  const updateNavDisplayMarkers = (navViewport) => {
+    if ($playbackProgressStart >= 0) {
+      const startTick = progressPercentageToTick($playbackProgressStart);
+      const startLinePx =
+        firstHolePx + ($scrollDownwards ? startTick : -startTick);
+      const startLineViewport = viewport.imageToViewportCoordinates(
+        0,
+        startLinePx,
+      );
+      const startTL = navViewport.pixelFromPointNoRotate(
+        startLineViewport,
+        false,
+      );
+      navDisplayStartMarker.style.top = `${
+        Math.round(startTL.y) +
+        ($scrollDownwards ? -navDisplayMarkerHeight : navDisplayMarkerHeight)
+      }px`;
+      navDisplayStartMarker.style.display = "block";
+    } else {
+      navDisplayStartMarker.style.display = "none";
+    }
+
+    if ($playbackProgressEnd < 1) {
+      const endTick = progressPercentageToTick($playbackProgressEnd);
+      const endLinePx = firstHolePx + ($scrollDownwards ? endTick : -endTick);
+      const endLineViewport = viewport.imageToViewportCoordinates(0, endLinePx);
+      const endTL = navViewport.pixelFromPointNoRotate(endLineViewport, false);
+      navDisplayEndMarker.style.top = `${
+        Math.round(endTL.y) +
+        ($scrollDownwards ? navDisplayMarkerHeight : -navDisplayMarkerHeight)
+      }px`;
+      navDisplayEndMarker.style.display = "block";
+    } else {
+      navDisplayEndMarker.style.display = "none";
+    }
+  };
+
   onMount(() => {
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
@@ -463,8 +614,8 @@
       boxShadow: "0 0 4px var(--primary-accent)",
     });
 
-    osdNavDisplayRegionContainer.appendChild(startMarker);
-    osdNavDisplayRegionContainer.appendChild(endMarker);
+    osdNavDisplayRegionContainer.appendChild(navDisplayStartMarker);
+    osdNavDisplayRegionContainer.appendChild(navDisplayEndMarker);
 
     // Monkey-patch the navigator.update method to prevent the displayRegion element
     //  being resized to reflect the horizontal dimension of the viewport
@@ -491,39 +642,7 @@
         style.top = `${Math.round(topleft.y)}px`;
         style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
 
-        if ($playbackProgressStart >= 0) {
-          const startTick = progressPercentageToTick($playbackProgressStart);
-          const startLinePx =
-            firstHolePx + ($scrollDownwards ? startTick : -startTick);
-          const startLineViewport = viewport.imageToViewportCoordinates(
-            0,
-            startLinePx,
-          );
-          const startTL = navViewport.pixelFromPointNoRotate(
-            startLineViewport,
-            false,
-          );
-          startMarker.style.top = `${Math.round(startTL.y)}px`;
-          startMarker.style.height = "2px";
-          startMarker.style.backgroundColor = "red";
-        }
-
-        if ($playbackProgressEnd < 1) {
-          const endTick = progressPercentageToTick($playbackProgressEnd);
-          const endLinePx =
-            firstHolePx + ($scrollDownwards ? endTick : -endTick);
-          const endLineViewport = viewport.imageToViewportCoordinates(
-            0,
-            endLinePx,
-          );
-          const endTL = navViewport.pixelFromPointNoRotate(
-            endLineViewport,
-            false,
-          );
-          endMarker.style.top = `${Math.round(endTL.y)}px`;
-          endMarker.style.height = "2px";
-          endMarker.style.backgroundColor = "blue";
-        }
+        updateNavDisplayMarkers(navViewport);
       }
     };
 
@@ -543,6 +662,7 @@
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
       partitionHolesOverlaySvgs();
+      updateSelectionOverlay();
       updateViewportFromTick(0);
     });
 
@@ -626,6 +746,17 @@
 
   const closeLatencyWarning = () => ($showLatencyWarning = false);
 
+  const updateSelection = () => {
+    if (openSeadragon == undefined) {
+      return;
+    }
+    updateNavDisplayMarkers(openSeadragon.navigator.viewport);
+    updateSelectionOverlay();
+    updateVisibleSvgPartitions();
+  };
+
+  $: $playbackProgressStart, updateSelection();
+  $: $playbackProgressEnd, updateSelection();
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
