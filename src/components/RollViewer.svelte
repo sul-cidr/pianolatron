@@ -115,6 +115,7 @@
     playbackProgressEnd,
     latencyDetected,
     showLatencyWarning,
+    transposeHalfStep,
   } from "../stores";
   import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -180,11 +181,21 @@
       color: holeColor,
       type: holeType,
     } = hole;
+
     const mark = document.createElement("mark");
 
-    const holeLabel = getHoleLabel(midiKey, $rollMetadata.ROLL_TYPE);
+    // We only want to transpose notes, not ALL midi keys.
+    let transpose = 0;
+    if (holeType == "note") {
+      mark.dataset.noteVelocity = velocity || 64;
+      transpose = $transposeHalfStep;
+    }
+
+    const holeLabel = getHoleLabel(
+      midiKey + transpose,
+      $rollMetadata.ROLL_TYPE,
+    );
     mark.dataset.holeLabel = holeLabel;
-    if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
 
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
     mark.classList.add(holeType);
@@ -430,6 +441,12 @@
       mark.classList.add("active");
       marks.push([hole, mark]);
     });
+  };
+
+  // remove the current hightlights readd them. Needed for when a transpose has taken place
+  const rehighlightHoles = (tick) => {
+    highlightHoles(-1);
+    highlightHoles(tick);
   };
 
   // Pan the viewer to bring the position of `@tick` to the center of
@@ -759,6 +776,7 @@
   $: $playbackProgressEnd, updateSelection();
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
+  $: $transposeHalfStep, rehighlightHoles($currentTick);
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
