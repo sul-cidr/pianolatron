@@ -2,7 +2,7 @@
   dl {
     display: block;
     overflow: auto;
-    padding: 0.5em 1em;
+    padding: 0.5em 1em 0em 1em;
   }
 
   dt {
