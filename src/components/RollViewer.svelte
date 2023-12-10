@@ -209,14 +209,16 @@
 
   // Adds an overlay that shows user selection in the roll viewer.
   // If start and end markers are set, a rect is added to show the selected section.
-  const createSelectionOverlaySvg = (startPx, endPx) => {
+  const createSelectionOverlaySvg = (startPx, endPx, overlayConfig) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    if (overlayConfig.viewBox) {
+      svg.setAttribute("viewBox", overlayConfig.viewBox);
+    }
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
-    svg.setAttribute("width", imageWidth);
-    svg.setAttribute("height", imageLength);
-    svg.setAttribute("viewBox", `0 0 ${imageWidth} ${imageLength}`);
-    svg.setAttribute("style", "pointer-events: none;");
+    svg.setAttribute("width", "100%");
+    svg.setAttribute("height", "100%");
+    svg.setAttribute("style", "pointer-events: none; margin: 0 5px;");
     svg.appendChild(g);
 
     // start line/
@@ -225,14 +227,13 @@
         "http://www.w3.org/2000/svg",
         "line",
       );
-      startLine.setAttribute("id", "viewer-start-line");
       startLine.setAttribute("x1", 0);
       startLine.setAttribute("y1", startPx);
-      startLine.setAttribute("x2", imageWidth);
+      startLine.setAttribute("x2", overlayConfig.lineWidth);
       startLine.setAttribute("y2", startPx);
       startLine.setAttribute("stroke", "darkolivegreen");
-      startLine.setAttribute("stroke-width", 20);
-      startLine.setAttribute("stroke-opacity", "50%");
+      startLine.setAttribute("stroke-width", overlayConfig.strokeWidth);
+      startLine.setAttribute("stroke-opacity", overlayConfig.strokeOpacity);
       g.appendChild(startLine);
     }
 
@@ -242,14 +243,13 @@
         "http://www.w3.org/2000/svg",
         "line",
       );
-      endLine.setAttribute("id", "viewer-end-line");
       endLine.setAttribute("x1", 0);
       endLine.setAttribute("y1", endPx);
-      endLine.setAttribute("x2", imageWidth);
+      endLine.setAttribute("x2", overlayConfig.lineWidth);
       endLine.setAttribute("y2", endPx);
       endLine.setAttribute("stroke", "steelblue");
-      endLine.setAttribute("stroke-width", 20);
-      endLine.setAttribute("stroke-opacity", "50%");
+      endLine.setAttribute("stroke-width", overlayConfig.strokeWidth);
+      endLine.setAttribute("stroke-opacity", overlayConfig.strokeOpacity);
       g.appendChild(endLine);
     }
 
@@ -263,8 +263,6 @@
       rect.setAttribute("y", startPx);
       rect.setAttribute("width", "100%");
       rect.setAttribute("height", endPx - startPx);
-      rect.setAttribute("rx", 10);
-      rect.setAttribute("ry", 10);
       rect.setAttribute("fill", `hsla(304, 97%, 58%, 0.26)`);
       rect.setAttribute("class", "selection");
       g.appendChild(rect);
@@ -273,84 +271,26 @@
     return svg;
   };
 
-  // Maybe we should DRY this out with createSelectionOverlaySvg
-  const createNavSelectionOverlaySvg = (startPx, endPx) => {
-    let startY = 0;
-    let endY = 0;
+  // Take a Y value in the image and return a Y coordinate in the Nav viewer
+  // that we can draw a line with.
+  const imagePxToNavLine = (imagePx) => {
+    const lineViewport = viewport.imageToViewportCoordinates(0, imagePx);
+    const lineNav = openSeadragon.navigator.viewport.pixelFromPointNoRotate(
+      lineViewport,
+      false,
+    );
+    return lineNav.y;
+  };
 
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("style", "pointer-events: none;");
-    svg.setAttribute("width", "80px");
-    svg.setAttribute("height", "100%");
-
-    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    svg.appendChild(g);
-    // start line
-    if (startPx >= 0) {
-      const startLineViewport = viewport.imageToViewportCoordinates(0, startPx);
-      const startLineNav =
-        openSeadragon.navigator.viewport.pixelFromPointNoRotate(
-          startLineViewport,
-          false,
-        );
-
-      startY = startLineNav.y;
-      const startLine = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "line",
-      );
-      startLine.setAttribute("id", "nav-start-line");
-      startLine.setAttribute("x1", 0);
-      startLine.setAttribute("y1", startY);
-      startLine.setAttribute("x2", 80);
-      startLine.setAttribute("y2", startY);
-      startLine.setAttribute("stroke", "darkolivegreen");
-      startLine.setAttribute("stroke-width", 2);
-      startLine.setAttribute("stroke-opacity", "100%");
-      g.appendChild(startLine);
-    }
-
-    // end line
-    if (endPx >= 0) {
-      const endLineViewport = viewport.imageToViewportCoordinates(0, endPx);
-      const endLineNav =
-        openSeadragon.navigator.viewport.pixelFromPointNoRotate(
-          endLineViewport,
-          false,
-        );
-
-      endY = endLineNav.y;
-      const endLine = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "line",
-      );
-      endLine.setAttribute("id", "nav-end-line");
-      endLine.setAttribute("x1", 0);
-      endLine.setAttribute("y1", endY);
-      endLine.setAttribute("x2", 80);
-      endLine.setAttribute("y2", endY);
-      endLine.setAttribute("stroke", "steelblue");
-      endLine.setAttribute("stroke-width", 2);
-      endLine.setAttribute("stroke-opacity", "100%");
-      g.appendChild(endLine);
-    }
-
-    // and in between
-    if (startPx >= 0 && endPx >= 0) {
-      const rect = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "rect",
-      );
-      rect.setAttribute("x", 0);
-      rect.setAttribute("y", startY);
-      rect.setAttribute("width", "100%");
-      rect.setAttribute("height", endY - startY);
-      rect.setAttribute("fill", `hsla(304, 97%, 58%, 0.26)`);
-      rect.setAttribute("class", "selection");
-      g.appendChild(rect);
-    }
-
-    return svg;
+  // Some UI configuration for the selection overlays. There is some minor
+  // variance between the image roll and the nav strip.
+  const getSelectionConfig = (isNav = false) => {
+    return {
+      lineWidth: isNav ? "50px" : imageWidth,
+      viewBox: isNav ? null : `0 0 ${imageWidth} ${imageLength}`,
+      strokeWidth: isNav ? 2 : 20,
+      strokOpacity: isNav ? "100%" : "50%",
+    };
   };
 
   // Selection Overlay in the image viewer
@@ -376,17 +316,29 @@
       endLinePx = firstHolePx + ($scrollDownwards ? endTick : -endTick);
     }
 
+    // Remove any existing lines
     if (navSelectionSvg != undefined) {
       openSeadragon.navigator.removeOverlay(navSelectionSvg);
     }
-    navSelectionSvg = createNavSelectionOverlaySvg(startLinePx, endLinePx);
+
+    const navBarLineConfig = [
+      imagePxToNavLine(startLinePx),
+      imagePxToNavLine(endLinePx),
+      getSelectionConfig(true),
+    ];
+    navSelectionSvg = createSelectionOverlaySvg(...navBarLineConfig);
     openSeadragon.navigator.addOverlay(
       navSelectionSvg,
       OpenSeadragon.Point(0, 0),
       OpenSeadragon.Placement.TOP,
     );
 
-    selectionSvg = createSelectionOverlaySvg(startLinePx, endLinePx);
+    const selectionConfig = getSelectionConfig();
+    selectionSvg = createSelectionOverlaySvg(
+      startLinePx,
+      endLinePx,
+      selectionConfig,
+    );
     svgPartitions.insert(firstHolePx, lastHolePx, selectionSvg);
   };
 
