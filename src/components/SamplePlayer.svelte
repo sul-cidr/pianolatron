@@ -34,6 +34,7 @@
     playRepeat,
     playbackProgressStart,
     latencyDetected,
+    ticksPerSecond,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -99,7 +100,7 @@
       i += 1;
       if (i >= tempoMap.length) break;
     }
-    return tempo;
+    return tempo || DEFAULT_TEMPO;
   };
 
   const toggleSustain = (onOff, fromMidi) => {
@@ -124,7 +125,6 @@
   };
 
   const getElapsedTimeAtTick = (tick) => {
-    let ticksPerSecond;
     let prevTempo = null;
     let thisTick;
     let thisTempo;
@@ -140,16 +140,21 @@
         continue;
       }
       if (thisTempo != prevTempo) {
-        ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
-        elapsedTime += (1 / ticksPerSecond) * (thisTick - 1 - tempoStartTick);
+        $ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
+        elapsedTime += (1 / $ticksPerSecond) * (thisTick - 1 - tempoStartTick);
         tempoStartTick = thisTick;
         prevTempo = thisTempo;
       }
       if (i >= tempoMap.length) break;
     }
-    ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
-    elapsedTime += (1 / ticksPerSecond) * (tick - tempoStartTick);
+    $ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
+    elapsedTime += (1 / $ticksPerSecond) * (tick - tempoStartTick);
     return elapsedTime;
+  };
+
+  const setTempo = (tempo) => {
+    midiSamplePlayer.setTempo(tempo * $tempoCoefficient);
+    $ticksPerSecond = (midiSamplePlayer.division * midiSamplePlayer.tempo) / 60;
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
@@ -461,7 +466,7 @@
           softOnOff.set(!!value);
         }
       } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-        midiSamplePlayer.setTempo(data * $tempoCoefficient);
+        setTempo(data);
       }
     },
   );

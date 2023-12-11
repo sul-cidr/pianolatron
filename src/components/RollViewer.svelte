@@ -121,6 +121,7 @@
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
   import LatencyWarning from "../ui-components/LatencyWarning.svelte";
+  import RollViewerLegend from "./RollViewerLegend.svelte";
 
   export let showScaleBar = true;
   export let imageUrl;
@@ -866,5 +867,8 @@
   {/if}
   {#if $latencyDetected && $showLatencyWarning}
     <LatencyWarning {closeLatencyWarning} />
+  {/if}
+  {#if rollImageReady}
+    <RollViewerLegend />
   {/if}
 </div>
