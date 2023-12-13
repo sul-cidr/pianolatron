@@ -218,7 +218,7 @@
 
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
-    svg.setAttribute("style", "pointer-events: none; margin: 0 5px;");
+    svg.setAttribute("style", "pointer-events: none; margin: 0 10px;");
     svg.appendChild(g);
 
     // start line/
@@ -259,10 +259,14 @@
         "http://www.w3.org/2000/svg",
         "rect",
       );
+
+      const height = $scrollDownwards ? endPx - startPx : startPx - endPx;
+      const boxStart = $scrollDownwards ? startPx : endPx;
+
       rect.setAttribute("x", 0);
-      rect.setAttribute("y", startPx);
+      rect.setAttribute("y", boxStart);
       rect.setAttribute("width", "100%");
-      rect.setAttribute("height", endPx - startPx);
+      rect.setAttribute("height", height);
       rect.setAttribute("fill", `hsla(304, 97%, 58%, 0.26)`);
       rect.setAttribute("class", "selection");
       g.appendChild(rect);
@@ -298,9 +302,11 @@
     if (viewport === undefined) {
       return;
     }
+    const holesBeginPx = $scrollDownwards ? firstHolePx : lastHolePx;
+    const holesEndPx = $scrollDownwards ? lastHolePx : firstHolePx;
 
     if (selectionSvg !== undefined) {
-      svgPartitions.remove(firstHolePx, lastHolePx, selectionSvg);
+      svgPartitions.remove(holesBeginPx, holesEndPx, selectionSvg);
     }
 
     let startLinePx = -1;
@@ -339,7 +345,7 @@
       endLinePx,
       selectionConfig,
     );
-    svgPartitions.insert(firstHolePx, lastHolePx, selectionSvg);
+    svgPartitions.insert(holesBeginPx, holesEndPx, selectionSvg);
   };
 
   const createHolesOverlaySvg = (holes) => {
