@@ -6,39 +6,32 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin: 10px;
 
     .search-box {
       height: 2.25em;
       position: relative;
-      width: 100%;
+      display: flex;
+      width: 30%;
+      margin: 5px;
 
-      &::after {
-        border: 3px solid var(--primary-accent);
-        border-right: 0;
-        border-top: 0;
-        border-radius: 2px;
-        display: block;
-        height: 0.625em;
-        margin-top: -0.4375em;
-        pointer-events: none;
-        position: absolute;
-        right: 1.125em;
-        top: 50%;
-        width: 0.625em;
+      label {
+        margin: auto 10px;
+        font-weight: bold;
       }
-    }
 
-    span.input {
-      background: white;
-      cursor: pointer;
-      display: inline-block;
-      height: 100%;
-      line-height: calc(2.25em - 10px);
-      overflow: hidden;
-      padding: 5px 2.5em 5px 11px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
+      input {
+        background: white;
+        cursor: pointer;
+        display: inline-block;
+        height: 100%;
+        line-height: calc(2.25em - 10px);
+        overflow: hidden;
+        padding: 5px 2.5em 5px 11px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+      }
     }
 
     div.facets {
@@ -47,6 +40,11 @@
       display: flex;
       align-items: flex-end;
       gap: 15px;
+
+      label {
+        margin: auto;
+        font-weight: bold;
+      }
 
       ul {
         flex: 1 0 auto;
@@ -70,6 +68,16 @@
       }
     }
   }
+
+  :global(.row-links) {
+    display: flex;
+  }
+
+  :global(.row-links a) {
+    color: var(--primary-accent);
+    margin: auto;
+    height: 30px;
+  }
 </style>
 
 <script>
@@ -86,16 +94,46 @@
 
   const searchFields = [
     "title",
-    "composer",
+    "composer_arranger",
     "performer",
-    "arranger",
+    // "arranger",
+    // "composer",
     "publisher",
   ];
 
+  // taken from Icon component
+  const icons = {
+    piano: `
+      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano">
+        <rect x="2" y="7" width="20" height="12" rx="2"></rect>
+        <line x1="7" y1="9" x2="7" y2="13.5" style="stroke-width:2.5;stroke-linecap:square"></line>
+        <line x1="12" y1="9" x2="12" y2="13.5" style="stroke-width:2.5;stroke-linecap:square"></line>
+        <line x1="17" y1="9" x2="17" y2="13.5" style="stroke-width:2.5;stroke-linecap:square"></line>
+      </svg>
+      `,
+    play: `
+      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21ZM12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23Z"
+          fill="currentColor"
+        />
+        <path d="M16 12L10 16.3301V7.66987L16 12Z" fill="currentColor" />
+      </svg>
+      `,
+  };
+
   const getLinksForCell = (druid) => {
     return html(`
-        <a href="/?druid=${druid}">Listen</a><br/>
-        <a href="/perform/?druid=${druid}">Perform</a>
+        <span class="row-links">
+          <a  href="/?druid=${druid}">
+            ${icons["play"]}
+          </a>
+          <a href="/perform/?druid=${druid}">
+            ${icons["piano"]}
+            </a>
+        </span>
         `);
   };
 
@@ -109,7 +147,8 @@
   const columns = [
     {
       id: "_links",
-      name: "",
+      name: "Play / Perform",
+      width: "160px",
       sort: false,
       data: (r) => r._d_links,
     },
@@ -119,20 +158,25 @@
       data: (r) => r._d_title,
     },
     {
-      name: "Composer",
+      name: "Composer / Arranger",
       sort: true,
-      data: (r) => r._d_composer,
+      data: (r) => r._d_composer_arranger,
     },
+    //{
+    //  name: "Composer",
+    //  sort: true,
+    //  data: (r) => r._d_composer,
+    // },
     {
       name: "Performer",
       sort: true,
       data: (r) => r._d_performer,
     },
-    {
-      name: "Arranger",
-      sort: true,
-      data: (r) => r._d_arranger,
-    },
+    // {
+    //  name: "Arranger",
+    //  sort: true,
+    //  data: (r) => r._d_arranger,
+    // },
     {
       name: "Publisher",
       sort: true,
@@ -144,7 +188,7 @@
 
   const pagination = {
     enabled: true,
-    limit: 10,
+    limit: 20,
   };
 
   let placeHolder = "SEARCH";
@@ -152,8 +196,6 @@
   const facetFilter = (listItem) => listItem.type === activeFacet;
 
   const activateInput = () => {
-    input.innerHTML = "";
-    filteredListItems = activeFacet ? listItems.filter(facetFilter) : listItems;
     input.focus();
   };
 
@@ -192,10 +234,9 @@
       filteredListItems = listItems;
     }
 
-    if (!input || input.innerHTML == placeHolder) return;
-
+    if (!input || input.value == placeHolder) return;
     const filteredText = normalizeText(
-      input.innerHTML.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
+      input.value.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );
 
     if (filteredText) {
@@ -220,7 +261,7 @@
     } else {
       // no search term so we need to be sure to remove any hit highlights that might still be present.
       filteredListItems = filteredListItems.map((item) => {
-        searchFields.forEach((k) => (item[`_d_${k}`] = item[k]));
+        searchFields.forEach((k) => (item[`_d_${k}`] = html(item[k])));
         return item;
       });
     }
@@ -284,6 +325,9 @@
     const listItem = {
       druid: item.druid,
       title: item.work,
+      composer_arranger: [
+        ...new Set([item.composer, item.arranger].filter(Boolean)),
+      ].join(" <br/>"),
       composer: item.composer,
       performer: item.performer,
       publisher: `${item.publisher} (${item.number})`,
@@ -295,7 +339,7 @@
     searchFields.forEach((k) => {
       searchArr.push(listItem[k]);
       listItem[`_s_${k}`] = normalizeText(listItem[k]);
-      listItem[`_d_${k}`] = listItem[k];
+      listItem[`_d_${k}`] = html(listItem[k]);
     });
 
     return { ...listItem, _search: normalizeText(searchArr.join("   ")) };
@@ -308,20 +352,23 @@
 
 <div id="app">
   <div class="search-box">
-    <span
+    <label for="searchbox">SEARCH:</label>
+    <input
       role="textbox"
+      name="searchbox"
       tabindex="0"
       class="input"
       spellcheck="false"
       contenteditable="true"
+      aria-multiline="false"
       bind:this={input}
       on:focus={activateInput}
       on:input={itemFilter}
-      >{@html placeHolder}
-    </span>
+    />
   </div>
   <!-- search-box -->
   <div class="facets">
+    <label>ROLL TYPE:</label>
     {#if facets}
       <ul>
         {#each facets as facet}
@@ -353,6 +400,7 @@
     {columns}
     {pagination}
     {style}
+    resizable="true"
     bind:this={grid}
   />
 </div>
