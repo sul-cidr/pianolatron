@@ -31,7 +31,7 @@
     delete params.end;
 
     if ($playbackProgressStart >= 0) {
-      params.start = ($playbackProgress * 100).toFixed(2);
+      params.start = ($playbackProgressStart * 100).toFixed(2);
     }
     if ($playbackProgressEnd < 1) {
       params.end = ($playbackProgressEnd * 100).toFixed(2);
