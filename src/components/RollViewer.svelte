@@ -216,9 +216,9 @@
     }
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
-    svg.setAttribute("width", "100%");
+    svg.setAttribute("width", overlayConfig.lineWidth);
     svg.setAttribute("height", "100%");
-    svg.setAttribute("style", "pointer-events: none; margin: 0 10px;");
+    svg.setAttribute("style", "pointer-events: none;");
     svg.appendChild(g);
 
     // start line/
@@ -278,6 +278,10 @@
   // Take a Y value in the image and return a Y coordinate in the Nav viewer
   // that we can draw a line with.
   const imagePxToNavLine = (imagePx) => {
+    // below 0 means there is not selection.
+    if (imagePx < 0) {
+      return -1;
+    }
     const lineViewport = viewport.imageToViewportCoordinates(0, imagePx);
     const lineNav = openSeadragon.navigator.viewport.pixelFromPointNoRotate(
       lineViewport,
@@ -290,7 +294,7 @@
   // variance between the image roll and the nav strip.
   const getSelectionConfig = (isNav = false) => {
     return {
-      lineWidth: isNav ? "50px" : imageWidth,
+      lineWidth: isNav ? "50" : imageWidth,
       viewBox: isNav ? null : `0 0 ${imageWidth} ${imageLength}`,
       strokeWidth: isNav ? 2 : 20,
       strokOpacity: isNav ? "100%" : "50%",
@@ -323,8 +327,9 @@
     }
 
     // Remove any existing lines
+    openSeadragon.navigator.clearOverlays();
     if (navSelectionSvg != undefined) {
-      openSeadragon.navigator.removeOverlay(navSelectionSvg);
+      navSelectionSvg = undefined;
     }
 
     const navBarLineConfig = [
@@ -332,11 +337,15 @@
       imagePxToNavLine(endLinePx),
       getSelectionConfig(true),
     ];
+
     navSelectionSvg = createSelectionOverlaySvg(...navBarLineConfig);
+    // hack: addOverlay take an onDraw function,using it
+    // seems to help keep OSD from trying to futz with the positioning in the nav bar.
     openSeadragon.navigator.addOverlay(
       navSelectionSvg,
       OpenSeadragon.Point(0, 0),
       OpenSeadragon.Placement.TOP,
+      (_position, _size, _el) => {},
     );
 
     const selectionConfig = getSelectionConfig();
