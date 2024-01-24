@@ -42,7 +42,6 @@
   let webMidi;
   let audioRecorder;
   let recordingDestination;
-  let recordingDestination;
 
   let tempoMap;
   let pedalingMap;
