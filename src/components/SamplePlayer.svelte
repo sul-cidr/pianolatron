@@ -505,10 +505,7 @@
     } else {
       $latencyDetected = false;
     }
-  const audioRecording = (action) => {
-    if (action === "clear") audioRecorder.clearRecording();
-    else if (action === "export") audioRecorder.exportRecording();
-  };
+  }
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);
