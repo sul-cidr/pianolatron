@@ -221,7 +221,10 @@
 
     Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
-        metadata = (({ holeData: _, ...obj }) => obj)({...metadataJson, druid: rollDruid});
+        metadata = (({ holeData: _, ...obj }) => obj)({
+          ...metadataJson,
+          druid: rollDruid,
+        });
         holeData = metadataJson.holeData;
         annotateHoleData(holeData, $rollMetadata, $scrollDownwards);
         buildHolesIntervalTree();
@@ -236,6 +239,10 @@
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
           const url = new URL(window.location);
+          url.searchParams.delete("start");
+          url.searchParams.delete("end");
+          playbackProgressStart.reset();
+          playbackProgressEnd.reset();
           url.searchParams.set("druid", currentRoll.druid);
           window.history.pushState({ roll: currentRoll }, "", url);
         }
@@ -278,12 +285,16 @@
 
       if (params.has("start")) {
         playbackProgressStart.set(validateStartParam(params.get("start")));
+      } else {
+        playbackProgressStart.reset();
       }
 
       if (params.has("end")) {
         playbackProgressEnd.set(
           validateEndParam(params.get("end"), $playbackProgressStart),
         );
+      } else {
+        playbackProgressEnd.reset();
       }
     } else {
       currentRoll =

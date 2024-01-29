@@ -31,7 +31,7 @@
     delete params.end;
 
     if ($playbackProgressStart >= 0) {
-      params.start = ($playbackProgress * 100).toFixed(2);
+      params.start = ($playbackProgressStart * 100).toFixed(2);
     }
     if ($playbackProgressEnd < 1) {
       params.end = ($playbackProgressEnd * 100).toFixed(2);
@@ -66,6 +66,10 @@
       playbackProgressStart.reset();
     } else {
       playbackProgressStart.set($playbackProgress);
+      // if the start is bigger than the end, delete the end
+      if ($playbackProgress > $playbackProgressEnd) {
+        playbackProgressEnd.reset();
+      }
     }
   };
   const markEnd = () => {
@@ -73,6 +77,10 @@
       playbackProgressEnd.reset();
     } else {
       playbackProgressEnd.set($playbackProgress);
+      // if the end is less than the start, delete the start.
+      if ($playbackProgress < $playbackProgressStart) {
+        playbackProgressStart.reset();
+      }
     }
   };
 

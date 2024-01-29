@@ -126,14 +126,13 @@
 
   const getElapsedTimeAtTick = (tick) => {
     let prevTempo = null;
-    let thisTick;
-    let thisTempo;
+    let thisTick = 0;
+    let thisTempo = DEFAULT_TEMPO;
     let i = 0;
     let tempoStartTick;
     let elapsedTime = 0;
     while (tempoMap[i][0] <= tick) {
       [thisTick, thisTempo] = tempoMap[i];
-      i += 1;
       if (prevTempo === null) {
         prevTempo = thisTempo;
         tempoStartTick = thisTick;
@@ -145,6 +144,7 @@
         tempoStartTick = thisTick;
         prevTempo = thisTempo;
       }
+      i += 1;
       if (i >= tempoMap.length) break;
     }
     $ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
