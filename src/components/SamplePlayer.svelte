@@ -475,8 +475,8 @@
   midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
   const audioRecording = (action) => {
-    if (action === "clear") webMidi.clearRecording();
-    else if (action === "export") webMidi.exportRecording();
+    if (action === "clear") audioRecorder.clearRecording();
+    else if (action === "export") audioRecorder.exportRecording();
   };
 
   const updateTranspose = () => {
@@ -492,7 +492,7 @@
     } else {
       $latencyDetected = false;
     }
-  }
+  };
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);

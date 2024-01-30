@@ -8,6 +8,10 @@
 <script>
   import { tick as sweep } from "svelte";
   import IconButton from "../ui-components/IconButton.svelte";
+  import Notification, {
+    notify,
+    clearNotification,
+  } from "../ui-components/Notification.svelte";
   import {
     currentTick,
     isPlaying,
@@ -15,13 +19,15 @@
     playbackProgress,
     playbackProgressEnd,
     playbackProgressStart,
+    recordingOnOff,
+    recordingInBuffer,
   } from "../stores";
 
   export let skipToTick;
   export let resetPlayback;
   export let playPauseApp;
-
-  let isRecording = false;
+  export let recordingControl;
+  export let isPerform = true;
 
   let isBookmarked = false;
   const bookmark = () => {
@@ -44,9 +50,32 @@
     }, 1000);
   };
 
-  const toggleRecording = async () => {
-    console.log("TBD");
-    isRecording = !isRecording;
+  const exportRecording = () => recordingControl("export");
+  const clearRecording = () => recordingControl("clear");
+
+  const toggleRecording = () => {
+    $recordingOnOff = !$recordingOnOff;
+    if ($recordingInBuffer && !$recordingOnOff) {
+      notify({
+        title: "Recording Complete.",
+        message: "",
+        closable: true,
+        actions: [
+          {
+            label: "Export Recording",
+            fn: exportRecording,
+          },
+          {
+            label: "Clear Recording",
+            fn: clearRecording,
+          },
+          {
+            label: "Continue",
+            fn: clearNotification,
+          },
+        ],
+      });
+    }
   };
 
   const togglePlayPause = async () => {
@@ -161,18 +190,31 @@
       width="24"
     />
   {/if}
-  <IconButton
-    class={isRecording
-      ? "overlay player-button record"
-      : "player-button record"}
-    disabled={false}
-    on:mousedown={toggleRecording}
-    iconName="record"
-    label="Record"
-    height="24"
-    width="24"
-    title="Record"
-  />
+  {#if isPerform}
+    {#if !$recordingOnOff}
+      <IconButton
+        class="player-button record"
+        disabled={false}
+        on:mousedown={toggleRecording}
+        iconName="record"
+        label="Record"
+        height="24"
+        width="24"
+        title="Record"
+      />
+    {:else}
+      <IconButton
+        class="overlay player-button pause-record"
+        disabled={false}
+        on:mousedown={toggleRecording}
+        iconName="pause"
+        label="Pause Record"
+        height="24"
+        width="24"
+        title="Pause Record"
+      />
+    {/if}
+  {/if}
   <IconButton
     class={"player-button"}
     disabled={false}

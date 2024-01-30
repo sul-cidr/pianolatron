@@ -40,7 +40,7 @@
   };
 
   const exportRecording = () => {
-    const clipName = $rollMetadata.DRUID;
+    const clipName = $rollMetadata.DRUID + "-" + new Date().toISOString();
     // Allow user to name the clip file before downloading it?
     // let clipName = prompt("Enter a name for your sound clip");
     // .ogg is also available, but sounds a little funky

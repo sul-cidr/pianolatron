@@ -369,7 +369,13 @@
     </FlexCollapsible>
     <div id="roll">
       {#if appReady}
-        <RollPlayerControls {skipToTick} {resetPlayback} {playPauseApp} />
+        <RollPlayerControls
+          {skipToTick}
+          {resetPlayback}
+          {playPauseApp}
+          {recordingControl}
+          {isPerform}
+        />
         <RollViewer
           bind:this={rollViewer}
           bind:rollImageReady
@@ -390,11 +396,11 @@
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
       {#if isPerform}
         <TabbedPanel
-        {playPauseApp}
-        {stopApp}
-        {skipToPercentage}
-        {recordingControl}
-      />
+          {playPauseApp}
+          {stopApp}
+          {skipToPercentage}
+          {recordingControl}
+        />
       {:else}
         <ListenerPanel {playPauseApp} {stopApp} />
       {/if}
