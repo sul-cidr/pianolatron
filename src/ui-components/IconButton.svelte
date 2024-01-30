@@ -42,6 +42,13 @@
         cursor: not-allowed;
       }
 
+      &.pause-record {
+        color: red;
+        &:active {
+          color: white;
+        }
+      }
+
       &.record:active,
       &.record:hover,
       &.record:focus {
