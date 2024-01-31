@@ -78,6 +78,10 @@ export const velocityCurveHigh = createPersistedStore(
 export const midiInputs = createStore([]);
 export const midiOutputs = createStore([]);
 
+export const gameController = createStore(undefined);
+export const volumeSensitivity = createStore(70);
+export const tempoSensitivity = createStore(30);
+
 // Playback State
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);
