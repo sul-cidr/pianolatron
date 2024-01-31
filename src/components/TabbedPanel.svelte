@@ -47,6 +47,7 @@
   import AdvancedSettings from "./AdvancedSettings.svelte";
   import AudioSettings from "./AudioSettings.svelte";
   import MidiSettings from "./MidiSettings.svelte";
+  import ViewerMetrics from "./ViewerMetrics.svelte";
 
   export let playPauseApp;
   export let skipToPercentage;
@@ -73,4 +74,5 @@
     {...panels[selectedPanel].props}
   />
 </div>
+<ViewerMetrics />
 <PlaybackControls {playPauseApp} {stopApp} />
