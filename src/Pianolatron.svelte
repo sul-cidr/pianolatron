@@ -122,7 +122,7 @@
   let pausePlayback;
   let startPlayback;
   let resetPlayback;
-  let audioRecording;
+  let recordingControl;
   let skipToTick;
 
   let rollViewer;
@@ -192,9 +192,6 @@
     holesByTickInterval = new IntervalTree();
   };
 
-  const recordingControl = (action) => {
-    audioRecording(action);
-  };
 
   const loadRoll = (roll) => {
     appWaiting = true;
@@ -322,7 +319,7 @@
       pausePlayback,
       startPlayback,
       resetPlayback,
-      audioRecording,
+      recordingControl,
       skipToTick,
     } = samplePlayer);
 
@@ -394,15 +391,17 @@
       {/if}
     </div>
     <FlexCollapsible id="right-sidebar" width="20vw" position="left">
-      {#if isPerform}
-        <TabbedPanel
-          {playPauseApp}
-          {stopApp}
-          {skipToPercentage}
-          {recordingControl}
-        />
-      {:else}
-        <ListenerPanel {playPauseApp} {stopApp} />
+      {#if appReady}
+        {#if isPerform}
+          <TabbedPanel
+            {playPauseApp}
+            {stopApp}
+            {skipToPercentage}
+            {recordingControl}
+          />
+        {:else}
+          <ListenerPanel {playPauseApp} {stopApp} />
+        {/if}
       {/if}
     </FlexCollapsible>
   </div>

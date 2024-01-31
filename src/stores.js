@@ -5,6 +5,7 @@ import {
   createPersistedStore,
 } from "./lib/stores";
 import { watchMedia } from "./lib/mq-store";
+import {RecordingTargets} from './lib/utils'
 
 // For piano settings
 class KeyboardRegion {
@@ -81,6 +82,7 @@ export const midiOutputs = createStore([]);
 export const recordingOnOff = createStore(false);
 export const recordingInBuffer = createStore(false);
 export const recordingDuration = createStore(0);
+export const recordingTarget = createStore(RecordingTargets.WAV);
 
 // Playback State
 export const currentTick = createStore(0);

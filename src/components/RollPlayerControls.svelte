@@ -12,6 +12,7 @@
     notify,
     clearNotification,
   } from "../ui-components/Notification.svelte";
+  import { RecordingActions, RecordingTargets } from "../lib/utils";
   import {
     currentTick,
     isPlaying,
@@ -21,6 +22,7 @@
     playbackProgressStart,
     recordingOnOff,
     recordingInBuffer,
+    recordingTarget,
   } from "../stores";
 
   export let skipToTick;
@@ -50,8 +52,10 @@
     }, 1000);
   };
 
-  const exportRecording = () => recordingControl("export");
-  const clearRecording = () => recordingControl("clear");
+  const exportRecording = () =>
+    recordingControl($recordingTarget, RecordingActions.Export);
+  const clearRecording = () =>
+    recordingControl($recordingTarget, RecordingActions.Clear);
 
   const toggleRecording = () => {
     $recordingOnOff = !$recordingOnOff;

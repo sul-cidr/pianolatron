@@ -5,7 +5,12 @@
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
-  import { getPathJoiner, NoteSource } from "../lib/utils";
+  import {
+    getPathJoiner,
+    NoteSource,
+    RecordingActions,
+    RecordingTargets,
+  } from "../lib/utils";
   import {
     rollMetadata,
     softOnOff,
@@ -474,9 +479,24 @@
 
   midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
+  const midiRecording = (action) => {
+    if (action === RecordingActions.Clear) webMidi?.clearRecording();
+    else if (action === RecordingActions.Export) webMidi?.exportRecording();
+  };
+
   const audioRecording = (action) => {
-    if (action === "clear") audioRecorder.clearRecording();
-    else if (action === "export") audioRecorder.exportRecording();
+    if (action === RecordingActions.Clear) audioRecorder.clearRecording();
+    else if (action === RecordingActions.Export)
+      audioRecorder.exportRecording();
+  };
+
+  const recordingControl = (source, action) => {
+    if (source == RecordingTargets.WAV) {
+      audioRecording(action);
+    }
+    if (source == RecordingTargets.MIDI) {
+      midiRecording(action);
+    }
   };
 
   const updateTranspose = () => {
@@ -515,7 +535,7 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
-    audioRecording,
+    recordingControl,
     skipToTick,
     skipToPercentage,
   };
