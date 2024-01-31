@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { Midi } from "@tonejs/midi";
   import { clamp } from "../lib/utils";
   import {
     midiInputs,
@@ -14,12 +15,13 @@
   export let stopNote;
   export let toggleSustain;
   export let toggleSoft;
-  export let recordingDestination;
 
   let mediaAccess = null;
-  let mediaRecorder = null;
+  let recordingStartTime = null;
   let lastRecordingTime = null;
   let recordingLengthUpdateInterval = null;
+  let heldDown = {};
+  let eventsByTime = {};
 
   const midiBytes = {
     NOTE_ON: 0x90, // = the event code (0x90) + channel (0)
@@ -29,20 +31,17 @@
     SOFT: 0x43,
   };
 
-  let chunks = [];
-
   const startPauseRecording = (onOff) => {
-    if (onOff && mediaRecorder) {
+    if (onOff) {
       $recordingInBuffer = true;
-      mediaRecorder.start();
-      lastRecordingTime = Date.now();
+      const now = Date.now();
+      if (!recordingStartTime) recordingStartTime = now;
+      lastRecordingTime = now;
       recordingLengthUpdateInterval = setInterval(() => {
-        const now = Date.now();
         $recordingDuration += now - lastRecordingTime;
         lastRecordingTime = now;
       }, 100);
-    } else if (!onOff && mediaRecorder) {
-      mediaRecorder.stop();
+    } else if (!onOff) {
       clearInterval(recordingLengthUpdateInterval);
       $recordingDuration += Date.now() - lastRecordingTime;
     }
@@ -52,33 +51,128 @@
     $recordingDuration = 0;
     $recordingOnOff = false;
     $recordingInBuffer = false;
-    chunks = [];
+    recordingStartTime = null;
+    eventsByTime = {};
+    heldDown = {};
   };
 
   const exportRecording = () => {
-    const clipName = $rollMetadata.DRUID;
-    // Allow user to name the clip file before downloading it?
-    // let clipName = prompt("Enter a name for your sound clip");
-    // .ogg is also available, but sounds a little funky
-    const blob = new Blob(chunks, { type: "audio/wav" });
-    const audioURL = window.URL.createObjectURL(blob);
+    // ToneJS MIDI seems to use ticks per beat/quarter = 480
+    // const ticksPerSecond = 480;
+
+    const midi = new Midi();
+    midi.name = $rollMetadata.DRUID;
+    const track = midi.addTrack();
+
+    Object.keys(eventsByTime)
+      .sort()
+      .forEach((time) => {
+        // ToneJS MIDI can work with seconds as start/end values, so we don't
+        // need to work with ticks (and also deal with TPQ values and
+        // tempo/acceleration values) unless we really want to.)
+        // const startTick = parseInt(
+        //   ((parseInt(time, 10) - recordingStartTime) / 1000) * ticksPerSecond,
+        //   10,
+        // );
+        eventsByTime[time].forEach((event) => {
+          // const durationInTicks = parseInt(
+          //   (event[2] / 1000) * ticksPerSecond,
+          //   10,
+          // );
+          if (event[0] === "NOTE") {
+            console.log("Hi");
+            track.addNote({
+              midi: event[1],
+              time: (parseInt(time, 10) - recordingStartTime) / 1000,
+              duration: event[2] / 1000,
+              velocity: event[3],
+            });
+            // Controller events don't have durations in the ToneJS MIDI
+            // implementation, so we need to add an explicit OFF event
+            // for each pedal event.
+          } else if (event[0] === "CONTROLLER") {
+            // Pedal on event
+            track.addCC({
+              number:
+                event[1] === "SUSTAIN" ? midiBytes.SUSTAIN : midiBytes.SOFT,
+              time: (parseInt(time, 10) - recordingStartTime) / 1000,
+              value: 1,
+            });
+            // Pedal off event
+            track.addCC({
+              number:
+                event[1] === "SUSTAIN" ? midiBytes.SUSTAIN : midiBytes.SOFT,
+              time:
+                (parseInt(time, 10) - recordingStartTime) / 1000 +
+                event[2] / 1000,
+              value: 0,
+            });
+          }
+        });
+      });
+
+    // The PPQ (TPQ) value is not adjustable for the ToneJS MIDI writer, which
+    // means that tempo and acceleration probably will need to be handled
+    // differently in recordings compared to how they work in note and
+    // expression MIDI files created via the roll image parser and midi2exp
+    // toolchain.
+    // midi.header.tempos = [{ ticks: 0, bpm: 60 }]; // This can be done
+    // console.log("MIDI PPQ is", midi.header.ppq);
+    const clipName = $rollMetadata.DRUID + "-" + new Date().toISOString();
+    const midiBlob = new Blob([midi.toArray()], { type: "audio/midi" });
+    const midiURL = window.URL.createObjectURL(midiBlob);
     const element = document.createElement("a");
-    element.setAttribute("href", audioURL);
-    element.setAttribute("download", `${clipName}.wav`);
+    element.setAttribute("href", midiURL);
+    element.setAttribute("download", `${clipName}.mid`);
     element.style.display = "none";
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
+    URL.revokeObjectURL(midiURL);
   };
 
   const sendMidiMsg = (msgType, entity, value) => {
-    $midiOutputs.forEach((output) =>
-      output.send([
-        midiBytes[msgType],
-        midiBytes[entity] || entity,
-        clamp(parseInt(value * 127, 10), 0, 127),
-      ]),
-    );
+    const msg = [
+      midiBytes[msgType],
+      midiBytes[entity] || entity,
+      clamp(parseInt(value * 127, 10), 0, 127),
+    ];
+    $midiOutputs.forEach((output) => output.send(msg));
+    if ($recordingOnOff) {
+      const now = Date.now();
+      if (msgType === "NOTE_ON" && !(entity in heldDown)) {
+        // NOTE that these velocity levels have been affected by the
+        // settings in the volume multiplier AND the velocity curves
+        // by the time we see them here. We'd need to handle this
+        // differently if we wanted the MIDI recording to contain
+        // "uninflected" velocities.
+        heldDown[entity] = [now, value];
+      } else if (msgType === "NOTE_OFF" && entity in heldDown) {
+        const startTime = heldDown[entity][0];
+        const duration = now - startTime;
+        const event = ["NOTE", entity, duration, heldDown[entity][1]];
+        if (startTime in eventsByTime && eventsByTime[startTime].length) {
+          eventsByTime[startTime].push(event);
+        } else {
+          eventsByTime[startTime] = [event];
+        }
+        delete heldDown[entity];
+      } else if (msgType === "CONTROLLER") {
+        if (value && !(entity in heldDown)) {
+          heldDown[entity] = [now, 1];
+        } else if (value === false && entity in heldDown) {
+          const startTime = heldDown[entity][0];
+          const duration = now - startTime;
+          const event = ["CONTROLLER", entity, duration, heldDown[entity][1]];
+          if (startTime in eventsByTime && eventsByTime[startTime].length) {
+            eventsByTime[startTime].push(event);
+          } else {
+            eventsByTime[startTime] = [event];
+          }
+          delete heldDown[entity];
+        }
+      }
+    }
   };
 
   const receiveMidiMsg = ({ data: [msgType, entity, value] }) => {
@@ -164,11 +258,6 @@
         mediaAccess.addEventListener("statechange", midiStateChange);
       });
     }
-
-    mediaRecorder = new MediaRecorder(recordingDestination.stream);
-    mediaRecorder.ondataavailable = (e) => {
-      chunks.push(e.data);
-    };
 
     return () => {
       if (mediaAccess)

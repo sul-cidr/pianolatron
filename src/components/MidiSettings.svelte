@@ -58,7 +58,11 @@
     recordingOnOff,
     recordingInBuffer,
     recordingDuration,
+    recordingTarget,
   } from "../stores";
+  import { RecordingActions, RecordingTargets } from "../lib/utils";
+  import Toggle from "../ui-components/Toggle.svelte";
+  import { Midi } from "tone";
 
   export let recordingControl;
 
@@ -85,10 +89,16 @@
     recordingTime = `${minutes}:${seconds}:${hundredths}`;
   };
 
+  const changeTarget = () => {
+    recordingControl(RecordingTargets.MIDI, RecordingActions.Clear);
+    recordingControl(RecordingTargets.WAV, RecordingActions.Clear);
+  };
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainFromExternalMidi, resetPedals();
   $: $softFromExternalMidi, resetPedals();
   $: formatRecordingDuration($recordingDuration);
+  $: $recordingTarget, changeTarget();
 </script>
 
 <div>
@@ -141,27 +151,78 @@
     </fieldset>
   {/if}
   <fieldset>
-    <legend>Record an Audio File</legend>
-    <div id="recording-controls">
-      <button
-        type="button"
-        class:recording-on={$recordingOnOff}
-        aria-pressed={$recordingOnOff}
-        on:click={() => ($recordingOnOff = !$recordingOnOff)}
-        >Start/Pause</button
-      >
-      {#if $recordingInBuffer && !$recordingOnOff}
-        <br />
-        <button type="button" on:click={() => recordingControl("clear")}
-          >Clear
-        </button>
-        <button type="button" on:click={() => recordingControl("export")}
-          >Export
-        </button>
-      {/if}
-      <p>
-        {recordingTime}
-      </p>
+    <legend>Recording Type</legend>
+    <div id="recording-selector">
+      <Toggle
+        bind:value={$recordingTarget}
+        label="Choose a recording target:"
+        options={Object.entries(RecordingTargets)}
+      />
     </div>
+  </fieldset>
+  <fieldset>
+    <legend>Record to a MIDI file</legend>
+    {#if $recordingTarget == RecordingTargets.MIDI}
+      <div id="recording-controls">
+        <button
+          type="button"
+          class:recording-on={$recordingOnOff}
+          aria-pressed={$recordingOnOff}
+          on:click={() => ($recordingOnOff = !$recordingOnOff)}
+          >Start/Pause</button
+        >
+        {#if $recordingInBuffer}
+          <br />
+          <button
+            type="button"
+            on:click={() =>
+              recordingControl(RecordingTargets.MIDI, RecordingActions.Clear)}
+            >Clear
+          </button>
+          <button
+            type="button"
+            on:click={() =>
+              recordingControl(RecordingTargets.MIDI, RecordingActions.Export)}
+            >Export
+          </button>
+        {/if}
+      </div>
+    {:else}
+      <p>Select "MIDI" in "Recording Type" options to enable MIDI recording.</p>
+    {/if}
+  </fieldset>
+  <fieldset>
+    <legend>Record an Audio File</legend>
+    {#if $recordingTarget == RecordingTargets.WAV}
+      <div id="recording-controls">
+        <button
+          type="button"
+          class:recording-on={$recordingOnOff}
+          aria-pressed={$recordingOnOff}
+          on:click={() => ($recordingOnOff = !$recordingOnOff)}
+          >Start/Pause</button
+        >
+        {#if $recordingInBuffer && !$recordingOnOff}
+          <br />
+          <button
+            type="button"
+            on:click={() =>
+              recordingControl(RecordingTargets.WAV, RecordingActions.Clear)}
+            >Clear
+          </button>
+          <button
+            type="button"
+            on:click={() =>
+              recordingControl(RecordingTargets.WAV, RecordingActions.Export)}
+            >Export
+          </button>
+        {/if}
+        <p>
+          {recordingTime}
+        </p>
+      </div>
+    {:else}
+      <p>Select "WAV" in "Recording Type" options to enable audio recording.</p>
+    {/if}
   </fieldset>
 </div>
