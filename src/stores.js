@@ -50,6 +50,7 @@ export const transposeHalfStep = createStore(0);
 export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
+export const ticksPerSecond = createStore(0);
 
 // Piano Settings
 export const sampleVolumes = createPersistedStore("sampleVolumes", {
@@ -81,6 +82,10 @@ export const midiOutputs = createStore([]);
 export const recordingOnOff = createStore(false);
 export const recordingInBuffer = createStore(false);
 export const recordingDuration = createStore(0);
+
+export const gameController = createStore(undefined);
+export const volumeSensitivity = createStore(70);
+export const tempoSensitivity = createStore(30);
 
 // Playback State
 export const currentTick = createStore(0);
