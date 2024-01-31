@@ -34,6 +34,7 @@
     playRepeat,
     playbackProgressStart,
     latencyDetected,
+    ticksPerSecond,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
 
@@ -45,7 +46,6 @@
 
   let playbackStartTick;
   let playbackStartTime;
-  let midiTPQ;
 
   let latencyThreshold = 1000;
   let latentNotes = [];
@@ -99,7 +99,7 @@
       i += 1;
       if (i >= tempoMap.length) break;
     }
-    return tempo;
+    return tempo || DEFAULT_TEMPO;
   };
 
   const toggleSustain = (onOff, fromMidi) => {
@@ -124,38 +124,52 @@
   };
 
   const getElapsedTimeAtTick = (tick) => {
-    let ticksPerSecond;
     let prevTempo = null;
+    let prevTemposTick;
+
     let thisTick = 0;
     let thisTempo = DEFAULT_TEMPO;
-    let i = 0;
-    let tempoStartTick;
+
     let elapsedTime = 0;
+    let i = 0;
+
     while (tempoMap[i][0] <= tick) {
       [thisTick, thisTempo] = tempoMap[i];
+
       if (prevTempo === null) {
         prevTempo = thisTempo;
-        tempoStartTick = thisTick;
+        prevTemposTick = thisTick;
         continue;
       }
+
       if (thisTempo != prevTempo) {
-        ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
-        elapsedTime += (1 / ticksPerSecond) * (thisTick - 1 - tempoStartTick);
-        tempoStartTick = thisTick;
+        let thisTickPerSec =
+          (prevTempo * $tempoCoefficient * midiSamplePlayer.division) / 60.0;
+        elapsedTime += (1 / thisTickPerSec) * (thisTick - 1 - prevTemposTick);
         prevTempo = thisTempo;
+        prevTemposTick = thisTick;
       }
+
       i += 1;
       if (i >= tempoMap.length) break;
     }
-    ticksPerSecond = (prevTempo * $tempoCoefficient * midiTPQ) / 60.0;
-    elapsedTime += (1 / ticksPerSecond) * (tick - tempoStartTick);
+
+    let thisTickPerSec =
+      (prevTempo * $tempoCoefficient * midiSamplePlayer.division) / 60.0;
+
+    elapsedTime += (1 / thisTickPerSec) * (tick - prevTemposTick);
     return elapsedTime;
+  };
+
+  const setTempo = (tempo) => {
+    midiSamplePlayer.setTempo(tempo * $tempoCoefficient);
+    $ticksPerSecond = (midiSamplePlayer.division * midiSamplePlayer.tempo) / 60;
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
     if (midiSamplePlayer.tracks[0])
       midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
-    midiSamplePlayer.setTempo(getTempoAtTick(tick) * $tempoCoefficient);
+    setTempo(getTempoAtTick(tick));
 
     playbackStartTick = $currentTick;
     playbackStartTime = Date.now();
@@ -425,9 +439,8 @@
       ),
     );
 
-    midiTPQ = midiSamplePlayer.getDivision().division;
+    $ticksPerSecond = 0;
     tempoMap = buildTempoMap(metadataTrack);
-
     // where two or more "music tracks" exist, pedal events are expected to have
     //  been duplicated across tracks, so we read only from the first one.
     pedalingMap = buildPedalingMap(musicTracks[0]);
@@ -461,7 +474,7 @@
           softOnOff.set(!!value);
         }
       } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-        midiSamplePlayer.setTempo(data * $tempoCoefficient);
+        setTempo(data);
       }
     },
   );

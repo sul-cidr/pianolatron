@@ -113,7 +113,7 @@ export const easingInterval = (
 // This is the "coolwarm" color map -- blue to red
 // RdYlBu (reversed) sort of works, but the yellows are too ambiguous
 // (values in H, S, L)
-const holeColorMap = [
+export const holeColorMap = [
   "232, 53%, 49%",
   "229, 64%, 58%",
   "225, 78%, 66%",
@@ -131,9 +131,9 @@ const holeColorMap = [
   "348, 96%, 36%",
 ];
 
-const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
-const controlHoleColor = "120, 73%, 75%"; // light green
-const pedalHoleColor = "39, 100%, 50%"; // orange;
+export const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
+export const controlHoleColor = "120, 73%, 75%"; // light green
+export const pedalHoleColor = "39, 100%, 50%"; // orange;
 
 export const annotateHoleData = (
   holeData,
@@ -146,13 +146,13 @@ export const annotateHoleData = (
 
   const getNoteHoleColor = ({ v: velocity }) =>
     holeColorMap[
-      Math.round(
-        mapToRange(
-          normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-          0,
-          holeColorMap.length - 1,
-        ),
-      )
+    Math.round(
+      mapToRange(
+        normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+        0,
+        holeColorMap.length - 1,
+      ),
+    )
     ];
 
   const imageLengthPx = parseInt(imageLength, 10);

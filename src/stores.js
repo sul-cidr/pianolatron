@@ -50,6 +50,7 @@ export const transposeHalfStep = createStore(0);
 export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
+export const ticksPerSecond = createStore(0);
 
 // Piano Settings
 export const sampleVolumes = createPersistedStore("sampleVolumes", {

@@ -34,9 +34,37 @@
     padding: 3px 0;
     width: 100%;
   }
+
+  dt {
+    height: 1em;
+    width: 1em;
+    float: left;
+    margin-right: 0.5em;
+    border-radius: 4px;
+    transition: background-color 0.25s ease;
+    &.disabled {
+      background-color: none !important;
+    }
+  }
+  dl:not(.hole-color-legend) dd span {
+    display: inline-block;
+    text-align: right;
+    width: 3ch;
+    margin-right: 1ch;
+  }
+  dl.hole-color-legend {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5em;
+    dt {
+      margin: 0.25em 0;
+      width: 100%;
+    }
+  }
 </style>
 
 <script>
+  import { slide } from "svelte/transition";
   import {
     rollHasExpressions,
     playExpressionsOnOff,
@@ -54,6 +82,12 @@
   import { notify } from "../ui-components/Notification.svelte";
   import SliderControl from "../ui-components/SliderControl.svelte";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
+  import {
+    defaultHoleColor,
+    pedalHoleColor,
+    controlHoleColor,
+    holeColorMap,
+  } from "../lib/utils";
 
   const themes = ["cardinal", "blue", "green", "grey"];
 
@@ -82,6 +116,46 @@
       Show Roll Viewer Scale Bar
       <input type="checkbox" bind:checked={$userSettings.showRuler} />
     </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Color Legend</legend>
+    <dl>
+      <dt
+        style={$rollPedalingOnOff
+          ? `background-color: hsl(${pedalHoleColor});`
+          : ""}
+        class:disabled={!$rollPedalingOnOff}
+      />
+      <dd>Pedal Holes</dd>
+      <dt
+        style={$playExpressionsOnOff
+          ? `background-color: hsl(${controlHoleColor});`
+          : ""}
+        class:disabled={!$playExpressionsOnOff}
+      />
+      <dd>Control Holes</dd>
+      {#if !$userSettings.showNoteVelocities && !$userSettings.highlightEnabledHoles}
+        <dt
+          style="background-color: hsl({defaultHoleColor});"
+          transition:slide
+        />
+        <dd transition:slide>Note Holes</dd>
+      {/if}
+    </dl>
+    {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
+      <dl class="hole-color-legend" transition:slide>
+        <dd>Note Velocity</dd>
+        <dt
+          style={`background: linear-gradient(90deg, ${holeColorMap
+            .map(
+              (hsl, i) =>
+                `hsl(${hsl}) ${(i / (holeColorMap.length - 1)) * 100}%`,
+            )
+            .join(", ")})`}
+        />
+      </dl>
+    {/if}
   </fieldset>
 
   <fieldset>
