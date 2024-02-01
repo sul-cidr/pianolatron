@@ -26,7 +26,8 @@
 
   #roll {
     position: relative;
-    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
     grid-area: center;
   }
 
@@ -83,6 +84,7 @@
   import KeyboardControls from "./components/KeyboardControls.svelte";
   import KeyboardShortcuts from "./components/KeyboardShortcuts.svelte";
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
+  import GameController from "./components/GameController.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
   import ListenerPanel from "./components/ListenerPanel.svelte";
   import Notification, {
@@ -128,6 +130,7 @@
   let rollViewer;
   let updateTickByViewportIncrement;
   let panHorizontal;
+  let adjustZoom;
 
   const progressPercentageToTick = (percentage = 0) =>
     Math.floor(midiSamplePlayer.totalTicks * percentage);
@@ -340,7 +343,7 @@
     $playRepeat ? skipToPercentage($playbackProgressStart) : pausePlayback();
   }
   $: if (rollViewer)
-    ({ updateTickByViewportIncrement, panHorizontal } = rollViewer);
+    ({ adjustZoom, updateTickByViewportIncrement, panHorizontal } = rollViewer);
   $: if (rollImageReady) {
     document.querySelector("#loading span").textContent = "Loading complete!";
     document
@@ -430,6 +433,13 @@
 />
 <KeyboardShortcutEditor />
 <Notification />
+<GameController
+  {playPauseApp}
+  {stopApp}
+  {updateTickByViewportIncrement}
+  {panHorizontal}
+  {adjustZoom}
+/>
 
 <svelte:window
   on:popstate={({ state }) =>
