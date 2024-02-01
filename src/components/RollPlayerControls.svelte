@@ -70,7 +70,7 @@
             fn: clearRecording,
           },
           {
-            label: "Continue",
+            label: "Continue Recording",
             fn: clearNotification,
           },
         ],
@@ -196,11 +196,11 @@
         class="player-button record"
         disabled={false}
         on:mousedown={toggleRecording}
-        iconName="record"
-        label="Record"
+        iconName={$recordingInBuffer ? "record-continue" : "record"}
+        label={$recordingInBuffer ? "Continue Recording" : "Record"}
         height="24"
         width="24"
-        title="Record"
+        title={$recordingInBuffer ? "Continue Recording" : "Record"}
       />
     {:else}
       <IconButton
