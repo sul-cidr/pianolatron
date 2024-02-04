@@ -5,12 +5,7 @@
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
-  import {
-    getPathJoiner,
-    NoteSource,
-    RecordingActions,
-    RecordingTargets,
-  } from "../lib/utils";
+  import { getPathJoiner, NoteSource, RecordingActions } from "../lib/utils";
   import {
     rollMetadata,
     softOnOff,
@@ -492,23 +487,20 @@
 
   midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
-  const midiRecording = (action) => {
-    if (action === RecordingActions.Clear) webMidi?.clearRecording();
-    else if (action === RecordingActions.Export) webMidi?.exportRecording();
-  };
-
-  const audioRecording = (action) => {
-    if (action === RecordingActions.Clear) audioRecorder.clearRecording();
-    else if (action === RecordingActions.Export)
-      audioRecorder.exportRecording();
-  };
-
-  const recordingControl = (source, action) => {
-    if (source == RecordingTargets.WAV) {
-      audioRecording(action);
-    }
-    if (source == RecordingTargets.MIDI) {
-      midiRecording(action);
+  const recordingControl = (action) => {
+    switch (action) {
+      case RecordingActions.Clear:
+        webMidi?.clearRecording();
+        audioRecorder.clearRecording();
+        break;
+      case RecordingActions.ExportMIDI:
+        webMidi?.exportRecording();
+        break;
+      case RecordingActions.ExportWAV:
+        audioRecorder.exportRecording();
+        break;
+      default:
+        console.log("Unknown recording action: " + action)
     }
   };
 

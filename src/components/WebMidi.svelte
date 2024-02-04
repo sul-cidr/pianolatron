@@ -80,7 +80,6 @@
           //   10,
           // );
           if (event[0] === "NOTE") {
-            console.log("Hi");
             track.addNote({
               midi: event[1],
               time: (parseInt(time, 10) - recordingStartTime) / 1000,

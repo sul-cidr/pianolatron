@@ -12,7 +12,6 @@
     notify,
     clearNotification,
   } from "../ui-components/Notification.svelte";
-  import { RecordingActions, RecordingTargets } from "../lib/utils";
   import {
     currentTick,
     isPlaying,
@@ -22,8 +21,8 @@
     playbackProgressStart,
     recordingOnOff,
     recordingInBuffer,
-    recordingTarget,
   } from "../stores";
+  import { RecordingActions } from "../lib/utils";
 
   export let skipToTick;
   export let resetPlayback;
@@ -52,10 +51,10 @@
     }, 1000);
   };
 
-  const exportRecording = () =>
-    recordingControl($recordingTarget, RecordingActions.Export);
-  const clearRecording = () =>
-    recordingControl($recordingTarget, RecordingActions.Clear);
+  const exportRecordingMIDI = () =>
+    recordingControl(RecordingActions.ExportMIDI);
+  const exportRecordingWAV = () => recordingControl(RecordingActions.ExportWAV);
+  const clearRecording = () => recordingControl(RecordingActions.Clear);
 
   const toggleRecording = () => {
     $recordingOnOff = !$recordingOnOff;
@@ -66,8 +65,12 @@
         closable: true,
         actions: [
           {
-            label: "Export Recording",
-            fn: exportRecording,
+            label: "Export MIDI Recording ",
+            fn: exportRecordingMIDI,
+          },
+          {
+            label: "Export WAV Recording ",
+            fn: exportRecordingWAV,
           },
           {
             label: "Clear Recording",
@@ -196,16 +199,29 @@
   {/if}
   {#if isPerform}
     {#if !$recordingOnOff}
-      <IconButton
-        class="player-button record"
-        disabled={false}
-        on:mousedown={toggleRecording}
-        iconName="record"
-        label="Record"
-        height="24"
-        width="24"
-        title="Record"
-      />
+      {#if $recordingInBuffer}
+        <IconButton
+          class="player-button record"
+          disabled={false}
+          on:mousedown={toggleRecording}
+          iconName={"record-continue"}
+          label={"Continue Recording"}
+          height="24"
+          width="24"
+          title={"Continue Recording"}
+        />
+      {:else}
+        <IconButton
+          class="player-button record"
+          disabled={false}
+          on:mousedown={toggleRecording}
+          iconName={"record"}
+          label={"Record"}
+          height="24"
+          width="24"
+          title={"Record"}
+        />
+      {/if}
     {:else}
       <IconButton
         class="overlay player-button pause-record"

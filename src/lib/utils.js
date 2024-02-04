@@ -7,14 +7,10 @@ export const NoteSource = {
   WebMidi: 2,
 };
 
-export const RecordingTargets = {
-  WAV: 0,
-  MIDI: 1,
-}
-
 export const RecordingActions = {
   Clear: 0,
-  Export: 1
+  ExportMIDI: 1,
+  ExportWAV: 2
 }
 
 const profiles = new Set(["perform", "listen"]);
