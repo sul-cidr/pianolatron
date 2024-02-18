@@ -171,13 +171,19 @@
       svg: `
       <path d="M8.46448 7.75739L7.05026 9.1716L9.87869 12L7.05029 14.8284L8.46451 16.2426L12.7071 12L8.46448 7.75739Z" fill="currentColor" /><path d="M11.2929 9.1716L12.7071 7.75739L16.9498 12L12.7071 16.2426L11.2929 14.8284L14.1213 12L11.2929 9.1716Z" fill="currentColor" /><path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1C5.92487 1 1 5.92487 1 12ZM3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12Z" fill="currentColor" />
       `,
-      attribs: { "stroke-width": 0.5 },
+      attribs: {
+        viewBox: "0 0 24 24",
+        "stroke-width": 0.5,
+      },
     },
     skipBack: {
       svg: `
       <path d="M12.7071 9.1716L11.2929 7.75739L7.05024 12L11.2929 16.2426L12.7071 14.8284L9.87869 12L12.7071 9.1716Z" fill="currentColor" /><path d="M15.5355 7.75739L16.9497 9.1716L14.1213 12L16.9497 14.8284L15.5355 16.2426L11.2929 12L15.5355 7.75739Z" fill="currentColor" /><path fill-rule="evenodd" clip-rule="evenodd" d="M23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12ZM21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" fill="currentColor" />
       `,
-      attribs: { "stroke-width": 0.5 },
+      attribs: {
+        viewBox: "0 0 24 24",
+        "stroke-width": 0.5,
+      },
     },
     bookmark: {
       svg: `
@@ -205,7 +211,10 @@
         <path d="M6 12L13.0023 7.00003V17L6 12Z" fill="currentColor" />
         <path d="M21.0023 7.00003L14 12L21.0023 17V7.00003Z" fill="currentColor" />
       `,
-      attribs: { "stroke-width": 0.5 },
+      attribs: {
+        viewBox: "0 0 24 24",
+        "stroke-width": 0.5,
+      },
     },
     play: {
       svg: `
@@ -217,7 +226,10 @@
         />
         <path d="M16 12L10 16.3301V7.66987L16 12Z" fill="currentColor" />
       `,
-      attribs: { "stroke-width": 0.5 },
+      attribs: {
+        viewBox: "0 0 24 24",
+        "stroke-width": 0.5,
+      },
     },
     pause: {
       svg: `
@@ -230,13 +242,28 @@
           fill="currentColor"
         />
       `,
-      attribs: { "stroke-width": 0.5 },
+      attribs: {
+        viewBox: "0 0 24 24",
+        "stroke-width": 0.5,
+      },
     },
     record: {
       svg: `
         <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="currentColor" /><path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z" fill="currentColor" />      
       `,
-      attribs: { "stroke-width": 0.5 },
+      attribs: {
+        viewBox: "0 0 24 24",
+        "stroke-width": 0.5,
+      },
+    },
+    "record-continue": {
+      svg: `
+        <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="red" /><path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z" fill="currentColor" />
+      `,
+      attribs: {
+        viewBox: "0 0 24 24",
+        "stroke-width": 0.5,
+      },
     },
     markStart: {
       svg: `

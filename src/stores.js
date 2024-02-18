@@ -82,6 +82,11 @@ export const gameController = createStore(undefined);
 export const volumeSensitivity = createStore(70);
 export const tempoSensitivity = createStore(30);
 
+// Recording State
+export const recordingOnOff = createStore(false);
+export const recordingInBuffer = createStore(false);
+export const recordingDuration = createStore(0);
+
 // Playback State
 export const currentTick = createStore(0);
 export const playbackProgress = createStore(0);

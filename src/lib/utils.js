@@ -7,6 +7,12 @@ export const NoteSource = {
   WebMidi: 2,
 };
 
+export const RecordingActions = {
+  Clear: 0,
+  ExportMIDI: 1,
+  ExportWAV: 2
+}
+
 const profiles = new Set(["perform", "listen"]);
 export const getProfile = (profile) =>
   profiles.has(profile) ? profile : "perform";

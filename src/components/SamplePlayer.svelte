@@ -5,7 +5,7 @@
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
-  import { getPathJoiner, NoteSource } from "../lib/utils";
+  import { getPathJoiner, NoteSource, RecordingActions } from "../lib/utils";
   import {
     rollMetadata,
     softOnOff,
@@ -37,8 +37,11 @@
     ticksPerSecond,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
+  import AudioRecorder from "./AudioRecorder.svelte";
 
   let webMidi;
+  let audioRecorder;
+  let recordingDestination;
 
   let tempoMap;
   let pedalingMap;
@@ -80,6 +83,9 @@
   });
 
   const pianoReady = piano.load();
+
+  recordingDestination = piano.context.createMediaStreamDestination();
+  piano.connect(recordingDestination);
 
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
@@ -481,6 +487,23 @@
 
   midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
+  const recordingControl = (action) => {
+    switch (action) {
+      case RecordingActions.Clear:
+        webMidi?.clearRecording();
+        audioRecorder.clearRecording();
+        break;
+      case RecordingActions.ExportMIDI:
+        webMidi?.exportRecording();
+        break;
+      case RecordingActions.ExportWAV:
+        audioRecorder.exportRecording();
+        break;
+      default:
+        console.log("Unknown recording action: " + action)
+    }
+  };
+
   const updateTranspose = () => {
     // if we're playing just dump everything and let the updates roll in
     if ($isPlaying) {
@@ -517,6 +540,7 @@
     pausePlayback,
     startPlayback,
     resetPlayback,
+    recordingControl,
     skipToTick,
     skipToPercentage,
   };
@@ -529,5 +553,8 @@
     {stopNote}
     {toggleSustain}
     {toggleSoft}
+    {recordingDestination}
   />
 {/if}
+
+<AudioRecorder bind:this={audioRecorder} {recordingDestination} />

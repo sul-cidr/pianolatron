@@ -27,6 +27,22 @@
   li {
     padding: 0.25em 0;
   }
+
+  #recording-controls {
+    margin: 0 0.5em;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  button {
+    @include button;
+
+    &.recording-on {
+      background-color: yellow;
+      border-color: var(--primary-accent);
+      color: var(--primary-accent);
+    }
+  }
 </style>
 
 <script>
@@ -39,19 +55,44 @@
     softOnOff,
     sustainFromExternalMidi,
     softFromExternalMidi,
+    recordingOnOff,
+    recordingInBuffer,
+    recordingDuration,
   } from "../stores";
+  import { RecordingActions } from "../lib/utils";
+
+  export let recordingControl;
+
+  let recordingTime = "00:00.00";
 
   const resetPedals = () => {
     $sustainOnOff = false;
     $softOnOff = false;
   };
 
+  const formatRecordingDuration = (durInMs) => {
+    const minutes = Math.floor(durInMs / 60000)
+      .toString()
+      .padStart(2, "0");
+    const seconds = Math.floor((durInMs - minutes * 60000) / 1000)
+      .toString()
+      .padStart(2, "0");
+    const hundredths = Math.floor(
+      (durInMs - minutes * 60000 - seconds * 1000) / 10,
+    )
+      .toString()
+      .padStart(2, "0");
+
+    recordingTime = `${minutes}:${seconds}:${hundredths}`;
+  };
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainFromExternalMidi, resetPedals();
   $: $softFromExternalMidi, resetPedals();
+  $: formatRecordingDuration($recordingDuration);
 </script>
 
-<section>
+<div>
   {#if navigator.requestMIDIAccess}
     <fieldset>
       <legend>MIDI in/out available</legend>
@@ -100,4 +141,34 @@
       </p>
     </fieldset>
   {/if}
-</section>
+  <fieldset>
+    <legend>Record to file</legend>
+    <div id="recording-controls">
+      <button
+        type="button"
+        class:recording-on={$recordingOnOff}
+        aria-pressed={$recordingOnOff}
+        on:click={() => ($recordingOnOff = !$recordingOnOff)}
+        >Start/Pause</button
+      >
+      {#if $recordingInBuffer}
+        <br />
+        <button
+          type="button"
+          on:click={() => recordingControl(RecordingActions.Clear)}
+          >Clear
+        </button>
+        <button
+          type="button"
+          on:click={() => recordingControl(RecordingActions.ExportMIDI)}
+          >Export MIDI
+        </button>
+        <button
+          type="button"
+          on:click={() => recordingControl(RecordingActions.ExportWAV)}
+          >Export WAV
+        </button>
+      {/if}
+    </div>
+  </fieldset>
+</div>
