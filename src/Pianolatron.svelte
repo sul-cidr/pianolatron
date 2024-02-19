@@ -66,6 +66,8 @@
     isReproducingRoll,
     scrollDownwards,
     playExpressionsOnOff,
+    recordingInBuffer,
+    recordingOnOff,
     rollPedalingOnOff,
     userSettings,
     playRepeat,
@@ -75,6 +77,7 @@
     clamp,
     getPathJoiner,
     getProfile,
+    RecordingActions,
   } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
@@ -309,6 +312,40 @@
     }
   };
 
+  const exportRecordingMIDI = () =>
+    recordingControl(RecordingActions.ExportMIDI);
+  const exportRecordingWAV = () => recordingControl(RecordingActions.ExportWAV);
+  const clearRecording = () => recordingControl(RecordingActions.Clear);
+
+  const toggleRecording = () => {
+    $recordingOnOff = !$recordingOnOff;
+    if ($recordingInBuffer && !$recordingOnOff) {
+      notify({
+        title: "Recording Complete.",
+        message: "",
+        closable: true,
+        actions: [
+          {
+            label: "Export MIDI Recording ",
+            fn: exportRecordingMIDI,
+          },
+          {
+            label: "Export WAV Recording ",
+            fn: exportRecordingWAV,
+          },
+          {
+            label: "Clear Recording",
+            fn: clearRecording,
+          },
+          {
+            label: "Continue",
+            fn: clearNotification,
+          },
+        ],
+      });
+    }
+  };
+
   onMount(async () => {
     document.querySelector("#loading span").textContent =
       "Loading resources...";
@@ -354,7 +391,7 @@
 
 <div id="app">
   <div>
-    <FlexCollapsible id="left-sidebar" width="20vw">
+    <FlexCollapsible id="left-sidebar" width="20vw" hidden={false}>
       {#if isPerform}<RollSelector bind:currentRoll {rollListItems} />{/if}
       {#if appReady}
         <RollDetails {metadata} />
@@ -372,7 +409,7 @@
           {skipToTick}
           {resetPlayback}
           {playPauseApp}
-          {recordingControl}
+          {toggleRecording}
           {isPerform}
         />
         <RollViewer
@@ -392,7 +429,12 @@
         </div>
       {/if}
     </div>
-    <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+    <FlexCollapsible
+      id="right-sidebar"
+      width="20vw"
+      position="left"
+      hidden={!isPerform}
+    >
       {#if appReady}
         {#if isPerform}
           <TabbedPanel
@@ -428,6 +470,7 @@
   {stopApp}
   {updateTickByViewportIncrement}
   {panHorizontal}
+  {toggleRecording}
 />
 <KeyboardShortcutEditor />
 <Notification />

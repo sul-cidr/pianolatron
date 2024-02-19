@@ -1,5 +1,4 @@
 <style lang="scss">
-
   #perform-controls {
     :global(kbd) {
       bottom: 0.35rem;
@@ -17,7 +16,8 @@
 
     font-family: SourceSans3, sans-serif;
 
-    & .play-pause-button, .accent-button {
+    & .play-pause-button,
+    .accent-button {
       background-color: var(--cardinal-red-light);
       border-color: var(--cardinal-red);
       border-radius: 4px;
@@ -99,12 +99,13 @@
 <script>
   import { tick as sweep } from "svelte";
   import { keyMap } from "./KeyboardShortcuts.svelte";
-  import { 
+  import {
     currentTick,
-    isPlaying, 
-    softOnOff, 
-    sustainOnOff, 
-    accentOnOff, } from "../stores";
+    isPlaying,
+    softOnOff,
+    sustainOnOff,
+    accentOnOff,
+  } from "../stores";
   import IconButton from "../ui-components/IconButton.svelte";
 
   export let playPauseApp;
@@ -128,12 +129,12 @@
 
   // Fewer controls for listener than performer
   // Not entirely sure how this is supposed to work - commented out for now
-  // export let isPerform = true;
+  export let isPerform = true;
 </script>
 
 <div id="perform-controls">
-  <!-- {#if isPerform} -->
-    <div class="play-pause-button">
+  {#if isPerform}
+    <!-- <div class="play-pause-button">
       {#key $isPlaying}
         <IconButton
           class="overlay performer-button"
@@ -143,7 +144,9 @@
           on:click={togglePlayPause}
           iconName={$isPlaying ? "pause" : "play"}
           label={$isPlaying ? "Pause" : "Play"}
-          tooltip={$isPlaying ? `Pause (key: ${$keyMap.PLAY_PAUSE.key})` : `Play (key: ${$keyMap.PLAY_PAUSE.key})`}
+          tooltip={$isPlaying
+            ? `Pause (key: ${$keyMap.PLAY_PAUSE.key})`
+            : `Play (key: ${$keyMap.PLAY_PAUSE.key})`}
         >
           <kbd class:depressed={$keyMap.PLAY_PAUSE.active}
             >{$keyMap.PLAY_PAUSE.key}</kbd
@@ -154,16 +157,14 @@
     <div class="half">
       <div class="record-button">
         <IconButton
-          class={isRecording
-            ? "overlay performer-button"
-            : "performer-button"}
+          class={isRecording ? "overlay performer-button" : "performer-button"}
           disabled={true}
           on:mousedown={toggleRecording}
           iconName="record"
           label="Record"
           height="24"
           title="Record"
-          tooltip="Record (TBD)"
+          tooltip="Record (key: {$keyMap.TOGGLE_RECORD.key})"
         />
       </div>
       <div class="start-over-button">
@@ -176,7 +177,8 @@
           tooltip="Rewind (key: {$keyMap.REWIND.key})"
           height="24"
         >
-          <kbd class:depressed={$keyMap.REWIND.active}>{$keyMap.REWIND.key}</kbd>
+          <kbd class:depressed={$keyMap.REWIND.active}>{$keyMap.REWIND.key}</kbd
+          >
         </IconButton>
       </div>
     </div>
@@ -193,7 +195,9 @@
           height="24"
           tooltip="Skip Back (key: {$keyMap.BACKWARD.key})"
         >
-          <kbd class:depressed={$keyMap.BACKWARD.active}>{$keyMap.BACKWARD.key}</kbd>
+          <kbd class:depressed={$keyMap.BACKWARD.active}
+            >{$keyMap.BACKWARD.key}</kbd
+          >
         </IconButton>
       </div>
       <div class="skip-forward-button skip-button">
@@ -206,29 +210,32 @@
           height="24"
           tooltip="Skip Ahead (key: {$keyMap.FORWARD.key})"
         >
-          <kbd class:depressed={$keyMap.FORWARD.active}>{$keyMap.FORWARD.key}</kbd>
+          <kbd class:depressed={$keyMap.FORWARD.active}
+            >{$keyMap.FORWARD.key}</kbd
+          >
         </IconButton>
       </div>
-    </div>
+    </div> -->
     <div class="performer-accent-buttons half">
-        <button
-          type="button"
-          class:pedal-on={$softOnOff}
-          aria-pressed={$softOnOff}
-          on:click={() => ($softOnOff = !$softOnOff)}
-          >Soft
-          <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
-        >
-        <button
-          type="button"
-          class:pedal-on={$sustainOnOff}
-          aria-pressed={$sustainOnOff}
-          on:click={() => ($sustainOnOff = !$sustainOnOff)}
-          >Sustain
-          <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
-        >
-      </div>
-
+      <button
+        type="button"
+        class:pedal-on={$softOnOff}
+        aria-pressed={$softOnOff}
+        on:click={() => ($softOnOff = !$softOnOff)}
+        title="Soft pedal (key: {$keyMap.SOFT.key})"
+        >Soft
+        <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
+      >
+      <button
+        type="button"
+        class:pedal-on={$sustainOnOff}
+        aria-pressed={$sustainOnOff}
+        on:click={() => ($sustainOnOff = !$sustainOnOff)}
+        title="Sustain pedal (key: {$keyMap.SUSTAIN.key})"
+        >Sustain
+        <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
+      >
+    </div>
     <div class="performer-accent-buttons">
       <button
         type="button"
@@ -237,10 +244,11 @@
         class="accent-button"
         aria-pressed={$accentOnOff}
         on:mousedown={() => ($accentOnOff = true)}
+        title="Accent (key: {$keyMap.ACCENT.key})"
         >Accent
         <kbd class:depressed={$accentOnOff}>{$keyMap.ACCENT.key}</kbd></button
       >
     </div>
-  <!-- {/if} -->
+  {/if}
 </div>
 <svelte:window on:mouseup={() => ($accentOnOff = false)} />

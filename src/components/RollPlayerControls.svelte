@@ -8,6 +8,7 @@
 <script>
   import { tick as sweep } from "svelte";
   import IconButton from "../ui-components/IconButton.svelte";
+  import { keyMap } from "./KeyboardShortcuts.svelte";
   import Notification, {
     notify,
     clearNotification,
@@ -22,12 +23,11 @@
     recordingOnOff,
     recordingInBuffer,
   } from "../stores";
-  import { RecordingActions } from "../lib/utils";
 
   export let skipToTick;
   export let resetPlayback;
   export let playPauseApp;
-  export let recordingControl;
+  export let toggleRecording;
   export let isPerform = true;
 
   let isBookmarked = false;
@@ -49,40 +49,6 @@
     setTimeout(function () {
       isBookmarked = false;
     }, 1000);
-  };
-
-  const exportRecordingMIDI = () =>
-    recordingControl(RecordingActions.ExportMIDI);
-  const exportRecordingWAV = () => recordingControl(RecordingActions.ExportWAV);
-  const clearRecording = () => recordingControl(RecordingActions.Clear);
-
-  const toggleRecording = () => {
-    $recordingOnOff = !$recordingOnOff;
-    if ($recordingInBuffer && !$recordingOnOff) {
-      notify({
-        title: "Recording Complete.",
-        message: "",
-        closable: true,
-        actions: [
-          {
-            label: "Export MIDI Recording ",
-            fn: exportRecordingMIDI,
-          },
-          {
-            label: "Export WAV Recording ",
-            fn: exportRecordingWAV,
-          },
-          {
-            label: "Clear Recording",
-            fn: clearRecording,
-          },
-          {
-            label: "Continue",
-            fn: clearNotification,
-          },
-        ],
-      });
-    }
   };
 
   const togglePlayPause = async () => {
@@ -161,7 +127,7 @@
     disabled={false}
     on:mousedown={resetPlayback}
     iconName="rewind"
-    label="Rewind"
+    label="Rewind ({$keyMap.REWIND.key})"
     height="24"
     width="24"
   />
@@ -172,7 +138,7 @@
       skipFromCurrent(-1500);
     }}
     iconName="skipBack"
-    label="Skip Back"
+    label="Skip Back ({$keyMap.BACKWARD.key})"
     height="24"
     width="24"
   />
@@ -182,7 +148,7 @@
       disabled={false}
       on:mousedown={togglePlayPause}
       iconName="play"
-      label="Play"
+      label="Play ({$keyMap.PLAY_PAUSE.key})"
       height="24"
       width="24"
     />
@@ -192,7 +158,7 @@
       disabled={false}
       on:mousedown={togglePlayPause}
       iconName="pause"
-      label="Pause"
+      label="Pause ({$keyMap.PLAY_PAUSE.key})"
       height="24"
       width="24"
     />
@@ -201,25 +167,25 @@
     {#if !$recordingOnOff}
       {#if $recordingInBuffer}
         <IconButton
-          class="player-button record"
+          class="player-button continue-record"
           disabled={false}
           on:mousedown={toggleRecording}
-          iconName={"record-continue"}
-          label={"Continue Recording"}
+          iconName="record"
+          label="Continue Recording ({$keyMap.TOGGLE_RECORD.key})"
           height="24"
           width="24"
-          title={"Continue Recording"}
+          title="Continue Recording ({$keyMap.TOGGLE_RECORD.key})"
         />
       {:else}
         <IconButton
           class="player-button record"
           disabled={false}
           on:mousedown={toggleRecording}
-          iconName={"record"}
-          label={"Record"}
+          iconName="record"
+          label="Record ({$keyMap.TOGGLE_RECORD.key})"
           height="24"
           width="24"
-          title={"Record"}
+          title="Record ({$keyMap.TOGGLE_RECORD.key})"
         />
       {/if}
     {:else}
@@ -228,10 +194,10 @@
         disabled={false}
         on:mousedown={toggleRecording}
         iconName="pause"
-        label="Pause Record"
+        label="Pause Recording ({$keyMap.TOGGLE_RECORD.key})"
         height="24"
         width="24"
-        title="Pause Record"
+        title="Pause Recording ({$keyMap.TOGGLE_RECORD.key})"
       />
     {/if}
   {/if}
@@ -240,7 +206,7 @@
     disabled={false}
     on:mousedown={() => skipFromCurrent()}
     iconName="skipForward"
-    label="Skip Ahead"
+    label="Skip Ahead ({$keyMap.FORWARD.key})"
     height="24"
     width="24"
   />

@@ -24,6 +24,8 @@ export const defaultKeyMap = {
   PAN_DOWN: { code: "ArrowDown", key: "↓" },
   PAN_LEFT: { code: "ArrowLeft", key: "←" },
   PAN_RIGHT: { code: "ArrowRight", key: "→" },
+
+  TOGGLE_RECORD: { code: "KeyS", key: "S" },
 };
 
 export const keyMapMeta = {
@@ -114,6 +116,10 @@ export const keyMapMeta = {
   PAN_RIGHT: {
     description: "Pan Right",
     help: "Pan the roll rightwards (hold to accelerate)",
+  },
+  TOGGLE_RECORD: {
+    description: "Start/Stop Recording",
+    help: "Start recording or pause and open dialog to export/clear/resume recording",
   },
 };
 

@@ -49,6 +49,13 @@
         }
       }
 
+      &.continue-record {
+        color: red;
+        &:active {
+          color: white;
+        }
+      }
+
       &.record:active,
       &.record:hover,
       &.record:focus {
@@ -82,7 +89,6 @@
         color: var(--cool-grey);
         cursor: not-allowed;
       }
-
     }
   }
 </style>

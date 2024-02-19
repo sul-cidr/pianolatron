@@ -10,8 +10,9 @@ export const NoteSource = {
 export const RecordingActions = {
   Clear: 0,
   ExportMIDI: 1,
-  ExportWAV: 2
-}
+  ExportWAV: 2,
+  Toggle: 3,
+};
 
 const profiles = new Set(["perform", "listen"]);
 export const getProfile = (profile) =>
@@ -152,13 +153,13 @@ export const annotateHoleData = (
 
   const getNoteHoleColor = ({ v: velocity }) =>
     holeColorMap[
-    Math.round(
-      mapToRange(
-        normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-        0,
-        holeColorMap.length - 1,
-      ),
-    )
+      Math.round(
+        mapToRange(
+          normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+          0,
+          holeColorMap.length - 1,
+        ),
+      )
     ];
 
   const imageLengthPx = parseInt(imageLength, 10);

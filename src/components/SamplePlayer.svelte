@@ -22,7 +22,6 @@
     softFromExternalMidi,
     useMidiTempoEventsOnOff,
     activeNotes,
-    isPlaying,
     currentTick,
     sampleVolumes,
     sampleVelocities,
