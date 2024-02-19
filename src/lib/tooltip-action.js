@@ -1,4 +1,6 @@
 import { createPopper } from "@popperjs/core/lib/popper-lite";
+import preventOverflow from "@popperjs/core/lib/modifiers/preventOverflow";
+import arrow from "@popperjs/core/lib/modifiers/arrow";
 import Tooltip from "./Tooltip.svelte";
 
 export const tooltip = (node, text) => {
@@ -14,6 +16,16 @@ export const tooltip = (node, text) => {
 
     popperInstance = createPopper(node, componentInstance.element, {
       placement: "top",
+      modifiers: [
+        preventOverflow,
+        {
+          name: "preventOverflow",
+          options: {
+            padding: 8,
+          },
+        },
+        arrow,
+      ],
     });
   };
 

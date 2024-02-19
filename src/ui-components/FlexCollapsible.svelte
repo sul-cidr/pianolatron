@@ -82,7 +82,7 @@
   export let id;
   export let width;
   export let position = "right";
-  let hidden = false;
+  export let hidden = false;
 </script>
 
 <div
@@ -92,7 +92,7 @@
   style={`width: ${hidden ? 0 : width};`}
 >
   <input type="checkbox" id={`${id}_collapse`} bind:checked={hidden} />
-  <label for={`${id}_collapse`} />
+  <label for={`${id}_collapse`} title={`${hidden ? "show" : "hide"}`} />
   <div style={`width: ${width};`}>
     <slot />
   </div>

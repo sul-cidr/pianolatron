@@ -50,8 +50,8 @@
   import ViewerMetrics from "./ViewerMetrics.svelte";
 
   export let playPauseApp;
-  export let skipToPercentage;
   export let stopApp;
+  export let skipToPercentage;
   export let recordingControl;
 
   const panels = {

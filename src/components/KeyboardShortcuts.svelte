@@ -29,6 +29,7 @@
   export let stopApp;
   export let updateTickByViewportIncrement;
   export let panHorizontal;
+  export let toggleRecording;
 
   let actionInterval;
   let leftHandAugment = false;
@@ -97,6 +98,8 @@
     PAN_LEFT: () => keydownRepeatAction(() => panHorizontal(/* left = */ true)),
     PAN_RIGHT: () =>
       keydownRepeatAction(() => panHorizontal(/* left = */ false)),
+
+    TOGGLE_RECORD: toggleRecording,
   };
 
   const keyupCommandMap = {

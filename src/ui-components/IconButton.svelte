@@ -49,10 +49,45 @@
         }
       }
 
+      &.continue-record {
+        color: red;
+        &:active {
+          color: white;
+        }
+      }
+
       &.record:active,
       &.record:hover,
       &.record:focus {
         color: red;
+      }
+    }
+    &.performer-button {
+      align-items: center;
+      color: var(--white);
+      display: flex;
+      justify-content: center;
+      padding: 0.5rem;
+      width: 100%;
+
+      &:active {
+        color: var(--white);
+      }
+
+      &:focus,
+      &:active {
+        outline: 0;
+      }
+
+      &:hover,
+      &.enabled,
+      &.pause {
+        color: var(--white);
+      }
+
+      &:disabled {
+        color: var(--cool-grey);
+        cursor: not-allowed;
       }
     }
   }
@@ -85,4 +120,5 @@
   title={label}
 >
   <Icon name={iconName} {height} {width} aria-hidden="true" focusable="false" />
+  <slot />
 </button>
