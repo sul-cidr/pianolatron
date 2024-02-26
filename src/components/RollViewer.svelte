@@ -78,6 +78,7 @@
       );
       top: calc(100% + 2px);
       transition: margin 0.5s ease;
+      opacity: 0.6;
     }
 
     :global(.displayregion.label-above::after) {

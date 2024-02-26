@@ -5,8 +5,8 @@
   export let customAttribs = {};
 
   const defaultAttribs = {
-    viewBox: "-2 0 24 24",
-    "stroke-width": 0,
+    viewBox: "0 0 24 24",
+    "stroke-width": 2,
     stroke: "currentColor",
     fill: "none",
     "stroke-linecap": "round",

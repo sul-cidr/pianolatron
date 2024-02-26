@@ -46,8 +46,10 @@ const datetime = new Date().toISOString();
     <meta name="msapplication-square310x310logo" content="//www-media.stanford.edu/assets/favicon/mstile-310x310.png" />
     <title>{title}</title>
     <script>
-      const { theme } =
-        JSON.parse(window.localStorage.getItem("userSettings")) || {};
+      let { theme } = JSON.parse(window.localStorage.getItem("userSettings")) || {};
+      if (window.location.href.indexOf("/perform") == -1) {
+        theme = "blue";
+      }
       theme && document.documentElement.setAttribute("data-theme", theme);
     </script>
     <link rel="preload" href="/cidr.trsp.300x176.png" as="image" />
