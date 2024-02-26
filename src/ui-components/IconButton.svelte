@@ -5,11 +5,11 @@
     color: grey;
     cursor: pointer;
     margin: 0;
-    padding: 0;
+    padding: 0.35em 0.8em;
     transition: all 0.2s;
 
     &:not(:disabled):hover {
-      color: black;
+      color: white;
     }
 
     &:disabled {
