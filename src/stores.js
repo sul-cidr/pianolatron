@@ -16,6 +16,9 @@ class KeyboardRegion {
   }
 }
 
+// App mode
+export const appMode = createStore("perform");
+
 // Metadata
 export const rollMetadata = createStore({});
 export const rollHasExpressions = derived(
@@ -116,5 +119,6 @@ export const media = watchMedia({
   hover: "(hover: hover)",
 });
 
+// Latency warnings
 export const latencyDetected = createStore(false);
 export const showLatencyWarning = createStore(true);

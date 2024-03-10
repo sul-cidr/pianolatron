@@ -1,11 +1,13 @@
 ---
 import BaseLayout from "../../layouts/base.astro";
 import Search from "../../components/Search.svelte";
+import StanfordHeader from "../../layouts/stanfordHeader.astro";
 import StanfordSubheader from "../../layouts/stanfordSubheader.astro";
 import StanfordFooter from "../../layouts/stanfordFooter.astro";
 ---
 
 <BaseLayout title="Pianolatron Search">
+  <StanfordHeader />
   <StanfordSubheader />
   <Search client:only />
   <StanfordFooter />

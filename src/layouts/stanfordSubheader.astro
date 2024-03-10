@@ -1,61 +1,126 @@
 <div class="subheader">
+  <span class="background-container"></span>
+  <span class="background-container-gradient"></span>
   <div class="subheader-container">
-    <ul class="subheader-menu">
-      <li class="subheader-menu-item">
-        <a href="/homepage/" class="subheader-menu-item">Home</a>
-      </li>
-      <li class="subheader-menu-item">
-        <a
-          href="https://exhibits.stanford.edu/supra"
-          class="subheader-menu-item">Roll Archive Features</a>
-      </li>
-      <li class="subheader-menu-item">
-        <a href="/search/" class="subheader-menu-item">Search</a>
-      </li>
-      <li class="subheader-menu-item">
-        <a href="/about/" class="subheader-menu-item">About</a>
-      </li>
-    </ul>
-    <h1 class="subheader-title">Stanford University Piano Rolls Archive</h1>
+    <div class="subheader-title">
+      <h1 class="subheader-title">
+        Stanford University Piano Roll Archive
+        <small class="subheader-subtitle">SUPRA</small>
+      </h1>
+    </div>
+  </div>
+  <div class="site-navbar">
+    <div class="navbar-row">
+      <ul class="subheader-menu">
+        <li class="subheader-menu-item">
+          <a href="/homepage/" class="subheader-menu-item">HOME</a>
+        </li>
+        <li class="subheader-menu-item">
+          <a
+            href="https://exhibits.stanford.edu/supra"
+            class="subheader-menu-item">Roll Archive Features</a
+          >
+        </li>
+        <li class="subheader-menu-item">
+          <a href="/search/" class="subheader-menu-item">Browse</a>
+        </li>
+        <li class="subheader-menu-item">
+          <a href="/about/" class="subheader-menu-item">About</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 
 <style>
   .subheader {
-    background: url(https://exhibits.stanford.edu/images/5262/14,130,584,58/1800,180/0/default.jpg);
-    background-color: var(--cardinal-red);
-    height: 60px;
-    width: 100%;
-    z-index: 10;
-    white-space: nowrap;
+    background-color: #2e2d29;
+    border-bottom: 1px solid #dee2e6;
+    position: relative;
+    display: block;
+  }
+  .background-container {
+    background: url("/header_bg.jpg");
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: block;
+    width: auto;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-right: 1px solid #2e2d29;
+    filter: blur(1px);
+    margin-left: -1px;
+    margin-top: -1px;
+    overflow: hidden;
+  }
+  .background-container-gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: block;
+    width: auto;
+    height: 100%;
+    background: linear-gradient(
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.5)
+    );
   }
   .subheader-container {
-    display: flex;
-    justify-content: space-between;
+    background-color: #2e2d29;
+    display: block;
     margin: 0 auto;
-    padding: 0.5rem 0;
-    width: 80%;
+    max-width: 1140px;
+    height: inherit;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    max-height: 8rem;
+  }
+  .subheader-title {
+    display: inline-grid;
+    color: white;
+    text-shadow: 1px 1px 0 #212529;
+    font-family: SourceSans3, sans-serif;
+    font-weight: 400;
+    font-size: 2.125rem;
+    margin-top: 0.65rem;
+    z-index: 1;
+    padding-bottom: 1rem;
+  }
+  .subheader-title small {
+    color: white;
+    font-size: 1.5rem;
+  }
+  .site-navbar {
+    position: relative;
+    padding: 0.5rem 1rem;
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+  .navbar-row {
+    margin: 0 auto;
+    max-width: 1140px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
   .subheader-menu {
     display: flex;
     gap: 1.25rem;
-    justify-content: space-between;
     list-style: none;
     padding: 0;
-    margin: 1rem 0 0;
+    margin: 0.5rem 0 0.6rem 0;
   }
   .subheader-menu-item {
     color: white;
     font-family: SourceSans3, sans-serif;
     text-decoration: none;
+    text-transform: uppercase;
+    font-size: 15px;
+    letter-spacing: 1.1px;
+    color: #dbdbdb;
   }
   .subheader-menu-item:hover {
     text-decoration: underline;
-  }
-  .subheader-title {
-    color: white;
-    font-family: SourceSans3, sans-serif;
-    font-weight: 400;
-    margin: 0;
   }
 </style>

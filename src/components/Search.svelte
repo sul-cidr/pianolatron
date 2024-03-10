@@ -102,6 +102,8 @@
   ];
 
   // taken from Icon component
+  // The way grid.js loads the values (and icons/links) for each row as HTML
+  // make it very difficult to reuse that component here.
   const icons = {
     piano: `
       <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano">

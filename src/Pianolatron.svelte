@@ -1,6 +1,5 @@
 <style lang="scss">
   #app {
-    height: calc(100vh - 60px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -13,6 +12,13 @@
       grid-template-columns: auto 1fr auto;
       grid-template-areas: "left center right";
     }
+  }
+
+  .listen-app {
+    height: calc(100vh - 220px);
+  }
+  .perform-app {
+    height: calc(100vh - 185px);
   }
 
   :global(#left-sidebar) {
@@ -55,6 +61,7 @@
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import {
+    appMode,
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
     tempoCoefficient,
@@ -75,8 +82,8 @@
   import {
     annotateHoleData,
     clamp,
+    getMode,
     getPathJoiner,
-    getProfile,
     RecordingActions,
   } from "./lib/utils";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -99,10 +106,9 @@
   import RollPlayerControls from "./components/RollPlayerControls.svelte";
   import catalog from "./config/catalog.json";
 
-  export let profile = "perform";
+  export let mode;
 
   const joinPath = getPathJoiner(import.meta.env.BASE_URL);
-  const isPerform = getProfile(profile) === "perform";
 
   let firstLoad = true;
   let appReady = false;
@@ -349,6 +355,9 @@
   onMount(async () => {
     document.querySelector("#loading span").textContent =
       "Loading resources...";
+
+    $appMode = getMode(mode);
+
     ({
       midiSamplePlayer,
       pianoReady,
@@ -387,12 +396,16 @@
     document.getElementById("loading").classList.add("fade-out");
     appLoaded = true;
   }
+  $: appClass = $appMode === "perform" ? "perform-app" : "listen-app";
 </script>
 
-<div id="app">
+<div id="app" class={appClass}>
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw" hidden={false}>
-      {#if isPerform}<RollSelector bind:currentRoll {rollListItems} />{/if}
+      {#if $appMode === "perform"}<RollSelector
+          bind:currentRoll
+          {rollListItems}
+        />{/if}
       {#if appReady}
         <RollDetails {metadata} />
         {#if !holesByTickInterval.count}
@@ -410,7 +423,6 @@
           {resetPlayback}
           {playPauseApp}
           {toggleRecording}
-          {isPerform}
         />
         <RollViewer
           bind:this={rollViewer}
@@ -420,7 +432,7 @@
           {holesByTickInterval}
           {skipToTick}
           {progressPercentageToTick}
-          showScaleBar={isPerform && $userSettings.showRuler}
+          showScaleBar={$appMode === "perform" && $userSettings.showRuler}
         />
       {/if}
       {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
@@ -433,10 +445,10 @@
       id="right-sidebar"
       width="20vw"
       position="left"
-      hidden={!isPerform}
+      hidden={!($appMode === "perform")}
     >
       {#if appReady}
-        {#if isPerform}
+        {#if $appMode === "perform"}
           <TabbedPanel
             {playPauseApp}
             {stopApp}
