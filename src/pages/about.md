@@ -5,6 +5,8 @@ title: About the Pianolatron
 
 The Pianolatron is the product of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' <a href="https://library.stanford.edu/projects/player-piano-program" target="_blank">Player Piano Program</a>. The technical implementation of the Pianolatron app, carried out by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open source software community.
 
+<br />
+
 ### Principal Investigators
 
 - Kumaran Arul, Department of Music, Stanford University
@@ -15,6 +17,11 @@ The Pianolatron is the product of a large-scale collaborative partnership betwee
 - Peter Broadwell
 - Simon Wiles
 - Vijoy Abraham
+
+### Contributing Developers
+
+- Chris Fitzpatrick
+- Mark Pernotto
 
 ### Research Contributors
 

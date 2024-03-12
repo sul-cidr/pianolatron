@@ -1,13 +1,12 @@
 <header class="masthead image-masthead" role="banner">
   <span
     class="background-container"
-    style="background-image: url('https://exhibits.stanford.edu/images/5262/14,130,584,58/1800,180/0/default.jpg')"
-  ></span>
+    style="background-image: url('/header_bg.jpg')"></span>
   <span class="background-container-gradient"></span>
 
   <div class="container site-title-container">
     <div class="site-title-wrapper">
-      <h1 class="site-title h2">Stanford University Piano Roll Archive</h1>
+      <h2 class="site-title">Stanford University Piano Roll Archive</h2>
     </div>
   </div>
   <div
@@ -23,17 +22,19 @@
           >
         </li>
         <li class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"
-            >Roll Archive Features</a
+          <a
+            href="https://exhibits.stanford.edu/supra"
+            class="nav-link dropdown-toggle"
+            data-toggle="dropdown">Roll Archive Features</a
           >
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="/search">Search</a>
+          <a class="nav-link" href="/search/">Browse</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="/homepage">Home</a>
+          <a class="nav-link" href="/about/">About</a>
         </li>
       </ul>
     </div>
@@ -43,8 +44,6 @@
 <style>
   .masthead {
     background-color: #2e2d29;
-    border-bottom: 1px solid #dee2e6;
-    margin-bottom: 1.5rem;
     padding: 0;
     position: relative;
   }
@@ -93,6 +92,9 @@
   h2 {
     font-size: 2.125rem;
     text-shadow: 1px 1px 0 #212529;
+    color: white;
+    font-family: SourceSans3, sans-serif;
+    font-weight: 400;
   }
   .navbar {
     position: relative;
@@ -122,7 +124,15 @@
     list-style: none;
   }
   .navbar-nav li a {
-    color: #fff;
+    color: #dbdbdb;
     padding: 0 0.5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: SourceSans3, sans-serif;
+    font-size: 15px;
+    letter-spacing: 1.1px;
+  }
+  .navbar-nav .nav-link:hover {
+    text-decoration: underline;
   }
 </style>

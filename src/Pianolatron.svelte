@@ -18,7 +18,10 @@
     height: calc(100vh - 220px);
   }
   .perform-app {
-    height: calc(100vh - 185px);
+    height: calc(100vh - 170px);
+  }
+  .embed-app {
+    height: 100vh;
   }
 
   :global(#left-sidebar) {
@@ -396,7 +399,7 @@
     document.getElementById("loading").classList.add("fade-out");
     appLoaded = true;
   }
-  $: appClass = $appMode === "perform" ? "perform-app" : "listen-app";
+  $: appClass = `${$appMode}-app`;
 </script>
 
 <div id="app" class={appClass}>

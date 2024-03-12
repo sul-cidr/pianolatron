@@ -300,14 +300,6 @@
             (n) => n >= $currentTick - latencyThreshold,
           );
         }
-      } else {
-        console.log(
-          "Couldn't find note",
-          noteNumber,
-          "at tick",
-          tick,
-          "in notesMap",
-        );
       }
       piano.keyDown({
         midi: noteNumber,

@@ -103,7 +103,7 @@
 
   // taken from Icon component
   // The way grid.js loads the values (and icons/links) for each row as HTML
-  // make it very difficult to reuse that component here.
+  // makes it very difficult to reuse that component here.
   const icons = {
     piano: `
       <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano">
@@ -124,19 +124,46 @@
         <path d="M16 12L10 16.3301V7.66987L16 12Z" fill="currentColor" />
       </svg>
       `,
+    midi: `
+      <svg height="24" width="24" viewBox="0 0 712 266" stroke-width="2" stroke="currentColor" fill="currentColor" stroke-linecap="round" stroke-linejoin="round" name="midi">
+        <path aria-label="M" text-data="M" d="m 0,0 h 233 c 19.6,0 31,16.9 31,37 V 266 H 199 V 67 H 161 V 266 H 102 V 67 H 65 V 266 H 0 Z" />
+        <rect aria-label="I" text-data="I" x="296" y="0" width="65" height="266" />
+        <path aria-label="D" text-data="D" d="m 392,0 h 193 c 19.6,0 31,16.9 31,37 v 196 c 0,24.9 -10.4,33 -33,33 H 392 V 97 h 66 v 104 h 93 V 60 H 392 Z" />
+        <rect aria-label="I" text-data="I" x="646" y="0" width="66" height="266" />
+      </svg>
+      `,
+    roll_image: `
+      <svg height="24" width="24" aria-label="Roll image" role="img" viewBox="0 0 300 550" stroke-width="2" stroke="currentColor" fill="currentColor" stroke-linecap="round" stroke-linejoin="round" name="roll-image">
+        <rect x="1" y="50" width="298" height="200" stroke-width="4"></rect>
+        <path fill="lightgrey" stroke-width="4" d="M 1 250 V 400 L 135 549 H 165 L 299 400 V 250 Z"></path>
+        <rect x="100" y="400" width="100" height="75" rx="5%" fill="white" stroke-width="2"></rect>
+      </svg>
+      `,
   };
 
   const getLinksForCell = (druid) => {
+    const catalogEntry = catalog.filter((obj) =>
+      Object.keys(obj).some((key) => obj[key].includes(druid)),
+    )[0];
+    const imageKey = catalogEntry.image_url.split("/").slice(-2, -1)[0];
+    const imageLink = `https://stacks.stanford.edu/file/${druid}/${imageKey}.jp2`;
+
     return html(`
-        <span class="row-links">
-          <a  href="/?druid=${druid}">
-            ${icons["play"]}
-          </a>
-          <a href="/perform/?druid=${druid}">
-            ${icons["piano"]}
-            </a>
-        </span>
-        `);
+      <span class="row-links">
+        <a href="/?druid=${druid}" title="Play roll">
+          ${icons["play"]}
+        </a>
+        <a href="/perform/?druid=${druid}" title="Perform roll">
+          ${icons["piano"]}
+        </a>
+        <a href="/midi/${druid}.mid" title="Download MIDI">
+          ${icons["midi"]}
+        </a>
+        <a href="${imageLink}" title="Download image">
+          ${icons["roll_image"]}
+        </a>
+      </span>
+    `);
   };
 
   beforeUpdate(async () => {
@@ -149,8 +176,8 @@
   const columns = [
     {
       id: "_links",
-      name: "Play / Perform",
-      width: "160px",
+      name: "Play / Perform / MIDI / Image",
+      width: "250px",
       sort: false,
       data: (r) => r._d_links,
     },
