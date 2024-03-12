@@ -41,21 +41,16 @@
 </style>
 
 <script>
-  // This will probably change a lot as we make the listener panel look less utilitiarian. 
+  // This will probably change a lot as we make the listener panel look less utilitiarian.
   import { keyMap } from "./KeyboardShortcuts.svelte";
   import PlaybackControls from "./PlaybackControls.svelte";
-  import {
-    tempoCoefficient,
-  } from "../stores";
+  import { tempoCoefficient } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
-
 
   export let playPauseApp;
   export let stopApp;
   export let skipToTick;
-  const isPerform = false;
-
 </script>
 
 <div id="listener-panel">
@@ -72,10 +67,11 @@
         <kbd class:depressed={$keyMap.TEMPO_DOWN.active}
           >{$keyMap.TEMPO_DOWN.key}</kbd
         >↓
-        <kbd class:depressed={$keyMap.TEMPO_UP.active}>{$keyMap.TEMPO_UP.key}</kbd
+        <kbd class:depressed={$keyMap.TEMPO_UP.active}
+          >{$keyMap.TEMPO_UP.key}</kbd
         >↑
       </svelte:fragment>
     </SliderControl>
   </div>
 </div>
-<PlaybackControls {skipToTick} {playPauseApp} {stopApp} {isPerform} />
+<PlaybackControls {skipToTick} {playPauseApp} {stopApp} />

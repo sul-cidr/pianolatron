@@ -14,9 +14,8 @@ export const RecordingActions = {
   Toggle: 3,
 };
 
-const profiles = new Set(["perform", "listen"]);
-export const getProfile = (profile) =>
-  profiles.has(profile) ? profile : "perform";
+const modes = new Set(["perform", "listen", "embed"]);
+export const getMode = (mode) => (modes.has(mode) ? mode : "perform");
 
 export const getPathJoiner = (base) => {
   const noSlashBase = base.replace(/[/]+$/, "");

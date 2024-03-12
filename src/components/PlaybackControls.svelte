@@ -100,13 +100,13 @@
   import { tick as sweep } from "svelte";
   import { keyMap } from "./KeyboardShortcuts.svelte";
   import {
+    appMode,
     currentTick,
     isPlaying,
     softOnOff,
     sustainOnOff,
     accentOnOff,
   } from "../stores";
-  import IconButton from "../ui-components/IconButton.svelte";
 
   export let playPauseApp;
   export let stopApp;
@@ -126,14 +126,10 @@
     playPauseApp();
     await sweep();
   };
-
-  // Fewer controls for listener than performer
-  // Not entirely sure how this is supposed to work - commented out for now
-  export let isPerform = true;
 </script>
 
 <div id="perform-controls">
-  {#if isPerform}
+  {#if $appMode === "perform"}
     <!-- <div class="play-pause-button">
       {#key $isPlaying}
         <IconButton

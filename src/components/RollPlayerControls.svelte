@@ -15,6 +15,7 @@
     clearNotification,
   } from "../ui-components/Notification.svelte";
   import {
+    appMode,
     currentTick,
     isPlaying,
     playRepeat,
@@ -29,7 +30,6 @@
   export let resetPlayback;
   export let playPauseApp;
   export let toggleRecording;
-  export let isPerform = true;
 
   let isBookmarked = false;
   const bookmark = () => {
@@ -100,7 +100,7 @@
       disabled={false}
       on:mousedown={bookmark}
       iconName="bookmark"
-      label="bookmark"
+      label="Bookmark"
       height="24"
       width="24"
     />
@@ -164,7 +164,7 @@
       width="24"
     />
   {/if}
-  {#if isPerform}
+  {#if $appMode === "perform"}
     {#if !$recordingOnOff}
       {#if $recordingInBuffer}
         <IconButton

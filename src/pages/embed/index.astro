@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../../layouts/base.astro";
-import StanfordHeader from "../../pages/newHeader.astro";
 import Pianolatron from "../../Pianolatron.svelte";
 import LoadingSpinner from "../../ui-components/LoadingSpinner.svelte";
 ---
@@ -10,6 +9,5 @@ import LoadingSpinner from "../../ui-components/LoadingSpinner.svelte";
     showLoadingSpinner={true}
     loadingSpinnerText="Loading application..."
   />
-  <StanfordHeader />
-  <Pianolatron client:only mode="perform" />
+  <Pianolatron client:only mode="embed" />
 </BaseLayout>

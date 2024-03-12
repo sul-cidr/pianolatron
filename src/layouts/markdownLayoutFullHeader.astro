@@ -35,7 +35,7 @@ const datetime = new Date().toISOString();
 <title>{title}</title>
 <script>
   const { theme } =
-    JSON.parse(window.localStorage.getItem("userSettings")) || {};
+    JSON.parse(window.localStorage.getItem("userSettings")) || "";
   theme && document.documentElement.setAttribute("data-theme", theme);
 </script>
 

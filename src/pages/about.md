@@ -5,6 +5,7 @@ title: About the Pianolatron
 
 The Pianolatron is the product of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' <a href="https://library.stanford.edu/projects/player-piano-program" target="_blank">Player Piano Program</a>. The technical implementation of the Pianolatron app, carried out by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open source software community.
 
+<br />
 
 ### Principal Investigators
 
@@ -16,6 +17,11 @@ The Pianolatron is the product of a large-scale collaborative partnership betwee
 - Peter Broadwell
 - Simon Wiles
 - Vijoy Abraham
+
+### Contributing Developers
+
+- Chris Fitzpatrick
+- Mark Pernotto
 
 ### Research Contributors
 
@@ -37,7 +43,7 @@ The Pianolatron is the product of a large-scale collaborative partnership betwee
 
 ## Source Code
 
-The source code for the site is freely available under the MIT License at https://github.com/sul-cidr/pianolatron <a href="https://github.com/sul-cidr/pianolatron" target="_blank" rel="noopener"><img src="/github.svg" height="14" width="14" alt="Github" /></a>
+The source code for the site is freely available under the MIT License at https://github.com/sul-cidr/pianolatron <a href="https://github.com/sul-cidr/pianolatron" target="_blank" rel="noopener"><img src="/github-mark.svg" height="14" width="14" alt="Github" /></a>
 
 The Pianolatron makes significant use of modules from the following open-source software projects:
 
@@ -47,4 +53,4 @@ The Pianolatron makes significant use of modules from the following open-source 
 - [canvasSpliner](https://github.com/jonathanlurie/canvasSpliner), principal developer: Jonathan Lurie
 - [node-interval-tree](https://github.com/ShieldBattery/node-interval-tree), principal developer: Marko Žarković
 
-© 2022 Stanford University
+© 2024 Stanford University
