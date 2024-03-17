@@ -1,4 +1,4 @@
-import { derived } from "svelte/store";
+import { derived, writable } from "svelte/store";
 import {
   createStore,
   createSetStore,
@@ -35,6 +35,8 @@ export const scrollDownwards = derived(
   ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
 );
 
+export const holesIntervalTree = writable();
+
 // Pedaling
 export const softOnOff = createStore(false);
 export const sustainOnOff = createStore(false);
@@ -54,6 +56,9 @@ export const playExpressionsOnOff = createStore(true);
 export const rollPedalingOnOff = createStore(true);
 export const useMidiTempoEventsOnOff = createStore(true);
 export const ticksPerSecond = createStore(0);
+
+export const useInAppExpression = createStore(false);
+export const expressionBox = createStore();
 
 // Piano Settings
 export const sampleVolumes = createPersistedStore("sampleVolumes", {
@@ -89,6 +94,13 @@ export const tempoSensitivity = createStore(30);
 export const recordingOnOff = createStore(false);
 export const recordingInBuffer = createStore(false);
 export const recordingDuration = createStore(0);
+// Expression Curves
+export const bassExpCurve = createStore();
+export const trebleExpCurve = createStore();
+export const expressionParameters = createStore({});
+export const defaultExpressionParameters = createStore({});
+export const expBoxType = createStore(null);
+export const drawVelocityCurves = createStore(false);
 
 // Playback State
 export const isPlaying = createStore(false);

@@ -72,13 +72,16 @@
     playbackProgressStart,
     playbackProgressEnd,
     currentTick,
-    rollMetadata,
+    expressionBox,
+    holesIntervalTree,
     isReproducingRoll,
-    scrollDownwards,
     playExpressionsOnOff,
     recordingInBuffer,
     recordingOnOff,
+    rollMetadata,
     rollPedalingOnOff,
+    scrollDownwards,
+    useInAppExpression,
     userSettings,
     playRepeat,
   } from "./stores";
@@ -89,6 +92,8 @@
     getPathJoiner,
     RecordingActions,
   } from "./lib/utils";
+  import expressionBoxes from "./expression-boxes";
+  import { processHoleData } from "./lib/hole-data";
   import SamplePlayer from "./components/SamplePlayer.svelte";
   import RollSelector from "./components/RollSelector.svelte";
   import RollDetails from "./components/RollDetails.svelte";
@@ -123,8 +128,6 @@
   let currentRoll;
   let previousRoll;
   let metadata;
-  let holeData;
-  let holesByTickInterval = new IntervalTree();
 
   let samplePlayer;
 
@@ -137,7 +140,6 @@
   let startPlayback;
   let resetPlayback;
   let recordingControl;
-  let skipToTick;
 
   let rollViewer;
   let updateTickByViewportIncrement;
@@ -180,6 +182,12 @@
     });
   };
 
+  const skipToTick = (tick) => {
+    if (tick < 0) pausePlayback();
+    $currentTick = tick;
+    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
+  };
+
   const playPauseApp = () => {
     if (midiSamplePlayer.isPlaying()) {
       pausePlayback();
@@ -204,24 +212,42 @@
     tempoCoefficient.reset();
     bassVolumeCoefficient.reset();
     trebleVolumeCoefficient.reset();
-    holesByTickInterval = new IntervalTree();
+    $holesIntervalTree = new IntervalTree();
   };
 
-  const loadRoll = (roll) => {
+  const loadRoll = (roll, doReset = true) => {
     appWaiting = true;
-    const rollDruid = roll.druid;
-    mididataReady = fetch(joinPath("midi", `${rollDruid}.mid`))
+    mididataReady = fetch(
+      `./${$useInAppExpression ? "note_midi" : "midi"}/${roll.druid}.mid`,
+    )
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
           return mididataResponse.arrayBuffer();
         throw new Error("Error fetching MIDI file! (Operation cancelled)");
       })
       .then((mididataArrayBuffer) => {
-        resetApp();
+        if (doReset) resetApp();
         midiSamplePlayer.loadArrayBuffer(mididataArrayBuffer);
       })
+      .then(() => {
+        // Configure and hook-up expression box
+        const expressionBoxType = $useInAppExpression
+          ? $rollMetadata.ROLL_TYPE
+          : "expressiveMidi";
+        $expressionBox = new expressionBoxes[expressionBoxType](
+          midiSamplePlayer,
+          startNote,
+          stopNote,
+        );
+        // This is a tiny bit hacky (in the sense that it's using an undocumented
+        //  api), but it's a simple way to ensure that only one midiEventHandler
+        //  is registered.
+        midiSamplePlayer.eventListeners.midiEvent = [
+          $expressionBox.midiEventHandler,
+        ];
+      })
       .catch((err) => {
-        notify({ title: "Error!", message: err, type: "error" });
+        notify({ title: "MIDI Data Error!", message: err, type: "error" });
         currentRoll = previousRoll;
       });
 
@@ -231,21 +257,23 @@
         throw new Error("Error fetching metadata file! (Operation cancelled)");
       })
       .catch((err) => {
-        notify({ title: "Error!", message: err, type: "error" });
+        notify({ title: "Metadata Error!", message: err, type: "error" });
         currentRoll = previousRoll;
       });
 
-    Promise.all([mididataReady, metadataReady, pianoReady]).then(
+    return Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
-        metadata = (({ holeData: _, ...obj }) => obj)({
-          ...metadataJson,
-          druid: rollDruid,
-        });
-        holeData = metadataJson.holeData;
-        annotateHoleData(holeData, $rollMetadata, $scrollDownwards);
-        buildHolesIntervalTree();
-        $playExpressionsOnOff = $isReproducingRoll;
-        $rollPedalingOnOff = $isReproducingRoll;
+        metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
+        $holesIntervalTree = processHoleData(
+          metadataJson.holeData,
+          $rollMetadata,
+          $scrollDownwards,
+          $expressionBox.noteVelocitiesMap,
+        );
+        if (doReset) {
+          $playExpressionsOnOff = $isReproducingRoll;
+          $rollPedalingOnOff = $isReproducingRoll;
+        }
         appReady = true;
         appWaiting = false;
         firstLoad = false;
@@ -280,6 +308,21 @@
       end = 1;
     }
     return end;
+  };
+
+  const reloadRoll = () => {
+    const savedTick = $currentTick;
+    let startPlayer = false;
+    if (midiSamplePlayer.isPlaying()) {
+      pausePlayback();
+      startPlayer = true;
+    }
+    loadRoll(currentRoll, false).then(() => {
+      rollViewer.partitionOverlaySvgs();
+      rollViewer.updateVisibleOverlays();
+      skipToTick(savedTick);
+      if (startPlayer) startPlayback();
+    });
   };
 
   const setCurrentRollFromUrl = () => {
@@ -371,7 +414,6 @@
       startPlayback,
       resetPlayback,
       recordingControl,
-      skipToTick,
     } = samplePlayer);
 
     setCurrentRollFromUrl();
@@ -411,7 +453,7 @@
         />{/if}
       {#if appReady}
         <RollDetails {metadata} />
-        {#if !holesByTickInterval.count}
+        {#if !$holesIntervalTree.count}
           <p>
             Note:<br />Hole visualization data is not available for this roll at
             this time. Hole highlighting will not be enabled.
@@ -431,8 +473,6 @@
           bind:this={rollViewer}
           bind:rollImageReady
           imageUrl={currentRoll.image_url}
-          {holeData}
-          {holesByTickInterval}
           {skipToTick}
           {progressPercentageToTick}
           showScaleBar={$appMode === "perform" && $userSettings.showRuler}
@@ -457,6 +497,7 @@
             {stopApp}
             {skipToPercentage}
             {recordingControl}
+            {reloadRoll}
           />
         {:else}
           <ListenerPanel {skipToTick} {playPauseApp} {stopApp} />

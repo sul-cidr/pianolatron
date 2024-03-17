@@ -97,15 +97,15 @@
 <div id="settings-panel">
   <fieldset>
     <legend>Visualization Settings</legend>
-    <div class="setting">
+    <div>
       Show Details for Active Notes:
       <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
     </div>
-    <div class="setting">
+    <div>
       Display Note Velocities:
       <input type="checkbox" bind:checked={$userSettings.showNoteVelocities} />
     </div>
-    <div class="setting">
+    <div>
       Highlight Enabled Holes:
       <input
         type="checkbox"
@@ -160,7 +160,7 @@
 
   <fieldset>
     <legend>Roll Emulation Settings</legend>
-    <div class="setting">
+    <div>
       Play Expressions:
       <input
         type="checkbox"
@@ -168,7 +168,7 @@
         disabled={!$rollHasExpressions}
       />
     </div>
-    <div class="setting">
+    <div>
       Use Roll Pedaling:
       <input
         type="checkbox"
@@ -176,7 +176,7 @@
         disabled={!$rollHasExpressions}
       />
     </div>
-    <div class="setting">
+    <div>
       Emulate Roll Acceleration:
       <input type="checkbox" bind:checked={$useMidiTempoEventsOnOff} />
     </div>
