@@ -190,7 +190,6 @@
       $rollMetadata.ROLL_TYPE,
     );
     mark.dataset.holeLabel = holeLabel;
-    mark.dataset.holeLabel = label;
     if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
 
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);

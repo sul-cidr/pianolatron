@@ -13,6 +13,7 @@ import {
   trebleExpCurve,
   useMidiTempoEventsOnOff,
 } from "../../stores";
+import { NoteSource } from "../../lib/utils";
 import { rollProfile } from "../../config/roll-config";
 import { getHoleType } from "../../lib/hole-data";
 
@@ -303,13 +304,17 @@ export default class InAppExpressionizer {
           const ticksPerSecond = (parseFloat(tempo) * this.midiTPQ) / 60.0;
           const trackerExtensionSeconds =
             this.expParams.tracker_extension / ticksPerSecond;
-          this.stopNote(midiNumber, `+${trackerExtensionSeconds}`);
+          this.stopNote(
+            midiNumber,
+            NoteSource.Midi,
+            `+${trackerExtensionSeconds}`,
+          );
           activeNotes.delete(midiNumber);
         } else {
           const noteVelocity = get(playExpressionsOnOff)
             ? this.noteVelocitiesMap[tick]?.[midiNumber] || velocity
             : this.defaultNoteVelocity;
-          this.startNote(midiNumber, noteVelocity);
+          this.startNote(midiNumber, noteVelocity, NoteSource.Midi);
           activeNotes.add(midiNumber);
         }
       } else if (holeType === "pedal" && get(rollPedalingOnOff)) {

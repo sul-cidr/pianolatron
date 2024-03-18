@@ -30,7 +30,6 @@
     velocityCurveLow,
     velocityCurveMid,
     velocityCurveHigh,
-    userSettings,
     transposeHalfStep,
     playRepeat,
     playbackProgressStart,
@@ -44,8 +43,6 @@
   let webMidi;
   let audioRecorder;
   let recordingDestination;
-
-  let notesMap;
 
   let playbackStartTick;
   let playbackStartTime;
@@ -310,12 +307,14 @@
     }
   };
 
-  const stopNote = (noteNumber, noteSource) => {
+  const stopNote = (noteNumber, noteSource, timeDelay) => {
     if (noteSource == NoteSource.Midi) {
       noteNumber = noteNumber + $transposeHalfStep;
     }
     activeNotes.delete(noteNumber);
-    piano.keyUp({ midi: noteNumber });
+    if (timeDelay !== undefined)
+      piano.keyUp({ midi: noteNumber, time: timeDelay });
+    else piano.keyUp({ midi: noteNumber });
     if (noteSource != NoteSource.WebMidi) {
       webMidi?.sendMidiMsg("NOTE_OFF", noteNumber, 0);
     }
@@ -479,14 +478,12 @@
   };
 </script>
 
-{#if $userSettings.useWebMidi}
-  <WebMidi
-    bind:this={webMidi}
-    {startNote}
-    {stopNote}
-    {toggleSustain}
-    {toggleSoft}
-  />
-{/if}
+<WebMidi
+  bind:this={webMidi}
+  {startNote}
+  {stopNote}
+  {toggleSustain}
+  {toggleSoft}
+/>
 
 <AudioRecorder bind:this={audioRecorder} {recordingDestination} />
