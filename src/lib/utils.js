@@ -32,25 +32,12 @@ export const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 // Return a float between 0 and 1 proportional to value's position between min
 // and max
 export const normalizeInRange = (value, min, max) => {
-  if (max - min === 0) return 0;
+  if (max - min === 0) return 0.5;
   return (value - min) / (max - min);
 };
 
-export const getHoleType = ({ m: midiNumber }, rollType) => {
-  const {
-    bassNotesBegin: notesBegin,
-    trebleNotesEnd: notesEnd,
-    ctrlMap,
-  } = rollProfile[rollType];
-
-  if (midiNumber >= notesBegin && midiNumber <= notesEnd) return "note";
-  if (
-    ctrlMap[midiNumber]?.includes("soft") ||
-    ctrlMap[midiNumber]?.includes("sust")
-  )
-    return "pedal";
-  return "control";
-};
+export const getKeyByValue = (object, value) =>
+  Object.keys(object).find((key) => object[key] === value);
 
 // Return a float between min and max proportional to value's position between
 // 0 and 1

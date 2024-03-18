@@ -48,11 +48,13 @@
   import AudioSettings from "./AudioSettings.svelte";
   import MidiSettings from "./MidiSettings.svelte";
   import ViewerMetrics from "./ViewerMetrics.svelte";
+  import ExpressionSettings from "./ExpressionSettings.svelte";
 
   export let playPauseApp;
   export let stopApp;
   export let skipToPercentage;
   export let recordingControl;
+  export let reloadRoll;
 
   const panels = {
     controls: {
@@ -66,6 +68,11 @@
       component: MidiSettings,
       props: { recordingControl },
       icon: "midi",
+    },
+    expression: {
+      component: ExpressionSettings,
+      props: { reloadRoll },
+      icon: "exp_curves",
     },
   };
 

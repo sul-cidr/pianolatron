@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { Midi } from "@tonejs/midi";
-  import { clamp } from "../lib/utils";
+  import { clamp, NoteSource } from "../lib/utils";
   import {
     midiInputs,
     midiOutputs,

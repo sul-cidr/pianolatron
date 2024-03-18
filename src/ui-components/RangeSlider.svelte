@@ -28,7 +28,8 @@
   $ie-bottom-track-color: darken($track-color, $contrast);
 
   @mixin shadow($shadow-size, $shadow-blur, $shadow-color) {
-    box-shadow: $shadow-size $shadow-size $shadow-blur $shadow-color,
+    box-shadow:
+      $shadow-size $shadow-size $shadow-blur $shadow-color,
       0 0 $shadow-size lighten($shadow-color, 5%);
   }
 
@@ -96,8 +97,10 @@
       @include thumb;
       -webkit-appearance: none;
       margin-top: (
-        math.div((-$track-border-width * 2 + $track-height), 2) -
-          math.div($thumb-height, 2)
+        math.div((-$track-border-width * 2 + $track-height), 2) - math.div(
+            $thumb-height,
+            2
+          )
       );
     }
 

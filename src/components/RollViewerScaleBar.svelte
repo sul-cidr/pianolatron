@@ -4,7 +4,9 @@
     color: black;
     font-size: 12px;
     height: 28px;
-    transition: width 0.5s ease, transform 0.5s ease;
+    transition:
+      width 0.5s ease,
+      transform 0.5s ease;
     position: absolute;
     left: 1em;
     top: 1em;
@@ -72,11 +74,17 @@
   .us.halves span {
     background-image: linear-gradient(black, black),
       linear-gradient(black, black);
-    background-position: 50% top, 100% top;
-    background-size: 1px 12px, 1px 22px;
+    background-position:
+      50% top,
+      100% top;
+    background-size:
+      1px 12px,
+      1px 22px;
 
     &:last-child {
-      background-size: 1px 12px, 1px 100%;
+      background-size:
+        1px 12px,
+        1px 100%;
     }
 
     &::before {
@@ -89,11 +97,23 @@
     background-image: linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black);
-    background-position: 25% top, 50% top, 75% top, 100% top;
-    background-size: 1px 12px, 1px 16px, 1px 12px, 1px 22px;
+    background-position:
+      25% top,
+      50% top,
+      75% top,
+      100% top;
+    background-size:
+      1px 12px,
+      1px 16px,
+      1px 12px,
+      1px 22px;
 
     &:last-child {
-      background-size: 1px 12px, 1px 16px, 1px 12px, 1px 100%;
+      background-size:
+        1px 12px,
+        1px 16px,
+        1px 12px,
+        1px 100%;
     }
 
     &::before {
@@ -108,14 +128,35 @@
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black);
-    background-position: 12.5% top, 25% top, 37.5% top, 50% top, 62.5% top,
-      75% top, 87.5% top, 100% top;
-    background-size: 1px 8px, 1px 12px, 1px 8px, 1px 16px, 1px 8px, 1px 12px,
-      1px 8px, 1px 22px;
+    background-position:
+      12.5% top,
+      25% top,
+      37.5% top,
+      50% top,
+      62.5% top,
+      75% top,
+      87.5% top,
+      100% top;
+    background-size:
+      1px 8px,
+      1px 12px,
+      1px 8px,
+      1px 16px,
+      1px 8px,
+      1px 12px,
+      1px 8px,
+      1px 22px;
 
     &:last-child {
-      background-size: 1px 8px, 1px 12px, 1px 8px, 1px 16px, 1px 8px, 1px 12px,
-        1px 8px, 1px 100%;
+      background-size:
+        1px 8px,
+        1px 12px,
+        1px 8px,
+        1px 16px,
+        1px 8px,
+        1px 12px,
+        1px 8px,
+        1px 100%;
     }
 
     &::before {
@@ -134,17 +175,59 @@
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black), linear-gradient(black, black),
       linear-gradient(black, black);
-    background-position: 6.25% top, 12.5% top, 18.75% top, 25% top, 31.25% top,
-      37.5% top, 43.75% top, 50% top, 56.25% top, 62.5% top, 68.75% top, 75% top,
-      81.25% top, 87.5% top, 93.75% top, 100% top;
-    background-size: 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
-      1px 4px, 1px 16px, 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
-      1px 4px, 1px 22px;
+    background-position:
+      6.25% top,
+      12.5% top,
+      18.75% top,
+      25% top,
+      31.25% top,
+      37.5% top,
+      43.75% top,
+      50% top,
+      56.25% top,
+      62.5% top,
+      68.75% top,
+      75% top,
+      81.25% top,
+      87.5% top,
+      93.75% top,
+      100% top;
+    background-size:
+      1px 4px,
+      1px 8px,
+      1px 4px,
+      1px 12px,
+      1px 4px,
+      1px 8px,
+      1px 4px,
+      1px 16px,
+      1px 4px,
+      1px 8px,
+      1px 4px,
+      1px 12px,
+      1px 4px,
+      1px 8px,
+      1px 4px,
+      1px 22px;
 
     &:last-child {
-      background-size: 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
-        1px 4px, 1px 16px, 1px 4px, 1px 8px, 1px 4px, 1px 12px, 1px 4px, 1px 8px,
-        1px 4px, 1px 100%;
+      background-size:
+        1px 4px,
+        1px 8px,
+        1px 4px,
+        1px 12px,
+        1px 4px,
+        1px 8px,
+        1px 4px,
+        1px 16px,
+        1px 4px,
+        1px 8px,
+        1px 4px,
+        1px 12px,
+        1px 4px,
+        1px 8px,
+        1px 4px,
+        1px 100%;
     }
 
     &::before {

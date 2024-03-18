@@ -1,7 +1,8 @@
+<svelte:options accessors />
+
 <script>
   import { tick as sweep } from "svelte";
   import MidiPlayer from "midi-player-js";
-  import IntervalTree from "node-interval-tree";
   import { createEventDispatcher } from "svelte";
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
@@ -29,12 +30,12 @@
     velocityCurveLow,
     velocityCurveMid,
     velocityCurveHigh,
-    userSettings,
     transposeHalfStep,
     playRepeat,
     playbackProgressStart,
     latencyDetected,
     ticksPerSecond,
+    expressionBox,
   } from "../stores";
   import WebMidi from "./WebMidi.svelte";
   import AudioRecorder from "./AudioRecorder.svelte";
@@ -42,10 +43,6 @@
   let webMidi;
   let audioRecorder;
   let recordingDestination;
-
-  let tempoMap;
-  let pedalingMap;
-  let notesMap;
 
   let playbackStartTick;
   let playbackStartTime;
@@ -97,15 +94,9 @@
     skipToTick(Math.floor(midiSamplePlayer.totalTicks * percentage));
 
   const getTempoAtTick = (tick) => {
-    if (!tempoMap || !$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
-    let tempo;
-    let i = 0;
-    while (tempoMap[i][0] <= tick) {
-      [, tempo] = tempoMap[i];
-      i += 1;
-      if (i >= tempoMap.length) break;
-    }
-    return tempo || DEFAULT_TEMPO;
+    if (!$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
+    const { tempoMap } = $expressionBox;
+    return tempoMap.search(tick, tick)[0] || DEFAULT_TEMPO;
   };
 
   const toggleSustain = (onOff, fromMidi) => {
@@ -138,6 +129,8 @@
 
     let elapsedTime = 0;
     let i = 0;
+
+    const { tempoMap } = $expressionBox;
 
     while (tempoMap[i][0] <= tick) {
       [thisTick, thisTempo] = tempoMap[i];
@@ -173,6 +166,8 @@
   };
 
   const setPlayerStateAtTick = (tick = $currentTick) => {
+    const { pedalingMap, notesMap, midiSoftPedal, midiSustPedal } =
+      $expressionBox;
     if (midiSamplePlayer.tracks[0])
       midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
     setTempo(getTempoAtTick(tick));
@@ -182,8 +177,8 @@
 
     if (pedalingMap && $rollPedalingOnOff) {
       const pedals = pedalingMap.search($currentTick, $currentTick);
-      sustainOnOff.set(pedals.includes(SUSTAIN_PEDAL));
-      softOnOff.set(pedals.includes(SOFT_PEDAL));
+      sustainOnOff.set(pedals.includes(midiSustPedal));
+      softOnOff.set(pedals.includes(midiSoftPedal));
     } else {
       sustainOnOff.set(false);
       softOnOff.set(false);
@@ -285,6 +280,7 @@
       1,
     );
     if (modifiedVelocity) {
+      const { notesMap } = $expressionBox;
       if (
         notesMap.search(tick, tick).includes(noteNumber - $transposeHalfStep)
       ) {
@@ -311,12 +307,14 @@
     }
   };
 
-  const stopNote = (noteNumber, noteSource) => {
+  const stopNote = (noteNumber, noteSource, timeDelay) => {
     if (noteSource == NoteSource.Midi) {
       noteNumber = noteNumber + $transposeHalfStep;
     }
     activeNotes.delete(noteNumber);
-    piano.keyUp({ midi: noteNumber });
+    if (timeDelay !== undefined)
+      piano.keyUp({ midi: noteNumber, time: timeDelay });
+    else piano.keyUp({ midi: noteNumber });
     if (noteSource != NoteSource.WebMidi) {
       webMidi?.sendMidiMsg("NOTE_OFF", noteNumber, 0);
     }
@@ -363,59 +361,6 @@
     $isPlaying = true;
   };
 
-  const buildTempoMap = (metadataTrack) =>
-    metadataTrack
-      .filter((event) => event.name === "Set Tempo")
-      .reduce((_tempoMap, { tick, data }) => {
-        if (!_tempoMap.map(([, _data]) => _data).includes(data))
-          _tempoMap.push([tick, data]);
-        return _tempoMap;
-      }, []);
-
-  const buildPedalingMap = (eventsTrack) => {
-    const _pedalingMap = new IntervalTree();
-    const controllerEvents = eventsTrack.filter(
-      (event) => event.name === "Controller Change",
-    );
-
-    const enterEvents = (eventNumber) => {
-      let tickOn = false;
-      controllerEvents
-        .filter(({ number }) => number === eventNumber)
-        .forEach(({ value, tick }) => {
-          if (value === 0) {
-            if (tickOn) _pedalingMap.insert(tickOn, tick, eventNumber);
-            tickOn = false;
-          } else if (value === 127) {
-            if (!tickOn) tickOn = tick;
-          }
-        });
-    };
-
-    enterEvents(SOFT_PEDAL);
-    enterEvents(SUSTAIN_PEDAL);
-
-    return _pedalingMap;
-  };
-
-  const buildNotesMap = (musicTracks) => {
-    const _notesMap = new IntervalTree();
-    musicTracks.forEach((track) => {
-      const tickOn = {};
-      track
-        .filter((event) => event.name === "Note on")
-        .forEach(({ noteNumber, velocity, tick }) => {
-          if (velocity === 0) {
-            if (noteNumber in tickOn) {
-              _notesMap.insert(tickOn[noteNumber], tick, noteNumber);
-              delete tickOn[noteNumber];
-            }
-          } else if (!(noteNumber in tickOn)) tickOn[noteNumber] = tick;
-        });
-    });
-    return _notesMap;
-  };
-
   midiSamplePlayer.on("fileLoaded", () => {
     const decodeHtmlEntities = (string) =>
       string
@@ -424,7 +369,7 @@
           String.fromCodePoint(parseInt(num, 16)),
         );
 
-    const [metadataTrack, ...musicTracks] = midiSamplePlayer.events;
+    const [metadataTrack] = midiSamplePlayer.events;
 
     rollMetadata.set(
       Object.fromEntries(
@@ -440,12 +385,6 @@
     );
 
     $ticksPerSecond = 0;
-    tempoMap = buildTempoMap(metadataTrack);
-    // where two or more "music tracks" exist, pedal events are expected to have
-    //  been duplicated across tracks, so we read only from the first one.
-    pedalingMap = buildPedalingMap(musicTracks[0]);
-
-    notesMap = buildNotesMap(musicTracks);
 
     latencyThreshold = Math.floor(midiSamplePlayer.totalTicks * 0.1);
   });
@@ -479,8 +418,6 @@
     },
   );
 
-  midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
-
   const recordingControl = (action) => {
     switch (action) {
       case RecordingActions.Clear:
@@ -512,6 +449,7 @@
       $latencyDetected = false;
     }
   };
+  midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);
@@ -540,15 +478,12 @@
   };
 </script>
 
-{#if $userSettings.useWebMidi}
-  <WebMidi
-    bind:this={webMidi}
-    {startNote}
-    {stopNote}
-    {toggleSustain}
-    {toggleSoft}
-    {recordingDestination}
-  />
-{/if}
+<WebMidi
+  bind:this={webMidi}
+  {startNote}
+  {stopNote}
+  {toggleSustain}
+  {toggleSoft}
+/>
 
 <AudioRecorder bind:this={audioRecorder} {recordingDestination} />

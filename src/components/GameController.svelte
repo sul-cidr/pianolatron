@@ -49,7 +49,8 @@
     $trebleVolumeCoefficient =
       Math.round(
         clamp(
-          $trebleVolumeCoefficient - gamepad.axes[3] / (100 - $tempoSensitivity),
+          $trebleVolumeCoefficient -
+            gamepad.axes[3] / (100 - $tempoSensitivity),
           controlsConfig.trebleVolume.min,
           controlsConfig.trebleVolume.max,
         ) * 100,
@@ -93,7 +94,6 @@
       updateTickByViewportIncrement(/* up - */ false);
     if (buttonPressed(gamepad.buttons[14])) panHorizontal(/* left = */ true);
     if (buttonPressed(gamepad.buttons[15])) panHorizontal(/* left = */ false);
-
 
     lastControllerState = {
       timestamp: "timestamp" in gamepad ? gamepad.timestamp : undefined,
