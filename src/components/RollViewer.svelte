@@ -169,7 +169,7 @@
       startY: offsetY,
       w: width,
       h: height,
-      // m: midiKey,
+      m: midiKey,
       v: velocity,
       color: holeColor,
       type: holeType,
@@ -312,6 +312,8 @@
   };
 
   // Selection Overlay in the image viewer
+  // This is stored along with the partitioned SVG holes. There's only ever one
+  // selection overlay, so it seems unnecessary to store it in its own tree.
   const updateSelectionOverlays = () => {
     if (viewport === undefined) {
       return;
@@ -320,7 +322,7 @@
     const holesEndPx = $scrollDownwards ? lastHolePx : firstHolePx;
 
     if (selectionSvg !== undefined) {
-      svgPartitions.remove(holesBeginPx, holesEndPx, selectionSvg);
+      holesSvgPartitions.remove(holesBeginPx, holesEndPx, selectionSvg);
     }
 
     let startLinePx = -1;
@@ -349,8 +351,8 @@
     ];
 
     navSelectionSvg = createSelectionOverlaySvg(...navBarLineConfig);
-    // hack: addOverlay take an onDraw function,using it
-    // seems to help keep OSD from trying to futz with the positioning in the nav bar.
+    // hack: addOverlay takes an onDraw function, using it seem to help keep
+    // OSD from trying to futz with the positioning in the nav bar.
     openSeadragon.navigator.addOverlay(
       navSelectionSvg,
       OpenSeadragon.Point(0, 0),
@@ -364,7 +366,7 @@
       endLinePx,
       selectionConfig,
     );
-    svgPartitions.insert(holesBeginPx, holesEndPx, selectionSvg);
+    holesSvgPartitions.insert(holesBeginPx, holesEndPx, selectionSvg);
   };
 
   const updateVisibleSvgPartitions = (svgPartitions, visibleSvgs) => {
@@ -379,7 +381,7 @@
 
     // Remove any currently displayed SVG overlays that don't overlap with the
     // viewer window
-    const updatedSvgs = visibleSvgs.filter((visibleSvg) => {
+    let updatedSvgs = visibleSvgs.filter((visibleSvg) => {
       if (svgs.includes(visibleSvg)) return true;
       viewport.viewer.removeOverlay(visibleSvg);
       return false;
@@ -838,6 +840,7 @@
       navigatorHeight: "100%",
       navigatorWidth: "var(--navigator-width)",
       navigatorDisplayRegionColor: "transparent",
+      navigatorMaintainSizeRatio: true,
       animationTime: 0,
     });
 
@@ -880,17 +883,26 @@
       } = navigator;
 
       if (mainViewport && navViewport) {
+        const navigatorContainerDims = viewport.getContainerSize();
         const bounds = viewport.getBoundsNoRotate(true);
-        const topleft = navViewport.pixelFromPointNoRotate(
+        const imgBounds = viewport.viewportToImageRectangle(
+          viewport.getBounds(),
+        );
+
+        const topOffset =
+          (imgBounds.getTopLeft().y / imageLength) * navigatorContainerDims.y;
+
+        const topLeft = navViewport.pixelFromPointNoRotate(
           bounds.getTopLeft(),
           false,
         );
-        const bottomright = navViewport
+
+        const bottomRight = navViewport
           .pixelFromPointNoRotate(bounds.getBottomRight(), false)
           .minus(totalBorderWidths);
 
-        style.top = `${Math.round(topleft.y)}px`;
-        style.height = `${Math.abs(topleft.y - bottomright.y)}px`;
+        style.top = `${Math.round(topOffset)}px`;
+        style.height = `${Math.abs(topLeft.y - bottomRight.y)}px`;
       }
     };
 
@@ -1000,6 +1012,7 @@
     }
     updateSelectionOverlays();
     updateVisibleSvgPartitions();
+    updateViewportFromTick($currentTick);
   };
 
   $: $playbackProgressStart, updateSelection();
