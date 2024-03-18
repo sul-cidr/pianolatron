@@ -2,6 +2,9 @@
   // based on https://github.com/darlanrod/input-range-scss
   // which is, in turn, based on
   // https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+
+  @use "sass:math";
+
   $track-color: #eaeaea;
   $thumb-color: var(--primary-accent);
 

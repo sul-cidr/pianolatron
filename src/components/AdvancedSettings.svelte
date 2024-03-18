@@ -226,7 +226,7 @@
         {$gameController.id} Buttons: {$gameController.buttons.length} Axes: {$gameController
           .axes.length}
       </p>
-            <br />
+      <br />
       <SliderControl
         bind:value={$volumeSensitivity}
         min={controlsConfig.volumeSensitivity.min}
