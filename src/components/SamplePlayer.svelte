@@ -45,8 +45,6 @@
   let audioRecorder;
   let recordingDestination;
 
-  let tempoMap;
-  let pedalingMap;
   let notesMap;
 
   let playbackStartTick;
@@ -285,6 +283,7 @@
       1,
     );
     if (modifiedVelocity) {
+      const { notesMap } = $expressionBox;
       if (
         notesMap.search(tick, tick).includes(noteNumber - $transposeHalfStep)
       ) {
@@ -487,7 +486,6 @@
     {stopNote}
     {toggleSustain}
     {toggleSoft}
-    {recordingDestination}
   />
 {/if}
 

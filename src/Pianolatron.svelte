@@ -85,13 +85,7 @@
     userSettings,
     playRepeat,
   } from "./stores";
-  import {
-    annotateHoleData,
-    clamp,
-    getMode,
-    getPathJoiner,
-    RecordingActions,
-  } from "./lib/utils";
+  import { clamp, getMode, getPathJoiner, RecordingActions } from "./lib/utils";
   import expressionBoxes from "./expression-boxes";
   import { processHoleData } from "./lib/hole-data";
   import SamplePlayer from "./components/SamplePlayer.svelte";
@@ -154,6 +148,12 @@
   const skipToPercentage = (percentage = 0) =>
     skipToTick(progressPercentageToTick(percentage));
 
+  const skipToTick = (tick) => {
+    if (tick < 0) pausePlayback();
+    $currentTick = tick;
+    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
+  };
+
   const rollListItems = catalog.map((item) => ({
     ...item,
     _label: `${item.number} ${item.title} [${item.publisher}]`,
@@ -166,26 +166,6 @@
       duration,
       css: (t) => `height: ${quartInOut(t) * o}px`,
     };
-  };
-
-  const buildHolesIntervalTree = () => {
-    const { FIRST_HOLE } = $rollMetadata;
-
-    const firstHolePx = parseInt(FIRST_HOLE, 10);
-
-    holeData.forEach((hole) => {
-      const { y: offsetY, h: height } = hole;
-      const tickOn = offsetY - firstHolePx;
-      const tickOff = offsetY + height - firstHolePx;
-
-      holesByTickInterval.insert(tickOn, tickOff, hole);
-    });
-  };
-
-  const skipToTick = (tick) => {
-    if (tick < 0) pausePlayback();
-    $currentTick = tick;
-    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 
   const playPauseApp = () => {
@@ -218,7 +198,7 @@
   const loadRoll = (roll, doReset = true) => {
     appWaiting = true;
     mididataReady = fetch(
-      `./${$useInAppExpression ? "note_midi" : "midi"}/${roll.druid}.mid`,
+      `/${$useInAppExpression ? "note_midi" : "midi"}/${roll.druid}.mid`,
     )
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)
@@ -251,7 +231,7 @@
         currentRoll = previousRoll;
       });
 
-    metadataReady = fetch(joinPath("json", `${rollDruid}.json`))
+    metadataReady = fetch(joinPath("json", `${roll.druid}.json`))
       .then((metadataResponse) => {
         if (metadataResponse.status === 200) return metadataResponse.json();
         throw new Error("Error fetching metadata file! (Operation cancelled)");
