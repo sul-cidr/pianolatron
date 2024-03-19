@@ -143,16 +143,16 @@
   const progressPercentageToTick = (percentage = 0) =>
     Math.floor(midiSamplePlayer.totalTicks * percentage);
 
-  // redundant, but the way the BasicSettings comp is built requires we define the func
-  // here, as it won't update the ref.
-  const skipToPercentage = (percentage = 0) =>
-    skipToTick(progressPercentageToTick(percentage));
-
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
     $currentTick = tick;
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
+
+  // redundant, but the way the BasicSettings comp is built requires we define the func
+  // here, as it won't update the ref.
+  const skipToPercentage = (percentage = 0) =>
+    skipToTick(progressPercentageToTick(percentage));
 
   const rollListItems = catalog.map((item) => ({
     ...item,
@@ -275,19 +275,19 @@
   };
 
   const validateStartParam = (start) => {
-    start = Number(start) / 100;
-    if (start < 0 || start >= 1) {
-      start = 0;
+    let startPct = Number(start) / 100;
+    if (startPct < 0 || startPct >= 1) {
+      startPct = 0;
     }
-    return start;
+    return startPct;
   };
 
   const validateEndParam = (end, start) => {
-    end = Number(end) / 100;
-    if (end <= 0 || end > 1 || start >= end) {
-      end = 1;
+    let endPct = Number(end) / 100;
+    if (endPct <= 0 || endPct > 1 || start >= endPct) {
+      endPct = 1;
     }
-    return end;
+    return endPct;
   };
 
   const reloadRoll = () => {
@@ -403,11 +403,12 @@
   $: if (appLoaded && $playbackProgressStart > 0) {
     skipToPercentage($playbackProgressStart);
   }
-  $: playbackProgress.update(() => {
-    return clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1);
-  });
+  $: playbackProgress.update(() =>
+    clamp($currentTick / (midiSamplePlayer?.totalTicks || 1), 0, 1),
+  );
   $: if (appLoaded && $playbackProgress >= $playbackProgressEnd) {
-    $playRepeat ? skipToPercentage($playbackProgressStart) : pausePlayback();
+    if ($playRepeat) skipToPercentage($playbackProgressStart);
+    else pausePlayback();
   }
   $: if (rollViewer)
     ({ adjustZoom, updateTickByViewportIncrement, panHorizontal } = rollViewer);
@@ -472,13 +473,7 @@
     >
       {#if appReady}
         {#if $appMode === "perform"}
-          <TabbedPanel
-            {playPauseApp}
-            {stopApp}
-            {skipToPercentage}
-            {recordingControl}
-            {reloadRoll}
-          />
+          <TabbedPanel {skipToPercentage} {reloadRoll} />
         {:else}
           <ListenerPanel {skipToTick} {playPauseApp} {stopApp} />
         {/if}

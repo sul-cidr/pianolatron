@@ -67,11 +67,11 @@
 
 <script>
   import catalog from "../config/catalog.json";
-  export let metadata;
 
-  export const similarWorksByPerformer = catalog.filter((w) => {
-    return w.performer === metadata.performer && w.druid !== metadata.druid;
-  });
+  export let metadata;
+  export const similarWorksByPerformer = catalog.filter(
+    (w) => w.performer === metadata.performer && w.druid !== metadata.druid,
+  );
 
   const unavailable = "<span>Unavailable</span>";
 </script>

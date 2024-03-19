@@ -55,39 +55,16 @@
     softOnOff,
     sustainFromExternalMidi,
     softFromExternalMidi,
-    //recordingDuration,
   } from "../stores";
-  import { RecordingActions } from "../lib/utils";
-
-  export let recordingControl;
-
-  let recordingTime = "00:00.00";
 
   const resetPedals = () => {
     $sustainOnOff = false;
     $softOnOff = false;
   };
 
-  // const formatRecordingDuration = (durInMs) => {
-  //   const minutes = Math.floor(durInMs / 60000)
-  //     .toString()
-  //     .padStart(2, "0");
-  //   const seconds = Math.floor((durInMs - minutes * 60000) / 1000)
-  //     .toString()
-  //     .padStart(2, "0");
-  //   const hundredths = Math.floor(
-  //     (durInMs - minutes * 60000 - seconds * 1000) / 10,
-  //   )
-  //     .toString()
-  //     .padStart(2, "0");
-
-  //   recordingTime = `${minutes}:${seconds}:${hundredths}`;
-  // };
-
   /* eslint-disable no-unused-expressions, no-sequences */
   $: $sustainFromExternalMidi, resetPedals();
   $: $softFromExternalMidi, resetPedals();
-  // $: formatRecordingDuration($recordingDuration);
 </script>
 
 <div>

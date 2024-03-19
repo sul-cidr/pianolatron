@@ -10,10 +10,6 @@
   import { tick as sweep } from "svelte";
   import IconButton from "../ui-components/IconButton.svelte";
   import { keyMap } from "./KeyboardShortcuts.svelte";
-  import Notification, {
-    notify,
-    clearNotification,
-  } from "../ui-components/Notification.svelte";
   import {
     appMode,
     currentTick,
@@ -47,7 +43,8 @@
     urlToCopy.search = new URLSearchParams(params);
     window.navigator.clipboard.writeText(urlToCopy.toString());
     isBookmarked = true;
-    setTimeout(function () {
+
+    setTimeout(() => {
       isBookmarked = false;
     }, 1000);
   };

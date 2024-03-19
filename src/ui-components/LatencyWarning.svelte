@@ -56,6 +56,7 @@
 
 <script>
   import { fade } from "svelte/transition";
+
   export let closeLatencyWarning;
 </script>
 

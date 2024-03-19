@@ -7,7 +7,6 @@
     midiOutputs,
     recordingOnOff,
     recordingInBuffer,
-    recordingDuration,
     rollMetadata,
   } from "../stores";
 
@@ -18,8 +17,6 @@
 
   let mediaAccess = null;
   let recordingStartTime = null;
-  let lastRecordingTime = null;
-  let recordingLengthUpdateInterval = null;
   let heldDown = {};
   let eventsByTime = {};
 
@@ -36,19 +33,10 @@
       $recordingInBuffer = true;
       const now = Date.now();
       if (!recordingStartTime) recordingStartTime = now;
-      lastRecordingTime = now;
-      recordingLengthUpdateInterval = setInterval(() => {
-        $recordingDuration += now - lastRecordingTime;
-        lastRecordingTime = now;
-      }, 100);
-    } else if (!onOff) {
-      clearInterval(recordingLengthUpdateInterval);
-      $recordingDuration += Date.now() - lastRecordingTime;
     }
   };
 
   const clearRecording = () => {
-    $recordingDuration = 0;
     $recordingOnOff = false;
     $recordingInBuffer = false;
     recordingStartTime = null;
@@ -116,8 +104,7 @@
     // expression MIDI files created via the roll image parser and midi2exp
     // toolchain.
     // midi.header.tempos = [{ ticks: 0, bpm: 60 }]; // This can be done
-    // console.log("MIDI PPQ is", midi.header.ppq);
-    const clipName = $rollMetadata.DRUID + "-" + new Date().toISOString();
+    const clipName = `${$rollMetadata.DRUID}-${new Date().toISOString()}`;
     const midiBlob = new Blob([midi.toArray()], { type: "audio/midi" });
     const midiURL = window.URL.createObjectURL(midiBlob);
     const element = document.createElement("a");

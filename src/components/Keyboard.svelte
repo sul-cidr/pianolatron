@@ -228,8 +228,9 @@
     }
   };
 
+  /* eslint-disable no-unused-expressions, no-sequences */
   $: $transposeHalfStep, updateTransposeCoefficient();
-  $: if ($isPlaying && transposeCoefficient != 0) transposeCoefficient = 0;
+  $: if ($isPlaying && transposeCoefficient !== 0) transposeCoefficient = 0;
 </script>
 
 <div id="keyboard">

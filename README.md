@@ -4,7 +4,7 @@ Development repository for the CIDR Pianolatron application.
 
 ## Development Status
 
-- **June 2022**: Testing and final modifications are in progress.
+- **March 2024**: Testing and final modifications are in progress.
 
 ## Run Locally
 

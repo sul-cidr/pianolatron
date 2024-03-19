@@ -30,7 +30,7 @@
   </div>
   <div class="metric">
     <span>Time index:</span><span
-      >{(($currentTick / $ticksPerSecond) | 0).toFixed(1)}s</span
+      >{($currentTick / $ticksPerSecond).toFixed(1)}s</span
     >
   </div>
 </div>

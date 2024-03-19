@@ -41,7 +41,8 @@
       align-items: flex-end;
       gap: 15px;
 
-      label {
+      label,
+      .facet-heading {
         margin: auto;
         font-weight: bold;
       }
@@ -92,14 +93,7 @@
   let filteredListItems;
   let activeFacet;
 
-  const searchFields = [
-    "title",
-    "composer_arranger",
-    "performer",
-    // "arranger",
-    // "composer",
-    "publisher",
-  ];
+  const searchFields = ["title", "composer_arranger", "performer", "publisher"];
 
   // taken from Icon component
   // The way grid.js loads the values (and icons/links) for each row as HTML
@@ -151,16 +145,16 @@
     return html(`
       <span class="row-links">
         <a href="/?druid=${druid}" title="Play roll">
-          ${icons["play"]}
+          ${icons.play}
         </a>
         <a href="/perform/?druid=${druid}" title="Perform roll">
-          ${icons["piano"]}
+          ${icons.piano}
         </a>
         <a href="/midi/${druid}.mid" title="Download MIDI">
-          ${icons["midi"]}
+          ${icons.midi}
         </a>
         <a href="${imageLink}" title="Download image">
-          ${icons["roll_image"]}
+          ${icons.roll_image}
         </a>
       </span>
     `);
@@ -191,21 +185,11 @@
       sort: true,
       data: (r) => r._d_composer_arranger,
     },
-    //{
-    //  name: "Composer",
-    //  sort: true,
-    //  data: (r) => r._d_composer,
-    // },
     {
       name: "Performer",
       sort: true,
       data: (r) => r._d_performer,
     },
-    // {
-    //  name: "Arranger",
-    //  sort: true,
-    //  data: (r) => r._d_arranger,
-    // },
     {
       name: "Publisher",
       sort: true,
@@ -220,7 +204,7 @@
     limit: 20,
   };
 
-  let placeHolder = "SEARCH";
+  const placeHolder = "SEARCH";
 
   const facetFilter = (listItem) => listItem.type === activeFacet;
 
@@ -256,49 +240,31 @@
       .replace(/[\u0300-\u036f]/g, "")
       .trim();
 
-  const itemFilter = async () => {
-    if (activeFacet) {
-      filteredListItems = listItems.filter(facetFilter);
-    } else {
-      filteredListItems = listItems;
-    }
+  const listItems = catalog.map((item) => {
+    // _s_ prefix is for search ( normalizedText is called )
+    // _d_ prefix is for display (they can be marked up)
+    const listItem = {
+      druid: item.druid,
+      title: item.work,
+      composer_arranger: [
+        ...new Set([item.composer, item.arranger].filter(Boolean)),
+      ].join(" <br/>"),
+      composer: item.composer,
+      performer: item.performer,
+      publisher: `${item.publisher} (${item.number})`,
+      arranger: item.arranger,
+      type: item.type,
+      _d_links: getLinksForCell(item.druid),
+    };
+    const searchArr = [];
+    searchFields.forEach((k) => {
+      searchArr.push(listItem[k]);
+      listItem[`_s_${k}`] = normalizeText(listItem[k]);
+      listItem[`_d_${k}`] = html(listItem[k]);
+    });
 
-    if (!input || input.value == placeHolder) return;
-    const filteredText = normalizeText(
-      input.value.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
-    );
-
-    if (filteredText) {
-      const searchParts = filteredText.split(" ").slice(0, 8);
-      filteredListItems = filteredListItems
-        .filter((listItem) =>
-          searchParts.every((searchPart) =>
-            listItem._search.includes(searchPart),
-          ),
-        )
-        .map((item) => {
-          searchFields.forEach(
-            (k) =>
-              (item[`_d_${k}`] = markupMatches(
-                item[k],
-                item[`_s_${k}`],
-                searchParts,
-              )),
-          );
-          return item;
-        });
-    } else {
-      // no search term so we need to be sure to remove any hit highlights that might still be present.
-      filteredListItems = filteredListItems.map((item) => {
-        searchFields.forEach((k) => (item[`_d_${k}`] = html(item[k])));
-        return item;
-      });
-    }
-  };
-
-  const setActiveFacet = (facet) => {
-    activeFacet = facet === activeFacet ? undefined : facet;
-  };
+    return { ...listItem, _search: normalizeText(searchArr.join("   ")) };
+  });
 
   const startIdxAdjustment = (str, idx) =>
     (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || [])
@@ -348,34 +314,53 @@
     return html(markedUp);
   };
 
-  const listItems = catalog.map((item) => {
-    // _s_ prefix is for search ( normalizedText is called )
-    // _d_ prefix is for display (they can be marked up)
-    const listItem = {
-      druid: item.druid,
-      title: item.work,
-      composer_arranger: [
-        ...new Set([item.composer, item.arranger].filter(Boolean)),
-      ].join(" <br/>"),
-      composer: item.composer,
-      performer: item.performer,
-      publisher: `${item.publisher} (${item.number})`,
-      arranger: item.arranger,
-      type: item.type,
-      _d_links: getLinksForCell(item.druid),
-    };
-    const searchArr = [];
-    searchFields.forEach((k) => {
-      searchArr.push(listItem[k]);
-      listItem[`_s_${k}`] = normalizeText(listItem[k]);
-      listItem[`_d_${k}`] = html(listItem[k]);
-    });
+  const itemFilter = async () => {
+    if (activeFacet) {
+      filteredListItems = listItems.filter(facetFilter);
+    } else {
+      filteredListItems = listItems;
+    }
 
-    return { ...listItem, _search: normalizeText(searchArr.join("   ")) };
-  });
+    if (!input || input.value === placeHolder) return;
+    const filteredText = normalizeText(
+      input.value.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
+    );
+
+    if (filteredText) {
+      const searchParts = filteredText.split(" ").slice(0, 8);
+      filteredListItems = filteredListItems
+        .filter((listItem) =>
+          searchParts.every((searchPart) =>
+            listItem._search.includes(searchPart),
+          ),
+        )
+        .map((item) => {
+          searchFields.forEach(
+            (k) =>
+              (item[`_d_${k}`] = markupMatches(
+                item[k],
+                item[`_s_${k}`],
+                searchParts,
+              )),
+          );
+          return item;
+        });
+    } else {
+      // no search term so we need to be sure to remove any hit highlights that might still be present.
+      filteredListItems = filteredListItems.map((item) => {
+        searchFields.forEach((k) => (item[`_d_${k}`] = html(item[k])));
+        return item;
+      });
+    }
+  };
+
+  const setActiveFacet = (facet) => {
+    activeFacet = facet === activeFacet ? undefined : facet;
+  };
 
   const facets = [...new Set(listItems.map((item) => item.type))];
 
+  /* eslint-disable no-unused-expressions, no-sequences */
   $: activeFacet, itemFilter();
 </script>
 
@@ -397,7 +382,7 @@
   </div>
   <!-- search-box -->
   <div class="facets">
-    <label>ROLL TYPE:</label>
+    <div class="facet-heading">ROLL TYPE:</div>
     {#if facets}
       <ul>
         {#each facets as facet}

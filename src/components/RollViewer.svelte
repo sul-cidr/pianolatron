@@ -152,7 +152,6 @@
   let trackerbarHeight;
   let animationEaseInterval;
   let osdNavDisplayRegion;
-  let osdNavDisplayRegionContainer;
   let ppi;
   let holesSvgPartitions;
   let visibleHolesSvgs = [];
@@ -173,14 +172,13 @@
       v: velocity,
       color: holeColor,
       type: holeType,
-      label,
     } = hole;
 
     const mark = document.createElement("mark");
 
     // We only want to transpose notes, not ALL midi keys.
     let transpose = 0;
-    if (holeType == "note") {
+    if (holeType === "note") {
       mark.dataset.noteVelocity = velocity || 64;
       transpose = $transposeHalfStep;
     }
@@ -190,7 +188,6 @@
       $rollMetadata.ROLL_TYPE,
     );
     mark.dataset.holeLabel = holeLabel;
-    if (holeType === "note") mark.dataset.noteVelocity = velocity || 64;
 
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
     mark.classList.add(holeType);
@@ -301,14 +298,12 @@
 
   // Some UI configuration for the selection overlays. There is some minor
   // variance between the image roll and the nav strip.
-  const getSelectionConfig = (isNav = false) => {
-    return {
-      lineWidth: isNav ? "50" : imageWidth,
-      viewBox: isNav ? null : `0 0 ${imageWidth} ${imageLength}`,
-      strokeWidth: isNav ? 2 : 20,
-      strokOpacity: isNav ? "100%" : "50%",
-    };
-  };
+  const getSelectionConfig = (isNav = false) => ({
+    lineWidth: isNav ? "50" : imageWidth,
+    viewBox: isNav ? null : `0 0 ${imageWidth} ${imageLength}`,
+    strokeWidth: isNav ? 2 : 20,
+    strokOpacity: isNav ? "100%" : "50%",
+  });
 
   // Selection Overlay in the image viewer
   // This is stored along with the partitioned SVG holes. There's only ever one
@@ -339,7 +334,7 @@
 
     // Remove any existing lines
     openSeadragon.navigator.clearOverlays();
-    if (navSelectionSvg != undefined) {
+    if (navSelectionSvg !== undefined) {
       navSelectionSvg = undefined;
     }
 
@@ -356,7 +351,7 @@
       navSelectionSvg,
       OpenSeadragon.Point(0, 0),
       OpenSeadragon.Placement.TOP,
-      (_position, _size, _el) => {},
+      // (_position, _size, _el) => {},
     );
 
     const selectionConfig = getSelectionConfig();
@@ -380,7 +375,7 @@
 
     // Remove any currently displayed SVG overlays that don't overlap with the
     // viewer window
-    let updatedSvgs = visibleSvgs.filter((visibleSvg) => {
+    const updatedSvgs = visibleSvgs.filter((visibleSvg) => {
       if (svgs.includes(visibleSvg)) return true;
       viewport.viewer.removeOverlay(visibleSvg);
       return false;
@@ -504,9 +499,9 @@
     if (
       !$drawVelocityCurves ||
       !$useInAppExpression ||
-      bassExpC == null ||
+      bassExpC === null ||
       bassExpC.length === 0 ||
-      trebleExpC == null ||
+      trebleExpC === null ||
       trebleExpC.length === 0 ||
       firstHolePx === undefined
     ) {
@@ -845,10 +840,7 @@
 
     const { navigator } = openSeadragon;
     ({ viewport } = openSeadragon);
-    ({
-      displayRegion: osdNavDisplayRegion,
-      displayRegionContainer: osdNavDisplayRegionContainer,
-    } = navigator);
+    ({ displayRegion: osdNavDisplayRegion } = navigator);
 
     // Directly set some OSD internals that aren't exposed in the constructor
     viewport.zoomSpring.animationTime = 1.2;
@@ -878,11 +870,11 @@
       const {
         viewport: navViewport,
         displayRegion: { style },
-        totalBorderWidths,
       } = navigator;
 
       if (mainViewport && navViewport) {
-        const navigatorContainerDims = viewport.getContainerSize();
+        const navigatorContainerDims = navViewport.getContainerSize();
+
         const bounds = viewport.getBoundsNoRotate(true);
         const imgBounds = viewport.viewportToImageRectangle(
           viewport.getBounds(),
@@ -896,9 +888,10 @@
           false,
         );
 
-        const bottomRight = navViewport
-          .pixelFromPointNoRotate(bounds.getBottomRight(), false)
-          .minus(totalBorderWidths);
+        const bottomRight = navViewport.pixelFromPointNoRotate(
+          bounds.getBottomRight(),
+          false,
+        );
 
         style.top = `${Math.round(topOffset)}px`;
         style.height = `${Math.abs(topLeft.y - bottomRight.y)}px`;
@@ -923,6 +916,7 @@
       partitionHolesOverlaySvgs();
       updateSelectionOverlays();
       updateViewportFromTick(0);
+      navigator.viewport.fitVertically();
     });
 
     // update the height of the tracker bar and the PPI value passed to
@@ -1006,7 +1000,7 @@
   const closeLatencyWarning = () => ($showLatencyWarning = false);
 
   const updateSelection = () => {
-    if (openSeadragon == undefined) {
+    if (openSeadragon === undefined) {
       return;
     }
     updateSelectionOverlays();
@@ -1014,6 +1008,7 @@
     updateViewportFromTick($currentTick);
   };
 
+  /* eslint-disable no-unused-expressions, no-sequences */
   $: $playbackProgressStart, updateSelection();
   $: $playbackProgressEnd, updateSelection();
   $: updateViewportFromTick($currentTick);

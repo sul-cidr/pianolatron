@@ -1,18 +1,44 @@
 module.exports = {
   root: true,
-  extends: ["eslint:recommended", "plugin:svelte/recommended", "prettier"],
+  plugins: ["svelte3"],
+  extends: ["airbnb-base", "prettier"],
   parserOptions: {
+    ecmaVersion: 2022,
     sourceType: "module",
-    ecmaVersion: 2020,
-    extraFileExtensions: [".svelte"],
   },
   env: {
+    es6: true,
     browser: true,
-    es2017: true,
-    node: true,
   },
+  overrides: [
+    {
+      files: ["**/*.svelte"],
+      processor: "svelte3/svelte3",
+    },
+  ],
   rules: {
-    "svelte/no-at-html-tags": "off",
-    "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "no-cond-assign": ["error", "except-parens"],
+    "no-param-reassign": ["error", { props: false }],
+    "no-return-assign": ["error", "except-parens"],
+    "no-undef-init": "off",
+    "no-underscore-dangle": "off",
+    // see https://github.com/sveltejs/eslint-plugin-svelte3/blob/master/OTHER_PLUGINS.md#eslint-plugin-import
+    "import/first": "off",
+    "import/no-mutable-exports": "off",
+    "import/prefer-default-export": "off",
+    "import/no-duplicates": "off",
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { exceptAfterSingleLine: true },
+    ],
+  },
+  settings: {
+    "svelte3/ignore-styles": (attribs) => "lang" in attribs,
+    "import/resolver": {
+      node: {
+        extensions: [".d.ts"],
+      },
+    },
   },
 };

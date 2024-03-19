@@ -84,6 +84,81 @@
   recordingDestination = piano.context.createMediaStreamDestination();
   piano.connect(recordingDestination);
 
+  const setTempo = (tempo) => {
+    midiSamplePlayer.setTempo(tempo * $tempoCoefficient);
+    $ticksPerSecond = (midiSamplePlayer.division * midiSamplePlayer.tempo) / 60;
+  };
+
+  const getTempoAtTick = (tick) => {
+    if (!$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
+    const { tempoMap } = $expressionBox;
+    return tempoMap.search(tick, tick)[0] || DEFAULT_TEMPO;
+  };
+
+  const setPlayerStateAtTick = (tick = $currentTick) => {
+    const { pedalingMap, notesMap, midiSoftPedal, midiSustPedal } =
+      $expressionBox;
+    if (midiSamplePlayer.tracks[0])
+      midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
+    setTempo(getTempoAtTick(tick));
+
+    playbackStartTick = $currentTick;
+    playbackStartTime = Date.now();
+
+    if (pedalingMap && $rollPedalingOnOff) {
+      const pedals = pedalingMap.search($currentTick, $currentTick);
+      sustainOnOff.set(pedals.includes(midiSustPedal));
+      softOnOff.set(pedals.includes(midiSoftPedal));
+    } else {
+      sustainOnOff.set(false);
+      softOnOff.set(false);
+    }
+
+    if (notesMap) {
+      activeNotes.reset(notesMap.search($currentTick, $currentTick));
+    }
+  };
+
+  const stopNote = (noteNumber, noteSource, timeDelay) => {
+    const finalNoteNumber =
+      noteSource === NoteSource.Midi
+        ? noteNumber + $transposeHalfStep
+        : noteNumber;
+    activeNotes.delete(finalNoteNumber);
+    if (timeDelay !== undefined)
+      piano.keyUp({ midi: finalNoteNumber, time: timeDelay });
+    else piano.keyUp({ midi: finalNoteNumber });
+    if (noteSource !== NoteSource.WebMidi) {
+      webMidi?.sendMidiMsg("NOTE_OFF", finalNoteNumber, 0);
+    }
+  };
+
+  const stopAllNotes = () => {
+    piano.pedalUp();
+    $activeNotes.forEach((midiNumber) => stopNote(midiNumber));
+    if ($sustainOnOff) piano.pedalDown();
+  };
+
+  const pausePlayback = () => {
+    midiSamplePlayer.pause();
+    midiSamplePlayer.triggerPlayerEvent("pause");
+    stopAllNotes();
+    $isPlaying = false;
+  };
+
+  const updatePlayer = (fn = () => {}) => {
+    if (midiSamplePlayer.isPlaying()) {
+      midiSamplePlayer.pause();
+      return Promise.resolve(fn()).then(() => {
+        setPlayerStateAtTick($currentTick);
+        midiSamplePlayer.play();
+      });
+    }
+    return Promise.resolve(fn())
+      .then(() => setPlayerStateAtTick($currentTick))
+      .catch(() => {});
+  };
+
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
     $currentTick = tick;
@@ -92,12 +167,6 @@
 
   const skipToPercentage = (percentage = 0) =>
     skipToTick(Math.floor(midiSamplePlayer.totalTicks * percentage));
-
-  const getTempoAtTick = (tick) => {
-    if (!$useMidiTempoEventsOnOff) return DEFAULT_TEMPO;
-    const { tempoMap } = $expressionBox;
-    return tempoMap.search(tick, tick)[0] || DEFAULT_TEMPO;
-  };
 
   const toggleSustain = (onOff, fromMidi) => {
     if (onOff) {
@@ -138,68 +207,25 @@
       if (prevTempo === null) {
         prevTempo = thisTempo;
         prevTemposTick = thisTick;
-        continue;
-      }
+      } else {
+        if (thisTempo !== prevTempo) {
+          const thisTickPerSec =
+            (prevTempo * $tempoCoefficient * midiSamplePlayer.division) / 60.0;
+          elapsedTime += (1 / thisTickPerSec) * (thisTick - 1 - prevTemposTick);
+          prevTempo = thisTempo;
+          prevTemposTick = thisTick;
+        }
 
-      if (thisTempo != prevTempo) {
-        let thisTickPerSec =
-          (prevTempo * $tempoCoefficient * midiSamplePlayer.division) / 60.0;
-        elapsedTime += (1 / thisTickPerSec) * (thisTick - 1 - prevTemposTick);
-        prevTempo = thisTempo;
-        prevTemposTick = thisTick;
+        i += 1;
+        if (i >= tempoMap.length) break;
       }
-
-      i += 1;
-      if (i >= tempoMap.length) break;
     }
 
-    let thisTickPerSec =
+    const thisTickPerSec =
       (prevTempo * $tempoCoefficient * midiSamplePlayer.division) / 60.0;
 
     elapsedTime += (1 / thisTickPerSec) * (tick - prevTemposTick);
     return elapsedTime;
-  };
-
-  const setTempo = (tempo) => {
-    midiSamplePlayer.setTempo(tempo * $tempoCoefficient);
-    $ticksPerSecond = (midiSamplePlayer.division * midiSamplePlayer.tempo) / 60;
-  };
-
-  const setPlayerStateAtTick = (tick = $currentTick) => {
-    const { pedalingMap, notesMap, midiSoftPedal, midiSustPedal } =
-      $expressionBox;
-    if (midiSamplePlayer.tracks[0])
-      midiSamplePlayer.tracks[0].enabled = $useMidiTempoEventsOnOff;
-    setTempo(getTempoAtTick(tick));
-
-    playbackStartTick = $currentTick;
-    playbackStartTime = Date.now();
-
-    if (pedalingMap && $rollPedalingOnOff) {
-      const pedals = pedalingMap.search($currentTick, $currentTick);
-      sustainOnOff.set(pedals.includes(midiSustPedal));
-      softOnOff.set(pedals.includes(midiSoftPedal));
-    } else {
-      sustainOnOff.set(false);
-      softOnOff.set(false);
-    }
-
-    if (notesMap) {
-      activeNotes.reset(notesMap.search($currentTick, $currentTick));
-    }
-  };
-
-  const updatePlayer = (fn = () => {}) => {
-    if (midiSamplePlayer.isPlaying()) {
-      midiSamplePlayer.pause();
-      return Promise.resolve(fn()).then(() => {
-        setPlayerStateAtTick($currentTick);
-        midiSamplePlayer.play();
-      });
-    }
-    return Promise.resolve(fn())
-      .then(() => setPlayerStateAtTick($currentTick))
-      .catch(() => {});
   };
 
   const loadSampleVelocities = () => {
@@ -246,18 +272,19 @@
   };
 
   const startNote = (noteNumber, velocity, noteSource, tick) => {
-    if (noteSource == NoteSource.Midi) {
-      noteNumber = noteNumber + $transposeHalfStep;
-    }
-    activeNotes.add(noteNumber);
+    const finalNoteNumber =
+      noteSource === NoteSource.Midi
+        ? noteNumber + $transposeHalfStep
+        : noteNumber;
+    activeNotes.add(finalNoteNumber);
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
     [$velocityCurveLow, $velocityCurveMid, $velocityCurveHigh].forEach(
       (keyboardRegion) => {
         if (
           keyboardRegion.velocityCurve !== null &&
-          noteNumber >= keyboardRegion.firstMidi &&
-          noteNumber <= keyboardRegion.lastMidi
+          finalNoteNumber >= keyboardRegion.firstMidi &&
+          finalNoteNumber <= keyboardRegion.lastMidi
         ) {
           [, baseVelocity] =
             keyboardRegion.velocityCurve[
@@ -274,16 +301,14 @@
       baseVelocity *
         (($accentOnOff && ACCENT_BUMP) || 1) *
         $volumeCoefficient *
-        (noteNumber < HALF_BOUNDARY
+        (finalNoteNumber < HALF_BOUNDARY
           ? $bassVolumeCoefficient
           : $trebleVolumeCoefficient),
       1,
     );
     if (modifiedVelocity) {
       const { notesMap } = $expressionBox;
-      if (
-        notesMap.search(tick, tick).includes(noteNumber - $transposeHalfStep)
-      ) {
+      if (notesMap.search(tick, tick).includes(noteNumber)) {
         const thisTime = Date.now();
         const elapsedTime = (thisTime - playbackStartTime) / 1000;
         const expectedElapsedTime =
@@ -298,32 +323,13 @@
         }
       }
       piano.keyDown({
-        midi: noteNumber,
+        midi: finalNoteNumber,
         velocity: modifiedVelocity * (($softOnOff && SOFT_PEDAL_RATIO) || 1),
       });
     }
-    if (noteSource != NoteSource.WebMidi) {
-      webMidi?.sendMidiMsg("NOTE_ON", noteNumber, modifiedVelocity);
+    if (noteSource !== NoteSource.WebMidi) {
+      webMidi?.sendMidiMsg("NOTE_ON", finalNoteNumber, modifiedVelocity);
     }
-  };
-
-  const stopNote = (noteNumber, noteSource, timeDelay) => {
-    if (noteSource == NoteSource.Midi) {
-      noteNumber = noteNumber + $transposeHalfStep;
-    }
-    activeNotes.delete(noteNumber);
-    if (timeDelay !== undefined)
-      piano.keyUp({ midi: noteNumber, time: timeDelay });
-    else piano.keyUp({ midi: noteNumber });
-    if (noteSource != NoteSource.WebMidi) {
-      webMidi?.sendMidiMsg("NOTE_OFF", noteNumber, 0);
-    }
-  };
-
-  const stopAllNotes = () => {
-    piano.pedalUp();
-    $activeNotes.forEach((midiNumber) => stopNote(midiNumber));
-    if ($sustainOnOff) piano.pedalDown();
   };
 
   const resetPlayback = () => {
@@ -336,11 +342,11 @@
     $isPlaying = false;
   };
 
-  const pausePlayback = () => {
-    midiSamplePlayer.pause();
-    midiSamplePlayer.triggerPlayerEvent("pause");
-    stopAllNotes();
-    $isPlaying = false;
+  const startPlayback = () => {
+    if ($currentTick < 0) resetPlayback();
+    updatePlayer();
+    midiSamplePlayer.play();
+    $isPlaying = true;
   };
 
   const pausePlaybackOrLoop = async () => {
@@ -352,13 +358,6 @@
       skipToPercentage($playbackProgressStart);
       startPlayback();
     }
-  };
-
-  const startPlayback = () => {
-    if ($currentTick < 0) resetPlayback();
-    updatePlayer();
-    midiSamplePlayer.play();
-    $isPlaying = true;
   };
 
   midiSamplePlayer.on("fileLoaded", () => {
@@ -431,7 +430,7 @@
         audioRecorder.exportRecording();
         break;
       default:
-        console.log("Unknown recording action: " + action);
+        break;
     }
   };
 
