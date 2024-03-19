@@ -1,5 +1,5 @@
 <style lang="scss">
-  @import "https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css";
+  @import "/public/styles/mermaid.min.css";
 
   #app {
     min-height: 100vh;
@@ -70,24 +70,21 @@
     }
   }
 
-  :global(.row-links) {
-    display: flex;
-  }
-
   :global(.row-links a) {
     color: var(--primary-accent);
-    margin: auto;
-    height: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: inline-block;
+    height: 20px;
   }
 </style>
 
 <script>
-  import { beforeUpdate } from "svelte";
   import Grid from "gridjs-svelte";
   import { html } from "gridjs";
   import catalog from "../config/catalog.json";
 
-  let grid = false;
+  let grid = null;
   let input;
 
   let filteredListItems;
@@ -160,51 +157,10 @@
     `);
   };
 
-  beforeUpdate(async () => {
-    if (grid) {
-      grid.instance.config.plugin.remove("pagination");
-      grid.instance.config.plugin.remove("search");
-    }
-  });
-
-  const columns = [
-    {
-      id: "_links",
-      name: "Play / Perform / MIDI / Image",
-      width: "250px",
-      sort: false,
-      data: (r) => r._d_links,
-    },
-    {
-      name: "Title",
-      sort: true,
-      data: (r) => r._d_title,
-    },
-    {
-      name: "Composer / Arranger",
-      sort: true,
-      data: (r) => r._d_composer_arranger,
-    },
-    {
-      name: "Performer",
-      sort: true,
-      data: (r) => r._d_performer,
-    },
-    {
-      name: "Publisher",
-      sort: true,
-      data: (r) => r._d_publisher,
-    },
-  ];
-
-  const style = {};
-
   const pagination = {
     enabled: true,
     limit: 20,
   };
-
-  const placeHolder = "SEARCH";
 
   const facetFilter = (listItem) => listItem.type === activeFacet;
 
@@ -249,10 +205,8 @@
       composer_arranger: [
         ...new Set([item.composer, item.arranger].filter(Boolean)),
       ].join(" <br/>"),
-      composer: item.composer,
       performer: item.performer,
       publisher: `${item.publisher} (${item.number})`,
-      arranger: item.arranger,
       type: item.type,
       _d_links: getLinksForCell(item.druid),
     };
@@ -265,6 +219,50 @@
 
     return { ...listItem, _search: normalizeText(searchArr.join("   ")) };
   });
+
+  const sortColumnHtml = (a, b) => {
+    if (a.props.content > b.props.content) {
+      return 1;
+    }
+    if (b.props.content > a.props.content) {
+      return -1;
+    }
+    return 0;
+  };
+
+  const columns = [
+    {
+      id: "_d_links",
+      name: "Play/Perform/MIDI/Image",
+      width: "240px",
+      sort: false,
+      data: (r) => r._d_links,
+    },
+    {
+      id: "_d_title",
+      name: "Title",
+      sort: { compare: sortColumnHtml },
+      data: (r) => r._d_title,
+    },
+    {
+      id: "_d_composer_arranger",
+      name: "Composer / Arranger",
+      sort: { compare: sortColumnHtml },
+      data: (r) => r._d_composer_arranger,
+    },
+    {
+      id: "_d_performer",
+      name: "Performer",
+      sort: { compare: sortColumnHtml },
+      data: (r) => r._d_performer,
+    },
+    {
+      id: "_d_publisher",
+      name: "Publisher",
+      sort: { compare: sortColumnHtml },
+      data: (r) => r._d_publisher,
+    },
+  ];
 
   const startIdxAdjustment = (str, idx) =>
     (str.toLowerCase().substring(0, idx).match(longSubstitutionsRegex) || [])
@@ -321,7 +319,7 @@
       filteredListItems = listItems;
     }
 
-    if (!input || input.value === placeHolder) return;
+    if (!input) return;
     const filteredText = normalizeText(
       input.value.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "),
     );
@@ -413,8 +411,7 @@
     data={filteredListItems}
     {columns}
     {pagination}
-    {style}
-    resizable="true"
+    resizable={true}
     bind:this={grid}
   />
 </div>
