@@ -103,13 +103,13 @@
   };
 
   if (navigator.getGamepads) {
-    addEventListener("gamepadconnected", (event) => {
+    window.addEventListener("gamepadconnected", (event) => {
       $gameController = event.gamepad;
       gamepad = event.gamepad;
       controllerLoop = setInterval(pollController, 10);
     });
 
-    addEventListener("gamepaddisconnected", () => {
+    window.addEventListener("gamepaddisconnected", () => {
       clearInterval(controllerLoop);
       controllerLoop = undefined;
       $gameController = undefined;

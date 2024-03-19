@@ -35,5 +35,10 @@ module.exports = {
   },
   settings: {
     "svelte3/ignore-styles": (attribs) => "lang" in attribs,
+    "import/resolver": {
+      node: {
+        extensions: [".d.ts"],
+      },
+    },
   },
 };

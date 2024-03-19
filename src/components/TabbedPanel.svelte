@@ -50,10 +50,7 @@
   import ViewerMetrics from "./ViewerMetrics.svelte";
   import ExpressionSettings from "./ExpressionSettings.svelte";
 
-  export let playPauseApp;
-  export let stopApp;
   export let skipToPercentage;
-  export let recordingControl;
   export let reloadRoll;
 
   const panels = {
@@ -61,18 +58,24 @@
       component: BasicSettings,
       props: { skipToPercentage },
       icon: "sliders",
+      title: "Performance controls",
     },
-    settings: { component: AdvancedSettings, icon: "cog" },
-    audio: { component: AudioSettings, icon: "piano" },
+    settings: {
+      component: AdvancedSettings,
+      icon: "cog",
+      title: "Advanced settings",
+    },
+    audio: { component: AudioSettings, icon: "piano", title: "Audio settings" },
     midi: {
       component: MidiSettings,
-      props: { recordingControl },
       icon: "midi",
+      title: "MIDI settings",
     },
     expression: {
       component: ExpressionSettings,
       props: { reloadRoll },
       icon: "exp_curves",
+      title: "Expression settings",
     },
   };
 
@@ -87,4 +90,4 @@
   />
 </div>
 <ViewerMetrics />
-<PlaybackControls {playPauseApp} {stopApp} />
+<PlaybackControls />

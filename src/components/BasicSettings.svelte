@@ -10,6 +10,7 @@
   } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
+
   export let skipToPercentage;
 </script>
 

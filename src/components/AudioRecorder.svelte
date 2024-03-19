@@ -1,17 +1,10 @@
 <script>
   import { onMount } from "svelte";
-  import {
-    recordingOnOff,
-    recordingInBuffer,
-    recordingDuration,
-    rollMetadata,
-  } from "../stores";
+  import { recordingOnOff, recordingInBuffer, rollMetadata } from "../stores";
 
   export let recordingDestination;
 
   let mediaRecorder = null;
-  let lastRecordingTime = null;
-  let recordingLengthUpdateInterval = null;
 
   let chunks = [];
 
@@ -19,28 +12,19 @@
     if (onOff && mediaRecorder) {
       mediaRecorder.start();
       $recordingInBuffer = true;
-      lastRecordingTime = Date.now();
-      recordingLengthUpdateInterval = setInterval(() => {
-        const now = Date.now();
-        $recordingDuration += now - lastRecordingTime;
-        lastRecordingTime = now;
-      }, 100);
     } else if (!onOff && mediaRecorder) {
       mediaRecorder.stop();
-      clearInterval(recordingLengthUpdateInterval);
-      $recordingDuration += Date.now() - lastRecordingTime;
     }
   };
 
   const clearRecording = () => {
-    $recordingDuration = 0;
     $recordingOnOff = false;
     $recordingInBuffer = false;
     chunks = [];
   };
 
   const exportRecording = () => {
-    const clipName = $rollMetadata.DRUID + "-" + new Date().toISOString();
+    const clipName = `${$rollMetadata.DRUID}-${new Date().toISOString()}`;
     // Allow user to name the clip file before downloading it?
     // let clipName = prompt("Enter a name for your sound clip");
     // .ogg is also available, but sounds a little funky

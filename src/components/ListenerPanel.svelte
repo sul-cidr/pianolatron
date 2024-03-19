@@ -47,10 +47,6 @@
   import { tempoCoefficient } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
-
-  export let playPauseApp;
-  export let stopApp;
-  export let skipToTick;
 </script>
 
 <div id="listener-panel">
@@ -74,4 +70,4 @@
     </SliderControl>
   </div>
 </div>
-<PlaybackControls {skipToTick} {playPauseApp} {stopApp} />
+<PlaybackControls />

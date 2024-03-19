@@ -301,7 +301,7 @@ export default class InAppExpressionizer {
       const holeType = getHoleType({ m: midiNumber }, this.#rollType);
       if (holeType === "note") {
         if (velocity === 0) {
-          const ticksPerSecond = (parseFloat(tempo) * this.midiTPQ) / 60.0;
+          const ticksPerSecond = (parseFloat(tempo) * this.#midiTPQ) / 60.0;
           const trackerExtensionSeconds =
             this.expParams.tracker_extension / ticksPerSecond;
           this.stopNote(
