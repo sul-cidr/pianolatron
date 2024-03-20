@@ -74,12 +74,9 @@
     currentTick,
     expressionBox,
     holesIntervalTree,
-    isReproducingRoll,
-    playExpressionsOnOff,
     recordingInBuffer,
     recordingOnOff,
     rollMetadata,
-    rollPedalingOnOff,
     scrollDownwards,
     useInAppExpression,
     userSettings,
@@ -252,10 +249,6 @@
           $scrollDownwards,
           $expressionBox.noteVelocitiesMap,
         );
-        if (doReset) {
-          $playExpressionsOnOff = $isReproducingRoll;
-          $rollPedalingOnOff = $isReproducingRoll;
-        }
         appReady = true;
         appWaiting = false;
         firstLoad = false;
