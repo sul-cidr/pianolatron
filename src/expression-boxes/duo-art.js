@@ -56,7 +56,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
   // ? TODO: refactor
   // eslint-disable-next-line class-methods-use-this
-  getVelocityAtTime = (time, expState) => {
+  getVelocityAtTime = (_, expState) => {
     const convertStepToPressure = (step, isTheme) => {
       // Mappings from volume "steps" to pressure values are from
       // https://www.youtube.com/watch?v=w-XrDw04P2M&t=218s
@@ -138,10 +138,13 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
   extendControlHoles = (item) => {
     const ctrlFunc = this.ctrlMap[item.noteNumber];
-    const { tunable: theme_extent, tracker_extension } = this.expParams;
+    const {
+      tunable: { theme_extent },
+      tracker_extension,
+    } = this.expParams;
 
     if (
-      ctrlFunc == null ||
+      ctrlFunc === null ||
       !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc)
     )
       return item;

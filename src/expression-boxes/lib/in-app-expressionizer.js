@@ -38,6 +38,7 @@ export default class InAppExpressionizer {
   // ?Needs looking at...
   convertTicksAndTime = (input, target) => {
     let wanted = target;
+    // The == is necessary (but probably should be refactored out)
     if (wanted == null) wanted = "time";
 
     if (!get(useMidiTempoEventsOnOff)) {
@@ -117,13 +118,11 @@ export default class InAppExpressionizer {
   }
 
   initializeExpressionizer() {
-    if (!Object.keys(get(expressionParameters)).length)
-      expressionParameters.set(this.defaultExpressionParams);
+    expressionParameters.set(this.defaultExpressionParams);
     this.expParams = this.computeDerivedExpressionParams();
 
     this.tempoMap = this.#buildTempoMap();
     this.noteVelocitiesMap = this.buildNoteVelocitiesMap();
-    this.pedalingMap = this.buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
   }
 
@@ -195,9 +194,9 @@ export default class InAppExpressionizer {
         ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
       );
       const finalTime = this.convertTicksAndTime(finalTick);
+      const finalPanVelocity = this.getVelocityAtTime(finalTime, expState);
 
       if (finalTime > expState.time) {
-        const finalPanVelocity = this.getVelocityAtTime(finalTime, expState);
         panExpMap.insert(expState.time, finalTime, [
           expState.velocity,
           finalPanVelocity,
@@ -240,6 +239,8 @@ export default class InAppExpressionizer {
         expressionCurve.push([expStartTick, startVelocity, startTime]);
         expressionCurve.push([expEndTick, endVelocity, endTime]);
       });
+
+      expressionCurve.push([finalTick, finalPanVelocity, finalTime]);
 
       return expressionCurve;
     };
