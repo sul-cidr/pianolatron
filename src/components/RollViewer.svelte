@@ -421,12 +421,36 @@
       let rangeStartPx = null;
       let rangeEndPx = null;
       const rangeLengthPx = 1000;
+      let rangeStart = null;
+      let rangeEnd = null;
 
-      for (let i = 0; i < expCurve.length - 1; i += 1) {
+      for (let i = 0; i < expCurve.length; i += 1) {
         // The start of the vertical pixel range of each partition of curve and
         //  guide elements will be greater than the end of the range for rolls
-        //  that scroll downwards, hence the abs and min/max checks here.
-        if (Math.abs(rangeEndPx - rangeStartPx) > rangeLengthPx) {
+        //  that scroll downwards, hence the abs and min/max checks below.
+        if (
+          Math.abs(rangeEndPx - rangeStartPx) > rangeLengthPx ||
+          i === expCurve.length - 1
+        ) {
+          const guideValues = Object.values(guides);
+          for (let j = 0; j < guideValues.length; j += 1) {
+            const guideLine = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "line",
+            );
+            guideLine.setAttribute(
+              "style",
+              "stroke:palegreen;fill:none;stroke-width:1;opacity:25%;",
+            );
+            guideLine.setAttribute("x1", guideValues[j]);
+            guideLine.setAttribute("x2", guideValues[j]);
+            guideLine.setAttribute("y1", rangeStart);
+            guideLine.setAttribute("y2", rangeEnd);
+            guideLine.setAttribute("transform", transformation);
+
+            g.appendChild(guideLine);
+          }
+
           expressionSvgPartitions.insert(
             Math.min(rangeStartPx, rangeEndPx),
             Math.max(rangeStartPx, rangeEndPx),
@@ -442,7 +466,13 @@
           svg.appendChild(g);
 
           rangeStartPx = null;
+
+          rangeStart = null;
         }
+
+        // The final partition is usually shorter than rangeLengthPx; stop
+        // after drawing it.
+        if (i === expCurve.length - 1) break;
 
         const curveStart = expCurve[i][0];
         const curveEnd = expCurve[i + 1][0];
@@ -454,42 +484,32 @@
 
         if (rangeStartPx === null) {
           rangeStartPx = curveStartPx;
+          rangeStart = curveStart;
         }
+        rangeStart = Math.min(rangeStart, curveStart);
+        rangeEnd = Math.max(rangeEnd, curveEnd);
+
         rangeEndPx = curveEndPx;
 
-        const curveLine = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "line",
-        );
-        curveLine.setAttribute(
-          "style",
-          "stroke:green;fill:none;stroke-width:2;",
-        );
-        curveLine.setAttribute("x1", expCurve[i][1]);
-        curveLine.setAttribute("x2", expCurve[i + 1][1]);
-        curveLine.setAttribute("y1", curveStart);
-        curveLine.setAttribute("y2", curveEnd);
-        curveLine.setAttribute("transform", transformation);
-        g.appendChild(curveLine);
-
-        const guideLines = Object.values(guides).map((value) => {
-          const guideLine = document.createElementNS(
+        // Each expression emulation "curve" is a series of connected segments,
+        //  and the end point of one segment is usually identical to the start
+        //  point of the next. This results in many zero-length point segments
+        //  between the "real" segments; the former don't need to be drawn.
+        if (expCurve[i][1] !== expCurve[i + 1][1] || curveStart !== curveEnd) {
+          const curveLine = document.createElementNS(
             "http://www.w3.org/2000/svg",
             "line",
           );
-          guideLine.setAttribute(
+          curveLine.setAttribute(
             "style",
-            "stroke:palegreen;fill:none;stroke-width:1;opacity:25%;",
+            "stroke:green;fill:none;stroke-width:2;",
           );
-          guideLine.setAttribute("x1", value);
-          guideLine.setAttribute("x2", value);
-          guideLine.setAttribute("y1", curveStart);
-          guideLine.setAttribute("y2", curveEnd);
-          guideLine.setAttribute("transform", transformation);
-          return guideLine;
-        });
-        for (let j = 0; j < guideLines.length; j += 1) {
-          g.appendChild(guideLines[j]);
+          curveLine.setAttribute("x1", expCurve[i][1]);
+          curveLine.setAttribute("x2", expCurve[i + 1][1]);
+          curveLine.setAttribute("y1", curveStart);
+          curveLine.setAttribute("y2", curveEnd);
+          curveLine.setAttribute("transform", transformation);
+          g.appendChild(curveLine);
         }
       }
     };

@@ -14,7 +14,6 @@
 <script>
   import {
     expressionParameters,
-    defaultExpressionParameters,
     rollHasExpressions,
     rollMetadata,
     useInAppExpression,
@@ -28,12 +27,6 @@
   const resetExpressionSettings = (forceReset) => {
     // Load the defaults when the roll type changes or Reset button is clicked
     if (!forceReset && $rollMetadata.ROLL_TYPE === currentRollType) return;
-
-    if ($defaultExpressionParameters !== null) {
-      $expressionParameters = JSON.parse(
-        JSON.stringify($defaultExpressionParameters),
-      );
-    }
     currentRollType = $rollMetadata.ROLL_TYPE;
   };
 

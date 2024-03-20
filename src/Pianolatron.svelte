@@ -211,6 +211,8 @@
       })
       .then(() => {
         // Configure and hook-up expression box
+        // Including a check for the one (so far) 65-note roll...
+        if ($rollMetadata.ROLL_TYPE === "65-note") $useInAppExpression = false;
         const expressionBoxType = $useInAppExpression
           ? $rollMetadata.ROLL_TYPE
           : "expressiveMidi";
