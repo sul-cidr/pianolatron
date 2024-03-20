@@ -98,7 +98,6 @@ export const recordingDuration = createStore(0);
 export const bassExpCurve = createStore();
 export const trebleExpCurve = createStore();
 export const expressionParameters = createStore({});
-export const defaultExpressionParameters = createStore({});
 export const expBoxType = createStore(null);
 export const drawVelocityCurves = createStore(false);
 
