@@ -9,10 +9,10 @@ export const PedalingLockAndCancel = (SuperClass) =>
     //  e.g. Welte-Red, Welte-Licensee
 
     buildPedalingMap = () => {
-      const midiSoftOn = getKeyByValue(this.ctrlMap, "soft_on");
-      const midiSoftOff = getKeyByValue(this.ctrlMap, "soft_off");
-      const midiSustOn = getKeyByValue(this.ctrlMap, "sust_on");
-      const midiSustOff = getKeyByValue(this.ctrlMap, "sust_off");
+      const midiSoftOn = parseInt(getKeyByValue(this.ctrlMap, "soft_on"), 10);
+      const midiSoftOff = parseInt(getKeyByValue(this.ctrlMap, "soft_off"), 10);
+      const midiSustOn = parseInt(getKeyByValue(this.ctrlMap, "sust_on"), 10);
+      const midiSustOff = parseInt(getKeyByValue(this.ctrlMap, "sust_off"), 10);
 
       const pedalingMap = new IntervalTree();
 
@@ -29,7 +29,7 @@ export const PedalingLockAndCancel = (SuperClass) =>
                 pedalingMap.insert(tickOn, tick, eventNumber);
               tickOn = false;
             } else if (noteNumber === pedalOn) {
-              if (!tickOn) tickOn = tick;
+              if (tickOn === false) tickOn = tick;
             }
           });
       };
@@ -86,12 +86,11 @@ export const PedalingContinuousInput = (SuperClass) =>
   class extends SuperClass {
     // Pedaling is represented by a single hole per pedal event
     //  whose extension indicates the duration of the pedaling
-    //  e.g. Welte-Green, Duo-Art
+    //  e.g. Welte-Green, Duo-Art, also 88-note occasionally
 
     buildPedalingMap = () => {
-      const midiSoft = getKeyByValue(this.ctrlMap, "soft");
-      const midiSust = getKeyByValue(this.ctrlMap, "sust");
-
+      const midiSoft = parseInt(getKeyByValue(this.ctrlMap, "soft"), 10);
+      const midiSust = parseInt(getKeyByValue(this.ctrlMap, "sust"), 10);
       const pedalingMap = new IntervalTree();
 
       const registerPedalEvents = (track, pedalOn, eventNumber) => {
@@ -107,13 +106,29 @@ export const PedalingContinuousInput = (SuperClass) =>
                   pedalingMap.insert(tickOn, tick, eventNumber);
                 tickOn = false;
               } else if (velocity === 1) {
-                if (!tickOn) tickOn = tick;
+                if (tickOn === false) tickOn = tick;
               }
             }
           });
       };
 
+      // Although the lock-and-cancel Welte types (red and licensee) have the
+      //  soft pedal controls on the left/bass side and sustain on the right/
+      //  treble, green Welte has the sustain on the left/bass and soft on the
+      //  right/treble. As for the other roll types with continuous pedal punches,
+      //  Duo-Art has soft on the left, sustain on the right, as do Ampico A and
+      //  B, while 88-note rolls have sustain on the left (and no soft control)!
+      //  So it's easiest just to search all pedal control events on both
+      //  (left and right) control tracks for all of these types of rolls,
+      //  rather than trying to hard-code the preferred sides for each roll type.
+
       registerPedalEvents(this.bassControlsTrack, midiSoft, this.midiSoftPedal);
+      registerPedalEvents(
+        this.trebleControlsTrack,
+        midiSoft,
+        this.midiSoftPedal,
+      );
+      registerPedalEvents(this.bassControlsTrack, midiSust, this.midiSustPedal);
       registerPedalEvents(
         this.trebleControlsTrack,
         midiSust,
