@@ -227,11 +227,11 @@
         midiSamplePlayer.eventListeners.midiEvent = [
           $expressionBox.midiEventHandler,
         ];
+      })
+      .catch((err) => {
+        notify({ title: "MIDI Data Error!", message: err, type: "error" });
+        currentRoll = previousRoll;
       });
-    // .catch((err) => {
-    //   notify({ title: "MIDI Data Error!", message: err, type: "error" });
-    //   currentRoll = previousRoll;
-    // });
 
     metadataReady = fetch(joinPath("json", `${roll.druid}.json`))
       .then((metadataResponse) => {
