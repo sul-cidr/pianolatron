@@ -7,17 +7,17 @@ export default class WelteRedExpressionizer extends ExpressionWelteMignon(
 ) {
   defaultExpressionParams = {
     tunable: {
-      welte_p: 35.0,
-      welte_mf: 60.0,
-      welte_f: 90.0,
-      welte_loud: 75.0,
-      left_adjust: -5.0, // bass notes can be a bit too loud (kind of a kludge)
-      slow_decay_rate: 2380, // rates are in steps/ms, i.e., 1 step in 2.38s
-      fastC_decay_rate: 300,
-      fastD_decay_rate: 400,
-      tracker_diameter: 16.7, // measured in pixels =~ ticks (1 = 1/300 in)
-      punch_ext_ratio: 0.75,
-      accelFtPerMin2: 0.3147,
+      welte_p: { value: 35.0 },
+      welte_mf: { value: 60.0 },
+      welte_f: { value: 90.0 },
+      welte_loud: { value: 75.0 },
+      left_adjust: { value: -5.0 }, // bass notes can be a bit too loud (kind of a kludge)
+      slow_decay_rate: { value: 2380 }, // rates are in steps/ms, i.e., 1 step in 2.38s
+      fastC_decay_rate: { value: 300 },
+      fastD_decay_rate: { value: 400 },
+      tracker_diameter: { value: 16.7 }, // measured in pixels =~ ticks (1 = 1/300 in)
+      punch_ext_ratio: { value: 0.75 },
+      accelFtPerMin2: { value: 0.3147 },
     },
   };
 

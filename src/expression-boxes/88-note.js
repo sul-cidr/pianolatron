@@ -13,17 +13,29 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
 
   defaultExpressionParams = {
     tunable: {
-      default_mf: 75,
-      accent_f: 95, // velocity when snakebite accent is active
-      snakebite_extension: 200, // extension (in ms) before and after snakebite
-      tracker_diameter: 16.7,
-      punch_ext_ratio: 0.75,
-      accelFtPerMin2: 0.2,
+      default_mf: {
+        value: this.defaultNoteVelocity,
+        alias: "default velocity",
+        min: 0,
+        max: 127,
+        step: 1,
+      },
+      accent_f: {
+        value: 90,
+        alias: "accent velocity",
+        min: 0,
+        max: 127,
+        step: 1,
+      }, // velocity when snakebite accent is active
+      snakebite_extension: { value: 200 }, // extension (in ms) before and after snakebite
+      tracker_diameter: { value: 16.7 },
+      punch_ext_ratio: { value: 0.75 },
+      accelFtPerMin2: { value: 0.2 },
     },
   };
 
   startingExpState = {
-    velocity: this.defaultExpressionParams.default_mf,
+    velocity: 0.0,
     time: 0.0, // time (in ms) at last expression event
     snakebite_start: null,
     snakebite_stop: null, // this can be in the future due to tracker extension
@@ -31,15 +43,24 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
 
   // ? TODO: this method is shared with Duo-Art; perhaps DRY this up a bit?
   computeDerivedExpressionParams = () => {
+    this.startingExpState.velocity =
+      get(expressionParameters)?.tunable.default_mf.value ||
+      this.defaultExpressionParams.tunable.default_mf.value;
+
     const tunable =
       get(expressionParameters)?.tunable ||
       this.defaultExpressionParams.tunable;
 
     const { tracker_diameter, punch_ext_ratio } = tunable;
 
+    const hydratedTunableParams = this.hydrateExpressionParams(tunable);
+
     return {
-      tunable,
-      tracker_extension: parseInt(tracker_diameter * punch_ext_ratio, 10),
+      tunable: hydratedTunableParams,
+      tracker_extension: parseInt(
+        tracker_diameter.value * punch_ext_ratio.value,
+        10,
+      ),
     };
   };
 
@@ -51,7 +72,7 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
       snakebite_start !== null &&
       (snakebite_stop === null || snakebite_stop > time);
 
-    return isSnakebiteOn ? accent_f : default_mf;
+    return isSnakebiteOn ? accent_f.value : default_mf.value;
   };
 
   extendControlHoles = (item) => {
@@ -87,7 +108,10 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
       // It's only necessary to handle one of the "bites" of a snakebite accent
       //  but handling both doesn't seem to cause problems
       if (velocity > 0) {
-        expState.snakebite_start = Math.max(0, msgTime - snakebite_extension);
+        expState.snakebite_start = Math.max(
+          0,
+          msgTime - snakebite_extension.value,
+        );
 
         // Add an entry to the expression Interval Tree for the previous
         //  interval (when the velocity was lower)
@@ -104,7 +128,7 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
 
         expState.snakebite_stop = null;
       } else {
-        expState.snakebite_stop = msgTime + snakebite_extension;
+        expState.snakebite_stop = msgTime + snakebite_extension.value;
 
         if (expState.snakebite_start < expState.snakebite_stop) {
           panExpMap.insert(
@@ -141,6 +165,22 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
           { ...this.startingExpState },
         ]);
 
+      const mapIntervals = Array.from(panExpMap.inOrder());
+      const finalExpTime = mapIntervals[mapIntervals.length - 1].high;
+
+      // Extend the expression map so that it extends from the accent event
+      //  to the final note on this side of the roll (if needed)
+      const finalTick = Math.max(
+        noteTrackMsgs[noteTrackMsgs.length - 1].tick,
+        ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
+      );
+      const finalTime = this.convertTicksAndTime(finalTick);
+
+      if (finalTime > finalExpTime) {
+        panExpMap.insert(finalExpTime, finalExpTime, default_mf.value);
+        panExpMap.insert(finalExpTime, finalTime, default_mf.value);
+      }
+
       noteTrackMsgs
         .filter(({ name, velocity }) => name === "Note on" && !!velocity)
         .forEach(({ noteNumber: midiNumber, tick }) => {
@@ -148,7 +188,7 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
 
           let noteVelocity = panExpMap.search(msgTime, msgTime)[0];
           if (noteVelocity == null) {
-            noteVelocity = default_mf;
+            noteVelocity = default_mf.value;
           }
 
           if (tick in expressionMap) {
@@ -171,9 +211,9 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
         // ? XXX Should we also do this from the final velocity control event
         // ? to the end of the piece (final tick)?
         if (expVelocity === null) {
-          expressionCurve.push([0, default_mf, 0]);
-          expressionCurve.push([expStartTick, default_mf, interval.low]);
-          expVelocity = default_mf;
+          expressionCurve.push([0, default_mf.value, 0]);
+          expressionCurve.push([expStartTick, default_mf.value, interval.low]);
+          expVelocity = default_mf.value;
         }
         if (thisVelocity !== expVelocity) {
           expressionCurve.push([expStartTick, thisVelocity, interval.low]);

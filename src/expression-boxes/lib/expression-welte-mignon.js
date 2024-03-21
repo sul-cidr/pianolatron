@@ -17,13 +17,11 @@ export const ExpressionWelteMignon = (BaseClass) =>
       fast_decresc_stop: null,
     };
 
-    initializeExpressionizer = () => {
-      this.startingExpState.velocity =
-        this.defaultExpressionParams.tunable.welte_p;
-      super.initializeExpressionizer();
-    };
-
     computeDerivedExpressionParams = () => {
+      this.startingExpState.velocity =
+        get(expressionParameters)?.tunable.welte_p.value ||
+        this.defaultExpressionParams.tunable.welte_p.value;
+
       // The derived parameters are computed from the tunable parameters and
       //  are used to calculate the expression velocities, but cannot be
       //  directly adjusted via the expression settings controls
@@ -42,12 +40,17 @@ export const ExpressionWelteMignon = (BaseClass) =>
         punch_ext_ratio,
       } = tunable;
 
+      const hydratedTunableParams = this.hydrateExpressionParams(tunable);
+
       return {
-        tunable,
-        slow_step: (welte_mf - welte_p) / slow_decay_rate,
-        fastC_step: (welte_mf - welte_p) / fastC_decay_rate,
-        fastD_step: -(welte_f - welte_p) / fastD_decay_rate,
-        tracker_extension: parseInt(tracker_diameter * punch_ext_ratio, 10),
+        tunable: hydratedTunableParams,
+        slow_step: (welte_mf.value - welte_p.value) / slow_decay_rate.value,
+        fastC_step: (welte_mf.value - welte_p.value) / fastC_decay_rate.value,
+        fastD_step: -(welte_f.value - welte_p.value) / fastD_decay_rate.value,
+        tracker_extension: parseInt(
+          tracker_diameter.value * punch_ext_ratio.value,
+          10,
+        ),
       };
     };
 
@@ -92,30 +95,30 @@ export const ExpressionWelteMignon = (BaseClass) =>
       const velocityDelta = newVelocity - expState.velocity;
       if (expState.mf_start !== null) {
         // If the previous velocity was above MF, keep it there
-        if (expState.velocity > welte_mf) {
+        if (expState.velocity > welte_mf.value) {
           newVelocity =
             velocityDelta < 0
-              ? Math.max(welte_mf + 0.001, newVelocity)
-              : Math.min(welte_f, newVelocity);
+              ? Math.max(welte_mf.value + 0.001, newVelocity)
+              : Math.min(welte_f.value, newVelocity);
           // If the previous velocity was below MF, keep it there
-        } else if (expState.velocity < welte_mf) {
+        } else if (expState.velocity < welte_mf.value) {
           newVelocity =
             velocityDelta > 0
-              ? Math.min(welte_mf - 0.001, newVelocity)
-              : Math.max(welte_p, newVelocity);
+              ? Math.min(welte_mf.value - 0.001, newVelocity)
+              : Math.max(welte_p.value, newVelocity);
         }
       } else if (
         expState.slow_cresc_start !== null &&
         !isFastCrescOn &&
-        expState.velocity < welte_loud
+        expState.velocity < welte_loud.value
       ) {
         // If the MF hook is off and only slow crescendo is on, the velocity
         //  should never exceed welte_loud (which is lower than welte_f)
-        newVelocity = Math.min(newVelocity, welte_loud - 0.001);
+        newVelocity = Math.min(newVelocity, welte_loud.value - 0.001);
       }
 
       // Ensure the velocity always stays between welte_p and welte_f
-      newVelocity = clamp(newVelocity, welte_p, welte_f);
+      newVelocity = clamp(newVelocity, welte_p.value, welte_f.value);
 
       return newVelocity;
     };

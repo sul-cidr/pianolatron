@@ -65,7 +65,9 @@
   import IntervalTree from "node-interval-tree";
   import {
     appMode,
+    appWaiting,
     bassVolumeCoefficient,
+    expressionParameters,
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
@@ -111,7 +113,6 @@
 
   let firstLoad = true;
   let appReady = false;
-  let appWaiting = false;
   let appLoaded = false;
   let rollImageReady = false;
   let mididataReady;
@@ -193,7 +194,7 @@
   };
 
   const loadRoll = (roll, doReset = true) => {
-    appWaiting = true;
+    $appWaiting = true;
     mididataReady = fetch(
       `/${$useInAppExpression ? "note_midi" : "midi"}/${roll.druid}.mid`,
     )
@@ -213,6 +214,8 @@
         const expressionBoxType = $useInAppExpression
           ? $rollMetadata.ROLL_TYPE
           : "expressiveMidi";
+        if (previousRoll && roll.type !== previousRoll.type)
+          $expressionParameters = {};
         $expressionBox = new expressionBoxes[expressionBoxType](
           midiSamplePlayer,
           startNote,
@@ -224,11 +227,11 @@
         midiSamplePlayer.eventListeners.midiEvent = [
           $expressionBox.midiEventHandler,
         ];
-      })
-      .catch((err) => {
-        notify({ title: "MIDI Data Error!", message: err, type: "error" });
-        currentRoll = previousRoll;
       });
+    // .catch((err) => {
+    //   notify({ title: "MIDI Data Error!", message: err, type: "error" });
+    //   currentRoll = previousRoll;
+    // });
 
     metadataReady = fetch(joinPath("json", `${roll.druid}.json`))
       .then((metadataResponse) => {
@@ -250,7 +253,7 @@
           $expressionBox.noteVelocitiesMap,
         );
         appReady = true;
-        appWaiting = false;
+        $appWaiting = false;
         firstLoad = false;
         const loadingSpan = document.querySelector("#loading span");
         if (loadingSpan !== null)
@@ -286,13 +289,15 @@
     return endPct;
   };
 
-  const reloadRoll = () => {
+  const reloadRoll = (resetExpression = false) => {
     const savedTick = $currentTick;
     let startPlayer = false;
     if (midiSamplePlayer.isPlaying()) {
       pausePlayback();
       startPlayer = true;
     }
+    if (resetExpression) $expressionParameters = {};
+
     loadRoll(currentRoll, false).then(() => {
       rollViewer.partitionOverlaySvgs();
       rollViewer.updateVisibleOverlays();
@@ -483,13 +488,13 @@
   {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
-  <LoadingSpinner showLoadingSpinner={appLoaded && appWaiting} />
+  <LoadingSpinner showLoadingSpinner={appLoaded && $appWaiting} />
 </div>
 <SamplePlayer
   bind:this={samplePlayer}
   on:loading={({ detail: loadingSamples }) => {
-    appWaiting = true;
-    loadingSamples.then(() => (appWaiting = false)).catch(() => {});
+    $appWaiting = true;
+    loadingSamples.then(() => ($appWaiting = false)).catch(() => {});
   }}
 />
 <KeyboardShortcuts

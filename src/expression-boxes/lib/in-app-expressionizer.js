@@ -35,6 +35,83 @@ export default class InAppExpressionizer {
   bassControlsTrack;
   trebleControlsTrack;
 
+  expKeyToHydration = {
+    welte_p: { alias: "p velocity", min: 0, max: 127, step: 1 },
+    welte_mf: { alias: "mf velocity", min: 0, max: 127, step: 1 },
+    welte_f: { alias: "ff velocity", min: 0, max: 127, step: 1 },
+    welte_loud: { alias: "f velocity", min: 0, max: 127, step: 1 },
+    left_adjust: { alias: "+/- bass velocity", min: -127, max: 127, step: 1 },
+    slow_decay_rate: {
+      alias: "slow decresc (ms/vel)",
+      min: 1,
+      max: 4000,
+      step: 10,
+    },
+    fastC_decay_rate: {
+      alias: "fast cresc (ms/vel)",
+      min: 1,
+      max: 1000,
+      step: 10,
+    },
+    fastD_decay_rate: {
+      alias: "fast decresc (ms/vel)",
+      min: 1,
+      max: 1000,
+      step: 10,
+    },
+    tracker_diameter: {
+      alias: "trackerbar height (mm)",
+      min: 5,
+      max: 25,
+      step: 0.1,
+    },
+    punch_ext_ratio: {
+      alias: "tracker extension ratio",
+      min: 0,
+      max: 1,
+      step: 0.05,
+    },
+    accelFtPerMin2: {
+      alias: "acceleration (ft/min^2)",
+      min: 0,
+      max: 1,
+      step: 0.01,
+    },
+    theme_extent: {
+      alias: "theme extension (ms +/-)",
+      min: 0,
+      max: 100,
+      step: 1,
+    },
+    snakebite_extension: {
+      alias: "accent extension (ms +/-)",
+      min: 0,
+      max: 1000,
+      step: 1,
+    },
+  };
+
+  hydrateExpressionParams = (tunableParams) => {
+    const hydratedParams = {};
+    const tunableKeys = Object.keys(tunableParams);
+    for (let i = 0; i < tunableKeys.length; i += 1) {
+      const thisKey = tunableKeys[i];
+      hydratedParams[thisKey] = tunableParams[thisKey];
+      if (thisKey in this.expKeyToHydration) {
+        const hydrations = this.expKeyToHydration[thisKey];
+        const hydrationKeys = Object.keys(hydrations);
+        for (let j = 0; j < hydrationKeys.length; j += 1) {
+          const hydrationKey = hydrationKeys[j];
+          if (!(hydrationKey in hydratedParams[thisKey])) {
+            hydratedParams[thisKey][hydrationKey] =
+              this.expKeyToHydration[thisKey][hydrationKey];
+          }
+        }
+      }
+    }
+    return hydratedParams;
+  };
+
   // ?Needs looking at...
   convertTicksAndTime = (input, target) => {
     let wanted = target;
@@ -52,7 +129,7 @@ export default class InAppExpressionizer {
 
     let lastTime = 0.0;
     let lastTick = 0;
-    let tempo = this.defaultTemp;
+    let tempo = this.defaultTempo;
     let ticksPerSecond = 0;
     let ticksAtLastTempo = 0;
     let timeAtLastTempo = 0;
@@ -118,11 +195,14 @@ export default class InAppExpressionizer {
   }
 
   initializeExpressionizer() {
-    expressionParameters.set(this.defaultExpressionParams);
+    if (!Object.keys(get(expressionParameters)).length)
+      expressionParameters.set(this.defaultExpressionParams);
+
     this.expParams = this.computeDerivedExpressionParams();
 
     this.tempoMap = this.#buildTempoMap();
     this.noteVelocitiesMap = this.buildNoteVelocitiesMap();
+    this.pedalingMap = this.buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
   }
 
@@ -156,7 +236,7 @@ export default class InAppExpressionizer {
     ) {
       minute += minuteDiv;
       nextTick = tick + parseInt(speed * minuteDiv * ticksPerFt, 10);
-      speed = startSpeed + minute * this.expParams.tunable.accelFtPerMin2;
+      speed = startSpeed + minute * this.expParams.tunable.accelFtPerMin2.value;
       nextTempo = (speed * ticksPerFt) / this.#midiTPQ;
       tempoMap.insert(tick, nextTick, tempo);
       tick = nextTick;
@@ -249,7 +329,7 @@ export default class InAppExpressionizer {
       buildPanExpMap(
         this.bassNotesTrack,
         this.bassControlsTrack,
-        this.expParams.tunable.left_adjust,
+        this.expParams.tunable.left_adjust.value,
       ),
     );
 

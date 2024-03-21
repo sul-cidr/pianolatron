@@ -430,7 +430,6 @@
         audioRecorder.exportRecording();
         break;
       default:
-        break;
     }
   };
 
