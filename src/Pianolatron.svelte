@@ -469,7 +469,7 @@
     >
       {#if appReady}
         {#if $appMode === "perform"}
-          <TabbedPanel {skipToPercentage} {reloadRoll} />
+          <TabbedPanel {reloadRoll} />
         {:else}
           <ListenerPanel {skipToTick} {playPauseApp} {stopApp} />
         {/if}
