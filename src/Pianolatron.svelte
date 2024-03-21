@@ -252,8 +252,9 @@
         appReady = true;
         appWaiting = false;
         firstLoad = false;
-        document.querySelector("#loading span").textContent =
-          "Loading roll image...";
+        const loadingSpan = document.querySelector("#loading span");
+        if (loadingSpan !== null)
+          loadingSpan.textContent = "Loading roll image...";
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -374,8 +375,8 @@
   };
 
   onMount(async () => {
-    document.querySelector("#loading span").textContent =
-      "Loading resources...";
+    const loadingSpan = document.querySelector("#loading span");
+    if (loadingSpan !== null) loadingSpan.textContent = "Loading resources...";
 
     $appMode = getMode(mode);
 
@@ -408,13 +409,13 @@
   $: if (rollViewer)
     ({ adjustZoom, updateTickByViewportIncrement, panHorizontal } = rollViewer);
   $: if (rollImageReady) {
-    document.querySelector("#loading span").textContent = "Loading complete!";
-    document
-      .getElementById("loading")
-      .addEventListener("transitionend", () =>
-        document.getElementById("loading").remove(),
-      );
-    document.getElementById("loading").classList.add("fade-out");
+    const loadingSpan = document.querySelector("#loading span");
+    if (loadingSpan !== null) loadingSpan.textContent = "Loading complete!";
+    const loadingElt = document.getElementById("loading");
+    if (loadingElt !== null) {
+      loadingElt.addEventListener("transitionend", () => loadingElt.remove());
+      loadingElt.classList.add("fade-out");
+    }
     appLoaded = true;
   }
   $: appClass = `${$appMode}-app`;
