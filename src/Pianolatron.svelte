@@ -146,7 +146,7 @@
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 
-  // redundant, but the way the BasicSettings comp is built requires we define the func
+  // redundant, but the way the SamplePlayer comp is built requires we define the func
   // here, as it won't update the ref.
   const skipToPercentage = (percentage = 0) =>
     skipToTick(progressPercentageToTick(percentage));
