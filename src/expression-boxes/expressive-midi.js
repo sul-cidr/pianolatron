@@ -139,9 +139,9 @@ export default class ExpressiveMidiExpressionizer {
       if (velocity === 0) {
         this.stopNote(noteNumber, NoteSource.Midi);
       } else {
-        const expressionizedVelocity =
+        const noteVelocity =
           this.noteVelocitiesMap[tick]?.[noteNumber] || velocity;
-        this.startNote(noteNumber, expressionizedVelocity, NoteSource.Midi);
+        this.startNote(noteNumber, noteVelocity, NoteSource.Midi);
         activeNotes.add(noteNumber);
       }
     } else if (name === "Controller Change" && get(rollPedalingOnOff)) {

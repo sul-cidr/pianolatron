@@ -65,7 +65,9 @@
   import IntervalTree from "node-interval-tree";
   import {
     appMode,
+    appWaiting,
     bassVolumeCoefficient,
+    expressionParameters,
     trebleVolumeCoefficient,
     tempoCoefficient,
     playbackProgress,
@@ -74,12 +76,9 @@
     currentTick,
     expressionBox,
     holesIntervalTree,
-    isReproducingRoll,
-    playExpressionsOnOff,
     recordingInBuffer,
     recordingOnOff,
     rollMetadata,
-    rollPedalingOnOff,
     scrollDownwards,
     useInAppExpression,
     userSettings,
@@ -114,7 +113,6 @@
 
   let firstLoad = true;
   let appReady = false;
-  let appWaiting = false;
   let appLoaded = false;
   let rollImageReady = false;
   let mididataReady;
@@ -149,7 +147,7 @@
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 
-  // redundant, but the way the BasicSettings comp is built requires we define the func
+  // redundant, but the way the SamplePlayer comp is built requires we define the func
   // here, as it won't update the ref.
   const skipToPercentage = (percentage = 0) =>
     skipToTick(progressPercentageToTick(percentage));
@@ -196,7 +194,7 @@
   };
 
   const loadRoll = (roll, doReset = true) => {
-    appWaiting = true;
+    $appWaiting = true;
     mididataReady = fetch(
       `/${$useInAppExpression ? "note_midi" : "midi"}/${roll.druid}.mid`,
     )
@@ -216,6 +214,8 @@
         const expressionBoxType = $useInAppExpression
           ? $rollMetadata.ROLL_TYPE
           : "expressiveMidi";
+        if (previousRoll && roll.type !== previousRoll.type)
+          $expressionParameters = {};
         $expressionBox = new expressionBoxes[expressionBoxType](
           midiSamplePlayer,
           startNote,
@@ -252,15 +252,12 @@
           $scrollDownwards,
           $expressionBox.noteVelocitiesMap,
         );
-        if (doReset) {
-          $playExpressionsOnOff = $isReproducingRoll;
-          $rollPedalingOnOff = $isReproducingRoll;
-        }
         appReady = true;
-        appWaiting = false;
+        $appWaiting = false;
         firstLoad = false;
-        document.querySelector("#loading span").textContent =
-          "Loading roll image...";
+        const loadingSpan = document.querySelector("#loading span");
+        if (loadingSpan !== null)
+          loadingSpan.textContent = "Loading roll image...";
         previousRoll = currentRoll;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -292,13 +289,15 @@
     return endPct;
   };
 
-  const reloadRoll = () => {
+  const reloadRoll = (resetExpression = false) => {
     const savedTick = $currentTick;
     let startPlayer = false;
     if (midiSamplePlayer.isPlaying()) {
       pausePlayback();
       startPlayer = true;
     }
+    if (resetExpression) $expressionParameters = {};
+
     loadRoll(currentRoll, false).then(() => {
       rollViewer.partitionOverlaySvgs();
       rollViewer.updateVisibleOverlays();
@@ -381,8 +380,8 @@
   };
 
   onMount(async () => {
-    document.querySelector("#loading span").textContent =
-      "Loading resources...";
+    const loadingSpan = document.querySelector("#loading span");
+    if (loadingSpan !== null) loadingSpan.textContent = "Loading resources...";
 
     $appMode = getMode(mode);
 
@@ -415,13 +414,13 @@
   $: if (rollViewer)
     ({ adjustZoom, updateTickByViewportIncrement, panHorizontal } = rollViewer);
   $: if (rollImageReady) {
-    document.querySelector("#loading span").textContent = "Loading complete!";
-    document
-      .getElementById("loading")
-      .addEventListener("transitionend", () =>
-        document.getElementById("loading").remove(),
-      );
-    document.getElementById("loading").classList.add("fade-out");
+    const loadingSpan = document.querySelector("#loading span");
+    if (loadingSpan !== null) loadingSpan.textContent = "Loading complete!";
+    const loadingElt = document.getElementById("loading");
+    if (loadingElt !== null) {
+      loadingElt.addEventListener("transitionend", () => loadingElt.remove());
+      loadingElt.classList.add("fade-out");
+    }
     appLoaded = true;
   }
   $: appClass = `${$appMode}-app`;
@@ -475,7 +474,7 @@
     >
       {#if appReady}
         {#if $appMode === "perform"}
-          <TabbedPanel {skipToPercentage} {reloadRoll} />
+          <TabbedPanel {reloadRoll} />
         {:else}
           <ListenerPanel {skipToTick} {playPauseApp} {stopApp} />
         {/if}
@@ -489,13 +488,13 @@
   {:else if !$userSettings.showKeyboard}
     <KeyboardControls outside />
   {/if}
-  <LoadingSpinner showLoadingSpinner={appLoaded && appWaiting} />
+  <LoadingSpinner showLoadingSpinner={appLoaded && $appWaiting} />
 </div>
 <SamplePlayer
   bind:this={samplePlayer}
   on:loading={({ detail: loadingSamples }) => {
-    appWaiting = true;
-    loadingSamples.then(() => (appWaiting = false)).catch(() => {});
+    $appWaiting = true;
+    loadingSamples.then(() => ($appWaiting = false)).catch(() => {});
   }}
 />
 <KeyboardShortcuts

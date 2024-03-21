@@ -4,15 +4,16 @@
   }
   .exp-param {
     align-self: center;
-    margin: 0 10px 0 0;
+    margin: 0 5px 0 0;
   }
   .param-value {
-    max-width: 100px;
+    max-width: 4rem;
   }
 </style>
 
 <script>
   import {
+    appWaiting,
     expressionParameters,
     rollHasExpressions,
     rollMetadata,
@@ -21,17 +22,6 @@
   } from "../stores";
 
   export let reloadRoll;
-
-  let currentRollType = $rollMetadata.ROLL_TYPE;
-
-  const resetExpressionSettings = (forceReset) => {
-    // Load the defaults when the roll type changes or Reset button is clicked
-    if (!forceReset && $rollMetadata.ROLL_TYPE === currentRollType) return;
-    currentRollType = $rollMetadata.ROLL_TYPE;
-  };
-
-  /* eslint-disable no-unused-expressions, no-sequences */
-  $: $rollMetadata, resetExpressionSettings(false);
 </script>
 
 <div id="expression-panel">
@@ -50,21 +40,23 @@
         {#each Object.keys($expressionParameters.tunable || {}) as expressionParam}
           <div>
             <label class="exp-param" for={`"input_"{expressionParam}`}
-              >{expressionParam}</label
+              >{$expressionParameters.tunable[expressionParam].alias}</label
             >
             <div>
               <input
+                disabled={$appWaiting}
                 class="param-value"
                 id={`"input_"{expressionParam}`}
                 type="number"
-                value={$expressionParameters.tunable[expressionParam]}
+                min={$expressionParameters.tunable[expressionParam].min}
+                max={$expressionParameters.tunable[expressionParam].max}
+                step={$expressionParameters.tunable[expressionParam].step}
+                value={$expressionParameters.tunable[expressionParam].value}
                 on:change={(e) => {
-                  $expressionParameters.tunable[expressionParam] = parseFloat(
-                    e.target.value,
-                  );
-                  $expressionParameters.tunable[expressionParam] = parseFloat(
-                    e.target.value,
-                  );
+                  $expressionParameters.tunable[expressionParam].value =
+                    parseFloat(e.target.value);
+                  $expressionParameters.tunable[expressionParam].value =
+                    parseFloat(e.target.value);
                   reloadRoll();
                 }}
               />
@@ -75,8 +67,7 @@
           <button
             type="button"
             on:click={() => {
-              resetExpressionSettings(true);
-              reloadRoll();
+              reloadRoll(true);
             }}>Reset to Defaults</button
           >
         </div>

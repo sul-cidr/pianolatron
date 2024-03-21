@@ -10,19 +10,16 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 ) {
   defaultExpressionParams = {
     tunable: {
-      // TODO Should get rid of the "welte" for these, or hardcode them
-      //  into the overlay viz module if they shouldn't affect the emulation
-      welte_p: 35.0,
-      welte_mf: 60.0,
-      welte_f: 90.0,
-
+      welte_p: { value: 35.0 },
+      welte_mf: { value: 60.0 },
+      welte_f: { value: 90.0 },
       // XXX should the effect of the "theme" holes also extend *before* the
       //  beginning of the snakebite accent holes, as for 88-note rolls?
-      theme_extent: 20, // effective ms after theme selector snakebites
-      left_adjust: -5.0, // used for Welte rolls, apply it here as well?
-      tracker_diameter: 16.7, // TODO get value from P. Phillips dissertation
-      punch_ext_ratio: 0.75,
-      accelFtPerMin2: 0.2,
+      theme_extent: { value: 20 }, // effective ms after theme selector snakebites
+      left_adjust: { value: -5.0 }, // used for Welte rolls, apply it here as well?
+      tracker_diameter: { value: 16.7 }, // TODO get value from P. Phillips
+      punch_ext_ratio: { value: 0.75 },
+      accelFtPerMin2: { value: 0.2 },
     },
   };
 
@@ -42,15 +39,24 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
   };
 
   computeDerivedExpressionParams = () => {
+    this.startingExpState.velocity =
+      get(expressionParameters)?.tunable.welte_mf.value ||
+      this.defaultExpressionParams.tunable.welte_mf.value;
+
     const tunable =
       get(expressionParameters)?.tunable ||
       this.defaultExpressionParams.tunable;
 
     const { tracker_diameter, punch_ext_ratio } = tunable;
 
+    const hydratedTunableParams = this.hydrateExpressionParams(tunable);
+
     return {
-      tunable,
-      tracker_extension: parseInt(tracker_diameter * punch_ext_ratio, 10),
+      tunable: hydratedTunableParams,
+      tracker_extension: parseInt(
+        tracker_diameter.value * punch_ext_ratio.value,
+        10,
+      ),
     };
   };
 
@@ -151,9 +157,9 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
     if (ctrlFunc === "acc") {
       if (item.velocity !== 0) {
-        item.tick = Math.max(0, item.tick - theme_extent * 0.5);
+        item.tick = Math.max(0, item.tick - theme_extent.value * 0.5);
       } else {
-        item.tick += theme_extent;
+        item.tick += theme_extent.value;
       }
     } else if (item.velocity === 0) {
       item.tick += tracker_extension;
@@ -183,10 +189,13 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     switch (ctrlFunc) {
       case "acc":
         if (velocity > 0) {
-          expState.theme_start = Math.max(0, msgTime - theme_extent * 0.1);
+          expState.theme_start = Math.max(
+            0,
+            msgTime - theme_extent.value * 0.1,
+          );
           expState.theme_stop = null;
         } else {
-          expState.theme_stop = msgTime + theme_extent;
+          expState.theme_stop = msgTime + theme_extent.value;
         }
         break;
 
@@ -225,12 +234,6 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     expState.velocity = panVelocity;
 
     return [panExpMap, expState];
-  };
-
-  initializeExpressionizer = () => {
-    this.startingExpState.velocity =
-      this.defaultExpressionParams.tunable.welte_p;
-    super.initializeExpressionizer();
   };
 
   constructor(...args) {

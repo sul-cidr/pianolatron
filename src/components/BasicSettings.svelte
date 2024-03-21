@@ -6,12 +6,10 @@
     trebleVolumeCoefficient,
     tempoCoefficient,
     transposeHalfStep,
-    playbackProgress,
+    // playbackProgress,
   } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
-
-  export let skipToPercentage;
 </script>
 
 <div id="playback-settings">
@@ -90,19 +88,5 @@
     name="transpose"
   >
     <svelte:fragment slot="label">Transpose (half steps):</svelte:fragment>
-  </SliderControl>
-  <SliderControl
-    value={$playbackProgress}
-    min="0"
-    max="1"
-    step="0.001"
-    name="progress"
-    on:input={({ target: { value } }) => skipToPercentage(value)}
-    mousewheel={false}
-  >
-    <svelte:fragment slot="label">Progress:</svelte:fragment>
-    <svelte:fragment slot="value"
-      >{($playbackProgress * 100).toFixed(2)}%</svelte:fragment
-    >
   </SliderControl>
 </div>

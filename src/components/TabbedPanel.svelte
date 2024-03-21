@@ -50,13 +50,11 @@
   import ViewerMetrics from "./ViewerMetrics.svelte";
   import ExpressionSettings from "./ExpressionSettings.svelte";
 
-  export let skipToPercentage;
   export let reloadRoll;
 
   const panels = {
     controls: {
       component: BasicSettings,
-      props: { skipToPercentage },
       icon: "sliders",
       title: "Performance controls",
     },

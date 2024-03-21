@@ -551,15 +551,15 @@
       // overlays are drawn, but ideally it shouldn't happen this way.
       if (expParams === undefined || !("tunable" in expParams)) return;
       guides = {
-        p: parseInt(expParams.tunable.welte_p, 10),
-        mf: parseInt(expParams.tunable.welte_mf, 10),
-        f: parseInt(expParams.tunable.welte_f, 10),
+        p: parseInt(expParams.tunable.welte_p.value, 10),
+        mf: parseInt(expParams.tunable.welte_mf.value, 10),
+        f: parseInt(expParams.tunable.welte_f.value, 10),
       };
     } else if ($rollMetadata.ROLL_TYPE === "88-note") {
       if (expParams === undefined || !("tunable" in expParams)) return;
       guides = {
-        mf: parseInt(expParams.tunable.default_mf, 10),
-        f: parseInt(expParams.tunable.accent_f, 10),
+        mf: parseInt(expParams.tunable.default_mf.value, 10),
+        f: parseInt(expParams.tunable.accent_f.value, 10),
       };
     }
     partitionGuidesAndCurve(
