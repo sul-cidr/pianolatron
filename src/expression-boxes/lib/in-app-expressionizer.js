@@ -91,6 +91,10 @@ export default class InAppExpressionizer {
     },
   };
 
+  // The point here is to apply the parameter templates above to all applicable
+  //  roll types, but allow the settings for each specific roll type to override
+  //  these values. Probably that could be done instead with some kind of class
+  //  inheritance setup, but this is OK for now.
   hydrateExpressionParams = (tunableParams) => {
     const hydratedParams = {};
     const tunableKeys = Object.keys(tunableParams);
