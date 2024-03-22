@@ -7,7 +7,7 @@
     margin: 0 5px 0 0;
   }
   .param-value {
-    max-width: 4rem;
+    width: 4.5rem;
   }
   .button-row {
     display: flex;
@@ -155,6 +155,7 @@
                 max={$expressionParameters.tunable[expressionParam].max}
                 step={$expressionParameters.tunable[expressionParam].step}
                 value={$expressionParameters.tunable[expressionParam].value}
+                on:keydown|stopPropagation
                 on:change={(e) => {
                   $expressionParameters.tunable[expressionParam].value =
                     parseFloat(e.target.value);
