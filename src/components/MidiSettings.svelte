@@ -27,22 +27,6 @@
   li {
     padding: 0.25em 0;
   }
-
-  #recording-controls {
-    margin: 0 0.5em;
-    flex-wrap: wrap;
-    flex-direction: column;
-  }
-
-  button {
-    @include button;
-
-    &.recording-on {
-      background-color: yellow;
-      border-color: var(--primary-accent);
-      color: var(--primary-accent);
-    }
-  }
 </style>
 
 <script>

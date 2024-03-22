@@ -141,10 +141,10 @@
 
     return html(`
       <span class="row-links">
-        <a href="/?druid=${druid}" title="Play roll">
+        <a href="/?druid=${druid}" title="Play roll" target="_blank">
           ${icons.play}
         </a>
-        <a href="/perform/?druid=${druid}" title="Perform roll">
+        <a href="/perform/?druid=${druid}" title="Perform roll" target="_blank">
           ${icons.piano}
         </a>
         <a href="/midi/${druid}.mid" title="Download MIDI">

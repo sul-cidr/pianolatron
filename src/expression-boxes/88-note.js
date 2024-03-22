@@ -166,7 +166,9 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
         ]);
 
       const mapIntervals = Array.from(panExpMap.inOrder());
-      const finalExpTime = mapIntervals[mapIntervals.length - 1].high;
+      const finalExpTime = mapIntervals?.length
+        ? mapIntervals[mapIntervals.length - 1].high
+        : 0;
 
       // Extend the expression map so that it extends from the accent event
       //  to the final note on this side of the roll (if needed)
