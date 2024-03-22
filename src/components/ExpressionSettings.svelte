@@ -9,6 +9,15 @@
   .param-value {
     max-width: 4rem;
   }
+  .button-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 5px;
+  }
+  #input-file {
+    display: none;
+  }
 </style>
 
 <script>
@@ -19,9 +28,103 @@
     rollMetadata,
     useInAppExpression,
     drawVelocityCurves,
+    rollPedalingOnOff,
+    playExpressionsOnOff,
+    reverbWetDry,
+    currentTick,
+    volumeCoefficient,
+    bassVolumeCoefficient,
+    trebleVolumeCoefficient,
+    transposeHalfStep,
+    sampleVolumes,
+    sampleVelocities,
+    tempoCoefficient,
+    velocityCurveLow,
+    velocityCurveMid,
+    velocityCurveHigh,
+    userSettings,
+    useMidiTempoEventsOnOff,
   } from "../stores";
 
   export let reloadRoll;
+
+  let files;
+
+  const exportSettings = () => {
+    const playbackSettings = {
+      volumeCoefficient: $volumeCoefficient,
+      bassVolumeCoefficient: $bassVolumeCoefficient,
+      trebleVolumeCoefficient: $trebleVolumeCoefficient,
+      tempoCoefficient: $tempoCoefficient,
+      transposeHalfStep: $transposeHalfStep,
+      rollPedalingOnOff: $rollPedalingOnOff,
+      playExpressionsOnOff: $playExpressionsOnOff,
+      useMidiTempoEventsOnOff: $useMidiTempoEventsOnOff,
+      sampleVolumes: $sampleVolumes,
+      sampleVelocities: $sampleVelocities,
+      reverbWetDry: $reverbWetDry,
+      velocityCurveLow: $velocityCurveLow,
+      velocityCurveMid: $velocityCurveMid,
+      velocityCurveHigh: $velocityCurveHigh,
+      currentTick: $currentTick,
+      userSettings: $userSettings,
+      drawVelocityCurves: $drawVelocityCurves,
+    };
+    const settingsJson = {
+      expressionParameters: $expressionParameters,
+      playbackSettings,
+    };
+
+    const settingsFileName = `${
+      $rollMetadata.DRUID
+    }-${new Date().toISOString()}-settings`;
+    const jsonUrl = `data:text/plain;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(settingsJson),
+    )}`;
+    const element = document.createElement("a");
+    element.setAttribute("href", jsonUrl);
+    element.setAttribute("download", `${settingsFileName}.json`);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    URL.revokeObjectURL(jsonUrl);
+  };
+
+  const loadSettings = () => {
+    const reader = new FileReader();
+    reader.readAsText(files[0], "UTF-8");
+
+    reader.onload = (readerEvent) => {
+      const allSettings = JSON.parse(readerEvent.target.result);
+      $expressionParameters = allSettings.expressionParameters;
+      // The alternatives to this, i.e., using eval() or rearranging most of
+      //  the contents of stores.js to be part of single settings object,
+      //  seem worse than just hardcoding the assignments.
+      $volumeCoefficient = allSettings.playbackSettings.volumeCoefficient;
+      $bassVolumeCoefficient =
+        allSettings.playbackSettings.bassVolumeCoefficient;
+      $trebleVolumeCoefficient =
+        allSettings.playbackSettings.trebleVolumeCoefficient;
+      $tempoCoefficient = allSettings.playbackSettings.tempoCoefficient;
+      $transposeHalfStep = allSettings.playbackSettings.transposeHalfStep;
+      $rollPedalingOnOff = allSettings.playbackSettings.rollPedalingOnOff;
+      $playExpressionsOnOff = allSettings.playbackSettings.playExpressionsOnOff;
+      $useMidiTempoEventsOnOff =
+        allSettings.playbackSettings.useMidiTempoEventsOnOff;
+      $sampleVolumes = allSettings.playbackSettings.sampleVolumes;
+      $sampleVelocities = allSettings.playbackSettings.sampleVelocities;
+      $reverbWetDry = allSettings.playbackSettings.reverbWetDry;
+      $velocityCurveLow = allSettings.playbackSettings.velocityCurveLow;
+      $velocityCurveMid = allSettings.playbackSettings.velocityCurveMid;
+      $velocityCurveHigh = allSettings.playbackSettings.velocityCurveHigh;
+      $currentTick = allSettings.playbackSettings.currentTick;
+      $userSettings = allSettings.playbackSettings.userSettings;
+      $drawVelocityCurves = allSettings.playbackSettings.drawVelocityCurves;
+
+      reloadRoll();
+    };
+  };
 </script>
 
 <div id="expression-panel">
@@ -63,13 +166,39 @@
             </div>
           </div>
         {/each}
-        <div id="reset-control">
-          <button
-            type="button"
-            on:click={() => {
-              reloadRoll(true);
-            }}>Reset to Defaults</button
-          >
+        <div class="button-row">
+          <div>
+            <button
+              type="button"
+              on:click={() => {
+                reloadRoll(true);
+              }}>Reset</button
+            >
+          </div>
+          <div>
+            <button
+              type="button"
+              on:click={() => {
+                exportSettings();
+              }}>Export</button
+            >
+          </div>
+          <div>
+            <button
+              type="button"
+              on:click={() => {
+                document.getElementById("input-file").click();
+              }}>Load</button
+            >
+            <input
+              accept="application/json,"
+              bind:files
+              id="input-file"
+              name="input-file"
+              type="file"
+              on:change={loadSettings}
+            />
+          </div>
         </div>
       </fieldset>
       <fieldset>
