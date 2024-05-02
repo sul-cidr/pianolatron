@@ -53,4 +53,10 @@ The Pianolatron makes significant use of modules from the following open-source 
 - [canvasSpliner](https://github.com/jonathanlurie/canvasSpliner), principal developer: Jonathan Lurie
 - [node-interval-tree](https://github.com/ShieldBattery/node-interval-tree), principal developer: Marko Žarković
 
+## Graphics Elements
+
+The site uses the following icons from the [Noun Project](https://thenounproject.com/), which their creators made available via a Creative Commons Attribution (CC BY) license:
+
+- TBD
+
 © 2024 Stanford University
