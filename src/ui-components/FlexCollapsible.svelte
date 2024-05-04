@@ -15,6 +15,7 @@
       padding: 0.5em;
       position: absolute;
       top: 0;
+      height: 100%;
     }
 
     &:hover {
