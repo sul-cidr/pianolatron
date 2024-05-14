@@ -7,6 +7,7 @@
     flex-direction: column;
     overflow: hidden;
     margin: 10px;
+    gap: 0.5rem;
 
     .search-box {
       height: 2.25em;
@@ -59,7 +60,7 @@
         border-radius: 6px;
         background-color: darkslategray; // var(--primary-accent);
         color: white;
-        padding: 1px 8px;
+        padding: 1px 8px 4px;
         margin: 0 4px;
         cursor: pointer;
 
