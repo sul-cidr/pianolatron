@@ -63,6 +63,15 @@
         margin: 0 4px;
         cursor: pointer;
 
+        button {
+          background: none;
+          border: none;
+          color: inherit;
+          cursor: pointer;
+          margin: 0;
+          padding: 0;
+        }
+
         &.active {
           background-color: var(--primary-accent);
         }
@@ -386,10 +395,8 @@
       <ul>
         {#each facets as facet}
           <li class:active={facet === activeFacet}>
-            <span
-              role="checkbox"
-              tabindex="0"
-              aria-checked={facet === activeFacet}
+            <button
+              class:active={facet === activeFacet}
               on:click={() => {
                 setActiveFacet(facet);
               }}
@@ -400,7 +407,7 @@
               }}
             >
               {facet}
-            </span>
+            </button>
           </li>
         {/each}
       </ul>
