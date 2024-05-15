@@ -185,10 +185,15 @@
       button {
         background-color: #fff;
         border: 1px solid #d2d6dc;
+        cursor: pointer;
         padding: 5px 14px;
         user-select: none;
 
-        &:not(disabled):hover {
+        &[disabled] {
+          cursor: not-allowed;
+        }
+
+        &:not([disabled]):hover {
           background-color: #f7f7f7;
           color: #3c4257;
         }
