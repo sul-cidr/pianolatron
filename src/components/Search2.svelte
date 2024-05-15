@@ -140,7 +140,8 @@
           background-size: 10px;
         }
 
-        &:hover {
+        &:hover,
+        &:focus {
           background-color: #e5e7eb;
         }
       }
@@ -354,23 +355,32 @@
       <tr>
         <th>Play/Perform/MIDI/Image</th>
         <th
+          tabindex="0"
           on:click={() => sortItems("work")}
+          on:keypress={({ key }) => key === "Enter" && sortItems("work")}
           class:sortedAsc={sortOrder === "work-asc"}
           class:sortedDesc={sortOrder === "work-desc"}>Title</th
         >
         <th
+          tabindex="0"
           on:click={() => sortItems("composerArranger")}
+          on:keypress={({ key }) =>
+            key === "Enter" && sortItems("composerArranger")}
           class:sortedAsc={sortOrder === "composerArranger-asc"}
           class:sortedDesc={sortOrder === "composerArranger-desc"}
           >Composer / Arranger</th
         >
         <th
+          tabindex="0"
           on:click={() => sortItems("performer")}
+          on:keypress={({ key }) => key === "Enter" && sortItems("performer")}
           class:sortedAsc={sortOrder === "performer-asc"}
           class:sortedDesc={sortOrder === "performer-desc"}>Performer</th
         >
         <th
+          tabindex="0"
           on:click={() => sortItems("publisher")}
+          on:keypress={({ key }) => key === "Enter" && sortItems("publisher")}
           class:sortedAsc={sortOrder === "publisher-asc"}
           class:sortedDesc={sortOrder === "publisher-desc"}>Publisher</th
         >
