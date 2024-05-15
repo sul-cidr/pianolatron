@@ -273,6 +273,14 @@
       `,
       attribs: { "stroke-width": 0.5 },
     },
+    "roll-image": {
+      svg: `
+        <rect x="1" y="50" width="298" height="200" stroke-width="4"></rect>
+        <path fill="lightgrey" stroke-width="4" d="M 1 250 V 400 L 135 549 H 165 L 299 400 V 250 Z"></path>
+        <rect x="100" y="400" width="100" height="75" rx="5%" fill="white" stroke-width="2"></rect>
+      `,
+      attribs: { viewBox: "0 0 300 550", fill: "currentColor" },
+    },
   };
   const { attribs, svg } = icons[name];
 </script>
@@ -280,6 +288,7 @@
 <svg
   {height}
   {width}
+  role="img"
   {...defaultAttribs}
   {...attribs}
   {...customAttribs}
