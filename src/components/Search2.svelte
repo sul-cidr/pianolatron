@@ -205,7 +205,7 @@
   catalog.forEach((item) => {
     item.composerArranger = [
       ...new Set([item.composer, item.arranger].filter(Boolean)),
-    ].join(" <br/>");
+    ].join("\n");
   });
 
   let filteredListItems = catalog;
