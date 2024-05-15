@@ -1,6 +1,5 @@
 <style lang="scss">
   #app {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -108,7 +107,6 @@
     th {
       background-color: #f9fafb;
       border: 1px solid #e5e7eb;
-      border-top: none;
       box-sizing: border-box;
       color: #6b7280;
       outline: none;
@@ -164,6 +162,32 @@
       height: 64px;
       padding: 0 24px;
     }
+
+    tfoot {
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+
+      div {
+        align-items: center;
+        display: flex;
+
+        span {
+          flex-grow: 1;
+        }
+      }
+
+      button {
+        background-color: #fff;
+        border: 1px solid #d2d6dc;
+        padding: 5px 14px;
+        user-select: none;
+
+        &:not(disabled):hover {
+          background-color: #f7f7f7;
+          color: #3c4257;
+        }
+      }
+    }
   }
 </style>
 
@@ -182,6 +206,9 @@
   let activeFacet;
   let sortOrder;
   let searchParts = [];
+  let pageSize = 20;
+  let currentPage = 1;
+  let filteredAndPagedItems;
 
   const searchFields = ["title", "composerArranger", "performer", "publisher"];
 
@@ -306,6 +333,11 @@
   /* eslint-disable no-unused-expressions, no-sequences */
   $: activeFacet, itemFilter();
   $: searchParts, itemFilter();
+  $: currentPage,
+    (filteredAndPagedItems = catalog.slice(
+      0 + (currentPage - 1) * pageSize,
+      0 + (currentPage - 1) * pageSize + pageSize,
+    ));
 </script>
 
 <div id="app">
@@ -387,7 +419,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each filteredListItems as item}
+      {#each filteredAndPagedItems as item}
         {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
         <tr>
           <td class="row-links">
@@ -429,6 +461,41 @@
         </tr>
       {/each}
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5">
+          <div>
+            {#if filteredListItems.length === 0}
+              No results
+            {:else}
+              {@const pageStart = pageSize * (currentPage - 1) + 1}
+              <span>
+                Showing <strong>{pageStart}</strong> to
+                <strong>
+                  {Math.min(pageStart + pageSize - 1, filteredListItems.length)}
+                </strong>
+                of <strong>{filteredListItems.length}</strong>
+              </span>
+
+              <button
+                disabled={currentPage === 1}
+                on:click={() => currentPage--}
+                on:keypress={({ code }) => code === "Enter" && currentPage--}
+              >
+                &laquo; Previous
+              </button>
+              <button
+                disabled={currentPage * pageSize >= filteredListItems.length}
+                on:click={() => currentPage++}
+                on:keypress={({ code }) => code === "Enter" && currentPage++}
+              >
+                Next &raquo;
+              </button>
+            {/if}
+          </div>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </div>
 <!-- app -->
