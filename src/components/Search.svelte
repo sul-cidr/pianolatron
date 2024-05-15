@@ -63,6 +63,15 @@
         margin: 0 4px;
         cursor: pointer;
 
+        button {
+          background: none;
+          border: none;
+          color: inherit;
+          cursor: pointer;
+          margin: 0;
+          padding: 0;
+        }
+
         &.active {
           background-color: var(--primary-accent);
         }
@@ -97,7 +106,7 @@
   // makes it very difficult to reuse that component here.
   const icons = {
     piano: `
-      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano" tabindex="0">
+      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano" role="img" aria-label="Play Roll">
         <rect x="2" y="7" width="20" height="12" rx="2"></rect>
         <line x1="7" y1="9" x2="7" y2="13.5" style="stroke-width:2.5;stroke-linecap:square"></line>
         <line x1="12" y1="9" x2="12" y2="13.5" style="stroke-width:2.5;stroke-linecap:square"></line>
@@ -105,7 +114,7 @@
       </svg>
       `,
     play: `
-      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano" tabindex="0">
+      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="play" role="img" aria-label="Perform Roll">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
@@ -116,7 +125,7 @@
       </svg>
       `,
     midi: `
-      <svg height="24" width="24" viewBox="0 0 712 266" stroke-width="2" stroke="currentColor" fill="currentColor" stroke-linecap="round" stroke-linejoin="round" name="midi" tabindex="0">
+      <svg height="24" width="24" viewBox="0 0 712 266" stroke-width="2" stroke="currentColor" fill="currentColor" stroke-linecap="round" stroke-linejoin="round" name="midi" role="img" aria-label="Download MIDI">
         <path aria-label="M" text-data="M" d="m 0,0 h 233 c 19.6,0 31,16.9 31,37 V 266 H 199 V 67 H 161 V 266 H 102 V 67 H 65 V 266 H 0 Z" />
         <rect aria-label="I" text-data="I" x="296" y="0" width="65" height="266" />
         <path aria-label="D" text-data="D" d="m 392,0 h 193 c 19.6,0 31,16.9 31,37 v 196 c 0,24.9 -10.4,33 -33,33 H 392 V 97 h 66 v 104 h 93 V 60 H 392 Z" />
@@ -124,7 +133,7 @@
       </svg>
       `,
     roll_image: `
-      <svg height="24" width="24" aria-label="Roll image" role="img" viewBox="0 0 300 550" stroke-width="2" stroke="currentColor" fill="currentColor" stroke-linecap="round" stroke-linejoin="round" name="roll-image" tabindex="0">
+      <svg height="24" width="24" viewBox="0 0 300 550" stroke-width="2" stroke="currentColor" fill="currentColor" stroke-linecap="round" stroke-linejoin="round" name="roll-image" role="img" aria-label="Download Image">
         <rect x="1" y="50" width="298" height="200" stroke-width="4"></rect>
         <path fill="lightgrey" stroke-width="4" d="M 1 250 V 400 L 135 549 H 165 L 299 400 V 250 Z"></path>
         <rect x="100" y="400" width="100" height="75" rx="5%" fill="white" stroke-width="2"></rect>
@@ -386,10 +395,8 @@
       <ul>
         {#each facets as facet}
           <li class:active={facet === activeFacet}>
-            <span
-              role="checkbox"
-              tabindex="0"
-              aria-checked={facet === activeFacet}
+            <button
+              class:active={facet === activeFacet}
               on:click={() => {
                 setActiveFacet(facet);
               }}
@@ -400,7 +407,7 @@
               }}
             >
               {facet}
-            </span>
+            </button>
           </li>
         {/each}
       </ul>
