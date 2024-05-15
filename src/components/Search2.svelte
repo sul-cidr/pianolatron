@@ -206,6 +206,7 @@
     item.composerArranger = [
       ...new Set([item.composer, item.arranger].filter(Boolean)),
     ].join("\n");
+    item.publisher = `${item.publisher}  [${item.number}]`;
   });
 
   let filteredListItems = catalog;
