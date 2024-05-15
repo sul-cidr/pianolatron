@@ -32,8 +32,6 @@
     "@tonejs/midi": "^2.0.28",
     "@types/watch": "^1.0.4",
     "CanvasSpliner": "jonathanlurie/CanvasSpliner",
-    "gridjs": "^6.0.6",
-    "gridjs-svelte": "^2.1.1",
     "midi-player-js": "^2.0.16",
     "node-interval-tree": "^2.1.2",
     "openseadragon": "^4.1.0",
