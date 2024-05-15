@@ -4,8 +4,8 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    margin: 10px;
-    gap: 0.5rem;
+    margin: 1rem;
+    gap: 1rem;
 
     .search-box {
       height: 2.25em;
@@ -121,6 +121,13 @@
       }
     }
 
+    th:first-child,
+    td:first-child,
+    th:last-child,
+    td:last-child {
+      width: 240px;
+    }
+
     tbody {
       background-color: #fff;
     }
@@ -128,7 +135,8 @@
     td {
       border: 1px solid #e5e7eb;
       box-sizing: content-box;
-      padding: 12px 24px;
+      height: 64px;
+      padding: 0 24px;
     }
   }
 </style>
