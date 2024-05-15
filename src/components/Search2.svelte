@@ -212,7 +212,7 @@
   let activeFacet;
   let sortOrder;
   let searchParts = [];
-  let pageSize = 20;
+  let pageSize = 10;
   let currentPage = 1;
   let filteredAndPagedItems;
 
