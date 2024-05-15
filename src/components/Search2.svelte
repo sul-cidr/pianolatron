@@ -94,10 +94,12 @@
   /************************/
   table {
     border-collapse: collapse;
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.26);
     display: table;
     margin: 0;
-    max-width: 100%;
-    overflow: auto;
+    min-width: 1000px;
     padding: 0;
     table-layout: fixed;
     text-align: left;
