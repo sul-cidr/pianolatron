@@ -106,7 +106,7 @@
   // makes it very difficult to reuse that component here.
   const icons = {
     piano: `
-      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano" role="img" aria-label="Play Roll">
+      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="piano" role="img" aria-label="Perform Roll">
         <rect x="2" y="7" width="20" height="12" rx="2"></rect>
         <line x1="7" y1="9" x2="7" y2="13.5" style="stroke-width:2.5;stroke-linecap:square"></line>
         <line x1="12" y1="9" x2="12" y2="13.5" style="stroke-width:2.5;stroke-linecap:square"></line>
@@ -114,7 +114,7 @@
       </svg>
       `,
     play: `
-      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="play" role="img" aria-label="Perform Roll">
+      <svg height="24" width="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" name="play" role="img" aria-label="Play Roll">
         <path
           fill-rule="evenodd"
           clip-rule="evenodd"
