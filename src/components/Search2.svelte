@@ -314,6 +314,8 @@
         ),
       );
     }
+    currentPage = 1;
+    paginate();
   };
 
   const sortItems = (key) => {
@@ -324,20 +326,25 @@
       if (a[key] > b[key]) return asc ? 1 : -1;
       return 0;
     });
+    currentPage = 1;
+    paginate();
   };
 
   const setActiveFacet = (facet) =>
     (activeFacet = facet === activeFacet ? undefined : facet);
   const facets = [...new Set(catalog.map((item) => item.type))];
 
+  const paginate = () => {
+    filteredAndPagedItems = filteredListItems.slice(
+      0 + (currentPage - 1) * pageSize,
+      0 + (currentPage - 1) * pageSize + pageSize,
+    );
+  };
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: activeFacet, itemFilter();
   $: searchParts, itemFilter();
-  $: currentPage,
-    (filteredAndPagedItems = catalog.slice(
-      0 + (currentPage - 1) * pageSize,
-      0 + (currentPage - 1) * pageSize + pageSize,
-    ));
+  $: currentPage, paginate();
 </script>
 
 <div id="app">
