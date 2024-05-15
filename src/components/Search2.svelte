@@ -77,10 +77,8 @@
     }
   }
 
-  :global(.row-links a) {
+  .row-links a {
     color: var(--primary-accent);
-    margin-left: 10px;
-    margin-right: 10px;
     display: inline-block;
     height: 20px;
 
@@ -96,9 +94,7 @@
     box-shadow:
       0 1px 3px 0 rgba(0, 0, 0, 0.1),
       0 1px 2px 0 rgba(0, 0, 0, 0.26);
-    display: table;
     margin: 0;
-    min-width: 1000px;
     padding: 0;
     table-layout: fixed;
     text-align: left;
@@ -110,8 +106,10 @@
       box-sizing: border-box;
       color: #6b7280;
       outline: none;
+      overflow: hidden;
       padding: 14px 24px;
       position: relative;
+      text-overflow: ellipsis;
       user-select: none;
       vertical-align: middle;
       white-space: nowrap;
@@ -149,7 +147,7 @@
     td:first-child,
     th:last-child,
     td:last-child {
-      width: 240px;
+      width: min(16vw, 240px);
     }
 
     tbody {
@@ -160,7 +158,15 @@
       border: 1px solid #e5e7eb;
       box-sizing: content-box;
       height: 64px;
-      padding: 0 24px;
+      padding: 0 min(1.5%, 24px);
+
+      &:first-child div {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+      }
     }
 
     tfoot {
@@ -430,22 +436,24 @@
         {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
         <tr>
           <td class="row-links">
-            <a href="/?druid={item.druid}" title="Play roll" target="_blank">
-              <Icon name="play" aria-label="Play roll" />
-            </a>
-            <a
-              href="/perform/?druid={item.druid}"
-              title="Perform roll"
-              target="_blank"
-            >
-              <Icon name="piano" aria-label="Perform roll" />
-            </a>
-            <a href="/midi/{item.druid}.mid" title="Download MIDI">
-              <Icon name="midi" aria-label="Download MIDI" />
-            </a>
-            <a href={imageLink} title="Download image">
-              <Icon name="roll-image" aria-label="Download Image" />
-            </a>
+            <div>
+              <a href="/?druid={item.druid}" title="Play roll" target="_blank">
+                <Icon name="play" aria-label="Play roll" />
+              </a>
+              <a
+                href="/perform/?druid={item.druid}"
+                title="Perform roll"
+                target="_blank"
+              >
+                <Icon name="piano" aria-label="Perform roll" />
+              </a>
+              <a href="/midi/{item.druid}.mid" title="Download MIDI">
+                <Icon name="midi" aria-label="Download MIDI" />
+              </a>
+              <a href={imageLink} title="Download image">
+                <Icon name="roll-image" aria-label="Download Image" />
+              </a>
+            </div>
           </td>
           <td>
             {@html searchParts.length ? markupMatches(item.work) : item.work}
