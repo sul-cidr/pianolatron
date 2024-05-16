@@ -15,6 +15,7 @@
       padding: 0.5em;
       position: absolute;
       top: 0;
+      height: 100%;
     }
 
     &:hover {
@@ -67,7 +68,7 @@
     opacity: 0;
     place-items: center;
     position: relative;
-    top: 1em;
+    top: 3em;
     transition: all 0.3s ease;
     width: 40px;
     z-index: z($main-context, sidebar-collapse-labels);
