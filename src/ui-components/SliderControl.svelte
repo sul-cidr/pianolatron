@@ -13,6 +13,7 @@
     padding: 2em 0 1em 0;
     position: absolute;
     top: 0;
+    height: 50px;
   }
 </style>
 

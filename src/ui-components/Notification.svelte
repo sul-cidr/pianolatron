@@ -175,7 +175,7 @@
               if (event.code === "Enter") clearNotification(notification.id);
             }}
           >
-            &times;
+            X
           </div>
         {/if}
       </div>

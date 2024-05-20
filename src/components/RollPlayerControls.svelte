@@ -7,9 +7,19 @@
 
   .mode-switch-container {
     padding: 2px;
-    text-align: center;
     position: absolute;
     left: 0;
+  }
+
+  .tempo-control-container {
+    padding: 2px;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 200px;
+    height: 50px;
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    border-radius: 0.25em;
   }
 
   .player-button-container {
@@ -33,7 +43,10 @@
     recordingOnOff,
     recordingInBuffer,
     rollMetadata,
+    tempoCoefficient,
   } from "../stores";
+  import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
+  import SliderControl from "../ui-components/SliderControl.svelte";
 
   export let skipToTick;
   export let resetPlayback;
@@ -267,4 +280,17 @@
       width="32"
     />
   </div>
+  {#if $appMode === "listen"}
+    <div class="tempo-control-container">
+      <SliderControl
+        bind:value={$tempoCoefficient}
+        min={controlsConfig.tempo.min}
+        max={controlsConfig.tempo.max}
+        step={controlsConfig.tempo.delta}
+        name="tempo"
+      >
+        <svelte:fragment slot="label">Tempo:</svelte:fragment>
+      </SliderControl>
+    </div>
+  {/if}
 </div>
