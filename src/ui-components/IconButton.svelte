@@ -18,8 +18,20 @@
     }
 
     &.player-button {
+      display: inline-block;
+      border: 2px solid rgba(black, 0.6);
+      border-radius: 0.25em;
+      transition: all 0.2s;
+      cursor: pointer;
       filter: drop-shadow(2px 2px 1px #a4a4a4);
       padding: 0.35em 0.8em;
+      color: rgba(black, 0.6);
+
+      &:hover {
+        background-color: unset;
+        color: unset;
+        border: 2px solid rgba(white, 1);
+      }
 
       &:active {
         color: white;
@@ -32,8 +44,7 @@
       }
 
       &:hover,
-      &.enabled,
-      &.pause {
+      &.enabled {
         color: white;
       }
 
@@ -43,10 +54,26 @@
       }
 
       &.pause-record {
-        color: red;
+        @keyframes recordCycle {
+          0% {
+            color: red;
+          }
+
+          50% {
+            color: white;
+          }
+
+          100% {
+            color: red;
+          }
+        }
         &:active {
           color: white;
         }
+        animation: recordCycle ease;
+        animation-iteration-count: infinite;
+        animation-duration: 2s;
+        animation-fill-mode: both;
       }
 
       &.continue-record {
@@ -80,14 +107,20 @@
       }
 
       &:hover,
-      &.enabled,
-      &.pause {
+      &.enabled {
         color: var(--white);
       }
 
       &:disabled {
-        color: var(--cool-grey);
         cursor: not-allowed;
+      }
+    }
+    &.always-visible {
+      color: var(--black-30);
+
+      &:hover,
+      &.enabled {
+        color: var(--white);
       }
     }
   }
