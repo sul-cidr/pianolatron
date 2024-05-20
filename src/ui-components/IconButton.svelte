@@ -22,9 +22,9 @@
       border: 2px solid rgba(black, 0.6);
       border-radius: 0.25em;
       transition: all 0.2s;
+      padding: 0.4em 0.8em 0.3em;
       cursor: pointer;
       filter: drop-shadow(2px 2px 1px #a4a4a4);
-      padding: 0.35em 0.8em;
       color: rgba(black, 0.6);
 
       &:hover {
