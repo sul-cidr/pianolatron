@@ -218,7 +218,7 @@
   let activeFacet;
   let sortOrder;
   let searchParts = [];
-  let pageSize = 10;
+  const pageSize = 10;
   let currentPage = 1;
   let filteredAndPagedItems;
 
@@ -309,6 +309,13 @@
       : [];
   };
 
+  const paginate = () => {
+    filteredAndPagedItems = filteredListItems.slice(
+      0 + (currentPage - 1) * pageSize,
+      0 + (currentPage - 1) * pageSize + pageSize,
+    );
+  };
+
   const itemFilter = async () => {
     filteredListItems = catalog;
     if (activeFacet) {
@@ -345,13 +352,6 @@
   const setActiveFacet = (facet) =>
     (activeFacet = facet === activeFacet ? undefined : facet);
   const facets = [...new Set(catalog.map((item) => item.type))];
-
-  const paginate = () => {
-    filteredAndPagedItems = filteredListItems.slice(
-      0 + (currentPage - 1) * pageSize,
-      0 + (currentPage - 1) * pageSize + pageSize,
-    );
-  };
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: activeFacet, itemFilter();
@@ -500,15 +500,19 @@
 
               <button
                 disabled={currentPage === 1}
-                on:click={() => currentPage--}
-                on:keypress={({ code }) => code === "Enter" && currentPage--}
+                on:click={() => (currentPage -= 1)}
+                on:keypress={({ code }) => {
+                  if (code === "Enter") currentPage -= 1;
+                }}
               >
                 &laquo; Previous
               </button>
               <button
                 disabled={currentPage * pageSize >= filteredListItems.length}
-                on:click={() => currentPage++}
-                on:keypress={({ code }) => code === "Enter" && currentPage++}
+                on:click={() => (currentPage += 1)}
+                on:keypress={({ code }) => {
+                  if (code === "Enter") currentPage += 1;
+                }}
               >
                 Next &raquo;
               </button>

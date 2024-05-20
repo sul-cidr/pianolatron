@@ -97,7 +97,6 @@
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import GameController from "./components/GameController.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
-  import ListenerPanel from "./components/ListenerPanel.svelte";
   import Notification, {
     notify,
     clearNotification,
