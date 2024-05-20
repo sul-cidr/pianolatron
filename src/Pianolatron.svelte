@@ -371,7 +371,7 @@
             fn: clearRecording,
           },
           {
-            label: "Continue",
+            label: "Keep in Buffer",
             fn: clearNotification,
           },
         ],
