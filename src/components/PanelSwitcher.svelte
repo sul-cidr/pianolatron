@@ -48,7 +48,7 @@
     />
     <label for={panel} title={label.title}>
       {#if label.icon}
-        <Icon name={label.icon} height="24" width="24" />
+        <Icon name={label.icon} height="32" width="32" />
       {/if}
       {#if label.text}
         {label.text}
