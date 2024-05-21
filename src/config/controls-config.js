@@ -8,21 +8,21 @@ import {
 export const defaultControlsConfig = {
   volume: {
     min: 0,
-    max: 4,
+    max: 3,
     delta: 0.1,
     augmentedDelta: 0.4,
     precision: 2,
   },
   bassVolume: {
     min: 0,
-    max: 4,
+    max: 3,
     delta: 0.1,
     augmentedDelta: 0.4,
     precision: 2,
   },
   trebleVolume: {
     min: 0,
-    max: 4,
+    max: 3,
     delta: 0.1,
     augmentedDelta: 0.4,
     precision: 2,

@@ -10,10 +10,6 @@
       opacity: 0.6;
     }
 
-    &:hover :global(kbd) {
-      opacity: 1;
-    }
-
     font-family: SourceSans3, sans-serif;
 
     & .accent-button {

@@ -7,9 +7,19 @@
 
   .mode-switch-container {
     padding: 2px;
-    text-align: center;
     position: absolute;
     left: 0;
+  }
+
+  .tempo-control-container {
+    padding: 2px;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 200px;
+    height: 50px;
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    border-radius: 0.25em;
   }
 
   .player-button-container {
@@ -33,7 +43,10 @@
     recordingOnOff,
     recordingInBuffer,
     rollMetadata,
+    tempoCoefficient,
   } from "../stores";
+  import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
+  import SliderControl from "../ui-components/SliderControl.svelte";
 
   export let skipToTick;
   export let resetPlayback;
@@ -110,10 +123,10 @@
         class={"player-button"}
         disabled={false}
         on:mousedown={window.location.replace(`/?druid=${$rollMetadata.DRUID}`)}
-        iconName="play"
+        iconName="note"
         label="Reload in listen mode"
-        height="24"
-        width="24"
+        height="32"
+        width="32"
       />
     {:else}
       <IconButton
@@ -124,8 +137,8 @@
         )}
         iconName="piano"
         label="Reload in perform mode"
-        height="24"
-        width="24"
+        height="32"
+        width="32"
       />
     {/if}
   </div>
@@ -138,8 +151,8 @@
         on:mousedown={bookmark}
         iconName="bookmark"
         label="Bookmark"
-        height="24"
-        width="24"
+        height="32"
+        width="32"
       />
     {:else}
       <IconButton
@@ -147,8 +160,8 @@
         disabled={false}
         iconName="check"
         label="Bookmark Copied!"
-        height="24"
-        width="24"
+        height="32"
+        width="32"
       />
     {/if}
     <IconButton
@@ -157,8 +170,8 @@
       on:mousedown={togglePlayRepeat}
       iconName="replay"
       label="Repeat"
-      height="24"
-      width="24"
+      height="32"
+      width="32"
     />
     <IconButton
       class={"player-button"}
@@ -166,8 +179,8 @@
       on:mousedown={resetPlayback}
       iconName="rewind"
       label="Rewind ({$keyMap.REWIND.key})"
-      height="24"
-      width="24"
+      height="32"
+      width="32"
     />
     <IconButton
       class={"player-button"}
@@ -177,18 +190,18 @@
       }}
       iconName="skipBack"
       label="Skip Back ({$keyMap.BACKWARD.key})"
-      height="24"
-      width="24"
+      height="32"
+      width="32"
     />
     {#if !$isPlaying}
       <IconButton
         class={"player-button"}
         disabled={false}
         on:mousedown={togglePlayPause}
-        iconName="play"
+        iconName="playback"
         label="Play ({$keyMap.PLAY_PAUSE.key})"
-        height="24"
-        width="24"
+        height="32"
+        width="32"
       />
     {:else}
       <IconButton
@@ -197,8 +210,8 @@
         on:mousedown={togglePlayPause}
         iconName="pause"
         label="Pause ({$keyMap.PLAY_PAUSE.key})"
-        height="24"
-        width="24"
+        height="32"
+        width="32"
       />
     {/if}
     {#if $appMode === "perform"}
@@ -208,10 +221,10 @@
             class="player-button continue-record"
             disabled={false}
             on:mousedown={toggleRecording}
-            iconName="record"
+            iconName="continueRecording"
             label="Continue Recording ({$keyMap.TOGGLE_RECORD.key})"
-            height="24"
-            width="24"
+            height="32"
+            width="32"
             title="Continue Recording ({$keyMap.TOGGLE_RECORD.key})"
           />
         {:else}
@@ -221,20 +234,20 @@
             on:mousedown={toggleRecording}
             iconName="record"
             label="Record ({$keyMap.TOGGLE_RECORD.key})"
-            height="24"
-            width="24"
+            height="32"
+            width="32"
             title="Record ({$keyMap.TOGGLE_RECORD.key})"
           />
         {/if}
       {:else}
         <IconButton
-          class="overlay player-button pause-record"
+          class="player-button pause-record"
           disabled={false}
           on:mousedown={toggleRecording}
-          iconName="pause"
+          iconName="recordingActive"
           label="Pause Recording ({$keyMap.TOGGLE_RECORD.key})"
-          height="24"
-          width="24"
+          height="32"
+          width="32"
           title="Pause Recording ({$keyMap.TOGGLE_RECORD.key})"
         />
       {/if}
@@ -245,8 +258,8 @@
       on:mousedown={() => skipFromCurrent()}
       iconName="skipForward"
       label="Skip Ahead ({$keyMap.FORWARD.key})"
-      height="24"
-      width="24"
+      height="32"
+      width="32"
     />
     <IconButton
       class={startMarked ? "enabled player-button" : "player-button"}
@@ -254,8 +267,8 @@
       on:mousedown={markStart}
       iconName="markStart"
       label={startMarked ? "Remove Start Mark" : "Mark Start"}
-      height="24"
-      width="24"
+      height="32"
+      width="32"
     />
     <IconButton
       class={endMarked ? "enabled player-button" : "player-button"}
@@ -263,8 +276,21 @@
       on:mousedown={markEnd}
       iconName="markEnd"
       label={endMarked ? "Remove End Mark" : "Mark End"}
-      height="24"
-      width="24"
+      height="32"
+      width="32"
     />
   </div>
+  {#if $appMode === "listen"}
+    <div class="tempo-control-container">
+      <SliderControl
+        bind:value={$tempoCoefficient}
+        min={controlsConfig.tempo.min}
+        max={controlsConfig.tempo.max}
+        step={controlsConfig.tempo.delta}
+        name="tempo"
+      >
+        <svelte:fragment slot="label">Tempo:</svelte:fragment>
+      </SliderControl>
+    </div>
+  {/if}
 </div>

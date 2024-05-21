@@ -97,7 +97,6 @@
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import GameController from "./components/GameController.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
-  import ListenerPanel from "./components/ListenerPanel.svelte";
   import Notification, {
     notify,
     clearNotification,
@@ -354,16 +353,16 @@
     $recordingOnOff = !$recordingOnOff;
     if ($recordingInBuffer && !$recordingOnOff) {
       notify({
-        title: "Recording Complete.",
+        title: "Recording paused, ready for export",
         message: "",
         closable: true,
         actions: [
           {
-            label: "Export MIDI Recording ",
+            label: "Export as MIDI",
             fn: exportRecordingMIDI,
           },
           {
-            label: "Export WAV Recording ",
+            label: "Export as WAV",
             fn: exportRecordingWAV,
           },
           {
@@ -371,7 +370,7 @@
             fn: clearRecording,
           },
           {
-            label: "Continue",
+            label: "Keep in Buffer",
             fn: clearNotification,
           },
         ],
@@ -466,20 +465,13 @@
         </div>
       {/if}
     </div>
-    <FlexCollapsible
-      id="right-sidebar"
-      width="20vw"
-      position="left"
-      hidden={!($appMode === "perform")}
-    >
-      {#if appReady}
-        {#if $appMode === "perform"}
+    {#if $appMode === "perform"}
+      <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+        {#if appReady}
           <TabbedPanel {reloadRoll} />
-        {:else}
-          <ListenerPanel {skipToTick} {playPauseApp} {stopApp} />
         {/if}
-      {/if}
-    </FlexCollapsible>
+      </FlexCollapsible>
+    {/if}
   </div>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>

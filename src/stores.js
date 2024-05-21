@@ -63,12 +63,12 @@ export const expressionBox = createStore();
 
 // Piano Settings
 export const sampleVolumes = createPersistedStore("sampleVolumes", {
-  strings: -15,
+  strings: -10,
   harmonics: -10,
   pedal: -10,
   keybed: -10,
 });
-export const sampleVelocities = createPersistedStore("sampleVelocities", 4);
+export const sampleVelocities = createPersistedStore("sampleVelocities", 8);
 export const reverbWetDry = createPersistedStore("reverbWetDry", 0.8);
 export const velocityCurveLow = createPersistedStore(
   "velocityCurveLow",

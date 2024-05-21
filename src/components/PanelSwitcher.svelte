@@ -10,10 +10,10 @@
   label {
     display: inline-block;
     padding: 0.2em 0.2em 0;
-    border: 2px solid rgba(black, 0.4);
+    border: 2px solid rgba(black, 0.6);
     border-radius: 0.25em;
     transition: all 0.2s;
-    opacity: 0.4;
+    opacity: 0.6;
     cursor: pointer;
 
     &:hover {
@@ -48,7 +48,7 @@
     />
     <label for={panel} title={label.title}>
       {#if label.icon}
-        <Icon name={label.icon} height="24" width="24" />
+        <Icon name={label.icon} height="32" width="32" />
       {/if}
       {#if label.text}
         {label.text}

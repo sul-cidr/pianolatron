@@ -3,7 +3,7 @@ layout: ../layouts/markdownLayoutFullHeader.astro
 title: About the Pianolatron
 ---
 
-The Pianolatron is the product of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' <a href="https://library.stanford.edu/projects/player-piano-program" target="_blank">Player Piano Program</a>. The technical implementation of the Pianolatron app, carried out by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open source software community.
+The Pianolatron is the product of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' Player Piano Program. The technical implementation of the Pianolatron app, carried out by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open source software community.
 
 <br />
 
@@ -57,6 +57,17 @@ The Pianolatron makes significant use of modules from the following open-source 
 
 The site uses the following icons from the [Noun Project](https://thenounproject.com/), which their creators made available via a Creative Commons Attribution (CC BY) license:
 
-- TBD
+- Musical Note by Kholifah from <a href="https://thenounproject.com/browse/icons/term/musical-note/" target="_blank" title="Musical Note Icons">Noun Project</a> (CC BY 3.0)
+- bookmark by New icon from <a href="https://thenounproject.com/browse/icons/term/bookmark/" target="_blank" title="bookmark Icons">Noun Project</a> (CC BY 3.0)
+- Check Mark by Alexander Russell from <a href="https://thenounproject.com/browse/icons/term/check-mark/" target="_blank" title="Check Mark Icons">Noun Project</a> (CC BY 3.0)
+- Repeat by Brandy Bora from <a href="https://thenounproject.com/browse/icons/term/repeat/" target="_blank" title="Repeat Icons">Noun Project</a> (CC BY 3.0)
+- rewind by Riley Shaw from <a href="https://thenounproject.com/browse/icons/term/rewind/" target="_blank" title="rewind Icons">Noun Project</a> (CC BY 3.0)
+- go back by Mike Zuidgeest from <a href="https://thenounproject.com/browse/icons/term/go-back/" target="_blank" title="go back Icons">Noun Project</a> (CC BY 3.0)
+- play by Styfico from <a href="https://thenounproject.com/browse/icons/term/play/" target="_blank" title="play Icons">Noun Project</a> (CC BY 3.0)
+- pause by Reshifa Aurel Salsabila from <a href="https://thenounproject.com/browse/icons/term/pause/" target="_blank" title="pause Icons">Noun Project</a> (CC BY 3.0)
+- Record by Styfico from <a href="https://thenounproject.com/browse/icons/term/record/" target="_blank" title="Record Icons">Noun Project</a> (CC BY 3.0)
+- Pause recording by Ally Hwang from <a href="https://thenounproject.com/browse/icons/term/pause-recording/" target="_blank" title="Pause recording Icons">Noun Project</a> (CC BY 3.0)
+- recording by Ally Hwang from <a href="https://thenounproject.com/browse/icons/term/recording/" target="_blank" title="recording Icons">Noun Project</a> (CC BY 3.0)
+- Arrow by Koson Rattanaphan from <a href="https://thenounproject.com/browse/icons/term/arrow/" target="_blank" title="Arrow Icons">Noun Project</a> (CC BY 3.0)
 
 © 2024 Stanford University

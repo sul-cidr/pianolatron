@@ -33,22 +33,22 @@
 
 <div class="overlay-buttons" class:outside transition:fade|local>
   <IconButton
-    class="overlay"
+    class="always-visible"
     on:click={() => ($userSettings.showKeyboard = !$userSettings.showKeyboard)}
     iconName={$userSettings.showKeyboard ? "piano-down" : "piano-up"}
     label="Show/Hide Piano Keyboard"
-    height="24"
-    width="24"
+    height="32"
+    width="32"
   />
   {#if !outside}
     <IconButton
-      class="overlay"
+      class="always-visible"
       on:click={() =>
         ($userSettings.overlayKeyboard = !$userSettings.overlayKeyboard)}
       iconName={$userSettings.overlayKeyboard ? "piano-out" : "piano-in"}
       label="Overlay Piano Keyboard on Roll Image"
-      height="24"
-      width="24"
+      height="32"
+      width="32"
     />
   {/if}
 </div>
