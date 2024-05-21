@@ -409,6 +409,11 @@
           tabindex="0"
           on:click={() => sortItems("work")}
           on:keypress={({ key }) => key === "Enter" && sortItems("work")}
+          aria-sort={sortOrder === "work-asc"
+            ? "ascending"
+            : sortOrder === "work-desc"
+              ? "descending"
+              : null}
           class:sortedAsc={sortOrder === "work-asc"}
           class:sortedDesc={sortOrder === "work-desc"}>Title</th
         >
@@ -417,6 +422,11 @@
           on:click={() => sortItems("composerArranger")}
           on:keypress={({ key }) =>
             key === "Enter" && sortItems("composerArranger")}
+          aria-sort={sortOrder === "composerArranger-asc"
+            ? "ascending"
+            : sortOrder === "composerArranger-desc"
+              ? "descending"
+              : null}
           class:sortedAsc={sortOrder === "composerArranger-asc"}
           class:sortedDesc={sortOrder === "composerArranger-desc"}
           >Composer / Arranger</th
@@ -425,6 +435,11 @@
           tabindex="0"
           on:click={() => sortItems("performer")}
           on:keypress={({ key }) => key === "Enter" && sortItems("performer")}
+          aria-sort={sortOrder === "performer-asc"
+            ? "ascending"
+            : sortOrder === "performer-desc"
+              ? "descending"
+              : null}
           class:sortedAsc={sortOrder === "performer-asc"}
           class:sortedDesc={sortOrder === "performer-desc"}>Performer</th
         >
@@ -432,6 +447,11 @@
           tabindex="0"
           on:click={() => sortItems("publisher")}
           on:keypress={({ key }) => key === "Enter" && sortItems("publisher")}
+          aria-sort={sortOrder === "publisher-asc"
+            ? "ascending"
+            : sortOrder === "publisher-desc"
+              ? "descending"
+              : null}
           class:sortedAsc={sortOrder === "publisher-asc"}
           class:sortedDesc={sortOrder === "publisher-desc"}>Publisher</th
         >
