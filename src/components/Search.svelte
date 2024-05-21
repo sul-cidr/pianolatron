@@ -147,7 +147,7 @@
     td:first-child,
     th:last-child,
     td:last-child {
-      width: min(16vw, 240px);
+      width: min(17vw, 240px);
     }
 
     tbody {
