@@ -46,7 +46,7 @@
       }
 
       ul {
-        flex: 1 0 auto;
+        flex: 1 0 min-content;
         margin: 0;
         text-align: left;
         padding: 0;
