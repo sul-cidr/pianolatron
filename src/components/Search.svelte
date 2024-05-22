@@ -463,21 +463,34 @@
         <tr>
           <td class="row-links">
             <div>
-              <a href="/?druid={item.druid}" title="Play roll" target="_blank">
-                <Icon name="play" aria-label="Play roll" />
+              <a
+                href="/?druid={item.druid}"
+                title="Play roll {item.title}"
+                target="_blank"
+              >
+                <Icon name="play" aria-label="Play roll {item.title}" />
               </a>
               <a
                 href="/perform/?druid={item.druid}"
-                title="Perform roll"
+                title="Perform roll {item.title}"
                 target="_blank"
               >
-                <Icon name="piano" aria-label="Perform roll" />
+                <Icon name="piano" aria-label="Perform roll {item.title}" />
               </a>
-              <a href="/midi/{item.druid}.mid" title="Download MIDI">
-                <Icon name="midi" aria-label="Download MIDI" />
+              <a
+                href="/midi/{item.druid}.mid"
+                title="Download MIDI for roll {item.title}"
+              >
+                <Icon
+                  name="midi"
+                  aria-label="Download MIDI for roll {item.title}"
+                />
               </a>
-              <a href={imageLink} title="Download image">
-                <Icon name="roll-image" aria-label="Download Image" />
+              <a href={imageLink} title="Download image for roll {item.title}">
+                <Icon
+                  name="roll-image"
+                  aria-label="Download image for roll {item.title}"
+                />
               </a>
             </div>
           </td>
