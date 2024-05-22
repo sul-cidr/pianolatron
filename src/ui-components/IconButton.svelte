@@ -45,7 +45,8 @@
 
       &:hover,
       &.enabled {
-        color: white;
+        color: var(--primary-accent);
+        background: white;
       }
 
       &:disabled {
