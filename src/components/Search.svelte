@@ -149,6 +149,7 @@
         &:hover,
         &:focus {
           background-color: #e5e7eb;
+          color: black;
         }
       }
     }
