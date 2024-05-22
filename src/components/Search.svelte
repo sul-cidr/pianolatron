@@ -72,6 +72,7 @@
 
         &.active {
           background-color: var(--primary-accent);
+          color: black;
         }
       }
     }
