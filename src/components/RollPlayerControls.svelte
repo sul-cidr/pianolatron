@@ -2,7 +2,6 @@
   .controls-container {
     display: flex;
     justify-content: center;
-    background-color: var(--background-color);
   }
 
   .mode-switch-container {
