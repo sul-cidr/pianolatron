@@ -46,7 +46,10 @@
       }
 
       ul {
+        display: flex;
+        flex-wrap: wrap;
         flex: 1 0 min-content;
+        gap: 8px;
         margin: 0;
         text-align: left;
         padding: 0;
@@ -58,7 +61,7 @@
         background-color: darkslategray;
         color: white;
         padding: 1px 8px 4px;
-        margin: 0 4px;
+        margin: 0;
         cursor: pointer;
 
         button {
