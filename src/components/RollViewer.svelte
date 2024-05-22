@@ -345,7 +345,7 @@
     ];
 
     navSelectionSvg = createSelectionOverlaySvg(...navBarLineConfig);
-    // hack: addOverlay takes an onDraw function, using it seem to help keep
+    // hack: addOverlay takes an onDraw function, using it seems to help keep
     // OSD from trying to futz with the positioning in the nav bar.
     openSeadragon.navigator.addOverlay(
       navSelectionSvg,
@@ -890,18 +890,20 @@
       const {
         viewport: navViewport,
         displayRegion: { style },
+        element: navElement,
       } = navigator;
 
       if (mainViewport && navViewport) {
-        const navigatorContainerDims = navViewport.getContainerSize();
-
         const bounds = viewport.getBoundsNoRotate(true);
         const imgBounds = viewport.viewportToImageRectangle(
           viewport.getBounds(),
         );
 
+        // Need to use navElement.clientHeight here because navViewport.getContainerSize()
+        // only returns the original size of the viewport (in screen pixels) even after
+        // the browser window has been resized.
         const topOffset =
-          (imgBounds.getTopLeft().y / imageLength) * navigatorContainerDims.y;
+          (imgBounds.getTopLeft().y / imageLength) * navElement.clientHeight;
 
         const topLeft = navViewport.pixelFromPointNoRotate(
           bounds.getTopLeft(),
