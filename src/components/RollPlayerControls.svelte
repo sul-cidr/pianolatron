@@ -7,7 +7,7 @@
   .mode-switch-container {
     padding: 2px;
     position: absolute;
-    left: 0;
+    left: 1rem;
   }
 
   .tempo-control-container {
