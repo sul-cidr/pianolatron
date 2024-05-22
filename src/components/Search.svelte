@@ -46,7 +46,10 @@
       }
 
       ul {
-        flex: 1 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        flex: 1 0 min-content;
+        gap: 8px;
         margin: 0;
         text-align: left;
         padding: 0;
@@ -55,10 +58,10 @@
       li {
         display: inline-block;
         border-radius: 6px;
-        background-color: darkslategray; // var(--primary-accent);
+        background-color: darkslategray;
         color: white;
         padding: 1px 8px 4px;
-        margin: 0 4px;
+        margin: 0;
         cursor: pointer;
 
         button {
@@ -77,9 +80,18 @@
     }
   }
 
+  .row-links-cell {
+    padding: 0;
+  }
+
+  .row-links {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
   .row-links a {
     color: var(--primary-accent);
-    display: inline-block;
     height: 20px;
 
     :global(svg) {
@@ -100,7 +112,7 @@
     text-align: left;
     width: 100%;
 
-    th {
+    th:not([scope="row"]) {
       background-color: #f9fafb;
       border: 1px solid #e5e7eb;
       box-sizing: border-box;
@@ -114,7 +126,7 @@
       vertical-align: middle;
       white-space: nowrap;
 
-      &:not(:first-child) {
+      &:not(:last-child) {
         background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDIiIGhlaWdodD0iNDAyIiBzdHlsZT0iZmlsbDojMDAwNCI+PHBhdGggZD0iTTczLjA5MiAxNjQuNDUyaDI1NS44MTNjNC45NDkgMCA5LjIzMy0xLjgwNyAxMi44NDgtNS40MjQgMy42MTMtMy42MTYgNS40MjctNy44OTggNS40MjctMTIuODQ3cy0xLjgxMy05LjIyOS01LjQyNy0xMi44NUwyMTMuODQ2IDUuNDI0QzIxMC4yMzIgMS44MTIgMjA1Ljk1MSAwIDIwMC45OTkgMHMtOS4yMzMgMS44MTItMTIuODUgNS40MjRMNjAuMjQyIDEzMy4zMzFjLTMuNjE3IDMuNjE3LTUuNDI0IDcuOTAxLTUuNDI0IDEyLjg1IDAgNC45NDggMS44MDcgOS4yMzEgNS40MjQgMTIuODQ3IDMuNjIxIDMuNjE3IDcuOTAyIDUuNDI0IDEyLjg1IDUuNDI0ek0zMjguOTA1IDIzNy41NDlINzMuMDkyYy00Ljk1MiAwLTkuMjMzIDEuODA4LTEyLjg1IDUuNDIxLTMuNjE3IDMuNjE3LTUuNDI0IDcuODk4LTUuNDI0IDEyLjg0N3MxLjgwNyA5LjIzMyA1LjQyNCAxMi44NDhMMTg4LjE0OSAzOTYuNTdjMy42MjEgMy42MTcgNy45MDIgNS40MjggMTIuODUgNS40MjhzOS4yMzMtMS44MTEgMTIuODQ3LTUuNDI4bDEyNy45MDctMTI3LjkwNmMzLjYxMy0zLjYxNCA1LjQyNy03Ljg5OCA1LjQyNy0xMi44NDggMC00Ljk0OC0xLjgxMy05LjIyOS01LjQyNy0xMi44NDctMy42MTQtMy42MTYtNy44OTktNS40Mi0xMi44NDgtNS40MnoiLz48L3N2Zz4=);
         background-position-x: calc(100% - 9px);
         background-position-y: 50%;
@@ -139,6 +151,7 @@
         &:hover,
         &:focus {
           background-color: #e5e7eb;
+          color: black;
         }
       }
     }
@@ -147,18 +160,20 @@
     td:first-child,
     th:last-child,
     td:last-child {
-      width: min(16vw, 240px);
+      width: min(17vw, 240px);
     }
 
     tbody {
       background-color: #fff;
     }
 
-    td {
+    td,
+    th:not([scope="col"]) {
       border: 1px solid #e5e7eb;
       box-sizing: content-box;
       height: 64px;
       padding: 0 min(1.5%, 24px);
+      font-weight: normal;
 
       &:first-child div {
         display: flex;
@@ -222,7 +237,7 @@
   let currentPage = 1;
   let filteredAndPagedItems;
 
-  const searchFields = ["title", "composerArranger", "performer", "publisher"];
+  const searchFields = ["publisher", "title", "composerArranger", "performer"];
 
   const unDecomposableMap = {
     ł: "l",
@@ -401,66 +416,71 @@
     Filtered: {filteredListItems?.length} / {catalog.length}
   </div>
   <!-- facets -->
-  <table>
+  <table
+    aria-label="Search/Browse Results: Piano Rolls"
+    aria-rowcount={pageSize}
+  >
     <thead>
       <tr>
-        <th>Play/Perform/MIDI/Image</th>
         <th
           tabindex="0"
+          scope="col"
+          on:click={() => sortItems("publisher")}
+          on:keypress={({ key }) => key === "Enter" && sortItems("publisher")}
+          aria-sort={(sortOrder === "publisher-asc" && "ascending") ||
+            (sortOrder === "publisher-desc" && "descending") ||
+            null}
+          class:sortedAsc={sortOrder === "publisher-asc"}
+          class:sortedDesc={sortOrder === "publisher-desc"}
+          >Publisher / Label</th
+        >
+        <th
+          tabindex="0"
+          scope="col"
           on:click={() => sortItems("work")}
           on:keypress={({ key }) => key === "Enter" && sortItems("work")}
+          aria-sort={(sortOrder === "work-asc" && "ascending") ||
+            (sortOrder === "work-desc" && "descending") ||
+            null}
           class:sortedAsc={sortOrder === "work-asc"}
           class:sortedDesc={sortOrder === "work-desc"}>Title</th
         >
         <th
           tabindex="0"
+          scope="col"
           on:click={() => sortItems("composerArranger")}
           on:keypress={({ key }) =>
             key === "Enter" && sortItems("composerArranger")}
+          aria-sort={(sortOrder === "composerArranger-asc" && "ascending") ||
+            (sortOrder === "composerArranger-desc" && "descending") ||
+            null}
           class:sortedAsc={sortOrder === "composerArranger-asc"}
           class:sortedDesc={sortOrder === "composerArranger-desc"}
           >Composer / Arranger</th
         >
         <th
           tabindex="0"
+          scope="col"
           on:click={() => sortItems("performer")}
           on:keypress={({ key }) => key === "Enter" && sortItems("performer")}
+          aria-sort={(sortOrder === "performer-asc" && "ascending") ||
+            (sortOrder === "performer-desc" && "descending") ||
+            null}
           class:sortedAsc={sortOrder === "performer-asc"}
           class:sortedDesc={sortOrder === "performer-desc"}>Performer</th
         >
-        <th
-          tabindex="0"
-          on:click={() => sortItems("publisher")}
-          on:keypress={({ key }) => key === "Enter" && sortItems("publisher")}
-          class:sortedAsc={sortOrder === "publisher-asc"}
-          class:sortedDesc={sortOrder === "publisher-desc"}>Publisher</th
-        >
+        <th scope="col">Play/Perform/MIDI/Image</th>
       </tr>
     </thead>
     <tbody>
       {#each filteredAndPagedItems as item}
         {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
         <tr>
-          <td class="row-links">
-            <div>
-              <a href="/?druid={item.druid}" title="Play roll" target="_blank">
-                <Icon name="play" aria-label="Play roll" />
-              </a>
-              <a
-                href="/perform/?druid={item.druid}"
-                title="Perform roll"
-                target="_blank"
-              >
-                <Icon name="piano" aria-label="Perform roll" />
-              </a>
-              <a href="/midi/{item.druid}.mid" title="Download MIDI">
-                <Icon name="midi" aria-label="Download MIDI" />
-              </a>
-              <a href={imageLink} title="Download image">
-                <Icon name="roll-image" aria-label="Download Image" />
-              </a>
-            </div>
-          </td>
+          <th scope="row">
+            {@html searchParts.length
+              ? markupMatches(item.publisher)
+              : item.publisher}
+          </th>
           <td>
             {@html searchParts.length ? markupMatches(item.work) : item.work}
           </td>
@@ -474,10 +494,49 @@
               ? markupMatches(item.performer)
               : item.performer}
           </td>
-          <td>
-            {@html searchParts.length
-              ? markupMatches(item.publisher)
-              : item.publisher}
+          <td class="row-links-cell">
+            <div class="row-links">
+              <div>
+                <a
+                  href="/?druid={item.druid}"
+                  title="Play roll {item.title}"
+                  target="_blank"
+                >
+                  <Icon name="play" aria-label="Play roll {item.title}" />
+                </a>
+              </div>
+              <div>
+                <a
+                  href="/perform/?druid={item.druid}"
+                  title="Perform roll {item.title}"
+                  target="_blank"
+                >
+                  <Icon name="piano" aria-label="Perform roll {item.title}" />
+                </a>
+              </div>
+              <div>
+                <a
+                  href="/midi/{item.druid}.mid"
+                  title="Download MIDI for roll {item.title}"
+                >
+                  <Icon
+                    name="midi"
+                    aria-label="Download MIDI for roll {item.title}"
+                  />
+                </a>
+              </div>
+              <div>
+                <a
+                  href={imageLink}
+                  title="Download image for roll {item.title}"
+                >
+                  <Icon
+                    name="roll-image"
+                    aria-label="Download image for roll {item.title}"
+                  />
+                </a>
+              </div>
+            </div>
           </td>
         </tr>
       {/each}
