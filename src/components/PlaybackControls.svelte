@@ -6,10 +6,6 @@
       right: 0rem;
     }
 
-    :global(kbd:not(.depressed)) {
-      opacity: 0.6;
-    }
-
     font-family: SourceSans3, sans-serif;
 
     & .accent-button {
