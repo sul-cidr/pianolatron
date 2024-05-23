@@ -1,8 +1,7 @@
 <style lang="scss">
   #viewer-metrics {
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--primary-accent);
     color: white;
-    margin: 0 0.5em;
     border-radius: 0.25em;
     border: 0.1em solid #ffffff;
     padding: 0.2em 0.8em;
