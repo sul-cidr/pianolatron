@@ -2,13 +2,12 @@
   .controls-container {
     display: flex;
     justify-content: center;
-    background-color: var(--background-color);
   }
 
   .mode-switch-container {
     padding: 2px;
     position: absolute;
-    left: 0;
+    left: 1rem;
   }
 
   .tempo-control-container {

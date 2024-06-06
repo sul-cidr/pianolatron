@@ -1,3 +1,11 @@
+<style lang="scss">
+  .overlay-buttons {
+    :global(button) {
+      color: white;
+    }
+  }
+</style>
+
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";

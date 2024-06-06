@@ -1,41 +1,34 @@
 <style lang="scss">
   #perform-controls {
+    font-family: SourceSans3, sans-serif;
+
     :global(kbd) {
       bottom: 0.35rem;
       position: absolute;
       right: 0rem;
     }
 
-    :global(kbd:not(.depressed)) {
-      opacity: 0.6;
-    }
-
-    font-family: SourceSans3, sans-serif;
-
-    & .accent-button {
-      background-color: var(--cardinal-red-light);
-      border-color: var(--cardinal-red);
-      border-radius: 4px;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
+    button {
       align-items: center;
-      margin: 0 0 0.5rem;
-      position: relative;
-      cursor: pointer;
-    }
-
-    & .accent-button {
-      background-color: var(--cool-grey);
-      border-color: var(--cool-grey);
-      border-style: solid;
+      background-color: var(--primary-accent);
+      border: 1px solid var(--white);
+      border-radius: 4px;
       color: var(--white);
+      cursor: pointer;
+      display: flex;
       height: 2rem;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+
+      &:hover {
+        background-color: var(--cardinal-red-light);
+      }
 
       &.pedal-on {
-        background-color: var(--cool-grey);
-        border-color: yellow;
-        color: yellow;
+        background-color: white;
+        color: var(--primary-accent);
+        border-color: var(--cardinal-red-light);
         font-weight: 500;
       }
     }
@@ -46,28 +39,6 @@
       gap: 0.5rem;
       justify-content: center;
       margin: 0 0 0.5rem;
-
-      &.performer-accent-buttons {
-        & button {
-          background-color: var(--cool-grey);
-          border-radius: 4px;
-          border: 1px solid var(--cool-grey);
-          color: var(--white);
-          cursor: pointer;
-          flex-grow: 1;
-          height: 2rem;
-          min-width: 120px;
-          position: relative;
-          width: 100%;
-
-          &.pedal-on {
-            background-color: var(--cool-grey);
-            border-color: yellow;
-            color: yellow;
-            font-weight: 500;
-          }
-        }
-      }
     }
   }
 </style>
