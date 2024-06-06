@@ -1,6 +1,6 @@
 <style lang="scss">
   #viewer-metrics {
-    background: var(--primary-accent);
+    background: var(--cool-grey);
     color: white;
     border-radius: 0.25em;
     border: 0.1em solid #ffffff;
