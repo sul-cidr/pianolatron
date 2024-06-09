@@ -15,7 +15,7 @@
     role="navigation"
     aria-label="Exhibit navigation"
   >
-    <div class="container flex-column flex-md-row">
+    <div class="container">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <a class="nav-link" href="https://exhibits.stanford.edu/supra">Home</a
@@ -35,6 +35,10 @@
 
         <li class="nav-item">
           <a class="nav-link" href="/about/">About</a>
+        </li>
+
+        <li class="nav-item nav-item-right">
+          <a class="nav-link" href="/how-to-use/">How to Use</a>
         </li>
       </ul>
     </div>
@@ -107,13 +111,8 @@
     background-color: rgba(0, 0, 0, 0.25);
   }
   .navbar .container {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row !important;
     width: 1140px;
-    padding: 0 1rem;
+    padding: 0 1rem 0 0.5rem;
     margin: 0 auto;
   }
   .navbar-nav {
@@ -134,5 +133,8 @@
   }
   .navbar-nav .nav-link:hover {
     text-decoration: underline;
+  }
+  .nav-item-right {
+    margin: 0 0 0 auto;
   }
 </style>
