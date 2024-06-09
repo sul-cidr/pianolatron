@@ -22,6 +22,7 @@ The Pianolatron is the product of a large-scale collaborative partnership betwee
 
 - Chris Fitzpatrick
 - Mark Pernotto
+- Jeffrey Treviño
 
 ### Research Contributors
 
