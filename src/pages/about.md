@@ -3,9 +3,9 @@ layout: ../layouts/markdownLayoutFullHeader.astro
 title: About the Pianolatron
 ---
 
-The Pianolatron is the product of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' Player Piano Program. The technical implementation of the Pianolatron app, carried out by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open source software community.
+# About the Pianolatron
 
-<br />
+The Pianolatron is the product of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' Player Piano Program. The technical implementation of the Pianolatron app, carried out by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open source software community.
 
 ### Principal Investigators
 
@@ -55,6 +55,8 @@ The Pianolatron makes significant use of modules from the following open-source 
 - [node-interval-tree](https://github.com/ShieldBattery/node-interval-tree), principal developer: Marko Žarković
 
 ## Graphics Elements
+
+The gamepad button map graphic was produced via [PadCrafter](https://www.padcrafter.com), principal developer: Edd Coates
 
 The site uses the following icons from the [Noun Project](https://thenounproject.com/), which their creators made available via a Creative Commons Attribution (CC BY) license:
 
