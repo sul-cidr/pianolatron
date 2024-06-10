@@ -394,7 +394,12 @@
       params.end = ($playbackProgressEnd * 100).toFixed(2);
     }
     urlToCopy.search = new URLSearchParams(params);
-    window.navigator.clipboard.writeText(urlToCopy.toString());
+
+    try {
+      window.navigator.clipboard.writeText(urlToCopy.toString());
+    } catch {
+      // ignore error
+    }
 
     setTimeout(() => {
       $rollBeingBookmarked = false;
