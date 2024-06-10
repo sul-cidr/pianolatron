@@ -1,11 +1,11 @@
 ---
-import MarkdownHeader from "./markdownHeader.astro";
 import StanfordHeader from "./stanfordHeader.astro";
+import DocNav from "../pages/docNav.astro";
 import StanfordFooter from "./stanfordFooter.astro";
 import StanfordSubheader from "./stanfordSubheader.astro";
 import { execSync } from "node:child_process";
 
-import "../styles/styles.scss";
+import "../styles/markdown-styles.scss";
 
 const { title } = Astro.props.content || Astro.props;
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
@@ -14,7 +14,7 @@ const datetime = new Date().toISOString();
 
 <style>
   main {
-    color: var(--black-100);
+    color: var(--black);
     font-family: "Source Sans Pro", sans-serif;
     margin: 0 auto;
     max-width: 80%;
@@ -42,7 +42,7 @@ const datetime = new Date().toISOString();
 <body>
   <StanfordHeader />
   <StanfordSubheader />
-  <MarkdownHeader {title} />
+  <DocNav />
   <main>
     <slot />
   </main>

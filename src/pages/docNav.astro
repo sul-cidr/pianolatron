@@ -1,0 +1,102 @@
+---
+const pathname = Astro.url.pathname;
+const base = "/";
+
+export const links = [
+  { label: "Site Overview", url: "homepage/" },
+  { label: "How to Use", url: "howto/" },
+  { label: "Controllers", url: "controllers/" },
+  { label: "Audio Processing", url: "mixer/" },
+  { label: "Credits", url: "about/" },
+];
+---
+
+<header role="banner">
+  <nav>
+    {
+      links.map(({ label, url }) => (
+        <a class={pathname === base + url ? "active" : null} href={base + url}>
+          {label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<style>
+  header {
+    --sticky-offset: 220px;
+
+    background-color: var(--background-color);
+    top: 0;
+    box-shadow: 0 0 4px 4px rgb(0 0 0 / 40%);
+    width: auto;
+    padding-top: 0.8em;
+    padding-bottom: 0.25em;
+    position: sticky;
+    z-index: 4;
+  }
+
+  nav {
+    --nav-item-height: 30px;
+
+    background-color: var(--background-color);
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2em;
+    justify-content: center;
+  }
+
+  a {
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: var(--black-90);
+    font-size: 1.2em;
+    font-weight: 200;
+    height: var(--nav-item-height);
+    white-space: nowrap;
+
+    :global(svg) {
+      height: 1.2rem;
+      width: 1.2rem;
+      transform: translateY(2px);
+      vertical-align: baseline;
+    }
+  }
+
+  a:hover {
+    color: var(--primary-accent);
+  }
+
+  a.active {
+    color: var(--primary-accent);
+  }
+
+  a.active:after {
+    background-color: var(--primary-accent);
+    bottom: 6px;
+    content: "";
+    height: 2px;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    left: 0%;
+  }
+
+  a:not(.active):hover:after {
+    background-color: var(--primary-accent);
+    bottom: 6px;
+    content: "";
+    height: 1px;
+    position: absolute;
+    width: 100%;
+    left: 0%;
+  }
+
+  a.active:hover {
+    color: var(--black-90);
+  }
+</style>
