@@ -43,6 +43,7 @@
     recordingInBuffer,
     rollMetadata,
     tempoCoefficient,
+    rollBeingBookmarked,
   } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
@@ -51,28 +52,7 @@
   export let resetPlayback;
   export let playPauseApp;
   export let toggleRecording;
-
-  let isBookmarked = false;
-  const bookmark = () => {
-    const urlToCopy = new URL(window.location);
-    const params = Object.fromEntries(new URLSearchParams(urlToCopy.search));
-    delete params.start;
-    delete params.end;
-
-    if ($playbackProgressStart >= 0) {
-      params.start = ($playbackProgressStart * 100).toFixed(2);
-    }
-    if ($playbackProgressEnd < 1) {
-      params.end = ($playbackProgressEnd * 100).toFixed(2);
-    }
-    urlToCopy.search = new URLSearchParams(params);
-    window.navigator.clipboard.writeText(urlToCopy.toString());
-    isBookmarked = true;
-
-    setTimeout(() => {
-      isBookmarked = false;
-    }, 1000);
-  };
+  export let bookmarkRoll;
 
   const togglePlayPause = async () => {
     playPauseApp();
@@ -143,11 +123,11 @@
   </div>
 
   <div class="player-button-container">
-    {#if !isBookmarked}
+    {#if !$rollBeingBookmarked}
       <IconButton
         class="player-button"
         disabled={false}
-        on:mousedown={bookmark}
+        on:mousedown={bookmarkRoll}
         iconName="bookmark"
         label="Bookmark"
         height="32"

@@ -18,6 +18,7 @@
   export let updateTickByViewportIncrement;
   export let panHorizontal;
   export let adjustZoom;
+  export let bookmarkRoll;
 
   let controllerLoop = null;
   let lastControllerState = null;
@@ -80,6 +81,7 @@
       $sustainOnOff = buttonPressed(gamepad.buttons[5]);
 
     if (buttonPressed(gamepad.buttons[8])) adjustZoom("resetZoom");
+    if (buttonPressed(gamepad.buttons[9])) bookmarkRoll();
     if (
       buttonToggled(10, lastControllerState, gamepad) ||
       buttonToggled(11, lastControllerState, gamepad)
