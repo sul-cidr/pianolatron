@@ -397,8 +397,18 @@
 
     try {
       window.navigator.clipboard.writeText(urlToCopy.toString());
+      notify({
+        title: "URL copied to your clipboard!",
+        message: urlToCopy.toString(),
+        type: "success",
+        timeout: 3000,
+      });
     } catch {
-      // ignore error
+      notify({
+        title: "URL could not be copied to your clipboard!",
+        message: "Please copy manually: " + urlToCopy.toString(),
+        type: "error",
+      });
     }
 
     setTimeout(() => {
