@@ -19,7 +19,7 @@ In "Perform" mode, the Pianolatron supports interactive modification of many pla
 
 Please note that the mappings given below may not be available or consistent for all combinations of game controller, web browser and operating system.
 
-<img src="/public/assets/gamepad_mappings.png" alt="Diagram of how the Pianolatron's playback functions map to gamepad controller buttons, triggers and sticks" width="100%" />
+<img src="/assets/gamepad_mappings.png" alt="Diagram of how the Pianolatron's playback functions map to gamepad controller buttons, triggers and sticks" width="100%" />
 
 - **Left Trigger:** Decrease tempo (pressure sensitive)
 - **Right Trigger:** Increase tempo (pressure sensitive)
