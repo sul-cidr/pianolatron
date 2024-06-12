@@ -1,5 +1,4 @@
 ---
-import MarkdownHeader from "./markdownHeader.astro";
 import StanfordHeader from "./stanfordHeader.astro";
 import StanfordFooter from "./stanfordFooter.astro";
 import { execSync } from "node:child_process";
@@ -13,7 +12,7 @@ const datetime = new Date().toISOString();
 
 <style>
   main {
-    color: var(--black-100);
+    color: var(--black);
     font-family: "Source Sans Pro", sans-serif;
     margin: 0 auto;
     max-width: 80%;
@@ -40,7 +39,7 @@ const datetime = new Date().toISOString();
 
 <body>
   <StanfordHeader />
-  <MarkdownHeader {title} />
+  <DocNav />
   <main>
     <slot />
   </main>

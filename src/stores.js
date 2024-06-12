@@ -19,6 +19,7 @@ class KeyboardRegion {
 // App state
 export const appMode = createStore("perform");
 export const appWaiting = createStore(false);
+export const rollBeingBookmarked = createStore(false);
 
 // Metadata
 export const rollMetadata = createStore({});

@@ -83,6 +83,7 @@
     useInAppExpression,
     userSettings,
     playRepeat,
+    rollBeingBookmarked,
   } from "./stores";
   import { clamp, getMode, getPathJoiner, RecordingActions } from "./lib/utils";
   import expressionBoxes from "./expression-boxes";
@@ -378,6 +379,33 @@
     }
   };
 
+  const bookmarkRoll = () => {
+    $rollBeingBookmarked = true;
+
+    const urlToCopy = new URL(window.location);
+    const params = Object.fromEntries(new URLSearchParams(urlToCopy.search));
+    delete params.start;
+    delete params.end;
+
+    if ($playbackProgressStart >= 0) {
+      params.start = ($playbackProgressStart * 100).toFixed(2);
+    }
+    if ($playbackProgressEnd < 1) {
+      params.end = ($playbackProgressEnd * 100).toFixed(2);
+    }
+    urlToCopy.search = new URLSearchParams(params);
+
+    try {
+      window.navigator.clipboard.writeText(urlToCopy.toString());
+    } catch {
+      // ignore error
+    }
+
+    setTimeout(() => {
+      $rollBeingBookmarked = false;
+    }, 1000);
+  };
+
   onMount(async () => {
     const loadingSpan = document.querySelector("#loading span");
     if (loadingSpan !== null) loadingSpan.textContent = "Loading resources...";
@@ -449,6 +477,7 @@
           {resetPlayback}
           {playPauseApp}
           {toggleRecording}
+          {bookmarkRoll}
         />
         <RollViewer
           bind:this={rollViewer}
@@ -504,6 +533,7 @@
   {updateTickByViewportIncrement}
   {panHorizontal}
   {adjustZoom}
+  {bookmarkRoll}
 />
 
 <svelte:window

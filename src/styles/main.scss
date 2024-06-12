@@ -1,0 +1,85 @@
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  background-color: var(--fog);
+  font-size: 18px;
+  color: var(--black);
+}
+
+main {
+  font-size: 1em;
+
+  a {
+    font-weight: 400;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+      text-decoration-thickness: 1px;
+    }
+  }
+
+  strong {
+    font-weight: 800;
+  }
+
+  > img {
+    padding-top: 1em;
+  }
+
+  > h1 {
+    color: var(--primary-accent);
+    display: inline-block;
+    font-size: 1.6em;
+    font-weight: 400;
+    left: 50%;
+    line-height: 1;
+    padding-top: 0.25em;
+    margin-bottom: 1em;
+    padding-bottom: 0.25em;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    transform: translateX(-50%);
+
+    &:after {
+      animation: 1200ms cubic-bezier(0.25, 0.8, 0.25, 1) 1 headerUnderline;
+      background-color: var(--primary-accent);
+      bottom: -2px;
+      content: "";
+      height: 1px;
+      left: 0;
+      left: 0%;
+      position: absolute;
+      width: 100%;
+      width: 100%;
+    }
+  }
+
+  > h2 {
+    border-bottom: 1px solid currentColor;
+    display: inline-block;
+    font-size: 1.4em;
+    font-weight: 400;
+    left: 50%;
+    margin: 0.5em auto 0.75em;
+    padding-top: 0.25em;
+    padding-bottom: 0.125em;
+    position: relative;
+    transform: translateX(-50%);
+  }
+
+  > h3 {
+    margin: 1em 0px 0px;
+  }
+}
+
+p + p {
+  margin-top: 1em;
+}
+
+@keyframes headerUnderline {
+  0% {
+    left: 50%;
+    width: 0%;
+  }
+}
