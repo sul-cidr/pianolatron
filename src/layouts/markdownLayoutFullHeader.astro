@@ -12,6 +12,31 @@ const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
 ---
 
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="version" content={commit} />
+    <meta name="dcterms.modified" content={datetime} />
+    <meta
+      name="description"
+      content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection."
+    />
+    <title>{title}</title>
+  </head>
+
+  <body>
+    <StanfordHeader />
+    <StanfordSubheader />
+    <DocNav />
+    <main>
+      <slot />
+    </main>
+    <StanfordFooter />
+  </body>
+</html>
+
 <style>
   main {
     color: var(--black);
@@ -40,23 +65,3 @@ const datetime = new Date().toISOString();
     }
   }
 </style>
-
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="version" content={commit} />
-<meta name="dcterms.modified" content={datetime} />
-<meta
-  name="description"
-  content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection."
-/>
-<title>{title}</title>
-
-<body>
-  <StanfordHeader />
-  <StanfordSubheader />
-  <DocNav />
-  <main>
-    <slot />
-  </main>
-  <StanfordFooter />
-</body>
