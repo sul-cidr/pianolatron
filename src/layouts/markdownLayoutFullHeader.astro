@@ -50,11 +50,6 @@ const datetime = new Date().toISOString();
   content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection."
 />
 <title>{title}</title>
-<script>
-  const { theme } =
-    JSON.parse(window.localStorage.getItem("userSettings")) || "";
-  theme && document.documentElement.setAttribute("data-theme", theme);
-</script>
 
 <body>
   <StanfordHeader />
