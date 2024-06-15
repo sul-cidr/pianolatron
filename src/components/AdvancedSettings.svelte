@@ -1,4 +1,8 @@
 <style lang="scss">
+  button {
+    @include button;
+  }
+
   .theme-selector button {
     height: 1.5em;
     width: 1.5em;
@@ -27,12 +31,6 @@
     &.grey {
       background: darkslategrey;
     }
-  }
-
-  button.full-width {
-    margin: 0;
-    padding: 3px 0;
-    width: 100%;
   }
 
   dt {
@@ -196,11 +194,8 @@
       />
     {/each}
   </div>
-  <button class="full-width" on:click={toggleKeybindingsConfig}
-    >Configure Key Bindings</button
-  >
+  <button on:click={toggleKeybindingsConfig}>Configure Key Bindings</button>
   <button
-    class="full-width"
     on:click={() => {
       userSettings.reset();
       sampleVolumes.reset();

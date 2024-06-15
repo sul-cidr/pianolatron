@@ -14,6 +14,7 @@
     flex-direction: row;
     justify-content: space-between;
     padding-top: 5px;
+    width: 100%;
   }
   #input-file {
     display: none;
@@ -203,14 +204,12 @@
           </div>
         </div>
         <div class="button-row">
-          <div>
-            <button
-              type="button"
-              on:click={() => {
-                exportInAppMIDI();
-              }}>Export complete roll as MIDI</button
-            >
-          </div>
+          <button
+            type="button"
+            on:click={() => {
+              exportInAppMIDI();
+            }}>Export complete roll as MIDI</button
+          >
         </div>
       </fieldset>
       <fieldset>
