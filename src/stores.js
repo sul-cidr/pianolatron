@@ -88,6 +88,7 @@ export const velocityCurveHigh = createPersistedStore(
 export const midiInputs = createStore([]);
 export const midiOutputs = createStore([]);
 
+// Game Controller
 export const gameController = createStore(undefined);
 export const volumeSensitivity = createStore(70);
 export const tempoSensitivity = createStore(30);
@@ -96,6 +97,7 @@ export const tempoSensitivity = createStore(30);
 export const recordingOnOff = createStore(false);
 export const recordingInBuffer = createStore(false);
 export const recordingDuration = createStore(0);
+
 // Expression Curves
 export const bassExpCurve = createStore();
 export const trebleExpCurve = createStore();
