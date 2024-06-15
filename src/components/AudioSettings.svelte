@@ -2,6 +2,8 @@
   import {
     sampleVolumes,
     sampleVelocities,
+    softPedalRatio,
+    accentBump,
     reverbWetDry,
     velocityCurveLow,
     velocityCurveMid,
@@ -12,6 +14,8 @@
 
   let sampleVelocitiesSliderValue;
   let reverbWetDrySliderValue;
+  let softPedalSliderValue;
+  let accentBumpSliderValue; // the pianola's foot pump is basically a pedal
 
   const accentColor = getComputedStyle(
     document.documentElement,
@@ -19,6 +23,8 @@
 
   $: sampleVelocitiesSliderValue = $sampleVelocities;
   $: reverbWetDrySliderValue = $reverbWetDry;
+  $: softPedalSliderValue = $softPedalRatio;
+  $: accentBumpSliderValue = $accentBump;
 </script>
 
 <div id="audio-panel">
@@ -31,12 +37,38 @@
         max="10"
         step="1"
         name={`${sampleType}-volume`}
+        mousewheel={false}
       >
         <span slot="label" style="text-transform: capitalize;"
           >{sampleType}</span
         >
       </SliderControl>
     {/each}
+  </fieldset>
+  <fieldset>
+    <legend>Pedal Settings</legend>
+    <SliderControl
+      bind:value={softPedalSliderValue}
+      min="0"
+      max="1"
+      step=".01"
+      name="soft-pedal-ratio"
+      mousewheel={false}
+      on:change={({ target: { value } }) => ($softPedalRatio = value)}
+    >
+      <svelte:fragment slot="label">Soft Pedal Ratio</svelte:fragment>
+    </SliderControl>
+    <SliderControl
+      bind:value={accentBumpSliderValue}
+      min="1"
+      max="2"
+      step=".05"
+      name="accent-bump"
+      mousewheel={false}
+      on:change={({ target: { value } }) => ($accentBump = value)}
+    >
+      <svelte:fragment slot="label">Accent Modifier</svelte:fragment>
+    </SliderControl>
   </fieldset>
   <fieldset>
     <legend>Audio Controls</legend>

@@ -22,6 +22,8 @@
     rollPedalingOnOff,
     sustainFromExternalMidi,
     softFromExternalMidi,
+    softPedalRatio,
+    accentBump,
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
@@ -53,13 +55,12 @@
   let latencyThreshold = 1000;
   let latentNotes = [];
 
+  // These are the MIDI controller values for these pedal events
   const SOFT_PEDAL = 67;
   const SUSTAIN_PEDAL = 64;
 
   const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
-  const SOFT_PEDAL_RATIO = 0.67;
-  const ACCENT_BUMP = 1.5;
 
   const dispatch = createEventDispatcher();
 
@@ -295,13 +296,13 @@
         }
       },
     );
-    // Note: SOFT_PEDAL_RATIO is only applied when calling piano.keyDown() as
+    // Note: $softPedalRatio is only applied when calling piano.keyDown() as
     //       @tonejs/piano has so built-in soft pedaling and so we emulate in
     //       software.  For WebMIDI outputs we send soft pedal controller
     //       events and note velocities that are not modified for softness.
     const modifiedVelocity = Math.min(
       baseVelocity *
-        (($accentOnOff && ACCENT_BUMP) || 1) *
+        (($accentOnOff && $accentBump) || 1) *
         $volumeCoefficient *
         (finalNoteNumber < rollProfile[$rollMetadata.ROLL_TYPE].trebleNotesBegin
           ? $bassVolumeCoefficient
@@ -326,7 +327,7 @@
       }
       piano.keyDown({
         midi: finalNoteNumber,
-        velocity: modifiedVelocity * (($softOnOff && SOFT_PEDAL_RATIO) || 1),
+        velocity: modifiedVelocity * (($softOnOff && $softPedalRatio) || 1),
       });
     }
     if (noteSource !== NoteSource.WebMidi) {

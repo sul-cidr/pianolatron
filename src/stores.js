@@ -45,6 +45,8 @@ export const sustainOnOff = createStore(false);
 export const accentOnOff = createStore(false);
 export const sustainFromExternalMidi = createStore(false);
 export const softFromExternalMidi = createStore(false);
+export const softPedalRatio = createStore(0.67);
+export const accentBump = createStore(1.5);
 
 // Playback Settings
 export const volumeCoefficient = createStore(1);
