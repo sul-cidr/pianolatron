@@ -5,7 +5,7 @@
 
   .spliner-container {
     height: 200px;
-    width: 100%;
+    width: 99%;
   }
 
   .x-axis,
@@ -49,7 +49,7 @@
 </style>
 
 <script>
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { fade } from "svelte/transition";
   import { CanvasSpliner } from "CanvasSpliner";
   import Icon from "../ui-components/Icon.svelte";
@@ -61,6 +61,8 @@
 
   let splinerContainer;
   let canvasSpliner;
+
+  let resizeTimeout = false;
 
   const getVelocityCurve = () => {
     const yCoords = canvasSpliner.getYSeriesInterpolated();
@@ -75,7 +77,7 @@
     $keyboardRegion.velocityPoints = canvasSpliner._pointCollection;
   };
 
-  const initSpline = () => {
+  const redrawSpliner = () => {
     while (splinerContainer.firstChild)
       splinerContainer.removeChild(splinerContainer.firstChild);
 
@@ -119,11 +121,24 @@
     ["movePoint", "releasePoint", "pointAdded", "pointRemoved"].forEach(
       (eventType) => canvasSpliner.on(eventType, onCurveUpdated),
     );
+  };
 
+  const resizeHandler = () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(redrawSpliner, 250);
+  };
+
+  const initSpliner = () => {
+    window.addEventListener("resize", resizeHandler);
+    redrawSpliner();
     return () => (canvasSpliner = null);
   };
 
-  onMount(initSpline);
+  onMount(initSpliner);
+
+  onDestroy(() => {
+    window.removeEventListener("resize", resizeHandler);
+  });
 </script>
 
 <fieldset>
@@ -140,7 +155,7 @@
         use:tooltip={"Reset"}
         on:click={() => {
           keyboardRegion.reset();
-          initSpline();
+          initSpliner();
         }}><Icon name="reset" height="24" width="24" /></button
       >
     {/if}
