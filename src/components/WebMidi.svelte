@@ -48,6 +48,7 @@
   };
 
   const midiDataExport = (midi) => {
+    // Create an ephemeral download link for the MIDI data and click it
     const clipName = `${$rollMetadata.DRUID}-${new Date().toISOString()}`;
     const midiBlob = new Blob([midi.toArray()], { type: "audio/midi" });
     const midiURL = window.URL.createObjectURL(midiBlob);
@@ -62,7 +63,15 @@
   };
 
   const exportRecording = () => {
-    // ToneJS MIDI seems to use ticks per beat/quarter = 480
+    // Build a ToneJS MIDI instance from the note and pedal events in the
+    //  recording buffer.
+
+    // ToneJS MIDI uses ticks per beat/quarter = 480, which differs a bit from
+    //  the Pianolatron's input MIDI files. This setting is a bit cumbersome to
+    //  change, although we do it below for the in-app expression MIDI export.
+    //  But there's no need to do it for the "live" recordings here, as the
+    //  point is to record spontaneous performances, not to audition different
+    //  expression MIDI settings.
     // const ticksPerSecond = 480;
 
     const midi = new Midi();
@@ -72,9 +81,8 @@
     Object.keys(eventsByTime)
       .sort()
       .forEach((time) => {
-        // ToneJS MIDI can work with seconds as start/end values, so we don't
-        // need to work with ticks (and also deal with TPQ values and
-        // tempo/acceleration values) unless we really want to.)
+        // ToneJS MIDI can work with seconds as start/end values, but this is
+        //  how we'd convert them to ticks if we wanted to.
         // const startTick = parseInt(
         //   ((parseInt(time, 10) - recordingStartTime) / 1000) * ticksPerSecond,
         //   10,
@@ -92,8 +100,8 @@
               velocity: event[3],
             });
             // Controller events don't have durations in the ToneJS MIDI
-            // implementation, so we need to add an explicit OFF event
-            // for each pedal event.
+            //  implementation, so we need to add an explicit OFF event
+            //  for each pedal event.
           } else if (event[0] === "CONTROLLER") {
             // Pedal on event
             track.addCC({
@@ -118,6 +126,125 @@
     midiDataExport(midi);
   };
 
+  const exportInAppMIDI = () => {
+    // Build a ToneJS MIDI instance from the note, pedal and tempo intervals
+    //  and values that were calculated using the current expression box
+    //  settings when the roll was loaded (and that update whenever the
+    //  expression settings are changed).
+    const tempoIntervals = Array.from($expressionBox.tempoMap.inOrder());
+    const pedalIntervals = Array.from($expressionBox.pedalingMap.inOrder());
+    const noteIntervals = Array.from($expressionBox.notesMap.inOrder());
+
+    const midiJSON = {
+      header: {
+        name: metadata.searchtitle,
+        ppq: $rollMetadata.TICKS_PER_QUARTER,
+        tempos: [],
+        timeSignatures: [], // required but empty
+        keySignatures: [], // required but empty
+        meta: [],
+      },
+    };
+
+    // We can dump as much metadata into the "meta" track as we like
+    ["title", "composer", "performer", "label"].forEach((metadataKey) => {
+      midiJSON.header.meta.push({
+        text: `${metadataKey}: ${metadata[metadataKey]}`,
+        ticks: 0,
+        type: "text",
+      });
+    });
+
+    Object.entries($rollMetadata).forEach((key, value) => {
+      midiJSON.header.meta.push({
+        text: `${key}: ${value}`,
+        ticks: 0,
+        type: "text",
+      });
+    });
+
+    // Probably it makes sense to record the expression settings that produced
+    //  this MIDI output (although they also can be exported as JSON via the app)
+    Object.entries($expressionBox.expParams.tunable).forEach((key, value) => {
+      midiJSON.header.meta.push({
+        text: `${key}: ${value}`,
+        ticks: 0,
+        type: "text",
+      });
+    });
+
+    midiJSON.tracks = [
+      {
+        channel: 0,
+        instrument: {
+          family: "piano",
+          name: "acoustic grand piano",
+          number: 0,
+        },
+        name: "Piano right",
+        notes: [],
+        controlChanges: { [midiBytes.SUSTAIN]: [], [midiBytes.SOFT]: [] },
+      },
+      {
+        channel: 0,
+        instrument: {
+          family: "piano",
+          name: "acoustic grand piano",
+          number: 0,
+        },
+        name: "Piano left",
+        notes: [],
+        controlChanges: { [midiBytes.SUSTAIN]: [], [midiBytes.SOFT]: [] },
+      },
+    ];
+
+    noteIntervals.forEach((noteInterval) => {
+      // Allocate note events between left and right keyboard pans, based on
+      //  the dividing point between the bass and treble expression mechanisms
+      //  for the current roll type (which is generally not middle C!)
+      midiJSON.tracks[
+        noteInterval.data >=
+        rollProfile[$rollMetadata.ROLL_TYPE].trebleNotesBegin
+          ? 0
+          : 1
+      ].notes.push({
+        durationTicks: noteInterval.high - noteInterval.low,
+        midi: noteInterval.data,
+        ticks: noteInterval.low,
+        velocity: Math.round(
+          $expressionBox.noteVelocitiesMap[noteInterval.low][noteInterval.data],
+        ),
+      });
+    });
+
+    // Pedal events should be replicated on both piano tracks (bass/treble)
+    pedalIntervals.forEach((pedalInterval) => {
+      midiJSON.tracks.forEach((midiTrack) => {
+        midiTrack.controlChanges[pedalInterval.data].push({
+          number: pedalInterval.data,
+          ticks: pedalInterval.low,
+          value: 1,
+        });
+        midiTrack.controlChanges[pedalInterval.data].push({
+          number: pedalInterval.data,
+          ticks: pedalInterval.high,
+          value: 0,
+        });
+      });
+    });
+
+    tempoIntervals.forEach((tempoInterval) => {
+      midiJSON.header.tempos.push({
+        ticks: tempoInterval.low,
+        bpm: Math.round(tempoInterval.data),
+      });
+    });
+
+    const midi = new Midi();
+    midi.fromJSON(midiJSON);
+    midiDataExport(midi);
+  };
+
   const sendMidiMsg = (msgType, entity, value) => {
     const msg = [
       midiBytes[msgType],
@@ -128,11 +255,6 @@
     if ($recordingOnOff) {
       const now = Date.now();
       if (msgType === "NOTE_ON" && !(entity in heldDown)) {
-        // NOTE that these velocity levels have been affected by the
-        // settings in the volume multiplier AND the velocity curves
-        // by the time we see them here. We'd need to handle this
-        // differently if we wanted the MIDI recording to contain
-        // "uninflected" velocities.
         heldDown[entity] = [now, value];
       } else if (msgType === "NOTE_OFF" && entity in heldDown) {
         const startTime = heldDown[entity][0];
@@ -235,114 +357,6 @@
         midiOutputs.update((v) => v.filter((p) => p !== port));
       }
     }
-  };
-
-  const exportInAppMIDI = () => {
-    const tempoIntervals = Array.from($expressionBox.tempoMap.inOrder());
-    const pedalIntervals = Array.from($expressionBox.pedalingMap.inOrder());
-    const noteIntervals = Array.from($expressionBox.notesMap.inOrder());
-
-    const midiJSON = {
-      header: {
-        name: $rollMetadata.DRUID,
-        ppq: $rollMetadata.TICKS_PER_QUARTER,
-        tempos: [],
-        timeSignatures: [], // required but empty
-        keySignatures: [], // required but empty
-        meta: [],
-      },
-    };
-
-    ["title", "composer", "performer", "label"].forEach((metadataKey) => {
-      midiJSON.header.meta.push({
-        text: `${metadataKey}: ${metadata[metadataKey]}`,
-        ticks: 0,
-        type: "text",
-      });
-    });
-
-    Object.entries($rollMetadata).forEach((key, value) => {
-      midiJSON.header.meta.push({
-        text: `${key}: ${value}`,
-        ticks: 0,
-        type: "text",
-      });
-    });
-
-    Object.entries($expressionBox.expParams.tunable).forEach((key, value) => {
-      midiJSON.header.meta.push({
-        text: `${key}: ${value}`,
-        ticks: 0,
-        type: "text",
-      });
-    });
-
-    midiJSON.tracks = [
-      {
-        channel: 0,
-        instrument: {
-          family: "piano",
-          name: "acoustic grand piano",
-          number: 0,
-        },
-        name: "Piano right",
-        notes: [],
-        controlChanges: { [midiBytes.SUSTAIN]: [], [midiBytes.SOFT]: [] },
-      },
-      {
-        channel: 0,
-        instrument: {
-          family: "piano",
-          name: "acoustic grand piano",
-          number: 0,
-        },
-        name: "Piano left",
-        notes: [],
-        controlChanges: { [midiBytes.SUSTAIN]: [], [midiBytes.SOFT]: [] },
-      },
-    ];
-
-    noteIntervals.forEach((noteInterval) => {
-      midiJSON.tracks[
-        noteInterval.data >=
-        rollProfile[$rollMetadata.ROLL_TYPE].trebleNotesBegin
-          ? 0
-          : 1
-      ].notes.push({
-        durationTicks: noteInterval.high - noteInterval.low,
-        midi: noteInterval.data,
-        ticks: noteInterval.low,
-        velocity: Math.round(
-          $expressionBox.noteVelocitiesMap[noteInterval.low][noteInterval.data],
-        ),
-      });
-    });
-
-    pedalIntervals.forEach((pedalInterval) => {
-      midiJSON.tracks.forEach((midiTrack) => {
-        midiTrack.controlChanges[pedalInterval.data].push({
-          number: pedalInterval.data,
-          ticks: pedalInterval.low,
-          value: 1,
-        });
-        midiTrack.controlChanges[pedalInterval.data].push({
-          number: pedalInterval.data,
-          ticks: pedalInterval.high,
-          value: 0,
-        });
-      });
-    });
-
-    tempoIntervals.forEach((tempoInterval) => {
-      midiJSON.header.tempos.push({
-        ticks: tempoInterval.low,
-        bpm: Math.round(tempoInterval.data),
-      });
-    });
-
-    const midi = new Midi();
-    midi.fromJSON(midiJSON);
-    midiDataExport(midi);
   };
 
   onMount(() => {
