@@ -31,12 +31,10 @@ export default class WelteRedExpressionizer extends ExpressionWelteMignon(
     //  Note that the extension also is applied to the note holes during
     //  playback in the MidiEventHandler. A modified version of this
     //  function could be used to apply the extension prior to playback.
-    //  Note also that no extension is applied to pedal events, but this
-    //  could be done as well.
     if (
       ctrlFunc == null ||
       item.velocity !== 0 ||
-      !["sf_on", "sf_off"].includes(ctrlFunc)
+      !["sf_on", "sf_off", "sust_off", "soft_off"].includes(ctrlFunc)
     )
       return item;
 

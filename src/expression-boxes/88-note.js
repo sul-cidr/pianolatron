@@ -80,10 +80,13 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
     const { tracker_extension } = this.expParams;
 
     // The only control holes to which the tracker extension can be
-    //  meaningfully applied are the snakebite accents.
-    //  Note also that no extension is applied to pedal events, but this
-    //  could be done as well.
-    if (ctrlFunc == null || item.velocity !== 0 || ctrlFunc !== "acc")
+    //  meaningfully applied are the snakebite accents and the sustain
+    //  pedal events.
+    if (
+      ctrlFunc == null ||
+      item.velocity !== 0 ||
+      !["acc", "sust_off"].includes(ctrlFunc)
+    )
       return item;
 
     item.tick += tracker_extension;
