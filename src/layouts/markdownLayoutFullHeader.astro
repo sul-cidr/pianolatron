@@ -46,17 +46,17 @@ const datetime = new Date().toISOString();
     min-height: calc(100vh - 90px - 69px - 193px);
     padding: 1em 1em;
     position: relative;
+  }
 
-    a {
-      color: var(--primary-accent);
-    }
+  main :global(a) {
+    color: var(--primary-accent);
+  }
 
-    img {
-      border-radius: 5px;
-      display: block;
-      height: auto;
-      margin: 0 auto;
-      max-width: 100%;
-    }
+  main :global(img) {
+    border-radius: 5px;
+    display: block;
+    height: auto;
+    margin: 0 auto;
+    max-width: 100%;
   }
 </style>
