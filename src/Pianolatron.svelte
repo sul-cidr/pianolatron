@@ -132,6 +132,7 @@
   let startPlayback;
   let resetPlayback;
   let recordingControl;
+  let exportInAppMIDI;
 
   let rollViewer;
   let updateTickByViewportIncrement;
@@ -432,6 +433,7 @@
       startPlayback,
       resetPlayback,
       recordingControl,
+      exportInAppMIDI,
     } = samplePlayer);
 
     setCurrentRollFromUrl();
@@ -507,7 +509,7 @@
     {#if $appMode === "perform"}
       <FlexCollapsible id="right-sidebar" width="20vw" position="left">
         {#if appReady}
-          <TabbedPanel {reloadRoll} />
+          <TabbedPanel {reloadRoll} {exportInAppMIDI} />
         {/if}
       </FlexCollapsible>
     {/if}
@@ -522,6 +524,7 @@
   <LoadingSpinner showLoadingSpinner={appLoaded && $appWaiting} />
 </div>
 <SamplePlayer
+  {metadata}
   bind:this={samplePlayer}
   on:loading={({ detail: loadingSamples }) => {
     $appWaiting = true;

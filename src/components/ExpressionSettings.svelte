@@ -47,6 +47,7 @@
   } from "../stores";
 
   export let reloadRoll;
+  export let exportInAppMIDI;
 
   let files;
 
@@ -199,6 +200,16 @@
               type="file"
               on:change={loadSettings}
             />
+          </div>
+        </div>
+        <div class="button-row">
+          <div>
+            <button
+              type="button"
+              on:click={() => {
+                exportInAppMIDI();
+              }}>Export complete roll as MIDI</button
+            >
           </div>
         </div>
       </fieldset>

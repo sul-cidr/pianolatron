@@ -7,6 +7,7 @@
   import { Piano } from "../lib/pianolatron-piano";
   import { notify } from "../ui-components/Notification.svelte";
   import { getPathJoiner, NoteSource, RecordingActions } from "../lib/utils";
+  import { rollProfile } from "../config/roll-config";
   import {
     isPlaying,
     rollMetadata,
@@ -40,6 +41,8 @@
   import WebMidi from "./WebMidi.svelte";
   import AudioRecorder from "./AudioRecorder.svelte";
 
+  export let metadata; // This is the metadata from the roll's JSON file
+
   let webMidi;
   let audioRecorder;
   let recordingDestination;
@@ -56,7 +59,6 @@
   const DEFAULT_NOTE_VELOCITY = 50.0;
   const DEFAULT_TEMPO = 60;
   const SOFT_PEDAL_RATIO = 0.67;
-  const HALF_BOUNDARY = 66; // F# above Middle C; divides the keyboard into two "pans"
   const ACCENT_BUMP = 1.5;
 
   const dispatch = createEventDispatcher();
@@ -119,7 +121,7 @@
     }
   };
 
-  const stopNote = (noteNumber, noteSource, timeDelay) => {
+  const stopNote = (noteNumber, noteSource, timeDelay, tick) => {
     const finalNoteNumber =
       noteSource === NoteSource.Midi
         ? noteNumber + $transposeHalfStep
@@ -129,7 +131,7 @@
       piano.keyUp({ midi: finalNoteNumber, time: timeDelay });
     else piano.keyUp({ midi: finalNoteNumber });
     if (noteSource !== NoteSource.WebMidi) {
-      webMidi?.sendMidiMsg("NOTE_OFF", finalNoteNumber, 0);
+      webMidi?.sendMidiMsg("NOTE_OFF", finalNoteNumber, 0, tick);
     }
   };
 
@@ -301,7 +303,7 @@
       baseVelocity *
         (($accentOnOff && ACCENT_BUMP) || 1) *
         $volumeCoefficient *
-        (finalNoteNumber < HALF_BOUNDARY
+        (finalNoteNumber < rollProfile[$rollMetadata.ROLL_TYPE].trebleNotesBegin
           ? $bassVolumeCoefficient
           : $trebleVolumeCoefficient),
       1,
@@ -328,7 +330,7 @@
       });
     }
     if (noteSource !== NoteSource.WebMidi) {
-      webMidi?.sendMidiMsg("NOTE_ON", finalNoteNumber, modifiedVelocity);
+      webMidi?.sendMidiMsg("NOTE_ON", finalNoteNumber, modifiedVelocity, tick);
     }
   };
 
@@ -396,26 +398,33 @@
   midiSamplePlayer.on("pause", () => ($isPlaying = false));
   midiSamplePlayer.on("stop", () => ($isPlaying = false));
 
-  midiSamplePlayer.on(
-    "midiEvent",
-    ({ name, value, number, noteNumber, velocity, data, tick }) => {
-      if (name === "Note on") {
-        if (velocity === 0) {
-          stopNote(noteNumber, NoteSource.Midi);
-        } else {
-          startNote(noteNumber, velocity, NoteSource.Midi, tick);
-        }
-      } else if (name === "Controller Change" && $rollPedalingOnOff) {
-        if (number === SUSTAIN_PEDAL) {
-          sustainOnOff.set(!!value);
-        } else if (number === SOFT_PEDAL) {
-          softOnOff.set(!!value);
-        }
-      } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
-        setTempo(data);
+  const handleMidiEvent = ({
+    name,
+    value,
+    number,
+    noteNumber,
+    velocity,
+    data,
+    tick,
+  }) => {
+    if (name === "Note on") {
+      if (velocity === 0) {
+        stopNote(noteNumber, NoteSource.Midi, 0, tick);
+      } else {
+        startNote(noteNumber, velocity, NoteSource.Midi, tick);
       }
-    },
-  );
+    } else if (name === "Controller Change" && $rollPedalingOnOff) {
+      if (number === SUSTAIN_PEDAL) {
+        sustainOnOff.set(!!value);
+      } else if (number === SOFT_PEDAL) {
+        softOnOff.set(!!value);
+      }
+    } else if (name === "Set Tempo" && $useMidiTempoEventsOnOff) {
+      setTempo(data);
+    }
+  };
+
+  midiSamplePlayer.on("midiEvent", handleMidiEvent);
 
   const recordingControl = (action) => {
     switch (action) {
@@ -447,6 +456,11 @@
       $latencyDetected = false;
     }
   };
+
+  const exportInAppMIDI = () => {
+    webMidi?.exportInAppMIDI();
+  };
+
   midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
 
   /* eslint-disable no-unused-expressions, no-sequences */
@@ -471,13 +485,13 @@
     startPlayback,
     resetPlayback,
     recordingControl,
-    skipToTick,
-    skipToPercentage,
+    exportInAppMIDI,
   };
 </script>
 
 <WebMidi
   bind:this={webMidi}
+  {metadata}
   {startNote}
   {stopNote}
   {toggleSustain}
