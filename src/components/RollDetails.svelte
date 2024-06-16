@@ -106,7 +106,7 @@
     {@html metadata.publisher || unavailable}
   </dd>
   {#if similarWorksByPerformer.length > 0}
-    <dt>Other Works By This Performer</dt>
+    <dt>Other Rolls Featuring This Performer</dt>
     <dd class="large">
       <ul>
         {#each similarWorksByPerformer as work}
@@ -119,7 +119,7 @@
       </ul>
     </dd>
   {/if}
-  <dt>PURL</dt>
+  <dt>Archive Record</dt>
   <dd>
     <a href={metadata.PURL} target="_blank"
       >{@html metadata.PURL || unavailable}</a
