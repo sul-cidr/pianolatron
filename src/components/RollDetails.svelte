@@ -67,8 +67,8 @@
 
 <script>
   import catalog from "../config/catalog.json";
-
   export let metadata;
+
   export const similarWorksByPerformer = catalog.filter(
     (w) => w.performer === metadata.performer && w.druid !== metadata.druid,
   );
@@ -106,7 +106,7 @@
     {@html metadata.publisher || unavailable}
   </dd>
   {#if similarWorksByPerformer.length > 0}
-    <dt>Similar Works By This Performer</dt>
+    <dt>Other Works By This Performer</dt>
     <dd class="large">
       <ul>
         {#each similarWorksByPerformer as work}

@@ -247,6 +247,7 @@
     return Promise.all([mididataReady, metadataReady, pianoReady]).then(
       ([, metadataJson]) => {
         metadata = (({ holeData: _, ...obj }) => obj)(metadataJson);
+        metadata.druid = roll.druid;
         $holesIntervalTree = processHoleData(
           metadataJson.holeData,
           $rollMetadata,
