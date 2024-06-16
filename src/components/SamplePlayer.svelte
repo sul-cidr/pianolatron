@@ -24,6 +24,7 @@
     softFromExternalMidi,
     softPedalRatio,
     accentBump,
+    sustainProlong,
     useMidiTempoEventsOnOff,
     activeNotes,
     currentTick,
@@ -175,7 +176,7 @@
     if (onOff) {
       piano.pedalDown();
     } else {
-      piano.pedalUp();
+      piano.pedalUp({ time: `+${$sustainProlong / 1000}s` });
     }
     if (fromMidi && $sustainFromExternalMidi) {
       $sustainOnOff = onOff;
@@ -394,6 +395,7 @@
   midiSamplePlayer.on("playing", ({ tick }) => {
     if (!$isPlaying) $isPlaying = true;
     if (tick <= midiSamplePlayer.totalTicks) currentTick.set(tick);
+    if (tick >= midiSamplePlayer.totalTicks) $isPlaying = false;
   });
 
   midiSamplePlayer.on("pause", () => ($isPlaying = false));

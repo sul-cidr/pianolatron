@@ -4,6 +4,7 @@
     sampleVelocities,
     softPedalRatio,
     accentBump,
+    sustainProlong,
     reverbWetDry,
     velocityCurveLow,
     velocityCurveMid,
@@ -16,6 +17,7 @@
   let reverbWetDrySliderValue;
   let softPedalSliderValue;
   let accentBumpSliderValue; // the pianola's foot pump is basically a pedal
+  let sustainProlongSliderValue;
 
   const accentColor = getComputedStyle(
     document.documentElement,
@@ -25,6 +27,7 @@
   $: reverbWetDrySliderValue = $reverbWetDry;
   $: softPedalSliderValue = $softPedalRatio;
   $: accentBumpSliderValue = $accentBump;
+  $: sustainProlongSliderValue = $sustainProlong;
 </script>
 
 <div id="audio-panel">
@@ -68,6 +71,19 @@
       on:change={({ target: { value } }) => ($accentBump = value)}
     >
       <svelte:fragment slot="label">Accent Modifier</svelte:fragment>
+    </SliderControl>
+    <SliderControl
+      bind:value={sustainProlongSliderValue}
+      min="0"
+      max="500"
+      step="1"
+      name="sustain-prolong"
+      mousewheel={false}
+      on:change={({ target: { value } }) => ($sustainProlong = value)}
+    >
+      <svelte:fragment slot="label"
+        >Prolong Sustain Release (ms)</svelte:fragment
+      >
     </SliderControl>
   </fieldset>
   <fieldset>
