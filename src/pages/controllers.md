@@ -9,9 +9,11 @@ In the basic "Listen" mode, the Pianolatron can only be controlled via the trans
 
 In the more advanced "Perform" mode, it is possible to modify many aspects of the playback of a piano roll interactively, including bass and treble volume, pedaling, accents, and transposition, as well as recording and all features available in "Listen" mode. In addition to the on-screen transport strip buttons, pedaling buttons and sliders in the Performance Controls menu, the app supports control of these features via mapped keyboard buttons, a gamepad controller, and a MIDI input device.
 
+
 ## Keyboard button mappings
 
 The assignment of keys on the computer keyboard to specific performance parameters (tempo, volume) and player piano controls (pedaling, accents) can be managed by selecting the "Configure Key Bindings" button in the Advanced Settings menu.
+
 
 ## Game controller button mappings
 
@@ -19,7 +21,7 @@ In "Perform" mode, the Pianolatron supports interactive modification of many pla
 
 Please note that the mappings given below may not be available or consistent for all combinations of game controller, web browser and operating system.
 
-<img src="/assets/gamepad_mappings.png" alt="Diagram of how the Pianolatron's playback functions map to gamepad controller buttons, triggers and sticks" width="100%" />
+![Diagram of how the Pianolatron's playback functions map to gamepad controller buttons, triggers and sticks](../images/gamepad_mappings.png)
 
 - **Left Trigger:** Decrease tempo (pressure sensitive)
 - **Right Trigger:** Increase tempo (pressure sensitive)
@@ -39,6 +41,7 @@ Please note that the mappings given below may not be available or consistent for
 - **Right Stick Click:** Accent (entire keyboard)
 - **Back Button:** Fit roll image to viewer
 - **Start Button:** Get bookmark link
+
 
 ## MIDI input devices
 

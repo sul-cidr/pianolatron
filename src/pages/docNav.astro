@@ -27,12 +27,12 @@ export const links = [
   header {
     --sticky-offset: 220px;
 
-    background-color: var(--background-color);
+    background-color: white;
     top: 0;
     box-shadow: 0 0 4px 4px rgb(0 0 0 / 40%);
     width: auto;
-    padding-top: 0.8em;
-    padding-bottom: 0.25em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     position: sticky;
     z-index: 4;
   }
@@ -40,7 +40,6 @@ export const links = [
   nav {
     --nav-item-height: 30px;
 
-    background-color: var(--background-color);
     align-items: center;
     display: flex;
     flex-direction: row;
@@ -56,6 +55,7 @@ export const links = [
     color: var(--black-90);
     font-size: 1.2em;
     font-weight: 200;
+    line-height: var(--nav-item-height);
     height: var(--nav-item-height);
     white-space: nowrap;
 
@@ -77,7 +77,7 @@ export const links = [
 
   a.active:after {
     background-color: var(--primary-accent);
-    bottom: 6px;
+    bottom: 2px;
     content: "";
     height: 2px;
     pointer-events: none;
@@ -88,7 +88,7 @@ export const links = [
 
   a:not(.active):hover:after {
     background-color: var(--primary-accent);
-    bottom: 6px;
+    bottom: 2px;
     content: "";
     height: 1px;
     position: absolute;
