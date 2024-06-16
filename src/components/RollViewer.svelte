@@ -227,7 +227,7 @@
     svg.setAttribute("style", "pointer-events: none;");
     svg.appendChild(g);
 
-    // start line/
+    // start line
     if (startPx >= 0) {
       const startLine = document.createElementNS(
         "http://www.w3.org/2000/svg",
@@ -282,7 +282,7 @@
   };
 
   // Take a Y value in the image and return a Y coordinate in the Nav viewer
-  // that we can draw a line with.
+  //  that we can draw a line with.
   const imagePxToNavLine = (imagePx) => {
     // below 0 means there is not selection.
     if (imagePx < 0) {
@@ -297,7 +297,7 @@
   };
 
   // Some UI configuration for the selection overlays. There is some minor
-  // variance between the image roll and the nav strip.
+  //  variance between the image roll and the nav strip.
   const getSelectionConfig = (isNav = false) => ({
     lineWidth: isNav ? "50" : imageWidth,
     viewBox: isNav ? null : `0 0 ${imageWidth} ${imageLength}`,
@@ -307,7 +307,7 @@
 
   // Selection Overlay in the image viewer
   // This is stored along with the partitioned SVG holes. There's only ever one
-  // selection overlay, so it seems unnecessary to store it in its own tree.
+  //  selection overlay, so it seems unnecessary to store it in its own tree.
   const updateSelectionOverlays = () => {
     if (viewport === undefined) {
       return;
@@ -374,7 +374,7 @@
     const svgs = svgPartitions.search(firstImagePixel, lastImagePixel);
 
     // Remove any currently displayed SVG overlays that don't overlap with the
-    // viewer window
+    //  viewer window
     const updatedSvgs = visibleSvgs.filter((visibleSvg) => {
       if (svgs.includes(visibleSvg)) return true;
       viewport.viewer.removeOverlay(visibleSvg);
@@ -471,7 +471,7 @@
         }
 
         // The final partition is usually shorter than rangeLengthPx; stop
-        // after drawing it.
+        //  after drawing it.
         if (i === expCurve.length - 1) break;
 
         const curveStart = expCurve[i][0];
@@ -546,9 +546,9 @@
       )
     ) {
       // Sometimes this runs before $expressionMap updates (when changing
-      // between roll types), meaning the guide overlay coords are NaNs.
-      // Fortunately it runs again later after they've updated, ensuring the
-      // overlays are drawn, but ideally it shouldn't happen this way.
+      //  between roll types), meaning the guide overlay coords are NaNs.
+      //  Fortunately it runs again later after they've updated, ensuring the
+      //  overlays are drawn, but ideally it shouldn't happen this way.
       if (expParams === undefined || !("tunable" in expParams)) return;
       guides = {
         p: parseInt(expParams.tunable.welte_p.value, 10),
@@ -828,7 +828,7 @@
   };
 
   onMount(() => {
-    // XXX The roll direction and first pixel values are needed from the roll
+    // The roll direction and first pixel values are needed from the roll
     //  metadata to be able to draw the velocity curves. At present, this is
     //  not guaranteed to be available when the roll viewer first loads, so
     //  the velocity curves are always disabled by default (this may be the
@@ -900,8 +900,8 @@
         );
 
         // Need to use navElement.clientHeight here because navViewport.getContainerSize()
-        // only returns the original size of the viewport (in screen pixels) even after
-        // the browser window has been resized.
+        //  only returns the original size of the viewport (in screen pixels) even after
+        //  the browser window has been resized.
         const topOffset =
           (imgBounds.getTopLeft().y / imageLength) * navElement.clientHeight;
 
@@ -983,29 +983,29 @@
       updateTickFromViewport(/* animate = */ true);
     });
 
-    openSeadragon.addHandler("navigator-click", (event) => {
+    // Again, the navigator viewport dims are not updated after the browser
+    //  window is resized (as of OSD 4), so in that case we need a different
+    //  approach to get the proper distance to move the main viewport and
+    //  navigator overlay when the navigator strip is clicked or dragged.
+    //  Always calculating this as a fraction of the full image length in
+    //  pixels seems to work as well as any other method.
+    const clickDragHandler = (event) => {
       event.preventDefaultAction = true;
-      if (!event.quick) return;
-      const target = navigator.viewport.pointFromPixel(event.position);
-      viewport.centerSpringY.springTo(target.y);
-      updateTickFromViewport(/* animate = */ true);
-    });
+      if (event.originalEvent.type === "pointerup" && !event.quick) return;
+      const imageTargetY =
+        imageLength *
+        (event.position.y / event.originalEvent.target.clientHeight);
+      const targetNavCoords = navigator.viewport.imageToViewportCoordinates(
+        new OpenSeadragon.Point(0, imageTargetY),
+      );
+      viewport.centerSpringY.springTo(targetNavCoords.y);
+      updateTickFromViewport(
+        /* animate = */ event.originalEvent.type === "pointerup",
+      );
+    };
 
-    openSeadragon.addHandler("navigator-drag", (event) => {
-      event.preventDefaultAction = true;
-      const center = new OpenSeadragon.Point(
-        0,
-        viewport.centerSpringY.target.value,
-      );
-      const target = center.plus(
-        navigator.viewport.deltaPointsFromPixels(event.delta),
-      );
-      const verticalBound = navigator.viewport.imageToViewportCoordinates(
-        new OpenSeadragon.Point(0, imageLength),
-      );
-      viewport.centerSpringY.springTo(clamp(target.y, 0, verticalBound.y));
-      updateTickFromViewport(/* animate = */ false);
-    });
+    openSeadragon.addHandler("navigator-click", clickDragHandler);
+    openSeadragon.addHandler("navigator-drag", clickDragHandler);
 
     navigator.innerTracker.releaseHandler = () => {
       // The releaseHandler for navigator viewports is delegated to an
