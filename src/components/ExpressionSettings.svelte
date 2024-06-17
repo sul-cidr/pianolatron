@@ -12,9 +12,15 @@
   .button-row {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
+    gap: 0.5rem;
     padding-top: 5px;
     width: 100%;
+  }
+  .option-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
   #input-file {
     display: none;
@@ -133,10 +139,26 @@
   {#if !$rollHasExpressions || ["welte-red", "welte-green", "welte-licensee", "duo-art", "88-note"].includes($rollMetadata.ROLL_TYPE)}
     <fieldset>
       <legend>Emulation Type</legend>
-      <select bind:value={$useInAppExpression} on:change={reloadRoll}>
-        <option value={false}>Expression MIDI</option>
-        <option value={true}>In-App Expression</option>
-      </select>
+
+      <div class="option-toggle">
+        <span
+          ><strong>Active</strong>: {$useInAppExpression
+            ? "In-App Expression"
+            : "Expression MIDI"}</span
+        >
+        <div>
+          <button
+            type="button"
+            on:click={() => {
+              $useInAppExpression = !$useInAppExpression;
+              reloadRoll();
+            }}
+            >Change to {$useInAppExpression
+              ? "Expression MIDI"
+              : "In-App Expression"}</button
+          >
+        </div>
+      </div>
     </fieldset>
 
     {#if $useInAppExpression}
