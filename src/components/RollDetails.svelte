@@ -97,6 +97,12 @@
       {@html metadata.arranger || unavailable}
     </dd>
   {/if}
+  {#if metadata.original_composer}
+    <dt>Composer (original)</dt>
+    <dd class="large">
+      {@html metadata.original_composer || unavailable}
+    </dd>
+  {/if}
   <dt>Label/Publisher</dt>
   <dd class="large">
     {@html metadata.label || unavailable}
