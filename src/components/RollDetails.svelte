@@ -97,13 +97,9 @@
       {@html metadata.arranger || unavailable}
     </dd>
   {/if}
-  <dt>Label</dt>
+  <dt>Label/Publisher</dt>
   <dd class="large">
     {@html metadata.label || unavailable}
-  </dd>
-  <dt>Publisher</dt>
-  <dd class="large">
-    {@html metadata.publisher || unavailable}
   </dd>
   {#if similarWorksByPerformer.length > 0}
     <dt>Other Rolls Featuring This Performer</dt>
