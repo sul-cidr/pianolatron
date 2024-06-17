@@ -63,11 +63,11 @@
 <div id="lag-warning" transition:fade>
   <div>
     <div>
-      <span>Latency Warning!</span>
+      <span>Playback Latency Warning</span>
       <p>
         Your web browser seems to be having difficulty playing this roll, and as
         a result some notes may not be sounding when they should. Please
-        consider following the suggestions in <a href="/help/" target="blank"
+        consider following the suggestions in <a href="/howto/" target="blank"
           >the documentation</a
         > to attempt to improve the performance.
       </p>
