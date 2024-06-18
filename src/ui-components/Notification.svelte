@@ -42,8 +42,8 @@
     }
 
     &.success {
-      background: #8bc34a;
-      border: 1px solid desaturate(darken(#8bc34a, 12), 10);
+      background: #30ba0e;
+      border: 1px solid desaturate(darken(#30ba0e, 12), 10);
     }
 
     &.error {
