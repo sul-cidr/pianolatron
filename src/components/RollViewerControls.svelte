@@ -44,6 +44,7 @@
 
 <div class="overlay-buttons top-center" transition:fade>
   <IconButton
+    class={"panzoom-button"}
     disabled={currentZoom >= maxZoomLevel}
     on:mousedown={mousedownRepeatAction(() => adjustZoom("zoomIn"))}
     iconName="plus"
@@ -52,6 +53,7 @@
     width="24"
   />
   <IconButton
+    class={"panzoom-button"}
     disabled={currentZoom <= minZoomLevel}
     on:mousedown={mousedownRepeatAction(() => adjustZoom("zoomOut"))}
     iconName="minus"
@@ -60,6 +62,7 @@
     width="24"
   />
   <IconButton
+    class={"panzoom-button"}
     disabled={currentZoom === 1}
     on:click={() => {
       adjustZoom("resetZoom");
@@ -70,6 +73,7 @@
     width="24"
   />
   <IconButton
+    class={"panzoom-button"}
     disabled={false}
     on:mousedown={mousedownRepeatAction(() =>
       updateTickByViewportIncrement(/* up = */ true),
@@ -80,6 +84,7 @@
     width="24"
   />
   <IconButton
+    class={"panzoom-button"}
     disabled={false}
     on:mousedown={mousedownRepeatAction(() =>
       updateTickByViewportIncrement(/* up = */ false),
@@ -90,6 +95,7 @@
     width="24"
   />
   <IconButton
+    class={"panzoom-button"}
     disabled={false}
     on:mousedown={mousedownRepeatAction(() => panHorizontal(/* left = */ true))}
     iconName="arrow-left"
@@ -98,6 +104,7 @@
     width="24"
   />
   <IconButton
+    class={"panzoom-button"}
     disabled={false}
     on:mousedown={mousedownRepeatAction(() =>
       panHorizontal(/* left = */ false),
