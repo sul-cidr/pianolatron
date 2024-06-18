@@ -43,7 +43,7 @@
         mousewheel={false}
       >
         <span slot="label" style="text-transform: capitalize;"
-          >{sampleType}</span
+          >{sampleType}:</span
         >
       </SliderControl>
     {/each}
@@ -59,7 +59,7 @@
       mousewheel={false}
       on:change={({ target: { value } }) => ($softPedalRatio = value)}
     >
-      <svelte:fragment slot="label">Soft Pedal Ratio</svelte:fragment>
+      <svelte:fragment slot="label">Soft Pedal Ratio:</svelte:fragment>
     </SliderControl>
     <SliderControl
       bind:value={accentBumpSliderValue}
@@ -70,7 +70,7 @@
       mousewheel={false}
       on:change={({ target: { value } }) => ($accentBump = value)}
     >
-      <svelte:fragment slot="label">Accent Modifier</svelte:fragment>
+      <svelte:fragment slot="label">Accent Modifier:</svelte:fragment>
     </SliderControl>
     <SliderControl
       bind:value={sustainProlongSliderValue}
@@ -82,7 +82,7 @@
       on:change={({ target: { value } }) => ($sustainProlong = value)}
     >
       <svelte:fragment slot="label"
-        >Prolong Sustain Release (ms)</svelte:fragment
+        >Prolong Sustain Release (ms):</svelte:fragment
       >
     </SliderControl>
   </fieldset>
@@ -97,7 +97,7 @@
       mousewheel={false}
       on:change={({ target: { value } }) => ($sampleVelocities = value)}
     >
-      <svelte:fragment slot="label">Sample Count</svelte:fragment>
+      <svelte:fragment slot="label">Sample Count:</svelte:fragment>
     </SliderControl>
     <SliderControl
       bind:value={reverbWetDrySliderValue}
@@ -108,7 +108,7 @@
       mousewheel={false}
       on:change={({ target: { value } }) => ($reverbWetDry = value)}
     >
-      <svelte:fragment slot="label">Reverb</svelte:fragment>
+      <svelte:fragment slot="label">Reverb:</svelte:fragment>
     </SliderControl>
   </fieldset>
   <VelocitySpliner keyboardRegion={velocityCurveLow} {accentColor} />

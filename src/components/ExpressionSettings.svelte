@@ -167,7 +167,7 @@
         {#each Object.keys($expressionParameters.tunable || {}) as expressionParam}
           <div>
             <label class="exp-param" for={`"input_"{expressionParam}`}
-              >{$expressionParameters.tunable[expressionParam].alias}</label
+              >{$expressionParameters.tunable[expressionParam].alias}:</label
             >
             <div>
               <input
@@ -237,7 +237,7 @@
       <fieldset>
         <legend>Visualization Settings</legend>
         <div>
-          Draw Velocity Curves
+          Draw Velocity Curves:
           <input type="checkbox" bind:checked={$drawVelocityCurves} />
         </div>
       </fieldset>

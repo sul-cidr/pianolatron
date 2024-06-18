@@ -29,7 +29,7 @@
   const resetShortcut = () => dispatch("reset");
 </script>
 
-<dt use:tooltip={meta.help}>{meta.description}</dt>
+<dt use:tooltip={meta.help}>{meta.description}:</dt>
 <dd>
   ±<span>{controlConfigValue}</span>
   <RangeSlider

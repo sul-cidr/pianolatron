@@ -111,7 +111,7 @@
       />
     </div>
     <div class="setting">
-      Show Roll Viewer Scale Bar
+      Show Roll Viewer Scale Bar:
       <input type="checkbox" bind:checked={$userSettings.showRuler} />
     </div>
   </fieldset>
@@ -143,7 +143,7 @@
     </dl>
     {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
       <dl class="hole-color-legend" transition:slide>
-        <dd>Note Velocity</dd>
+        <dd>Note Velocity (soft - loud)</dd>
         <dt
           style={`background: linear-gradient(90deg, ${holeColorMap
             .map(
