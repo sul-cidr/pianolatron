@@ -63,6 +63,24 @@
   li a:hover {
     text-decoration: underline;
   }
+  
+  nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+  }
+
+  nav a {
+    background-color: var(--cardinal-red-dark);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 0.5em 1em;
+    text-align: center;
+    text-decoration: none;
+  }
 </style>
 
 <script>
@@ -73,10 +91,26 @@
     (w) => w.performer === metadata.performer && w.druid !== metadata.druid,
   );
 
+  const index = catalog.findIndex((w) => w.druid === metadata.druid);
+  export const neighbors = {};
+  for (const direction of ["←", "→"]) {
+    const offset = direction === "←" ? -1 : 1;
+    if (index + offset >= 0 && index + offset < catalog.length)
+      neighbors[direction] = catalog[index + offset];
+  }
+
   const unavailable = "<span>Unavailable</span>";
 </script>
 
 <dl>
+  <nav>
+    {#each Object.entries(neighbors) as [direction, neighbor]}
+      <a
+        href={`/?druid=${neighbor.druid}`}
+        >{direction}</a
+      >
+    {/each}
+  </nav>
   <dt>Title</dt>
   <dd class="large">
     {@html metadata.title || unavailable}
