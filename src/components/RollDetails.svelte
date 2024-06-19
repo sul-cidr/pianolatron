@@ -78,9 +78,11 @@
 
   const unavailable = "<span>Unavailable</span>";
 
-  QRCode.toDataURL(`${deployment_url}/?druid=${metadata.druid}`).then((url) => {
+  const url = `${deployment_url}/?druid=${metadata.druid}`
+  QRCode.toDataURL(url).then((dataUrl) => {
     const qrCode = document.querySelector("img");
-    qrCode.src = qrCode.alt = url;
+    qrCode.src = dataUrl;
+    qrCode.alt = url;
   });
 
 </script>
