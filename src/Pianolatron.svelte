@@ -235,7 +235,13 @@
 
     metadataReady = fetch(joinPath("json", `${roll.druid}.json`))
       .then((metadataResponse) => {
-        if (metadataResponse.status === 200) return metadataResponse.json();
+        if (metadataResponse.status === 200)
+          return metadataResponse.json().then(
+              (metadataJson) => {
+                metadataJson.druid = roll.druid;
+                return metadataJson;
+              },
+            );
         throw new Error("Error fetching metadata file! (Operation cancelled)");
       })
       .catch((err) => {
