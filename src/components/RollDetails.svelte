@@ -67,6 +67,9 @@
 
 <script>
   import catalog from "../config/catalog.json";
+  import QRCode from "qrcode";
+
+  const deployment_url = "https://pianolatron-staging.netlify.app";
 
   export let metadata;
   export const similarWorksByPerformer = catalog.filter(
@@ -74,6 +77,12 @@
   );
 
   const unavailable = "<span>Unavailable</span>";
+
+  QRCode.toDataURL(`${deployment_url}/?druid=${metadata.druid}`).then((url) => {
+    const qrCode = document.querySelector("img");
+    qrCode.src = qrCode.alt = url;
+  });
+
 </script>
 
 <dl>
@@ -131,4 +140,8 @@
       {@html metadata.work || unavailable}
     </dd>
   {/if}
+  <dt>QR Code</dt>
+  <dd>
+    <img alt="QR Code" />
+  </dd>    
 </dl>
