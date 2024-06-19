@@ -143,8 +143,7 @@
   </nav>
   <dt>Work</dt>
   <dd class="large">
-    <select on:change={navigateToDruid}>
-      <option value={metadata.druid}>{metadata.title}</option>
+    <select on:change={navigateToDruid} value={metadata.druid}>
       {#each catalog as work}
         <option value={work.druid}>{work.title}</option>
       {/each}
