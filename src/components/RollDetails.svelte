@@ -149,6 +149,10 @@
       {/each}
     </select>
   </dd>
+  <dt>Title</dt>
+  <dd class="large">
+    {@html metadata.title || unavailable}
+  </dd>
   {#if metadata.performer}
     <dt>Performer</dt>
     <dd class="large">
