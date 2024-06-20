@@ -145,5 +145,5 @@
   <dt>QR Code</dt>
   <dd>
     <img alt="QR Code" />
-  </dd>    
+  </dd>
 </dl>
