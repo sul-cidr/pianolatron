@@ -151,20 +151,22 @@
         }}
         class="notification {notification.type || 'default'}"
       >
-        <section>
-          {#if notification.title}
-            <header>{notification.title}</header>
-          {/if}
-          <p>{@html notification.message}</p>
-          {#each notification.actions || [] as action}
-            <button
-              on:click={() => {
-                clearNotification(notification.id);
-                action.fn();
-              }}>{action.label}</button
-            >
-          {/each}
-        </section>
+        <div>
+          <section>
+            {#if notification.title}
+              <header>{notification.title}</header>
+            {/if}
+            <p>{@html notification.message}</p>
+            {#each notification.actions || [] as action}
+              <button
+                on:click={() => {
+                  clearNotification(notification.id);
+                  action.fn();
+                }}>{action.label}</button
+              >
+            {/each}
+          </section>
+        </div>
         {#if notification.closable !== false}
           <div
             class="close"
