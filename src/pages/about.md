@@ -44,7 +44,7 @@ The Pianolatron is the product of a large-scale collaborative partnership betwee
 
 ## Source Code
 
-The source code for the site is freely available under the MIT License at https://github.com/sul-cidr/pianolatron <a href="https://github.com/sul-cidr/pianolatron" target="_blank" rel="noopener"><img src="/github-mark.svg" height="14" width="14" alt="Github" /></a>
+The source code for the site is freely available under the MIT License at https://github.com/sul-cidr/pianolatron <a href="https://github.com/sul-cidr/pianolatron" target="_blank" rel="noopener"><img src="/github-mark.svg" style="margin-left: 0px; display: inline-block;" height="14" width="14" alt="Github" /></a>
 
 The Pianolatron makes significant use of modules from the following open-source software projects:
 
