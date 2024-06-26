@@ -1,4 +1,8 @@
 <style lang="scss">
+  button {
+    @include button;
+  }
+
   .theme-selector button {
     height: 1.5em;
     width: 1.5em;
@@ -27,12 +31,6 @@
     &.grey {
       background: darkslategrey;
     }
-  }
-
-  button.full-width {
-    margin: 0;
-    padding: 3px 0;
-    width: 100%;
   }
 
   dt {
@@ -113,7 +111,7 @@
       />
     </div>
     <div class="setting">
-      Show Roll Viewer Scale Bar
+      Show Roll Viewer Scale Bar:
       <input type="checkbox" bind:checked={$userSettings.showRuler} />
     </div>
   </fieldset>
@@ -145,7 +143,7 @@
     </dl>
     {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
       <dl class="hole-color-legend" transition:slide>
-        <dd>Note Velocity</dd>
+        <dd>Note Velocity (soft - loud)</dd>
         <dt
           style={`background: linear-gradient(90deg, ${holeColorMap
             .map(
@@ -196,11 +194,8 @@
       />
     {/each}
   </div>
-  <button class="full-width" on:click={toggleKeybindingsConfig}
-    >Configure Key Bindings</button
-  >
+  <button on:click={toggleKeybindingsConfig}>Configure Key Bindings</button>
   <button
-    class="full-width"
     on:click={() => {
       userSettings.reset();
       sampleVolumes.reset();

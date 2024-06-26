@@ -44,7 +44,7 @@ The Pianolatron is the product of a large-scale collaborative partnership betwee
 
 ## Source Code
 
-The source code for the site is freely available under the MIT License at https://github.com/sul-cidr/pianolatron <a href="https://github.com/sul-cidr/pianolatron" target="_blank" rel="noopener"><img src="/github-mark.svg" height="14" width="14" alt="Github" /></a>
+The source code for the site is freely available under the MIT License at https://github.com/sul-cidr/pianolatron <a href="https://github.com/sul-cidr/pianolatron" target="_blank" rel="noopener"><img src="/github-mark.svg" style="margin-left: 0px; display: inline-block;" height="14" width="14" alt="Github" /></a>
 
 The Pianolatron makes significant use of modules from the following open-source software projects:
 
@@ -64,7 +64,7 @@ The site uses the following icons from the [Noun Project](https://thenounproject
 - bookmark by New icon from <a href="https://thenounproject.com/browse/icons/term/bookmark/" target="_blank" title="bookmark Icons">Noun Project</a> (CC BY 3.0)
 - Check Mark by Alexander Russell from <a href="https://thenounproject.com/browse/icons/term/check-mark/" target="_blank" title="Check Mark Icons">Noun Project</a> (CC BY 3.0)
 - Repeat by Brandy Bora from <a href="https://thenounproject.com/browse/icons/term/repeat/" target="_blank" title="Repeat Icons">Noun Project</a> (CC BY 3.0)
-- rewind by Riley Shaw from <a href="https://thenounproject.com/browse/icons/term/rewind/" target="_blank" title="rewind Icons">Noun Project</a> (CC BY 3.0)
+- skip back by Robert Kyriakis from <a href="https://thenounproject.com/browse/icons/term/skip-back/" target="_blank" title="skip back Icons">Noun Project</a> (CC BY 3.0)
 - go back by Mike Zuidgeest from <a href="https://thenounproject.com/browse/icons/term/go-back/" target="_blank" title="go back Icons">Noun Project</a> (CC BY 3.0)
 - play by Styfico from <a href="https://thenounproject.com/browse/icons/term/play/" target="_blank" title="play Icons">Noun Project</a> (CC BY 3.0)
 - pause by Reshifa Aurel Salsabila from <a href="https://thenounproject.com/browse/icons/term/pause/" target="_blank" title="pause Icons">Noun Project</a> (CC BY 3.0)

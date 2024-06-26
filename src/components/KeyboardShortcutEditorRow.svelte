@@ -23,7 +23,7 @@
   const resetShortcut = () => dispatch("reset");
 </script>
 
-<dt use:tooltip={meta.help}>{meta.description}</dt>
+<dt use:tooltip={meta.help}>{meta.description}:</dt>
 <dd>
   {#if editing}
     <span>Choose a new keystroke...</span>

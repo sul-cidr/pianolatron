@@ -28,6 +28,7 @@ $cardinal: #8c1515; // "cardinal"
   margin: 0;
   padding: 0.35em 0.8em;
   transition: all 0.2s;
+  width: inherit;
 
   &:hover {
     color: var(--primary-accent);

@@ -24,14 +24,7 @@ export default class WelteGreenExpressionizer extends ExpressionWelteMignon(
   extendControlHoles = (item) => {
     const ctrlFunc = this.ctrlMap[item.noteNumber];
 
-    // No extension is applied to pedal events, but this could be done
-    // as well.
-    if (
-      ctrlFunc == null ||
-      item.velocity !== 0 ||
-      !["sfp", "mf", "cresc", "sff"].includes(ctrlFunc)
-    )
-      return item;
+    if (ctrlFunc == null || item.velocity !== 0) return item;
 
     item.tick += this.expParams.tracker_extension;
 

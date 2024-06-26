@@ -51,6 +51,7 @@
   import ExpressionSettings from "./ExpressionSettings.svelte";
 
   export let reloadRoll;
+  export let exportInAppMIDI;
 
   const panels = {
     controls: {
@@ -71,7 +72,7 @@
     },
     expression: {
       component: ExpressionSettings,
-      props: { reloadRoll },
+      props: { reloadRoll, exportInAppMIDI },
       icon: "exp_curves",
       title: "Expression settings",
     },

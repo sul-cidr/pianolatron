@@ -149,11 +149,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
       tracker_extension,
     } = this.expParams;
 
-    if (
-      ctrlFunc === null ||
-      !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc)
-    )
-      return item;
+    if (ctrlFunc === null) return item;
 
     if (ctrlFunc === "acc") {
       if (item.velocity !== 0) {

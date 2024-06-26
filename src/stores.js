@@ -45,6 +45,9 @@ export const sustainOnOff = createStore(false);
 export const accentOnOff = createStore(false);
 export const sustainFromExternalMidi = createStore(false);
 export const softFromExternalMidi = createStore(false);
+export const softPedalRatio = createStore(0.67);
+export const accentBump = createStore(1.5);
+export const sustainProlong = createStore(0.0);
 
 // Playback Settings
 export const volumeCoefficient = createStore(1);
@@ -88,6 +91,7 @@ export const velocityCurveHigh = createPersistedStore(
 export const midiInputs = createStore([]);
 export const midiOutputs = createStore([]);
 
+// Game Controller
 export const gameController = createStore(undefined);
 export const volumeSensitivity = createStore(70);
 export const tempoSensitivity = createStore(30);
@@ -96,6 +100,7 @@ export const tempoSensitivity = createStore(30);
 export const recordingOnOff = createStore(false);
 export const recordingInBuffer = createStore(false);
 export const recordingDuration = createStore(0);
+
 // Expression Curves
 export const bassExpCurve = createStore();
 export const trebleExpCurve = createStore();

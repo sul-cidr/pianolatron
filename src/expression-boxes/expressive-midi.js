@@ -8,6 +8,7 @@ import {
   sustainOnOff,
   tempoCoefficient,
   useMidiTempoEventsOnOff,
+  ticksPerSecond,
 } from "../stores";
 
 export default class ExpressiveMidiExpressionizer {
@@ -152,6 +153,9 @@ export default class ExpressiveMidiExpressionizer {
       }
     } else if (name === "Set Tempo" && get(useMidiTempoEventsOnOff)) {
       this.midiSamplePlayer.setTempo(data * get(tempoCoefficient));
+      ticksPerSecond.set(
+        (this.midiSamplePlayer.division * this.midiSamplePlayer.tempo) / 60,
+      );
     }
   };
 }

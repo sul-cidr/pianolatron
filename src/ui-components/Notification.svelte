@@ -42,8 +42,8 @@
     }
 
     &.success {
-      background: #8bc34a;
-      border: 1px solid desaturate(darken(#8bc34a, 12), 10);
+      background: #30ba0e;
+      border: 1px solid desaturate(darken(#30ba0e, 12), 10);
     }
 
     &.error {
@@ -151,20 +151,22 @@
         }}
         class="notification {notification.type || 'default'}"
       >
-        <section>
-          {#if notification.title}
-            <header>{notification.title}</header>
-          {/if}
-          <p>{@html notification.message}</p>
-          {#each notification.actions || [] as action}
-            <button
-              on:click={() => {
-                clearNotification(notification.id);
-                action.fn();
-              }}>{action.label}</button
-            >
-          {/each}
-        </section>
+        <div>
+          <section>
+            {#if notification.title}
+              <header>{notification.title}</header>
+            {/if}
+            <p>{@html notification.message}</p>
+            {#each notification.actions || [] as action}
+              <button
+                on:click={() => {
+                  clearNotification(notification.id);
+                  action.fn();
+                }}>{action.label}</button
+              >
+            {/each}
+          </section>
+        </div>
         {#if notification.closable !== false}
           <div
             class="close"

@@ -5,7 +5,6 @@
     color: grey;
     cursor: pointer;
     margin: 0;
-    padding: 0.35em 0.8em;
     transition: all 0.2s;
 
     &:not(:disabled):hover {
@@ -90,34 +89,27 @@
         color: red;
       }
     }
-    &.performer-button {
-      align-items: center;
-      color: var(--white);
-      display: flex;
-      justify-content: center;
-      padding: 0.5rem;
-      width: 100%;
 
-      &:active {
-        color: var(--white);
-      }
+    &.panzoom-button {
+      padding: 0.35em 0.8em;
+    }
 
-      &:focus,
-      &:active {
-        outline: 0;
-      }
+    &.menu-button {
+      color: var(--black-80);
 
-      &:hover,
-      &.enabled {
-        color: var(--white);
-      }
-
-      &:disabled {
-        cursor: not-allowed;
+      &:not(:disabled):hover {
+        color: var(--primary-accent);
       }
     }
+
+    &.selected-menu-button {
+      color: white;
+      cursor: unset;
+    }
+
     &.always-visible {
       color: var(--black-30);
+      padding: 0.4em 0.8em 0.3em;
 
       &:hover,
       &.enabled {
@@ -151,7 +143,7 @@
   on:click
   on:mousedown
   bind:this={ref}
-  title={label}
+  title={tooltip ? null : label}
 >
   <Icon name={iconName} {height} {width} aria-hidden="true" focusable="false" />
   <slot />

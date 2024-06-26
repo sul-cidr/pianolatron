@@ -10,28 +10,20 @@
   label {
     display: inline-block;
     padding: 0.2em 0.2em 0;
-    border: 2px solid rgba(black, 0.6);
+    border: 2px solid rgba(black, 0.4);
     border-radius: 0.25em;
     transition: all 0.2s;
-    opacity: 0.6;
     cursor: pointer;
-
-    &:hover {
-      background-color: unset;
-      color: unset;
-    }
   }
 
   input:checked + label {
-    color: white;
     background-color: var(--primary-accent);
     cursor: unset;
-    opacity: 1;
   }
 </style>
 
 <script>
-  import Icon from "../ui-components/Icon.svelte";
+  import IconButton from "../ui-components/IconButton.svelte";
 
   export let panels;
   export let selectedPanel;
@@ -46,9 +38,22 @@
       value={panel}
       id={panel}
     />
-    <label for={panel} title={label.title}>
+    <label for={panel} aria-label={label.title}>
       {#if label.icon}
-        <Icon name={label.icon} height="32" width="32" />
+        <IconButton
+          class={selectedPanel === panel
+            ? "selected-menu-button"
+            : "menu-button"}
+          disabled={false}
+          on:mousedown={() => {
+            selectedPanel = panel;
+          }}
+          iconName={label.icon}
+          label={label.title}
+          tooltip={label.title}
+          height="32"
+          width="32"
+        />
       {/if}
       {#if label.text}
         {label.text}

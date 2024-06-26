@@ -67,8 +67,8 @@
 
 <script>
   import catalog from "../config/catalog.json";
-
   export let metadata;
+
   export const similarWorksByPerformer = catalog.filter(
     (w) => w.performer === metadata.performer && w.druid !== metadata.druid,
   );
@@ -97,16 +97,18 @@
       {@html metadata.arranger || unavailable}
     </dd>
   {/if}
-  <dt>Label</dt>
+  {#if metadata.original_composer}
+    <dt>Composer (original)</dt>
+    <dd class="large">
+      {@html metadata.original_composer || unavailable}
+    </dd>
+  {/if}
+  <dt>Label/Publisher</dt>
   <dd class="large">
     {@html metadata.label || unavailable}
   </dd>
-  <dt>Publisher</dt>
-  <dd class="large">
-    {@html metadata.publisher || unavailable}
-  </dd>
   {#if similarWorksByPerformer.length > 0}
-    <dt>Similar Works By This Performer</dt>
+    <dt>Other Rolls Featuring This Performer</dt>
     <dd class="large">
       <ul>
         {#each similarWorksByPerformer as work}
@@ -119,7 +121,7 @@
       </ul>
     </dd>
   {/if}
-  <dt>PURL</dt>
+  <dt>Archive Record</dt>
   <dd>
     <a href={metadata.PURL} target="_blank"
       >{@html metadata.PURL || unavailable}</a

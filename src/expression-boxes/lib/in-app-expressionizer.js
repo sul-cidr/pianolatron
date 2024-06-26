@@ -11,6 +11,7 @@ import {
   rollPedalingOnOff,
   tempoCoefficient,
   trebleExpCurve,
+  ticksPerSecond,
   useMidiTempoEventsOnOff,
 } from "../../stores";
 import { NoteSource } from "../../lib/utils";
@@ -379,6 +380,9 @@ export default class InAppExpressionizer {
     if (this.midiSamplePlayer.tempo !== playerTempo) {
       this.midiSamplePlayer.pause();
       this.midiSamplePlayer.setTempo(playerTempo);
+      ticksPerSecond.set(
+        (this.midiSamplePlayer.division * this.midiSamplePlayer.tempo) / 60,
+      );
       this.midiSamplePlayer.play();
     }
 
@@ -386,9 +390,9 @@ export default class InAppExpressionizer {
       const holeType = getHoleType({ m: midiNumber }, this.#rollType);
       if (holeType === "note") {
         if (velocity === 0) {
-          const ticksPerSecond = (parseFloat(tempo) * this.#midiTPQ) / 60.0;
+          const ticksPerSec = (parseFloat(tempo) * this.#midiTPQ) / 60.0;
           const trackerExtensionSeconds =
-            this.expParams.tracker_extension / ticksPerSecond;
+            this.expParams.tracker_extension / ticksPerSec;
           this.stopNote(
             midiNumber,
             NoteSource.Midi,
@@ -414,6 +418,9 @@ export default class InAppExpressionizer {
       //  beginning that sets the starting tempo, usually to a default of 60.
       const newTempo = data * get(tempoCoefficient);
       this.midiSamplePlayer.setTempo(newTempo);
+      ticksPerSecond.set(
+        (this.midiSamplePlayer.division * this.midiSamplePlayer.tempo) / 60,
+      );
     }
   };
 }
