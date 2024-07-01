@@ -199,35 +199,38 @@
         flex-wrap: wrap;
       }
     }
+  }
 
-    tfoot {
-      background-color: #f9fafb;
-      border: 1px solid #e5e7eb;
+  .tfoot {
+    align-items: center;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-top: 0;
+    box-sizing: content-box;
+    display: flex;
+    gap: 0.3rem;
+    height: 64px;
+    margin-top: -1rem;
+    padding: 0 min(1.5%, 24px);
 
-      div {
-        align-items: center;
-        display: flex;
+    span {
+      flex-grow: 1;
+    }
 
-        span {
-          flex-grow: 1;
-        }
+    button {
+      background-color: #fff;
+      border: 1px solid #d2d6dc;
+      cursor: pointer;
+      padding: 5px 14px;
+      user-select: none;
+
+      &[disabled] {
+        cursor: not-allowed;
       }
 
-      button {
-        background-color: #fff;
-        border: 1px solid #d2d6dc;
-        cursor: pointer;
-        padding: 5px 14px;
-        user-select: none;
-
-        &[disabled] {
-          cursor: not-allowed;
-        }
-
-        &:not([disabled]):hover {
-          background-color: #f7f7f7;
-          color: #3c4257;
-        }
+      &:not([disabled]):hover {
+        background-color: #f7f7f7;
+        color: #3c4257;
       }
     }
   }
@@ -555,45 +558,30 @@
         </tr>
       {/each}
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="5">
-          <div>
-            {#if filteredListItems.length === 0}
-              No results
-            {:else}
-              {@const pageStart = pageSize * (currentPage - 1) + 1}
-              <span>
-                Showing <strong>{pageStart}</strong> to
-                <strong>
-                  {Math.min(pageStart + pageSize - 1, filteredListItems.length)}
-                </strong>
-                of <strong>{filteredListItems.length}</strong>
-              </span>
-
-              <button
-                disabled={currentPage === 1}
-                on:click={() => (currentPage -= 1)}
-                on:keypress={({ code }) => {
-                  if (code === "Enter") currentPage -= 1;
-                }}
-              >
-                &laquo; Previous
-              </button>
-              <button
-                disabled={currentPage * pageSize >= filteredListItems.length}
-                on:click={() => (currentPage += 1)}
-                on:keypress={({ code }) => {
-                  if (code === "Enter") currentPage += 1;
-                }}
-              >
-                Next &raquo;
-              </button>
-            {/if}
-          </div>
-        </td>
-      </tr>
-    </tfoot>
   </table>
+  <nav class="tfoot" aria-label="Piano Rolls Table Pagination">
+    {#if filteredListItems.length === 0}
+      No results
+    {:else}
+      {@const pageStart = pageSize * (currentPage - 1) + 1}
+      <span>
+        Showing <strong>{pageStart}</strong> to
+        <strong>
+          {Math.min(pageStart + pageSize - 1, filteredListItems.length)}
+        </strong>
+        of <strong>{filteredListItems.length}</strong>
+      </span>
+
+      <button disabled={currentPage === 1} on:click={() => (currentPage -= 1)}>
+        &laquo; Previous
+      </button>
+      <button
+        disabled={currentPage * pageSize >= filteredListItems.length}
+        on:click={() => (currentPage += 1)}
+      >
+        Next &raquo;
+      </button>
+    {/if}
+  </nav>
 </div>
 <!-- app -->
