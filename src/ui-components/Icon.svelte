@@ -175,10 +175,10 @@
     },
     midi: {
       svg: `
-        <path aria-label="M" text-data="M" d="m 0,0 h 233 c 19.6,0 31,16.9 31,37 V 266 H 199 V 67 H 161 V 266 H 102 V 67 H 65 V 266 H 0 Z" />
-        <rect aria-label="I" text-data="I" x="296" y="0" width="65" height="266" />
-        <path aria-label="D" text-data="D" d="m 392,0 h 193 c 19.6,0 31,16.9 31,37 v 196 c 0,24.9 -10.4,33 -33,33 H 392 V 97 h 66 v 104 h 93 V 60 H 392 Z" />
-        <rect aria-label="I" text-data="I" x="646" y="0" width="66" height="266" />
+        <path text-data="M" d="m 0,0 h 233 c 19.6,0 31,16.9 31,37 V 266 H 199 V 67 H 161 V 266 H 102 V 67 H 65 V 266 H 0 Z" />
+        <rect text-data="I" x="296" y="0" width="65" height="266" />
+        <path text-data="D" d="m 392,0 h 193 c 19.6,0 31,16.9 31,37 v 196 c 0,24.9 -10.4,33 -33,33 H 392 V 97 h 66 v 104 h 93 V 60 H 392 Z" />
+        <rect text-data="I" x="646" y="0" width="66" height="266" />
       `,
       attribs: { viewBox: "0 0 712 266", fill: "currentColor" },
     },
