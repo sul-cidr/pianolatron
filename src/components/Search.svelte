@@ -154,6 +154,22 @@
           color: black;
         }
       }
+
+      button {
+        appearance: none;
+        background-color: transparent;
+        border: none;
+        color: inherit;
+        cursor: inherit;
+        font: inherit;
+        height: 100%;
+        left: 0;
+        padding: inherit;
+        position: absolute;
+        text-align: inherit;
+        top: 0;
+        width: 100%;
+      }
     }
 
     th:first-child,
@@ -424,52 +440,49 @@
     <thead>
       <tr>
         <th
-          tabindex="0"
           scope="col"
-          on:click={() => sortItems("publisher")}
-          on:keypress={({ key }) => key === "Enter" && sortItems("publisher")}
           aria-sort={(sortOrder === "publisher-asc" && "ascending") ||
             (sortOrder === "publisher-desc" && "descending") ||
             null}
           class:sortedAsc={sortOrder === "publisher-asc"}
           class:sortedDesc={sortOrder === "publisher-desc"}
-          >Publisher / Label</th
         >
+          <button on:click={() => sortItems("publisher")}>
+            Publisher / Label
+          </button>
+        </th>
         <th
-          tabindex="0"
           scope="col"
-          on:click={() => sortItems("work")}
-          on:keypress={({ key }) => key === "Enter" && sortItems("work")}
           aria-sort={(sortOrder === "work-asc" && "ascending") ||
             (sortOrder === "work-desc" && "descending") ||
             null}
           class:sortedAsc={sortOrder === "work-asc"}
-          class:sortedDesc={sortOrder === "work-desc"}>Title</th
+          class:sortedDesc={sortOrder === "work-desc"}
         >
+          <button on:click={() => sortItems("work")}>Title</button>
+        </th>
         <th
-          tabindex="0"
           scope="col"
-          on:click={() => sortItems("composerArranger")}
-          on:keypress={({ key }) =>
-            key === "Enter" && sortItems("composerArranger")}
           aria-sort={(sortOrder === "composerArranger-asc" && "ascending") ||
             (sortOrder === "composerArranger-desc" && "descending") ||
             null}
           class:sortedAsc={sortOrder === "composerArranger-asc"}
           class:sortedDesc={sortOrder === "composerArranger-desc"}
-          >Composer / Arranger</th
         >
+          <button on:click={() => sortItems("composerArranger")}>
+            Composer / Arranger
+          </button>
+        </th>
         <th
-          tabindex="0"
           scope="col"
-          on:click={() => sortItems("performer")}
-          on:keypress={({ key }) => key === "Enter" && sortItems("performer")}
           aria-sort={(sortOrder === "performer-asc" && "ascending") ||
             (sortOrder === "performer-desc" && "descending") ||
             null}
           class:sortedAsc={sortOrder === "performer-asc"}
-          class:sortedDesc={sortOrder === "performer-desc"}>Performer</th
+          class:sortedDesc={sortOrder === "performer-desc"}
         >
+          <button on:click={() => sortItems("performer")}>Performer</button>
+        </th>
         <th scope="col">Play/Perform/MIDI/Image</th>
       </tr>
     </thead>
