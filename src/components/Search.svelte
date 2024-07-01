@@ -73,7 +73,7 @@
           padding: 0;
         }
 
-        &.active {
+        &[aria-current] {
           background-color: var(--primary-accent);
         }
       }
@@ -395,9 +395,8 @@
     {#if facets}
       <ul>
         {#each facets as facet}
-          <li class:active={facet === activeFacet}>
+          <li aria-current={facet === activeFacet ? "true" : null}>
             <button
-              class:active={facet === activeFacet}
               on:click={() => {
                 setActiveFacet(facet);
               }}
