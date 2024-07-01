@@ -412,7 +412,9 @@
         {/each}
       </ul>
     {/if}
-    Filtered: {filteredListItems?.length} / {catalog.length}
+    <span aria-live="assertive"
+      >Filtered: {filteredListItems?.length} / {catalog.length}</span
+    >
   </div>
   <!-- facets -->
   <table
