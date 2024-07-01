@@ -57,9 +57,9 @@
 
       li {
         display: inline-block;
+        border: 2px solid var(--primary-accent);
         border-radius: 6px;
-        background-color: darkslategray;
-        color: white;
+        color: var(--primary-accent);
         padding: 1px 8px 4px;
         margin: 0;
         cursor: pointer;
@@ -75,6 +75,8 @@
 
         &[aria-current] {
           background-color: var(--primary-accent);
+          border-color: white;
+          color: white;
         }
       }
     }
