@@ -407,9 +407,9 @@
   </div>
   <!-- search-box -->
   <div class="facets">
-    <div class="facet-heading">ROLL TYPE:</div>
+    <div id="facets-label" class="facet-heading">ROLL TYPE:</div>
     {#if facets}
-      <ul>
+      <ul role="group" aria-labelledby="facets-label">
         {#each facets as facet}
           <li aria-current={facet === activeFacet ? "true" : null}>
             <button
