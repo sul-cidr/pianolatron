@@ -90,6 +90,8 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    gap: 0.3rem 0.8rem;
+    flex-wrap: wrap;
   }
 
   .row-links a {
@@ -103,12 +105,17 @@
   }
 
   /************************/
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
   table {
     border-collapse: collapse;
     box-shadow:
       0 1px 3px 0 rgba(0, 0, 0, 0.1),
       0 1px 2px 0 rgba(0, 0, 0, 0.26);
     margin: 0;
+    min-width: 750px;
     padding: 0;
     table-layout: fixed;
     text-align: left;
@@ -121,7 +128,7 @@
       color: #6b7280;
       outline: none;
       overflow: hidden;
-      padding: 14px 24px 14px min(1vw, 24px);
+      padding: 14px 24px 14px min(1.5vw, 24px);
       position: relative;
       text-overflow: ellipsis;
       user-select: none;
@@ -182,7 +189,7 @@
     td:first-child,
     th:last-child,
     td:last-child {
-      width: min(17vw, 240px);
+      width: clamp(85px, 17vw, 240px);
     }
 
     tbody {
@@ -196,14 +203,6 @@
       height: 64px;
       padding: 0 min(1.5%, 24px);
       font-weight: normal;
-
-      &:first-child div {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        gap: 0.3rem;
-        flex-wrap: wrap;
-      }
     }
   }
 
@@ -442,129 +441,131 @@
     >
   </div>
   <!-- facets -->
-  <table
-    aria-label="Search/Browse Results: Piano Rolls"
-    aria-rowcount={pageSize}
-  >
-    <thead>
-      <tr>
-        <th
-          scope="col"
-          aria-sort={(sortOrder === "publisher-asc" && "ascending") ||
-            (sortOrder === "publisher-desc" && "descending") ||
-            null}
-          class:sortedAsc={sortOrder === "publisher-asc"}
-          class:sortedDesc={sortOrder === "publisher-desc"}
-        >
-          <button on:click={() => sortItems("publisher")}>
-            Publisher / Label
-          </button>
-        </th>
-        <th
-          scope="col"
-          aria-sort={(sortOrder === "work-asc" && "ascending") ||
-            (sortOrder === "work-desc" && "descending") ||
-            null}
-          class:sortedAsc={sortOrder === "work-asc"}
-          class:sortedDesc={sortOrder === "work-desc"}
-        >
-          <button on:click={() => sortItems("work")}>Title</button>
-        </th>
-        <th
-          scope="col"
-          aria-sort={(sortOrder === "composerArranger-asc" && "ascending") ||
-            (sortOrder === "composerArranger-desc" && "descending") ||
-            null}
-          class:sortedAsc={sortOrder === "composerArranger-asc"}
-          class:sortedDesc={sortOrder === "composerArranger-desc"}
-        >
-          <button on:click={() => sortItems("composerArranger")}>
-            Composer / Arranger
-          </button>
-        </th>
-        <th
-          scope="col"
-          aria-sort={(sortOrder === "performer-asc" && "ascending") ||
-            (sortOrder === "performer-desc" && "descending") ||
-            null}
-          class:sortedAsc={sortOrder === "performer-asc"}
-          class:sortedDesc={sortOrder === "performer-desc"}
-        >
-          <button on:click={() => sortItems("performer")}>Performer</button>
-        </th>
-        <th scope="col">Play/Perform/MIDI/Image</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each filteredAndPagedItems as item}
-        {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
+  <div class="table-wrapper">
+    <table
+      aria-label="Search/Browse Results: Piano Rolls"
+      aria-rowcount={pageSize}
+    >
+      <thead>
         <tr>
-          <th scope="row">
-            {@html searchParts.length
-              ? markupMatches(item.publisher)
-              : item.publisher}
+          <th
+            scope="col"
+            aria-sort={(sortOrder === "publisher-asc" && "ascending") ||
+              (sortOrder === "publisher-desc" && "descending") ||
+              null}
+            class:sortedAsc={sortOrder === "publisher-asc"}
+            class:sortedDesc={sortOrder === "publisher-desc"}
+          >
+            <button on:click={() => sortItems("publisher")}>
+              Publisher / Label
+            </button>
           </th>
-          <td>
-            {@html searchParts.length ? markupMatches(item.work) : item.work}
-          </td>
-          <td>
-            {@html searchParts.length
-              ? markupMatches(item.composerArranger).replace("\n", "<br/>")
-              : item.composerArranger.replace("\n", "<br/>")}
-          </td>
-          <td>
-            {@html searchParts.length
-              ? markupMatches(item.performer)
-              : item.performer}
-          </td>
-          <td class="row-links-cell">
-            <div class="row-links">
-              <div>
-                <a
-                  href="/?druid={item.druid}"
-                  title="Play roll {item.title}"
-                  target="_blank"
-                >
-                  <Icon name="play" aria-label="Play roll {item.title}" />
-                </a>
-              </div>
-              <div>
-                <a
-                  href="/perform/?druid={item.druid}"
-                  title="Perform roll {item.title}"
-                  target="_blank"
-                >
-                  <Icon name="piano" aria-label="Perform roll {item.title}" />
-                </a>
-              </div>
-              <div>
-                <a
-                  href="/midi/{item.druid}.mid"
-                  title="Download MIDI for roll {item.title}"
-                >
-                  <Icon
-                    name="midi"
-                    aria-label="Download MIDI for roll {item.title}"
-                  />
-                </a>
-              </div>
-              <div>
-                <a
-                  href={imageLink}
-                  title="Download image for roll {item.title}"
-                >
-                  <Icon
-                    name="roll-image"
-                    aria-label="Download image for roll {item.title}"
-                  />
-                </a>
-              </div>
-            </div>
-          </td>
+          <th
+            scope="col"
+            aria-sort={(sortOrder === "work-asc" && "ascending") ||
+              (sortOrder === "work-desc" && "descending") ||
+              null}
+            class:sortedAsc={sortOrder === "work-asc"}
+            class:sortedDesc={sortOrder === "work-desc"}
+          >
+            <button on:click={() => sortItems("work")}>Title</button>
+          </th>
+          <th
+            scope="col"
+            aria-sort={(sortOrder === "composerArranger-asc" && "ascending") ||
+              (sortOrder === "composerArranger-desc" && "descending") ||
+              null}
+            class:sortedAsc={sortOrder === "composerArranger-asc"}
+            class:sortedDesc={sortOrder === "composerArranger-desc"}
+          >
+            <button on:click={() => sortItems("composerArranger")}>
+              Composer / Arranger
+            </button>
+          </th>
+          <th
+            scope="col"
+            aria-sort={(sortOrder === "performer-asc" && "ascending") ||
+              (sortOrder === "performer-desc" && "descending") ||
+              null}
+            class:sortedAsc={sortOrder === "performer-asc"}
+            class:sortedDesc={sortOrder === "performer-desc"}
+          >
+            <button on:click={() => sortItems("performer")}>Performer</button>
+          </th>
+          <th scope="col">Play/Perform/MIDI/Image</th>
         </tr>
-      {/each}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {#each filteredAndPagedItems as item}
+          {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
+          <tr>
+            <th scope="row">
+              {@html searchParts.length
+                ? markupMatches(item.publisher)
+                : item.publisher}
+            </th>
+            <td>
+              {@html searchParts.length ? markupMatches(item.work) : item.work}
+            </td>
+            <td>
+              {@html searchParts.length
+                ? markupMatches(item.composerArranger).replace("\n", "<br/>")
+                : item.composerArranger.replace("\n", "<br/>")}
+            </td>
+            <td>
+              {@html searchParts.length
+                ? markupMatches(item.performer)
+                : item.performer}
+            </td>
+            <td class="row-links-cell">
+              <div class="row-links">
+                <div>
+                  <a
+                    href="/?druid={item.druid}"
+                    title="Play roll {item.title}"
+                    target="_blank"
+                  >
+                    <Icon name="play" aria-label="Play roll {item.title}" />
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="/perform/?druid={item.druid}"
+                    title="Perform roll {item.title}"
+                    target="_blank"
+                  >
+                    <Icon name="piano" aria-label="Perform roll {item.title}" />
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="/midi/{item.druid}.mid"
+                    title="Download MIDI for roll {item.title}"
+                  >
+                    <Icon
+                      name="midi"
+                      aria-label="Download MIDI for roll {item.title}"
+                    />
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href={imageLink}
+                    title="Download image for roll {item.title}"
+                  >
+                    <Icon
+                      name="roll-image"
+                      aria-label="Download image for roll {item.title}"
+                    />
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
   <nav class="tfoot" aria-label="Piano Rolls Table Pagination">
     {#if filteredListItems.length === 0}
       No results
