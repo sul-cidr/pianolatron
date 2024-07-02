@@ -219,18 +219,20 @@
     gap: 0.3rem;
     height: 64px;
     margin-top: -1rem;
-    padding: 0 min(1.5%, 24px);
+    padding: 0 min(2.5vw, 24px);
 
     span {
       flex-grow: 1;
+      line-height: 1.2;
     }
 
     button {
       background-color: #fff;
       border: 1px solid #d2d6dc;
       cursor: pointer;
-      padding: 5px 14px;
+      padding: 5px min(1.5vw, 14px);
       user-select: none;
+      white-space: nowrap;
 
       &[disabled] {
         cursor: not-allowed;
@@ -575,8 +577,7 @@
     {:else}
       {@const pageStart = pageSize * (currentPage - 1) + 1}
       <span>
-        Showing <strong>{pageStart}</strong> to
-        <strong>
+        Showing <strong>{pageStart}</strong>&nbsp;to&nbsp;<strong>
           {Math.min(pageStart + pageSize - 1, filteredListItems.length)}
         </strong>
         of <strong>{filteredListItems.length}</strong>
