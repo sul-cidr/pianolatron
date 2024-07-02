@@ -10,7 +10,6 @@
       height: 2.25em;
       position: relative;
       display: flex;
-      width: 30%;
       margin: 5px;
 
       label {
@@ -29,6 +28,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         width: 100%;
+        max-width: 400px;
       }
     }
 
