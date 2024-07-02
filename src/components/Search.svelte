@@ -36,13 +36,15 @@
       text-align: right;
       padding: 5px 15px;
       display: flex;
-      align-items: flex-end;
+      align-items: flex-start;
       gap: 15px;
 
       label,
       .facet-heading {
-        margin: auto;
+        margin: 0 auto;
         font-weight: bold;
+        line-height: 28px;
+        text-align: left;
       }
 
       ul {
@@ -71,6 +73,7 @@
           cursor: pointer;
           margin: 0;
           padding: 0;
+          white-space: nowrap;
         }
 
         &[aria-current] {
@@ -437,7 +440,7 @@
       </ul>
     {/if}
     <span aria-live="assertive"
-      >Filtered: {filteredListItems?.length} / {catalog.length}</span
+      >Filtered: {filteredListItems?.length}&nbsp;/&nbsp;{catalog.length}</span
     >
   </div>
   <!-- facets -->
