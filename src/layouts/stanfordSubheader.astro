@@ -94,7 +94,7 @@
   }
   .subheader-title small {
     color: white;
-    font-size: 1.5rem;
+    font-size: 0.7em; /* relative to font-size of .subheader-title */
   }
   .site-navbar {
     position: relative;
@@ -127,5 +127,15 @@
   }
   .subheader-menu-item-right {
     margin: 0 0 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .subheader-menu {
+      flex-direction: column;
+    }
+
+    .subheader-title {
+      font-size: 1.625rem;
+    }
   }
 </style>
