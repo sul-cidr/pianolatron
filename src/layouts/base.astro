@@ -3,13 +3,13 @@ import { execSync } from "child_process";
 
 import "../styles/styles.scss";
 
-const { title } = Astro.props;
+const { title, theme } = Astro.props;
 const commit = execSync("git rev-parse --short HEAD").toString().trim();
 const datetime = new Date().toISOString();
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme={theme}>
   <head prefix="dcterms: http://purl.org/dc/terms/#">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -127,13 +127,12 @@ const datetime = new Date().toISOString();
     />
     <title>{title}</title>
     <script>
-      let { theme } = JSON.parse(
-        window.localStorage.getItem("userSettings") || "",
-      );
-      if (window.location.href.indexOf("/perform") == -1) {
-        theme = "blue";
+      if (!document.documentElement.getAttribute("data-theme")) {
+        let { theme } = JSON.parse(
+          window.localStorage.getItem("userSettings") || "",
+        );
+        theme && document.documentElement.setAttribute("data-theme", theme);
       }
-      theme && document.documentElement.setAttribute("data-theme", theme);
     </script>
   </head>
   <body>
