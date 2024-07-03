@@ -4,40 +4,21 @@ import DocNav from "../pages/docNav.astro";
 import StanfordFooter from "./stanfordFooter.astro";
 import StanfordSubheader from "./stanfordSubheader.astro";
 import SkipLink from "../ui-components/SkipLink.svelte";
-import { execSync } from "node:child_process";
+import BaseLayout from "./base.astro";
 
 import "../styles/markdown-styles.scss";
-
-const { title } = Astro.props.content || Astro.props;
-const commit = execSync("git rev-parse --short HEAD").toString().trim();
-const datetime = new Date().toISOString();
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="version" content={commit} />
-    <meta name="dcterms.modified" content={datetime} />
-    <meta
-      name="description"
-      content="The Pianolatron application provides interactive engagement with the Stanford Piano Rolls collection."
-    />
-    <title>{title}</title>
-  </head>
-
-  <body>
-    <SkipLink />
-    <StanfordHeader />
-    <StanfordSubheader />
-    <DocNav />
-    <main id="content">
-      <slot />
-    </main>
-    <StanfordFooter />
-  </body>
-</html>
+<BaseLayout title="Pianolatron Search">
+  <SkipLink />
+  <StanfordHeader />
+  <StanfordSubheader />
+  <DocNav />
+  <main id="content">
+    <slot />
+  </main>
+  <StanfordFooter />
+</BaseLayout>
 
 <style>
   main {
