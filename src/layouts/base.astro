@@ -127,8 +127,9 @@ const datetime = new Date().toISOString();
     />
     <title>{title}</title>
     <script>
-      let { theme } =
-        JSON.parse(window.localStorage.getItem("userSettings")) || "";
+      let { theme } = JSON.parse(
+        window.localStorage.getItem("userSettings") || "",
+      );
       if (window.location.href.indexOf("/perform") == -1) {
         theme = "blue";
       }
