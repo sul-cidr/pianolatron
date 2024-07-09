@@ -3,7 +3,6 @@
 import { get } from "svelte/store";
 import IntervalTree from "node-interval-tree";
 import {
-  activeNotes,
   bassExpCurve,
   expressionParameters,
   playExpressionsOnOff,
@@ -398,13 +397,11 @@ export default class InAppExpressionizer {
             NoteSource.Midi,
             `+${trackerExtensionSeconds}`,
           );
-          activeNotes.delete(midiNumber);
         } else {
           const noteVelocity = get(playExpressionsOnOff)
             ? this.noteVelocitiesMap[tick]?.[midiNumber] || velocity
             : this.defaultNoteVelocity;
           this.startNote(midiNumber, noteVelocity, NoteSource.Midi);
-          activeNotes.add(midiNumber);
         }
       } else if (holeType === "pedal" && get(rollPedalingOnOff)) {
         this.handlePedal(velocity, midiNumber);

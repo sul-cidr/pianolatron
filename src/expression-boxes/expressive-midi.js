@@ -2,7 +2,6 @@ import { get } from "svelte/store";
 import IntervalTree from "node-interval-tree";
 import { NoteSource } from "../lib/utils";
 import {
-  activeNotes,
   rollPedalingOnOff,
   softOnOff,
   sustainOnOff,
@@ -143,7 +142,6 @@ export default class ExpressiveMidiExpressionizer {
         const noteVelocity =
           this.noteVelocitiesMap[tick]?.[noteNumber] || velocity;
         this.startNote(noteNumber, noteVelocity, NoteSource.Midi);
-        activeNotes.add(noteNumber);
       }
     } else if (name === "Controller Change" && get(rollPedalingOnOff)) {
       if (number === this.midiSustPedal) {

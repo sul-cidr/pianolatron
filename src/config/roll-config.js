@@ -121,7 +121,7 @@ export const rollProfile = {
     trebleNotesBegin: 65,
     trebleNotesEnd: 108,
     trebleCtrlBegin: 109,
-    trebleCtrlEnd: 110,
+    trebleCtrlEnd: 114,
     ctrlMap: {
       16: "rewind",
       18: "sust",
