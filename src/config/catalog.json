@@ -67,9 +67,21 @@
     "number": "4652",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Alonso - La Parranda: Ronda de las solteras",
+    "title": "Alonso - La  Parranda: Ronda de las solteras",
     "type": "88-note",
-    "work": "La Parranda: Ronda de las solteras"
+    "work": "La  Parranda: Ronda de las solteras"
+  },
+  {
+    "arranger": "",
+    "composer": "Alonso, Francisco, 1887-1948",
+    "druid": "cy287wz7683",
+    "image_url": "https://stacks.stanford.edu/image/iiif/cy287wz7683/cy287wz7683_0002/info.json",
+    "number": "653",
+    "performer": "",
+    "publisher": "P.O.C.H.",
+    "title": "Alonso - Las  Castigadoras: Charlestón",
+    "type": "88-note",
+    "work": "Las  Castigadoras: Charlestón"
   },
   {
     "arranger": "",
@@ -86,26 +98,14 @@
   {
     "arranger": "",
     "composer": "Alonso, Francisco, 1887-1948",
-    "druid": "cy287wz7683",
-    "image_url": "https://stacks.stanford.edu/image/iiif/cy287wz7683/cy287wz7683_0002/info.json",
-    "number": "653",
-    "performer": "",
-    "publisher": "P.O.C.H.",
-    "title": "Alonso - Las Castigadoras: Charlestón",
-    "type": "88-note",
-    "work": "Las Castigadoras: Charlestón"
-  },
-  {
-    "arranger": "",
-    "composer": "Alonso, Francisco, 1887-1948",
     "druid": "pz594dj8436",
     "image_url": "https://stacks.stanford.edu/image/iiif/pz594dj8436/pz594dj8436_0002/info.json",
     "number": "4391",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Alonso - Las Corsarias: selecciones",
+    "title": "Alonso - Las  Corsarias: selecciones",
     "type": "88-note",
-    "work": "Las Corsarias: selecciones"
+    "work": "Las  Corsarias: selecciones"
   },
   {
     "arranger": "",
@@ -166,6 +166,54 @@
     "title": "Beethoven - Sonata, op. 2, no 1, en fa menor: minuetto",
     "type": "88-note",
     "work": "Sonata, op. 2, no 1, en fa menor: minuetto"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "wb438xf5756",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wb438xf5756/wb438xf5756_0001/info.json",
+    "number": "11070",
+    "performer": "",
+    "publisher": "QRS",
+    "title": "Beethoven - Symphonie, op. 92, no. 7: 2nd movement: Allegretto",
+    "type": "88-note",
+    "work": "Symphonie, op. 92, no. 7: 2nd movement: Allegretto"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "tn472jy2817",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tn472jy2817/tn472jy2817_0001/info.json",
+    "number": "12506",
+    "performer": "",
+    "publisher": "QRS",
+    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Eroica): 1st movement: Allegro con brio",
+    "type": "88-note",
+    "work": "Symphony no. 3 in e flat, op. 55: (Eroica): 1st movement: Allegro con brio"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "ky144fd6229",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ky144fd6229/ky144fd6229_0001/info.json",
+    "number": "12507",
+    "performer": "",
+    "publisher": "QRS",
+    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Eroica): 2nd movement: Funeral march",
+    "type": "88-note",
+    "work": "Symphony no. 3 in e flat, op. 55: (Eroica): 2nd movement: Funeral march"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "ff220ct4404",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ff220ct4404/ff220ct4404_0001/info.json",
+    "number": "12517",
+    "performer": "",
+    "publisher": "QRS",
+    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Euroica): 3rd movement: Scherzo",
+    "type": "88-note",
+    "work": "Symphony no. 3 in e flat, op. 55: (Euroica): 3rd movement: Scherzo"
   },
   {
     "arranger": "Liszt, Franz",
@@ -631,9 +679,9 @@
     "number": "1288",
     "performer": "Fichter, Bella",
     "publisher": "Welte-Mignon",
-    "title": "Borel-Clerc/Fichter - La Mattchiche",
+    "title": "Borel-Clerc/Fichter - La  Mattchiche",
     "type": "welte-red",
-    "work": "La Mattchiche"
+    "work": "La  Mattchiche"
   },
   {
     "arranger": "",
@@ -751,9 +799,9 @@
     "number": "2594",
     "performer": "Bloomfield-Zeisler, Fannie",
     "publisher": "Welte-Mignon",
-    "title": "Chaminade/Bloomfield-Zeisler - Le Retour",
+    "title": "Chaminade/Bloomfield-Zeisler - Le  Retour",
     "type": "welte-red",
-    "work": "Le Retour"
+    "work": "Le  Retour"
   },
   {
     "arranger": "",
@@ -811,9 +859,9 @@
     "number": "2540",
     "performer": "Mero, Yolanda",
     "publisher": "Welte-Mignon",
-    "title": "Chaminade/Mero - La Lisonjera",
+    "title": "Chaminade/Mero - La  Lisonjera",
     "type": "welte-red",
-    "work": "La Lisonjera"
+    "work": "La  Lisonjera"
   },
   {
     "arranger": "",
@@ -835,9 +883,9 @@
     "number": "4466",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Chapí - El Puñao de rosas: selecciones",
+    "title": "Chapí - El  Puñao de rosas: selecciones",
     "type": "88-note",
-    "work": "El Puñao de rosas: selecciones"
+    "work": "El  Puñao de rosas: selecciones"
   },
   {
     "arranger": "",
@@ -847,9 +895,21 @@
     "number": "1944",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Chapí - La Tempestad: valses sobre varios motivos",
+    "title": "Chapí - La  Tempestad: valses sobre varios motivos",
     "type": "88-note",
-    "work": "La Tempestad: valses sobre varios motivos"
+    "work": "La  Tempestad: valses sobre varios motivos"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
+    "druid": "wt920yb3768",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wt920yb3768/wt920yb3768_0002/info.json",
+    "number": "84247",
+    "performer": "",
+    "publisher": "Universal",
+    "title": "Chopin - Mazurkas, op. 17: No.1, No.2: B flat; E minor",
+    "type": "88-note",
+    "work": "Mazurkas, op. 17: No.1, No.2: B flat ; E minor"
   },
   {
     "arranger": "",
@@ -1603,9 +1663,9 @@
     "number": "4319",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Chueca - La Alegría de la huerta: selecciones",
+    "title": "Chueca - La  Alegría de la huerta: selecciones",
     "type": "88-note",
-    "work": "La Alegría de la huerta: selecciones"
+    "work": "La  Alegría de la huerta: selecciones"
   },
   {
     "arranger": "",
@@ -1663,9 +1723,9 @@
     "number": "2580",
     "performer": "D'Egville, Louis H. (Louis Hervey)",
     "publisher": "Welte-Mignon",
-    "title": "D'Egville/D'Egville - A Canadian rondo: a passing-fancy",
+    "title": "D'Egville/D'Egville - A  Canadian rondo: a passing-fancy",
     "type": "welte-red",
-    "work": "A Canadian rondo: a passing-fancy"
+    "work": "A  Canadian rondo: a passing-fancy"
   },
   {
     "arranger": "",
@@ -1735,9 +1795,9 @@
     "number": "1450",
     "performer": "Schelling, Ernest",
     "publisher": "Welte-Mignon",
-    "title": "Debussy/Schelling - La Soirée dane granade",
+    "title": "Debussy/Schelling - La  Soirée dane granade",
     "type": "welte-red",
-    "work": "La Soirée dane granade"
+    "work": "La  Soirée dane granade"
   },
   {
     "arranger": "",
@@ -1752,16 +1812,16 @@
     "work": "Toccata"
   },
   {
-    "arranger": "Dohnányi, Ernő, 1877-1960",
-    "composer": "Delibes, Léo, 1836-1891",
+    "arranger": "Dohnányi, Ernő",
+    "composer": "Delibes, Léo",
     "druid": "bs533ns1949",
     "image_url": "https://stacks.stanford.edu/image/iiif/bs533ns1949/bs533ns1949_0001/info.json",
     "number": "3398",
     "performer": "Blumen, Alfred",
     "publisher": "Welte-Mignon",
-    "title": "Delibes-Dohnányi/Blumen - \"naïla\": Walzer",
+    "title": "Delibes-Dohnányi/Blumen - Naïla: Walzer",
     "type": "welte-red",
-    "work": "\"naïla\": Walzer"
+    "work": "Naïla: Walzer"
   },
   {
     "arranger": "",
@@ -1879,9 +1939,9 @@
     "number": "4420",
     "performer": "",
     "publisher": "Aeolian",
-    "title": "Font y de Anta - El Organillo y... yo: schotish",
+    "title": "Font y de Anta - El  Organillo y... yo: schotish",
     "type": "88-note",
-    "work": "El Organillo y... yo: schotish"
+    "work": "El  Organillo y... yo: schotish"
   },
   {
     "arranger": "",
@@ -1999,9 +2059,9 @@
     "number": "2525",
     "performer": "Ebenstein, K",
     "publisher": "Welte-Mignon",
-    "title": "Gilbert/Ebenstein - Die Keusche susanna: Potpourri",
+    "title": "Gilbert/Ebenstein - Die  Keusche susanna: Potpourri",
     "type": "welte-red",
-    "work": "Die Keusche susanna: Potpourri"
+    "work": "Die  Keusche susanna: Potpourri"
   },
   {
     "arranger": "",
@@ -2011,9 +2071,9 @@
     "number": "4490",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Giménez - El Barbero de sevilla: (zarzuela española): selecciones",
+    "title": "Giménez - El  Barbero de sevilla: (zarzuela española): selecciones",
     "type": "88-note",
-    "work": "El Barbero de sevilla: (zarzuela española) : selecciones"
+    "work": "El  Barbero de sevilla: (zarzuela española) : selecciones"
   },
   {
     "arranger": "",
@@ -2023,9 +2083,9 @@
     "number": "4514",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Giménez - La Tempranica: selecciones",
+    "title": "Giménez - La  Tempranica: selecciones",
     "type": "88-note",
-    "work": "La Tempranica: selecciones"
+    "work": "La  Tempranica: selecciones"
   },
   {
     "arranger": "Blumenfeld, Félix",
@@ -2059,9 +2119,9 @@
     "number": "1945",
     "performer": "Glazunov, Aleksandr Konstantinovich",
     "publisher": "Welte-Mignon",
-    "title": "Glazunov/Glazunov - Les Saisons, ballet",
+    "title": "Glazunov/Glazunov - Les   Saisons, ballet",
     "type": "welte-red",
-    "work": "Les Saisons, ballet"
+    "work": "Les   Saisons, ballet"
   },
   {
     "arranger": "",
@@ -2131,9 +2191,9 @@
     "number": "1819",
     "performer": "Utz, Paula",
     "publisher": "Welte-Mignon",
-    "title": "Gottschalk/Utz - The Last hope: (meditation réligieuse)",
+    "title": "Gottschalk/Utz - The  Last hope: (meditation réligieuse)",
     "type": "welte-red",
-    "work": "The Last hope: (meditation réligieuse)"
+    "work": "The  Last hope: (meditation réligieuse)"
   },
   {
     "arranger": "Liszt, Franz",
@@ -2299,9 +2359,9 @@
     "number": "1307",
     "performer": "Pugno, Raoul",
     "publisher": "Welte-Mignon",
-    "title": "Grieg/Pugno - An Den frühling: op. 43, no. 1: (Lyrische Stücke)",
+    "title": "Grieg/Pugno - An  Den frühling: op. 43, no. 1: (Lyrische Stücke)",
     "type": "welte-red",
-    "work": "An Den frühling: op. 43, no. 1 : (Lyrische Stücke)"
+    "work": "An  Den frühling: op. 43, no. 1 : (Lyrische Stücke)"
   },
   {
     "arranger": "",
@@ -2395,9 +2455,9 @@
     "number": "5404",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Guerrero - El Huésped del sevillano: Lagarteranas",
+    "title": "Guerrero - El  Huésped del sevillano: Lagarteranas",
     "type": "88-note",
-    "work": "El Huésped del sevillano: Lagarteranas"
+    "work": "El  Huésped del sevillano: Lagarteranas"
   },
   {
     "arranger": "",
@@ -2407,9 +2467,9 @@
     "number": "4540",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Guerrero - El Sobre verde: Bombones de chocolate",
+    "title": "Guerrero - El  Sobre verde: Bombones de chocolate",
     "type": "88-note",
-    "work": "El Sobre verde: Bombones de chocolate"
+    "work": "El  Sobre verde: Bombones de chocolate"
   },
   {
     "arranger": "",
@@ -2419,9 +2479,9 @@
     "number": "3376",
     "performer": "Berend, Fritz",
     "publisher": "Welte-Mignon",
-    "title": "Halévy/Berend - Die Jüdin",
+    "title": "Halévy/Berend - Die  Jüdin",
     "type": "welte-red",
-    "work": "Die Jüdin"
+    "work": "Die  Jüdin"
   },
   {
     "arranger": "",
@@ -2443,9 +2503,9 @@
     "number": "10",
     "performer": "Adam-Benard, Eugenie",
     "publisher": "Welte-Mignon",
-    "title": "Handel/Adam-Benard - The Harmonius blacksmith: E major, 5th suite = Le forgeron harmonieux",
+    "title": "Handel/Adam-Benard - The  Harmonius blacksmith: E major, 5th suite = Le forgeron harmonieux",
     "type": "welte-red",
-    "work": "The Harmonius blacksmith: E major, 5th suite = Le forgeron harmonieux"
+    "work": "The  Harmonius blacksmith: E major, 5th suite = Le forgeron harmonieux"
   },
   {
     "arranger": "",
@@ -2503,9 +2563,9 @@
     "number": "40019",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Hoyos - El Carrerito: tango argentino",
+    "title": "Hoyos - El  Carrerito: tango argentino",
     "type": "88-note",
-    "work": "El Carrerito: tango argentino"
+    "work": "El  Carrerito: tango argentino"
   },
   {
     "arranger": "",
@@ -2617,15 +2677,27 @@
   },
   {
     "arranger": "",
+    "composer": "Lange, Gustav",
+    "druid": "xn861tf7013",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xn861tf7013/xn861tf7013_0001/info.json",
+    "number": "83847",
+    "performer": "",
+    "publisher": "Universal",
+    "title": "Lange - Edelweiss: op. 31: idylle",
+    "type": "88-note",
+    "work": "Edelweiss: op. 31: idylle"
+  },
+  {
+    "arranger": "",
     "composer": "Lecocq, Charles",
     "druid": "ft113cg5195",
     "image_url": "https://stacks.stanford.edu/image/iiif/ft113cg5195/ft113cg5195_0001/info.json",
     "number": "2810",
     "performer": "Gayraud, P",
     "publisher": "Welte-Mignon",
-    "title": "Lecocq/Gayraud - La Fille de madame angot: (fantasie mosaïque)",
+    "title": "Lecocq/Gayraud - La  Fille de madame angot: (fantasie mosaïque)",
     "type": "welte-red",
-    "work": "La Fille de madame angot: (fantasie mosaïque)"
+    "work": "La  Fille de madame angot: (fantasie mosaïque)"
   },
   {
     "arranger": "",
@@ -2724,8 +2796,20 @@
     "work": "Luna-walzer: a. d. Operette \"Frau Luna\""
   },
   {
-    "arranger": "Vetter, Hermann, 1859-1928",
-    "composer": "Liszt, Franz, 1811-1886",
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "ny190nz5753",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ny190nz5753/ny190nz5753_0001/info.json",
+    "number": "11091",
+    "performer": "",
+    "publisher": "QRS",
+    "title": "Liszt - Rhapsodie hongroise, no. 2: key of E",
+    "type": "88-note",
+    "work": "Rhapsodie hongroise, no. 2: key of E"
+  },
+  {
+    "arranger": "Vetter, Hermann",
+    "composer": "Liszt, Franz",
     "druid": "jg717nb8731",
     "image_url": "https://stacks.stanford.edu/image/iiif/jg717nb8731/jg717nb8731_0001/info.json",
     "number": "2703",
@@ -2803,9 +2887,9 @@
     "number": "444",
     "performer": "Busoni, Ferruccio",
     "publisher": "Welte-Mignon",
-    "title": "Liszt/Busoni - La Campanella: Paganini etude no. 3",
+    "title": "Liszt/Busoni - La  Campanella: Paganini etude no. 3",
     "type": "welte-red",
-    "work": "La Campanella: Paganini etude no. 3"
+    "work": "La  Campanella: Paganini etude no. 3"
   },
   {
     "arranger": "",
@@ -2818,6 +2902,18 @@
     "title": "Liszt/Busoni - Norma: Fantasie",
     "type": "welte-red",
     "work": "Norma: Fantasie"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "mf443ns5829",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mf443ns5829/mf443ns5829_0001/info.json",
+    "number": "445",
+    "performer": "Busoni, Ferruccio",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Busoni - Rigoletto: (paraphrase)",
+    "type": "welte-red",
+    "work": "Rigoletto: (paraphrase)"
   },
   {
     "arranger": "",
@@ -3492,6 +3588,18 @@
     "work": "Thais, meditation"
   },
   {
+    "arranger": "",
+    "composer": "Mendelssohn-Bartholdy, Felix",
+    "druid": "bx696fq3697",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bx696fq3697/bx696fq3697_0001/info.json",
+    "number": "84307",
+    "performer": "",
+    "publisher": "Universal",
+    "title": "Mendelssohn-Bartholdy - Midsummer night's dream: op. 61: Nocturne",
+    "type": "88-note",
+    "work": "Midsummer night's dream: op. 61: Nocturne"
+  },
+  {
     "arranger": "Hutcheson, Ernest",
     "composer": "Mendelssohn-Bartholdy, Felix",
     "druid": "hh361xy4933",
@@ -3661,15 +3769,27 @@
   },
   {
     "arranger": "",
+    "composer": "Meyer, George W",
+    "druid": "bv720gq2633",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bv720gq2633/bv720gq2633_0003/info.json",
+    "number": "Z106353",
+    "performer": "Clair, Herbert",
+    "publisher": "Rythmodik",
+    "title": "Meyer/Clair - Hiawatha's melody of love: waltz: key of E flat",
+    "type": "88-note",
+    "work": "Hiawatha's melody of love: waltz : key of E flat"
+  },
+  {
+    "arranger": "",
     "composer": "Moreno Torroba, Federico, 1891-1982",
     "druid": "qf152xr6941",
     "image_url": "https://stacks.stanford.edu/image/iiif/qf152xr6941/qf152xr6941_0002/info.json",
     "number": "4660",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Moreno Torroba - La Marchenera: Petenera",
+    "title": "Moreno Torroba - La  Marchenera: Petenera",
     "type": "88-note",
-    "work": "La Marchenera: Petenera"
+    "work": "La  Marchenera: Petenera"
   },
   {
     "arranger": "",
@@ -3698,6 +3818,18 @@
   {
     "arranger": "",
     "composer": "Mozart, Wolfgang Amadeus",
+    "druid": "ns724rz6542",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ns724rz6542/ns724rz6542_0001/info.json",
+    "number": "50315",
+    "performer": "",
+    "publisher": "Hupfeld",
+    "title": "Mozart - Sonate, c-dur = ut majeur = c major: (Köch.-Verz. No. 330): Allegro moderato; Andante cantabile",
+    "type": "88-note",
+    "work": "Sonate, c-dur = ut majeur = c major: (Köch.-Verz. No. 330): Allegro moderato ; Andante cantabile"
+  },
+  {
+    "arranger": "",
+    "composer": "Mozart, Wolfgang Amadeus",
     "druid": "jx095ty1753",
     "image_url": "https://stacks.stanford.edu/image/iiif/jx095ty1753/jx095ty1753_0001/info.json",
     "number": "1204",
@@ -3706,6 +3838,18 @@
     "title": "Mozart/Pachmann - Sonate, a-dur, nr. 9",
     "type": "welte-red",
     "work": "Sonate, a-dur, nr. 9"
+  },
+  {
+    "arranger": "",
+    "composer": "Mozart, Wolfgang Amadeus",
+    "druid": "nr538vy9112",
+    "image_url": "https://stacks.stanford.edu/image/iiif/nr538vy9112/nr538vy9112_0001/info.json",
+    "number": "50319",
+    "performer": "Reinecke, Carl",
+    "publisher": "Hupfeld",
+    "title": "Mozart/Reinecke - Sonata no. 12, f-dur = fa majeur = f major: Allegro assai",
+    "type": "88-note",
+    "work": "Sonata no. 12, f-dur = fa majeur = f major: Allegro assai"
   },
   {
     "arranger": "",
@@ -3739,9 +3883,9 @@
     "number": "4636",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Muñoz Aceña - La Cieguita: tango-canción",
+    "title": "Muñoz Aceña - La  Cieguita: tango-canción",
     "type": "88-note",
-    "work": "La Cieguita: tango-canción"
+    "work": "La  Cieguita: tango-canción"
   },
   {
     "arranger": "",
@@ -3883,9 +4027,9 @@
     "number": "2255",
     "performer": "Epstein, Richard",
     "publisher": "Welte-Mignon",
-    "title": "Puccini/Epstein - La Boheme: selection",
+    "title": "Puccini/Epstein - La  Boheme: selection",
     "type": "welte-red",
-    "work": "La Boheme: selection"
+    "work": "La  Boheme: selection"
   },
   {
     "arranger": "",
@@ -3931,9 +4075,9 @@
     "number": "4309",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Pérez Soriano - El Guitarrico: Jota",
+    "title": "Pérez Soriano - El  Guitarrico: Jota",
     "type": "88-note",
-    "work": "El Guitarrico: Jota"
+    "work": "El  Guitarrico: Jota"
   },
   {
     "arranger": "",
@@ -4039,9 +4183,9 @@
     "number": "424",
     "performer": "Wendling, Carl",
     "publisher": "Welte-Mignon",
-    "title": "Raff/Wendling - La Fileuse: op. 157, no. 2",
+    "title": "Raff/Wendling - La  Fileuse: op. 157, no. 2",
     "type": "welte-red",
-    "work": "La Fileuse: op. 157, no. 2"
+    "work": "La  Fileuse: op. 157, no. 2"
   },
   {
     "arranger": "Whiteman, Paul",
@@ -4099,9 +4243,9 @@
     "number": "4246",
     "performer": "",
     "publisher": "Pricesa",
-    "title": "Rouget de Lisle - La Marsellesa: himno francés",
+    "title": "Rouget de Lisle - La  Marsellesa: himno francés",
     "type": "88-note",
-    "work": "La Marsellesa: himno francés"
+    "work": "La  Marsellesa: himno francés"
   },
   {
     "arranger": "",
@@ -4363,9 +4507,9 @@
     "number": "1260",
     "performer": "Paderewski, Ignace Jan",
     "publisher": "Welte-Mignon",
-    "title": "Schubert-Liszt/Paderewski - The Erl king",
+    "title": "Schubert-Liszt/Paderewski - The  Erl king",
     "type": "welte-red",
-    "work": "The Erl king"
+    "work": "The  Erl king"
   },
   {
     "arranger": "Tausig, Carl",
@@ -4406,6 +4550,18 @@
   {
     "arranger": "",
     "composer": "Schubert, Franz",
+    "druid": "kh288bx3828",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kh288bx3828/kh288bx3828_0001/info.json",
+    "number": "50385",
+    "performer": "Grünfeld, Alfred",
+    "publisher": "Hupfeld",
+    "title": "Schubert/Grünfeld - Impromptu, op. 142, no. 2, as = la bémol = a♭",
+    "type": "88-note",
+    "work": "Impromptu, op. 142, no. 2, as = la bémol = a♭"
+  },
+  {
+    "arranger": "",
+    "composer": "Schubert, Franz",
     "druid": "gx107hd3026",
     "image_url": "https://stacks.stanford.edu/image/iiif/gx107hd3026/gx107hd3026_0001/info.json",
     "number": "3316",
@@ -4435,9 +4591,9 @@
     "number": "2388",
     "performer": "Mackle, Frieda",
     "publisher": "Welte-Mignon",
-    "title": "Schubert/Mackle - Der Wanderer",
+    "title": "Schubert/Mackle - Der  Wanderer",
     "type": "welte-red",
-    "work": "Der Wanderer"
+    "work": "Der  Wanderer"
   },
   {
     "arranger": "",
@@ -4891,9 +5047,9 @@
     "number": "1697",
     "performer": "Scott, Cyril",
     "publisher": "Welte-Mignon",
-    "title": "Scott/Scott - A Song from the east: Danse nègre",
+    "title": "Scott/Scott - A  Song from the east: Danse nègre",
     "type": "welte-red",
-    "work": "A Song from the east: Danse nègre"
+    "work": "A  Song from the east: Danse nègre"
   },
   {
     "arranger": "",
@@ -4963,9 +5119,9 @@
     "number": "3537",
     "performer": "Daly, William",
     "publisher": "Welte-Mignon",
-    "title": "Silésu/Daly - Un Peu d'amour: popular song",
+    "title": "Silésu/Daly - Un  Peu d'amour: popular song",
     "type": "welte-red",
-    "work": "Un Peu d'amour: popular song"
+    "work": "Un  Peu d'amour: popular song"
   },
   {
     "arranger": "",
@@ -5005,6 +5161,30 @@
   },
   {
     "arranger": "",
+    "composer": "",
+    "druid": "ph633tr8751",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ph633tr8751/ph633tr8751_0002/info.json",
+    "number": "12515",
+    "performer": "",
+    "publisher": "QRS",
+    "title": "Sonato in a flat: Andante and variations",
+    "type": "88-note",
+    "work": "Sonato in a flat: Andante and variations"
+  },
+  {
+    "arranger": "",
+    "composer": "Sousa, John Philip",
+    "druid": "cn498vz4750",
+    "image_url": "https://stacks.stanford.edu/image/iiif/cn498vz4750/cn498vz4750_0001/info.json",
+    "number": "1812",
+    "performer": "",
+    "publisher": "US Regular",
+    "title": "Sousa - The   Stars and stripes forever: march",
+    "type": "88-note",
+    "work": "The   Stars and stripes forever: march"
+  },
+  {
+    "arranger": "",
     "composer": "Steinway, Charles H",
     "druid": "fr396nf3639",
     "image_url": "https://stacks.stanford.edu/image/iiif/fr396nf3639/fr396nf3639_0001/info.json",
@@ -5035,9 +5215,21 @@
     "number": "2613",
     "performer": "Goodall, B",
     "publisher": "Welte-Mignon",
-    "title": "Straus/Goodall - The Chocolate soldier: selection 1",
+    "title": "Straus/Goodall - The  Chocolate soldier: selection 1",
     "type": "welte-red",
-    "work": "The Chocolate soldier: selection 1"
+    "work": "The  Chocolate soldier: selection 1"
+  },
+  {
+    "arranger": "",
+    "composer": "Strauss, Johann",
+    "druid": "gp583km0927",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gp583km0927/gp583km0927_0002/info.json",
+    "number": "84632",
+    "performer": "",
+    "publisher": "Themodist-Metrostyle",
+    "title": "Strauss - Rosen aus dem süden: Walzer",
+    "type": "88-note",
+    "work": "Rosen aus dem süden: Walzer"
   },
   {
     "arranger": "Grünfeld, Alfred",
@@ -5215,9 +5407,9 @@
     "number": "2615",
     "performer": "Goodall, B",
     "publisher": "Welte-Mignon",
-    "title": "Sullivan/Goodall - The Gondoliers, or the king of barataria",
+    "title": "Sullivan/Goodall - The  Gondoliers, or the king of barataria",
     "type": "welte-red",
-    "work": "The Gondoliers, or the king of barataria"
+    "work": "The  Gondoliers, or the king of barataria"
   },
   {
     "arranger": "",
@@ -5227,9 +5419,9 @@
     "number": "2617",
     "performer": "Goodall, B",
     "publisher": "Welte-Mignon",
-    "title": "Sullivan/Goodall - The Mikado, or the town of titibu: II (Selection)",
+    "title": "Sullivan/Goodall - The  Mikado, or the town of titibu: II (Selection)",
     "type": "welte-red",
-    "work": "The Mikado, or the town of titibu: II (Selection)"
+    "work": "The  Mikado, or the town of titibu: II (Selection)"
   },
   {
     "arranger": "",
@@ -5239,9 +5431,9 @@
     "number": "2618",
     "performer": "Goodall, B",
     "publisher": "Welte-Mignon",
-    "title": "Sullivan/Goodall - The Yeomen of the guard, or the merry man and his maid",
+    "title": "Sullivan/Goodall - The  Yeomen of the guard, or the merry man and his maid",
     "type": "welte-red",
-    "work": "The Yeomen of the guard, or the merry man and his maid"
+    "work": "The  Yeomen of the guard, or the merry man and his maid"
   },
   {
     "arranger": "",
@@ -5376,18 +5568,6 @@
     "work": "Aida: Acto II: Gran marcha triunfal"
   },
   {
-    "arranger": "Liszt, Franz, 1811-1886",
-    "composer": "Verdi, Giuseppe, 1813-1901",
-    "druid": "mf443ns5829",
-    "image_url": "https://stacks.stanford.edu/image/iiif/mf443ns5829/mf443ns5829_0001/info.json",
-    "number": "445",
-    "performer": "Busoni, Ferruccio, 1866-1924",
-    "publisher": "Welte-Mignon",
-    "title": "Verdi-Liszt/Busoni - Rigoletto: (paraphrase)",
-    "type": "welte-red",
-    "work": "Rigoletto: (paraphrase)"
-  },
-  {
     "arranger": "",
     "composer": "Verdi, Giuseppe",
     "druid": "np204br1080",
@@ -5431,9 +5611,9 @@
     "number": "1339",
     "performer": "Starke, Gustav",
     "publisher": "Welte-Mignon",
-    "title": "Verdi/Starke - La Traviata: fantasie",
+    "title": "Verdi/Starke - La  Traviata: fantasie",
     "type": "welte-red",
-    "work": "La Traviata: fantasie"
+    "work": "La  Traviata: fantasie"
   },
   {
     "arranger": "",
@@ -5443,9 +5623,9 @@
     "number": "1339",
     "performer": "Starke, Gustav",
     "publisher": "Welte-Mignon",
-    "title": "Verdi/Starke - La Traviata: fantasie",
+    "title": "Verdi/Starke - La  Traviata: fantasie",
     "type": "welte-red",
-    "work": "La Traviata: fantasie"
+    "work": "La  Traviata: fantasie"
   },
   {
     "arranger": "",
@@ -5467,9 +5647,9 @@
     "number": "4518",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Viladomat - El Tango de la cocaína",
+    "title": "Viladomat - El  Tango de la cocaína",
     "type": "88-note",
-    "work": "El Tango de la cocaína"
+    "work": "El  Tango de la cocaína"
   },
   {
     "arranger": "",
@@ -5520,6 +5700,30 @@
     "work": "Feuerzauber"
   },
   {
+    "arranger": "Brockway, Howard",
+    "composer": "Wagner, Richard",
+    "druid": "fz108ts9393",
+    "image_url": "https://stacks.stanford.edu/image/iiif/fz108ts9393/fz108ts9393_0006/info.json",
+    "number": "C3494",
+    "performer": "Brockway, Howard",
+    "publisher": "Solostyle",
+    "title": "Wagner-Brockway/Brockway - Tannhauser: \"Oh thou sublime sweet evening star\"",
+    "type": "88-note",
+    "work": "Tannhauser: \"Oh thou sublime sweet evening star\""
+  },
+  {
+    "arranger": "Brockway, Howard",
+    "composer": "Wagner, Richard",
+    "druid": "xn815zk7379",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xn815zk7379/xn815zk7379_0005/info.json",
+    "number": "C3484",
+    "performer": "Brockway, Howard",
+    "publisher": "Solostyle",
+    "title": "Wagner-Brockway/Brockway - Tannhauser: \"Pilgrim's chorus\"",
+    "type": "88-note",
+    "work": "Tannhauser: \"Pilgrim's chorus\""
+  },
+  {
     "arranger": "Bülow, Hans von",
     "composer": "Wagner, Richard",
     "druid": "fd660zf8362",
@@ -5568,16 +5772,16 @@
     "work": "Tannhäuser overture"
   },
   {
-    "arranger": "Rybner, Cornelius, 1855-1929",
-    "composer": "Wagner, Richard, 1813-1883",
+    "arranger": "Rybner, Cornelius",
+    "composer": "Wagner, Richard",
     "druid": "hg709nf1997",
     "image_url": "https://stacks.stanford.edu/image/iiif/hg709nf1997/hg709nf1997_0001/info.json",
     "number": "3019",
-    "performer": "Rybner, Cornelius, 1855-1929",
+    "performer": "Rybner, Cornelius",
     "publisher": "Welte-Mignon",
-    "title": "Wagner-Rybner/Rybner - Die Meistersinger von nürnberg: Konzert-Paraphrase",
+    "title": "Wagner-Rybner/Rybner - Die   Meistersinger von nürnberg: Konzert-Paraphrase",
     "type": "welte-red",
-    "work": "Die Meistersinger von nürnberg: Konzert-Paraphrase"
+    "work": "Die   Meistersinger von nürnberg: Konzert-Paraphrase"
   },
   {
     "arranger": "Spindler, Fritz",
@@ -5635,9 +5839,9 @@
     "number": "1352",
     "performer": "Mottl, Felix",
     "publisher": "Welte-Mignon",
-    "title": "Wagner/Mottl - Die Meistersinger von nürnberg: Am stillen Herd zur Winterszeit",
+    "title": "Wagner/Mottl - Die  Meistersinger von nürnberg: Am stillen Herd zur Winterszeit",
     "type": "welte-red",
-    "work": "Die Meistersinger von nürnberg: Am stillen Herd zur Winterszeit"
+    "work": "Die  Meistersinger von nürnberg: Am stillen Herd zur Winterszeit"
   },
   {
     "arranger": "",
