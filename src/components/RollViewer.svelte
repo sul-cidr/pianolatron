@@ -51,6 +51,7 @@
       position: absolute;
       right: 0;
       top: 0;
+      box-shadow: inset 0px 0px 3px 0px rgba(0, 0, 0, 0.4);
     }
 
     :global(canvas) {
