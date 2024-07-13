@@ -211,9 +211,12 @@
         durationTicks: noteInterval.high - noteInterval.low,
         midi: noteInterval.data,
         ticks: noteInterval.low,
-        velocity: Math.round(
-          $expressionBox.noteVelocitiesMap[noteInterval.low][noteInterval.data],
-        ),
+        velocity:
+          Math.round(
+            $expressionBox.noteVelocitiesMap[noteInterval.low][
+              noteInterval.data
+            ],
+          ) / 127,
       });
     });
 
