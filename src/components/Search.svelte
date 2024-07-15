@@ -349,6 +349,7 @@
     searchParts = text
       ? normalizeText(text.replace(/<br>|[&/\\#,+()$~%.'":*?<>{}]|nbsp;/g, " "))
           .split(" ")
+          .filter(Boolean)
           .slice(0, 8)
       : [];
   };
