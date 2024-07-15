@@ -308,17 +308,17 @@
   const markupMatches = (label) => {
     const matchExtents = [];
     const mergedExtents = [];
-    let markedUp = label;
+    let markedUp = label.replace(/\s+/g, " "); // source text has irregular whitespace
     const searchContent = normalizeText(label);
 
     searchParts.forEach((searchPart) => {
       let idx = -1;
       while ((idx = searchContent.indexOf(searchPart, idx + 1)) > -1) {
-        const _idx = idx - startIdxAdjustment(label, idx - 1);
+        const _idx = idx - startIdxAdjustment(markedUp, idx - 1);
         const _idxEnd =
           idx +
           searchPart.length -
-          endIdxAdjustment(label, _idx + searchPart.length - 1);
+          endIdxAdjustment(markedUp, _idx + searchPart.length - 1);
         matchExtents.push([_idx, _idxEnd]);
       }
     });
