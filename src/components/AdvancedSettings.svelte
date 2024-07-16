@@ -86,6 +86,7 @@
     controlHoleColor,
     holeColorMap,
   } from "../lib/utils";
+  import { tooltip } from "../lib/tooltip-action";
 
   const themes = ["cardinal", "blue", "green", "grey"];
 
@@ -156,7 +157,11 @@
     {/if}
   </fieldset>
 
-  <fieldset>
+  <fieldset
+    use:tooltip={$rollHasExpressions
+      ? null
+      : "No Expressions are available for this roll type"}
+  >
     <legend>Roll Emulation Settings</legend>
     <label>
       Play Expressions:
