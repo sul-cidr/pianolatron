@@ -176,7 +176,11 @@
     </div>
     <div>
       Emulate Roll Acceleration:
-      <input type="checkbox" bind:checked={$useMidiTempoEventsOnOff} />
+      <input
+        type="checkbox"
+        bind:checked={$useMidiTempoEventsOnOff}
+        disabled={!$rollHasExpressions}
+      />
     </div>
   </fieldset>
 
