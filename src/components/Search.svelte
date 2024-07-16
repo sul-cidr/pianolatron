@@ -371,7 +371,7 @@
 
     if (searchParts.length) {
       filteredListItems = filteredListItems.filter((item) =>
-        searchParts.some((searchPart) =>
+        searchParts.every((searchPart) =>
           searchFields.some((field) =>
             normalizeText(item[field]).includes(searchPart),
           ),
