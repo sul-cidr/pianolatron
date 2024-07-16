@@ -26,6 +26,11 @@
     background-repeat: no-repeat;
     border: 2px solid var(--primary-accent);
   }
+
+  &:disabled {
+    background-color: lightgray;
+    border: 2px solid grey;
+  }
 }
 
 [type="radio"] {

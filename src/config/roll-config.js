@@ -112,6 +112,7 @@ export const rollProfile = {
   "65-note": {
     bassNotesBegin: 33,
     trebleNotesEnd: 97,
+    ctrlMap: {},
   },
   "88-note": {
     bassCtrlBegin: 15,

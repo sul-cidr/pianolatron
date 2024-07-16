@@ -136,7 +136,7 @@
 </script>
 
 <div id="expression-panel">
-  {#if !$rollHasExpressions || ["welte-red", "welte-green", "welte-licensee", "duo-art", "88-note"].includes($rollMetadata.ROLL_TYPE)}
+  {#if $rollHasExpressions}
     <fieldset>
       <legend>Emulation Type</legend>
 
