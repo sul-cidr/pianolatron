@@ -425,8 +425,9 @@
     {#if facets}
       <ul role="group" aria-labelledby="facets-label">
         {#each facets as facet}
-          <li aria-current={facet === activeFacet ? "true" : null}>
+          <li>
             <button
+              aria-current={facet === activeFacet ? "true" : null}
               on:click={() => {
                 setActiveFacet(facet);
               }}
