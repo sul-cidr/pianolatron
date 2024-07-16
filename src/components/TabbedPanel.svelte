@@ -33,7 +33,8 @@
       font-size: 1.4em;
     }
 
-    :global(fieldset div) {
+    :global(fieldset div),
+    :global(fieldset label) {
       display: flex;
       justify-content: space-between;
     }

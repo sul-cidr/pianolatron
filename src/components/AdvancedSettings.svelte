@@ -95,25 +95,25 @@
 <div id="settings-panel">
   <fieldset>
     <legend>Visualization Settings</legend>
-    <div>
+    <label>
       Show Details for Active Notes:
       <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
-    </div>
-    <div>
+    </label>
+    <label>
       Display Note Velocities:
       <input type="checkbox" bind:checked={$userSettings.showNoteVelocities} />
-    </div>
-    <div>
+    </label>
+    <label>
       Highlight Enabled Holes:
       <input
         type="checkbox"
         bind:checked={$userSettings.highlightEnabledHoles}
       />
-    </div>
-    <div class="setting">
+    </label>
+    <label class="setting">
       Show Roll Viewer Scale Bar:
       <input type="checkbox" bind:checked={$userSettings.showRuler} />
-    </div>
+    </label>
   </fieldset>
 
   <fieldset>
@@ -158,7 +158,7 @@
 
   <fieldset>
     <legend>Roll Emulation Settings</legend>
-    <div>
+    <label>
       Play Expressions:
       <input
         type="checkbox"
@@ -166,8 +166,8 @@
         on:change={() => ($playExpressionsOnOff = !$playExpressionsOnOff)}
         disabled={!$rollHasExpressions}
       />
-    </div>
-    <div>
+    </label>
+    <label>
       Use Roll Pedaling:
       <input
         type="checkbox"
@@ -175,8 +175,8 @@
         on:change={() => ($rollPedalingOnOff = !$rollPedalingOnOff)}
         disabled={!$rollHasExpressions}
       />
-    </div>
-    <div>
+    </label>
+    <label>
       Emulate Roll Acceleration:
       <input
         type="checkbox"
@@ -184,7 +184,7 @@
         on:change={() => ($useMidiTempoEventsOnOff = !$useMidiTempoEventsOnOff)}
         disabled={!$rollHasExpressions}
       />
-    </div>
+    </label>
   </fieldset>
 
   <div class="theme-selector">
