@@ -162,7 +162,8 @@
       Play Expressions:
       <input
         type="checkbox"
-        bind:checked={$playExpressionsOnOff}
+        checked={$rollHasExpressions && $playExpressionsOnOff}
+        on:change={() => ($playExpressionsOnOff = !$playExpressionsOnOff)}
         disabled={!$rollHasExpressions}
       />
     </div>
@@ -170,7 +171,8 @@
       Use Roll Pedaling:
       <input
         type="checkbox"
-        bind:checked={$rollPedalingOnOff}
+        checked={$rollHasExpressions && $rollPedalingOnOff}
+        on:change={() => ($rollPedalingOnOff = !$rollPedalingOnOff)}
         disabled={!$rollHasExpressions}
       />
     </div>
@@ -178,7 +180,8 @@
       Emulate Roll Acceleration:
       <input
         type="checkbox"
-        bind:checked={$useMidiTempoEventsOnOff}
+        checked={$rollHasExpressions && $useMidiTempoEventsOnOff}
+        on:change={() => ($useMidiTempoEventsOnOff = !$useMidiTempoEventsOnOff)}
         disabled={!$rollHasExpressions}
       />
     </div>
