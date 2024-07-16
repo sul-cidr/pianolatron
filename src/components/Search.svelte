@@ -308,7 +308,7 @@
   const markupMatches = (label) => {
     const matchExtents = [];
     const mergedExtents = [];
-    let markedUp = label.replace(/\s+/g, " "); // source text has irregular whitespace
+    let markedUp = label.replace(/[^\S\n]+/g, " "); // source text has irregular whitespace
     const searchContent = normalizeText(label);
 
     searchParts.forEach((searchPart) => {
