@@ -382,6 +382,8 @@
   };
 
   const bookmarkRoll = () => {
+    if ($rollBeingBookmarked) return;
+
     $rollBeingBookmarked = true;
 
     const urlToCopy = new URL(window.location);

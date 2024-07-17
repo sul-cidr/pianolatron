@@ -80,8 +80,9 @@
     if (buttonToggled(5, lastControllerState, gamepad))
       $sustainOnOff = buttonPressed(gamepad.buttons[5]);
 
-    if (buttonPressed(gamepad.buttons[8])) adjustZoom("resetZoom");
-    if (buttonPressed(gamepad.buttons[9])) bookmarkRoll();
+    if (buttonToggledOn(8, lastControllerState, gamepad))
+      adjustZoom("resetZoom");
+    if (buttonToggledOn(9, lastControllerState, gamepad)) bookmarkRoll();
     if (
       buttonToggled(10, lastControllerState, gamepad) ||
       buttonToggled(11, lastControllerState, gamepad)
