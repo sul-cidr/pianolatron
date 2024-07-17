@@ -236,10 +236,10 @@
       </fieldset>
       <fieldset>
         <legend>Visualization Settings</legend>
-        <div>
+        <label>
           Draw Velocity Curves:
           <input type="checkbox" bind:checked={$drawVelocityCurves} />
-        </div>
+        </label>
       </fieldset>
     {/if}
   {:else}

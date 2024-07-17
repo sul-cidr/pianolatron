@@ -61,20 +61,20 @@
         and pedal events.
       </p>
 
-      <div class="setting">
+      <label class="setting">
         Enable WebMIDI:
         <input type="checkbox" bind:checked={$userSettings.useWebMidi} />
-      </div>
+      </label>
 
       {#if $userSettings.useWebMidi}
-        <div class="setting" transition:fade>
+        <label class="setting" transition:fade>
           Sustain from External MIDI:
           <input type="checkbox" bind:checked={$sustainFromExternalMidi} />
-        </div>
-        <div class="setting" transition:fade>
+        </label>
+        <label class="setting" transition:fade>
           Soft from External MIDI:
           <input type="checkbox" bind:checked={$softFromExternalMidi} />
-        </div>
+        </label>
 
         <p class="list-header" transition:fade>Connected Inputs:</p>
         <ul>
