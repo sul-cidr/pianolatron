@@ -51,7 +51,7 @@
       Math.round(
         clamp(
           $trebleVolumeCoefficient -
-            gamepad.axes[3] / (100 - $tempoSensitivity),
+            gamepad.axes[3] / (100 - $volumeSensitivity),
           controlsConfig.trebleVolume.min,
           controlsConfig.trebleVolume.max,
         ) * 100,
@@ -61,7 +61,7 @@
         clamp(
           $tempoCoefficient +
             (gamepad.buttons[7].value - gamepad.buttons[6].value) /
-              (100 - $volumeSensitivity),
+              (100 - $tempoSensitivity),
           controlsConfig.tempo.min,
           controlsConfig.tempo.max,
         ) * 100,
