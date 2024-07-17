@@ -112,6 +112,14 @@
     overflow-x: auto;
   }
 
+  caption {
+    /* Visually hidden */
+    clip-path: inset(50%);
+    height: 1px; /* Safari doesn’t focus elements with zero dimensions */
+    width: 1px; /* so this remains necessary. */
+    white-space: nowrap; /* Screen readers (particularly NVDA) will sometimes remove line-breaks in wrapped text. */
+  }
+
   table {
     border-collapse: collapse;
     box-shadow:
@@ -425,8 +433,9 @@
     {#if facets}
       <ul role="group" aria-labelledby="facets-label">
         {#each facets as facet}
-          <li aria-current={facet === activeFacet ? "true" : null}>
+          <li>
             <button
+              aria-current={facet === activeFacet ? "true" : null}
               on:click={() => {
                 setActiveFacet(facet);
               }}
@@ -452,6 +461,7 @@
       aria-label="Search/Browse Results: Piano Rolls"
       aria-rowcount={pageSize}
     >
+      <caption>Column headers with buttons are sortable.</caption>
       <thead>
         <tr>
           <th
