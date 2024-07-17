@@ -37,6 +37,10 @@
   border-radius: 50%;
 }
 
+label:has([type="checkbox"]) {
+  cursor: pointer;
+}
+
 label:has([type="checkbox"]:disabled) {
   opacity: 0.5;
 }
