@@ -86,6 +86,7 @@
     controlHoleColor,
     holeColorMap,
   } from "../lib/utils";
+  import { tooltip } from "../lib/tooltip-action";
 
   const themes = ["cardinal", "blue", "green", "grey"];
 
@@ -95,25 +96,25 @@
 <div id="settings-panel">
   <fieldset>
     <legend>Visualization Settings</legend>
-    <div>
+    <label>
       Show Details for Active Notes:
       <input type="checkbox" bind:checked={$userSettings.activeNoteDetails} />
-    </div>
-    <div>
+    </label>
+    <label>
       Display Note Velocities:
       <input type="checkbox" bind:checked={$userSettings.showNoteVelocities} />
-    </div>
-    <div>
+    </label>
+    <label>
       Highlight Enabled Holes:
       <input
         type="checkbox"
         bind:checked={$userSettings.highlightEnabledHoles}
       />
-    </div>
-    <div class="setting">
+    </label>
+    <label class="setting">
       Show Roll Viewer Scale Bar:
       <input type="checkbox" bind:checked={$userSettings.showRuler} />
-    </div>
+    </label>
   </fieldset>
 
   <fieldset>
@@ -156,32 +157,39 @@
     {/if}
   </fieldset>
 
-  <fieldset>
+  <fieldset
+    use:tooltip={$rollHasExpressions
+      ? null
+      : "No Expressions are available for this roll type"}
+  >
     <legend>Roll Emulation Settings</legend>
-    <div>
+    <label>
       Play Expressions:
       <input
         type="checkbox"
-        bind:checked={$playExpressionsOnOff}
+        checked={$rollHasExpressions && $playExpressionsOnOff}
+        on:change={() => ($playExpressionsOnOff = !$playExpressionsOnOff)}
         disabled={!$rollHasExpressions}
       />
-    </div>
-    <div>
+    </label>
+    <label>
       Use Roll Pedaling:
       <input
         type="checkbox"
-        bind:checked={$rollPedalingOnOff}
+        checked={$rollHasExpressions && $rollPedalingOnOff}
+        on:change={() => ($rollPedalingOnOff = !$rollPedalingOnOff)}
         disabled={!$rollHasExpressions}
       />
-    </div>
-    <div>
+    </label>
+    <label>
       Emulate Roll Acceleration:
       <input
         type="checkbox"
-        bind:checked={$useMidiTempoEventsOnOff}
+        checked={$rollHasExpressions && $useMidiTempoEventsOnOff}
+        on:change={() => ($useMidiTempoEventsOnOff = !$useMidiTempoEventsOnOff)}
         disabled={!$rollHasExpressions}
       />
-    </div>
+    </label>
   </fieldset>
 
   <div class="theme-selector">

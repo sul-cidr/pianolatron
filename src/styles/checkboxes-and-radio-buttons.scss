@@ -36,3 +36,7 @@
 [type="radio"] {
   border-radius: 50%;
 }
+
+label:has([type="checkbox"]:disabled) {
+  opacity: 0.5;
+}
