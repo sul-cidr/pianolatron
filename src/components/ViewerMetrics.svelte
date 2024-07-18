@@ -9,10 +9,15 @@
     display: inline-block;
 
     .metric {
+      align-items: center;
       display: flex;
       min-height: 1.25em;
       justify-content: space-between;
       position: relative;
+
+      span:last-child {
+        font-family: monospace;
+      }
     }
   }
 </style>
