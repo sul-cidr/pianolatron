@@ -76,7 +76,7 @@
           white-space: nowrap;
         }
 
-        &[aria-current] {
+        &:has([aria-current]) {
           background-color: var(--primary-accent);
           border-color: white;
           color: white;
