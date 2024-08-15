@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../../layouts/base.astro";
+import Search from "../../components/Search.svelte";
+import SkipLink from "../../ui-components/SkipLink.svelte";
+---
+
+<BaseLayout title="Pianolatron Search" theme="blue">
+  <SkipLink />
+  <main id="content">
+    <Search client:only="svelte" />
+  </main>
+</BaseLayout>
