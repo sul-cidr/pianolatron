@@ -207,6 +207,15 @@
       background-color: #fff;
     }
 
+    .repo-links {
+      color: var(--primary-accent);
+      text-decoration: none;
+    }
+    .repo-links:hover {
+      text-decoration: underline;
+      color: var(--secondary-accent);
+    }
+
     td,
     th:not([scope="col"]) {
       border: 1px solid #e5e7eb;
@@ -516,9 +525,16 @@
           {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
           <tr>
             <th scope="row">
-              {@html searchParts.length
-                ? markupMatches(item.publisher)
-                : item.publisher}
+              <a
+                href="https://purl.stanford.edu/{item.druid}"
+                title="Open repository entry for {item.title} in a new tab"
+                target="_blank"
+                class="repo-links"
+              >
+                {@html searchParts.length
+                  ? markupMatches(item.publisher)
+                  : item.publisher}
+              </a>
             </th>
             <td>
               {@html searchParts.length ? markupMatches(item.work) : item.work}
