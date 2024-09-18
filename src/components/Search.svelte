@@ -200,7 +200,7 @@
     td:first-child,
     th:last-child,
     td:last-child {
-      width: clamp(85px, 17vw, 240px);
+      width: 240px;
     }
 
     tbody {
