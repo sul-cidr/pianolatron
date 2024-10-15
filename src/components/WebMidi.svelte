@@ -4,6 +4,7 @@
   import { clamp, NoteSource } from "../lib/utils";
   import { rollProfile } from "../config/roll-config";
   import {
+    isPlaying,
     midiInputs,
     midiOutputs,
     recordingOnOff,
@@ -254,7 +255,7 @@
       midiBytes[entity] || entity,
       clamp(parseInt(value * 127, 10), 0, 127),
     ];
-    $midiOutputs.forEach((output) => output.send(msg));
+    if ($isPlaying) $midiOutputs.forEach((output) => output.send(msg));
     if ($recordingOnOff) {
       const now = Date.now();
       if (msgType === "NOTE_ON" && !(entity in heldDown)) {

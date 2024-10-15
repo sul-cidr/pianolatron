@@ -147,6 +147,8 @@
     midiSamplePlayer.pause();
     midiSamplePlayer.triggerPlayerEvent("pause");
     stopAllNotes();
+    webMidi?.sendMidiMsg("CONTROLLER", "SUSTAIN", false);
+    webMidi?.sendMidiMsg("CONTROLLER", "SOFT", false);
     $isPlaying = false;
   };
 
