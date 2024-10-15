@@ -40,7 +40,7 @@ The Pianolatron is the product of a large-scale collaborative partnership betwee
 
 ### Special Thanks
 
-- Peter Phillips, [petersmidi.com](https://www.petersmidi.com)
+- Dr. Peter Phillips, [petersmidi.com](https://www.petersmidi.com)
 
 ## Source Code
 
