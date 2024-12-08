@@ -13,6 +13,30 @@
   },
   {
     "arranger": "",
+    "composer": "",
+    "druid": "dn562zk3294",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dn562zk3294/dn562zk3294_0001/info.json",
+    "number": "2675",
+    "performer": "Adam, Eugenie",
+    "publisher": "Welte-Mignon",
+    "title": "Adam - Hymns",
+    "type": "welte-red",
+    "work": "Hymns"
+  },
+  {
+    "arranger": "",
+    "composer": "",
+    "druid": "yd091xk8735",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yd091xk8735/yd091xk8735_0001_gs/info.json",
+    "number": "B2676",
+    "performer": "Adam, Eugenie",
+    "publisher": "De Luxe Reproducing Roll Corp.",
+    "title": "Adam - Hymns",
+    "type": "welte-licensee",
+    "work": "Hymns"
+  },
+  {
+    "arranger": "",
     "composer": "Adam, Adolphe",
     "druid": "sj617nc3041",
     "image_url": "https://stacks.stanford.edu/image/iiif/sj617nc3041/sj617nc3041_0001/info.json",
@@ -118,6 +142,18 @@
     "title": "Alonso - Por si las moscas: Schotis",
     "type": "88-note",
     "work": "Por si las moscas: Schotis"
+  },
+  {
+    "arranger": "",
+    "composer": "Bach, Johann Sebastian",
+    "druid": "dy315yq5418",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dy315yq5418/dy315yq5418_0001_gs/info.json",
+    "number": "2964",
+    "performer": "Albert, Eugen d'",
+    "publisher": "Welte-Mignon",
+    "title": "Bach/Albert - Passacaglia c-moll",
+    "type": "welte-green",
+    "work": "Passacaglia c-moll"
   },
   {
     "arranger": "",
@@ -230,6 +266,18 @@
   {
     "arranger": "",
     "composer": "Beethoven, Ludwig van",
+    "druid": "jb124fp1314",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jb124fp1314/jb124fp1314_0001_gs/info.json",
+    "number": "2971",
+    "performer": "Albert, Eugen d'",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Albert - Sonate e moll, op. 90",
+    "type": "welte-green",
+    "work": "Sonate e moll, op. 90"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
     "druid": "bq744nq5945",
     "image_url": "https://stacks.stanford.edu/image/iiif/bq744nq5945/bq744nq5945_0001/info.json",
     "number": "1462",
@@ -338,6 +386,66 @@
   {
     "arranger": "",
     "composer": "Beethoven, Ludwig van",
+    "druid": "bn375vj0359",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bn375vj0359/bn375vj0359_0001_gs/info.json",
+    "number": "1585",
+    "performer": "Fryer, Herbert",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Fryer - Sonata op. 2, no. 2, a major: 2nd and 3rd movements",
+    "type": "welte-green",
+    "work": "Sonata op. 2, no. 2, a major: 2nd and 3rd movements"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "xp665kv8628",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xp665kv8628/xp665kv8628_0001_gs/info.json",
+    "number": "3823",
+    "performer": "Gieseking, Walter",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Gieseking - Kreutzer-sonate 1. teil",
+    "type": "welte-green",
+    "work": "Kreutzer-sonate 1. teil"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "sg722dj4885",
+    "image_url": "https://stacks.stanford.edu/image/iiif/sg722dj4885/sg722dj4885_0001_gs/info.json",
+    "number": "3824",
+    "performer": "Gieseking, Walter",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Gieseking - Kreutzer-sonate: op 47, II. Teil",
+    "type": "welte-green",
+    "work": "Kreutzer-sonate: op 47, II. Teil"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "dz648rb2586",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dz648rb2586/dz648rb2586_0001_gs/info.json",
+    "number": "3296",
+    "performer": "Hoehn, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Hoehn - Variations op. 35, fugue: (Eroica)",
+    "type": "welte-green",
+    "work": "Variations op. 35, fugue: (Eroica)"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "tm316nt8568",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tm316nt8568/tm316nt8568_0001_gs/info.json",
+    "number": "3295",
+    "performer": "Hoehn, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Hoehn - Variations op. 35: Fugue eroica: Finale alla fuga",
+    "type": "welte-green",
+    "work": "Variations op. 35: Fugue eroica: Finale alla fuga"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
     "druid": "ty382mw3181",
     "image_url": "https://stacks.stanford.edu/image/iiif/ty382mw3181/ty382mw3181_0001/info.json",
     "number": "3026",
@@ -374,6 +482,18 @@
   {
     "arranger": "",
     "composer": "Beethoven, Ludwig van",
+    "druid": "tt325gp3090",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tt325gp3090/tt325gp3090_0001/info.json",
+    "number": "1801",
+    "performer": "Kohlberg, Walter",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Kohlberg - Overture egmont",
+    "type": "welte-red",
+    "work": "Overture egmont"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
     "druid": "ch718mg2581",
     "image_url": "https://stacks.stanford.edu/image/iiif/ch718mg2581/ch718mg2581_0001/info.json",
     "number": "284",
@@ -406,6 +526,30 @@
     "title": "Beethoven/Lamond - Sonate pathétique: op. 13, 3rd movement",
     "type": "welte-red",
     "work": "Sonate pathétique: op. 13, 3rd movement"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "dx509rw2262",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dx509rw2262/dx509rw2262_0001_gs/info.json",
+    "number": "1676",
+    "performer": "Margolies, Vera",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Margolies - Sonate c-moll, op. 10, no. 1",
+    "type": "welte-green",
+    "work": "Sonate c-moll, op. 10, no. 1"
+  },
+  {
+    "arranger": "",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "fw204gv3302",
+    "image_url": "https://stacks.stanford.edu/image/iiif/fw204gv3302/fw204gv3302_0001_gs/info.json",
+    "number": "684",
+    "performer": "Neitzel, Otto",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Neitzel - Sonate op. 31, no. 2: III. Teil",
+    "type": "welte-green",
+    "work": "Sonate op. 31, no. 2: III. Teil"
   },
   {
     "arranger": "",
@@ -589,6 +733,18 @@
   },
   {
     "arranger": "",
+    "composer": "Berger, Rodolphe",
+    "druid": "pz737tz3677",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pz737tz3677/pz737tz3677_0001_gs/info.json",
+    "number": "C341",
+    "performer": "Kupfernagel, Albrecht",
+    "publisher": "Welte-Mignon",
+    "title": "Berger/Kupfernagel - Amoureuse: (waltz)",
+    "type": "welte-green",
+    "work": "Amoureuse: (waltz)"
+  },
+  {
+    "arranger": "",
     "composer": "Berlin, Irving",
     "druid": "pp798fc0175",
     "image_url": "https://stacks.stanford.edu/image/iiif/pp798fc0175/pp798fc0175_0001/info.json",
@@ -622,6 +778,30 @@
     "title": "Berlioz-Liszt/Landowska - Ballet des sylves",
     "type": "welte-red",
     "work": "Ballet des sylves"
+  },
+  {
+    "arranger": "",
+    "composer": "Berté, Heinrich",
+    "druid": "qn627jw8094",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qn627jw8094/qn627jw8094_0001_gs/info.json",
+    "number": "3242",
+    "performer": "Starke, Gustav",
+    "publisher": "Welte-Mignon",
+    "title": "Berté/Starke - Das dreimäderlhaus: Potpourri",
+    "type": "welte-green",
+    "work": "Das dreimäderlhaus: Potpourri"
+  },
+  {
+    "arranger": "",
+    "composer": "Berté, Heinrich",
+    "druid": "hf634wy1613",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hf634wy1613/hf634wy1613_0001_gs/info.json",
+    "number": "3242",
+    "performer": "Starke, Gustav",
+    "publisher": "Welte-Mignon",
+    "title": "Berté/Starke - Lilac time: selection",
+    "type": "welte-red",
+    "work": "Lilac time: selection"
   },
   {
     "arranger": "",
@@ -710,6 +890,30 @@
   {
     "arranger": "",
     "composer": "Brahms, Johannes",
+    "druid": "sh954gz9635",
+    "image_url": "https://stacks.stanford.edu/image/iiif/sh954gz9635/sh954gz9635_0001/info.json",
+    "number": "590",
+    "performer": "Galston, Gottfried",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Galston - Waltzes (op. 39, nos. 8 & 12)",
+    "type": "welte-red",
+    "work": "Waltzes (op. 39, nos. 8 & 12)"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "kg327qk8426",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kg327qk8426/kg327qk8426_0001/info.json",
+    "number": "587",
+    "performer": "Galston, Gottfried",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Galston - Waltzes op. 39, 1. and 2",
+    "type": "welte-red",
+    "work": "Waltzes op. 39, 1. and 2"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
     "druid": "yw484ky7093",
     "image_url": "https://stacks.stanford.edu/image/iiif/yw484ky7093/yw484ky7093_0001/info.json",
     "number": "589",
@@ -718,6 +922,90 @@
     "title": "Brahms/Galston - Waltzes op. 39, 6 and 11",
     "type": "welte-red",
     "work": "Waltzes op. 39, 6 and 11"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "xm978sg7252",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xm978sg7252/xm978sg7252_0001/info.json",
+    "number": "592",
+    "performer": "Galston, Gottfried",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Galston - Waltzes op. 39, no. 15 and 16",
+    "type": "welte-red",
+    "work": "Waltzes op. 39, no. 15 and 16"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "wy641td3478",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wy641td3478/wy641td3478_0001/info.json",
+    "number": "588",
+    "performer": "Galston, Gottfried",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Galston - Waltzes op. 39, nos. 3, 4 and 5",
+    "type": "welte-red",
+    "work": "Waltzes op. 39, nos. 3, 4 and 5"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "cf814vt1322",
+    "image_url": "https://stacks.stanford.edu/image/iiif/cf814vt1322/cf814vt1322_0001/info.json",
+    "number": "4140",
+    "performer": "Haass, Hans",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Haass - Cradle song: (good evening, good night): op. 49, no. 4",
+    "type": "welte-red",
+    "work": "Cradle song: (good evening, good night) : op. 49, no. 4"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "nn353xp1548",
+    "image_url": "https://stacks.stanford.edu/image/iiif/nn353xp1548/nn353xp1548_0001_gs/info.json",
+    "number": "3837",
+    "performer": "Heinemann, Käthe",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Heinemann - Sonate c-dur, op. 1, iii. und iv. teil",
+    "type": "welte-green",
+    "work": "Sonate c-dur, op. 1, iii. und iv. teil"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "qy082cg2302",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qy082cg2302/qy082cg2302_0001_gs/info.json",
+    "number": "3836",
+    "performer": "Heinemann, Käthe",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Heinemann - Sonate c-dur, op.1, i. und ii. teil",
+    "type": "welte-green",
+    "work": "Sonate c-dur, op.1, i. und ii. teil"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "jy452wx0964",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jy452wx0964/jy452wx0964_0001_gs/info.json",
+    "number": "890",
+    "performer": "Hermanns, Hans",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Hermanns - Variations on a theme by schumann",
+    "type": "welte-green",
+    "work": "Variations on a theme by schumann"
+  },
+  {
+    "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "ct641rb1417",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ct641rb1417/ct641rb1417_0001_gs/info.json",
+    "number": "3297",
+    "performer": "Hoehn, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Hoehn - Sonate f-moll, op. 5, i. teil: (Allegro maestoso)",
+    "type": "welte-green",
+    "work": "Sonate f-moll, op. 5, i. teil: (Allegro maestoso)"
   },
   {
     "arranger": "",
@@ -769,6 +1057,30 @@
   },
   {
     "arranger": "",
+    "composer": "Brahms, Johannes",
+    "druid": "rg676ym0376",
+    "image_url": "https://stacks.stanford.edu/image/iiif/rg676ym0376/rg676ym0376_0001/info.json",
+    "number": "386",
+    "performer": "Schnabel, Artur",
+    "publisher": "Welte-Mignon",
+    "title": "Brahms/Schnabel - Intermezzo c dur, op. 119, no. 3",
+    "type": "welte-red",
+    "work": "Intermezzo c dur, op. 119, no. 3"
+  },
+  {
+    "arranger": "",
+    "composer": "Busoni, Ferruccio",
+    "druid": "yg939nd3043",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yg939nd3043/yg939nd3043_0001/info.json",
+    "number": "537",
+    "performer": "Zadora, Michael",
+    "publisher": "Welte-Mignon",
+    "title": "Busoni/Zadora - Iv balletscene: op. 33",
+    "type": "welte-red",
+    "work": "Iv balletscene: op. 33"
+  },
+  {
+    "arranger": "",
     "composer": "Caballero, M. F. (Manuel Fernández), 1835-1906",
     "druid": "ht999gf1829",
     "image_url": "https://stacks.stanford.edu/image/iiif/ht999gf1829/ht999gf1829_0002/info.json",
@@ -793,6 +1105,30 @@
   },
   {
     "arranger": "",
+    "composer": "Carreño, Teresa",
+    "druid": "qc650tp0469",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qc650tp0469/qc650tp0469_0001/info.json",
+    "number": "371",
+    "performer": "Carreño, Teresa",
+    "publisher": "Welte-Mignon",
+    "title": "Carreño/Carreño - Kleiner walzer",
+    "type": "welte-red",
+    "work": "Kleiner walzer"
+  },
+  {
+    "arranger": "",
+    "composer": "Carreño, Teresa",
+    "druid": "hc909pp9868",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hc909pp9868/hc909pp9868_0001/info.json",
+    "number": "371",
+    "performer": "Carreño, Teresa",
+    "publisher": "Welte-Mignon",
+    "title": "Carreño/Carreño - Little waltz",
+    "type": "welte-red",
+    "work": "Little waltz"
+  },
+  {
+    "arranger": "",
     "composer": "Chaminade, Cécile",
     "druid": "jc718cb5784",
     "image_url": "https://stacks.stanford.edu/image/iiif/jc718cb5784/jc718cb5784_0001/info.json",
@@ -802,6 +1138,18 @@
     "title": "Chaminade/Bloomfield-Zeisler - Le  Retour",
     "type": "welte-red",
     "work": "Le  Retour"
+  },
+  {
+    "arranger": "",
+    "composer": "Chaminade, Cécile",
+    "druid": "yb682jn2494",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yb682jn2494/yb682jn2494_0001/info.json",
+    "number": "1357",
+    "performer": "Kühn, Lenore",
+    "publisher": "Welte-Mignon",
+    "title": "Chaminade/Kühn - Pas des écharpes: 3ème air de ballet, op. 37",
+    "type": "welte-red",
+    "work": "Pas des écharpes: 3ème air de ballet, op. 37"
   },
   {
     "arranger": "",
@@ -950,6 +1298,18 @@
   {
     "arranger": "",
     "composer": "Chopin, Frédéric",
+    "druid": "nq087cp3030",
+    "image_url": "https://stacks.stanford.edu/image/iiif/nq087cp3030/nq087cp3030_0001/info.json",
+    "number": "120",
+    "performer": "Adam-Benard, Eugenie",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Adam-Benard - Mazurka op. 67, no. 4",
+    "type": "welte-red",
+    "work": "Mazurka op. 67, no. 4"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
     "druid": "nq628rc4181",
     "image_url": "https://stacks.stanford.edu/image/iiif/nq628rc4181/nq628rc4181_0001/info.json",
     "number": "83",
@@ -958,6 +1318,30 @@
     "title": "Chopin/Adam-Benard - Nocturne op. 9, no. 2, e flat major",
     "type": "welte-red",
     "work": "Nocturne op. 9, no. 2, e flat major"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
+    "druid": "ym522dd8598",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ym522dd8598/ym522dd8598_0001_gs/info.json",
+    "number": "2977",
+    "performer": "Albert, Eugen d'",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Albert - Ballade f-dur, op. 38",
+    "type": "welte-green",
+    "work": "Ballade f-dur, op. 38"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
+    "druid": "nq085rm1342",
+    "image_url": "https://stacks.stanford.edu/image/iiif/nq085rm1342/nq085rm1342_0001_gs/info.json",
+    "number": "2980",
+    "performer": "Albert, Eugen d'",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Albert - Nocturne op. 55, no1, f minor",
+    "type": "welte-green",
+    "work": "Nocturne op. 55, no1, f minor"
   },
   {
     "arranger": "",
@@ -994,6 +1378,18 @@
     "title": "Chopin/Bloomfield-Zeisler - Scherzo b-moll",
     "type": "welte-red",
     "work": "Scherzo b-moll"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
+    "druid": "qn001kz9328",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qn001kz9328/qn001kz9328_0001_gs/info.json",
+    "number": "1464",
+    "performer": "Bloomfield-Zeisler, Fannie",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Bloomfield-Zeisler - Scherzo b-moll, op. 31",
+    "type": "welte-green",
+    "work": "Scherzo b-moll, op. 31"
   },
   {
     "arranger": "",
@@ -1070,6 +1466,18 @@
   {
     "arranger": "",
     "composer": "Chopin, Frédéric",
+    "druid": "pp228yz4317",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pp228yz4317/pp228yz4317_0001_gs/info.json",
+    "number": "367",
+    "performer": "Carreño, Teresa",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Carreño - Ballade g-moll, op. 23",
+    "type": "welte-green",
+    "work": "Ballade g-moll, op. 23"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
     "druid": "bj606rp8160",
     "image_url": "https://stacks.stanford.edu/image/iiif/bj606rp8160/bj606rp8160_0001/info.json",
     "number": "367",
@@ -1078,6 +1486,18 @@
     "title": "Chopin/Carreño - Ballade op. 23, g minor",
     "type": "welte-red",
     "work": "Ballade op. 23, g minor"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
+    "druid": "bb988jx6754",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bb988jx6754/bb988jx6754_0001/info.json",
+    "number": "369",
+    "performer": "Carreño, Teresa",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Carreño - Ballade op. 47, a flat major",
+    "type": "welte-red",
+    "work": "Ballade op. 47, a flat major"
   },
   {
     "arranger": "",
@@ -1150,6 +1570,18 @@
     "title": "Chopin/Dohnányi - Valse op. 64, no. 2, cis-moll",
     "type": "welte-red",
     "work": "Valse op. 64, no. 2, cis-moll"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
+    "druid": "zx463rv8885",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zx463rv8885/zx463rv8885_0001/info.json",
+    "number": "265",
+    "performer": "Droucker, Sandra",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Droucker - Scherzo op. 39",
+    "type": "welte-red",
+    "work": "Scherzo op. 39"
   },
   {
     "arranger": "",
@@ -1310,6 +1742,18 @@
   {
     "arranger": "",
     "composer": "Chopin, Frédéric",
+    "druid": "pc228zw1709",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pc228zw1709/pc228zw1709_0001/info.json",
+    "number": "1194",
+    "performer": "Leschetizky, Theodor",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Leschetizky - Nocturne des-dur, op. 27, no. 2",
+    "type": "welte-red",
+    "work": "Nocturne des-dur, op. 27, no. 2"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
     "druid": "bm016sg7202",
     "image_url": "https://stacks.stanford.edu/image/iiif/bm016sg7202/bm016sg7202_0001/info.json",
     "number": "1671",
@@ -1370,6 +1814,18 @@
   {
     "arranger": "",
     "composer": "Chopin, Frédéric",
+    "druid": "vj076nk8220",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vj076nk8220/vj076nk8220_0001/info.json",
+    "number": "1213",
+    "performer": "Pachmann, Vladimir de",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Pachmann - Prelude op. 28, no. 20, c minor",
+    "type": "welte-red",
+    "work": "Prelude op. 28, no. 20, c minor"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
     "druid": "fn111kx0654",
     "image_url": "https://stacks.stanford.edu/image/iiif/fn111kx0654/fn111kx0654_0001/info.json",
     "number": "1213",
@@ -1418,6 +1874,18 @@
   {
     "arranger": "",
     "composer": "Chopin, Frédéric",
+    "druid": "hp956bx4547",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hp956bx4547/hp956bx4547_0001/info.json",
+    "number": "1253",
+    "performer": "Paderewski, Ignace Jan",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Paderewski - Etude ges-dur: Staccato: op. 25, no. 9",
+    "type": "welte-red",
+    "work": "Etude ges-dur: Staccato : op. 25, no. 9"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
     "druid": "ft746ns5736",
     "image_url": "https://stacks.stanford.edu/image/iiif/ft746ns5736/ft746ns5736_0001/info.json",
     "number": "1253",
@@ -1426,6 +1894,18 @@
     "title": "Chopin/Paderewski - Etude op. 25, no. 9, g flat",
     "type": "welte-red",
     "work": "Etude op. 25, no. 9, g flat"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
+    "druid": "qq058fs3554",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qq058fs3554/qq058fs3554_0001_gs/info.json",
+    "number": "1255",
+    "performer": "Paderewski, Ignace Jan",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Paderewski - Nocturno g-dur, op. 37, no. 2",
+    "type": "welte-green",
+    "work": "Nocturno g-dur, op. 37, no. 2"
   },
   {
     "arranger": "",
@@ -1526,6 +2006,18 @@
   {
     "arranger": "",
     "composer": "Chopin, Frédéric",
+    "druid": "xf854zv5355",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xf854zv5355/xf854zv5355_0001_gs/info.json",
+    "number": "880",
+    "performer": "Sauer, Emil von",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Sauer - Bolero: op. 19",
+    "type": "welte-green",
+    "work": "Bolero: op. 19"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
     "druid": "ch197br4742",
     "image_url": "https://stacks.stanford.edu/image/iiif/ch197br4742/ch197br4742_0001/info.json",
     "number": "881",
@@ -1552,6 +2044,18 @@
     "composer": "Chopin, Frédéric",
     "druid": "vy018tw5237",
     "image_url": "https://stacks.stanford.edu/image/iiif/vy018tw5237/vy018tw5237_0001/info.json",
+    "number": "245",
+    "performer": "Scharwenka, Xaver",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Scharwenka - Valse op. 42 as-dur",
+    "type": "welte-red",
+    "work": "Valse op. 42 as-dur"
+  },
+  {
+    "arranger": "",
+    "composer": "Chopin, Frédéric",
+    "druid": "mj502fy3866",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mj502fy3866/mj502fy3866_0001/info.json",
     "number": "245",
     "performer": "Scharwenka, Xaver",
     "publisher": "Welte-Mignon",
@@ -1778,6 +2282,18 @@
   {
     "arranger": "",
     "composer": "Debussy, Claude",
+    "druid": "wp169hm7888",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wp169hm7888/wp169hm7888_0001_gs/info.json",
+    "number": "2738",
+    "performer": "Debussy, Claude",
+    "publisher": "Welte-Mignon",
+    "title": "Debussy/Debussy - Préludes: Danseuses de Delphes; La chathédrale engloutie; La danse de Puck",
+    "type": "welte-green",
+    "work": "Préludes: Danseuses de Delphes ; La chathédrale engloutie ; La danse de Puck"
+  },
+  {
+    "arranger": "",
+    "composer": "Debussy, Claude",
     "druid": "tq268fs9721",
     "image_url": "https://stacks.stanford.edu/image/iiif/tq268fs9721/tq268fs9721_0001/info.json",
     "number": "3045",
@@ -1861,6 +2377,18 @@
   },
   {
     "arranger": "",
+    "composer": "Donizetti, Gaetano",
+    "druid": "dk553qf3284",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dk553qf3284/dk553qf3284_0001_gs/info.json",
+    "number": "2794",
+    "performer": "Gayraud, P",
+    "publisher": "Welte-Mignon",
+    "title": "Donizetti/Gayraud - Lucia di lammermoor: Fantasie",
+    "type": "welte-green",
+    "work": "Lucia di lammermoor: Fantasie"
+  },
+  {
+    "arranger": "",
     "composer": "Dvořák, Antonín",
     "druid": "xy699sy1462",
     "image_url": "https://stacks.stanford.edu/image/iiif/xy699sy1462/xy699sy1462_0001/info.json",
@@ -1870,6 +2398,30 @@
     "title": "Dvořák/Fryer - Humoreske op. 10, no. 7",
     "type": "welte-red",
     "work": "Humoreske op. 10, no. 7"
+  },
+  {
+    "arranger": "",
+    "composer": "Dvořák, Antonín",
+    "druid": "nq557qg1822",
+    "image_url": "https://stacks.stanford.edu/image/iiif/nq557qg1822/nq557qg1822_0001_gs/info.json",
+    "number": "3458",
+    "performer": "Haass, Hans",
+    "publisher": "Welte-Mignon",
+    "title": "Dvořák/Haass - Slavischer tanz: C-Dur, no. 1, op. 46",
+    "type": "welte-green",
+    "work": "Slavischer tanz: C-Dur, no. 1, op. 46"
+  },
+  {
+    "arranger": "",
+    "composer": "Ellis, Vivian",
+    "druid": "mw198ym5807",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mw198ym5807/mw198ym5807_0001/info.json",
+    "number": "5659",
+    "performer": "Johnson, Edward",
+    "publisher": "Welte-Mignon",
+    "title": "Ellis/Johnson - Hum a little tune: fox-trot",
+    "type": "welte-red",
+    "work": "Hum a little tune: fox-trot"
   },
   {
     "arranger": "",
@@ -1982,6 +2534,18 @@
   {
     "arranger": "",
     "composer": "Friml, Rudolf",
+    "druid": "ys250pr2232",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ys250pr2232/ys250pr2232_0001/info.json",
+    "number": "5736",
+    "performer": "Johnson, Edward",
+    "publisher": "Welte-Mignon",
+    "title": "Friml/Johnson - Indian love call: fox-trot",
+    "type": "welte-red",
+    "work": "Indian love call: fox-trot"
+  },
+  {
+    "arranger": "",
+    "composer": "Friml, Rudolf",
     "druid": "zk082zq3962",
     "image_url": "https://stacks.stanford.edu/image/iiif/zk082zq3962/zk082zq3962_0001/info.json",
     "number": "5707",
@@ -2050,6 +2614,18 @@
     "title": "German/La Forge - Three dances from henry viii",
     "type": "welte-red",
     "work": "Three dances from henry viii"
+  },
+  {
+    "arranger": "",
+    "composer": "Gershwin, George",
+    "druid": "zw008yw8187",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zw008yw8187/zw008yw8187_0001_gs/info.json",
+    "number": "5813",
+    "performer": "Johnson, Edward",
+    "publisher": "Welte-Mignon",
+    "title": "Gershwin/Johnson - Looking for a boy: fox-trot from the new musical comedy \"Tip -Toes\"",
+    "type": "welte-green",
+    "work": "Looking for a boy: fox-trot from the new musical comedy \"Tip -Toes\""
   },
   {
     "arranger": "",
@@ -2138,6 +2714,18 @@
   {
     "arranger": "",
     "composer": "Glazunov, Aleksandr Konstantinovich",
+    "druid": "gj893qf7478",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gj893qf7478/gj893qf7478_0001_gs/info.json",
+    "number": "1996",
+    "performer": "Hoffmann, Nelli",
+    "publisher": "Welte-Mignon",
+    "title": "Glazunov/Hoffmann - Thema et variations: op. 72",
+    "type": "welte-red",
+    "work": "Thema et variations: op. 72"
+  },
+  {
+    "arranger": "",
+    "composer": "Glazunov, Aleksandr Konstantinovich",
     "druid": "kx293yk2859",
     "image_url": "https://stacks.stanford.edu/image/iiif/kx293yk2859/kx293yk2859_0001/info.json",
     "number": "1996",
@@ -2158,6 +2746,18 @@
     "title": "Glazunov/Kimontt-Jacynowa - Grand valse de concert: op. 41",
     "type": "welte-red",
     "work": "Grand valse de concert: op. 41"
+  },
+  {
+    "arranger": "",
+    "composer": "Gold, Joe",
+    "druid": "jt465zc6779",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jt465zc6779/jt465zc6779_0001/info.json",
+    "number": "5658",
+    "performer": "Johnson, Edward",
+    "publisher": "Welte-Mignon",
+    "title": "Gold/Johnson - Driftwood: fox-trot",
+    "type": "welte-red",
+    "work": "Driftwood: fox-trot"
   },
   {
     "arranger": "",
@@ -2208,6 +2808,18 @@
     "work": "Faust-walzer"
   },
   {
+    "arranger": "Raff, Joachim",
+    "composer": "Gounod, Charles",
+    "druid": "yt636yv7215",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yt636yv7215/yt636yv7215_0001_gs/info.json",
+    "number": "3935",
+    "performer": "Liebling, Georg",
+    "publisher": "Welte-Mignon",
+    "title": "Gounod-Raff/Liebling - Valse de juliette",
+    "type": "welte-green",
+    "work": "Valse de juliette"
+  },
+  {
     "arranger": "",
     "composer": "Gounod, Charles",
     "druid": "hm373bm3807",
@@ -2242,6 +2854,18 @@
     "title": "Gounod/Adam-Benard - Nazareth: sacred song",
     "type": "welte-red",
     "work": "Nazareth: sacred song"
+  },
+  {
+    "arranger": "",
+    "composer": "Gounod, Charles",
+    "druid": "by076cz0337",
+    "image_url": "https://stacks.stanford.edu/image/iiif/by076cz0337/by076cz0337_0001_gs/info.json",
+    "number": "1528",
+    "performer": "Brightwell, Edward",
+    "publisher": "Welte-Mignon",
+    "title": "Gounod/Brightwell - Ballet faust",
+    "type": "welte-red",
+    "work": "Ballet faust"
   },
   {
     "arranger": "",
@@ -2354,6 +2978,18 @@
   {
     "arranger": "",
     "composer": "Grieg, Edvard",
+    "druid": "gh272kd2238",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gh272kd2238/gh272kd2238_0001/info.json",
+    "number": "213",
+    "performer": "Möhle, Hermann",
+    "publisher": "Welte-Mignon",
+    "title": "Grieg/Möhle - Ich liebe dich",
+    "type": "welte-red",
+    "work": "Ich liebe dich"
+  },
+  {
+    "arranger": "",
+    "composer": "Grieg, Edvard",
     "druid": "kj344bw3083",
     "image_url": "https://stacks.stanford.edu/image/iiif/kj344bw3083/kj344bw3083_0001/info.json",
     "number": "1307",
@@ -2434,6 +3070,42 @@
     "title": "Grieg/Wendling - Hochzeitstag auf troldhangen op. 65 no. 1",
     "type": "welte-red",
     "work": "Hochzeitstag auf troldhangen op. 65 no. 1"
+  },
+  {
+    "arranger": "",
+    "composer": "Grünfeld, Alfred",
+    "druid": "vb685pd6967",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vb685pd6967/vb685pd6967_0001/info.json",
+    "number": "192",
+    "performer": "Grünfeld, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Grünfeld/Grünfeld - Paraphrase über den walzer \"frühlingsstimmen\"",
+    "type": "welte-red",
+    "work": "Paraphrase über den walzer \"frühlingsstimmen\""
+  },
+  {
+    "arranger": "",
+    "composer": "Grünfeld, Alfred",
+    "druid": "jd625tw2164",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jd625tw2164/jd625tw2164_0001/info.json",
+    "number": "191",
+    "performer": "Grünfeld, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Grünfeld/Grünfeld - Romance op. 42, no. 1, des-dur",
+    "type": "welte-red",
+    "work": "Romance op. 42, no. 1, des-dur"
+  },
+  {
+    "arranger": "",
+    "composer": "Grünfeld, Alfred",
+    "druid": "gq169nf1405",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gq169nf1405/gq169nf1405_0001/info.json",
+    "number": "190",
+    "performer": "Grünfeld, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Grünfeld/Grünfeld - Valse mignonne: op. 51",
+    "type": "welte-red",
+    "work": "Valse mignonne: op. 51"
   },
   {
     "arranger": "",
@@ -2808,6 +3480,18 @@
     "work": "Rhapsodie hongroise, no. 2: key of E"
   },
   {
+    "arranger": "Busoni, Ferruccio",
+    "composer": "Liszt, Franz",
+    "druid": "kk805zf6786",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kk805zf6786/kk805zf6786_0001_gs/info.json",
+    "number": "4128",
+    "performer": "Horowitz, Vladimir",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt-Busoni/Horowitz - Figaro: Fantasie",
+    "type": "welte-green",
+    "work": "Figaro: Fantasie"
+  },
+  {
     "arranger": "Vetter, Hermann",
     "composer": "Liszt, Franz",
     "druid": "jg717nb8731",
@@ -2882,6 +3566,54 @@
   {
     "arranger": "",
     "composer": "Liszt, Franz",
+    "druid": "tn181vt8953",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tn181vt8953/tn181vt8953_0001_gs/info.json",
+    "number": "2986",
+    "performer": "Albert, Eugen d'",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Albert - Valse impromptu",
+    "type": "welte-green",
+    "work": "Valse impromptu"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "yr113vg5919",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yr113vg5919/yr113vg5919_0001_gs/info.json",
+    "number": "3390",
+    "performer": "Blumen, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Blumen - Tarantella a. venezia und napoli",
+    "type": "welte-green",
+    "work": "Tarantella a. venezia und napoli"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "xd651rz2895",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xd651rz2895/xd651rz2895_0001_gs/info.json",
+    "number": "722",
+    "performer": "Burmeister, Richard",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Burmeister - Variationen über das motiv von bach: Weinen, Klagen, Sorgen, Zagen, Sind der Christen Tränenbrot",
+    "type": "welte-green",
+    "work": "Variationen über das motiv von bach: Weinen, Klagen, Sorgen, Zagen, Sind der Christen Tränenbrot"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "wf895xd1180",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wf895xd1180/wf895xd1180_0001/info.json",
+    "number": "444",
+    "performer": "Busoni, Ferruccio",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Busoni - La   Campanella: Paganini-Etude Nr. 3",
+    "type": "welte-red",
+    "work": "La   Campanella: Paganini-Etude Nr. 3"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
     "druid": "kv550vj8954",
     "image_url": "https://stacks.stanford.edu/image/iiif/kv550vj8954/kv550vj8954_0001/info.json",
     "number": "444",
@@ -2918,6 +3650,30 @@
   {
     "arranger": "",
     "composer": "Liszt, Franz",
+    "druid": "pq698rb7959",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pq698rb7959/pq698rb7959_0001_gs/info.json",
+    "number": "1322",
+    "performer": "Busoni, Ferruccio",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Busoni - Ruins of athens: fantasia",
+    "type": "welte-green",
+    "work": "Ruins of athens: fantasia"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "zt775gx7906",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zt775gx7906/zt775gx7906_0001_gs/info.json",
+    "number": "3189",
+    "performer": "Carreras, Maria",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Carreras - Thema und variationen a-moll",
+    "type": "welte-green",
+    "work": "Thema und variationen a-moll"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
     "druid": "yx536mq2915",
     "image_url": "https://stacks.stanford.edu/image/iiif/yx536mq2915/yx536mq2915_0001/info.json",
     "number": "365",
@@ -2938,6 +3694,18 @@
     "title": "Liszt/Carreño - Soirée de vienne, no. 6",
     "type": "welte-red",
     "work": "Soirée de vienne, no. 6"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "wc588rr6112",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wc588rr6112/wc588rr6112_0001/info.json",
+    "number": "365",
+    "performer": "Carreño, Teresa",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Carreño - Vi ungar. rhapsodie",
+    "type": "welte-red",
+    "work": "Vi ungar. rhapsodie"
   },
   {
     "arranger": "",
@@ -3014,6 +3782,30 @@
   {
     "arranger": "",
     "composer": "Liszt, Franz",
+    "druid": "pv151xx7555",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pv151xx7555/pv151xx7555_0001/info.json",
+    "number": "1083",
+    "performer": "Esipova, Anna Nikolaevna",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Esipova - Rigoletto (paraphrase)",
+    "type": "welte-red",
+    "work": "Rigoletto (paraphrase)"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "mh120sr5901",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mh120sr5901/mh120sr5901_0001/info.json",
+    "number": "186",
+    "performer": "Friedheim, Arthur",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Friedheim - Paganini étude no. 2, e flat major",
+    "type": "welte-red",
+    "work": "Paganini étude no. 2, e flat major"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
     "druid": "mx460bt7026",
     "image_url": "https://stacks.stanford.edu/image/iiif/mx460bt7026/mx460bt7026_0001/info.json",
     "number": "198",
@@ -3034,6 +3826,30 @@
     "title": "Liszt/Ganz - Mignon's lied",
     "type": "welte-red",
     "work": "Mignon's lied"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "vt595ps7713",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vt595ps7713/vt595ps7713_0001_gs/info.json",
+    "number": "3829",
+    "performer": "Gieseking, Walter",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Gieseking - Xiv. ungarische rhapsodie",
+    "type": "welte-green",
+    "work": "Xiv. ungarische rhapsodie"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "zz408th0100",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zz408th0100/zz408th0100_0001_gs/info.json",
+    "number": "4055",
+    "performer": "Guller, Youra",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Guller - Mephisto-walzer: Episode aus Lenaus Faust: (Der Tanz in der Dorfschenke)",
+    "type": "welte-green",
+    "work": "Mephisto-walzer: Episode aus Lenaus Faust : (Der Tanz in der Dorfschenke)"
   },
   {
     "arranger": "",
@@ -3098,6 +3914,18 @@
   {
     "arranger": "",
     "composer": "Liszt, Franz",
+    "druid": "yj176wj3359",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yj176wj3359/yj176wj3359_0001_gs/info.json",
+    "number": "E-570",
+    "performer": "Lamond, Frederic",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Lamond - Nocturne: (Love's Dream)",
+    "type": "welte-green",
+    "work": "Nocturne: (Love's Dream)"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
     "druid": "dw083wh0675",
     "image_url": "https://stacks.stanford.edu/image/iiif/dw083wh0675/dw083wh0675_0001/info.json",
     "number": "1302",
@@ -3106,6 +3934,30 @@
     "title": "Liszt/Lhévinne - Loreley",
     "type": "welte-red",
     "work": "Loreley"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "bv479zh9659",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bv479zh9659/bv479zh9659_0001_gs/info.json",
+    "number": "2441",
+    "performer": "Lhévinne, Josef",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Lhévinne - Robert le diable: fantasia",
+    "type": "welte-green",
+    "work": "Robert le diable: fantasia"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
+    "druid": "jr992cq7032",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jr992cq7032/jr992cq7032_0001_gs/info.json",
+    "number": "2704",
+    "performer": "Lohr, Johanna",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Lohr - Consolation no. 2, e major",
+    "type": "welte-green",
+    "work": "Consolation no. 2, e major"
   },
   {
     "arranger": "",
@@ -3290,6 +4142,18 @@
   {
     "arranger": "",
     "composer": "Liszt, Franz",
+    "druid": "xh290ph9770",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xh290ph9770/xh290ph9770_0001_gs/info.json",
+    "number": "952",
+    "performer": "Sapellnikoff, W. (Wassily)",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Sapellnikoff - Spanish rhapsody in c♯ minor",
+    "type": "welte-red",
+    "work": "Spanish rhapsody in c♯ minor"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
     "druid": "hm523dq5554",
     "image_url": "https://stacks.stanford.edu/image/iiif/hm523dq5554/hm523dq5554_0001/info.json",
     "number": "876",
@@ -3386,6 +4250,18 @@
   {
     "arranger": "",
     "composer": "Liszt, Franz",
+    "druid": "vz353vy6324",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vz353vy6324/vz353vy6324_0001/info.json",
+    "number": "376",
+    "performer": "Wendling, Carl",
+    "publisher": "Welte-Mignon",
+    "title": "Liszt/Wendling - Elsa's brautzug",
+    "type": "welte-red",
+    "work": "Elsa's brautzug"
+  },
+  {
+    "arranger": "",
+    "composer": "Liszt, Franz",
     "druid": "sr504pc8797",
     "image_url": "https://stacks.stanford.edu/image/iiif/sr504pc8797/sr504pc8797_0001/info.json",
     "number": "376",
@@ -3454,6 +4330,18 @@
     "title": "MacDowell/Zadora - Hexentanz: op. 17, no. 2",
     "type": "welte-red",
     "work": "Hexentanz: op. 17, no. 2"
+  },
+  {
+    "arranger": "",
+    "composer": "Mahler, Gustav",
+    "druid": "vq976gr5492",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vq976gr5492/vq976gr5492_0001/info.json",
+    "number": "767",
+    "performer": "Mahler, Gustav",
+    "publisher": "Welte-Mignon",
+    "title": "Mahler/Mahler - Ging heute morgen übers feld",
+    "type": "welte-red",
+    "work": "Ging heute morgen übers feld"
   },
   {
     "arranger": "",
@@ -3624,6 +4512,18 @@
     "work": "Auf flügeln des gesangs"
   },
   {
+    "arranger": "Liszt, Franz",
+    "composer": "Mendelssohn-Bartholdy, Felix",
+    "druid": "dy874qf2051",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dy874qf2051/dy874qf2051_0001/info.json",
+    "number": "882",
+    "performer": "Sauer, Emil von",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy-Liszt/Sauer - On the wings of songs",
+    "type": "welte-red",
+    "work": "On the wings of songs"
+  },
+  {
     "arranger": "",
     "composer": "Mendelssohn-Bartholdy, Felix",
     "druid": "xn796bh4368",
@@ -3674,6 +4574,18 @@
   {
     "arranger": "",
     "composer": "Mendelssohn-Bartholdy, Felix",
+    "druid": "tb323rh4122",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tb323rh4122/tb323rh4122_0001/info.json",
+    "number": "3031",
+    "performer": "Hofmann, Josef",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Hofmann - Rondo capriccioso op. 14",
+    "type": "welte-red",
+    "work": "Rondo capriccioso op. 14"
+  },
+  {
+    "arranger": "",
+    "composer": "Mendelssohn-Bartholdy, Felix",
     "druid": "cd381jt9273",
     "image_url": "https://stacks.stanford.edu/image/iiif/cd381jt9273/cd381jt9273_0001/info.json",
     "number": "3172",
@@ -3698,6 +4610,30 @@
   {
     "arranger": "",
     "composer": "Mendelssohn-Bartholdy, Felix",
+    "druid": "ch039pq4772",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ch039pq4772/ch039pq4772_0001_gs/info.json",
+    "number": "3170",
+    "performer": "Kiek, Georges",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Kiek - Serenda & allegro giocoso: op. 43",
+    "type": "welte-green",
+    "work": "Serenda & allegro giocoso: op. 43"
+  },
+  {
+    "arranger": "",
+    "composer": "Mendelssohn-Bartholdy, Felix",
+    "druid": "xj419ft5538",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xj419ft5538/xj419ft5538_0001_gs/info.json",
+    "number": "3165",
+    "performer": "Kiek, Georges",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Kiek - The   Hebrides: overture",
+    "type": "welte-green",
+    "work": "The   Hebrides: overture"
+  },
+  {
+    "arranger": "",
+    "composer": "Mendelssohn-Bartholdy, Felix",
     "druid": "zv706jf8277",
     "image_url": "https://stacks.stanford.edu/image/iiif/zv706jf8277/zv706jf8277_0001/info.json",
     "number": "458",
@@ -3706,6 +4642,18 @@
     "title": "Mendelssohn-Bartholdy/Kleeberg - Duetto: (Song without words): A flat major",
     "type": "welte-red",
     "work": "Duetto: (Song without words) : A flat major"
+  },
+  {
+    "arranger": "",
+    "composer": "Mendelssohn-Bartholdy, Felix",
+    "druid": "hx879dt4860",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hx879dt4860/hx879dt4860_0001_gs/info.json",
+    "number": "1158",
+    "performer": "Morsztyn, Helene",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Morsztyn - Variations sérieuses: op. 54, D minor",
+    "type": "welte-green",
+    "work": "Variations sérieuses: op. 54, D minor"
   },
   {
     "arranger": "",
@@ -3781,6 +4729,30 @@
   },
   {
     "arranger": "",
+    "composer": "Michaelis, Th. (Theodor)",
+    "druid": "tj759sv4290",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tj759sv4290/tj759sv4290_0001/info.json",
+    "number": "1544",
+    "performer": "Brightwell, Edward",
+    "publisher": "Welte-Mignon",
+    "title": "Michaelis/Brightwell - Türkische scharwache =: The Turkish patrol",
+    "type": "welte-red",
+    "work": "Türkische scharwache =: The Turkish patrol"
+  },
+  {
+    "arranger": "",
+    "composer": "",
+    "druid": "gq104tn4658",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gq104tn4658/gq104tn4658_0001_gs/info.json",
+    "number": "----",
+    "performer": "",
+    "publisher": "[Welte-Mignon]",
+    "title": "Monteurscala für 98er",
+    "type": "welte-green",
+    "work": "Monteurscala für 98er"
+  },
+  {
+    "arranger": "",
     "composer": "Moreno Torroba, Federico, 1891-1982",
     "druid": "qf152xr6941",
     "image_url": "https://stacks.stanford.edu/image/iiif/qf152xr6941/qf152xr6941_0002/info.json",
@@ -3806,6 +4778,30 @@
   {
     "arranger": "",
     "composer": "Moszkowski, Moritz",
+    "druid": "wf903pd7291",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wf903pd7291/wf903pd7291_0001/info.json",
+    "number": "3744",
+    "performer": "Danziger, Laura",
+    "publisher": "Welte-Mignon",
+    "title": "Moszkowski/Danziger - Près du berceau =: (By the cradle): op. 58",
+    "type": "welte-red",
+    "work": "Près du berceau =: (By the cradle) : op. 58"
+  },
+  {
+    "arranger": "",
+    "composer": "Moszkowski, Moritz",
+    "druid": "yh718dv4624",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yh718dv4624/yh718dv4624_0001/info.json",
+    "number": "667",
+    "performer": "Hofmann, Josef",
+    "publisher": "Welte-Mignon",
+    "title": "Moszkowski/Hofmann - La   Jongleuse",
+    "type": "welte-red",
+    "work": "La   Jongleuse"
+  },
+  {
+    "arranger": "",
+    "composer": "Moszkowski, Moritz",
     "druid": "hq933dq4264",
     "image_url": "https://stacks.stanford.edu/image/iiif/hq933dq4264/hq933dq4264_0001/info.json",
     "number": "449",
@@ -3826,6 +4822,18 @@
     "title": "Mozart - Sonate, c-dur = ut majeur = c major: (Köch.-Verz. No. 330): Allegro moderato; Andante cantabile",
     "type": "88-note",
     "work": "Sonate, c-dur = ut majeur = c major: (Köch.-Verz. No. 330): Allegro moderato ; Andante cantabile"
+  },
+  {
+    "arranger": "",
+    "composer": "Mozart, Wolfgang Amadeus",
+    "druid": "sj859cc2398",
+    "image_url": "https://stacks.stanford.edu/image/iiif/sj859cc2398/sj859cc2398_0001_gs/info.json",
+    "number": "1843",
+    "performer": "Fischer, Edwin",
+    "publisher": "Welte-Mignon",
+    "title": "Mozart/Fischer - Fantasia c minor, no. 3",
+    "type": "welte-green",
+    "work": "Fantasia c minor, no. 3"
   },
   {
     "arranger": "",
@@ -3889,6 +4897,42 @@
   },
   {
     "arranger": "",
+    "composer": "Niemann, Walter",
+    "druid": "gg965jb7431",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gg965jb7431/gg965jb7431_0001_gs/info.json",
+    "number": "3845",
+    "performer": "Heinemann, Käthe",
+    "publisher": "Welte-Mignon",
+    "title": "Niemann/Heinemann - Old china: op. 62",
+    "type": "welte-green",
+    "work": "Old china: op. 62"
+  },
+  {
+    "arranger": "",
+    "composer": "Niemann, Walter",
+    "druid": "zm137tf5580",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zm137tf5580/zm137tf5580_0001_gs/info.json",
+    "number": "3932",
+    "performer": "Liebling, Georg",
+    "publisher": "Welte-Mignon",
+    "title": "Niemann/Liebling - Noon-stillness in the park: (elegie); Butterfly: (etude)",
+    "type": "welte-green",
+    "work": "Noon-stillness in the park: (elegie) ; Butterfly : (etude)"
+  },
+  {
+    "arranger": "",
+    "composer": "Niemann, Walter",
+    "druid": "tp877xb8485",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tp877xb8485/tp877xb8485_0001_gs/info.json",
+    "number": "4093",
+    "performer": "Niemann, Walter",
+    "publisher": "Welte-Mignon",
+    "title": "Niemann/Niemann - Japan: op. 89",
+    "type": "welte-green",
+    "work": "Japan: op. 89"
+  },
+  {
+    "arranger": "",
     "composer": "Offenbach, Jacques",
     "druid": "tr981xw2871",
     "image_url": "https://stacks.stanford.edu/image/iiif/tr981xw2871/tr981xw2871_0001/info.json",
@@ -3934,6 +4978,18 @@
     "title": "Pachmann/Pachmann - Improvisation on \"the maiden's prayer\"",
     "type": "welte-red",
     "work": "Improvisation on \"the maiden's prayer\""
+  },
+  {
+    "arranger": "",
+    "composer": "Paderewski, Ignace Jan",
+    "druid": "dc021nq1464",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dc021nq1464/dc021nq1464_0001/info.json",
+    "number": "1263",
+    "performer": "Paderewski, Ignace Jan",
+    "publisher": "Welte-Mignon",
+    "title": "Paderewski/Paderewski - Menuett op. 14, no. 1",
+    "type": "welte-red",
+    "work": "Menuett op. 14, no. 1"
   },
   {
     "arranger": "",
@@ -4006,6 +5062,18 @@
     "title": "Pettorossi - Galleguita: tango argentino",
     "type": "88-note",
     "work": "Galleguita: tango argentino"
+  },
+  {
+    "arranger": "",
+    "composer": "Pierné, Gabriel",
+    "druid": "zp085nr8664",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zp085nr8664/zp085nr8664_0001/info.json",
+    "number": "3558",
+    "performer": "Danziger, Laura",
+    "publisher": "Welte-Mignon",
+    "title": "Pierné/Danziger - Serenade",
+    "type": "welte-red",
+    "work": "Serenade"
   },
   {
     "arranger": "",
@@ -4082,6 +5150,30 @@
   {
     "arranger": "",
     "composer": "Rachmaninoff, Sergei",
+    "druid": "kd611nv7181",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kd611nv7181/kd611nv7181_0001_gs/info.json",
+    "number": "1964",
+    "performer": "Brick, Helene",
+    "publisher": "Welte-Mignon",
+    "title": "Rachmaninoff/Brick - Prélude g-moll, op. 23, no. 5",
+    "type": "welte-green",
+    "work": "Prélude g-moll, op. 23, no. 5"
+  },
+  {
+    "arranger": "",
+    "composer": "Rachmaninoff, Sergei",
+    "druid": "tg593zw7367",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tg593zw7367/tg593zw7367_0001_gs/info.json",
+    "number": "2084",
+    "performer": "Golʹdenveĭzer, Aleksandr Borisovich",
+    "publisher": "Welte-Mignon",
+    "title": "Rachmaninoff/Golʹdenveĭzer - Moment musical",
+    "type": "welte-licensee",
+    "work": "Moment musical"
+  },
+  {
+    "arranger": "",
+    "composer": "Rachmaninoff, Sergei",
     "druid": "kj388dj3308",
     "image_url": "https://stacks.stanford.edu/image/iiif/kj388dj3308/kj388dj3308_0001/info.json",
     "number": "2079",
@@ -4141,6 +5233,18 @@
   },
   {
     "arranger": "",
+    "composer": "Rachmaninoff, Sergei",
+    "druid": "pz923dx9638",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pz923dx9638/pz923dx9638_0001/info.json",
+    "number": "234",
+    "performer": "Rössel, Anatol von",
+    "publisher": "Welte-Mignon",
+    "title": "Rachmaninoff/Rössel - Prelude op. 3, no. 2",
+    "type": "welte-red",
+    "work": "Prelude op. 3, no. 2"
+  },
+  {
+    "arranger": "",
     "composer": "Raff, Joachim, 1822-1882",
     "druid": "jy320zw1102",
     "image_url": "https://stacks.stanford.edu/image/iiif/jy320zw1102/jy320zw1102_0002/info.json",
@@ -4150,6 +5254,30 @@
     "title": "Raff - Valse impromptu",
     "type": "88-note",
     "work": "Valse impromptu"
+  },
+  {
+    "arranger": "Henselt, Adolf von",
+    "composer": "Raff, Joachim",
+    "druid": "rr300fs3519",
+    "image_url": "https://stacks.stanford.edu/image/iiif/rr300fs3519/rr300fs3519_0001/info.json",
+    "number": "1223",
+    "performer": "Pachmann, Vladimir de",
+    "publisher": "Welte-Mignon",
+    "title": "Raff-Henselt/Pachmann - La   Fileuse",
+    "type": "welte-red",
+    "work": "La   Fileuse"
+  },
+  {
+    "arranger": "",
+    "composer": "Raff, Joachim",
+    "druid": "pb477ps9097",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pb477ps9097/pb477ps9097_0001_gs/info.json",
+    "number": "138",
+    "performer": "Adam-Benard, Eugenie",
+    "publisher": "Welte-Mignon",
+    "title": "Raff/Adam-Benard - Tannhäuser-fantasie",
+    "type": "welte-red",
+    "work": "Tannhäuser-fantasie"
   },
   {
     "arranger": "",
@@ -4178,6 +5306,18 @@
   {
     "arranger": "",
     "composer": "Raff, Joachim",
+    "druid": "zb160bd9850",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zb160bd9850/zb160bd9850_0001/info.json",
+    "number": "296",
+    "performer": "Gabrilowitsch, Ossip",
+    "publisher": "Welte-Mignon",
+    "title": "Raff/Gabrilowitsch - Riguadon in d",
+    "type": "welte-red",
+    "work": "Riguadon in d"
+  },
+  {
+    "arranger": "",
+    "composer": "Raff, Joachim",
     "druid": "vq227vv6345",
     "image_url": "https://stacks.stanford.edu/image/iiif/vq227vv6345/vq227vv6345_0001/info.json",
     "number": "424",
@@ -4186,6 +5326,66 @@
     "title": "Raff/Wendling - La  Fileuse: op. 157, no. 2",
     "type": "welte-red",
     "work": "La  Fileuse: op. 157, no. 2"
+  },
+  {
+    "arranger": "",
+    "composer": "Reger, Max",
+    "druid": "hx098mm3686",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hx098mm3686/hx098mm3686_0001_gs/info.json",
+    "number": "3414",
+    "performer": "Kwast-Hodapp, Frieda",
+    "publisher": "Welte-Mignon",
+    "title": "Reger/Kwast-Hodapp - Variations and fuge op. 134, part 1",
+    "type": "welte-green",
+    "work": "Variations and fuge op. 134, part 1"
+  },
+  {
+    "arranger": "",
+    "composer": "Reger, Max",
+    "druid": "zm553zd7852",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zm553zd7852/zm553zd7852_0001_gs/info.json",
+    "number": "3413",
+    "performer": "Kwast-Hodapp, Frieda",
+    "publisher": "Welte-Mignon",
+    "title": "Reger/Kwast-Hodapp - Variations and fuge op. 134, part 1",
+    "type": "welte-green",
+    "work": "Variations and fuge op. 134, part 1"
+  },
+  {
+    "arranger": "",
+    "composer": "Reger, Max",
+    "druid": "kw569bw0899",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kw569bw0899/kw569bw0899_0001_gs/info.json",
+    "number": "1019",
+    "performer": "Reger, Max",
+    "publisher": "Welte-Mignon",
+    "title": "Reger/Reger - Intermezzo g minor, op. 45, no. 5",
+    "type": "welte-green",
+    "work": "Intermezzo g minor, op. 45, no. 5"
+  },
+  {
+    "arranger": "",
+    "composer": "Reger, Max",
+    "druid": "wb477ky1555",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wb477ky1555/wb477ky1555_0001/info.json",
+    "number": "4041",
+    "performer": "Schapira, Vera",
+    "publisher": "Welte-Mignon",
+    "title": "Reger/Schapira - Sonatine d-dur, op. 89, no. 2: Menuett",
+    "type": "welte-red",
+    "work": "Sonatine d-dur, op. 89, no. 2: Menuett"
+  },
+  {
+    "arranger": "",
+    "composer": "Respighi, Ottorino",
+    "druid": "qh029qv9381",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qh029qv9381/qh029qv9381_0001_gs/info.json",
+    "number": "3901",
+    "performer": "Singer, Richard",
+    "publisher": "Welte-Mignon",
+    "title": "Respighi/Singer - Siciliana: (Ignato Ende des XVI. Jahrh.)",
+    "type": "welte-green",
+    "work": "Siciliana: (Ignato Ende des XVI. Jahrh.)"
   },
   {
     "arranger": "Whiteman, Paul",
@@ -4262,6 +5462,18 @@
   {
     "arranger": "",
     "composer": "Rubinstein, Anton",
+    "druid": "cj376vh3102",
+    "image_url": "https://stacks.stanford.edu/image/iiif/cj376vh3102/cj376vh3102_0001_gs/info.json",
+    "number": "661",
+    "performer": "Hofmann, Josef",
+    "publisher": "Welte-Mignon",
+    "title": "Rubinstein/Hofmann - German waltz",
+    "type": "welte-green",
+    "work": "German waltz"
+  },
+  {
+    "arranger": "",
+    "composer": "Rubinstein, Anton",
     "druid": "xr682fm1233",
     "image_url": "https://stacks.stanford.edu/image/iiif/xr682fm1233/xr682fm1233_0001/info.json",
     "number": "660",
@@ -4322,6 +5534,18 @@
   {
     "arranger": "",
     "composer": "Saint-Saëns, Camille",
+    "druid": "jt241qk3369",
+    "image_url": "https://stacks.stanford.edu/image/iiif/jt241qk3369/jt241qk3369_0001_gs/info.json",
+    "number": "2990",
+    "performer": "Albert, Eugen d'",
+    "publisher": "Welte-Mignon",
+    "title": "Saint-Saëns/Albert - Etude op. 52, no. 6: (En forme de valse)",
+    "type": "welte-green",
+    "work": "Etude op. 52, no. 6: (En forme de valse)"
+  },
+  {
+    "arranger": "",
+    "composer": "Saint-Saëns, Camille",
     "druid": "cp259ms0085",
     "image_url": "https://stacks.stanford.edu/image/iiif/cp259ms0085/cp259ms0085_0001/info.json",
     "number": "2260",
@@ -4342,6 +5566,18 @@
     "title": "Saint-Saëns/Epstein - Samson and delilah: Cantabile du grand duo",
     "type": "welte-red",
     "work": "Samson and delilah: Cantabile du grand duo"
+  },
+  {
+    "arranger": "",
+    "composer": "Saint-Saëns, Camille",
+    "druid": "qz155gk0442",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qz155gk0442/qz155gk0442_0001/info.json",
+    "number": "797",
+    "performer": "Saint-Saëns, Camille",
+    "publisher": "Welte-Mignon",
+    "title": "Saint-Saëns/Saint-Saëns - Finale a. d. i. akt \"samson und dalila\"",
+    "type": "welte-red",
+    "work": "Finale a. d. i. akt \"samson und dalila\""
   },
   {
     "arranger": "",
@@ -4369,6 +5605,18 @@
   },
   {
     "arranger": "",
+    "composer": "Saint-Saëns, Camille",
+    "druid": "vy825xs5525",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vy825xs5525/vy825xs5525_0001_gs/info.json",
+    "number": "906",
+    "performer": "Schnitzer, Germaine",
+    "publisher": "Welte-Mignon",
+    "title": "Saint-Saëns/Schnitzer - Toccata op. 111, no 6",
+    "type": "welte-green",
+    "work": "Toccata op. 111, no 6"
+  },
+  {
+    "arranger": "",
     "composer": "Sanders, Julio, 1897-1942",
     "druid": "zk199jz1564",
     "image_url": "https://stacks.stanford.edu/image/iiif/zk199jz1564/zk199jz1564_0002/info.json",
@@ -4378,6 +5626,30 @@
     "title": "Sanders - Adiós muchachos: tango",
     "type": "88-note",
     "work": "Adiós muchachos: tango"
+  },
+  {
+    "arranger": "",
+    "composer": "Sapellnikoff, W. (Wassily)",
+    "druid": "mc296vc1378",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mc296vc1378/mc296vc1378_0001_gs/info.json",
+    "number": "942",
+    "performer": "Sapellnikoff, W. (Wassily)",
+    "publisher": "Welte-Mignon",
+    "title": "Sapellnikoff/Sapellnikoff - Valse e-flat",
+    "type": "welte-green",
+    "work": "Valse e-flat"
+  },
+  {
+    "arranger": "",
+    "composer": "Scarlatti, Domenico",
+    "druid": "mz547cz5934",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mz547cz5934/mz547cz5934_0001_gs/info.json",
+    "number": "538",
+    "performer": "Pugno, Raoul",
+    "publisher": "Welte-Mignon",
+    "title": "Scarlatti/Pugno - Sonatina a major",
+    "type": "welte-green",
+    "work": "Sonatina a major"
   },
   {
     "arranger": "",
@@ -4454,6 +5726,18 @@
   {
     "arranger": "Liszt, Franz",
     "composer": "Schubert, Franz",
+    "druid": "yx139bt6626",
+    "image_url": "https://stacks.stanford.edu/image/iiif/yx139bt6626/yx139bt6626_0001/info.json",
+    "number": "292",
+    "performer": "Ansorge, Conrad",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Liszt/Ansorge - Du bist die ruh",
+    "type": "welte-red",
+    "work": "Du bist die ruh"
+  },
+  {
+    "arranger": "Liszt, Franz",
+    "composer": "Schubert, Franz",
     "druid": "md331fy4209",
     "image_url": "https://stacks.stanford.edu/image/iiif/md331fy4209/md331fy4209_0001/info.json",
     "number": "723",
@@ -4502,6 +5786,18 @@
   {
     "arranger": "Liszt, Franz",
     "composer": "Schubert, Franz",
+    "druid": "zb047nt8965",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zb047nt8965/zb047nt8965_0001_gs/info.json",
+    "number": "3317",
+    "performer": "Lászlò, Sándor",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Liszt/Lászlò - Wanderer-fantasie: I. und II. Satz",
+    "type": "welte-green",
+    "work": "Wanderer-fantasie: I. und II. Satz"
+  },
+  {
+    "arranger": "Liszt, Franz",
+    "composer": "Schubert, Franz",
     "druid": "sc188ff2842",
     "image_url": "https://stacks.stanford.edu/image/iiif/sc188ff2842/sc188ff2842_0001/info.json",
     "number": "1260",
@@ -4522,6 +5818,30 @@
     "title": "Schubert-Tausig/Bloomfield-Zeisler - Militär-marsch =: (Military march)",
     "type": "welte-red",
     "work": "Militär-marsch =: (Military march)"
+  },
+  {
+    "arranger": "Tausig, Carl",
+    "composer": "Schubert, Franz",
+    "druid": "fd429fm4324",
+    "image_url": "https://stacks.stanford.edu/image/iiif/fd429fm4324/fd429fm4324_0001/info.json",
+    "number": "281",
+    "performer": "Lambrino, Télémaque",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Tausig/Lambrino - March militaire",
+    "type": "welte-red",
+    "work": "March militaire"
+  },
+  {
+    "arranger": "Tausig, Carl",
+    "composer": "Schubert, Franz",
+    "druid": "vk819jp3643",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vk819jp3643/vk819jp3643_0001_gs/info.json",
+    "number": "3654",
+    "performer": "Zadora, Michael",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert-Tausig/Zadora - Air with variations",
+    "type": "welte-green",
+    "work": "Air with variations"
   },
   {
     "arranger": "",
@@ -4558,6 +5878,30 @@
     "title": "Schubert/Grünfeld - Impromptu, op. 142, no. 2, as = la bémol = a♭",
     "type": "88-note",
     "work": "Impromptu, op. 142, no. 2, as = la bémol = a♭"
+  },
+  {
+    "arranger": "",
+    "composer": "Schubert, Franz",
+    "druid": "cx495mw1504",
+    "image_url": "https://stacks.stanford.edu/image/iiif/cx495mw1504/cx495mw1504_0001_gs/info.json",
+    "number": "222",
+    "performer": "Grünfeld, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert/Grünfeld - Impromptus as-dur op. 142 no. 2",
+    "type": "welte-green",
+    "work": "Impromptus as-dur op. 142 no. 2"
+  },
+  {
+    "arranger": "",
+    "composer": "Schubert, Franz",
+    "druid": "hj286gj0705",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hj286gj0705/hj286gj0705_0001_gs/info.json",
+    "number": "891",
+    "performer": "Hermanns, Hans",
+    "publisher": "Welte-Mignon",
+    "title": "Schubert/Hermanns - Fantasie op. 103, nr. 17, f-moll",
+    "type": "welte-red",
+    "work": "Fantasie op. 103, nr. 17, f-moll"
   },
   {
     "arranger": "",
@@ -4922,6 +6266,18 @@
   {
     "arranger": "",
     "composer": "Schumann, Robert",
+    "druid": "tt832yh4966",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tt832yh4966/tt832yh4966_0001/info.json",
+    "number": "323",
+    "performer": "Reisenauer, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Reisenauer - Carnaval: III. Teil",
+    "type": "welte-red",
+    "work": "Carnaval: III. Teil"
+  },
+  {
+    "arranger": "",
+    "composer": "Schumann, Robert",
     "druid": "xw872bc8052",
     "image_url": "https://stacks.stanford.edu/image/iiif/xw872bc8052/xw872bc8052_0001/info.json",
     "number": "321",
@@ -4981,6 +6337,18 @@
   },
   {
     "arranger": "",
+    "composer": "Schumann, Robert",
+    "druid": "ps656vb4839",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ps656vb4839/ps656vb4839_0001/info.json",
+    "number": "2086",
+    "performer": "Schorr, David",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Schorr - Slumber song",
+    "type": "welte-red",
+    "work": "Slumber song"
+  },
+  {
+    "arranger": "",
     "composer": "Schytte, Ludvig",
     "druid": "dz678wd2724",
     "image_url": "https://stacks.stanford.edu/image/iiif/dz678wd2724/dz678wd2724_0001/info.json",
@@ -5026,6 +6394,18 @@
     "title": "Schütt/Seckendorf Popper - Carnaval mignon: scènes pantomimiques: op. 48",
     "type": "welte-red",
     "work": "Carnaval mignon: scènes pantomimiques : op. 48"
+  },
+  {
+    "arranger": "",
+    "composer": "Schütt, Eduard",
+    "druid": "qj233tv5549",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qj233tv5549/qj233tv5549_0001/info.json",
+    "number": "377",
+    "performer": "Wendling, Carl",
+    "publisher": "Welte-Mignon",
+    "title": "Schütt/Wendling - Etude mignonne",
+    "type": "welte-red",
+    "work": "Etude mignonne"
   },
   {
     "arranger": "",
@@ -5089,6 +6469,30 @@
   },
   {
     "arranger": "",
+    "composer": "Sgambati, Giovanni",
+    "druid": "bh080cm1901",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bh080cm1901/bh080cm1901_0001_gs/info.json",
+    "number": "3196",
+    "performer": "Carreras, Maria",
+    "publisher": "Welte-Mignon",
+    "title": "Sgambati/Carreras - Concerto op. 15, g minor: 2nd movement",
+    "type": "welte-green",
+    "work": "Concerto op. 15, g minor: 2nd movement"
+  },
+  {
+    "arranger": "",
+    "composer": "Sgambati, Giovanni",
+    "druid": "mh997nc7835",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mh997nc7835/mh997nc7835_0001_gs/info.json",
+    "number": "3197",
+    "performer": "Carreras, Maria",
+    "publisher": "Welte-Mignon",
+    "title": "Sgambati/Carreras - Concerto op. 15, g minor: 3rd movement",
+    "type": "welte-green",
+    "work": "Concerto op. 15, g minor: 3rd movement"
+  },
+  {
+    "arranger": "",
     "composer": "Sibelius, Jean",
     "druid": "vg335rq3648",
     "image_url": "https://stacks.stanford.edu/image/iiif/vg335rq3648/vg335rq3648_0001/info.json",
@@ -5098,6 +6502,18 @@
     "title": "Sibelius/Di Benici - Caprice f minor",
     "type": "welte-green",
     "work": "Caprice f minor"
+  },
+  {
+    "arranger": "",
+    "composer": "Sibelius, Jean",
+    "druid": "gt485ys0625",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gt485ys0625/gt485ys0625_0001/info.json",
+    "number": "2635",
+    "performer": "Di Benici, Tosta",
+    "publisher": "Welte-Mignon",
+    "title": "Sibelius/Di Benici - Romance des dur, op. 34, no. 9",
+    "type": "welte-red",
+    "work": "Romance des dur, op. 34, no. 9"
   },
   {
     "arranger": "",
@@ -5146,6 +6562,18 @@
     "title": "Sinding/Di Benici - Frühlingsrauschen: op. 32, no. 3",
     "type": "welte-red",
     "work": "Frühlingsrauschen: op. 32, no. 3"
+  },
+  {
+    "arranger": "",
+    "composer": "Sinding, Christian",
+    "druid": "vm569hf6713",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vm569hf6713/vm569hf6713_0001_gs/info.json",
+    "number": "3876",
+    "performer": "Strecker, Paul",
+    "publisher": "Welte-Mignon",
+    "title": "Sinding/Strecker - Fatum: variations: part II",
+    "type": "welte-green",
+    "work": "Fatum: variations : part II"
   },
   {
     "arranger": "",
@@ -5232,6 +6660,18 @@
     "work": "Rosen aus dem süden: Walzer"
   },
   {
+    "arranger": "Goldstein, Edward",
+    "composer": "Strauss, Johann",
+    "druid": "nv508pk0096",
+    "image_url": "https://stacks.stanford.edu/image/iiif/nv508pk0096/nv508pk0096_0001/info.json",
+    "number": "309",
+    "performer": "Rössel, Anatol von",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss-Goldstein/Rössel - Tausend und eine nacht: Walzer",
+    "type": "welte-red",
+    "work": "Tausend und eine nacht: Walzer"
+  },
+  {
     "arranger": "Grünfeld, Alfred",
     "composer": "Strauss, Josef",
     "druid": "sv842td3290",
@@ -5282,6 +6722,42 @@
   {
     "arranger": "",
     "composer": "Strauss, Johann",
+    "druid": "qt184gb0959",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qt184gb0959/qt184gb0959_0001/info.json",
+    "number": "2271",
+    "performer": "Epstein, Richard",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss/Epstein - O schoener mai: from Prince Methusalem",
+    "type": "welte-red",
+    "work": "O schoener mai: from Prince Methusalem"
+  },
+  {
+    "arranger": "",
+    "composer": "Strauss, Johann",
+    "druid": "df027sn7588",
+    "image_url": "https://stacks.stanford.edu/image/iiif/df027sn7588/df027sn7588_0001_gs/info.json",
+    "number": "1291",
+    "performer": "Fichter, Bella",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss/Fichter - Der  Zigeunerbaron: Potpourri",
+    "type": "welte-red",
+    "work": "Der  Zigeunerbaron: Potpourri"
+  },
+  {
+    "arranger": "",
+    "composer": "Strauss, Richard",
+    "druid": "fc139hf7118",
+    "image_url": "https://stacks.stanford.edu/image/iiif/fc139hf7118/fc139hf7118_0001_gs/info.json",
+    "number": "3980",
+    "performer": "Koczalski, Raoul",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss/Koczalski - Sonata op. 5, b minor: 3rd and 4th movements",
+    "type": "welte-green",
+    "work": "Sonata op. 5, b minor: 3rd and 4th movements"
+  },
+  {
+    "arranger": "",
+    "composer": "Strauss, Johann",
     "druid": "sk565bp3463",
     "image_url": "https://stacks.stanford.edu/image/iiif/sk565bp3463/sk565bp3463_0001/info.json",
     "number": "349",
@@ -5302,6 +6778,18 @@
     "title": "Strauss/Orlando - Du und du: aus Fledermaus: Walzer",
     "type": "welte-red",
     "work": "Du und du: aus Fledermaus : Walzer"
+  },
+  {
+    "arranger": "",
+    "composer": "Strauss, Richard",
+    "druid": "nk242mq5859",
+    "image_url": "https://stacks.stanford.edu/image/iiif/nk242mq5859/nk242mq5859_0001_gs/info.json",
+    "number": "2561",
+    "performer": "Paur, Emil",
+    "publisher": "Welte-Mignon",
+    "title": "Strauss/Paur - Rosenkavalier: Walzer",
+    "type": "welte-green",
+    "work": "Rosenkavalier: Walzer"
   },
   {
     "arranger": "",
@@ -5437,6 +6925,18 @@
   },
   {
     "arranger": "",
+    "composer": "Tausig, Carl",
+    "druid": "ty057qx3114",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ty057qx3114/ty057qx3114_0001_gs/info.json",
+    "number": "2055",
+    "performer": "Beklemishev, G. N. (Grigoríĭ Nikolaevich)",
+    "publisher": "Welte-Mignon",
+    "title": "Tausig/Beklemishev - Rondo on a french theme",
+    "type": "welte-green",
+    "work": "Rondo on a french theme"
+  },
+  {
+    "arranger": "",
     "composer": "Tchaikovsky, Peter Ilich",
     "druid": "zc118hn1152",
     "image_url": "https://stacks.stanford.edu/image/iiif/zc118hn1152/zc118hn1152_0001/info.json",
@@ -5521,6 +7021,18 @@
   },
   {
     "arranger": "",
+    "composer": "Tchaikovsky, Peter Ilich",
+    "druid": "pc917kv4570",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pc917kv4570/pc917kv4570_0001_gs/info.json",
+    "number": "1040",
+    "performer": "Roessel, Anatol von",
+    "publisher": "Welte-Mignon",
+    "title": "Tchaikovsky/Roessel - Thème original et variations: op. 19, no. 6",
+    "type": "welte-green",
+    "work": "Thème original et variations: op. 19, no. 6"
+  },
+  {
+    "arranger": "",
     "composer": "Texidor, Jaime, 1884-1957",
     "druid": "jv485mx5227",
     "image_url": "https://stacks.stanford.edu/image/iiif/jv485mx5227/jv485mx5227_0002/info.json",
@@ -5542,6 +7054,18 @@
     "title": "Thalberg/Brightwell - Home sweet home",
     "type": "welte-red",
     "work": "Home sweet home"
+  },
+  {
+    "arranger": "",
+    "composer": "Thalberg, Sigismond",
+    "druid": "dr994dw8204",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dr994dw8204/dr994dw8204_0001_gs/info.json",
+    "number": "1084",
+    "performer": "Esipova, Anna Nikolaevna",
+    "publisher": "Welte-Mignon",
+    "title": "Thalberg/Esipova - La   Sonnambula: fantasia",
+    "type": "welte-green",
+    "work": "La   Sonnambula: fantasia"
   },
   {
     "arranger": "",
@@ -5629,6 +7153,18 @@
   },
   {
     "arranger": "",
+    "composer": "Verdi, Giuseppe",
+    "druid": "pk245pq3468",
+    "image_url": "https://stacks.stanford.edu/image/iiif/pk245pq3468/pk245pq3468_0001_gs/info.json",
+    "number": "1340",
+    "performer": "Starke, Gustav",
+    "publisher": "Welte-Mignon",
+    "title": "Verdi/Starke - Troubadour: Potpourri",
+    "type": "welte-red",
+    "work": "Troubadour: Potpourri"
+  },
+  {
+    "arranger": "",
     "composer": "Vidal, Ramón (Composer)",
     "druid": "vr247rd6766",
     "image_url": "https://stacks.stanford.edu/image/iiif/vr247rd6766/vr247rd6766_0002/info.json",
@@ -5686,6 +7222,18 @@
     "title": "Vogrich/Mero - Staccato caprice",
     "type": "welte-red",
     "work": "Staccato caprice"
+  },
+  {
+    "arranger": "",
+    "composer": "Von Tilzer, Harry",
+    "druid": "hp881nf8962",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hp881nf8962/hp881nf8962_0001/info.json",
+    "number": "3624",
+    "performer": "Cusack, William T",
+    "publisher": "Welte-Mignon",
+    "title": "Von Tilzer/Cusack - Loves memories: hesitation",
+    "type": "welte-red",
+    "work": "Loves memories: hesitation"
   },
   {
     "arranger": "Brassin, Louis",
@@ -5784,6 +7332,18 @@
     "work": "Die   Meistersinger von nürnberg: Konzert-Paraphrase"
   },
   {
+    "arranger": "Schütt, Eduard",
+    "composer": "Wagner, Richard",
+    "druid": "fr239vm0948",
+    "image_url": "https://stacks.stanford.edu/image/iiif/fr239vm0948/fr239vm0948_0001/info.json",
+    "number": "917",
+    "performer": "Conne, Paul de",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner-Schütt/Conne - Walther's prize song: from the Mastersingers of Nurnberg",
+    "type": "welte-red",
+    "work": "Walther's prize song: from the Mastersingers of Nurnberg"
+  },
+  {
     "arranger": "Spindler, Fritz",
     "composer": "Wagner, Richard",
     "druid": "yr287jf4422",
@@ -5794,6 +7354,18 @@
     "title": "Wagner-Spindler/Adam-Benard - Lied a. d. abendstern: a. Tannhäuser op. 94",
     "type": "welte-red",
     "work": "Lied a. d. abendstern: a. Tannhäuser op. 94"
+  },
+  {
+    "arranger": "",
+    "composer": "Wagner, Richard",
+    "druid": "qg708tz0324",
+    "image_url": "https://stacks.stanford.edu/image/iiif/qg708tz0324/qg708tz0324_0001/info.json",
+    "number": "122",
+    "performer": "Adam-Benard, Eugenie",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Adam-Benard - Lohengrin: Prelude",
+    "type": "welte-red",
+    "work": "Lohengrin: Prelude"
   },
   {
     "arranger": "",
@@ -5893,6 +7465,18 @@
   },
   {
     "arranger": "",
+    "composer": "Wagner, Richard",
+    "druid": "vb983gg2310",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vb983gg2310/vb983gg2310_0001/info.json",
+    "number": "2566",
+    "performer": "Paur, Emil",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Paur - Siegfried: Waldweben",
+    "type": "welte-red",
+    "work": "Siegfried: Waldweben"
+  },
+  {
+    "arranger": "",
     "composer": "Waldteufel, Emil, 1837-1915",
     "druid": "xy736dn5214",
     "image_url": "https://stacks.stanford.edu/image/iiif/xy736dn5214/xy736dn5214_0002/info.json",
@@ -5929,6 +7513,18 @@
   },
   {
     "arranger": "",
+    "composer": "Weismann, Julius",
+    "druid": "fc003hh3109",
+    "image_url": "https://stacks.stanford.edu/image/iiif/fc003hh3109/fc003hh3109_0001_gs/info.json",
+    "number": "3493",
+    "performer": "Weismann, Julius",
+    "publisher": "Welte-Mignon",
+    "title": "Weismann/Weismann - Dance fantasia for piano, op. 35",
+    "type": "welte-green",
+    "work": "Dance fantasia for piano, op. 35"
+  },
+  {
+    "arranger": "",
     "composer": "Whiteman, Paul",
     "druid": "jd143sb1087",
     "image_url": "https://stacks.stanford.edu/image/iiif/jd143sb1087/jd143sb1087_0001/info.json",
@@ -5938,6 +7534,18 @@
     "title": "Whiteman/Wolf - Wonderful one: waltz song",
     "type": "welte-red",
     "work": "Wonderful one: waltz song"
+  },
+  {
+    "arranger": "",
+    "composer": "Youmans, Vincent",
+    "druid": "xk327pf9243",
+    "image_url": "https://stacks.stanford.edu/image/iiif/xk327pf9243/xk327pf9243_0001/info.json",
+    "number": "5676",
+    "performer": "Johnson, Edward",
+    "publisher": "Welte-Mignon",
+    "title": "Youmans/Johnson - I want to be happy: fox-trot",
+    "type": "welte-red",
+    "work": "I want to be happy: fox-trot"
   },
   {
     "arranger": "",
