@@ -150,6 +150,10 @@ const buildHolesIntervalTree = (holeData, firstHolePx) => {
 
   holeData.forEach((hole) => {
     const { y: offsetY, h: height } = hole;
+
+    // Check for bad data (shouldn't happen anymore, however)
+    if (height < 0) return;
+
     const tickOn = offsetY - firstHolePx;
     const tickOff = offsetY + height - firstHolePx;
 
