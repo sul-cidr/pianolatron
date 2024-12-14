@@ -23,6 +23,8 @@ $highlight-hover-outline-offset: 4px;
       }
 
       // the label "flag" (points to the right by default -- see .flag-left below)
+      // (also is positioned at the top of the label for upward-scrolling rolls,
+      // at the bottom for downward-scrolling rolls -- see .flag-bottom below)
       &::after {
         background-color: $highlight-hover-outline-color;
         color: white;
@@ -66,6 +68,12 @@ $highlight-hover-outline-offset: 4px;
     padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
   }
 
+  // .flag-bottom marks are positioned at the lower end of the flag overlay
+  mark.flag-bottom:hover::after {
+    top: auto;
+    bottom: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
+  }
+
   // if "Display Note Velocities" is on, a tooltip is displayed on .active marks
   &.active-note-details {
     mark.active::after {
@@ -82,6 +90,13 @@ $highlight-hover-outline-offset: 4px;
       mix-blend-mode: normal;
       transform: translate(-50%, -100%);
       pointer-events: none;
+    }
+
+    // tooltip is below perforation when the roll scrolls downwards
+    mark.flag-bottom.active::after {
+      top: auto;
+      bottom: 0;
+      transform: translate(-50%, 100%);
     }
 
     // when hovering a mark, revert to the outline+flag style
@@ -101,6 +116,12 @@ $highlight-hover-outline-offset: 4px;
         100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
       );
       padding: 8px 4px 8px ($highlight-hover-outline-width + 4px);
+    }
+
+    // and .flag-bottom marks
+    mark.flag-bottom:hover::after {
+      top: auto;
+      bottom: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
     }
   }
 

@@ -204,6 +204,8 @@
       parseFloat(imgBounds.width);
     mark.classList.toggle("flag-left", markFractionalPosition > 0.8);
 
+    mark.classList.toggle("flag-bottom", !$scrollDownwards);
+
     const viewportRectangle = viewport.imageToViewportRectangle(
       offsetX - 4,
       offsetY - 4,
