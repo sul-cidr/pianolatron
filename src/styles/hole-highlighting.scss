@@ -122,6 +122,7 @@ $highlight-hover-outline-offset: 4px;
     mark.flag-bottom:hover::after {
       top: auto;
       bottom: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
+      transform: translate(0);
     }
   }
 
