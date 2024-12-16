@@ -37,18 +37,6 @@
   },
   {
     "arranger": "",
-    "composer": "Adam, Adolphe",
-    "druid": "sj617nc3041",
-    "image_url": "https://stacks.stanford.edu/image/iiif/sj617nc3041/sj617nc3041_0001/info.json",
-    "number": "2543",
-    "performer": "Bernick, Hans",
-    "publisher": "Welte-Mignon",
-    "title": "Adam/Bernick - Si j'étais roi: Ouverture",
-    "type": "welte-red",
-    "work": "Si j'étais roi: Ouverture"
-  },
-  {
-    "arranger": "",
     "composer": "Akst, Harry, 1894-1963",
     "druid": "sz948zd1422",
     "image_url": "https://stacks.stanford.edu/image/iiif/sz948zd1422/sz948zd1422_0002/info.json",
@@ -733,18 +721,6 @@
   },
   {
     "arranger": "",
-    "composer": "Berger, Rodolphe",
-    "druid": "pz737tz3677",
-    "image_url": "https://stacks.stanford.edu/image/iiif/pz737tz3677/pz737tz3677_0001_gs/info.json",
-    "number": "C341",
-    "performer": "Kupfernagel, Albrecht",
-    "publisher": "Welte-Mignon",
-    "title": "Berger/Kupfernagel - Amoureuse: (waltz)",
-    "type": "welte-green",
-    "work": "Amoureuse: (waltz)"
-  },
-  {
-    "arranger": "",
     "composer": "Berlin, Irving",
     "druid": "pp798fc0175",
     "image_url": "https://stacks.stanford.edu/image/iiif/pp798fc0175/pp798fc0175_0001/info.json",
@@ -886,18 +862,6 @@
     "title": "Brahms/Dohnányi - Cappriccio op. 76, no. 2",
     "type": "welte-red",
     "work": "Cappriccio op. 76, no. 2"
-  },
-  {
-    "arranger": "",
-    "composer": "Brahms, Johannes",
-    "druid": "sh954gz9635",
-    "image_url": "https://stacks.stanford.edu/image/iiif/sh954gz9635/sh954gz9635_0001/info.json",
-    "number": "590",
-    "performer": "Galston, Gottfried",
-    "publisher": "Welte-Mignon",
-    "title": "Brahms/Galston - Waltzes (op. 39, nos. 8 & 12)",
-    "type": "welte-red",
-    "work": "Waltzes (op. 39, nos. 8 & 12)"
   },
   {
     "arranger": "",
@@ -2930,18 +2894,6 @@
   {
     "arranger": "",
     "composer": "Grieg, Edvard",
-    "druid": "df354sy6634",
-    "image_url": "https://stacks.stanford.edu/image/iiif/df354sy6634/df354sy6634_0001/info.json",
-    "number": "3379",
-    "performer": "Berend, Fritz",
-    "publisher": "Welte-Mignon",
-    "title": "Grieg/Berend - Peer gynt ii, op. 55, no. 4: Solvejgs Lied",
-    "type": "welte-green",
-    "work": "Peer gynt ii, op. 55, no. 4: Solvejgs Lied"
-  },
-  {
-    "arranger": "",
-    "composer": "Grieg, Edvard",
     "druid": "jw822wm2644",
     "image_url": "https://stacks.stanford.edu/image/iiif/jw822wm2644/jw822wm2644_0001/info.json",
     "number": "1275",
@@ -3910,18 +3862,6 @@
     "title": "Liszt/Lamond - Liebestraum: Nocturn No. 3",
     "type": "welte-red",
     "work": "Liebestraum: Nocturn No. 3"
-  },
-  {
-    "arranger": "",
-    "composer": "Liszt, Franz",
-    "druid": "yj176wj3359",
-    "image_url": "https://stacks.stanford.edu/image/iiif/yj176wj3359/yj176wj3359_0001_gs/info.json",
-    "number": "E-570",
-    "performer": "Lamond, Frederic",
-    "publisher": "Welte-Mignon",
-    "title": "Liszt/Lamond - Nocturne: (Love's Dream)",
-    "type": "welte-green",
-    "work": "Nocturne: (Love's Dream)"
   },
   {
     "arranger": "",
@@ -5365,18 +5305,6 @@
   },
   {
     "arranger": "",
-    "composer": "Reger, Max",
-    "druid": "wb477ky1555",
-    "image_url": "https://stacks.stanford.edu/image/iiif/wb477ky1555/wb477ky1555_0001/info.json",
-    "number": "4041",
-    "performer": "Schapira, Vera",
-    "publisher": "Welte-Mignon",
-    "title": "Reger/Schapira - Sonatine d-dur, op. 89, no. 2: Menuett",
-    "type": "welte-red",
-    "work": "Sonatine d-dur, op. 89, no. 2: Menuett"
-  },
-  {
-    "arranger": "",
     "composer": "Respighi, Ottorino",
     "druid": "qh029qv9381",
     "image_url": "https://stacks.stanford.edu/image/iiif/qh029qv9381/qh029qv9381_0001_gs/info.json",
@@ -5895,7 +5823,7 @@
     "arranger": "",
     "composer": "Schubert, Franz",
     "druid": "hj286gj0705",
-    "image_url": "https://stacks.stanford.edu/image/iiif/hj286gj0705/hj286gj0705_0001_gs/info.json",
+    "image_url": "https://stacks.stanford.edu/image/iiif/hj286gj0705/hj286gj0705_0001/info.json",
     "number": "891",
     "performer": "Hermanns, Hans",
     "publisher": "Welte-Mignon",
