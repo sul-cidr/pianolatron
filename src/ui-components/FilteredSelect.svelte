@@ -405,7 +405,7 @@
           {/each}
         </ul>
       {/if}
-      Filtered: {filteredListItems?.length} / {listItems.length}
+      Matched: {filteredListItems?.length} / {listItems.length}
     </div>
     <ul class="items" class:open bind:this={list}>
       {#if filteredListItems?.length}

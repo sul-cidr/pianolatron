@@ -200,11 +200,20 @@
     td:first-child,
     th:last-child,
     td:last-child {
-      width: clamp(85px, 17vw, 240px);
+      width: 240px;
     }
 
     tbody {
       background-color: #fff;
+    }
+
+    .repo-links {
+      color: var(--primary-accent);
+      text-decoration: none;
+    }
+    .repo-links:hover {
+      text-decoration: underline;
+      color: var(--secondary-accent);
     }
 
     td,
@@ -452,7 +461,7 @@
       </ul>
     {/if}
     <span aria-live="assertive"
-      >Filtered: {filteredListItems?.length}&nbsp;/&nbsp;{catalog.length}</span
+      >Matched: {filteredListItems?.length}&nbsp;/&nbsp;{catalog.length}</span
     >
   </div>
   <!-- facets -->
@@ -516,9 +525,16 @@
           {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
           <tr>
             <th scope="row">
-              {@html searchParts.length
-                ? markupMatches(item.publisher)
-                : item.publisher}
+              <a
+                href="https://purl.stanford.edu/{item.druid}"
+                title="Open repository entry for {item.title} in a new tab"
+                target="_blank"
+                class="repo-links"
+              >
+                {@html searchParts.length
+                  ? markupMatches(item.publisher)
+                  : item.publisher}
+              </a>
             </th>
             <td>
               {@html searchParts.length ? markupMatches(item.work) : item.work}
