@@ -461,7 +461,7 @@
       </ul>
     {/if}
     <span aria-live="assertive"
-      >Filtered: {filteredListItems?.length}&nbsp;/&nbsp;{catalog.length}</span
+      >Matched: {filteredListItems?.length}&nbsp;/&nbsp;{catalog.length}</span
     >
   </div>
   <!-- facets -->
