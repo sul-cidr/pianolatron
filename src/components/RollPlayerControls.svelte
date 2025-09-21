@@ -102,7 +102,7 @@
         class={"player-button"}
         disabled={false}
         on:mousedown={window.location.replace(`/?druid=${$rollMetadata.DRUID}`)}
-        iconName="note"
+        iconName="listen"
         label="Reload in listen mode"
         height="32"
         width="32"
@@ -114,7 +114,7 @@
         on:mousedown={window.location.replace(
           `/perform/?druid=${$rollMetadata.DRUID}`,
         )}
-        iconName="piano"
+        iconName="performMusic"
         label="Reload in perform mode"
         height="32"
         width="32"
