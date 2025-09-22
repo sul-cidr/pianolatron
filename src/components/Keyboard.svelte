@@ -312,6 +312,7 @@
 
 <button
   class="pedal"
+  title="Soft pedal"
   on:mousedown={() => ($softOnOff = true)}
   on:mouseup={() => ($softOnOff = false)}
   on:mouseout={() => ($softOnOff = false)}
@@ -325,6 +326,7 @@
 
 <button
   class="pedal"
+  title="Sustain pedal"
   on:mousedown={() => ($sustainOnOff = true)}
   on:mouseup={() => ($sustainOnOff = false)}
   on:mouseout={() => ($sustainOnOff = false)}

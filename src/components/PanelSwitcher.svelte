@@ -38,7 +38,7 @@
       value={panel}
       id={panel}
     />
-    <label for={panel} aria-label={label.title}>
+    <label for={panel} aria-label={label.title} title={label.title}>
       {#if label.icon}
         <IconButton
           class={selectedPanel === panel
