@@ -103,7 +103,7 @@
         disabled={false}
         on:mousedown={window.location.replace(`/?druid=${$rollMetadata.DRUID}`)}
         iconName="listen"
-        label="Reload in listen mode"
+        label="Reload in Listen Mode"
         height="32"
         width="32"
       />
@@ -115,7 +115,7 @@
           `/perform/?druid=${$rollMetadata.DRUID}`,
         )}
         iconName="performMusic"
-        label="Reload in perform mode"
+        label="Reload in Perform Mode"
         height="32"
         width="32"
       />

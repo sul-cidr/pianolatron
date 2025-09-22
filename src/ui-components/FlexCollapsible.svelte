@@ -93,7 +93,10 @@
   style={`width: ${hidden ? 0 : width};`}
 >
   <input type="checkbox" id={`${id}_collapse`} bind:checked={hidden} />
-  <label for={`${id}_collapse`} title={`${hidden ? "show" : "hide"}`} />
+  <label
+    for={`${id}_collapse`}
+    title={`${hidden ? "Show Panel" : "Hide Panel"}`}
+  />
   <div style={`width: ${width}; visibility: ${hidden ? "hidden" : "visible"}`}>
     <slot />
   </div>
