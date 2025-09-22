@@ -6,7 +6,7 @@
 
   <div class="container site-title-container">
     <div class="site-title-wrapper">
-      <h2 class="site-title">Pianolatron: Performing the Stanford University Piano Roll Archive</h2>
+      <h2 class="site-title">Pianolatron:</h2><span class="site-subtitle">Performing the Stanford University Piano Roll Archive</span>
     </div>
   </div>
   <div
@@ -85,13 +85,24 @@
     padding: 1rem;
     position: relative;
     color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
   }
-  h2 {
+  .site-title {
     font-size: 2.125rem;
     text-shadow: 1px 1px 0 #212529;
     color: white;
     font-family: SourceSans3, sans-serif;
     font-weight: 400;
+  }
+  .site-subtitle {
+    padding-left: 0.75rem;
+    font-size: 1.65rem;
+    text-shadow: 1px 1px 0 #212529;
+    color: white;
+    font-family: SourceSans3, sans-serif;
+    font-weight: 400px;
   }
   .navbar {
     position: relative;
