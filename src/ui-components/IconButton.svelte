@@ -121,7 +121,6 @@
 
 <script>
   import Icon from "./Icon.svelte";
-  import { tooltip as tooltipAction } from "../lib/tooltip-action";
 
   export let height = 20;
   export let width = 20;
@@ -138,7 +137,6 @@
 <button
   class={$$props.class}
   aria-label={label}
-  use:tooltipAction={tooltip}
   {disabled}
   on:click
   on:mousedown

@@ -1,15 +1,13 @@
 ---
 import BaseLayout from "../../layouts/base.astro";
 import Search from "../../components/Search.svelte";
-import StanfordHeader from "../../layouts/stanfordHeader.astro";
-import StanfordSubheader from "../../layouts/stanfordSubheader.astro";
+import StanfordSubheader from "../../layouts/subHeader.astro";
 import StanfordFooter from "../../layouts/stanfordFooter.astro";
 import SkipLink from "../../ui-components/SkipLink.svelte";
 ---
 
 <BaseLayout title="Pianolatron Search" theme="blue">
   <SkipLink />
-  <StanfordHeader />
   <StanfordSubheader />
   <main id="content">
     <Search client:only="svelte" />

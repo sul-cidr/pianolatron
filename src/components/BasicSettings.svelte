@@ -86,6 +86,6 @@
     step={controlsConfig.transpose.delta}
     name="transpose"
   >
-    <svelte:fragment slot="label">Transpose (half steps):</svelte:fragment>
+    <svelte:fragment slot="label">Transpose (Half Steps):</svelte:fragment>
   </SliderControl>
 </div>

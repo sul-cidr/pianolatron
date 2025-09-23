@@ -230,7 +230,7 @@
             type="button"
             on:click={() => {
               exportInAppMIDI();
-            }}>Export complete roll as MIDI</button
+            }}>Export Complete Roll as MIDI</button
           >
         </div>
       </fieldset>
@@ -244,7 +244,7 @@
     {/if}
   {:else}
     <fieldset>
-      <legend>Expression emulation not available</legend>
+      <legend>Expression Emulation Not Available</legend>
       <p>
         Modification of expression emulation settings is not yet available for
         this roll type, or this roll type does not have any controls for

@@ -2,8 +2,7 @@
 import BaseLayout from "../layouts/base.astro";
 import LoadingSpinner from "../ui-components/LoadingSpinner.svelte";
 import Pianolatron from "../Pianolatron.svelte";
-import StanfordHeader from "../layouts/stanfordHeader.astro";
-import StanfordSubheader from "../layouts/stanfordSubheader.astro";
+import StanfordSubheader from "../layouts/subHeader.astro";
 ---
 
 <BaseLayout title="Pianolatron" theme="blue">
@@ -11,7 +10,6 @@ import StanfordSubheader from "../layouts/stanfordSubheader.astro";
     showLoadingSpinner={true}
     loadingSpinnerText="Loading application..."
   />
-  <StanfordHeader />
   <StanfordSubheader />
   <Pianolatron client:only="svelte" mode="listen" />
 </BaseLayout>

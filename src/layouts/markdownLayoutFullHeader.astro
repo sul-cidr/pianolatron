@@ -1,8 +1,7 @@
 ---
-import StanfordHeader from "./stanfordHeader.astro";
 import DocNav from "../pages/docNav.astro";
 import StanfordFooter from "./stanfordFooter.astro";
-import StanfordSubheader from "./stanfordSubheader.astro";
+import StanfordSubheader from "../layouts/subHeader.astro";
 import SkipLink from "../ui-components/SkipLink.svelte";
 import BaseLayout from "./base.astro";
 
@@ -11,7 +10,6 @@ import "../styles/markdown-styles.scss";
 
 <BaseLayout title="Pianolatron Search" theme="default">
   <SkipLink />
-  <StanfordHeader />
   <StanfordSubheader />
   <DocNav />
   <main id="content">
