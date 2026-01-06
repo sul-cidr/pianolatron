@@ -1,8 +1,10 @@
 // Based on an idea from:
 // https://www.smashingmagazine.com/2014/06/sassy-z-index-management-for-complex-layouts/
 
+@use "sass:list";
+
 @function z($list, $element) {
-  $z-index: index($list, $element);
+  $z-index: list.index($list, $element);
 
   @if $z-index {
     @return $z-index;
@@ -12,6 +14,6 @@
   @return null;
 }
 
-$main-context: base, sidebars, keyboard, sidebar-collapse-labels,
-  keyboard-overlay, footer, roll-selector-dropdown, overlay-buttons,
-  modal-screen, notifications, tooltips;
+$main-context:
+  base, sidebars, keyboard, sidebar-collapse-labels, keyboard-overlay, footer,
+  roll-selector-dropdown, overlay-buttons, modal-screen, notifications, tooltips;
