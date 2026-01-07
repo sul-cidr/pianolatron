@@ -127,6 +127,7 @@
   export let facetFieldName;
 
   export let placeHolder = "Select an item...";
+  export let ariaLabel;
 
   export let postMarkup = (str) => str;
 
@@ -339,6 +340,7 @@
     class="input"
     spellcheck="false"
     contenteditable="true"
+    aria-label={ariaLabel}
     bind:this={input}
     on:input={search}
     on:focus={activateDropdown}
