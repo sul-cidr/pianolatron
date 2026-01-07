@@ -328,8 +328,8 @@
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: items, prepareListItems();
-  $: selectedItem, onSelectedItemChanged();
+  $: (items, prepareListItems());
+  $: (selectedItem, onSelectedItemChanged());
 </script>
 
 <div class="filtered-select">
