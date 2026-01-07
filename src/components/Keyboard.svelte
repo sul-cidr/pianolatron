@@ -218,7 +218,7 @@
   };
 
   // when playing, we dump the active notes and those incoming are transposed
-  // the keyboard doesn't need to do anythign with tranpose in that situation.
+  // the keyboard doesn't need to do anything with transpose in that situation.
   // if we're not playing, the activeNotes will stay in place ( untransposed )
   // so the keyboard needs to update its depressed keys.
   let transposeCoefficient = 0;
@@ -229,7 +229,7 @@
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: $transposeHalfStep, updateTransposeCoefficient();
+  $: ($transposeHalfStep, updateTransposeCoefficient());
   $: if ($isPlaying && transposeCoefficient !== 0) transposeCoefficient = 0;
 </script>
 
