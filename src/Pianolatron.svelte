@@ -468,7 +468,7 @@
   $: appClass = `${$appMode}-app`;
 </script>
 
-<div id="app" class={appClass}>
+<main id="app" class={appClass}>
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw" hidden={false}>
       {#if $appMode === "perform"}<RollSelector
@@ -525,7 +525,7 @@
     <KeyboardControls outside />
   {/if}
   <LoadingSpinner showLoadingSpinner={appLoaded && $appWaiting} />
-</div>
+</main>
 <SamplePlayer
   {metadata}
   bind:this={samplePlayer}
