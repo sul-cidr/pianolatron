@@ -167,7 +167,6 @@
     sustainOnOff,
     transposeHalfStep,
   } from "../stores";
-  import { NoteSource } from "../lib/utils";
 
   export let keyCount = 88;
   export let startNote;
@@ -208,14 +207,7 @@
     }
   }
 
-  let mouseDown = false;
   let playing = new Set();
-  const stopPlaying = () => {
-    playing.forEach((midiNumber) =>
-      stopNote(midiNumber, undefined, NoteSource.Keyboard),
-    );
-    playing = new Set();
-  };
 
   // when playing, we dump the active notes and those incoming are transposed
   // the keyboard doesn't need to do anything with transpose in that situation.
@@ -234,39 +226,12 @@
 </script>
 
 <div id="keyboard">
-  <div
-    id="keys"
-    role="presentation"
-    on:mousedown|preventDefault={({ target }) => {
-      const note = parseInt(target.dataset.key, 10);
-      mouseDown = true;
-      playing = playing.add(note);
-      startNote(note, undefined, NoteSource.Keyboard);
-    }}
-    on:mouseup|preventDefault={({ target }) => {
-      const note = parseInt(target.dataset.key, 10);
-      playing.delete(note);
-      playing = playing;
-      stopNote(note, NoteSource.Keyboard);
-    }}
-    on:mousemove|preventDefault={({ target }) => {
-      if (mouseDown) {
-        const note = parseInt(target.dataset.key, 10);
-        if (note && !playing.has(note)) {
-          stopPlaying();
-          playing = playing.add(note);
-          startNote(note, undefined, NoteSource.Keyboard);
-        }
-      }
-    }}
-  >
+  <div id="keys" role="presentation">
     {#each keys as key}
       <div>
         {#each key as { title, note }}
           <span
             {title}
-            role="button"
-            tabindex="0"
             data-key={note}
             class:depressed={$activeNotes.has(note - transposeCoefficient) ||
               playing.has(note)}
@@ -277,13 +242,6 @@
   </div>
   <KeyboardControls />
 </div>
-
-<svelte:window
-  on:mouseup={() => {
-    stopPlaying();
-    mouseDown = false;
-  }}
-/>
 
 <svg style="display: none">
   <symbol id="pedal" viewBox="0 0 12.4 16.3">
