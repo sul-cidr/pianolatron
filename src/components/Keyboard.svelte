@@ -174,17 +174,17 @@
 
   const notes = [
     "A",
-    "A#",
+    "A♯",
     "B",
     "C",
-    "C#",
+    "C♯",
     "D",
-    "D#",
+    "D♯",
     "E",
     "F",
-    "F#",
+    "F♯",
     "G",
-    "G#",
+    "G♯",
   ];
 
   const keys = [];
@@ -195,7 +195,7 @@
       const note = notes[i];
       if (note === "C") octave += 1;
       if (keyNumber > keyCount) break;
-      if (note.endsWith("#")) {
+      if (note.endsWith("♯")) {
         keys[keys.length - 1].push({
           note: keyNumber + 20,
           title: `${note}${octave}`,
