@@ -82,7 +82,7 @@
         class:pedal-on={$accentOnOff}
         class="accent-button"
         aria-pressed={$accentOnOff}
-        on:mousedown={() => ($accentOnOff = true)}
+        on:click={() => ($accentOnOff = true)}
         title="Accent (key: {$keyMap.ACCENT.key})"
         >Accent
         <kbd class:depressed={$accentOnOff}>{$keyMap.ACCENT.key}</kbd></button
