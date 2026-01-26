@@ -25,6 +25,11 @@
         background-color: var(--cardinal-red-light);
       }
 
+      &:focus {
+        outline: 4px solid white;
+        outline-offset: -4px;
+      }
+
       &.pedal-on {
         background-color: white;
         color: var(--primary-accent);

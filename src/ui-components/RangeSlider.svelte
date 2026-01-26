@@ -66,8 +66,6 @@
     }
 
     &:focus {
-      outline: 0;
-
       &::-webkit-slider-runnable-track {
         background: lighten($track-color, $contrast);
       }

@@ -8,7 +8,8 @@
     opacity: 0;
     transition: all 0.3s ease;
 
-    &:hover {
+    &:hover,
+    &:focus-within {
       opacity: 1;
     }
 

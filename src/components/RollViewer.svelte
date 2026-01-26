@@ -859,6 +859,7 @@
       navigatorDisplayRegionColor: "transparent",
       navigatorMaintainSizeRatio: true,
       animationTime: 0,
+      tabIndex: -1, // omit from tab order
     });
 
     const { navigator } = openSeadragon;
