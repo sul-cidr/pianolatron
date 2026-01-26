@@ -139,6 +139,7 @@
   {disabled}
   on:click
   on:mousedown
+  on:keydown
   bind:this={ref}
   title={tooltip ? null : label}
 >
