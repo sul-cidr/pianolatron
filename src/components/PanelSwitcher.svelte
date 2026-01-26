@@ -45,7 +45,7 @@
             ? "selected-menu-button"
             : "menu-button"}
           disabled={false}
-          on:mousedown={() => {
+          on:click={() => {
             selectedPanel = panel;
           }}
           iconName={label.icon}
