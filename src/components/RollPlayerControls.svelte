@@ -101,7 +101,7 @@
       <IconButton
         class={"player-button"}
         disabled={false}
-        on:mousedown={window.location.replace(`/?druid=${$rollMetadata.DRUID}`)}
+        on:click={window.location.replace(`/?druid=${$rollMetadata.DRUID}`)}
         iconName="listen"
         label="Reload in Listen Mode"
         height="32"
@@ -111,7 +111,7 @@
       <IconButton
         class={"player-button"}
         disabled={false}
-        on:mousedown={window.location.replace(
+        on:click={window.location.replace(
           `/perform/?druid=${$rollMetadata.DRUID}`,
         )}
         iconName="performMusic"
@@ -127,7 +127,7 @@
       <IconButton
         class="player-button"
         disabled={false}
-        on:mousedown={bookmarkRoll}
+        on:click={bookmarkRoll}
         iconName="bookmark"
         label="Bookmark"
         height="32"
@@ -146,7 +146,7 @@
     <IconButton
       class={$playRepeat ? "enabled player-button" : "player-button"}
       disabled={false}
-      on:mousedown={togglePlayRepeat}
+      on:click={togglePlayRepeat}
       iconName="replay"
       label="Repeat"
       height="32"
@@ -155,7 +155,7 @@
     <IconButton
       class={"player-button"}
       disabled={false}
-      on:mousedown={resetPlayback}
+      on:click={resetPlayback}
       iconName="rewind"
       label="Rewind ({$keyMap.REWIND.key})"
       height="32"
@@ -164,7 +164,7 @@
     <IconButton
       class={"player-button"}
       disabled={false}
-      on:mousedown={() => {
+      on:click={() => {
         skipFromCurrent(-1500);
       }}
       iconName="skipBack"
@@ -176,7 +176,7 @@
       <IconButton
         class={"player-button"}
         disabled={false}
-        on:mousedown={togglePlayPause}
+        on:click={togglePlayPause}
         iconName="playback"
         label="Play ({$keyMap.PLAY_PAUSE.key})"
         height="32"
@@ -186,7 +186,7 @@
       <IconButton
         class={"pause player-button"}
         disabled={false}
-        on:mousedown={togglePlayPause}
+        on:click={togglePlayPause}
         iconName="pause"
         label="Pause ({$keyMap.PLAY_PAUSE.key})"
         height="32"
@@ -199,7 +199,7 @@
           <IconButton
             class="player-button continue-record"
             disabled={false}
-            on:mousedown={toggleRecording}
+            on:click={toggleRecording}
             iconName="continueRecording"
             label="Continue Recording ({$keyMap.TOGGLE_RECORD.key})"
             height="32"
@@ -210,7 +210,7 @@
           <IconButton
             class="player-button record"
             disabled={false}
-            on:mousedown={toggleRecording}
+            on:click={toggleRecording}
             iconName="record"
             label="Record ({$keyMap.TOGGLE_RECORD.key})"
             height="32"
@@ -222,7 +222,7 @@
         <IconButton
           class="player-button pause-record"
           disabled={false}
-          on:mousedown={toggleRecording}
+          on:click={toggleRecording}
           iconName="recordingActive"
           label="Pause Recording ({$keyMap.TOGGLE_RECORD.key})"
           height="32"
@@ -234,7 +234,7 @@
     <IconButton
       class={"player-button"}
       disabled={false}
-      on:mousedown={() => skipFromCurrent()}
+      on:click={() => skipFromCurrent()}
       iconName="skipForward"
       label="Skip Ahead ({$keyMap.FORWARD.key})"
       height="32"
@@ -243,7 +243,7 @@
     <IconButton
       class={startMarked ? "enabled player-button" : "player-button"}
       disabled={false}
-      on:mousedown={markStart}
+      on:click={markStart}
       iconName="markStart"
       label={startMarked ? "Remove Start Mark" : "Mark Start"}
       height="32"
@@ -252,7 +252,7 @@
     <IconButton
       class={endMarked ? "enabled player-button" : "player-button"}
       disabled={false}
-      on:mousedown={markEnd}
+      on:click={markEnd}
       iconName="markEnd"
       label={endMarked ? "Remove End Mark" : "Mark End"}
       height="32"
