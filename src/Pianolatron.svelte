@@ -534,23 +534,26 @@
     loadingSamples.then(() => ($appWaiting = false)).catch(() => {});
   }}
 />
-<KeyboardShortcuts
-  {playPauseApp}
-  {stopApp}
-  {updateTickByViewportIncrement}
-  {panHorizontal}
-  {toggleRecording}
-/>
-<KeyboardShortcutEditor />
+
+{#if $appMode === "perform"}
+  <KeyboardShortcuts
+    {playPauseApp}
+    {stopApp}
+    {updateTickByViewportIncrement}
+    {panHorizontal}
+    {toggleRecording}
+  />
+  <KeyboardShortcutEditor />
+  <GameController
+    {playPauseApp}
+    {stopApp}
+    {updateTickByViewportIncrement}
+    {panHorizontal}
+    {adjustZoom}
+    {bookmarkRoll}
+  />
+{/if}
 <Notification />
-<GameController
-  {playPauseApp}
-  {stopApp}
-  {updateTickByViewportIncrement}
-  {panHorizontal}
-  {adjustZoom}
-  {bookmarkRoll}
-/>
 
 <svelte:window
   on:popstate={({ state }) =>
