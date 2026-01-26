@@ -1034,16 +1034,16 @@
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: $playbackProgressStart, updateSelection();
-  $: $playbackProgressEnd, updateSelection();
+  $: ($playbackProgressStart, updateSelection());
+  $: ($playbackProgressEnd, updateSelection());
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
-  $: $transposeHalfStep, rehighlightHoles($currentTick);
+  $: ($transposeHalfStep, rehighlightHoles($currentTick));
   /* eslint-disable no-unused-expressions, no-sequences */
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
-  $: $drawVelocityCurves,
-    partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
+  $: ($drawVelocityCurves,
+    partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
   $: imageWidth = parseInt($rollMetadata.IMAGE_WIDTH, 10);
   $: avgHoleWidth = parseInt($rollMetadata.AVG_HOLE_WIDTH, 10);
