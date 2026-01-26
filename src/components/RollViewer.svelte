@@ -86,6 +86,10 @@
       margin-top: -100%;
       top: 0;
     }
+
+    &:hover :global(.overlay-buttons) {
+      opacity: 1;
+    }
   }
 
   .roll-loading {
@@ -146,7 +150,6 @@
   let firstHolePx;
   let marks = [];
   let hoveredMark;
-  let showControls;
   let imageLength;
   let imageWidth;
   let avgHoleWidth;
@@ -1069,8 +1072,6 @@
 <div
   id="roll-viewer"
   role="presentation"
-  on:mouseenter={() => (showControls = true)}
-  on:mouseleave={() => (showControls = false)}
   on:wheel|capture|preventDefault={(event) => {
     if (event.ctrlKey) {
       updateTickByViewportIncrement(/* up = */ event.deltaY < 0);
@@ -1095,10 +1096,7 @@
 >
   {#if !rollImageReady}
     <span class="roll-loading" transition:fade>Downloading roll image...</span>
-  {:else if showScaleBar}
-    <RollViewerScaleBar {ppi} />
-  {/if}
-  {#if showControls}
+  {:else}
     <RollViewerControls
       {openSeadragon}
       {minZoomLevel}
@@ -1107,7 +1105,11 @@
       {panHorizontal}
       {adjustZoom}
     />
+    {#if showScaleBar}
+      <RollViewerScaleBar {ppi} />
+    {/if}
   {/if}
+
   {#if $latencyDetected && $showLatencyWarning}
     <LatencyWarning {closeLatencyWarning} />
   {/if}

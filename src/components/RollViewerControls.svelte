@@ -1,5 +1,13 @@
 <style lang="scss">
   .overlay-buttons {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    &:hover,
+    &:focus-within {
+      opacity: 1;
+    }
+
     :global(button) {
       color: white;
     }
@@ -21,9 +29,8 @@
   export let adjustZoom;
 
   let actionInterval;
-
-  const { viewport } = openSeadragon;
-  let currentZoom = viewport.getZoom();
+  let viewport;
+  let currentZoom;
 
   const onZoom = () => (currentZoom = viewport.getZoom());
 
@@ -43,6 +50,10 @@
   };
 
   onMount(() => {
+    if (!openSeadragon) return;
+    ({ viewport } = openSeadragon);
+    currentZoom = viewport.getZoom();
+
     openSeadragon.addHandler("zoom", onZoom);
     return () => {
       openSeadragon.removeHandler("zoom", onZoom);
