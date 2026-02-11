@@ -261,6 +261,7 @@
         if (loadingSpan !== null)
           loadingSpan.textContent = "Loading roll image...";
         previousRoll = currentRoll;
+        document.title = `${roll.title} | Pianolatron (${$appMode === "perform" ? "Perform Mode" : "Listen Mode"})`;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
           const url = new URL(window.location);
