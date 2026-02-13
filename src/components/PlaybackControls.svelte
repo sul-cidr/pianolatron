@@ -63,7 +63,7 @@
         on:click={() => ($softOnOff = !$softOnOff)}
         on:keydown={(e) => e.stopPropagation()}
         on:keyup={(e) => e.stopPropagation()}
-        title="Soft pedal (key: {$keyMap.SOFT.key})"
+        title="Soft pedal"
         >Soft
         <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
       >
@@ -74,7 +74,7 @@
         on:click={() => ($sustainOnOff = !$sustainOnOff)}
         on:keydown={(e) => e.stopPropagation()}
         on:keyup={(e) => e.stopPropagation()}
-        title="Sustain pedal (key: {$keyMap.SUSTAIN.key})"
+        title="Sustain pedal"
         >Sustain
         <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
       >
@@ -95,7 +95,7 @@
           if (e.key === "Enter" || e.code === "Space") $accentOnOff = false;
           e.stopPropagation();
         }}
-        title="Accent (key: {$keyMap.ACCENT.key})"
+        title="Accent"
         >Accent
         <kbd class:depressed={$accentOnOff}>{$keyMap.ACCENT.key}</kbd></button
       >

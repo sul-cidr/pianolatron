@@ -157,7 +157,7 @@
       disabled={false}
       on:click={resetPlayback}
       iconName="rewind"
-      label="Rewind ({$keyMap.REWIND.key})"
+      label="Rewind"
       height="32"
       width="32"
     />
@@ -168,7 +168,7 @@
         skipFromCurrent(-1500);
       }}
       iconName="skipBack"
-      label="Skip Back ({$keyMap.BACKWARD.key})"
+      label="Skip Back"
       height="32"
       width="32"
     />
@@ -178,7 +178,7 @@
         disabled={false}
         on:click={togglePlayPause}
         iconName="playback"
-        label="Play ({$keyMap.PLAY_PAUSE.key})"
+        label="Play"
         height="32"
         width="32"
       />
@@ -188,7 +188,7 @@
         disabled={false}
         on:click={togglePlayPause}
         iconName="pause"
-        label="Pause ({$keyMap.PLAY_PAUSE.key})"
+        label="Pause"
         height="32"
         width="32"
       />
@@ -201,10 +201,10 @@
             disabled={false}
             on:click={toggleRecording}
             iconName="continueRecording"
-            label="Continue Recording ({$keyMap.TOGGLE_RECORD.key})"
+            label="Continue Recording"
             height="32"
             width="32"
-            title="Continue Recording ({$keyMap.TOGGLE_RECORD.key})"
+            title="Continue Recording"
           />
         {:else}
           <IconButton
@@ -212,10 +212,10 @@
             disabled={false}
             on:click={toggleRecording}
             iconName="record"
-            label="Record ({$keyMap.TOGGLE_RECORD.key})"
+            label="Record"
             height="32"
             width="32"
-            title="Record ({$keyMap.TOGGLE_RECORD.key})"
+            title="Record"
           />
         {/if}
       {:else}
@@ -224,10 +224,10 @@
           disabled={false}
           on:click={toggleRecording}
           iconName="recordingActive"
-          label="Pause Recording ({$keyMap.TOGGLE_RECORD.key})"
+          label="Pause Recording"
           height="32"
           width="32"
-          title="Pause Recording ({$keyMap.TOGGLE_RECORD.key})"
+          title="Pause Recording"
         />
       {/if}
     {/if}
@@ -236,7 +236,7 @@
       disabled={false}
       on:click={() => skipFromCurrent()}
       iconName="skipForward"
-      label="Skip Ahead ({$keyMap.FORWARD.key})"
+      label="Skip Ahead"
       height="32"
       width="32"
     />
