@@ -126,11 +126,15 @@
 </style>
 
 <script context="module">
+  import { tick as sweep } from "svelte";
   import { writable } from "svelte/store";
 
   const showKeybindingsConfig = writable(false);
-  export const toggleKeybindingsConfig = () =>
+  export const toggleKeybindingsConfig = async () => {
     showKeybindingsConfig.update((val) => !val);
+    await sweep();
+    document.querySelector(".shortcut-editor").focus();
+  };
 </script>
 
 <script>
@@ -277,7 +281,13 @@
 </script>
 
 {#if $showKeybindingsConfig}
-  <div class="shortcut-editor" transition:fade>
+  <div
+    class="shortcut-editor"
+    role="region"
+    aria-label="Keyboard Shortcut Editor"
+    tabindex="-1"
+    transition:fade
+  >
     <header>
       Keyboard Controls
       <IconButton
