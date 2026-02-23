@@ -155,6 +155,10 @@
     svg {
       width: 100%;
     }
+
+    &:disabled {
+      cursor: default;
+    }
   }
 </style>
 
@@ -162,6 +166,7 @@
   import KeyboardControls from "./KeyboardControls.svelte";
   import {
     activeNotes,
+    appMode,
     isPlaying,
     softOnOff,
     sustainOnOff,
@@ -276,6 +281,7 @@
   on:mouseout={() => ($softOnOff = false)}
   on:blur={() => ($softOnOff = false)}
   class:depressed={$softOnOff}
+  disabled={$appMode !== "perform"}
 >
   <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
     <use href="#pedal" />
@@ -290,6 +296,7 @@
   on:mouseout={() => ($sustainOnOff = false)}
   on:blur={() => ($sustainOnOff = false)}
   class:depressed={$sustainOnOff}
+  disabled={$appMode !== "perform"}
 >
   <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
     <use href="#pedal" />
