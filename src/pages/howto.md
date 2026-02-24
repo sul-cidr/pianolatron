@@ -22,6 +22,10 @@ If you receive a playback latency warning, or notice that the audio and video ar
 
 The "Loading resources..." animation may appear for a long time when the Pianolatron is first opened as the browser downloads the string sound samples necessary to emulate a piano. These samples then tend to be stored locally until the browser's file cache is cleared, resulting in faster subsequent load times. The images for newly selected piano rolls must, however, always be loaded directly from the Stanford Digital Repository, so the Pianolatron requires a reliable network connection.
 
+## Accessibility
+
+The Pianolatron web app is a multimodal piece of research software which presents inherent obstacles to full accessibility for users with disabilities. We have done our best to mitigate these wherever possible, but certain limitations remain. We apologize for these limitations, and invite affected users to contact us with specific concerns.
+
 ## Contacting Us
 
 Questions, bug reports and other feedback regarding the Pianolatron and the Piano Roll Archive may be sent to [pianoroll_dataset@lists.stanford.edu](mailto:pianoroll_dataset@lists.stanford.edu).
