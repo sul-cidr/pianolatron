@@ -127,6 +127,7 @@
   export let facetFieldName;
 
   export let placeHolder = "Select an item...";
+  export let ariaLabel;
 
   export let postMarkup = (str) => str;
 
@@ -328,55 +329,69 @@
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: items, prepareListItems();
-  $: selectedItem, onSelectedItemChanged();
+  $: (items, prepareListItems());
+  $: (selectedItem, onSelectedItemChanged());
 </script>
 
-<div class="filtered-select">
+<div
+  class="filtered-select"
+  on:keydown|stopPropagation={(e) => {
+    console.log(e);
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        activateDropdown();
+        activateListItem(activeListItemIndex + 1);
+        break;
+
+      case "ArrowUp":
+        e.preventDefault();
+        activateDropdown();
+        activateListItem(activeListItemIndex - 1);
+        break;
+
+      case "PageDown":
+        e.preventDefault();
+        activateDropdown();
+        activateListItem(activeListItemIndex + 15);
+        break;
+
+      case "PageUp":
+        e.preventDefault();
+        activateDropdown();
+        activateListItem(activeListItemIndex - 15);
+        break;
+
+      case "Escape":
+        e.preventDefault();
+        closeDropdown();
+        break;
+
+      case "Enter":
+        e.preventDefault();
+        selectListItem();
+        closeDropdown();
+        break;
+
+      default:
+    }
+  }}
+  on:focusout={(e) =>
+    e.relatedTarget === null ||
+    e.currentTarget.contains(e.relatedTarget) ||
+    closeDropdown()}
+>
   <span
     role="textbox"
     tabindex="0"
     class="input"
     spellcheck="false"
     contenteditable="true"
+    aria-label={ariaLabel}
     bind:this={input}
     on:input={search}
     on:focus={activateDropdown}
-    on:mousedown|preventDefault={toggleDropdown}
-    on:keydown|stopPropagation={({ key }) => {
-      switch (key) {
-        case "ArrowDown":
-          activateDropdown();
-          activateListItem(activeListItemIndex + 1);
-          break;
-
-        case "ArrowUp":
-          activateDropdown();
-          activateListItem(activeListItemIndex - 1);
-          break;
-
-        case "PageDown":
-          activateDropdown();
-          activateListItem(activeListItemIndex + 15);
-          break;
-
-        case "PageUp":
-          activateDropdown();
-          activateListItem(activeListItemIndex - 15);
-          break;
-
-        case "Escape":
-          closeDropdown();
-          break;
-
-        case "Enter":
-          selectListItem();
-          closeDropdown();
-          break;
-
-        default:
-      }
-    }}>{@html placeHolder}</span
+    on:mousedown|preventDefault={toggleDropdown}>{@html placeHolder}</span
   >
   <div class="dropdown" class:open bind:this={dropdown}>
     <div class="facets">
@@ -392,11 +407,10 @@
                   setActiveFacet(facet);
                   input.focus();
                 }}
-                on:keypress={(event) => {
-                  if (event.code === "Enter") {
+                on:keydown={(event) => {
+                  event.stopPropagation();
+                  (event.code === "Enter" || event.code === "Space") &&
                     setActiveFacet(facet);
-                    input.focus();
-                  }
                 }}
               >
                 {facet}

@@ -36,6 +36,11 @@ $cardinal: #8c1515; // "cardinal"
     background-color: #ffffff;
   }
 
+  &:focus {
+    outline: 4px solid white;
+    outline-offset: -4px;
+  }
+
   &:disabled {
     color: var(--primary-accent-semiopaque);
     border-color: var(--primary-accent-semiopaque);

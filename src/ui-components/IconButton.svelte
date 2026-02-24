@@ -37,11 +37,6 @@
         filter: drop-shadow(1px 1px 1px #a4a4a4);
       }
 
-      &:focus,
-      &:active {
-        outline: 0;
-      }
-
       &:hover,
       &.enabled {
         color: var(--primary-accent);
@@ -105,6 +100,10 @@
     &.selected-menu-button {
       color: white;
       cursor: unset;
+
+      &:focus {
+        outline-color: white;
+      }
     }
 
     &.always-visible {
@@ -140,6 +139,7 @@
   {disabled}
   on:click
   on:mousedown
+  on:keydown
   bind:this={ref}
   title={tooltip ? null : label}
 >

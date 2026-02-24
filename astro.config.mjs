@@ -13,6 +13,11 @@ export default defineConfig({
       preprocess: [
         preprocess.scss({
           prependData: `@use "sass:math";@use 'src/styles/sass-globals.scss' as *;`,
+          silenceDeprecations: [
+            "color-functions",
+            "global-builtin",
+            "legacy-js-api",
+          ],
         }),
       ],
     }),

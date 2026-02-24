@@ -66,8 +66,6 @@
     }
 
     &:focus {
-      outline: 0;
-
       &::-webkit-slider-runnable-track {
         background: lighten($track-color, $contrast);
       }
@@ -198,6 +196,8 @@
   on:input
   on:change
   on:mousewheel={handleWheel}
+  on:keydown={(e) => e.stopPropagation()}
+  on:keyup={(e) => e.stopPropagation()}
   {min}
   {max}
   {step}

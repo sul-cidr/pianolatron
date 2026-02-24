@@ -1,5 +1,13 @@
 <style lang="scss">
   .overlay-buttons {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    &:hover,
+    &:focus-within {
+      opacity: 1;
+    }
+
     :global(button) {
       color: white;
     }
@@ -21,19 +29,31 @@
   export let adjustZoom;
 
   let actionInterval;
-
-  const { viewport } = openSeadragon;
-  let currentZoom = viewport.getZoom();
+  let viewport;
+  let currentZoom;
 
   const onZoom = () => (currentZoom = viewport.getZoom());
 
-  const mousedownRepeatAction = (fn, immediate = true) => {
+  const repeatAction = (fn, immediate = true) => {
     actionInterval?.clear();
     if (immediate) fn();
     actionInterval = easingInterval(fn);
   };
 
+  const keyboardInvokeAction = (keydownEvent, fn) => {
+    if (keydownEvent.key === " " || keydownEvent.key === "Enter") {
+      keydownEvent.preventDefault();
+      keydownEvent.stopPropagation();
+      if (keydownEvent.repeat) return;
+      repeatAction(fn);
+    }
+  };
+
   onMount(() => {
+    if (!openSeadragon) return;
+    ({ viewport } = openSeadragon);
+    currentZoom = viewport.getZoom();
+
     openSeadragon.addHandler("zoom", onZoom);
     return () => {
       openSeadragon.removeHandler("zoom", onZoom);
@@ -46,7 +66,8 @@
   <IconButton
     class={"panzoom-button"}
     disabled={currentZoom >= maxZoomLevel}
-    on:mousedown={mousedownRepeatAction(() => adjustZoom("zoomIn"))}
+    on:mousedown={repeatAction(() => adjustZoom("zoomIn"))}
+    on:keydown={(e) => keyboardInvokeAction(e, () => adjustZoom("zoomIn"))}
     iconName="plus"
     label="Zoom In"
     height="24"
@@ -55,7 +76,8 @@
   <IconButton
     class={"panzoom-button"}
     disabled={currentZoom <= minZoomLevel}
-    on:mousedown={mousedownRepeatAction(() => adjustZoom("zoomOut"))}
+    on:mousedown={repeatAction(() => adjustZoom("zoomOut"))}
+    on:keydown={(e) => keyboardInvokeAction(e, () => adjustZoom("zoomOut"))}
     iconName="minus"
     label="Zoom Out"
     height="24"
@@ -75,9 +97,13 @@
   <IconButton
     class={"panzoom-button"}
     disabled={false}
-    on:mousedown={mousedownRepeatAction(() =>
+    on:mousedown={repeatAction(() =>
       updateTickByViewportIncrement(/* up = */ true),
     )}
+    on:keydown={(e) =>
+      keyboardInvokeAction(e, () =>
+        updateTickByViewportIncrement(/* up = */ true),
+      )}
     iconName="arrow-up"
     label="Pan Up"
     height="24"
@@ -86,9 +112,13 @@
   <IconButton
     class={"panzoom-button"}
     disabled={false}
-    on:mousedown={mousedownRepeatAction(() =>
+    on:mousedown={repeatAction(() =>
       updateTickByViewportIncrement(/* up = */ false),
     )}
+    on:keydown={(e) =>
+      keyboardInvokeAction(e, () =>
+        updateTickByViewportIncrement(/* up = */ false),
+      )}
     iconName="arrow-down"
     label="Pan Down"
     height="24"
@@ -97,7 +127,9 @@
   <IconButton
     class={"panzoom-button"}
     disabled={false}
-    on:mousedown={mousedownRepeatAction(() => panHorizontal(/* left = */ true))}
+    on:mousedown={repeatAction(() => panHorizontal(/* left = */ true))}
+    on:keydown={(e) =>
+      keyboardInvokeAction(e, () => panHorizontal(/* left = */ true))}
     iconName="arrow-left"
     label="Pan Left"
     height="24"
@@ -106,13 +138,18 @@
   <IconButton
     class={"panzoom-button"}
     disabled={false}
-    on:mousedown={mousedownRepeatAction(() =>
-      panHorizontal(/* left = */ false),
-    )}
+    on:mousedown={repeatAction(() => panHorizontal(/* left = */ false))}
+    on:keydown={(e) =>
+      keyboardInvokeAction(e, () => panHorizontal(/* left = */ false))}
     iconName="arrow-right"
     label="Pan Right"
     height="24"
     width="24"
   />
 </div>
-<svelte:window on:mouseup={() => actionInterval?.clear()} />
+<svelte:window
+  on:mouseup={() => actionInterval?.clear()}
+  on:keyup={(e) => {
+    if (e.key === " " || e.key === "Enter") actionInterval?.clear();
+  }}
+/>

@@ -123,7 +123,7 @@ export const keyMapMeta = {
   },
 };
 
-export const unusableKeys = ["Escape", "CapsLock"];
+export const unusableKeys = ["Escape", "CapsLock", "Tab"];
 
 export const alternativeIndicatorText = {
   Space: "＿",

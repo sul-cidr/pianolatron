@@ -3,33 +3,43 @@
     @include button;
   }
 
-  .theme-selector button {
-    height: 1.5em;
-    width: 1.5em;
-    border-radius: 1.5em;
-    border: none;
-    margin: 0 0.5em;
-    cursor: pointer;
-
-    &.active {
+  .theme-selector {
+    &:focus-within {
       outline: 1px solid var(--primary-accent);
-      outline-offset: 4px;
+      outline-offset: 2px;
     }
 
-    &.cardinal {
-      background: $cardinal;
-    }
+    button {
+      height: 1.5em;
+      width: 1.5em;
+      border-radius: 1.5em;
+      border: none;
+      margin: 0 0.5em;
+      cursor: pointer;
 
-    &.blue {
-      background: steelblue;
-    }
+      &.active,
+      &:hover,
+      &:active,
+      &:focus {
+        outline: 1px solid var(--primary-accent);
+        outline-offset: 4px;
+      }
 
-    &.green {
-      background: darkolivegreen;
-    }
+      &.cardinal {
+        background: $cardinal;
+      }
 
-    &.grey {
-      background: darkslategrey;
+      &.blue {
+        background: steelblue;
+      }
+
+      &.green {
+        background: darkolivegreen;
+      }
+
+      &.grey {
+        background: darkslategrey;
+      }
     }
   }
 

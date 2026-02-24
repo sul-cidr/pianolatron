@@ -5,8 +5,8 @@
     box-shadow: 0 3px 6px rgb(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
+    height: 80%;
     left: 50%;
-    max-height: 80%;
     padding: 1em;
     position: absolute;
     top: 42%;
@@ -23,9 +23,16 @@
       border-bottom: 0;
       border-radius: 0.25em 0.25em 0 0;
       border-width: 1px;
-      color: white;
       opacity: 0.8;
       padding-bottom: 4px;
+    }
+
+    :global(.panel-switcher label button) {
+      color: white;
+
+      &:focus {
+        outline-color: white;
+      }
     }
 
     :global(.panel-switcher label:last-child) {
@@ -33,8 +40,15 @@
     }
     :global(.panel-switcher input:checked + label) {
       background-color: var(--background-color);
-      color: black;
       transform: translateY(2px);
+    }
+
+    :global(.panel-switcher input:checked + label button) {
+      color: black;
+
+      &:focus {
+        outline-color: var(--primary-accent);
+      }
     }
   }
 
@@ -126,11 +140,15 @@
 </style>
 
 <script context="module">
+  import { tick as sweep } from "svelte";
   import { writable } from "svelte/store";
 
   const showKeybindingsConfig = writable(false);
-  export const toggleKeybindingsConfig = () =>
+  export const toggleKeybindingsConfig = async () => {
     showKeybindingsConfig.update((val) => !val);
+    await sweep();
+    document.querySelector(".shortcut-editor").focus();
+  };
 </script>
 
 <script>
@@ -277,7 +295,13 @@
 </script>
 
 {#if $showKeybindingsConfig}
-  <div class="shortcut-editor" transition:fade>
+  <div
+    class="shortcut-editor"
+    role="region"
+    aria-label="Keyboard Shortcut Editor"
+    tabindex="-1"
+    transition:fade
+  >
     <header>
       Keyboard Controls
       <IconButton
@@ -292,36 +316,38 @@
     <PanelSwitcher bind:selectedPanel {panels} class="panel-switcher" />
     <div class="panels">
       {#each Object.keys(panels) as panel}
-        <dl class:shown={selectedPanel === panel}>
-          {#each panels[panel].shortcuts as shortcut}
-            {#if shortcut in $keyMap}
-              <KeyboardShortcutEditorRow
-                shortcut={$keyMap[shortcut]}
-                meta={keyMapMeta[shortcut]}
-                on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
-                on:reset={() =>
-                  updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
-              />
-            {:else if shortcut in deltaControls}
-              <KeyboardShortcutDeltaEditorRow
-                {shortcut}
-                controlConfigValue={$controlsConfig[
-                  deltaControls[shortcut].control
-                ][deltaControls[shortcut].deltaType]}
-                meta={deltaControls[shortcut]}
-                isChanged={$controlsConfig[
-                  deltaControls[shortcut].control
-                ].isChanged?.includes(deltaControls[shortcut].deltaType)}
-                on:update={({ detail }) => updateDelta(shortcut, detail)}
-                on:reset={() => updateDelta(shortcut)}
-              />
-            {:else if shortcut === "---"}
-              <hr />
-            {:else if shortcut === "==="}
-              <hr class="section" />
-            {/if}
-          {/each}
-        </dl>
+        {#if selectedPanel === panel}
+          <dl class:shown={selectedPanel === panel}>
+            {#each panels[panel].shortcuts as shortcut}
+              {#if shortcut in $keyMap}
+                <KeyboardShortcutEditorRow
+                  shortcut={$keyMap[shortcut]}
+                  meta={keyMapMeta[shortcut]}
+                  on:update={({ detail }) => updateKeyBinding(shortcut, detail)}
+                  on:reset={() =>
+                    updateKeyBinding(shortcut, defaultKeyMap[shortcut])}
+                />
+              {:else if shortcut in deltaControls}
+                <KeyboardShortcutDeltaEditorRow
+                  {shortcut}
+                  controlConfigValue={$controlsConfig[
+                    deltaControls[shortcut].control
+                  ][deltaControls[shortcut].deltaType]}
+                  meta={deltaControls[shortcut]}
+                  isChanged={$controlsConfig[
+                    deltaControls[shortcut].control
+                  ].isChanged?.includes(deltaControls[shortcut].deltaType)}
+                  on:update={({ detail }) => updateDelta(shortcut, detail)}
+                  on:reset={() => updateDelta(shortcut)}
+                />
+              {:else if shortcut === "---"}
+                <hr />
+              {:else if shortcut === "==="}
+                <hr class="section" />
+              {/if}
+            {/each}
+          </dl>
+        {/if}
       {/each}
     </div>
     <footer>

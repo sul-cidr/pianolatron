@@ -53,10 +53,12 @@
 </dd>
 
 <svelte:window
-  on:keydown|preventDefault|capture={(event) =>
-    editing && event.stopPropagation()}
-  on:keyup|preventDefault|capture={(event) => {
+  on:keydown|capture={(event) => {
+    editing && event.preventDefault() && event.stopPropagation();
+  }}
+  on:keyup|capture={(event) => {
     if (!editing) return;
+    event.preventDefault();
     updateShortcut(event);
     editing = false;
     editButtonRef.blur();

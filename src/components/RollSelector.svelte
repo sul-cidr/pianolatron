@@ -29,6 +29,7 @@
   searchFieldName="_label"
   facetFieldName="type"
   placeHolder="<span class='place-holder'>Select a roll...</span>"
+  ariaLabel="Select a roll"
   postMarkup={(str) =>
     str.replace(/^(?:[\S.]|<\/?mark>)+|\[[^\]]+\]$/g, "<small>$&</small>")}
 />

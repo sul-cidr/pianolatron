@@ -4,13 +4,25 @@
     flex-direction: column;
     overflow: hidden;
 
-    > div:first-child {
+    > div:first-of-type {
       flex: 1 0 auto;
       position: relative;
       display: grid;
       grid-template-rows: 1fr;
       grid-template-columns: auto 1fr auto;
       grid-template-areas: "left center right";
+    }
+
+    :global(:is(h1, h2, h3, h4, h5, h6)) {
+      // sr-only
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
     }
   }
 
@@ -120,6 +132,7 @@
   let currentRoll;
   let previousRoll;
   let metadata;
+  let pageTitle;
 
   let samplePlayer;
 
@@ -261,6 +274,8 @@
         if (loadingSpan !== null)
           loadingSpan.textContent = "Loading roll image...";
         previousRoll = currentRoll;
+        pageTitle = `${roll.title} | Pianolatron (${$appMode === "perform" ? "Perform Mode" : "Listen Mode"})`;
+        document.title = pageTitle;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
           const url = new URL(window.location);
@@ -468,9 +483,11 @@
   $: appClass = `${$appMode}-app`;
 </script>
 
-<div id="app" class={appClass}>
+<main id="app" class={appClass}>
+  <h1>{pageTitle || "Pianolatron"}</h1>
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw" hidden={false}>
+      <h2>Roll Details</h2>
       {#if $appMode === "perform"}<RollSelector
           bind:currentRoll
           {rollListItems}
@@ -486,6 +503,7 @@
       {/if}
     </FlexCollapsible>
     <div id="roll">
+      <h2>Roll Visualization</h2>
       {#if appReady}
         <RollPlayerControls
           {skipToTick}
@@ -511,12 +529,14 @@
     </div>
     {#if $appMode === "perform"}
       <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+        <h2>App Settings and Controls</h2>
         {#if appReady}
           <TabbedPanel {reloadRoll} {exportInAppMIDI} />
         {/if}
       </FlexCollapsible>
     {/if}
   </div>
+  <h2>Keyboard Visualization</h2>
   {#if $userSettings.showKeyboard && !$userSettings.overlayKeyboard}
     <div id="keyboard-container" transition:slide>
       <Keyboard keyCount="88" {startNote} {stopNote} />
@@ -525,7 +545,7 @@
     <KeyboardControls outside />
   {/if}
   <LoadingSpinner showLoadingSpinner={appLoaded && $appWaiting} />
-</div>
+</main>
 <SamplePlayer
   {metadata}
   bind:this={samplePlayer}
@@ -534,23 +554,26 @@
     loadingSamples.then(() => ($appWaiting = false)).catch(() => {});
   }}
 />
-<KeyboardShortcuts
-  {playPauseApp}
-  {stopApp}
-  {updateTickByViewportIncrement}
-  {panHorizontal}
-  {toggleRecording}
-/>
-<KeyboardShortcutEditor />
+
+{#if $appMode === "perform"}
+  <KeyboardShortcuts
+    {playPauseApp}
+    {stopApp}
+    {updateTickByViewportIncrement}
+    {panHorizontal}
+    {toggleRecording}
+  />
+  <KeyboardShortcutEditor />
+  <GameController
+    {playPauseApp}
+    {stopApp}
+    {updateTickByViewportIncrement}
+    {panHorizontal}
+    {adjustZoom}
+    {bookmarkRoll}
+  />
+{/if}
 <Notification />
-<GameController
-  {playPauseApp}
-  {stopApp}
-  {updateTickByViewportIncrement}
-  {panHorizontal}
-  {adjustZoom}
-  {bookmarkRoll}
-/>
 
 <svelte:window
   on:popstate={({ state }) =>

@@ -25,6 +25,11 @@
         background-color: var(--cardinal-red-light);
       }
 
+      &:focus {
+        outline: 4px solid white;
+        outline-offset: -4px;
+      }
+
       &.pedal-on {
         background-color: white;
         color: var(--primary-accent);
@@ -56,7 +61,9 @@
         class:pedal-on={$softOnOff}
         aria-pressed={$softOnOff}
         on:click={() => ($softOnOff = !$softOnOff)}
-        title="Soft pedal (key: {$keyMap.SOFT.key})"
+        on:keydown={(e) => e.stopPropagation()}
+        on:keyup={(e) => e.stopPropagation()}
+        title="Soft pedal"
         >Soft
         <kbd class:depressed={$softOnOff}>{$keyMap.SOFT.key}</kbd></button
       >
@@ -65,7 +72,9 @@
         class:pedal-on={$sustainOnOff}
         aria-pressed={$sustainOnOff}
         on:click={() => ($sustainOnOff = !$sustainOnOff)}
-        title="Sustain pedal (key: {$keyMap.SUSTAIN.key})"
+        on:keydown={(e) => e.stopPropagation()}
+        on:keyup={(e) => e.stopPropagation()}
+        title="Sustain pedal"
         >Sustain
         <kbd class:depressed={$sustainOnOff}>{$keyMap.SUSTAIN.key}</kbd></button
       >
@@ -78,11 +87,25 @@
         class="accent-button"
         aria-pressed={$accentOnOff}
         on:mousedown={() => ($accentOnOff = true)}
-        title="Accent (key: {$keyMap.ACCENT.key})"
+        on:keydown={(e) => {
+          if (e.key === "Enter" || e.code === "Space") $accentOnOff = true;
+          e.stopPropagation();
+        }}
+        on:keyup={(e) => {
+          if (e.key === "Enter" || e.code === "Space") $accentOnOff = false;
+          e.stopPropagation();
+        }}
+        title="Accent"
         >Accent
         <kbd class:depressed={$accentOnOff}>{$keyMap.ACCENT.key}</kbd></button
       >
     </div>
   {/if}
 </div>
-<svelte:window on:mouseup={() => ($accentOnOff = false)} />
+<svelte:window
+  on:mouseup={() => ($accentOnOff = false)}
+  on:keyup={(e) => {
+    if (e.key === "Enter" || e.code === "Space") $accentOnOff = false;
+    e.stopPropagation();
+  }}
+/>

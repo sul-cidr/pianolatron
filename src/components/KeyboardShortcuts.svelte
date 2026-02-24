@@ -114,6 +114,11 @@
 
 <svelte:window
   on:keydown={(event) => {
+    if (
+      (event.target.tagName === "INPUT" || event.target.tagName === "BUTTON") &&
+      (event.key === "Enter" || event.code === "Space")
+    )
+      return;
     const cmd = Object.keys($keyMap).find(
       (key) => $keyMap[key].code === event.code,
     );
@@ -124,8 +129,15 @@
       keydownCommandMap[cmd]?.(event);
     }
   }}
-  on:keyup={({ code }) => {
-    const cmd = Object.keys($keyMap).find((key) => $keyMap[key].code === code);
+  on:keyup={(event) => {
+    if (
+      (event.target.tagName === "INPUT" || event.target.tagName === "BUTTON") &&
+      (event.key === "Enter" || event.code === "Space")
+    )
+      return;
+    const cmd = Object.keys($keyMap).find(
+      (key) => $keyMap[key].code === event.code,
+    );
     if (cmd) {
       actionInterval?.clear();
       actionInterval = undefined;

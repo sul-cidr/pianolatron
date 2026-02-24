@@ -18,7 +18,18 @@
 
   input:checked + label {
     background-color: var(--primary-accent);
-    cursor: unset;
+    cursor: default;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding-bottom: 2px;
+
+    &:focus {
+      outline-offset: 0;
+    }
   }
 </style>
 
@@ -45,7 +56,7 @@
             ? "selected-menu-button"
             : "menu-button"}
           disabled={false}
-          on:mousedown={() => {
+          on:click={() => {
             selectedPanel = panel;
           }}
           iconName={label.icon}
@@ -56,7 +67,14 @@
         />
       {/if}
       {#if label.text}
-        {label.text}
+        <button
+          class={selectedPanel === panel ? "selected-menu-button" : ""}
+          on:click={() => {
+            selectedPanel = panel;
+          }}
+          label={label.title}
+          tooltip={label.title}>{label.text}</button
+        >
       {/if}
     </label>
   {/each}

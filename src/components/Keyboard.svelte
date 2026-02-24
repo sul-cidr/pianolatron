@@ -155,6 +155,10 @@
     svg {
       width: 100%;
     }
+
+    &:disabled {
+      cursor: default;
+    }
   }
 </style>
 
@@ -162,12 +166,12 @@
   import KeyboardControls from "./KeyboardControls.svelte";
   import {
     activeNotes,
+    appMode,
     isPlaying,
     softOnOff,
     sustainOnOff,
     transposeHalfStep,
   } from "../stores";
-  import { NoteSource } from "../lib/utils";
 
   export let keyCount = 88;
   export let startNote;
@@ -175,17 +179,17 @@
 
   const notes = [
     "A",
-    "A#",
+    "A♯",
     "B",
     "C",
-    "C#",
+    "C♯",
     "D",
-    "D#",
+    "D♯",
     "E",
     "F",
-    "F#",
+    "F♯",
     "G",
-    "G#",
+    "G♯",
   ];
 
   const keys = [];
@@ -196,7 +200,7 @@
       const note = notes[i];
       if (note === "C") octave += 1;
       if (keyNumber > keyCount) break;
-      if (note.endsWith("#")) {
+      if (note.endsWith("♯")) {
         keys[keys.length - 1].push({
           note: keyNumber + 20,
           title: `${note}${octave}`,
@@ -208,17 +212,10 @@
     }
   }
 
-  let mouseDown = false;
   let playing = new Set();
-  const stopPlaying = () => {
-    playing.forEach((midiNumber) =>
-      stopNote(midiNumber, undefined, NoteSource.Keyboard),
-    );
-    playing = new Set();
-  };
 
   // when playing, we dump the active notes and those incoming are transposed
-  // the keyboard doesn't need to do anythign with tranpose in that situation.
+  // the keyboard doesn't need to do anything with transpose in that situation.
   // if we're not playing, the activeNotes will stay in place ( untransposed )
   // so the keyboard needs to update its depressed keys.
   let transposeCoefficient = 0;
@@ -229,44 +226,17 @@
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: $transposeHalfStep, updateTransposeCoefficient();
+  $: ($transposeHalfStep, updateTransposeCoefficient());
   $: if ($isPlaying && transposeCoefficient !== 0) transposeCoefficient = 0;
 </script>
 
 <div id="keyboard">
-  <div
-    id="keys"
-    role="presentation"
-    on:mousedown|preventDefault={({ target }) => {
-      const note = parseInt(target.dataset.key, 10);
-      mouseDown = true;
-      playing = playing.add(note);
-      startNote(note, undefined, NoteSource.Keyboard);
-    }}
-    on:mouseup|preventDefault={({ target }) => {
-      const note = parseInt(target.dataset.key, 10);
-      playing.delete(note);
-      playing = playing;
-      stopNote(note, NoteSource.Keyboard);
-    }}
-    on:mousemove|preventDefault={({ target }) => {
-      if (mouseDown) {
-        const note = parseInt(target.dataset.key, 10);
-        if (note && !playing.has(note)) {
-          stopPlaying();
-          playing = playing.add(note);
-          startNote(note, undefined, NoteSource.Keyboard);
-        }
-      }
-    }}
-  >
+  <div id="keys" role="presentation">
     {#each keys as key}
       <div>
         {#each key as { title, note }}
           <span
             {title}
-            role="button"
-            tabindex="0"
             data-key={note}
             class:depressed={$activeNotes.has(note - transposeCoefficient) ||
               playing.has(note)}
@@ -277,13 +247,6 @@
   </div>
   <KeyboardControls />
 </div>
-
-<svelte:window
-  on:mouseup={() => {
-    stopPlaying();
-    mouseDown = false;
-  }}
-/>
 
 <svg style="display: none">
   <symbol id="pedal" viewBox="0 0 12.4 16.3">
@@ -318,6 +281,7 @@
   on:mouseout={() => ($softOnOff = false)}
   on:blur={() => ($softOnOff = false)}
   class:depressed={$softOnOff}
+  disabled={$appMode !== "perform"}
 >
   <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
     <use href="#pedal" />
@@ -332,6 +296,7 @@
   on:mouseout={() => ($sustainOnOff = false)}
   on:blur={() => ($sustainOnOff = false)}
   class:depressed={$sustainOnOff}
+  disabled={$appMode !== "perform"}
 >
   <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
     <use href="#pedal" />
