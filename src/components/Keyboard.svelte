@@ -272,16 +272,7 @@
   </symbol>
 </svg>
 
-<button
-  class="pedal"
-  title="Soft Pedal"
-  on:mousedown={() => ($softOnOff = true)}
-  on:mouseup={() => ($softOnOff = false)}
-  on:mouseout={() => ($softOnOff = false)}
-  on:blur={() => ($softOnOff = false)}
-  class:depressed={$softOnOff}
-  disabled
->
+<button class="pedal" title="Soft Pedal" class:depressed={$softOnOff} disabled>
   <svg xmlns="http://www.w3.org/2000/svg" width="46.9" height="61.6">
     <use href="#pedal" />
   </svg>
@@ -290,10 +281,6 @@
 <button
   class="pedal"
   title="Sustain Pedal"
-  on:mousedown={() => ($sustainOnOff = true)}
-  on:mouseup={() => ($sustainOnOff = false)}
-  on:mouseout={() => ($sustainOnOff = false)}
-  on:blur={() => ($sustainOnOff = false)}
   class:depressed={$sustainOnOff}
   disabled
 >
