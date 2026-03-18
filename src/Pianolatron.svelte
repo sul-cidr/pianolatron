@@ -68,6 +68,15 @@
     opacity: 0.5;
     // z-index: z($main-context, keyboard-overlay);
   }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.5em;
+    height: 100%;
+    max-width: 20vw;
+  }
 </style>
 
 <script>
@@ -486,7 +495,7 @@
 <main id="app" class={appClass}>
   <h1>{pageTitle || "Pianolatron"}</h1>
   <div>
-    <FlexCollapsible id="left-sidebar" width="20vw" hidden={false}>
+    <div class="sidebar">
       <h2>Roll Details</h2>
       {#if $appMode === "perform"}<RollSelector
           bind:currentRoll
@@ -501,7 +510,7 @@
           </p>
         {/if}
       {/if}
-    </FlexCollapsible>
+    </div>
     <div id="roll">
       <h2>Roll Visualization</h2>
       {#if appReady}
@@ -528,12 +537,12 @@
       {/if}
     </div>
     {#if $appMode === "perform"}
-      <FlexCollapsible id="right-sidebar" width="20vw" position="left">
+      <div class="sidebar">
         <h2>App Settings and Controls</h2>
         {#if appReady}
           <TabbedPanel {reloadRoll} {exportInAppMIDI} />
         {/if}
-      </FlexCollapsible>
+      </div>
     {/if}
   </div>
   <h2>Keyboard Visualization</h2>
