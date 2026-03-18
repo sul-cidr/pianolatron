@@ -113,6 +113,17 @@
       }
     }
   }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 </style>
 
 <script>
@@ -142,6 +153,7 @@
   let input;
   let dropdown;
   let list;
+  let announcer;
 
   const unDecomposableMap = {
     ł: "l",
@@ -161,6 +173,12 @@
       .join("|"),
     "gi",
   );
+
+  const announce = async (message) => {
+    announcer.textContent = ""; // Clear first to re-trigger announcement
+    await tick();
+    announcer.textContent = message;
+  };
 
   const normalizeText = (str) =>
     str
@@ -233,6 +251,9 @@
 
       if (listItemBottom > listBottom) activeListItem.scrollIntoView(false);
       if (listItemTop < listTop) activeListItem.scrollIntoView();
+
+      const item = filteredListItems[activeListItemIndex];
+      announce(`${item.item.title} ${item.item.publisher} ${item.item.number}`);
     }
   };
 
@@ -332,6 +353,13 @@
   $: (items, prepareListItems());
   $: (selectedItem, onSelectedItemChanged());
 </script>
+
+<div
+  aria-live="polite"
+  aria-atomic="true"
+  class="sr-only"
+  bind:this={announcer}
+></div>
 
 <div
   class="filtered-select"
