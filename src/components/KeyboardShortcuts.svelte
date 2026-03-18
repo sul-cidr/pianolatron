@@ -119,6 +119,11 @@
       (event.key === "Enter" || event.code === "Space")
     )
       return;
+
+    if (event.key === "Escape" && document.activeElement !== document.body) {
+      document.activeElement?.blur();
+    }
+
     const cmd = Object.keys($keyMap).find(
       (key) => $keyMap[key].code === event.code,
     );
