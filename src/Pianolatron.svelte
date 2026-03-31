@@ -27,7 +27,7 @@
   }
 
   .listen-app {
-    height: calc(100vh - 124px);
+    height: calc(100vh - 135px);
   }
   .perform-app {
     height: 100vh;
@@ -38,11 +38,6 @@
 
   :global(#left-sidebar) {
     grid-area: left;
-
-    p {
-      opacity: 0.5;
-      padding: 0.5em 1em;
-    }
   }
 
   #roll {
@@ -70,6 +65,7 @@
   }
 
   .sidebar {
+    position: absolute;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
@@ -123,7 +119,6 @@
     notify,
     clearNotification,
   } from "./ui-components/Notification.svelte";
-  import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
   import RollPlayerControls from "./components/RollPlayerControls.svelte";
   import catalog from "./config/catalog.json";
@@ -495,21 +490,23 @@
 <main id="app" class={appClass}>
   <h1>{pageTitle || "Pianolatron"}</h1>
   <div>
-    <div class="sidebar">
-      <h2>Roll Details</h2>
-      {#if $appMode === "perform"}<RollSelector
-          bind:currentRoll
-          {rollListItems}
-        />{/if}
-      {#if appReady}
-        <RollDetails {metadata} />
-        {#if !$holesIntervalTree.count}
-          <p>
-            Note:<br />Hole visualization data is not available for this roll at
-            this time. Hole highlighting will not be enabled.
-          </p>
+    <div id="left-sidebar" style="width: 20vw;">
+      <div class="sidebar">
+        <h2>Roll Details</h2>
+        {#if $appMode === "perform"}<RollSelector
+            bind:currentRoll
+            {rollListItems}
+          />{/if}
+        {#if appReady}
+          <RollDetails {metadata} />
+          {#if !$holesIntervalTree.count}
+            <p>
+              Note:<br />Hole visualization data is not available for this roll
+              at this time. Hole highlighting will not be enabled.
+            </p>
+          {/if}
         {/if}
-      {/if}
+      </div>
     </div>
     <div id="roll">
       <h2>Roll Visualization</h2>
@@ -537,11 +534,13 @@
       {/if}
     </div>
     {#if $appMode === "perform"}
-      <div class="sidebar">
-        <h2>App Settings and Controls</h2>
-        {#if appReady}
-          <TabbedPanel {reloadRoll} {exportInAppMIDI} />
-        {/if}
+      <div id="right-sidebar" style="width: 20vw;">
+        <div class="sidebar">
+          <h2>App Settings and Controls</h2>
+          {#if appReady}
+            <TabbedPanel {reloadRoll} {exportInAppMIDI} />
+          {/if}
+        </div>
       </div>
     {/if}
   </div>
