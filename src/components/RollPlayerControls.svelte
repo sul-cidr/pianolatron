@@ -1,18 +1,17 @@
 <style>
   .controls-container {
     display: flex;
-    justify-content: center;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .mode-switch-container {
     padding: 2px;
-    position: absolute;
-    left: 1rem;
   }
 
   .tempo-control-container {
+    position: relative;
     padding: 2px;
-    position: absolute;
     right: 2px;
     top: 2px;
     width: 200px;
@@ -271,5 +270,7 @@
         <svelte:fragment slot="label">Tempo:</svelte:fragment>
       </SliderControl>
     </div>
+  {:else}
+    <div />
   {/if}
 </div>
