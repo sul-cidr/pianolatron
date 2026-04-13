@@ -129,6 +129,7 @@
 <script>
   import { tick } from "svelte";
   import { clamp } from "../lib/utils";
+  import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
 
   export let items = [];
   export let selectedItem = undefined;
@@ -153,7 +154,7 @@
   let input;
   let dropdown;
   let list;
-  let announcer;
+  let announcement;
 
   const unDecomposableMap = {
     ł: "l",
@@ -173,12 +174,6 @@
       .join("|"),
     "gi",
   );
-
-  const announce = async (message) => {
-    announcer.textContent = ""; // Clear first to re-trigger announcement
-    await tick();
-    announcer.textContent = message;
-  };
 
   const normalizeText = (str) =>
     str
@@ -253,7 +248,7 @@
       if (listItemTop < listTop) activeListItem.scrollIntoView();
 
       const item = filteredListItems[activeListItemIndex];
-      announce(`${item.item.title} ${item.item.publisher} ${item.item.number}`);
+      announcement = `${item.item.title} ${item.item.publisher} ${item.item.number}`;
     }
   };
 
@@ -354,17 +349,11 @@
   $: (selectedItem, onSelectedItemChanged());
 </script>
 
-<div
-  aria-live="polite"
-  aria-atomic="true"
-  class="sr-only"
-  bind:this={announcer}
-></div>
+<AriaAnnouncer {announcement} />
 
 <div
   class="filtered-select"
   on:keydown|stopPropagation={(e) => {
-    console.log(e);
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
