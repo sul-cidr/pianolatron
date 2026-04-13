@@ -71,6 +71,7 @@
     gap: 0.5em;
     padding: 0.5em;
     height: 100%;
+    min-width: 20vw;
     max-width: 20vw;
   }
 </style>
