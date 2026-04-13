@@ -129,7 +129,7 @@ const datetime = new Date().toISOString();
     <script>
       if (!document.documentElement.getAttribute("data-theme")) {
         let { theme } = JSON.parse(
-          window.localStorage.getItem("userSettings") || "",
+          window.localStorage.getItem("userSettings") || "{}",
         );
         theme && document.documentElement.setAttribute("data-theme", theme);
       }
