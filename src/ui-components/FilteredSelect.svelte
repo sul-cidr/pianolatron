@@ -113,11 +113,23 @@
       }
     }
   }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 </style>
 
 <script>
   import { tick } from "svelte";
   import { clamp } from "../lib/utils";
+  import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
 
   export let items = [];
   export let selectedItem = undefined;
@@ -142,6 +154,7 @@
   let input;
   let dropdown;
   let list;
+  let announcement;
 
   const unDecomposableMap = {
     ł: "l",
@@ -233,6 +246,9 @@
 
       if (listItemBottom > listBottom) activeListItem.scrollIntoView(false);
       if (listItemTop < listTop) activeListItem.scrollIntoView();
+
+      const item = filteredListItems[activeListItemIndex];
+      announcement = `${item.item.title} ${item.item.publisher} ${item.item.number}`;
     }
   };
 
@@ -333,10 +349,11 @@
   $: (selectedItem, onSelectedItemChanged());
 </script>
 
+<AriaAnnouncer {announcement} />
+
 <div
   class="filtered-select"
   on:keydown|stopPropagation={(e) => {
-    console.log(e);
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();

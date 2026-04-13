@@ -196,8 +196,12 @@
   on:input
   on:change
   on:mousewheel={handleWheel}
-  on:keydown={(e) => e.stopPropagation()}
-  on:keyup={(e) => e.stopPropagation()}
+  on:keydown={(e) => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") e.stopPropagation();
+  }}
+  on:keyup={(e) => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") e.stopPropagation();
+  }}
   {min}
   {max}
   {step}

@@ -132,6 +132,7 @@
   import { clamp, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
+  import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
   import LatencyWarning from "../ui-components/LatencyWarning.svelte";
 
   export let showScaleBar = true;
@@ -145,6 +146,7 @@
   const maxZoomLevel = 4;
   const horizontalPanIncrement = 40;
 
+  let announcement;
   let openSeadragon;
   let viewport;
   let firstHolePx;
@@ -620,6 +622,7 @@
       rect.setAttribute("rx", 10);
       rect.setAttribute("ry", 10);
       rect.addEventListener("mouseover", () => {
+        announcement = hole.label.replace("#", "♯").replace("_", " ");
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
@@ -706,6 +709,7 @@
     });
 
     holes.forEach((hole) => {
+      announcement = hole.label.replace("#", "♯").replace("_", " ");
       if (marks.map(([_hole]) => _hole).includes(hole)) return;
       const mark = createMark(hole);
       mark.classList.add("active");
@@ -1068,6 +1072,8 @@
     updateVisibleOverlays,
   };
 </script>
+
+<AriaAnnouncer {announcement} />
 
 <div
   id="roll-viewer"
