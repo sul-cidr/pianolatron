@@ -416,9 +416,9 @@
   const facets = [...new Set(catalog.map((item) => item.type))];
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: activeFacet, itemFilter();
-  $: searchParts, itemFilter();
-  $: currentPage, paginate();
+  $: (activeFacet, itemFilter());
+  $: (searchParts, itemFilter());
+  $: (currentPage, paginate());
 </script>
 
 <div id="app">
@@ -610,6 +610,9 @@
         of <strong>{filteredListItems.length}</strong>
       </span>
 
+      <button disabled={currentPage === 1} on:click={() => (currentPage = 1)}>
+        &larrb; First
+      </button>
       <button disabled={currentPage === 1} on:click={() => (currentPage -= 1)}>
         &laquo; Previous
       </button>
@@ -618,6 +621,14 @@
         on:click={() => (currentPage += 1)}
       >
         Next &raquo;
+      </button>
+      <button
+        disabled={currentPage * pageSize >= filteredListItems.length}
+        on:click={() => {
+          currentPage = filteredListItems.length / pageSize;
+        }}
+      >
+        Last &rarrb;
       </button>
     {/if}
   </nav>
