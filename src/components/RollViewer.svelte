@@ -784,6 +784,7 @@
         );
         if (centerSpringY.animationTime <= 0) {
           clearInterval(animationEaseInterval);
+          centerSpringY.animationTime = 0;
         }
       }, 100);
     }
@@ -865,7 +866,6 @@
       navigatorWidth: "var(--navigator-width)",
       navigatorDisplayRegionColor: "transparent",
       navigatorMaintainSizeRatio: true,
-      animationTime: 0,
       tabIndex: -1, // omit from tab order
     });
 
@@ -981,17 +981,14 @@
       );
 
       const delta = viewport.deltaPointsFromPixels(event.delta.negate());
-
-      viewport.centerSpringX.target.value += delta.x;
       if (viewport.getBounds().x !== viewport.getConstrainedBounds().x)
         delta.x = 0;
-
       const target = center.plus(delta);
 
       viewport.centerSpringX.springTo(target.x);
       viewport.centerSpringY.springTo(clamp(target.y, 0, verticalBound.y));
 
-      updateTickFromViewport(/* animate = */ true);
+      updateTickFromViewport(/* animate = */ false);
     });
 
     // Again, the navigator viewport dims are not updated after the browser
@@ -1047,9 +1044,6 @@
   $: updateViewportFromTick($currentTick);
   $: highlightHoles($currentTick);
   $: ($transposeHalfStep, rehighlightHoles($currentTick));
-  /* eslint-disable no-unused-expressions, no-sequences */
-  $: updateViewportFromTick($currentTick);
-  $: highlightHoles($currentTick);
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
   $: imageLength = parseInt($rollMetadata.IMAGE_LENGTH, 10);
