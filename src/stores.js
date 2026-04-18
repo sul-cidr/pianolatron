@@ -106,7 +106,7 @@ export const bassExpCurve = createStore();
 export const trebleExpCurve = createStore();
 export const expressionParameters = createStore({});
 export const expBoxType = createStore(null);
-export const drawVelocityCurves = createStore(false);
+export const drawVelocityCurves = createStore(true);
 
 // Playback State
 export const isPlaying = createStore(false);
