@@ -36,6 +36,27 @@ export const scrollDownwards = derived(
   rollMetadata,
   ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red",
 );
+export const firstHolePx = derived(
+  rollMetadata,
+   ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red"
+      ? parseInt($rollMetadata.FIRST_HOLE, 10)
+      : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
+        parseInt($rollMetadata.FIRST_HOLE, 10));
+export const lastHolePx = derived(
+  rollMetadata,
+    ($rollMetadata) => $rollMetadata.ROLL_TYPE === "welte-red"
+      ? parseInt($rollMetadata.LAST_HOLE, 10)
+      : parseInt($rollMetadata.IMAGE_LENGTH, 10) -
+        parseInt($rollMetadata.LAST_HOLE, 10));
+export const imageLength = derived(
+  rollMetadata,
+  ($rollMetadata) => (parseInt($rollMetadata.IMAGE_LENGTH, 10)));
+export const imageWidth = derived(
+  rollMetadata,
+  ($rollMetadata) => (parseInt($rollMetadata.IMAGE_WIDTH, 10)));
+export const avgHoleWidth = derived(
+  rollMetadata,
+  ($rollMetadata) => (parseInt($rollMetadata.AVG_HOLE_WIDTH, 10)));
 
 export const holesIntervalTree = writable();
 
