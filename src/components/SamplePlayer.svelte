@@ -471,14 +471,14 @@
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);
   $: toggleSoft($softOnOff);
-  $: $tempoCoefficient, updatePlayer();
-  $: $useMidiTempoEventsOnOff, updatePlayer();
-  $: $rollPedalingOnOff, updatePlayer();
+  $: ($tempoCoefficient, updatePlayer());
+  $: ($useMidiTempoEventsOnOff, updatePlayer());
+  $: ($rollPedalingOnOff, updatePlayer());
   $: piano.updateVolumes($sampleVolumes);
   $: piano.updateReverb($reverbWetDry);
-  $: $sampleVelocities, updateSampleVelocities();
-  $: $transposeHalfStep, updateTranspose();
-  $: latentNotes, checkLatency();
+  $: ($sampleVelocities, updateSampleVelocities());
+  $: ($transposeHalfStep, updateTranspose());
+  $: (latentNotes, checkLatency());
 
   export {
     midiSamplePlayer,
