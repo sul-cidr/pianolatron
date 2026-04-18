@@ -74,4 +74,4 @@ The site uses the following icons from the [Noun Project](https://thenounproject
 - listen music by M. Oki Orlando from <a href="https://thenounproject.com/icon/listen-music-6680735/" target="_blank" title="listen music Icons">Noun Project</a> (CC BY 3.0)
 - Piano by Adrien Coquet from <a href="https://thenounproject.com/icon/piano-2526113/" target="_blank" title="Piano">Noun Project</a> (CC BY 3.0)
 
-© 2025 Stanford University
+© 2026 Stanford University
