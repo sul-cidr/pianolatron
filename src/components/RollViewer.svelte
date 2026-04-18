@@ -724,9 +724,15 @@
   };
 
   // Pan the viewer to bring the position of `@tick` to the center of
-  //  the viewport.  Does not trigger an OSD `pan` event.
+  //  the viewport. Does not trigger an OSD `pan` event, except when rewinding
+  //  to tick 0.
   const updateViewportFromTick = (tick) => {
     if (!openSeadragon) return;
+
+    if (tick === 0) {
+      updateTickFromViewport(/* animate = */ true, /* targetY = */ firstHolePx);
+    }
+
     const linePx = firstHolePx + ($scrollDownwards ? tick : -tick);
     const lineViewport = viewport.imageToViewportCoordinates(0, linePx);
 
@@ -765,12 +771,12 @@
   };
 
   // Updates the application position to reflect the current position of
-  //  the viewport.
+  //  the viewport, or optionally, to jump to a specified Y coord.
   // Pans the viewer only indirectly by virtue of updating `$currentTick`.
   // If `@animate` is passed, vertical panning is animated, but the
   //  `animationTime` for the OSD spring animation is reduced over time
   //  until it returns to zero (no animation).
-  const updateTickFromViewport = (animate) => {
+  const updateTickFromViewport = (animate, targetY) => {
     clearInterval(animationEaseInterval);
 
     if (animate) {
@@ -789,20 +795,18 @@
       }, 100);
     }
 
-    const viewportCenter = viewport.getCenter(false);
-    const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
+    // If no targetY coordinate is provided, use the current viewport's center
+    if (!targetY) {
+      const viewportCenter = viewport.getCenter(false);
+      const imgCenter = viewport.viewportToImageCoordinates(viewportCenter);
+      targetY = imgCenter.y;
+    }
+
+    // Update the application to the tick represented by the targetY coordinate
     skipToTick(
       $scrollDownwards
-        ? clamp(
-            imgCenter.y - firstHolePx,
-            -firstHolePx,
-            imageLength - firstHolePx,
-          )
-        : clamp(
-            firstHolePx - imgCenter.y,
-            firstHolePx - imageLength,
-            firstHolePx,
-          ),
+        ? clamp(targetY - firstHolePx, -firstHolePx, imageLength - firstHolePx)
+        : clamp(firstHolePx - targetY, firstHolePx - imageLength, firstHolePx),
     );
   };
 
