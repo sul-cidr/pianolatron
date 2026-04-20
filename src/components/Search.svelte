@@ -622,7 +622,7 @@
       <button
         disabled={currentPage * pageSize >= filteredListItems.length}
         on:click={() => {
-          currentPage = filteredListItems.length / pageSize;
+          currentPage = Math.ceil(filteredListItems.length / pageSize);
         }}
       >
         Last &rarrb;
