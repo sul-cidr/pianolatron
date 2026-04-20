@@ -23,6 +23,7 @@
     position: absolute;
     top: 40%;
     padding: 0;
+    z-index: z($main-context, sidebar-collapse-labels);
 
     &.left {
       &:not(.hidden) {
