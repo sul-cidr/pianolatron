@@ -9,11 +9,11 @@ Please consult the menu items in the navigation strip above for details on how t
 
 ## System Specifications and Compatibility
 
-The Pianolatron web app will play on most notebook and desktop systems of fairly recent vintage, as well as some large-format tablets. Mobile phones will have limited functionality. All major operating systems (Linux, Mac OS, Windows, Android, iOS) are supported. Firefox and Chrome/Edge-family web browsers are recommended; the Safari browser for Mac OS and iOS is not supported and is unlikely to provide an acceptable experience.
+The Pianolatron web app will play on most notebook and desktop systems of fairly recent vintage, as well as some large-format tablets. Mobile phones will have limited functionality. All major operating systems (Linux, Mac OS, Windows, Android, iOS) are supported. Firefox and Chrome/Edge-family web browsers are recommended; the Safari browser for Mac OS and iOS may not provide an acceptable experience.
 
 ## Troubleshooting Playback Difficulties
 
-If you receive a playback latency warning, or notice that the audio and video are not smooth and synchronized, or find yourself waiting a long time for resources to load, the following steps may help to improve the situation:
+If you receive a playback latency warning, notice that the audio and video are not smooth and synchronized, or find yourself waiting a long time for resources to load, the following steps may help to improve the situation:
 
 - Close other browser tabs, or shut down the browser entirely and re-open it with only the Pianolatron open.
 - Open the Pianolatron in a "private" or "incognito" window (usually done via the browser's "File" menu).

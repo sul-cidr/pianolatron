@@ -116,6 +116,7 @@
   import KeyboardShortcutEditor from "./components/KeyboardShortcutEditor.svelte";
   import GameController from "./components/GameController.svelte";
   import TabbedPanel from "./components/TabbedPanel.svelte";
+  import FlexCollapsible from "./ui-components/FlexCollapsible.svelte";
   import Notification, {
     notify,
     clearNotification,
@@ -491,24 +492,22 @@
 <main id="app" class={appClass}>
   <h1>{pageTitle || "Pianolatron"}</h1>
   <div>
-    <div id="left-sidebar" style="width: 20vw;">
-      <div class="sidebar">
-        <h2>Roll Details</h2>
-        {#if $appMode === "perform"}<RollSelector
-            bind:currentRoll
-            {rollListItems}
-          />{/if}
-        {#if appReady}
-          <RollDetails {metadata} />
-          {#if !$holesIntervalTree.count}
-            <p>
-              Note:<br />Hole visualization data is not available for this roll
-              at this time. Hole highlighting will not be enabled.
-            </p>
-          {/if}
+    <FlexCollapsible id="left-sidebar" width="20vw" position="left">
+      <h2>Roll Details</h2>
+      {#if $appMode === "perform"}<RollSelector
+          bind:currentRoll
+          {rollListItems}
+        />{/if}
+      {#if appReady}
+        <RollDetails {metadata} />
+        {#if !$holesIntervalTree.count}
+          <p>
+            Note:<br />Hole visualization data is not available for this roll at
+            this time. Hole highlighting will not be enabled.
+          </p>
         {/if}
-      </div>
-    </div>
+      {/if}
+    </FlexCollapsible>
     <div id="roll">
       <h2>Roll Visualization</h2>
       {#if appReady}
@@ -535,14 +534,12 @@
       {/if}
     </div>
     {#if $appMode === "perform"}
-      <div id="right-sidebar" style="width: 20vw;">
-        <div class="sidebar">
-          <h2>App Settings and Controls</h2>
-          {#if appReady}
-            <TabbedPanel {reloadRoll} {exportInAppMIDI} />
-          {/if}
-        </div>
-      </div>
+      <FlexCollapsible id="right-sidebar" width="20vw" position="right">
+        <h2>App Settings and Controls</h2>
+        {#if appReady}
+          <TabbedPanel {reloadRoll} {exportInAppMIDI} />
+        {/if}
+      </FlexCollapsible>
     {/if}
   </div>
   <h2>Keyboard Visualization</h2>

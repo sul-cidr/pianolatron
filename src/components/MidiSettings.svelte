@@ -47,14 +47,14 @@
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: $sustainFromExternalMidi, resetPedals();
-  $: $softFromExternalMidi, resetPedals();
+  $: ($sustainFromExternalMidi, resetPedals());
+  $: ($softFromExternalMidi, resetPedals());
 </script>
 
 <div>
   {#if navigator.requestMIDIAccess}
     <fieldset>
-      <legend>MIDI in/out available</legend>
+      <legend>MIDI In/Out Available</legend>
 
       <p>
         Connect a digital piano or other MIDI device to send/receive keyboard
@@ -93,7 +93,7 @@
     </fieldset>
   {:else}
     <fieldset>
-      <legend>MIDI in/out not available</legend>
+      <legend>MIDI In/Out Not Available</legend>
       <p>
         This browser does not support connecting to a digital piano or other
         MIDI device.

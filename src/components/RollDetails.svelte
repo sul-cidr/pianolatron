@@ -2,7 +2,7 @@
   dl {
     display: block;
     overflow: auto;
-    padding: 0.5em 1em 0em 1em;
+    padding: 0.5em 1em 0em 0.5em;
   }
 
   dt {
@@ -67,6 +67,9 @@
 
 <script>
   import catalog from "../config/catalog.json";
+
+  import { appMode } from "../stores";
+
   export let metadata;
 
   export const similarWorksByPerformer = catalog.filter(
@@ -113,8 +116,9 @@
       <ul>
         {#each similarWorksByPerformer as work}
           <li>
-            <a href={`/?druid=${work.druid}`} target="_blank"
-              >{@html work.title}</a
+            <a
+              href={`${$appMode === "perform" ? "/perform/" : "/"}?druid=${work.druid}`}
+              target="_blank">{@html work.title}</a
             >
           </li>
         {/each}

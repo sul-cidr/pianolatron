@@ -107,6 +107,11 @@
     }
   }
 
+  .icons-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
   /************************/
   .table-wrapper {
     overflow-x: auto;
@@ -139,7 +144,7 @@
       color: #6b7280;
       outline: none;
       overflow: hidden;
-      padding: 14px 24px 14px min(1.5vw, 24px);
+      padding: 14px 16px 14px 16px;
       position: relative;
       text-overflow: ellipsis;
       user-select: none;
@@ -207,21 +212,12 @@
       background-color: #fff;
     }
 
-    .repo-links {
-      color: var(--primary-accent);
-      text-decoration: none;
-    }
-    .repo-links:hover {
-      text-decoration: underline;
-      color: var(--secondary-accent);
-    }
-
     td,
     th:not([scope="col"]) {
       border: 1px solid #e5e7eb;
       box-sizing: content-box;
       height: 64px;
-      padding: 0 min(1.5%, 24px);
+      padding: 0 min(1.5%, 16px);
       font-weight: normal;
     }
   }
@@ -416,9 +412,9 @@
   const facets = [...new Set(catalog.map((item) => item.type))];
 
   /* eslint-disable no-unused-expressions, no-sequences */
-  $: activeFacet, itemFilter();
-  $: searchParts, itemFilter();
-  $: currentPage, paginate();
+  $: (activeFacet, itemFilter());
+  $: (searchParts, itemFilter());
+  $: (currentPage, paginate());
 </script>
 
 <div id="app">
@@ -517,7 +513,14 @@
           >
             <button on:click={() => sortItems("performer")}>Performer</button>
           </th>
-          <th scope="col">Play/Perform/MIDI/Image</th>
+          <th scope="col"
+            ><div class="icons-row">
+              <div>Play</div>
+              <div>Perform</div>
+              <div>MIDI</div>
+              <div>Image</div>
+            </div></th
+          >
         </tr>
       </thead>
       <tbody>
@@ -525,16 +528,9 @@
           {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
           <tr>
             <th scope="row">
-              <a
-                href="https://purl.stanford.edu/{item.druid}"
-                title="Open repository entry for {item.title} in a new tab"
-                target="_blank"
-                class="repo-links"
-              >
-                {@html searchParts.length
-                  ? markupMatches(item.publisher)
-                  : item.publisher}
-              </a>
+              {@html searchParts.length
+                ? markupMatches(item.publisher)
+                : item.publisher}
             </th>
             <td>
               {@html searchParts.length ? markupMatches(item.work) : item.work}
@@ -582,12 +578,13 @@
                 </div>
                 <div>
                   <a
-                    href={imageLink}
-                    title="Download image for roll {item.title}"
+                    href="https://purl.stanford.edu/{item.druid}"
+                    title="Open repository view for {item.title}"
+                    target="_blank"
                   >
                     <Icon
                       name="roll-image"
-                      aria-label="Download image for roll {item.title}"
+                      aria-label="Open repository view for {item.title}"
                     />
                   </a>
                 </div>
@@ -610,6 +607,9 @@
         of <strong>{filteredListItems.length}</strong>
       </span>
 
+      <button disabled={currentPage === 1} on:click={() => (currentPage = 1)}>
+        &larrb; First
+      </button>
       <button disabled={currentPage === 1} on:click={() => (currentPage -= 1)}>
         &laquo; Previous
       </button>
@@ -618,6 +618,14 @@
         on:click={() => (currentPage += 1)}
       >
         Next &raquo;
+      </button>
+      <button
+        disabled={currentPage * pageSize >= filteredListItems.length}
+        on:click={() => {
+          currentPage = Math.ceil(filteredListItems.length / pageSize);
+        }}
+      >
+        Last &rarrb;
       </button>
     {/if}
   </nav>

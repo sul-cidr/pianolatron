@@ -37,8 +37,8 @@ Please note that the mappings given below may not be available or consistent for
 - **D-Pad Down:** Pan roll image down
 - **A Button:** Play/pause roll
 - **B Button:** Rewind roll
-- **Left Stick Click:** Accent (entire keyboard)
-- **Right Stick Click:** Accent (entire keyboard)
+- **Left Stick Button:** Accent (entire keyboard)
+- **Right Stick Button:** Accent (entire keyboard)
 - **Back Button:** Fit roll image to viewer
 - **Start Button:** Get bookmark link
 
