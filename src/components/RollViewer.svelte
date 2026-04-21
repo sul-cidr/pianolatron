@@ -1,6 +1,7 @@
 <svelte:options accessors />
 
 <style lang="scss">
+  @use "src/styles/sass-globals.scss" as *;
   // See styles/hole-highlighting.scss for all the <mark/> and <rect/> styling
 
   #roll-viewer {
