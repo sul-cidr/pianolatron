@@ -59,6 +59,17 @@
       background: white !important;
     }
 
+    #active-note-highlight-canvas {
+      background: transparent !important;
+      height: 100%;
+      left: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
     :global(.openseadragon-canvas:focus) {
       outline: none;
     }
@@ -170,6 +181,8 @@
 
   let selectionSvg;
   let navSelectionSvg;
+  let highlightCanvas;
+  let highlightCtx = null;
 
   const createMark = (hole) => {
     const {
@@ -697,30 +710,75 @@
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
   };
 
-  const highlightHoles = (tick) => {
-    if (!openSeadragon) return;
+  // Draw active note highlights on canvas instead of as DOM elements.
+  const drawActiveHighlights = (tick) => {
+    if (!highlightCtx || !openSeadragon) return;
 
     const holes = $holesIntervalTree.search(tick, tick);
+    if (!holes.length) {
+      highlightCtx.clearRect(
+        0,
+        0,
+        highlightCanvas.width,
+        highlightCanvas.height,
+      );
+      return;
+    }
 
-    marks = marks.filter(([hole, elem]) => {
-      if (holes.includes(hole)) return true;
-      viewport.viewer.removeOverlay(elem);
-      return false;
-    });
-
+    // Announce active holes
     holes.forEach((hole) => {
       announcement = hole.label.replace("#", "♯").replace("_", " ");
-      if (marks.map(([_hole]) => _hole).includes(hole)) return;
-      const mark = createMark(hole);
-      mark.classList.add("active");
-      marks.push([hole, mark]);
+    });
+
+    const canvasRect = highlightCanvas.getBoundingClientRect();
+    const bounds = viewport.getBoundsNoRotate(true);
+    const imgBounds = viewport.viewportToImageRectangle(bounds);
+
+    // Clear and draw highlights for active holes
+    highlightCtx.clearRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+    holes.forEach((hole) => {
+      const holeX = hole.x;
+      const holeY = hole.startY;
+      const holeW = hole.w;
+      const holeH = hole.h;
+
+      // Convert image coords to screen pixel coords on the canvas
+      const screenX =
+        ((holeX - imgBounds.x) / imgBounds.width) * canvasRect.width;
+      const screenY =
+        ((holeY - imgBounds.y) / imgBounds.height) * canvasRect.height;
+      const screenW = (holeW / imgBounds.width) * canvasRect.width;
+      const screenH = (holeH / imgBounds.height) * canvasRect.height;
+
+      // Get highlight color
+      let color = hole.color;
+      if (
+        !$userSettings.showNoteVelocities ||
+        $userSettings.highlightEnabledHoles
+      ) {
+        color = "60, 100%, 50%"; // yellow default for non-velocity mode
+      }
+      if (
+        !$rollPedalingOnOff &&
+        (hole.type === "pedal" || hole.type === "control")
+      ) {
+        // skip pedal/control holes when roll pedaling is off
+        return;
+      }
+
+      highlightCtx.fillStyle = `hsla(${color}, 0.8)`;
+      highlightCtx.beginPath();
+      const radius = Math.min(6, screenW / 4, screenH / 4);
+      highlightCtx.roundRect(screenX, screenY, screenW, screenH, radius);
+      highlightCtx.fill();
     });
   };
 
-  // remove the current hightlights readd them. Needed for when a transpose has taken place
+  // remove the current highlights and re-add them. Needed for when a transpose has taken place
+  // NOTE: This appears to be redundant?
   const rehighlightHoles = (tick) => {
-    highlightHoles(-1);
-    highlightHoles(tick);
+    drawActiveHighlights(-1);
+    drawActiveHighlights(tick);
   };
 
   // Pan the viewer to bring the position of `@tick` to the center of
@@ -1036,6 +1094,25 @@
     };
 
     openSeadragon.open(imageUrl);
+
+    // Initialize highlight canvas context and size for active note drawing
+    const resizeHighlightCanvas = () => {
+      if (!highlightCanvas || !openSeadragon) return;
+      const rect = highlightCanvas.getBoundingClientRect();
+      highlightCanvas.width = Math.round(rect.width);
+      highlightCanvas.height = Math.round(rect.height);
+    };
+
+    if (highlightCanvas) {
+      highlightCtx = highlightCanvas.getContext("2d");
+      resizeHighlightCanvas();
+    }
+
+    // Resize observer to keep canvas internal dimensions synced with CSS size
+    if (highlightCanvas && typeof ResizeObserver !== "undefined") {
+      const resizeObserver = new ResizeObserver(resizeHighlightCanvas);
+      resizeObserver.observe(highlightCanvas.parentElement);
+    }
   });
 
   const closeLatencyWarning = () => ($showLatencyWarning = false);
@@ -1053,10 +1130,19 @@
   $: ($playbackProgressStart, updateSelection());
   $: ($playbackProgressEnd, updateSelection());
   $: updateViewportFromTick($currentTick);
-  $: highlightHoles($throttledTick);
   $: ($transposeHalfStep, rehighlightHoles($currentTick));
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
+
+  let rafId = null;
+  const scheduleHighlightDraw = () => {
+    if (rafId !== null || !highlightCtx) return;
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      drawActiveHighlights($throttledTick);
+    });
+  };
+  $: ($throttledTick, scheduleHighlightDraw());
 
   export {
     adjustZoom,
@@ -1109,6 +1195,8 @@
       <RollViewerScaleBar {ppi} />
     {/if}
   {/if}
+
+  <canvas id="active-note-highlight-canvas" bind:this={highlightCanvas} />
 
   {#if $latencyDetected && $showLatencyWarning}
     <LatencyWarning {closeLatencyWarning} />
