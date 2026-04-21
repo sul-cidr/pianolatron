@@ -125,6 +125,7 @@
     playbackProgressEnd,
     latencyDetected,
     showLatencyWarning,
+    throttledTick,
     transposeHalfStep,
     playExpressionsOnOff,
     rollMetadata,
@@ -1051,7 +1052,7 @@
   $: ($playbackProgressStart, updateSelection());
   $: ($playbackProgressEnd, updateSelection());
   $: updateViewportFromTick($currentTick);
-  $: highlightHoles($currentTick);
+  $: highlightHoles($throttledTick);
   $: ($transposeHalfStep, rehighlightHoles($currentTick));
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));

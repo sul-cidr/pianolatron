@@ -3,6 +3,7 @@ import {
   createStore,
   createSetStore,
   createPersistedStore,
+  createThrottledStore,
 } from "./lib/stores";
 import { watchMedia } from "./lib/mq-store";
 
@@ -132,6 +133,7 @@ export const drawVelocityCurves = createStore(true);
 // Playback State
 export const isPlaying = createStore(false);
 export const currentTick = createStore(0);
+export const throttledTick = createThrottledStore(0);
 export const playbackProgress = createStore(0);
 export const playbackProgressStart = createStore();
 export const playbackProgressEnd = createStore(1);

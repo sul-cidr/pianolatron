@@ -38,6 +38,7 @@
     playRepeat,
     playbackProgressStart,
     latencyDetected,
+    throttledTick,
     ticksPerSecond,
     expressionBox,
   } from "../stores";
@@ -168,6 +169,7 @@
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
     $currentTick = tick;
+    throttledTick.set(tick);
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 
@@ -396,7 +398,10 @@
 
   midiSamplePlayer.on("playing", ({ tick }) => {
     if (!$isPlaying) $isPlaying = true;
-    if (tick <= midiSamplePlayer.totalTicks) currentTick.set(tick);
+    if (tick <= midiSamplePlayer.totalTicks) {
+      currentTick.set(tick);
+      throttledTick.set(tick);
+    }
     if (tick >= midiSamplePlayer.totalTicks) $isPlaying = false;
   });
 
