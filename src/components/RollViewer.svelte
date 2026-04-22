@@ -38,7 +38,7 @@
       position: absolute;
       top: calc(50% - var(--trackerbar-height) / 2);
       width: calc(100% - var(--navigator-width));
-      z-index: 1;
+      z-index: 3;
     }
 
     // overlay to mask white borders on the roll images
