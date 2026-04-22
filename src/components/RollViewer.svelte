@@ -117,7 +117,7 @@
 </style>
 
 <script>
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import OpenSeadragon from "openseadragon";
@@ -164,6 +164,7 @@
   const maxZoomLevel = 4;
   const horizontalPanIncrement = 40;
 
+  let _updateViewportHandler;
   let announcement;
   let openSeadragon;
   let viewport;
@@ -1093,6 +1094,10 @@
       //  constraints applied here), we'll just neuter it here.
     };
 
+    // Draw highlights when OSD viewport updates
+    _updateViewportHandler = () => drawActiveHighlights($throttledTick);
+    openSeadragon.addHandler("update-viewport", _updateViewportHandler);
+
     openSeadragon.open(imageUrl);
 
     // Initialize highlight canvas context and size for active note drawing
@@ -1115,6 +1120,12 @@
     }
   });
 
+  onDestroy(() => {
+    if (openSeadragon && _updateViewportHandler) {
+      openSeadragon.removeHandler("update-viewport", _updateViewportHandler);
+    }
+  });
+
   const closeLatencyWarning = () => ($showLatencyWarning = false);
 
   const updateSelection = () => {
@@ -1133,16 +1144,6 @@
   $: ($transposeHalfStep, rehighlightHoles($currentTick));
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
-
-  let rafId = null;
-  const scheduleHighlightDraw = () => {
-    if (rafId !== null || !highlightCtx) return;
-    rafId = requestAnimationFrame(() => {
-      rafId = null;
-      drawActiveHighlights($throttledTick);
-    });
-  };
-  $: ($throttledTick, scheduleHighlightDraw());
 
   export {
     adjustZoom,
