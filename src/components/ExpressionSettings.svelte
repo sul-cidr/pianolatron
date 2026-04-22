@@ -39,6 +39,7 @@
     playExpressionsOnOff,
     reverbWetDry,
     currentTick,
+    throttledTick,
     volumeCoefficient,
     bassVolumeCoefficient,
     trebleVolumeCoefficient,
@@ -127,6 +128,7 @@
       $velocityCurveMid = allSettings.playbackSettings.velocityCurveMid;
       $velocityCurveHigh = allSettings.playbackSettings.velocityCurveHigh;
       $currentTick = allSettings.playbackSettings.currentTick;
+      throttledTick.set($currentTick);
       $userSettings = allSettings.playbackSettings.userSettings;
       $drawVelocityCurves = allSettings.playbackSettings.drawVelocityCurves;
 
