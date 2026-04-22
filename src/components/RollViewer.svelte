@@ -824,17 +824,12 @@
 
   const drawTextLine = (ctx, text, bold, x, y) => {
     ctx.font = bold ? "bold 18px sans-serif" : "16px sans-serif";
-    const metrics = ctx.measureText(text);
-    const tw = metrics.width;
-    const padding = 6;
+    ctx.textAlign = "center";
+    ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 1;
 
-    ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
-    ctx.fillRect(x - tw / 2 - padding, y - 11, tw + padding * 2, 22);
-
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
-    ctx.lineJoin = "round";
-    ctx.strokeText(text, x, y);
     ctx.fillStyle = "white";
     ctx.fillText(text, x, y);
   };
