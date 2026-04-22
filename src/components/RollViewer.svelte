@@ -66,7 +66,7 @@
       pointer-events: none;
       position: absolute;
       top: 0;
-      width: 100%;
+      width: calc(100% - var(--navigator-width));
       z-index: 2;
     }
 
@@ -734,6 +734,7 @@
     const canvasRect = highlightCanvas.getBoundingClientRect();
     const bounds = viewport.getBoundsNoRotate(true);
     const imgBounds = viewport.viewportToImageRectangle(bounds);
+    const viewerSize = viewport.getContainerSize();
 
     // Clear and draw highlights for active holes
     highlightCtx.clearRect(0, 0, highlightCanvas.width, highlightCanvas.height);
@@ -744,12 +745,10 @@
       const holeH = hole.h;
 
       // Convert image coords to screen pixel coords on the canvas
-      const screenX =
-        ((holeX - imgBounds.x) / imgBounds.width) * canvasRect.width;
-      const screenY =
-        ((holeY - imgBounds.y) / imgBounds.height) * canvasRect.height;
-      const screenW = (holeW / imgBounds.width) * canvasRect.width;
-      const screenH = (holeH / imgBounds.height) * canvasRect.height;
+      const screenX = ((holeX - imgBounds.x) / imgBounds.width) * viewerSize.x;
+      const screenY = ((holeY - imgBounds.y) / imgBounds.height) * viewerSize.y;
+      const screenW = (holeW / imgBounds.width) * viewerSize.x;
+      const screenH = (holeH / imgBounds.height) * viewerSize.y;
 
       // Get highlight color
       let color = hole.color;
