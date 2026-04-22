@@ -730,7 +730,6 @@
       announcement = hole.label.replace("#", "♯").replace("_", " ");
     });
 
-    const canvasRect = highlightCanvas.getBoundingClientRect();
     const bounds = viewport.getBoundsNoRotate(true);
     const imgBounds = viewport.viewportToImageRectangle(bounds);
     const viewerSize = viewport.getContainerSize();
