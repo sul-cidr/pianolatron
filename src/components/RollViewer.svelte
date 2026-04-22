@@ -772,7 +772,65 @@
       const radius = Math.min(6, screenW / 4, screenH / 4);
       highlightCtx.roundRect(screenX, screenY, screenW, screenH, radius);
       highlightCtx.fill();
+
+      // Draw detail label on canvas when active-note-details is enabled
+      if ($userSettings.activeNoteDetails && hole.type === "note") {
+        const noteLabel = hole.label;
+        let velocityLine = "";
+        if ($userSettings.showNoteVelocities) {
+          const vel = $playExpressionsOnOff ? (hole.v ?? 64) : 64;
+          velocityLine = `v:${Math.round(vel)}`;
+        }
+
+        highlightCtx.save();
+        highlightCtx.textAlign = "center";
+
+        const cx = screenX + screenW / 2;
+        if (!$scrollDownwards) {
+          drawTextLine(
+            highlightCtx,
+            noteLabel,
+            true,
+            cx,
+            screenY + screenH + 36,
+          );
+          if (velocityLine) {
+            drawTextLine(
+              highlightCtx,
+              velocityLine,
+              false,
+              cx,
+              screenY + screenH + 58,
+            );
+          }
+        } else {
+          if (velocityLine) {
+            drawTextLine(highlightCtx, noteLabel, true, cx, screenY - 36);
+            drawTextLine(highlightCtx, velocityLine, false, cx, screenY - 14);
+          } else {
+            drawTextLine(highlightCtx, noteLabel, true, cx, screenY - 14);
+          }
+        }
+        highlightCtx.restore();
+      }
     });
+  };
+
+  const drawTextLine = (ctx, text, bold, x, y) => {
+    ctx.font = bold ? "bold 18px sans-serif" : "16px sans-serif";
+    const metrics = ctx.measureText(text);
+    const tw = metrics.width;
+    const padding = 6;
+
+    ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+    ctx.fillRect(x - tw / 2 - padding, y - 11, tw + padding * 2, 22);
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.lineJoin = "round";
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = "white";
+    ctx.fillText(text, x, y);
   };
 
   // remove the current highlights and re-add them. Needed for when a transpose has taken place
@@ -1104,8 +1162,10 @@
     const resizeHighlightCanvas = () => {
       if (!highlightCanvas || !openSeadragon) return;
       const rect = highlightCanvas.getBoundingClientRect();
-      highlightCanvas.width = Math.round(rect.width);
-      highlightCanvas.height = Math.round(rect.height);
+      const dpr = window.devicePixelRatio ?? 1;
+      highlightCanvas.width = Math.round(rect.width * dpr);
+      highlightCanvas.height = Math.round(rect.height * dpr);
+      highlightCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     if (highlightCanvas) {
@@ -1144,6 +1204,10 @@
   $: ($transposeHalfStep, rehighlightHoles($currentTick));
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
+  $: ($userSettings.activeNoteDetails,
+    $userSettings.showNoteVelocities,
+    $playExpressionsOnOff,
+    drawActiveHighlights($throttledTick));
 
   export {
     adjustZoom,
