@@ -772,12 +772,20 @@
       highlightCtx.fill();
 
       // Draw detail label on canvas when active-note-details is enabled
-      if ($userSettings.activeNoteDetails && hole.type === "note") {
-        const noteLabel = hole.label;
+      if ($userSettings.activeNoteDetails) {
+        let noteLabel = hole.label;
         let velocityLine = "";
-        if ($userSettings.showNoteVelocities) {
-          const vel = $playExpressionsOnOff ? (hole.v ?? 64) : 64;
-          velocityLine = `v:${Math.round(vel)}`;
+
+        if (hole.type === "note") {
+          noteLabel = getHoleLabel(
+            hole.m + $transposeHalfStep,
+            $rollMetadata.ROLL_TYPE,
+          );
+
+          if ($userSettings.showNoteVelocities) {
+            const vel = $playExpressionsOnOff ? (hole.v ?? 64) : 64;
+            velocityLine = `v:${Math.round(vel)}`;
+          }
         }
 
         highlightCtx.save();
