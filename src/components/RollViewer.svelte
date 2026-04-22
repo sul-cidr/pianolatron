@@ -124,7 +124,6 @@
   import {
     avgHoleWidth,
     bassExpCurve,
-    currentTick,
     drawVelocityCurves,
     expressionParameters,
     firstHolePx,
@@ -1193,14 +1192,14 @@
     }
     updateSelectionOverlays();
     updateVisibleSvgPartitions();
-    updateViewportFromTick($currentTick);
+    updateViewportFromTick($throttledTick);
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: ($playbackProgressStart, updateSelection());
   $: ($playbackProgressEnd, updateSelection());
-  $: updateViewportFromTick($currentTick);
-  $: ($transposeHalfStep, rehighlightHoles($currentTick));
+  $: updateViewportFromTick($throttledTick);
+  $: ($transposeHalfStep, rehighlightHoles($throttledTick));
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
   $: ($userSettings.activeNoteDetails,

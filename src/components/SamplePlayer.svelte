@@ -342,6 +342,7 @@
 
   const resetPlayback = () => {
     currentTick.reset();
+    throttledTick.set(0);
     midiSamplePlayer.stop();
     activeNotes.reset();
     softOnOff.reset();
