@@ -816,7 +816,7 @@
             noteLabel,
             true,
             cx,
-            screenY + screenH + 36,
+            screenY + screenH + 28,
           );
           if (velocityLine) {
             drawTextLine(
@@ -824,7 +824,7 @@
               velocityLine,
               false,
               cx,
-              screenY + screenH + 58,
+              screenY + screenH + 50,
             );
           }
         } else {
