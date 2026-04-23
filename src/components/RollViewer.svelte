@@ -183,6 +183,7 @@
   let navSelectionSvg;
   let highlightCanvas;
   let highlightCtx = null;
+  const _highlightActivation = new WeakMap();
 
   const createMark = (hole) => {
     const {
@@ -764,11 +765,29 @@
         return;
       }
 
-      highlightCtx.fillStyle = `hsla(${color}, 0.8)`;
+      // Animate highlight: bright "attack" then fade to steady opacity over 500ms
+      let opacity = 0.5;
+      let glow = 8;
+      if (!_highlightActivation.has(hole)) {
+        _highlightActivation.set(hole, performance.now());
+      }
+      const elapsed = performance.now() - _highlightActivation.get(hole);
+      if (elapsed < 500) {
+        const t = elapsed / 500;
+        const eased = easeInOutCubic(t);
+        opacity = 1 - 0.5 * eased;
+        glow = 8 * (1 - eased);
+      }
+
+      highlightCtx.save();
+      highlightCtx.shadowColor = `hsla(${color}, ${opacity * 0.5})`;
+      highlightCtx.shadowBlur = glow;
+      highlightCtx.fillStyle = `hsla(${color}, ${opacity})`;
       highlightCtx.beginPath();
       const radius = Math.min(6, screenW / 4, screenH / 4);
       highlightCtx.roundRect(screenX, screenY, screenW, screenH, radius);
       highlightCtx.fill();
+      highlightCtx.restore();
 
       // Draw detail label on canvas when active-note-details is enabled
       if ($userSettings.activeNoteDetails) {
@@ -832,6 +851,10 @@
     ctx.fillStyle = "white";
     ctx.fillText(text, x, y);
   };
+
+  // cribbed from https://github.com/gre/bezier-easing
+  const easeInOutCubic = (t) =>
+    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
   // remove the current highlights and re-add them. Needed for when a transpose has taken place
   // NOTE: This appears to be redundant?
