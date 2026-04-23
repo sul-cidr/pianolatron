@@ -146,7 +146,7 @@
     useInAppExpression,
     userSettings,
   } from "../stores";
-  import { clamp, getHoleLabel } from "../lib/utils";
+  import { clamp, defaultHoleColor, getHoleLabel } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
   import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
@@ -752,10 +752,11 @@
       // Get highlight color
       let color = hole.color;
       if (
-        !$userSettings.showNoteVelocities ||
-        $userSettings.highlightEnabledHoles
+        hole.type === "note" &&
+        (!$userSettings.showNoteVelocities ||
+          $userSettings.highlightEnabledHoles)
       ) {
-        color = "60, 100%, 50%"; // yellow default for non-velocity mode
+        color = defaultHoleColor; // yellow default for non-velocity mode
       }
       if (
         !$rollPedalingOnOff &&
@@ -766,7 +767,7 @@
       }
 
       // Animate highlight: bright "attack" then fade to steady opacity over 500ms
-      let opacity = 0.5;
+      let opacity = 0.6;
       let glow = 8;
       if (!_highlightActivation.has(hole)) {
         _highlightActivation.set(hole, performance.now());
@@ -775,7 +776,7 @@
       if (elapsed < 500) {
         const t = elapsed / 500;
         const eased = easeInOutCubic(t);
-        opacity = 1 - 0.5 * eased;
+        opacity = 1 - 0.4 * eased;
         glow = 8 * (1 - eased);
       }
 

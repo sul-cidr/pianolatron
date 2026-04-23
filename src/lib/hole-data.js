@@ -23,10 +23,10 @@ const holeColorMap = [
   "348, 96%, 36%",
 ];
 
-const defaultHoleColor = "60, 100%, 50%"; // yellow (default)
-const controlHoleColor = "120, 73%, 75%"; // light green
-const pedalHoleColor = "39, 100%, 50%"; // orange;
+const defaultHoleColor = "60, 100%, 40%"; // yellow (default)
+const controlHoleColor = "120, 73%, 60%"; // light green
 
+const pedalHoleColor = "39, 100%, 45%"; // orange
 const getNoteName = (midiNumber) => {
   const octave = parseInt(midiNumber / 12, 10) - 1;
   const name = [
