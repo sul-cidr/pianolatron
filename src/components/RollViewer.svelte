@@ -637,7 +637,7 @@
       rect.setAttribute("rx", 10);
       rect.setAttribute("ry", 10);
       rect.addEventListener("mouseover", () => {
-        announcement = hole.label.replace("#", "♯").replace("_", " ");
+        announcement = hole.label.replace("#", "-sharp").replace("_", " ");
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
@@ -726,11 +726,6 @@
       );
       return;
     }
-
-    // Announce active holes
-    holes.forEach((hole) => {
-      announcement = hole.label.replace("#", "♯").replace("_", " ");
-    });
 
     const bounds = viewport.getBoundsNoRotate(true);
     const imgBounds = viewport.viewportToImageRectangle(bounds);
