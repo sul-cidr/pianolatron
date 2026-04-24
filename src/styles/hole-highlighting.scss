@@ -14,7 +14,7 @@ $highlight-hover-outline-offset: 4px;
       outline: $highlight-hover-outline-width solid
         $highlight-hover-outline-color;
       outline-offset: $highlight-hover-outline-offset;
-      z-index: 1;
+      z-index: 3;
 
       // winds off the actual hole highlight style, if one is set
       &::before {
