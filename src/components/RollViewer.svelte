@@ -147,6 +147,7 @@
     userSettings,
   } from "../stores";
   import { clamp, defaultHoleColor, getHoleLabel } from "../lib/utils";
+  import { getNoteHoleColor } from "../lib/hole-data";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
   import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
@@ -751,6 +752,9 @@
 
       // Get highlight color
       let color = hole.color;
+      if (hole.type === "note" && !$playExpressionsOnOff) {
+        color = getNoteHoleColor(64, 64, 64);
+      }
       if (
         hole.type === "note" &&
         (!$userSettings.showNoteVelocities ||

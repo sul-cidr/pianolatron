@@ -77,6 +77,23 @@ const getHoleLabel = (midiNumber, rollType) => {
   return `mid_${midiNumber}`;
 };
 
+export const getNoteHoleColor = (
+  velocity,
+  minNoteVelocity,
+  maxNoteVelocity,
+) => {
+  if (!velocity) return defaultHoleColor;
+  return holeColorMap[
+    Math.round(
+      mapToRange(
+        normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
+        0,
+        holeColorMap.length - 1,
+      ),
+    )
+  ];
+};
+
 const annotateHoleData = (
   holeData,
   rollType,
@@ -94,19 +111,6 @@ const annotateHoleData = (
     ],
     [Infinity, -Infinity],
   );
-
-  const getNoteHoleColor = ({ v: velocity }) => {
-    if (!velocity) return defaultHoleColor;
-    return holeColorMap[
-      Math.round(
-        mapToRange(
-          normalizeInRange(velocity, minNoteVelocity, maxNoteVelocity),
-          0,
-          holeColorMap.length - 1,
-        ),
-      )
-    ];
-  };
 
   return holeData.map((hole) => {
     // hole.y is the coordinate of the beginning of the hole *in the direction
@@ -133,7 +137,7 @@ const annotateHoleData = (
         break;
 
       case "note":
-        hole.color = getNoteHoleColor(hole);
+        hole.color = getNoteHoleColor(hole.v, minNoteVelocity, maxNoteVelocity);
         hole.type = "note";
         break;
 
