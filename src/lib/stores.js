@@ -60,3 +60,32 @@ export const createSetStore = () => {
     reset: (newValue) => set(new Set(newValue)),
   };
 };
+
+/**
+ * Throttled store that batches `set()` calls with requestAnimationFrame.
+ * Multiple calls within the same rAF window are coalesced into a single
+ * update.
+ */
+export const createThrottledStore = (initialValue) => {
+  let pendingValue = initialValue;
+  let rafId = null;
+
+  const store = writable(initialValue);
+  const { subscribe } = store;
+
+  return {
+    set(value) {
+      if (value === pendingValue) return;
+      pendingValue = value;
+
+      if (rafId !== null) return;
+
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        store.set(pendingValue);
+      });
+    },
+
+    subscribe,
+  };
+};

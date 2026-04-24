@@ -1,6 +1,7 @@
 <svelte:options accessors />
 
 <style lang="scss">
+  @use "src/styles/sass-globals.scss" as *;
   // See styles/hole-highlighting.scss for all the <mark/> and <rect/> styling
 
   #roll-viewer {
@@ -37,7 +38,7 @@
       position: absolute;
       top: calc(50% - var(--trackerbar-height) / 2);
       width: calc(100% - var(--navigator-width));
-      z-index: 1;
+      z-index: 3;
     }
 
     // overlay to mask white borders on the roll images
@@ -56,6 +57,17 @@
 
     :global(canvas) {
       background: white !important;
+    }
+
+    #active-note-highlight-canvas {
+      background: transparent !important;
+      height: 100%;
+      left: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      width: calc(100% - var(--navigator-width));
+      z-index: 2;
     }
 
     :global(.openseadragon-canvas:focus) {
@@ -105,14 +117,13 @@
 </style>
 
 <script>
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
   import OpenSeadragon from "openseadragon";
   import {
     avgHoleWidth,
     bassExpCurve,
-    currentTick,
     drawVelocityCurves,
     expressionParameters,
     firstHolePx,
@@ -125,6 +136,7 @@
     playbackProgressEnd,
     latencyDetected,
     showLatencyWarning,
+    throttledTick,
     transposeHalfStep,
     playExpressionsOnOff,
     rollMetadata,
@@ -134,7 +146,8 @@
     useInAppExpression,
     userSettings,
   } from "../stores";
-  import { clamp, getHoleLabel } from "../lib/utils";
+  import { clamp, defaultHoleColor, getHoleLabel } from "../lib/utils";
+  import { getNoteHoleColor } from "../lib/hole-data";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
   import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
@@ -151,6 +164,7 @@
   const maxZoomLevel = 4;
   const horizontalPanIncrement = 40;
 
+  let _updateViewportHandler;
   let announcement;
   let openSeadragon;
   let viewport;
@@ -168,6 +182,9 @@
 
   let selectionSvg;
   let navSelectionSvg;
+  let highlightCanvas;
+  let highlightCtx = null;
+  const _highlightActivation = new WeakMap();
 
   const createMark = (hole) => {
     const {
@@ -695,30 +712,160 @@
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
   };
 
-  const highlightHoles = (tick) => {
-    if (!openSeadragon) return;
+  // Draw active note highlights on canvas instead of as DOM elements.
+  const drawActiveHighlights = (tick) => {
+    if (!highlightCtx || !openSeadragon) return;
 
     const holes = $holesIntervalTree.search(tick, tick);
+    if (!holes.length) {
+      highlightCtx.clearRect(
+        0,
+        0,
+        highlightCanvas.width,
+        highlightCanvas.height,
+      );
+      return;
+    }
 
-    marks = marks.filter(([hole, elem]) => {
-      if (holes.includes(hole)) return true;
-      viewport.viewer.removeOverlay(elem);
-      return false;
-    });
-
+    // Announce active holes
     holes.forEach((hole) => {
       announcement = hole.label.replace("#", "♯").replace("_", " ");
-      if (marks.map(([_hole]) => _hole).includes(hole)) return;
-      const mark = createMark(hole);
-      mark.classList.add("active");
-      marks.push([hole, mark]);
+    });
+
+    const bounds = viewport.getBoundsNoRotate(true);
+    const imgBounds = viewport.viewportToImageRectangle(bounds);
+    const viewerSize = viewport.getContainerSize();
+
+    // Clear and draw highlights for active holes
+    highlightCtx.clearRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+    holes.forEach((hole) => {
+      const holeX = hole.x;
+      const holeY = hole.startY;
+      const holeW = hole.w;
+      const holeH = hole.h;
+
+      // Convert image coords to screen pixel coords on the canvas
+      const screenX = ((holeX - imgBounds.x) / imgBounds.width) * viewerSize.x;
+      const screenY = ((holeY - imgBounds.y) / imgBounds.height) * viewerSize.y;
+      const screenW = (holeW / imgBounds.width) * viewerSize.x;
+      const screenH = (holeH / imgBounds.height) * viewerSize.y;
+
+      // Get highlight color
+      let color = hole.color;
+      if (hole.type === "note" && !$playExpressionsOnOff) {
+        color = getNoteHoleColor(64, 64, 64);
+      }
+      if (
+        hole.type === "note" &&
+        (!$userSettings.showNoteVelocities ||
+          $userSettings.highlightEnabledHoles)
+      ) {
+        color = defaultHoleColor; // yellow default for non-velocity mode
+      }
+      if (
+        !$rollPedalingOnOff &&
+        (hole.type === "pedal" || hole.type === "control")
+      ) {
+        // skip pedal/control holes when roll pedaling is off
+        return;
+      }
+
+      // Animate highlight: bright "attack" then fade to steady opacity over 500ms
+      let opacity = 0.6;
+      let glow = 8;
+      if (!_highlightActivation.has(hole)) {
+        _highlightActivation.set(hole, performance.now());
+      }
+      const elapsed = performance.now() - _highlightActivation.get(hole);
+      if (elapsed < 500) {
+        const t = elapsed / 500;
+        const eased = easeInOutCubic(t);
+        opacity = 1 - 0.4 * eased;
+        glow = 8 * (1 - eased);
+      }
+
+      highlightCtx.save();
+      highlightCtx.shadowColor = `hsla(${color}, ${opacity * 0.5})`;
+      highlightCtx.shadowBlur = glow;
+      highlightCtx.fillStyle = `hsla(${color}, ${opacity})`;
+      highlightCtx.beginPath();
+      const radius = Math.min(6, screenW / 4, screenH / 4);
+      highlightCtx.roundRect(screenX, screenY, screenW, screenH, radius);
+      highlightCtx.fill();
+      highlightCtx.restore();
+
+      // Draw detail label on canvas when active-note-details is enabled
+      if ($userSettings.activeNoteDetails) {
+        let noteLabel = hole.label;
+        let velocityLine = "";
+
+        if (hole.type === "note") {
+          noteLabel = getHoleLabel(
+            hole.m + $transposeHalfStep,
+            $rollMetadata.ROLL_TYPE,
+          );
+
+          if ($userSettings.showNoteVelocities) {
+            const vel = $playExpressionsOnOff ? (hole.v ?? 64) : 64;
+            velocityLine = `v:${Math.round(vel)}`;
+          }
+        }
+
+        highlightCtx.save();
+        highlightCtx.textAlign = "center";
+
+        const cx = screenX + screenW / 2;
+        if (!$scrollDownwards) {
+          drawTextLine(
+            highlightCtx,
+            noteLabel,
+            true,
+            cx,
+            screenY + screenH + 28,
+          );
+          if (velocityLine) {
+            drawTextLine(
+              highlightCtx,
+              velocityLine,
+              false,
+              cx,
+              screenY + screenH + 50,
+            );
+          }
+        } else {
+          if (velocityLine) {
+            drawTextLine(highlightCtx, noteLabel, true, cx, screenY - 36);
+            drawTextLine(highlightCtx, velocityLine, false, cx, screenY - 14);
+          } else {
+            drawTextLine(highlightCtx, noteLabel, true, cx, screenY - 14);
+          }
+        }
+        highlightCtx.restore();
+      }
     });
   };
 
-  // remove the current hightlights readd them. Needed for when a transpose has taken place
+  const drawTextLine = (ctx, text, bold, x, y) => {
+    ctx.font = bold ? "bold 18px sans-serif" : "16px sans-serif";
+    ctx.textAlign = "center";
+    ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 1;
+
+    ctx.fillStyle = "white";
+    ctx.fillText(text, x, y);
+  };
+
+  // cribbed from https://github.com/gre/bezier-easing
+  const easeInOutCubic = (t) =>
+    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+  // remove the current highlights and re-add them. Needed for when a transpose has taken place
+  // NOTE: This appears to be redundant?
   const rehighlightHoles = (tick) => {
-    highlightHoles(-1);
-    highlightHoles(tick);
+    drawActiveHighlights(-1);
+    drawActiveHighlights(tick);
   };
 
   // Pan the viewer to bring the position of `@tick` to the center of
@@ -1033,7 +1180,38 @@
       //  constraints applied here), we'll just neuter it here.
     };
 
+    // Draw highlights when OSD viewport updates
+    _updateViewportHandler = () => drawActiveHighlights($throttledTick);
+    openSeadragon.addHandler("update-viewport", _updateViewportHandler);
+
     openSeadragon.open(imageUrl);
+
+    // Initialize highlight canvas context and size for active note drawing
+    const resizeHighlightCanvas = () => {
+      if (!highlightCanvas || !openSeadragon) return;
+      const rect = highlightCanvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio ?? 1;
+      highlightCanvas.width = Math.round(rect.width * dpr);
+      highlightCanvas.height = Math.round(rect.height * dpr);
+      highlightCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    if (highlightCanvas) {
+      highlightCtx = highlightCanvas.getContext("2d");
+      resizeHighlightCanvas();
+    }
+
+    // Resize observer to keep canvas internal dimensions synced with CSS size
+    if (highlightCanvas && typeof ResizeObserver !== "undefined") {
+      const resizeObserver = new ResizeObserver(resizeHighlightCanvas);
+      resizeObserver.observe(highlightCanvas.parentElement);
+    }
+  });
+
+  onDestroy(() => {
+    if (openSeadragon && _updateViewportHandler) {
+      openSeadragon.removeHandler("update-viewport", _updateViewportHandler);
+    }
   });
 
   const closeLatencyWarning = () => ($showLatencyWarning = false);
@@ -1044,17 +1222,20 @@
     }
     updateSelectionOverlays();
     updateVisibleSvgPartitions();
-    updateViewportFromTick($currentTick);
+    updateViewportFromTick($throttledTick);
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: ($playbackProgressStart, updateSelection());
   $: ($playbackProgressEnd, updateSelection());
-  $: updateViewportFromTick($currentTick);
-  $: highlightHoles($currentTick);
-  $: ($transposeHalfStep, rehighlightHoles($currentTick));
+  $: updateViewportFromTick($throttledTick);
+  $: ($transposeHalfStep, rehighlightHoles($throttledTick));
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
+  $: ($userSettings.activeNoteDetails,
+    $userSettings.showNoteVelocities,
+    $playExpressionsOnOff,
+    drawActiveHighlights($throttledTick));
 
   export {
     adjustZoom,
@@ -1107,6 +1288,8 @@
       <RollViewerScaleBar {ppi} />
     {/if}
   {/if}
+
+  <canvas id="active-note-highlight-canvas" bind:this={highlightCanvas} />
 
   {#if $latencyDetected && $showLatencyWarning}
     <LatencyWarning {closeLatencyWarning} />

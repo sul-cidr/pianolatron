@@ -92,6 +92,7 @@
     playbackProgressStart,
     playbackProgressEnd,
     currentTick,
+    throttledTick,
     expressionBox,
     holesIntervalTree,
     recordingInBuffer,
@@ -164,6 +165,7 @@
   const skipToTick = (tick) => {
     if (tick < 0) pausePlayback();
     $currentTick = tick;
+    throttledTick.set(tick);
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 
