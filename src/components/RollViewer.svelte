@@ -686,6 +686,8 @@
       rect.setAttribute("height", height + padding * 2);
       rect.setAttribute("rx", 10);
       rect.setAttribute("ry", 10);
+      rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
+      rect.setAttribute("class", holeType);
       const [holeLabel, velocity] = getHoleDescription(hole);
       const holeDescription = holeLabel
         .replace("#", "-sharp")
@@ -698,13 +700,16 @@
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
-      rect.addEventListener("focus", () => {
+      rect.addEventListener("focusin", () => {
         if (viewport.getZoom() < 1) adjustZoom("resetZoom");
         const holeAriaLabel = `${holeDescription} ${velocity ? `velocity ${velocity || 64}` : ""}`;
         rect.setAttribute("aria-label", holeAriaLabel);
+        rect.setAttribute("fill", `hsla(${defaultHoleColor}, 0.8)`);
       });
-      rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
-      rect.setAttribute("class", holeType);
+      rect.addEventListener("focusout", () => {
+        rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
+      });
+
       g.appendChild(rect);
     });
 
