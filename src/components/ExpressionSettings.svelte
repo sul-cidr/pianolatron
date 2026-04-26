@@ -176,6 +176,8 @@
                 disabled={$appWaiting}
                 class="param-value"
                 id={`"input_"{expressionParam}`}
+                aria-label={$expressionParameters.tunable[expressionParam]
+                  .alias}
                 type="number"
                 min={$expressionParameters.tunable[expressionParam].min}
                 max={$expressionParameters.tunable[expressionParam].max}
