@@ -27,4 +27,11 @@
   }
 </style>
 
-<a href="#content">Skip to main content</a>
+<script>
+  export let targetAnchor;
+  export let skipText;
+
+  console.log(targetAnchor, skipText);
+</script>
+
+<a href="#{targetAnchor}">{skipText}</a>

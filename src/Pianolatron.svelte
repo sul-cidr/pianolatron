@@ -122,6 +122,7 @@
     notify,
     clearNotification,
   } from "./ui-components/Notification.svelte";
+  import SkipLink from "./ui-components/SkipLink.svelte";
   import LoadingSpinner from "./ui-components/LoadingSpinner.svelte";
   import RollPlayerControls from "./components/RollPlayerControls.svelte";
   import catalog from "./config/catalog.json";
@@ -510,6 +511,12 @@
         {/if}
       {/if}
     </FlexCollapsible>
+    {#if $appMode === "perform"}
+      <SkipLink
+        targetAnchor="right-sidebar"
+        skipText="Skip to settings menus"
+      />
+    {/if}
     <div id="roll">
       <h2>Roll Visualization</h2>
       {#if appReady}
@@ -519,6 +526,10 @@
           {playPauseApp}
           {toggleRecording}
           {bookmarkRoll}
+        />
+        <SkipLink
+          targetAnchor="perform-controls"
+          skipText="Skip to pedal and accent controls"
         />
         <RollViewer
           bind:this={rollViewer}
