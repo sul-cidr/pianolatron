@@ -207,6 +207,7 @@
     {#each themes as theme}
       <button
         class={theme}
+        aria-label="Use {theme} theme colors"
         class:active={$userSettings.theme === theme}
         on:click={() =>
           userSettings.update((settings) => ({
