@@ -12,15 +12,25 @@
   import { createEventDispatcher } from "svelte";
   import IconButton from "../ui-components/IconButton.svelte";
   import { tooltip } from "../lib/tooltip-action";
+  import { getShortcutKeyDesc } from "../config/keyboard-shortcut-config";
 
   export let shortcut;
   export let meta;
   let editing = false;
   let editButtonRef;
 
+  const defaultKey = shortcut.key;
+  let shortcutKey = getShortcutKeyDesc(shortcut.key);
+
   const dispatch = createEventDispatcher();
-  const updateShortcut = (event) => dispatch("update", event);
-  const resetShortcut = () => dispatch("reset");
+  const updateShortcut = (event) => {
+    shortcutKey = getShortcutKeyDesc(event.key);
+    dispatch("update", event);
+  };
+  const resetShortcut = () => {
+    shortcutKey = getShortcutKeyDesc(defaultKey);
+    dispatch("reset");
+  };
 </script>
 
 <dt use:tooltip={meta.help}>{meta.description}:</dt>
@@ -32,7 +42,7 @@
   {/if}
   <IconButton
     iconName="edit"
-    label="Edit Keystroke"
+    label="Press button and type a key to change keystroke for {meta.description}, currently {shortcutKey}"
     height="20"
     width="20"
     tooltip="Edit"
@@ -42,7 +52,7 @@
   {#key shortcut.isChanged}
     <IconButton
       iconName="reset"
-      label="Reset Keystroke to Default"
+      label="Reset Keystroke to Default for {meta.description}, currently {shortcutKey}"
       height="20"
       width="20"
       tooltip={shortcut.isChanged ? "Reset to Default" : undefined}
