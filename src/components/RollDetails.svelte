@@ -131,6 +131,26 @@
       >{@html metadata.PURL || unavailable}</a
     >
   </dd>
+  <dt>Roll Type</dt>
+  <dd class="large">
+    {#if metadata.type === "welte-red"}
+      T-100 "Red" Welte
+    {:else if metadata.type === "welte-green"}
+      T-98 "Green" Welte
+    {:else if metadata.type === "welte-licensee"}
+      Welte Licensee
+    {:else if metadata.type === "duo-art"}
+      Duo-Art
+    {:else if metadata.type === "ampico-a"}
+      Ampico (A)
+    {:else if metadata.type === "ampico-b"}
+      Ampico (B)
+    {:else if metadata.type === "65-note"}
+      65-note Pianola
+    {:else}
+      88-note Pianola
+    {/if}
+  </dd>
   {#if metadata.work}
     <dt>Work</dt>
     <dd class="large">
