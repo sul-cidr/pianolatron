@@ -691,8 +691,7 @@
       const [holeLabel, velocity] = getHoleDescription(hole);
       const holeDescription = holeLabel
         .replace("#", "-sharp")
-        .replace("_", " ")
-        .replace("A-sharp", "ae-sharp");
+        .replace("_", " ");
 
       rect.addEventListener("mouseover", () => {
         announcement = holeDescription;
@@ -700,16 +699,11 @@
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
-      rect.addEventListener("focusin", () => {
+      rect.addEventListener("focus", () => {
         if (viewport.getZoom() < 1) adjustZoom("resetZoom");
-        const holeAriaLabel = `${holeDescription} ${velocity ? `velocity ${velocity || 64}` : ""}`;
+        const holeAriaLabel = `${holeDescription} ${$playExpressionsOnOff && velocity ? `velocity ${velocity}` : ""}`;
         rect.setAttribute("aria-label", holeAriaLabel);
-        rect.setAttribute("fill", `hsla(${defaultHoleColor}, 0.8)`);
       });
-      rect.addEventListener("focusout", () => {
-        rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
-      });
-
       g.appendChild(rect);
     });
 

@@ -120,6 +120,10 @@ $highlight-hover-outline-offset: 4px;
 
   svg rect {
     pointer-events: all;
+    &:focus {
+      stroke: yellow;
+      stroke-width: 15px;
+    }
   }
 
   // when "Highlight All Holes" is off, don't fill the hole <rect/> elements

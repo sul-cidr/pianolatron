@@ -198,9 +198,7 @@ export const deltaControls = {
   },
 };
 
-export const getShortcutKeyDesc = (keyMapping) =>
-  Object.values(alternativeIndicatorText).includes(keyMapping)
-    ? Object.keys(alternativeIndicatorText).find(
-        (key) => alternativeIndicatorText[key] === keyMapping,
-      )
-    : keyMapping;
+const alternativeIndicatorRev = Object.fromEntries(
+  Object.entries(alternativeIndicatorText).map(([k, v]) => [v, k])
+);
+export const getShortcutKeyDesc = (keyMapping) => alternativeIndicatorRev[keyMapping] ?? keyMapping;

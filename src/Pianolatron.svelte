@@ -527,10 +527,12 @@
           {toggleRecording}
           {bookmarkRoll}
         />
-        <SkipLink
-          targetAnchor="perform-controls"
-          skipText="Skip to pedal and accent controls"
-        />
+        {#if $appMode === "perform"}
+          <SkipLink
+            targetAnchor="perform-controls"
+            skipText="Skip to pedal and accent controls"
+          />
+        {/if}
         <RollViewer
           bind:this={rollViewer}
           bind:rollImageReady

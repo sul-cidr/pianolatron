@@ -168,16 +168,14 @@
         <legend>Expression Settings</legend>
         {#each Object.keys($expressionParameters.tunable || {}) as expressionParam}
           <div>
-            <label class="exp-param" for={`"input_"{expressionParam}`}
+            <label class="exp-param" for={`"input_"${expressionParam}`}
               >{$expressionParameters.tunable[expressionParam].alias}:</label
             >
             <div>
               <input
                 disabled={$appWaiting}
                 class="param-value"
-                id={`"input_"{expressionParam}`}
-                aria-label={$expressionParameters.tunable[expressionParam]
-                  .alias}
+                id={`"input_"${expressionParam}`}
                 type="number"
                 min={$expressionParameters.tunable[expressionParam].min}
                 max={$expressionParameters.tunable[expressionParam].max}

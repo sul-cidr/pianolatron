@@ -30,8 +30,6 @@
 <script>
   export let targetAnchor;
   export let skipText;
-
-  console.log(targetAnchor, skipText);
 </script>
 
 <a href="#{targetAnchor}">{skipText}</a>
