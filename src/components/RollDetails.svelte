@@ -134,9 +134,9 @@
   <dt>Roll Type</dt>
   <dd class="large">
     {#if metadata.type === "welte-red"}
-      T-100 "Red" Welte
+      T-100 “Red” Welte
     {:else if metadata.type === "welte-green"}
-      T-98 "Green" Welte
+      T-98 “Green” Welte
     {:else if metadata.type === "welte-licensee"}
       Welte Licensee
     {:else if metadata.type === "duo-art"}
