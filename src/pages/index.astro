@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/base.astro";
 import LoadingSpinner from "../ui-components/LoadingSpinner.svelte";
 import Pianolatron from "../Pianolatron.svelte";
 import StanfordSubheader from "../layouts/subHeader.astro";
+import SkipLink from "../ui-components/SkipLink.svelte";
+
 ---
 
 <BaseLayout title="Pianolatron" theme="blue">
@@ -10,6 +12,7 @@ import StanfordSubheader from "../layouts/subHeader.astro";
     showLoadingSpinner={true}
     loadingSpinnerText="Loading application..."
   />
+  <SkipLink targetAnchor="app" skipText="Skip to main content" />
   <StanfordSubheader />
   <Pianolatron client:only="svelte" mode="listen" />
 </BaseLayout>

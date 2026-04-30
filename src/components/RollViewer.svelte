@@ -186,32 +186,42 @@
   let highlightCtx = null;
   const _highlightActivation = new WeakMap();
 
+  const getHoleDescription = (hole) => {
+    let holeLabel = hole.label;
+    let velocity = "";
+
+    // We only want to transpose notes, not ALL midi keys.
+    if (hole.type === "note") {
+      holeLabel = getHoleLabel(
+        hole.m + $transposeHalfStep,
+        $rollMetadata.ROLL_TYPE,
+      );
+
+      if ($userSettings.showNoteVelocities) {
+        velocity = Math.round(
+          $playExpressionsOnOff ? (hole.v ?? 64) : 64,
+        ).toString();
+      }
+    }
+
+    return [holeLabel, velocity];
+  };
+
   const createMark = (hole) => {
     const {
       x: offsetX,
       startY: offsetY,
       w: width,
       h: height,
-      m: midiKey,
-      v: velocity,
       color: holeColor,
       type: holeType,
     } = hole;
 
     const mark = document.createElement("mark");
 
-    // We only want to transpose notes, not ALL midi keys.
-    let transpose = 0;
-    if (holeType === "note") {
-      mark.dataset.noteVelocity = velocity || 64;
-      transpose = $transposeHalfStep;
-    }
-
-    const holeLabel = getHoleLabel(
-      midiKey + transpose,
-      $rollMetadata.ROLL_TYPE,
-    );
+    const [holeLabel, velocity] = getHoleDescription(hole);
     mark.dataset.holeLabel = holeLabel;
+    mark.dataset.noteVelocity = velocity || 64;
 
     mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
     mark.classList.add(holeType);
@@ -342,7 +352,11 @@
     const holesEndPx = $scrollDownwards ? $lastHolePx : $firstHolePx;
 
     if (selectionSvg !== undefined) {
-      holesSvgPartitions.remove(holesBeginPx, holesEndPx, selectionSvg);
+      holesSvgPartitions.remove(holesBeginPx, holesEndPx, {
+        first: holesBeginPx,
+        last: holesEndPx,
+        svg: selectionSvg,
+      });
     }
 
     let startLinePx = -1;
@@ -386,32 +400,64 @@
       endLinePx,
       selectionConfig,
     );
-    holesSvgPartitions.insert(holesBeginPx, holesEndPx, selectionSvg);
+    holesSvgPartitions.insert(holesBeginPx, holesEndPx, {
+      first: holesBeginPx,
+      last: holesEndPx,
+      svg: selectionSvg,
+    });
   };
 
   const updateVisibleSvgPartitions = (svgPartitions, visibleSvgs) => {
     if (viewport === undefined || svgPartitions === undefined)
       return visibleSvgs;
 
-    const { y: firstImagePixel, height: viewport$imageLength } =
-      viewport.viewportToImageRectangle(viewport.getBounds());
+    const {
+      x: leftImagePixel,
+      y: firstImagePixel,
+      width: viewport$imageWidth,
+      height: viewport$imageLength,
+    } = viewport.viewportToImageRectangle(viewport.getBounds());
 
     const lastImagePixel = firstImagePixel + viewport$imageLength;
-    const svgs = svgPartitions.search(firstImagePixel, lastImagePixel);
+    const rightImagePixel = leftImagePixel + viewport$imageWidth;
+    const overlappingPartitions = svgPartitions.search(
+      firstImagePixel,
+      lastImagePixel,
+    );
 
     // Remove any currently displayed SVG overlays that don't overlap with the
     //  viewer window
     const updatedSvgs = visibleSvgs.filter((visibleSvg) => {
-      if (svgs.includes(visibleSvg)) return true;
-      viewport.viewer.removeOverlay(visibleSvg);
+      if (overlappingPartitions.includes(visibleSvg)) return true;
+      viewport.viewer.removeOverlay(visibleSvg.svg);
       return false;
     });
 
     // Add SVG overlays that newly overlap with the viewer window
-    svgs.forEach((svg) => {
-      if (updatedSvgs.includes(svg)) return;
-      updatedSvgs.push(svg);
-      viewport.viewer.addOverlay(svg, entireViewportRectangle);
+    overlappingPartitions.forEach((newSvgPartition) => {
+      newSvgPartition.svg
+        .querySelector("g")
+        ?.querySelectorAll("rect")
+        ?.forEach((rect) => {
+          const rectXMin = parseInt(rect.getAttribute("x"));
+          const rectXMax = rectXMin + parseInt(rect.getAttribute("width"));
+          const rectYMin = parseInt(rect.getAttribute("y"));
+          const rectYMax = rectYMin + parseInt(rect.getAttribute("height"));
+          if (
+            rectXMin >= leftImagePixel &&
+            rectXMax <= rightImagePixel &&
+            rectYMin >= firstImagePixel &&
+            rectYMax <= lastImagePixel
+          ) {
+            rect.setAttribute("tabindex", "0");
+          } else {
+            rect.setAttribute("tabindex", "-1");
+          }
+        });
+
+      if (updatedSvgs.includes(newSvgPartition)) return;
+      updatedSvgs.push(newSvgPartition);
+      viewport.viewer.addOverlay(newSvgPartition.svg, entireViewportRectangle);
     });
 
     return updatedSvgs;
@@ -480,7 +526,11 @@
           expressionSvgPartitions.insert(
             Math.min(rangeStartPx, rangeEndPx),
             Math.max(rangeStartPx, rangeEndPx),
-            svg,
+            {
+              first: Math.min(rangeStartPx, rangeEndPx),
+              last: Math.max(rangeStartPx, rangeEndPx),
+              svg: svg,
+            },
           );
 
           svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -636,14 +686,24 @@
       rect.setAttribute("height", height + padding * 2);
       rect.setAttribute("rx", 10);
       rect.setAttribute("ry", 10);
+      rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
+      rect.setAttribute("class", holeType);
+      const [holeLabel, velocity] = getHoleDescription(hole);
+      const holeDescription = holeLabel
+        .replace("#", "-sharp")
+        .replace("_", " ");
+
       rect.addEventListener("mouseover", () => {
-        announcement = hole.label.replace("#", "-sharp").replace("_", " ");
+        announcement = holeDescription;
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
       });
-      rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
-      rect.setAttribute("class", holeType);
+      rect.addEventListener("focus", () => {
+        if (viewport.getZoom() < 1) adjustZoom("resetZoom");
+        const holeAriaLabel = `${holeDescription} ${$playExpressionsOnOff && velocity ? `velocity ${velocity}` : ""}`;
+        rect.setAttribute("aria-label", holeAriaLabel);
+      });
       g.appendChild(rect);
     });
 
@@ -702,7 +762,11 @@
         const lastHoleEndsPx = Math.max(...holes.map(({ endY }) => endY));
         const svg = createHolesOverlaySvg(holes);
 
-        holesSvgPartitions.insert(firstHoleBeginsPx, lastHoleEndsPx, svg);
+        holesSvgPartitions.insert(firstHoleBeginsPx, lastHoleEndsPx, {
+          first: firstHoleBeginsPx,
+          last: lastHoleEndsPx,
+          svg: svg,
+        });
       }
     }
   };
@@ -791,20 +855,8 @@
 
       // Draw detail label on canvas when active-note-details is enabled
       if ($userSettings.activeNoteDetails) {
-        let noteLabel = hole.label;
-        let velocityLine = "";
-
-        if (hole.type === "note") {
-          noteLabel = getHoleLabel(
-            hole.m + $transposeHalfStep,
-            $rollMetadata.ROLL_TYPE,
-          );
-
-          if ($userSettings.showNoteVelocities) {
-            const vel = $playExpressionsOnOff ? (hole.v ?? 64) : 64;
-            velocityLine = `v:${Math.round(vel)}`;
-          }
-        }
+        const [holeLabel, velocity] = getHoleDescription(hole);
+        const velocityLine = velocity ? `v:${velocity}` : "";
 
         highlightCtx.save();
         highlightCtx.textAlign = "center";
@@ -813,7 +865,7 @@
         if (!$scrollDownwards) {
           drawTextLine(
             highlightCtx,
-            noteLabel,
+            holeLabel,
             true,
             cx,
             screenY + screenH + 28,
@@ -829,10 +881,10 @@
           }
         } else {
           if (velocityLine) {
-            drawTextLine(highlightCtx, noteLabel, true, cx, screenY - 36);
+            drawTextLine(highlightCtx, holeLabel, true, cx, screenY - 36);
             drawTextLine(highlightCtx, velocityLine, false, cx, screenY - 14);
           } else {
-            drawTextLine(highlightCtx, noteLabel, true, cx, screenY - 14);
+            drawTextLine(highlightCtx, holeLabel, true, cx, screenY - 14);
           }
         }
         highlightCtx.restore();

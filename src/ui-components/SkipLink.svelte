@@ -27,4 +27,9 @@
   }
 </style>
 
-<a href="#content">Skip to main content</a>
+<script>
+  export let targetAnchor;
+  export let skipText;
+</script>
+
+<a href="#{targetAnchor}">{skipText}</a>

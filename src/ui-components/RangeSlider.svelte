@@ -168,6 +168,8 @@
 </style>
 
 <script>
+  import { deltaControls } from "../config/keyboard-shortcut-config";
+
   export let min;
   export let max;
   export let step;
@@ -192,6 +194,7 @@
 <input
   type="range"
   id={name}
+  aria-label={name in deltaControls ? deltaControls[name].description : name}
   bind:value
   on:input
   on:change

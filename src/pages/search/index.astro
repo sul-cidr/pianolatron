@@ -7,7 +7,7 @@ import SkipLink from "../../ui-components/SkipLink.svelte";
 ---
 
 <BaseLayout title="Pianolatron Search" theme="blue">
-  <SkipLink />
+  <SkipLink targetAnchor="content" skipText="Skip to main content" />
   <StanfordSubheader />
   <main id="content">
     <Search client:only="svelte" />

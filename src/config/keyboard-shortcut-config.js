@@ -197,3 +197,8 @@ export const deltaControls = {
     help: "Amount to increase/decrease tempo by when holding the right-hand augment key and using the Tempo Up/Down keys",
   },
 };
+
+const alternativeIndicatorRev = Object.fromEntries(
+  Object.entries(alternativeIndicatorText).map(([k, v]) => [v, k])
+);
+export const getShortcutKeyDesc = (keyMapping) => alternativeIndicatorRev[keyMapping] ?? keyMapping;

@@ -51,6 +51,7 @@
 <script>
   import { keyMap } from "./KeyboardShortcuts.svelte";
   import { appMode, softOnOff, sustainOnOff, accentOnOff } from "../stores";
+  import { getShortcutKeyDesc } from "../config/keyboard-shortcut-config";
 </script>
 
 <div id="perform-controls">
@@ -60,6 +61,9 @@
         type="button"
         class:pedal-on={$softOnOff}
         aria-pressed={$softOnOff}
+        aria-label="Soft pedal, shortcut key {getShortcutKeyDesc(
+          $keyMap.SOFT.key,
+        )}"
         on:click={() => ($softOnOff = !$softOnOff)}
         on:keydown={(e) => {
           if (e.key === "Enter" || e.code === "Space") e.stopPropagation();
@@ -75,6 +79,9 @@
         type="button"
         class:pedal-on={$sustainOnOff}
         aria-pressed={$sustainOnOff}
+        aria-label="Sustain pedal, shortcut key {getShortcutKeyDesc(
+          $keyMap.SUSTAIN.key,
+        )}"
         on:click={() => ($sustainOnOff = !$sustainOnOff)}
         on:keydown={(e) => {
           if (e.key === "Enter" || e.code === "Space") e.stopPropagation();
@@ -94,6 +101,9 @@
         class:pedal-on={$accentOnOff}
         class="accent-button"
         aria-pressed={$accentOnOff}
+        aria-label="Accent, shortcut key {getShortcutKeyDesc(
+          $keyMap.ACCENT.key,
+        )}"
         on:mousedown={() => ($accentOnOff = true)}
         on:keydown={(e) => {
           if (e.key === "Enter" || e.code === "Space") {

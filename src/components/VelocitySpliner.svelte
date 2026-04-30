@@ -59,6 +59,7 @@
   export let keyboardRegion;
   export let accentColor;
 
+  let regionAriaLabel;
   let splinerContainer;
   let canvasSpliner;
 
@@ -108,6 +109,8 @@
     canvasSpliner.setGridStep(0.1);
     canvasSpliner.setBackgroundColor("#FFFFFF");
 
+    canvasSpliner._canvas.setAttribute("tabindex", "0");
+
     if (accentColor) {
       canvasSpliner.setControlPointColor("idle", accentColor);
       canvasSpliner.setControlPointColor("hovered", accentColor);
@@ -130,6 +133,13 @@
 
   const initSpliner = () => {
     window.addEventListener("resize", resizeHandler);
+    regionAriaLabel = `${getNoteName($keyboardRegion.firstMidi).replace(
+      "#",
+      "-sharp",
+    )} to ${getNoteName($keyboardRegion.lastMidi).replace(
+      "#",
+      "-sharp",
+    )} Velocity Curve`;
     redrawSpliner();
     return () => (canvasSpliner = null);
   };
@@ -142,7 +152,7 @@
 </script>
 
 <fieldset>
-  <legend
+  <legend aria-label={regionAriaLabel}
     >{getNoteName($keyboardRegion.firstMidi)}-{getNoteName(
       $keyboardRegion.lastMidi,
     )} Velocity Curve</legend
@@ -152,7 +162,8 @@
     {#if $keyboardRegion.velocityPoints}
       <button
         in:fade
-        use:tooltip={"Reset"}
+        aria-label="Reset curve"
+        use:tooltip={"Reset Curve"}
         on:click={() => {
           keyboardRegion.reset();
           initSpliner();
