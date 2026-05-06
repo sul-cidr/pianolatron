@@ -690,7 +690,8 @@
       rect.setAttribute("class", holeType);
       const [holeLabel, velocity] = getHoleDescription(hole);
       const holeDescription = holeLabel
-        .replace("#", "-sharp")
+        .replace("A#", "A-sharp")
+        .replace("#", " sharp")
         .replace("_", " ");
 
       rect.addEventListener("mouseover", () => {
