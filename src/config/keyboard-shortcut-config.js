@@ -145,6 +145,18 @@ export const alternativeIndicatorText = {
   MetaRight: "R_Meta",
   OSLeft: "L ⌘",
   OSRight: "R ⌘",
+  Semicolon: ";",
+  Colon: ":",
+  SingleQuote: "'",
+  Dash: "-",
+  Equals: "=",
+  LeftSquareBracket: "[",
+  RightSquareBracket: "]",
+  Backslash: "\\",
+  Comma: ",",
+  FullStop: ".",
+  ForwardSlash: "/",
+  Backtick: "`"
 };
 
 export const deltaControls = {
