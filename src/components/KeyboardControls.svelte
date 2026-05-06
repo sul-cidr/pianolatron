@@ -37,7 +37,8 @@
     class="always-visible"
     on:click={() => ($userSettings.showKeyboard = !$userSettings.showKeyboard)}
     iconName={$userSettings.showKeyboard ? "piano-down" : "piano-up"}
-    label="Show/Hide Piano Keyboard"
+    label={`${$userSettings.showKeyboard ? "Hide" : "Show"} Piano Keyboard`}
+    expanded={$userSettings.showKeyboard}
     height="32"
     width="32"
   />
@@ -47,7 +48,7 @@
       on:click={() =>
         ($userSettings.overlayKeyboard = !$userSettings.overlayKeyboard)}
       iconName={$userSettings.overlayKeyboard ? "piano-out" : "piano-in"}
-      label="Overlay Piano Keyboard on Roll Image"
+      label={`${$userSettings.overlayKeyboard ? "Display Piano Keyboard below" : "Overlay Piano Keyboard on"} Roll Image`}
       height="32"
       width="32"
     />

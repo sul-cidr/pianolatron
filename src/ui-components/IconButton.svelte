@@ -125,6 +125,7 @@
   export let width = 20;
 
   export let tooltip = undefined;
+  export let expanded = undefined;
   export let disabled = false;
 
   export let iconName;
@@ -137,6 +138,7 @@
   class={$$props.class}
   aria-label={label}
   {disabled}
+  aria-expanded={expanded !== undefined ? expanded : null}
   on:click
   on:mousedown
   on:keydown
