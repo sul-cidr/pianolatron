@@ -10,12 +10,14 @@
 
 <script>
   import { createEventDispatcher } from "svelte";
+  import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
   import IconButton from "../ui-components/IconButton.svelte";
   import { tooltip } from "../lib/tooltip-action";
   import { getShortcutKeyDesc } from "../config/keyboard-shortcut-config";
 
   export let shortcut;
   export let meta;
+  let announcement;
   let editing = false;
   let editButtonRef;
 
@@ -31,7 +33,13 @@
     shortcutKey = getShortcutKeyDesc(defaultKey);
     dispatch("reset");
   };
+  const editButton = () => {
+    editing = !editing;
+    announcement = editing ? "Choose a new keystroke" : "";
+  };
 </script>
+
+<AriaAnnouncer {announcement} />
 
 <dt use:tooltip={meta.help}>{meta.description}:</dt>
 <dd>
@@ -42,11 +50,11 @@
   {/if}
   <IconButton
     iconName="edit"
-    label="Press button and type a key to change keystroke for {meta.description}, currently {shortcutKey}"
+    label="Edit {meta.description}, currently {shortcutKey}"
     height="20"
     width="20"
     tooltip="Edit"
-    on:click={() => (editing = !editing)}
+    on:click={editButton}
     bind:ref={editButtonRef}
   />
   {#key shortcut.isChanged}
