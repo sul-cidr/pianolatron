@@ -409,9 +409,9 @@
     });
   };
 
-  const updateVisibleSvgPartitions = (svgPartitions, visibleSvgs) => {
+  const updateVisibleSvgPartitions = (svgPartitions, visiblePartitions) => {
     if (viewport === undefined || svgPartitions === undefined)
-      return visibleSvgs;
+      return visiblePartitions;
 
     const {
       x: leftImagePixel,
@@ -427,17 +427,21 @@
       lastImagePixel,
     );
 
-    // Remove any currently displayed SVG overlays that don't overlap with the
-    //  viewer window
-    const updatedSvgs = visibleSvgs.filter((visibleSvg) => {
+    // Remove any currently displayed SVG overlay partitions that don't overlap
+    //  with the viewer window, and make a note of those that do overlap
+    let partitionsToShow = visiblePartitions.filter((visibleSvg) => {
       if (overlappingPartitions.includes(visibleSvg)) return true;
       viewport.viewer.removeOverlay(visibleSvg.svg);
       return false;
     });
 
-    // Add SVG overlays that newly overlap with the viewer window
-    overlappingPartitions.forEach((newSvgPartition) => {
-      newSvgPartition.svg
+    let persistingPartitions = [];
+    let partitionsToAdd = [];
+
+    // For SVG overlays that now overlap with the viewer window, mark as
+    //  keyboard focusable only those hole rectangles that are fully visible
+    overlappingPartitions.forEach((visibleSvgPartition) => {
+      visibleSvgPartition.svg
         .querySelector("g")
         ?.querySelectorAll("rect")
         ?.forEach((rect) => {
@@ -457,12 +461,44 @@
           }
         });
 
-      if (updatedSvgs.includes(newSvgPartition)) return;
-      updatedSvgs.push(newSvgPartition);
-      viewport.viewer.addOverlay(newSvgPartition.svg, entireViewportRectangle);
+      // Keep track of overlays that will remain, because we may need to remove
+      //  them temporarily to make sure the overlays remain in order
+      if (partitionsToShow.includes(visibleSvgPartition)) {
+        persistingPartitions.push(visibleSvgPartition);
+        return;
+      }
+      partitionsToAdd.push(visibleSvgPartition);
+      partitionsToShow.push(visibleSvgPartition);
     });
 
-    return updatedSvgs;
+    // Check whether the persisting overlays and those to be newly added to the
+    //  DOM are in ascending order by first image pixel - this may not be the
+    //  case if the user is scrolling backwards
+    const alreadySorted = partitionsToShow.every(
+      (currentPartition, idx, allPartitions) => {
+        if (idx === allPartitions.length - 1) return true;
+        return currentPartition.first <= allPartitions[idx + 1].first;
+      },
+    );
+
+    // If the partitions would be out of order if the new entries are added
+    //  naively, remove all persisting partitions from the viewer and determine
+    //  the proper order
+    if (!alreadySorted) {
+      persistingPartitions.forEach((svgPartition) =>
+        viewport.viewer.removeOverlay(svgPartition.svg),
+      );
+      partitionsToShow.sort((a, b) => (a.first <= b.first ? -1 : 1));
+      partitionsToAdd = partitionsToShow;
+    }
+
+    // Add the partitions to be displayed, in the proper order
+    partitionsToShow.forEach((svgPartition) => {
+      if (partitionsToAdd.includes(svgPartition))
+        viewport.viewer.addOverlay(svgPartition.svg, entireViewportRectangle);
+    });
+
+    return partitionsToShow;
   };
 
   const updateVisibleOverlays = () => {
@@ -666,6 +702,19 @@
     svg.setAttribute("viewBox", `0 0 ${$imageWidth} ${$imageLength}`);
     svg.setAttribute("style", "pointer-events: none;");
     svg.appendChild(g);
+
+    holes.sort((a, b) => {
+      if (a.startY < b.startY) {
+        return -1;
+      } else if (a.startY > b.startY) {
+        return 1;
+      } else if (a.startY == b.startY && a.x < b.x) {
+        return -1;
+      } else if (a.startY == b.startY && a.x > b.x) {
+        return 1;
+      }
+      return 0;
+    });
 
     holes.forEach((hole) => {
       const {
