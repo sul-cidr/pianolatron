@@ -146,6 +146,7 @@
     useInAppExpression,
     userSettings,
   } from "../stores";
+  import { rollProfile } from "../config/roll-config";
   import { clamp, defaultHoleColor, getHoleLabel } from "../lib/utils";
   import { getNoteHoleColor } from "../lib/hole-data";
   import RollViewerControls from "./RollViewerControls.svelte";
@@ -670,10 +671,12 @@
       const {
         x: offsetX,
         startY: offsetY,
+        endY: offsetYEnd,
         w: width,
         h: height,
         color: holeColor,
         type: holeType,
+        m: midi,
       } = hole;
 
       const rect = document.createElementNS(
@@ -689,11 +692,24 @@
       rect.setAttribute("ry", 10);
       rect.setAttribute("fill", `hsla(${holeColor}, 0.8)`);
       rect.setAttribute("class", holeType);
+
       const [holeLabel, velocity] = getHoleDescription(hole);
-      const holeDescription = holeLabel
+      const holeName = holeLabel
         .replace("A#", "A-sharp")
         .replace("#", " sharp")
-        .replace("_", " ");
+        .replace("_", " ")
+        .replace("sust", "sustain");
+      const holeColumn =
+        midi - rollProfile[$rollMetadata.ROLL_TYPE].bassCtrlBegin;
+      const holeLength = Math.round(((offsetYEnd - offsetY) / 300) * 100) / 100;
+      const holeProgress = Math.round(
+        ($scrollDownwards
+          ? offsetY / $lastHolePx
+          : ($firstHolePx - offsetY) / $firstHolePx) * 100,
+      );
+      const holeDescription = `${hole.type} hole ${holeName} in column \
+      ${holeColumn} at ${holeProgress}% from roll end length ${holeLength} inches\
+      ${$playExpressionsOnOff && velocity ? `velocity ${velocity}` : ""}`;
 
       rect.addEventListener("mouseover", () => {
         announcement = holeDescription;
@@ -703,7 +719,7 @@
       });
       rect.addEventListener("focus", () => {
         if (viewport.getZoom() < 1) adjustZoom("resetZoom");
-        const holeAriaLabel = `${holeDescription} ${$playExpressionsOnOff && velocity ? `velocity ${velocity}` : ""}`;
+        const holeAriaLabel = holeDescription;
         rect.setAttribute("aria-label", holeAriaLabel);
       });
       g.appendChild(rect);
@@ -911,7 +927,6 @@
     t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
   // remove the current highlights and re-add them. Needed for when a transpose has taken place
-  // NOTE: This appears to be redundant?
   const rehighlightHoles = (tick) => {
     drawActiveHighlights(-1);
     drawActiveHighlights(tick);
