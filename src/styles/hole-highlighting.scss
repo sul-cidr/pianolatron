@@ -9,7 +9,7 @@ $highlight-hover-outline-offset: 4px;
     background-color: transparent;
 
     // mouseover hole outline and label flag
-    &:hover {
+    &:hover, &.focus {
       box-shadow: none;
       outline: $highlight-hover-outline-width solid
         $highlight-hover-outline-color;
@@ -44,7 +44,7 @@ $highlight-hover-outline-offset: 4px;
   }
 
   // .flag-left marks have their label "flag" pointing to the left
-  mark.flag-left:hover::after {
+  mark.flag-left:is(:hover,.focus)::after {
     left: auto;
     right: calc(
       100% + #{$highlight-hover-outline-offset} + #{$highlight-hover-outline-width}
@@ -53,7 +53,7 @@ $highlight-hover-outline-offset: 4px;
   }
 
   // .flag-bottom marks are positioned at the lower end of the flag overlay
-  mark.flag-bottom:hover::after {
+  mark.flag-bottom:is(:hover,.focus)::after {
     top: auto;
     bottom: -($highlight-hover-outline-offset + $highlight-hover-outline-width);
   }
@@ -61,14 +61,14 @@ $highlight-hover-outline-offset: 4px;
   // if "Display Note Velocities" is on...
   &.show-note-velocities {
     // ...label "flags" for note marks use the data-note-velocity value too
-    mark.note:hover::after {
+    mark.note:is(:hover,.focus)::after {
       content: attr(data-hole-label) "\av:" attr(data-note-velocity);
     }
 
     // if "Play Expressions" is off, velocity is 64, so...
     &:not(.play-expressions) {
       // ...and so is the label
-      mark.note:hover::after {
+      mark.note:is(:hover,.focus)::after {
         content: attr(data-hole-label) "\av:64";
       }
     }
@@ -120,10 +120,6 @@ $highlight-hover-outline-offset: 4px;
 
   svg rect {
     pointer-events: all;
-    &:focus {
-      stroke: yellow;
-      stroke-width: 15px;
-    }
   }
 
   // when "Highlight All Holes" is off, don't fill the hole <rect/> elements

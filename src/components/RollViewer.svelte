@@ -760,16 +760,23 @@
       ${holeColumn} at ${holeProgress}% from roll end length ${holeLength} inches\
       ${$playExpressionsOnOff && velocity ? `velocity ${velocity}` : ""}`;
 
-      rect.addEventListener("mouseover", () => {
-        announcement = holeDescription;
+      const initializeMark = (hole) => {
         if (marks.map(([_hole]) => _hole).includes(hole)) return;
         viewport.viewer.removeOverlay(hoveredMark);
         hoveredMark = createMark(hole);
+      };
+
+      rect.addEventListener("mouseover", () => {
+        announcement = holeDescription;
+        initializeMark(hole);
       });
+
       rect.addEventListener("focus", () => {
         if (viewport.getZoom() < 1) adjustZoom("resetZoom");
         const holeAriaLabel = holeDescription;
         rect.setAttribute("aria-label", holeAriaLabel);
+        initializeMark(hole);
+        hoveredMark.classList.add("focus");
       });
       g.appendChild(rect);
     });
@@ -1379,6 +1386,7 @@
       ),
     );
   }}
+  on:focusout={() => viewport.viewer.removeOverlay(hoveredMark)}
   class:active-note-details={$userSettings.activeNoteDetails}
   class:highlight-enabled-holes={$userSettings.highlightEnabledHoles}
   class:show-note-velocities={$userSettings.showNoteVelocities}
