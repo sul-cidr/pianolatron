@@ -152,6 +152,7 @@
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
   import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
   import LatencyWarning from "../ui-components/LatencyWarning.svelte";
+  import SkipLink from "../ui-components/SkipLink.svelte";
 
   export let showScaleBar = true;
   export let imageUrl;
@@ -1335,6 +1336,7 @@
     {#if showScaleBar}
       <RollViewerScaleBar {ppi} />
     {/if}
+    <SkipLink targetAnchor="roll-skip-target" skipText="Skip roll image" />
   {/if}
 
   <canvas id="active-note-highlight-canvas" bind:this={highlightCanvas} />
@@ -1343,3 +1345,5 @@
     <LatencyWarning {closeLatencyWarning} />
   {/if}
 </div>
+
+<div id="roll-skip-target" />
