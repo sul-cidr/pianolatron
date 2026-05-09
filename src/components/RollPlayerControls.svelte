@@ -156,7 +156,7 @@
       disabled={false}
       on:click={resetPlayback}
       iconName="rewind"
-      label="Rewind"
+      label={`Rewind${$appMode === "perform" ? ` (${$keyMap.REWIND.key})` : ""}`}
       height="32"
       width="32"
     />
@@ -167,7 +167,7 @@
         skipFromCurrent(-1500);
       }}
       iconName="skipBack"
-      label="Skip Back"
+      label={`Skip Back${$appMode === "perform" ? ` (${$keyMap.BACKWARD.key})` : ""}`}
       height="32"
       width="32"
     />
@@ -177,7 +177,7 @@
         disabled={false}
         on:click={togglePlayPause}
         iconName="playback"
-        label="Play"
+        label={`Play${$appMode === "perform" ? ` (${$keyMap.PLAY_PAUSE.key})` : ""}`}
         height="32"
         width="32"
       />
@@ -187,7 +187,7 @@
         disabled={false}
         on:click={togglePlayPause}
         iconName="pause"
-        label="Pause"
+        label={`Pause${$appMode === "perform" ? ` (${$keyMap.PLAY_PAUSE.key})` : ""}`}
         height="32"
         width="32"
       />
@@ -200,10 +200,10 @@
             disabled={false}
             on:click={toggleRecording}
             iconName="continueRecording"
-            label="Continue Recording"
+            label={`Continue Recording${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
             height="32"
             width="32"
-            title="Continue Recording"
+            title={`Continue Recording${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
           />
         {:else}
           <IconButton
@@ -211,10 +211,10 @@
             disabled={false}
             on:click={toggleRecording}
             iconName="record"
-            label="Record"
+            label={`Record${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
             height="32"
             width="32"
-            title="Record"
+            title={`Record${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
           />
         {/if}
       {:else}
@@ -223,10 +223,10 @@
           disabled={false}
           on:click={toggleRecording}
           iconName="recordingActive"
-          label="Pause Recording"
+          label={`Pause Recording${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
           height="32"
           width="32"
-          title="Pause Recording"
+          title={`Pause Recording${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
         />
       {/if}
     {/if}
@@ -235,7 +235,7 @@
       disabled={false}
       on:click={() => skipFromCurrent()}
       iconName="skipForward"
-      label="Skip Ahead"
+      label={`Skip Ahead${$appMode === "perform" ? ` (${$keyMap.FORWARD.key})` : ""}`}
       height="32"
       width="32"
     />

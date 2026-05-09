@@ -25,7 +25,7 @@ export const defaultKeyMap = {
   PAN_LEFT: { code: "ArrowLeft", key: "←" },
   PAN_RIGHT: { code: "ArrowRight", key: "→" },
 
-  TOGGLE_RECORD: { code: "KeyS", key: "S" },
+  TOGGLE_RECORD: { code: "KeyS", key: "s" },
 };
 
 export const keyMapMeta = {
