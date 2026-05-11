@@ -356,24 +356,18 @@
           {errorMessage}
         </p>
       {/if}
-      <p
-        class="reset"
-        class:shown={Object.values($keyMap).some(
-          (shortcut) => shortcut.isChanged,
-        ) ||
-          Object.values($controlsConfig).some(
-            (shortcut) => shortcut.isChanged?.length,
-          )}
-      >
-        Reset to defaults: <IconButton
-          on:click={resetShortcuts}
-          iconName="reset"
-          tooltip="Reset all Keystrokes to Default"
-          label="Reset all Keystrokes to Default"
-          height="24"
-          width="24"
-        />
-      </p>
+      {#if Object.values($keyMap).some((shortcut) => shortcut.isChanged) || Object.values($controlsConfig).some((shortcut) => shortcut.isChanged?.length)}
+        <p class="reset shown">
+          Reset to defaults: <IconButton
+            on:click={resetShortcuts}
+            iconName="reset"
+            tooltip="Reset all Keystrokes to Default"
+            label="Reset all Keystrokes to Default"
+            height="24"
+            width="24"
+          />
+        </p>
+      {/if}
     </footer>
   </div>
 {/if}

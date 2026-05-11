@@ -91,7 +91,8 @@
           class="always-visible"
           on:click={togglePanel}
           {iconName}
-          label="Show/Hide Panel"
+          expanded={!hidden}
+          label={`${hidden ? "Show" : "Hide"} Panel`}
           height="32"
           width="32"
         />

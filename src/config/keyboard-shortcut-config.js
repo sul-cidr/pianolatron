@@ -25,7 +25,7 @@ export const defaultKeyMap = {
   PAN_LEFT: { code: "ArrowLeft", key: "←" },
   PAN_RIGHT: { code: "ArrowRight", key: "→" },
 
-  TOGGLE_RECORD: { code: "KeyS", key: "S" },
+  TOGGLE_RECORD: { code: "KeyS", key: "s" },
 };
 
 export const keyMapMeta = {
@@ -145,6 +145,18 @@ export const alternativeIndicatorText = {
   MetaRight: "R_Meta",
   OSLeft: "L ⌘",
   OSRight: "R ⌘",
+  Semicolon: ";",
+  Colon: ":",
+  SingleQuote: "'",
+  Dash: "-",
+  Equals: "=",
+  LeftSquareBracket: "[",
+  RightSquareBracket: "]",
+  Backslash: "\\",
+  Comma: ",",
+  FullStop: ".",
+  ForwardSlash: "/",
+  Backtick: "`"
 };
 
 export const deltaControls = {
