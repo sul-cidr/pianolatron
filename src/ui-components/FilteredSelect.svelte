@@ -351,7 +351,7 @@
   $: (selectedItem, onSelectedItemChanged());
 </script>
 
-<AriaAnnouncer {announcement} />
+<AriaAnnouncer {announcement} atomic={false} />
 
 <div
   class="filtered-select"
