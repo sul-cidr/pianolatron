@@ -15,6 +15,7 @@
   import { tick } from "svelte";
 
   export let announcement;
+  export let atomic = true;
   let announcer;
 
   const announce = async (announcement) => {
@@ -29,7 +30,7 @@
 
 <div
   aria-live="polite"
-  aria-atomic="true"
+  aria-atomic={atomic}
   class="sr-only"
   bind:this={announcer}
 ></div>
