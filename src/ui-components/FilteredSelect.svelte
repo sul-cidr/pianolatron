@@ -320,6 +320,7 @@
     open = true;
     await tick();
     input.innerHTML = "";
+    dropdown.setAttribute("aria-expanded", open);
     filteredListItems = activeFacet
       ? listItems.filter(
           (listItem) => listItem.item[facetFieldName] === activeFacet,
@@ -331,6 +332,7 @@
 
   const closeDropdown = () => {
     open = false;
+    dropdown.setAttribute("aria-expanded", open);
     onSelectedItemChanged();
     input.blur();
   };
@@ -399,18 +401,21 @@
     closeDropdown()}
 >
   <span
-    role="textbox"
+    role="combobox"
     tabindex="0"
     class="input"
     spellcheck="false"
     contenteditable="true"
+    aria-controls="dropmenu"
     aria-label={ariaLabel}
+    aria-autocomplete="both"
+    aria-activedescendant="droplist"
     bind:this={input}
     on:input={search}
     on:focus={activateDropdown}
     on:mousedown|preventDefault={toggleDropdown}>{@html placeHolder}</span
   >
-  <div class="dropdown" class:open bind:this={dropdown}>
+  <div id="dropmenu" class="dropdown" class:open bind:this={dropdown}>
     <div class="facets">
       {#if facets}
         <ul>
@@ -438,7 +443,15 @@
       {/if}
       Matched: {filteredListItems?.length} / {listItems.length}
     </div>
-    <ul class="items" class:open bind:this={list}>
+    <ul
+      id="droplist"
+      aria-label={ariaLabel}
+      class="items"
+      role="listbox"
+      tabindex="-1"
+      class:open
+      bind:this={list}
+    >
       {#if filteredListItems?.length}
         {#each filteredListItems as listItem, i}
           <li
