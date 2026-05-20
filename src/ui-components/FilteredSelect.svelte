@@ -430,9 +430,10 @@
                   input.focus();
                 }}
                 on:keydown={(event) => {
-                  event.stopPropagation();
-                  (event.code === "Enter" || event.code === "Space") &&
+                  if (event.code === "Enter" || event.code === "Space") {
+                    event.stopPropagation();
                     setActiveFacet(facet);
+                  }
                 }}
               >
                 {facet}
