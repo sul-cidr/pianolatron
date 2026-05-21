@@ -1417,5 +1417,9 @@
     <LatencyWarning {closeLatencyWarning} />
   {/if}
 </div>
+<SkipLink
+  targetAnchor="active-note-highlight-canvas"
+  skipText="Skip back to start of roll image"
+/>
 
 <div id="roll-skip-target" />
