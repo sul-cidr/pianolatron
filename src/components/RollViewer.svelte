@@ -148,7 +148,6 @@
   } from "../stores";
   import { rollProfile } from "../config/roll-config";
   import { clamp, defaultHoleColor, getHoleLabel } from "../lib/utils";
-  import { getNoteHoleColor } from "../lib/hole-data";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
   import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
@@ -215,7 +214,6 @@
       startY: offsetY,
       w: width,
       h: height,
-      color: holeColor,
       type: holeType,
     } = hole;
 
@@ -225,7 +223,6 @@
     mark.dataset.holeLabel = holeLabel;
     mark.dataset.noteVelocity = velocity || 64;
 
-    mark.style.setProperty("--highlight-color", `hsl(${holeColor})`);
     mark.classList.add(holeType);
 
     mark.addEventListener("mouseout", () => {
@@ -872,6 +869,20 @@
     // Clear and draw highlights for active holes
     highlightCtx.clearRect(0, 0, highlightCanvas.width, highlightCanvas.height);
     holes.forEach((hole) => {
+      // Skip pedal/control holes when pedaling or expression is off
+      if (hole.type === "pedal" && !$rollPedalingOnOff) return;
+      if (hole.type === "control" && !$playExpressionsOnOff) return;
+
+      // Get highlight color: If base rect shaded, it's always yellow (default)
+      //  If no base shade: blue<->red for notes unless expression is disabled,
+      //  orange for pedals, green for control holes
+      let color = defaultHoleColor;
+      if (!$userSettings.highlightEnabledHoles) {
+        color = hole.color;
+        if (hole.type === "note" && !$playExpressionsOnOff)
+          color = defaultHoleColor;
+      }
+
       const holeX = hole.x;
       const holeY = hole.startY;
       const holeW = hole.w;
@@ -882,26 +893,6 @@
       const screenY = ((holeY - imgBounds.y) / imgBounds.height) * viewerSize.y;
       const screenW = (holeW / imgBounds.width) * viewerSize.x;
       const screenH = (holeH / imgBounds.height) * viewerSize.y;
-
-      // Get highlight color
-      let color = hole.color;
-      if (hole.type === "note" && !$playExpressionsOnOff) {
-        color = getNoteHoleColor(64, 64, 64);
-      }
-      if (
-        hole.type === "note" &&
-        (!$userSettings.showNoteVelocities ||
-          $userSettings.highlightEnabledHoles)
-      ) {
-        color = defaultHoleColor; // yellow default for non-velocity mode
-      }
-      if (
-        !$rollPedalingOnOff &&
-        (hole.type === "pedal" || hole.type === "control")
-      ) {
-        // skip pedal/control holes when roll pedaling is off
-        return;
-      }
 
       // Animate highlight: bright "attack" then fade to steady opacity over 500ms
       let opacity = 0.6;
