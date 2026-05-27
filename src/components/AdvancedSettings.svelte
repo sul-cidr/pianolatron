@@ -144,7 +144,7 @@
         class:disabled={!$playExpressionsOnOff}
       />
       <dd>Control Holes</dd>
-      {#if !$userSettings.showNoteVelocities && !$userSettings.highlightEnabledHoles}
+      {#if !$userSettings.highlightEnabledHoles && !$playExpressionsOnOff}
         <dt
           style="background-color: hsl({defaultHoleColor});"
           transition:slide
@@ -152,7 +152,7 @@
         <dd transition:slide>Note Holes</dd>
       {/if}
     </dl>
-    {#if $userSettings.showNoteVelocities || $userSettings.highlightEnabledHoles}
+    {#if $playExpressionsOnOff}
       <dl class="hole-color-legend" transition:slide>
         <dd>Note Velocity (soft - loud)</dd>
         <dt
