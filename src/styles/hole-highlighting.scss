@@ -1,11 +1,9 @@
-$note-highlight-color: yellow;
 $highlight-hover-outline-color: darkturquoise;
 $highlight-hover-outline-width: 6px;
 $highlight-hover-outline-offset: 4px;
 
 #roll-viewer {
   mark {
-    --highlight-color: #{$note-highlight-color};
     background-color: transparent;
 
     // mouseover hole outline and label flag
@@ -74,12 +72,8 @@ $highlight-hover-outline-offset: 4px;
     }
   }
 
-  // if "Use Roll Pedaling" is off, don't highlight pedal holes
+  // if "Use Roll Pedaling" is off, don't fill pedal holes
   &:not(.use-roll-pedaling) {
-    mark.pedal {
-      --highlight-color: none !important;
-    }
-
     rect.pedal {
       fill: none;
     }
@@ -92,12 +86,8 @@ $highlight-hover-outline-offset: 4px;
     }
   }
 
-  // if "Play Expressions" is off, don't highlight control holes
+  // if "Play Expressions" is off, don't fill control holes
   &:not(.play-expressions) {
-    mark.control {
-      --highlight-color: none !important;
-    }
-
     rect.control {
       fill: none;
     }
@@ -110,7 +100,7 @@ $highlight-hover-outline-offset: 4px;
     }
   }
 
-  // if "Play Expressions" is off, use the colour from the middle of the palate
+  // if "Play Expressions" is off, use the colour from the middle of the palette
   //  for all note holes (but only if "Highlight All Holes" is on!)
   &.highlight-enabled-holes:not(.play-expressions) {
     rect.note {
@@ -122,7 +112,7 @@ $highlight-hover-outline-offset: 4px;
     pointer-events: all;
   }
 
-  // when "Highlight All Holes" is off, don't fill the hole <rect/> elements
+  // when "Highlight Enabled Holes" is off, don't fill the hole <rect/> elements
   &:not(.highlight-enabled-holes) {
     svg rect:not(.selection) {
       fill: none;
