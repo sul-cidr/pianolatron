@@ -13,7 +13,7 @@ The Pianolatron web app will play on most notebook and desktop systems of fairly
 
 ## Troubleshooting Playback Difficulties
 
-If you receive a playback latency warning, notice that the audio and video are not smooth and synchronized, or find yourself waiting a long time for resources to load, the following steps may help to improve the situation:
+If you notice that the audio and video are not smooth and synchronized, find yourself waiting a long time for resources to load, or receive a playback latency warning from the app, the following steps may help to improve the situation:
 
 - Close other browser tabs, or shut down the browser entirely and re-open it with only the Pianolatron open.
 - Open the Pianolatron in a "private" or "incognito" window (usually done via the browser's "File" menu).
