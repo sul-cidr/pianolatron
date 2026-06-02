@@ -81,6 +81,11 @@
       width: 36px;
     }
   }
+
+  .download-links a:hover {
+    color: var(--cardinal-red);
+    border-color: var(--cardinal-red);
+  }
 </style>
 
 <script>

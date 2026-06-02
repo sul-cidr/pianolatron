@@ -76,6 +76,10 @@
         background-color: var(--primary-accent);
       }
     }
+
+    li:hover {
+      background-color: var(--primary-accent);
+    }
   }
 
   ul.items {
