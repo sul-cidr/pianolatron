@@ -91,6 +91,11 @@
           color: white;
         }
       }
+
+      li:hover {
+        color: var(--cardinal-red-light);
+        border-color: var(--cardinal-red-light);
+      }
     }
   }
 
@@ -114,6 +119,10 @@
       height: 32px;
       width: 32px;
     }
+  }
+
+  .row-links a:hover {
+    color: var(--cardinal-red-light);
   }
 
   .icons-row {
