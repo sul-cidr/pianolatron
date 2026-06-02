@@ -19,7 +19,7 @@
 [data-theme="white"] {
   --background-color: white;
   --background-darker: white;
-  --primary-accent: var(--link-blue);
+  --primary-accent: #006bb8;
   --primary-accent-semiopaque: #{color.adjust(steelblue, $alpha: -0.5)};
 }
 
