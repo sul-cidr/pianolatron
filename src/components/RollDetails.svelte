@@ -73,7 +73,7 @@
   }
 
   .download-links a {
-    color: var(--primary-accent);
+    color: var(--link-blue);
     height: 20px;
 
     :global(svg) {
