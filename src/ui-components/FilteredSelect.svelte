@@ -68,7 +68,7 @@
       border-radius: 6px;
       background-color: grey; // var(--primary-accent);
       color: white;
-      padding: 1px 8px;
+      padding: 1px 8px 2px;
       margin: 0 4px;
       cursor: pointer;
 
