@@ -259,6 +259,9 @@ export default class InAppExpressionizer {
     const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs, adjust) => {
       const expressionCurve = [];
 
+      if ((noteTrackMsgs === undefined) && (ctrlTrackMsgs === undefined))
+        return expressionCurve;
+
       // First build the velocity expression map from the control track only
       const [panExpMap, expState] = ctrlTrackMsgs
         .filter(({ name }) => name === "Note on")
@@ -348,6 +351,7 @@ export default class InAppExpressionizer {
     const _notesMap = new IntervalTree();
     [this.bassNotesTrack, this.trebleNotesTrack].forEach((track) => {
       const tickOn = {};
+      if (track === undefined) return _notesMap;
       track
         .filter(
           ({ name, noteNumber }) =>

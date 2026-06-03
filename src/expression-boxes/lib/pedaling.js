@@ -94,6 +94,8 @@ export const PedalingContinuousInput = (SuperClass) =>
       const pedalingMap = new IntervalTree();
 
       const registerPedalEvents = (track, pedalOn, eventNumber) => {
+        if (track === undefined) return;
+
         let tickOn = false;
         track
           // Pedal is on as long as the punch is present
