@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/base.astro";
+import Mixer from "../../components/Mixer.svelte";
+---
+
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  main {
+    flex-grow: 1;
+  }
+
+</style>
+
+<BaseLayout title="Audio Mixer">
+  <main id="content">
+    <Mixer client:only="svelte" />
+  </main>
+</BaseLayout>
