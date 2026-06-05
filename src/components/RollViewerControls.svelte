@@ -31,6 +31,7 @@
   let actionInterval;
   let viewport;
   let currentZoom;
+  let viewerIsFullScreen = false;
 
   const onZoom = () => (currentZoom = viewport.getZoom());
 
@@ -47,6 +48,11 @@
       if (keydownEvent.repeat) return;
       repeatAction(fn);
     }
+  };
+
+  const toggleFullScreen = () => {
+    viewerIsFullScreen = !viewerIsFullScreen;
+    viewport.viewer.setFullScreen(viewerIsFullScreen);
   };
 
   onMount(() => {
@@ -143,6 +149,15 @@
       keyboardInvokeAction(e, () => panHorizontal(/* left = */ false))}
     iconName="arrow-right"
     label="Pan Right"
+    height="24"
+    width="24"
+  />
+  <IconButton
+    class={"panzoom-button"}
+    disabled={false}
+    on:click={toggleFullScreen}
+    iconName="full-screen"
+    label={viewerIsFullScreen ? "Exit Full Screen" : "Full Screen"}
     height="24"
     width="24"
   />
