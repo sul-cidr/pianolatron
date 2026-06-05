@@ -146,6 +146,17 @@
     height="24"
     width="24"
   />
+  <IconButton
+    class={"panzoom-button"}
+    disabled={false}
+    on:click={() => {
+      viewport.viewer.setFullScreen(!viewport.viewer.isFullScreen());
+    }}
+    iconName="full-screen"
+    label="Full Screen"
+    height="24"
+    width="24"
+  />
 </div>
 <svelte:window
   on:mouseup={() => actionInterval?.clear()}
