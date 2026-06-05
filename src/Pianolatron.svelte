@@ -497,10 +497,7 @@
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw" position="left">
       <h2>Roll Details</h2>
-      {#if $appMode === "perform"}<RollSelector
-          bind:currentRoll
-          {rollListItems}
-        />{/if}
+      <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
         {#if !$holesIntervalTree.count}
