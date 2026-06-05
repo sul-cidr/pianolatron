@@ -30,7 +30,7 @@
     height: calc(100vh - 135px);
   }
   .perform-app {
-    height: 100vh;
+    height: calc(100vh - 135px);
   }
   .embed-app {
     height: 100vh;
