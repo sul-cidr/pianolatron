@@ -1,9 +1,9 @@
 ---
 layout: ../layouts/markdownLayoutFullHeader.astro
-title: Using the Pianolatron
+title: Using Pianolatron
 ---
 
-# Using the Pianolatron
+# Using Pianolatron
 
 Please consult the menu items in the navigation strip above for details on how to use specific aspects of the Pianolatron app, such as input from MIDI devices and game controllers.
 
