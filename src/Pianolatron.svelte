@@ -26,13 +26,17 @@
     }
   }
 
-  .listen-app {
-    height: calc(100vh - 135px);
-  }
+  .listen-app,
   .perform-app {
     height: calc(100vh - 135px);
+    transition: height 0.3s ease;
   }
   .embed-app {
+    height: 100vh;
+  }
+
+  :global(body.header-hidden) .listen-app,
+  :global(body.header-hidden) .perform-app {
     height: 100vh;
   }
 
@@ -77,7 +81,7 @@
 </style>
 
 <script>
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { quartInOut } from "svelte/easing";
   import { fade } from "svelte/transition";
   import IntervalTree from "node-interval-tree";
@@ -444,6 +448,19 @@
     }, 1000);
   };
 
+  let headerHidden = false;
+
+  const handleWheel = (e) => {
+    if (e.deltaY > 0 && !headerHidden) {
+      e.stopPropagation();
+      headerHidden = true;
+    } else if (e.deltaY < 0 && headerHidden) {
+      if (e.target.className !== "openseadragon-canvas") headerHidden = false;
+    }
+  };
+
+  $: document.body.classList.toggle("header-hidden", headerHidden);
+
   onMount(async () => {
     const loadingSpan = document.querySelector("#loading span");
     if (loadingSpan !== null) loadingSpan.textContent = "Loading resources...";
@@ -463,8 +480,14 @@
       exportInAppMIDI,
     } = samplePlayer);
 
+    window.addEventListener("wheel", handleWheel, { capture: true });
+
     setCurrentRollFromUrl();
   });
+
+  onDestroy(() =>
+    window.removeEventListener("wheel", handleWheel, { capture: true }),
+  );
 
   $: if (currentRoll !== previousRoll) loadRoll(currentRoll);
   $: if (appLoaded && $playbackProgressStart > 0) {

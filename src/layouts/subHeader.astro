@@ -35,8 +35,15 @@
 <style>
   .masthead {
     background-color: #2e2d29;
+    height: 135px;
+    overflow: hidden;
     padding: 0;
     position: relative;
+    transition: height 0.3s ease;
+  }
+
+  body.header-hidden .masthead {
+    height: 0;
   }
   .background-container {
     position: absolute;
