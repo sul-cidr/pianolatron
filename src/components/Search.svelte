@@ -428,7 +428,9 @@
 
   const setActiveFacet = (facet) =>
     (activeFacet = facet === activeFacet ? undefined : facet);
-  const facets = [...new Set(catalog.map((item) => item.type))];
+  const facets = Array.from([...new Set(catalog.map((item) => item.type))])
+    .sort()
+    .reverse();
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: (activeFacet, itemFilter());

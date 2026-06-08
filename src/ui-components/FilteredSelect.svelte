@@ -304,7 +304,11 @@
       item,
     }));
     if (facetFieldName)
-      facets = [...new Set(items.map((item) => item[facetFieldName]))];
+      facets = Array.from([
+        ...new Set(items.map((item) => item[facetFieldName])),
+      ])
+        .sort()
+        .reverse();
   };
 
   const onSelectedItemChanged = () => {
