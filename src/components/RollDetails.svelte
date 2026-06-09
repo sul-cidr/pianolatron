@@ -73,6 +73,9 @@
   }
 
   .download-links a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 1.2em;
     color: var(--link-blue);
     height: 20px;
 
@@ -80,11 +83,11 @@
       height: 36px;
       width: 36px;
     }
-  }
 
-  .download-links a:hover {
-    color: var(--cardinal-red);
-    border-color: var(--cardinal-red);
+    &:hover {
+      color: var(--cardinal-red);
+      border-color: var(--cardinal-red);
+    }
   }
 </style>
 
@@ -150,11 +153,21 @@
       </ul>
     </dd>
   {/if}
-  <dt>Archive Record</dt>
+  <dt>External Records</dt>
   <dd>
-    <a href={metadata.PURL} target="_blank"
-      >{@html metadata.PURL.replace("https://", "") || unavailable}</a
-    >
+    <div class="download-links">
+      <a
+        href={metadata.PURL}
+        title="Record in the Stanford Digital Repository for roll {metadata.title}"
+        target="_blank">ARCHIVE</a
+      >
+      |
+      <a
+        href="https://searchworks.stanford.edu/view/{metadata.catkey}"
+        title="Stanford library catalog entry for roll {metadata.title}"
+        target="_blank">CATALOG</a
+      >
+    </div>
   </dd>
   {#if metadata.work}
     <dt>Work</dt>
