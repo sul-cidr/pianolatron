@@ -21,7 +21,7 @@
           <a class="nav-link" href="/search/">Search</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://exhibits.stanford.edu/piano-rolls-test">Home</a
+          <a class="nav-link external" href="https://exhibits.stanford.edu/piano-rolls-test">Home</a
           >
         </li>
         <li class="nav-item">
@@ -106,11 +106,19 @@
     list-style: none;
   }
   .navbar-nav li a {
-    color: #dbdbdb;
+    color: #ffffff;
     text-decoration: none;
     font-family: SourceSans3, sans-serif;
     font-size: 15px;
     letter-spacing: 1.1px;
+    filter: brightness(0) invert(86%) sepia(0%) saturate(0%) hue-rotate(0deg) contrast(100%);
+  }
+  .navbar-nav li a.external {
+    background-image: url(/link-external-small-ltr-progressive.svg);
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-size: 0.857em;
+    padding-right: 1em;
   }
   .navbar-nav .nav-link:hover {
     text-decoration: underline;
