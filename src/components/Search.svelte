@@ -45,7 +45,7 @@
       text-align: right;
       padding: 5px 15px;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 15px;
 
       label,
@@ -119,10 +119,26 @@
       height: 32px;
       width: 32px;
     }
+
+    &:hover {
+      color: var(--cardinal-red-light);
+    }
   }
 
-  .row-links a:hover {
-    color: var(--cardinal-red-light);
+  .catalog-link {
+    text-decoration: none;
+    color: black;
+    &:hover {
+      color: var(--cardinal-red-light);
+
+      .info-i {
+        color: var(--cardinal-red-light);
+      }
+    }
+  }
+  .catalog-link .info-i {
+    color: var(--primary-accent);
+    font-weight: bold;
   }
 
   .icons-row {
@@ -551,9 +567,16 @@
         {#each filteredAndPagedItems as item}
           <tr>
             <th scope="row">
-              {@html searchParts.length
-                ? markupMatches(item.publisher)
-                : item.publisher}
+              <a
+                class="catalog-link"
+                href="https://searchworks.stanford.edu/view/{item.catkey}"
+                title="Open catalog record for roll {item.title}"
+                target="_blank"
+              >
+                {@html searchParts.length
+                  ? markupMatches(item.publisher)
+                  : item.publisher} <span class="info-i">ⓘ</span>
+              </a>
             </th>
             <td>
               {@html searchParts.length ? markupMatches(item.work) : item.work}
