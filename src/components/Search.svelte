@@ -126,6 +126,8 @@
   }
 
   .catalog-link {
+    position: relative;
+    display: inline-block;
     text-decoration: none;
     color: black;
     &:hover {
@@ -134,6 +136,14 @@
       .info-i {
         color: var(--cardinal-red-light);
       }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      bottom: -15px;
+      left: -15px;
+      right: -15px;
     }
   }
   .catalog-link .info-i {
