@@ -585,7 +585,7 @@
               >
                 {@html searchParts.length
                   ? markupMatches(item.publisher)
-                  : item.publisher} <span class="info-i">ⓘ</span>
+                  : item.publisher} <span class="info-i">𝓲</span>
               </a>
             </th>
             <td>
