@@ -63,9 +63,36 @@
   li a:hover {
     text-decoration: underline;
   }
+
+  .download-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-left: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .download-links a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 1.2em;
+    color: var(--link-blue);
+    height: 20px;
+
+    :global(svg) {
+      height: 36px;
+      width: 36px;
+    }
+
+    &:hover {
+      color: var(--cardinal-red);
+      border-color: var(--cardinal-red);
+    }
+  }
 </style>
 
 <script>
+  import Icon from "../ui-components/Icon.svelte";
   import catalog from "../config/catalog.json";
 
   import { appMode } from "../stores";
@@ -76,6 +103,7 @@
     (w) => w.performer === metadata.performer && w.druid !== metadata.druid,
   );
 
+  const imageLink = `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.jp2`;
   const unavailable = "<span>Unavailable</span>";
 </script>
 
@@ -125,11 +153,51 @@
       </ul>
     </dd>
   {/if}
-  <dt>Archive Record</dt>
+  <dt>External Records</dt>
   <dd>
-    <a href={metadata.PURL} target="_blank"
-      >{@html metadata.PURL || unavailable}</a
-    >
+    <div class="download-links">
+      <a
+        href={metadata.PURL}
+        title="Record in the Stanford Digital Repository for roll {metadata.title}"
+        target="_blank">ARCHIVE</a
+      >
+      |
+      <a
+        href="https://searchworks.stanford.edu/view/{metadata.catkey}"
+        title="Stanford library catalog entry for roll {metadata.title}"
+        target="_blank">CATALOG</a
+      >
+    </div>
+  </dd>
+  {#if metadata.work}
+    <dt>Work</dt>
+    <dd class="large">
+      {@html metadata.work || unavailable}
+    </dd>
+  {/if}
+  <dt>Download</dt>
+  <dd>
+    <div class="download-links">
+      <div>
+        <a
+          href="/midi/{metadata.druid}.mid"
+          title="Download MIDI for roll {metadata.title}"
+        >
+          <Icon
+            name="midi"
+            aria-label="Download MIDI for roll {metadata.title}"
+          />
+        </a>
+      </div>
+      <div>
+        <a href={imageLink} title="Download image for roll {metadata.title}">
+          <Icon
+            name="roll-image"
+            aria-label="Download image for roll {metadata.title}"
+          />
+        </a>
+      </div>
+    </div>
   </dd>
   <dt>Roll Type</dt>
   <dd class="large">
@@ -151,10 +219,4 @@
       88-note Pianola
     {/if}
   </dd>
-  {#if metadata.work}
-    <dt>Work</dt>
-    <dd class="large">
-      {@html metadata.work || unavailable}
-    </dd>
-  {/if}
 </dl>

@@ -6,6 +6,15 @@
     margin: 1rem;
     gap: 1rem;
 
+    .search-controls {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      overflow: hidden;
+      gap: 1rem;
+    }
+
     .search-box {
       height: 2.25em;
       position: relative;
@@ -36,7 +45,7 @@
       text-align: right;
       padding: 5px 15px;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 15px;
 
       label,
@@ -82,6 +91,11 @@
           color: white;
         }
       }
+
+      li:hover {
+        color: var(--cardinal-red-light);
+        border-color: var(--cardinal-red-light);
+      }
     }
   }
 
@@ -102,14 +116,45 @@
     height: 20px;
 
     :global(svg) {
-      height: 24px;
-      width: 24px;
+      height: 32px;
+      width: 32px;
     }
+
+    &:hover {
+      color: var(--cardinal-red-light);
+    }
+  }
+
+  .catalog-link {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    &:hover {
+      color: var(--cardinal-red-light);
+
+      .info-i {
+        color: var(--cardinal-red-light);
+      }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      bottom: -15px;
+      left: -15px;
+      right: -15px;
+    }
+  }
+  .catalog-link .info-i {
+    color: var(--primary-accent);
+    font-weight: bold;
   }
 
   .icons-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    margin-left: 0.75rem;
   }
 
   /************************/
@@ -409,7 +454,9 @@
 
   const setActiveFacet = (facet) =>
     (activeFacet = facet === activeFacet ? undefined : facet);
-  const facets = [...new Set(catalog.map((item) => item.type))];
+  const facets = Array.from([...new Set(catalog.map((item) => item.type))])
+    .sort()
+    .reverse();
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: (activeFacet, itemFilter());
@@ -418,49 +465,54 @@
 </script>
 
 <div id="app">
-  <div class="search-box">
-    <label for="searchbox">SEARCH:</label>
-    <input
-      role="textbox"
-      id="searchbox"
-      tabindex="0"
-      class="input"
-      spellcheck="false"
-      contenteditable="true"
-      aria-label="Search"
-      aria-multiline="false"
-      on:input={(e) => prepSearchParts(e.target.value)}
-    />
-  </div>
-  <!-- search-box -->
-  <div class="facets">
-    <div id="facets-label" class="facet-heading">ROLL TYPE:</div>
-    {#if facets}
-      <ul role="group" aria-labelledby="facets-label">
-        {#each facets as facet}
-          <li>
-            <button
-              aria-current={facet === activeFacet ? "true" : null}
-              on:click={() => {
-                setActiveFacet(facet);
-              }}
-              on:keypress={(event) => {
-                if (event.code === "Enter") {
+  <div class="search-controls">
+    <div class="search-box">
+      <label for="searchbox">SEARCH:</label>
+      <input
+        role="textbox"
+        id="searchbox"
+        tabindex="0"
+        size="25"
+        class="input"
+        spellcheck="false"
+        contenteditable="true"
+        aria-label="Search"
+        aria-multiline="false"
+        on:input={(e) => prepSearchParts(e.target.value)}
+      />
+    </div>
+    <!-- search-box -->
+    <div class="facets">
+      <div id="facets-label" class="facet-heading">ROLL TYPE:</div>
+      {#if facets}
+        <ul role="group" aria-labelledby="facets-label">
+          {#each facets as facet}
+            <li>
+              <button
+                aria-current={facet === activeFacet ? "true" : null}
+                on:click={() => {
                   setActiveFacet(facet);
-                }
-              }}
-            >
-              {facet}
-            </button>
-          </li>
-        {/each}
-      </ul>
-    {/if}
+                }}
+                on:keypress={(event) => {
+                  if (event.code === "Enter") {
+                    setActiveFacet(facet);
+                  }
+                }}
+              >
+                {facet}
+              </button>
+            </li>
+          {/each}
+        </ul>
+      {/if}
+    </div>
+    <!-- facets -->
     <span aria-live="assertive"
       >Matched: {filteredListItems?.length}&nbsp;/&nbsp;{catalog.length}</span
     >
+    <!-- search-controls -->
   </div>
-  <!-- facets -->
+
   <div class="table-wrapper">
     <table
       aria-label="Search/Browse Results: Piano Rolls"
@@ -478,7 +530,7 @@
             class:sortedDesc={sortOrder === "publisher-desc"}
           >
             <button on:click={() => sortItems("publisher")}>
-              Publisher / Label
+              Publisher / Number
             </button>
           </th>
           <th
@@ -517,20 +569,24 @@
             ><div class="icons-row">
               <div>Play</div>
               <div>Perform</div>
-              <div>MIDI</div>
-              <div>Image</div>
             </div></th
           >
         </tr>
       </thead>
       <tbody>
         {#each filteredAndPagedItems as item}
-          {@const imageLink = `https://stacks.stanford.edu/file/${item.druid}/${item.image_url.split("/").slice(-2, -1)[0]}.jp2`}
           <tr>
             <th scope="row">
-              {@html searchParts.length
-                ? markupMatches(item.publisher)
-                : item.publisher}
+              <a
+                class="catalog-link"
+                href="https://searchworks.stanford.edu/view/{item.catkey}"
+                title="Open catalog record for roll {item.title}"
+                target="_blank"
+              >
+                {@html searchParts.length
+                  ? markupMatches(item.publisher)
+                  : item.publisher} <span class="info-i">𝓲</span>
+              </a>
             </th>
             <td>
               {@html searchParts.length ? markupMatches(item.work) : item.work}
@@ -565,31 +621,8 @@
                     <Icon name="piano" aria-label="Perform roll {item.title}" />
                   </a>
                 </div>
-                <div>
-                  <a
-                    href="/midi/{item.druid}.mid"
-                    title="Download MIDI for roll {item.title}"
-                  >
-                    <Icon
-                      name="midi"
-                      aria-label="Download MIDI for roll {item.title}"
-                    />
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="https://purl.stanford.edu/{item.druid}"
-                    title="Open repository view for {item.title}"
-                    target="_blank"
-                  >
-                    <Icon
-                      name="roll-image"
-                      aria-label="Open repository view for {item.title}"
-                    />
-                  </a>
-                </div>
-              </div>
-            </td>
+              </div></td
+            >
           </tr>
         {/each}
       </tbody>

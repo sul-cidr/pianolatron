@@ -5,7 +5,7 @@ title: About the Pianolatron
 
 # About the Pianolatron
 
-The Pianolatron is the outcome of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries' Player Piano Program. The technical implementation of the Pianolatron app, led by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open source software community.
+The Pianolatron is the outcome of a large-scale collaborative partnership between faculty investigators, students and staff affiliated with the Stanford University Department of Music and the Stanford University Libraries. The technical implementation of the Pianolatron app, led by the developer team of the Stanford Center for Interdisciplinary Digital Research (CIDR), now part of Research Data Services in the Libraries, benefited greatly from contributions by other project participants, the worldwide network of player piano scholars and enthusiasts, and the open-source software community.
 
 ### Principal Investigators
 

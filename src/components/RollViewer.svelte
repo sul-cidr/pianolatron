@@ -447,6 +447,7 @@
           const rectYMin = parseInt(rect.getAttribute("y"));
           const rectYMax = rectYMin + parseInt(rect.getAttribute("height"));
           if (
+            $userSettings.keyboardFocusHoles &&
             rectXMin >= leftImagePixel &&
             rectXMax <= rightImagePixel &&
             rectYMin >= firstImagePixel &&
@@ -768,7 +769,8 @@
         initializeMark(hole);
       });
 
-      rect.addEventListener("focus", () => {
+      rect.addEventListener("focus", (e) => {
+        if (!$userSettings.keyboardFocusHoles) return;
         if (viewport.getZoom() < 1) adjustZoom("resetZoom");
         const holeAriaLabel = holeDescription;
         rect.setAttribute("aria-label", holeAriaLabel);
@@ -1337,6 +1339,7 @@
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
+  $: ($userSettings.keyboardFocusHoles, updateVisibleOverlays());
   $: ($playbackProgressStart, updateSelection());
   $: ($playbackProgressEnd, updateSelection());
   $: updateViewportFromTick($throttledTick);
@@ -1399,7 +1402,9 @@
     {#if showScaleBar}
       <RollViewerScaleBar {ppi} />
     {/if}
-    <SkipLink targetAnchor="roll-skip-target" skipText="Skip roll image" />
+    {#if $userSettings.keyboardFocusHoles}
+      <SkipLink targetAnchor="roll-skip-target" skipText="Skip roll image" />
+    {/if}
   {/if}
 
   <canvas id="active-note-highlight-canvas" bind:this={highlightCanvas} />
@@ -1408,9 +1413,11 @@
     <LatencyWarning {closeLatencyWarning} />
   {/if}
 </div>
-<SkipLink
-  targetAnchor="active-note-highlight-canvas"
-  skipText="Skip back to start of roll image"
-/>
+{#if $userSettings.keyboardFocusHoles}
+  <SkipLink
+    targetAnchor="active-note-highlight-canvas"
+    skipText="Skip back to start of roll image"
+  />
+{/if}
 
 <div id="roll-skip-target" />

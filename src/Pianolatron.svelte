@@ -26,13 +26,17 @@
     }
   }
 
-  .listen-app {
-    height: calc(100vh - 135px);
-  }
+  .listen-app,
   .perform-app {
-    height: 100vh;
+    height: calc(100vh - 135px);
+    transition: height 0.3s ease;
   }
   .embed-app {
+    height: 100vh;
+  }
+
+  :global(body.header-hidden) .listen-app,
+  :global(body.header-hidden) .perform-app {
     height: 100vh;
   }
 
@@ -489,6 +493,10 @@
     }
     appLoaded = true;
   }
+  $: document.body.classList.toggle(
+    "header-hidden",
+    $userSettings.headerHidden,
+  );
   $: appClass = `${$appMode}-app`;
 </script>
 
@@ -497,10 +505,7 @@
   <div>
     <FlexCollapsible id="left-sidebar" width="20vw" position="left">
       <h2>Roll Details</h2>
-      {#if $appMode === "perform"}<RollSelector
-          bind:currentRoll
-          {rollListItems}
-        />{/if}
+      <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
         <RollDetails {metadata} />
         {#if !$holesIntervalTree.count}

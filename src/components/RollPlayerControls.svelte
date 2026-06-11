@@ -1,12 +1,45 @@
-<style>
+<style lang="scss">
   .controls-container {
     display: flex;
     width: 100%;
     justify-content: space-between;
+
+    &:hover {
+      .header-show-hide-button {
+        opacity: 1;
+      }
+    }
   }
 
   .mode-switch-container {
     padding: 2px;
+  }
+
+  .right-side-buttons {
+    display: flex;
+    gap: 5px;
+  }
+
+  .header-show-hide-button {
+    position: relative;
+    padding: 0;
+    height: fit-content;
+    border-radius: 0 0 4px 4px;
+    background: rgba(0, 0, 0, 0.4);
+
+    &:not(.hidden) {
+      bottom: 0;
+      opacity: 0;
+    }
+
+    &.hidden {
+      visibility: visible;
+    }
+
+    &:hover,
+    &:focus-within {
+      opacity: 1;
+    }
   }
 
   .tempo-control-container {
@@ -43,6 +76,7 @@
     rollMetadata,
     tempoCoefficient,
     rollBeingBookmarked,
+    userSettings,
   } from "../stores";
   import { defaultControlsConfig as controlsConfig } from "../config/controls-config";
   import SliderControl from "../ui-components/SliderControl.svelte";
@@ -52,6 +86,8 @@
   export let playPauseApp;
   export let toggleRecording;
   export let bookmarkRoll;
+
+  let headerIconName = `panel-top-${$userSettings.headerHidden ? "open" : "collapse"}`;
 
   const togglePlayPause = async () => {
     playPauseApp();
@@ -89,6 +125,11 @@
   };
 
   const togglePlayRepeat = () => playRepeat.set(!$playRepeat);
+
+  const toggleHeader = () => {
+    $userSettings.headerHidden = !$userSettings.headerHidden;
+    headerIconName = `panel-top-${$userSettings.headerHidden ? "open" : "collapse"}`;
+  };
 
   $: startMarked = $playbackProgressStart >= 0;
   $: endMarked = $playbackProgressEnd < 1;
@@ -258,19 +299,32 @@
       width="32"
     />
   </div>
-  {#if $appMode === "listen"}
-    <div class="tempo-control-container">
-      <SliderControl
-        bind:value={$tempoCoefficient}
-        min={controlsConfig.tempo.min}
-        max={controlsConfig.tempo.max}
-        step={controlsConfig.tempo.delta}
-        name="tempo"
-      >
-        <svelte:fragment slot="label">Tempo:</svelte:fragment>
-      </SliderControl>
+  <div class="right-side-buttons">
+    <div class="header-show-hide-button">
+      {#key headerIconName}
+        <IconButton
+          class="always-visible"
+          on:click={toggleHeader}
+          iconName={headerIconName}
+          expanded={!$userSettings.headerHidden}
+          label={`${$userSettings.headerHidden ? "Show" : "Hide"} Page Header`}
+          height="32"
+          width="32"
+        />
+      {/key}
     </div>
-  {:else}
-    <div />
-  {/if}
+    {#if $appMode === "listen"}
+      <div class="tempo-control-container">
+        <SliderControl
+          bind:value={$tempoCoefficient}
+          min={controlsConfig.tempo.min}
+          max={controlsConfig.tempo.max}
+          step={controlsConfig.tempo.delta}
+          name="tempo"
+        >
+          <svelte:fragment slot="label">Tempo:</svelte:fragment>
+        </SliderControl>
+      </div>
+    {/if}
+  </div>
 </div>

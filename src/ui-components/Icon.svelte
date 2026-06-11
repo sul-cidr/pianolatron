@@ -88,6 +88,21 @@
         <path style="stroke-width:1.5" d="m8.5 8-4 4 4 4m7-8 4 4-4 4"/>
       `,
     },
+    "full-screen": {
+      svg: `
+        <rect x="1" y="1" width="22" height="22" stroke-width="1"/>
+        <line x1="4" y1="4" x2="20" y2="20" stroke-width="1.5"/>
+        <line x1="4" y1="20" x2="20" y2="4" stroke-width="1.5"/>
+        <line x1="3.5" y1="3.5" x2="7" y2="3.5" stroke-width="1"/>
+        <line x1="3.5" y1="3.5" x2="3.5" y2="7" stroke-width="1"/>
+        <line x1="20.5" y1="20.5" x2="16.5" y2="20.5" stroke-width="1"/>
+        <line x1="20.5" y1="20.5" x2="20.5" y2="16.5" stroke-width="1"/>
+        <line x1="20.5" y1="3.5" x2="20.5" y2="7" stroke-width="1"/>
+        <line x1="20.5" y1="3.5" x2="16.5" y2="3.5" stroke-width="1"/>
+        <line x1="3.5" y1="20.5" x2="7" y2="20.5" stroke-width="1"/>
+        <line x1="3.5" y1="20.5" x2="3.5" y2="16.5" stroke-width="1"/>
+      `,
+    },
     edit: {
       svg: `
         <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
@@ -203,6 +218,22 @@
         <line x1="20" y1="12" x2="16" y2="16" />
         <line x1="20" y1="12" x2="16" y2="8" />
         <line x1="4" y1="4" x2="4" y2="20" />
+      `,
+    },
+    "panel-top-open": {
+      svg: `
+        <line x1="4" y1="4" x2="20" y2="4" />
+        <line x1="12" y1="10" x2="12" y2="22" />
+        <line x1="12" y1="22" x2="8" y2="18" />
+        <line x1="12" y1="22" x2="16" y2="18" />
+      `,
+    },
+    "panel-top-collapse": {
+      svg: `
+        <line x1="4" y1="22" x2="20" y2="22" />
+        <line x1="12" y1="16" x2="12" y2="2" />
+        <line x1="12" y1="2" x2="8" y2="6" />
+        <line x1="12" y1="2" x2="16" y2="6" />
       `,
     },
 

@@ -125,6 +125,10 @@
       Show Roll Viewer Scale Bar:
       <input type="checkbox" bind:checked={$userSettings.showRuler} />
     </label>
+    <label class="setting">
+      Holes Get Keyboard Focus:
+      <input type="checkbox" bind:checked={$userSettings.keyboardFocusHoles} />
+    </label>
   </fieldset>
 
   <fieldset>

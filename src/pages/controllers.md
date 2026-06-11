@@ -23,25 +23,17 @@ Please note that the mappings given below may not be available or consistent for
 
 ![Diagram of how the Pianolatron's playback functions map to gamepad controller buttons, triggers and sticks](../images/gamepad_mappings.png)
 
-- **Left Trigger:** Decrease tempo (pressure sensitive)
-- **Right Trigger:** Increase tempo (pressure sensitive)
-- **Left Bumper:** Soft pedal
-- **Right Bumper:** Sustain pedal
-- **Left Stick:** Bass volume (up/down - pressure sensitive)
-- **Right Stick:** Treble volume (up/down - pressure sensitive)
-- **Y Button:** Zoom in on roll image
-- **X Button:** Zoom out on roll image
-- **D-Pad Up:** Pan roll image up
-- **D-Pad Right:** Pan roll image right
-- **D-Pad Left:** Pan roll image left
-- **D-Pad Down:** Pan roll image down
-- **A Button:** Play/pause roll
-- **B Button:** Rewind roll
-- **Left Stick Button:** Accent (entire keyboard)
-- **Right Stick Button:** Accent (entire keyboard)
-- **Back Button:** Fit roll image to viewer
-- **Start Button:** Get bookmark link
-
+| Left-side buttons | Right-side buttons |
+| :--- | :--- |
+| **Left Trigger:** Decrease tempo (pressure sensitive) | **Right Trigger:** Increase tempo (pressure sensitive) |
+| **Left Bumper:** Soft pedal | **Right Bumper:** Sustain pedal |
+| **Left Stick:** Bass volume (up/down - pressure sensitive) | **Right Stick:** Treble volume (up/down - pressure sensitive) |
+| **D-Pad Up:** Pan roll image up | **Y Button:** Zoom in on roll image |
+| **D-Pad Right:** Pan roll image right | **X Button:** Zoom out on roll image |
+| **D-Pad Left:** Pan roll image left | **A Button:** Play/pause roll |
+| **D-Pad Down:** Pan roll image down | **B Button:** Rewind roll |
+| **Left Stick Button:** Accent (entire keyboard) | **Right Stick Button:** Accent (entire keyboard) |
+| **Back Button:** Fit roll image to viewer | **Start Button:** Get bookmark link |
 
 ## MIDI input devices
 
