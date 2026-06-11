@@ -151,6 +151,7 @@ export const userSettings = createPersistedStore("userSettings", {
   useWebMidi: false,
   showRuler: false,
   keyboardFocusHoles: false,
+  headerHidden: false,
 });
 
 // Browser State
