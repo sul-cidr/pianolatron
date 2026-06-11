@@ -1,6 +1,6 @@
 <style lang="scss">
   .setting {
-    margin: 1em 0;
+    margin-top: 1em;
   }
 
   .list-header {
