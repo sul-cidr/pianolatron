@@ -2,6 +2,8 @@
   .filtered-select {
     height: 2.25em;
     position: relative;
+    border: 2px solid rgba(black, 0.4);
+    border-radius: 0.25em;
     width: 100%;
 
     &::after {

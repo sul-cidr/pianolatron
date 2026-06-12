@@ -40,6 +40,10 @@
       &.grey {
         background: darkslategrey;
       }
+
+      &.polar {
+        background: white;
+      }
     }
   }
 
@@ -98,7 +102,7 @@
   } from "../lib/utils";
   import { tooltip } from "../lib/tooltip-action";
 
-  const themes = ["cardinal", "blue", "green", "grey"];
+  const themes = ["cardinal", "blue", "green", "grey", "polar"];
 
   $: document.documentElement.setAttribute("data-theme", $userSettings.theme);
 </script>
