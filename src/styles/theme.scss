@@ -16,7 +16,7 @@
   --primary-accent-semiopaque: #{color.adjust(steelblue, $alpha: -0.5)};
 }
 
-[data-theme="white"] {
+[data-theme="polar"] {
   --background-color: white;
   --background-darker: white;
   --primary-accent: #006bb8;
