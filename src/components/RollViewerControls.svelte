@@ -2,6 +2,7 @@
   .overlay-buttons {
     opacity: 0;
     transition: opacity 0.3s ease;
+    z-index: 1;
 
     &:hover,
     &:focus-within {
