@@ -53,6 +53,7 @@ The Pianolatron makes significant use of modules from the following open-source 
 - [OpenSeadragon](https://github.com/openseadragon/openseadragon), principal developer: Ian Gilman
 - [canvasSpliner](https://github.com/jonathanlurie/canvasSpliner), principal developer: Jonathan Lurie
 - [node-interval-tree](https://github.com/ShieldBattery/node-interval-tree), principal developer: Marko Žarković
+- [pkspell](https://github.com/fosfrancesco/pkspell): Francesco Foscarin, Nicolas Audebert, and Raphaël Fournier S'niehotta, "PKSpell: Data-Driven Pitch Spelling and Key Signature Estimation," in _Proceedings of the International Society for Music Information Retrieval Conference (ISMIR)_, 2021.
 
 ## Graphics Elements
 
