@@ -34,6 +34,10 @@
       font-size: 1.6em;
       display: block;
     }
+    &.medium {
+      font-size: 1.4em;
+      display: block;
+    }
   }
 
   dd:not(:has(a)) {
@@ -53,15 +57,15 @@
   li {
     line-height: 1rem;
     padding: 0 0 10px;
-  }
 
-  li a {
-    font-size: 1rem;
-    text-decoration: none;
-  }
+    a {
+      font-size: 1rem;
+      text-decoration: none;
 
-  li a:hover {
-    text-decoration: underline;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .download-links {
@@ -70,6 +74,10 @@
     gap: 1.5rem;
     padding-left: 0.5rem;
     flex-wrap: wrap;
+
+    a {
+      text-transform: capitalize;
+    }
   }
 
   .download-links a {
@@ -99,9 +107,19 @@
 
   export let metadata;
 
-  export const similarWorksByPerformer = catalog.filter(
-    (w) => w.performer === metadata.performer && w.druid !== metadata.druid,
-  );
+  // Allow values from the catalog to override the matching keys in the roll data
+  const catalogRecord = catalog.find((r) => r.druid === metadata.druid);
+  for (const [key, value] of Object.entries(metadata)) {
+    if (catalogRecord[key] !== undefined && catalogRecord[key] !== value) {
+      metadata[key] = catalogRecord[key];
+    }
+  }
+
+  const similarWorksByPerformer = metadata.performer
+    ? catalog.filter(
+        (w) => w.performer === metadata.performer && w.druid !== metadata.druid,
+      )
+    : [];
 
   const imageLink = `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.jp2`;
   const unavailable = "<span>Unavailable</span>";
@@ -159,13 +177,13 @@
       <a
         href={metadata.PURL}
         title="Record in the Stanford Digital Repository for roll {metadata.title}"
-        target="_blank">ARCHIVE</a
+        target="_blank">Archive</a
       >
       |
       <a
         href="https://searchworks.stanford.edu/view/{metadata.catkey}"
         title="Stanford library catalog entry for roll {metadata.title}"
-        target="_blank">CATALOG</a
+        target="_blank">Catalog</a
       >
     </div>
   </dd>
@@ -200,7 +218,7 @@
     </div>
   </dd>
   <dt>Roll Type</dt>
-  <dd class="large">
+  <dd class="medium">
     {#if metadata.type === "welte-red"}
       T-100 “Red” Welte
     {:else if metadata.type === "welte-green"}
@@ -219,4 +237,26 @@
       88-note Pianola
     {/if}
   </dd>
+  {#if metadata.recording_date}
+    <dt>Recorded</dt>
+    <dd class="medium">
+      {metadata.recording_date
+        .replace("Recorded", "")
+        .replace(/[-/\\^$*+?.()|[\]{}]/g, "")}
+    </dd>
+  {/if}
+  {#if metadata.publish_date || metadata.publish_place}
+    <dt>Published</dt>
+    <dd class="medium">
+      {#if metadata.publish_date}
+        {metadata.publish_date.replace(/[\[\]]/g, "")}
+      {/if}
+      {#if metadata.publish_place}
+        {#if metadata.publish_date}
+          -
+        {/if}
+        {metadata.publish_place.replace(/[\[\]]/g, "")}
+      {/if}
+    </dd>
+  {/if}
 </dl>
