@@ -188,7 +188,7 @@
       disabled={false}
       on:click={togglePlayRepeat}
       iconName="replay"
-      label="Repeat"
+      label={$playRepeat ? "Disable Repeat" : "Enable Repeat"}
       height="32"
       width="32"
     />
