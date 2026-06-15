@@ -166,16 +166,6 @@
       .catch(() => {});
   };
 
-  const skipToTick = (tick) => {
-    if (tick < 0) pausePlayback();
-    $currentTick = tick;
-    throttledTick.set(tick);
-    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
-  };
-
-  const skipToPercentage = (percentage = 0) =>
-    skipToTick(Math.floor(midiSamplePlayer.totalTicks * percentage));
-
   const toggleSustain = (onOff, fromMidi) => {
     if (onOff) {
       piano.pedalDown();
@@ -362,9 +352,8 @@
     pausePlayback();
     if ($playRepeat) {
       // the midiplayer resets some things when it hits endOfFile.
-      // Let it reset, then go to the start point and restart.
+      // Let it reset, then restart.
       await sweep();
-      skipToPercentage($playbackProgressStart);
       startPlayback();
     }
   };
