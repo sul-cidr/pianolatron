@@ -198,6 +198,14 @@
         $rollMetadata.ROLL_TYPE,
       );
 
+      // Use the specified note spelling from the roll .json file, if available
+      if ($transposeHalfStep === 0 && hole.s !== undefined) {
+        const octave = holeLabel.match(/\d/)[0];
+        // The actual ♯ symbol looks weird when rendered in a hole label
+        const noteName = hole.s.replace("-", "♭").replace("+", "♯");
+        holeLabel = `${noteName}${octave}`;
+      }
+
       if ($userSettings.showNoteVelocities) {
         velocity = Math.round(
           $playExpressionsOnOff ? (hole.v ?? 64) : 64,
@@ -742,8 +750,11 @@
 
       const [holeLabel, velocity] = getHoleDescription(hole);
       const holeName = holeLabel
-        .replace("A#", "A-sharp")
-        .replace("#", " sharp")
+        .replace("♯", " sharp ")
+        .replace("A♭", "A-flat ")
+        .replace("♭", " flat ")
+        .replace("A#", "A-sharp ")
+        .replace("#", " sharp ")
         .replace("_", " ")
         .replace("sust", "sustain");
       const holeColumn =
@@ -755,7 +766,7 @@
           : ($firstHolePx - offsetY) / $firstHolePx) * 100,
       );
       const holeDescription = `${hole.type} hole ${holeName} in column \
-      ${holeColumn} at ${holeProgress}% from roll end length ${holeLength} inches\
+      ${holeColumn} at ${holeProgress}% from roll start length ${holeLength} inches\
       ${$playExpressionsOnOff && velocity ? `velocity ${velocity}` : ""}`;
 
       const initializeMark = (hole) => {
