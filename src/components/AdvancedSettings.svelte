@@ -100,10 +100,13 @@
 
   const themes = ["cardinal", "blue", "green", "grey"];
 
+  $: $userSettings.highlightEnabledHoles =
+    $userSettings.highlightEnabledHoles || $userSettings.hideRollImage;
+
   $: document.documentElement.setAttribute("data-theme", $userSettings.theme);
 </script>
 
-<div id="settings-panel">
+<div>
   <fieldset>
     <legend>Visualization Settings</legend>
     <label>
@@ -125,9 +128,17 @@
       Show Roll Viewer Scale Bar:
       <input type="checkbox" bind:checked={$userSettings.showRuler} />
     </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Roll Settings</legend>
     <label class="setting">
       Holes Get Keyboard Focus:
       <input type="checkbox" bind:checked={$userSettings.keyboardFocusHoles} />
+    </label>
+    <label class="setting">
+      Hide Image (Reloads Roll):
+      <input type="checkbox" bind:checked={$userSettings.hideRollImage} />
     </label>
   </fieldset>
 

@@ -538,14 +538,16 @@
             skipText="Skip to pedal and accent controls"
           />
         {/if}
-        <RollViewer
-          bind:this={rollViewer}
-          bind:rollImageReady
-          imageUrl={currentRoll.image_url}
-          {skipToTick}
-          {progressPercentageToTick}
-          showScaleBar={$appMode === "perform" && $userSettings.showRuler}
-        />
+        {#key $userSettings.hideRollImage}
+          <RollViewer
+            bind:this={rollViewer}
+            bind:rollImageReady
+            imageUrl={currentRoll.image_url}
+            {skipToTick}
+            {progressPercentageToTick}
+            showScaleBar={$appMode === "perform" && $userSettings.showRuler}
+          />
+        {/key}
       {/if}
       {#if $userSettings.showKeyboard && $userSettings.overlayKeyboard}
         <div id="keyboard-overlay" transition:fade>

@@ -1126,6 +1126,16 @@
     // Make sure the roll metadata is available before proceeding
     if (!$rollMetadata) return;
 
+    if ($userSettings.hideRollImage) {
+      const canvas = document.createElement("canvas");
+      canvas.width = $imageWidth;
+      canvas.height = $imageWidth;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#00000000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      imageUrl = canvas.toDataURL("image/png");
+    }
+
     openSeadragon = OpenSeadragon({
       id: "roll-viewer",
       showNavigationControl: false,
@@ -1147,6 +1157,10 @@
       navigatorDisplayRegionColor: "transparent",
       navigatorMaintainSizeRatio: true,
       tabIndex: -1, // omit from tab order
+      tileSources: {
+        type: "image",
+        url: imageUrl,
+      },
     });
 
     const { navigator } = openSeadragon;
@@ -1216,11 +1230,15 @@
     // on open, configure an event listener for when the images arrive
     //  from the SDR
     openSeadragon.addHandler("open", () => {
-      const tiledImage = viewport.viewer.world.getItemAt(0);
-      tiledImage.addOnceHandler(
-        "fully-loaded-change",
-        () => (rollImageReady = true),
-      );
+      if ($userSettings.hideRollImage) {
+        rollImageReady = true;
+      } else {
+        const tiledImage = viewport.viewer.world.getItemAt(0);
+        tiledImage.addOnceHandler(
+          "fully-loaded-change",
+          () => (rollImageReady = true),
+        );
+      }
     });
 
     // create the holes overlay SVG and "rewind" to the beginning of the
@@ -1308,7 +1326,7 @@
     _updateViewportHandler = () => drawActiveHighlights($throttledTick);
     openSeadragon.addHandler("update-viewport", _updateViewportHandler);
 
-    openSeadragon.open(imageUrl);
+    if (!$userSettings.hideRollImage) openSeadragon.open(imageUrl);
 
     // Initialize highlight canvas context and size for active note drawing
     const resizeHighlightCanvas = () => {

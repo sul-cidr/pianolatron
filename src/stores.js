@@ -152,6 +152,7 @@ export const userSettings = createPersistedStore("userSettings", {
   showRuler: false,
   keyboardFocusHoles: false,
   headerHidden: false,
+  hideRollImage: false,
 });
 
 // Browser State
