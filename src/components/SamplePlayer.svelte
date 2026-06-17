@@ -347,7 +347,8 @@
   };
 
   const startPlayback = () => {
-    if ($currentTick < 0) resetPlayback();
+    if ($currentTick < 0 || $currentTick >= midiSamplePlayer.totalTicks)
+      resetPlayback();
     updatePlayer();
     midiSamplePlayer.play();
     $isPlaying = true;

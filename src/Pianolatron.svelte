@@ -169,7 +169,8 @@
 
   const skipToTick = (tick) => {
     const targetTick = Math.round(tick);
-    if (targetTick < 0) pausePlayback();
+    if (targetTick < 0 || targetTick >= midiSamplePlayer.totalTicks)
+      pausePlayback();
     $currentTick = targetTick;
     throttledTick.set(targetTick);
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
