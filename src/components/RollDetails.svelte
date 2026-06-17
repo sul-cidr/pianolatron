@@ -108,12 +108,12 @@
   export let metadata;
 
   // Allow values from the catalog to override the matching keys in the roll data
-  const catalogRecord = catalog.find((r) => r.druid === metadata.druid);
-  for (const [key, value] of Object.entries(metadata)) {
-    if (catalogRecord[key] !== undefined && catalogRecord[key] !== value) {
-      metadata[key] = catalogRecord[key];
-    }
-  }
+  // const catalogRecord = catalog.find((r) => r.druid === metadata.druid);
+  // for (const [key, value] of Object.entries(metadata)) {
+  //   if (catalogRecord[key] !== undefined && catalogRecord[key] !== value) {
+  //     metadata[key] = catalogRecord[key];
+  //   }
+  // }
 
   const similarWorksByPerformer = metadata.performer
     ? catalog.filter(
