@@ -11,7 +11,7 @@ export const links = [
 ---
 
 <header role="banner">
-  <nav>
+  <nav aria-label="Document Navigation">
     {
       links.map(({ label, url }) => (
         <a class={pathname === base + url ? "active" : null} href={base + url}>

@@ -32,4 +32,6 @@
   export let skipText;
 </script>
 
-<a href="#{targetAnchor}">{skipText}</a>
+<nav aria-label="Skip link">
+  <a href="#{targetAnchor}">{skipText}</a>
+</nav>
