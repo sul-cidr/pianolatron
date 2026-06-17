@@ -18,7 +18,7 @@ If you notice that the audio and video are not smooth and synchronized, find you
 - Close other browser tabs, or shut down the browser entirely and re-open it with only the Pianolatron open.
 - Open the Pianolatron in a "private" or "incognito" window (usually done via the browser's "File" menu).
 - Quit other programs on the system that may be using considerable processing, memory or network resources, or reboot the system.
-- In the [Perform](/perform/) view, select the Audio Settings menu in the right-hand panel and reduce the Sample Count value, possibly to 4 or 2 (this reduces the memory requirements of the Pianolatron, at the cost of lower audio fidelity).
+- In the Perform view, select the Audio Settings menu in the right-hand panel and reduce the Sample Count value, possibly to 4 or 2 (this reduces the memory requirements of the Pianolatron, at the cost of lower audio fidelity).
 
 The "Loading resources..." animation may appear for a long time when the Pianolatron is first opened as the browser downloads the string sound samples necessary to emulate a piano. These samples then tend to be stored locally until the browser's file cache is cleared, resulting in faster subsequent load times. The images for newly selected piano rolls must, however, always be loaded directly from the Stanford Digital Repository, so the Pianolatron requires a reliable network connection.
 

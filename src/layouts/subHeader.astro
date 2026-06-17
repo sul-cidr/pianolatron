@@ -1,3 +1,7 @@
+---
+const { tourClass } = Astro.props;
+---
+
 <header class="masthead image-masthead" role="banner">
   <span
     class="background-container"
@@ -26,6 +30,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/howto/">Using Pianolatron</a>
+        </li>
+        <li class=`nav-item nav-item-right ${tourClass}`>
+          <button class="link-button" id="tour-button">Tour</button>
         </li>
       </ul>
     </div>
@@ -112,7 +119,7 @@
     margin: 0;
     list-style: none;
   }
-  .navbar-nav li a {
+  .navbar-nav li a,button {
     color: #ffffff;
     text-decoration: none;
     font-family: SourceSans3, sans-serif;
@@ -132,5 +139,21 @@
   }
   .nav-item-right {
     margin: 0 0 0 auto;
+  }
+  .link-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline;
+  }
+  .link-button:hover {
+    text-decoration: underline;
+  }
+  .tour-disabled {
+    pointer-events: none;
+    visibility: hidden;
   }
 </style>

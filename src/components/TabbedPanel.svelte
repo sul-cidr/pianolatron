@@ -78,7 +78,7 @@
   let selectedPanel = "controls";
 </script>
 
-<PanelSwitcher bind:selectedPanel {panels} />
+<PanelSwitcher bind:selectedPanel {panels} class="right-panel-menus" />
 <div>
   <svelte:component
     this={panels[selectedPanel].component}

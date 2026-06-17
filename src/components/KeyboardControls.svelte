@@ -32,7 +32,12 @@
   export let outside = false;
 </script>
 
-<div class="overlay-buttons" class:outside transition:fade|local>
+<div
+  id="piano-toggle"
+  class="overlay-buttons"
+  class:outside
+  transition:fade|local
+>
   <IconButton
     class="always-visible"
     on:click={() => ($userSettings.showKeyboard = !$userSettings.showKeyboard)}
