@@ -1230,6 +1230,16 @@
     // on open, configure an event listener for when the images arrive
     //  from the SDR
     openSeadragon.addHandler("open", () => {
+      const osdCanvas = viewport.viewer.element.querySelector(
+        ".openseadragon-canvas",
+      );
+
+      if (osdCanvas) {
+        osdCanvas.tabIndex = 0;
+        osdCanvas.setAttribute("aria-label", "Piano Roll Image Viewer");
+        osdCanvas.setAttribute("title", "Use arrow keys to pan, +/- to zoom");
+      }
+
       if ($userSettings.hideRollImage) {
         rollImageReady = true;
       } else {
