@@ -1237,7 +1237,6 @@
       if (osdCanvas) {
         osdCanvas.tabIndex = 0;
         osdCanvas.setAttribute("aria-label", "Piano Roll Image Viewer");
-        osdCanvas.setAttribute("title", "Use arrow keys to pan, +/- to zoom");
       }
 
       if ($userSettings.hideRollImage) {
