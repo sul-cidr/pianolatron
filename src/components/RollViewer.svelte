@@ -327,7 +327,7 @@
   // Take a Y value in the image and return a Y coordinate in the Nav viewer
   //  that we can draw a line with.
   const imagePxToNavLine = (imagePx) => {
-    // below 0 means there is not selection.
+    // below 0 means there is no selection.
     if (imagePx < 0) {
       return -1;
     }
@@ -349,21 +349,9 @@
   });
 
   // Selection Overlay in the image viewer
-  // This is stored along with the partitioned SVG holes. There's only ever one
-  //  selection overlay, so it seems unnecessary to store it in its own tree.
   const updateSelectionOverlays = () => {
     if (viewport === undefined) {
       return;
-    }
-    const holesBeginPx = $scrollDownwards ? $firstHolePx : $lastHolePx;
-    const holesEndPx = $scrollDownwards ? $lastHolePx : $firstHolePx;
-
-    if (selectionSvg !== undefined) {
-      holesSvgPartitions.remove(holesBeginPx, holesEndPx, {
-        first: holesBeginPx,
-        last: holesEndPx,
-        svg: selectionSvg,
-      });
     }
 
     let startLinePx = -1;
@@ -379,26 +367,23 @@
       endLinePx = $firstHolePx + ($scrollDownwards ? endTick : -endTick);
     }
 
-    // Remove any existing lines
+    // Remove any existing overlays from the roll viewer and navigator strip
+    if (selectionSvg !== undefined) viewport.viewer.removeOverlay(selectionSvg);
     openSeadragon.navigator.clearOverlays();
-    if (navSelectionSvg !== undefined) {
-      navSelectionSvg = undefined;
-    }
+
+    // This can happen at init time
+    if (startLinePx === -1 && endLinePx === -1) return;
 
     const navBarLineConfig = [
       imagePxToNavLine(startLinePx),
       imagePxToNavLine(endLinePx),
       getSelectionConfig(true),
     ];
-
     navSelectionSvg = createSelectionOverlaySvg(...navBarLineConfig);
-    // hack: addOverlay takes an onDraw function, using it seems to help keep
-    // OSD from trying to futz with the positioning in the nav bar.
     openSeadragon.navigator.addOverlay(
       navSelectionSvg,
       OpenSeadragon.Point(0, 0),
       OpenSeadragon.Placement.TOP,
-      // (_position, _size, _el) => {},
     );
 
     const selectionConfig = getSelectionConfig();
@@ -407,11 +392,7 @@
       endLinePx,
       selectionConfig,
     );
-    holesSvgPartitions.insert(holesBeginPx, holesEndPx, {
-      first: holesBeginPx,
-      last: holesEndPx,
-      svg: selectionSvg,
-    });
+    viewport.viewer.addOverlay(selectionSvg, entireViewportRectangle);
   };
 
   const updateVisibleSvgPartitions = (svgPartitions, visiblePartitions) => {
@@ -1253,6 +1234,13 @@
     // create the holes overlay SVG and "rewind" to the beginning of the
     //  performance when the viewport updates for the first time
     openSeadragon.addOnceHandler("update-viewport", () => {
+      entireViewportRectangle = viewport.imageToViewportRectangle(
+        0,
+        0,
+        $imageWidth,
+        $imageLength,
+      );
+
       partitionHolesOverlaySvgs();
       updateSelectionOverlays();
       updateViewportFromTick(0);
@@ -1368,12 +1356,8 @@
   const closeLatencyWarning = () => ($showLatencyWarning = false);
 
   const updateSelection = () => {
-    if (openSeadragon === undefined) {
-      return;
-    }
+    if (openSeadragon === undefined) return;
     updateSelectionOverlays();
-    updateVisibleSvgPartitions();
-    updateViewportFromTick($throttledTick);
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */

@@ -36,7 +36,6 @@
     velocityCurveHigh,
     transposeHalfStep,
     playRepeat,
-    playbackProgressStart,
     latencyDetected,
     throttledTick,
     ticksPerSecond,
@@ -54,7 +53,7 @@
   let playbackStartTick;
   let playbackStartTime;
 
-  let latencyThreshold = 1000;
+  let latencyThreshold = 100;
   let latentNotes = [];
 
   // These are the MIDI controller values for these pedal events
@@ -166,16 +165,6 @@
       .catch(() => {});
   };
 
-  const skipToTick = (tick) => {
-    if (tick < 0) pausePlayback();
-    $currentTick = tick;
-    throttledTick.set(tick);
-    updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
-  };
-
-  const skipToPercentage = (percentage = 0) =>
-    skipToTick(Math.floor(midiSamplePlayer.totalTicks * percentage));
-
   const toggleSustain = (onOff, fromMidi) => {
     if (onOff) {
       piano.pedalDown();
@@ -197,42 +186,37 @@
     }
   };
 
+  // Note this is somewhat redundant with convertTicksAndTime() in
+  //  in-app-expressionizer.js
   const getElapsedTimeAtTick = (tick) => {
-    let prevTempo = null;
-    let prevTemposTick;
-
-    let thisTick = 0;
     let thisTempo = DEFAULT_TEMPO;
-
-    let elapsedTime = 0;
-    let i = 0;
+    let elapsedTime = 0.0;
+    let lastTick = 0;
+    let ticksPerSecond = 0;
+    let ticksAtLastTempo = 0;
 
     const { tempoMap } = $expressionBox;
 
-    while (tempoMap[i][0] <= tick) {
-      [thisTick, thisTempo] = tempoMap[i];
+    const intervals = Array.from(tempoMap.inOrder());
 
-      if (prevTempo === null) {
-        prevTempo = thisTempo;
-        prevTemposTick = thisTick;
-      } else {
-        if (thisTempo !== prevTempo) {
-          const thisTickPerSec =
-            (prevTempo * $tempoCoefficient * midiSamplePlayer.division) / 60.0;
-          elapsedTime += (1 / thisTickPerSec) * (thisTick - 1 - prevTemposTick);
-          prevTempo = thisTempo;
-          prevTemposTick = thisTick;
-        }
+    Object.values(intervals).every((interval) => {
+      thisTempo = interval.data;
 
-        i += 1;
-        if (i >= tempoMap.length) break;
+      ticksPerSecond =
+        (thisTempo * $tempoCoefficient * midiSamplePlayer.division) / 60.0;
+
+      if (interval.high > tick) {
+        ticksAtLastTempo = tick - lastTick;
+        elapsedTime += (ticksAtLastTempo / ticksPerSecond) * 1000;
+        return false;
       }
-    }
+      ticksAtLastTempo = parseFloat(interval.high - interval.low);
 
-    const thisTickPerSec =
-      (prevTempo * $tempoCoefficient * midiSamplePlayer.division) / 60.0;
+      elapsedTime += (ticksAtLastTempo / ticksPerSecond) * 1000;
+      lastTick = interval.high;
+      return true;
+    });
 
-    elapsedTime += (1 / thisTickPerSec) * (tick - prevTemposTick);
     return elapsedTime;
   };
 
@@ -280,6 +264,12 @@
   };
 
   const startNote = (noteNumber, velocity, noteSource, tick) => {
+    // The MIDI player is prone to regurgitating swarms of note events from
+    //  earlier in the roll when skipping ahead (due to mishandling simultaneous
+    //  note off events). But legitimate note on events also can lag the current
+    //  tick by a handful of ticks if there are multiple near simultaneous
+    //  attacks. Disregarding those from more than 100 ticks earlier seems OK.
+    if (tick < $currentTick - 100) return;
     const finalNoteNumber =
       noteSource === NoteSource.Midi
         ? noteNumber + $transposeHalfStep
@@ -314,14 +304,19 @@
           : $trebleVolumeCoefficient),
       1,
     );
+    // For note play events, check whether they're lagging the expected timings
     if (modifiedVelocity) {
       const { notesMap } = $expressionBox;
       if (notesMap.search(tick, tick).includes(noteNumber)) {
         const thisTime = Date.now();
         const elapsedTime = (thisTime - playbackStartTime) / 1000;
         const expectedElapsedTime =
-          getElapsedTimeAtTick(tick) - getElapsedTimeAtTick(playbackStartTick);
+          (getElapsedTimeAtTick(tick) -
+            getElapsedTimeAtTick(playbackStartTick)) /
+          1000;
         const elapsedTimeDiff = elapsedTime - expectedElapsedTime;
+        latencyThreshold =
+          (midiSamplePlayer.division * midiSamplePlayer.tempo) / 600;
         if (elapsedTimeDiff > 0.1) {
           latentNotes = [...latentNotes, tick];
         } else if ($latencyDetected) {
@@ -352,7 +347,8 @@
   };
 
   const startPlayback = () => {
-    if ($currentTick < 0) resetPlayback();
+    if ($currentTick < 0 || $currentTick >= midiSamplePlayer.totalTicks)
+      resetPlayback();
     updatePlayer();
     midiSamplePlayer.play();
     $isPlaying = true;
@@ -362,9 +358,8 @@
     pausePlayback();
     if ($playRepeat) {
       // the midiplayer resets some things when it hits endOfFile.
-      // Let it reset, then go to the start point and restart.
+      // Let it reset, then restart.
       await sweep();
-      skipToPercentage($playbackProgressStart);
       startPlayback();
     }
   };
@@ -394,7 +389,10 @@
 
     $ticksPerSecond = 0;
 
-    latencyThreshold = Math.floor(midiSamplePlayer.totalTicks * 0.1);
+    // If a note is lagging its expected play time by > .1s, it is added to the
+    //  list of latent notes. When 10 of these are counted within .1s, the
+    //  warning message is triggered.
+    latencyThreshold = (midiSamplePlayer.division * DEFAULT_TEMPO) / 600;
   });
 
   midiSamplePlayer.on("playing", ({ tick }) => {
@@ -460,13 +458,7 @@
     }
   };
 
-  const checkLatency = () => {
-    if (latentNotes.length > 10) {
-      $latencyDetected = true;
-    } else {
-      $latencyDetected = false;
-    }
-  };
+  const checkLatency = () => ($latencyDetected = latentNotes.length > 10);
 
   const exportInAppMIDI = () => {
     webMidi?.exportInAppMIDI();

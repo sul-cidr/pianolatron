@@ -168,9 +168,11 @@
     Math.floor(midiSamplePlayer.totalTicks * percentage);
 
   const skipToTick = (tick) => {
-    if (tick < 0) pausePlayback();
-    $currentTick = tick;
-    throttledTick.set(tick);
+    const targetTick = Math.round(tick);
+    if (targetTick < 0 || targetTick >= midiSamplePlayer.totalTicks)
+      pausePlayback();
+    $currentTick = targetTick;
+    throttledTick.set(targetTick);
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
   };
 

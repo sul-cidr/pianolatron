@@ -395,13 +395,13 @@ export default class InAppExpressionizer {
           this.stopNote(
             midiNumber,
             NoteSource.Midi,
-            `+${trackerExtensionSeconds}`,
+            `+${trackerExtensionSeconds}`, tick
           );
         } else {
           const noteVelocity = get(playExpressionsOnOff)
             ? this.noteVelocitiesMap[tick]?.[midiNumber] || velocity
             : this.defaultNoteVelocity;
-          this.startNote(midiNumber, noteVelocity, NoteSource.Midi);
+          this.startNote(midiNumber, noteVelocity, NoteSource.Midi, tick);
         }
       } else if (holeType === "pedal" && get(rollPedalingOnOff)) {
         this.handlePedal(velocity, midiNumber);
