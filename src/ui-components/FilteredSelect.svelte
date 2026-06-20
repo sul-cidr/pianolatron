@@ -53,7 +53,7 @@
     text-align: right;
     padding: 5px 15px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 15px;
 
     ul {
@@ -87,7 +87,7 @@
     max-height: calc(15 * (1rem + 10px) + 15px);
     min-width: 100%;
     overflow-y: auto;
-    padding: 10px 0;
+    padding: 1px 0;
     position: relative;
     top: 0px;
     user-select: none;
