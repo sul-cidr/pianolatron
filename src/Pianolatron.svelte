@@ -460,7 +460,7 @@
   };
 
   const showTourIfRequested = () => {
-    const listenTourSteps = [
+    const everyTourSteps = [
       {
         element: ".filtered-select",
         popover: {
@@ -489,7 +489,7 @@
         popover: {
           title: "Roll Player Controls",
           description:
-            "Use these buttons to play, pause, and rewind the roll, as well as skip forward and backward, highlight a section of the roll, get a bookmark URL, create and export recordings, and set the roll to auto-repeat.",
+            "Use these buttons to play, pause, and rewind the roll, as well as to skip forward and backward, highlight a section of the roll, get a bookmark URL, create and export MIDI and sound recordings, and set the roll to auto-repeat.",
         },
       },
       {
@@ -497,7 +497,7 @@
         popover: {
           title: "Piano Keyboard Visibility",
           description:
-            "These buttons can show, hide, and overlay the live piano keyboard visualization on the roll image.",
+            "These buttons can reveal and hide the live piano keyboard visualization, as well as overlay it on the roll image.",
         },
       },
       {
@@ -509,13 +509,23 @@
       },
     ];
 
+    const listenTourSteps = [
+      {
+        element: ".tempo-control-container",
+        popover: {
+          title: "Tempo Control",
+          description: "Use this slider to adjust the roll playback speed.",
+        },
+      },
+    ];
+
     const performTourSteps = [
       {
         element: "#viewer-metrics",
         popover: {
           title: "Playback Metrics",
           description:
-            "These values update dynamically as the roll plays. Note how the roll moves faster as it accumulates on the (virtual) takeup spool.",
+            "These values update dynamically as the roll plays. Note how the roll moves faster as it accumulates over time on the (virtual) takeup spool.",
         },
       },
       {
@@ -530,6 +540,8 @@
         element: "button[aria-label='Performance controls']",
         popover: {
           title: "Performance Controls",
+          side: "top",
+          alignt: "start",
           description:
             "This menu exposes options for modifying volume, tempo, and transposition dynamically during roll playback.",
         },
@@ -539,7 +551,7 @@
         popover: {
           title: "Advanced Settings",
           description:
-            "This extensive menu enables changing the appearance of the roll, toggling emulation settings, keyboard bindings for playback controls, and game controller settings (when connected).",
+            "This extensive menu enables changing the appearance of the roll, toggling emulation settings, remapping keyboard bindings for playback controls, and configuring game controller settings (when connected).",
         },
       },
       {
@@ -547,7 +559,7 @@
         popover: {
           title: "Audio Settings",
           description:
-            "Use this menu to tweak aspects of how the piano sounds during playback, including sample resolution and volume, reverb, and other acoustic modifications.",
+            "Use this menu to tweak aspects of how the emulated piano sounds during playback, including sample resolution and volume, reverb, and other acoustic modifications.",
         },
       },
       {
@@ -563,7 +575,7 @@
         popover: {
           title: "Expression Settings",
           description:
-            "Use this menu to choose between hearing precalculated note velocities and the advanced 'in-app expression mode', which allows for dynamic modification of all of the expression emulation parameters during playback, as well as exporting the resulting MIDI and settings files.",
+            'Use this menu to choose between hearing precalculated note velocities and the advanced "in-app expression mode," which allows for dynamic modification of the expression applicable emulation parameters during playback, as well as exporting the resulting MIDI and settings files.',
         },
       },
     ];
@@ -572,14 +584,62 @@
       showProgress: true,
       steps:
         $appMode === "listen"
-          ? listenTourSteps
-          : listenTourSteps.concat(performTourSteps),
+          ? everyTourSteps.concat(listenTourSteps)
+          : everyTourSteps.concat(performTourSteps),
       onHighlighted: (e) => {
-        // This only highlights one of the buttons, but that's enough
-        const keyboardControlsElt = document.querySelector(
-          "#keyboard > .overlay-buttons > button",
-        );
-        if (keyboardControlsElt === e) e.focus();
+        switch (e) {
+          // This only highlights one of the buttons, but that's enough
+          case document.querySelector("#keyboard > .overlay-buttons > button"):
+            e.focus();
+            break;
+          case document.querySelector("#left-sidebar"):
+            const leftSidebarDivElt = document.querySelector(
+              "#left-sidebar > div > .panel-show-hide-button ",
+            );
+            leftSidebarDivElt.setAttribute("style", "opacity: 1");
+            break;
+          case document.querySelector("#roll-viewer"):
+            const rollViewerControlsButton = document.querySelector(
+              "#roll-viewer > .overlay-buttons > button",
+            );
+            rollViewerControlsButton.focus();
+            break;
+          case document.querySelector(
+            "button[aria-label='Performance controls']",
+          ):
+            e.click();
+            break;
+          case document.querySelector("button[aria-label='Advanced settings']"):
+            e.click();
+            break;
+          case document.querySelector("button[aria-label='Audio settings']"):
+            e.click();
+            break;
+          case document.querySelector("button[aria-label='MIDI settings']"):
+            e.click();
+            break;
+          case document.querySelector(
+            "button[aria-label='Expression settings']",
+          ):
+            e.click();
+            break;
+          default:
+            break;
+        }
+      },
+      onDeselected: (e) => {
+        if (document.querySelector("#left-sidebar") === e) {
+          const leftSidebarDivElt = document.querySelector(
+            "#left-sidebar > div > .panel-show-hide-button ",
+          );
+          leftSidebarDivElt.removeAttribute("style");
+        }
+      },
+      onDestroyed: () => {
+        if ($appMode === "perform")
+          document
+            .querySelector("button[aria-label='Performance controls']")
+            .click();
       },
     });
 
