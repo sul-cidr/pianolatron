@@ -481,7 +481,7 @@
         popover: {
           title: "Roll Information",
           description:
-            "This left panel presents information and links for the current roll. It can be hidden via the slider button that appears when it's focused.",
+            "The left panel presents information and links for the current roll. It can be hidden via the arrow tab that appears when it has mouse or keyboard focus.",
         },
       },
       {
@@ -551,7 +551,7 @@
         popover: {
           title: "Advanced Settings",
           description:
-            "This extensive menu enables changing the appearance of the roll, toggling emulation settings, remapping keyboard bindings for playback controls, and configuring game controller settings (when connected).",
+            "This extensive menu enables changing the appearance of the roll, toggling emulation settings, remapping keyboard bindings for playback controls, and configuring settings for a game controller (when one is connected).",
         },
       },
       {
@@ -559,7 +559,7 @@
         popover: {
           title: "Audio Settings",
           description:
-            "Use this menu to tweak aspects of how the emulated piano sounds during playback, including sample resolution and volume, reverb, and other acoustic modifications.",
+            "Use this menu to modify aspects of how the emulated piano sounds during playback, including sample resolution and volume, reverb, and other acoustic modifications.",
         },
       },
       {
@@ -575,7 +575,7 @@
         popover: {
           title: "Expression Settings",
           description:
-            'Use this menu to choose between hearing precalculated note velocities and the advanced "in-app expression mode," which allows for dynamic modification of the expression applicable emulation parameters during playback, as well as exporting the resulting MIDI and settings files.',
+            'Use this menu to choose between hearing precalculated note velocities (via precomputed "expression MIDI") and the advanced "in-app expression mode," which allows for dynamic modification of the applicable emulation parameters during playback, as well as downloading the resulting MIDI and settings as files.',
         },
       },
     ];
