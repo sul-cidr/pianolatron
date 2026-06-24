@@ -47,9 +47,9 @@
     "number": "2543",
     "performer": "Bernick, Hans",
     "publisher": "Welte-Mignon",
-    "title": "Adam/Bernick - Si j'étais roi",
+    "title": "Adam/Bernick - Si j'étais roi: Ouverture",
     "type": "welte-red",
-    "work": "Si j'étais roi"
+    "work": "Si j'étais roi: Ouverture"
   },
   {
     "arranger": "",
@@ -99,9 +99,9 @@
     "number": "4652",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Alonso - La   Parranda",
+    "title": "Alonso - La   Parranda: Ronda de las solteras",
     "type": "88-note",
-    "work": "La   Parranda"
+    "work": "La   Parranda: Ronda de las solteras"
   },
   {
     "arranger": "",
@@ -112,9 +112,9 @@
     "number": "653",
     "performer": "",
     "publisher": "P.O.C.H.",
-    "title": "Alonso - Las   Castigadoras",
+    "title": "Alonso - Las   Castigadoras: Charlestón",
     "type": "88-note",
-    "work": "Las   Castigadoras"
+    "work": "Las   Castigadoras: Charlestón"
   },
   {
     "arranger": "",
@@ -125,9 +125,9 @@
     "number": "4566",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Alonso - Las   Castigadoras",
+    "title": "Alonso - Las   Castigadoras: Pasodoble",
     "type": "88-note",
-    "work": "Las   Castigadoras"
+    "work": "Las   Castigadoras: Pasodoble"
   },
   {
     "arranger": "",
@@ -151,9 +151,9 @@
     "number": "40076",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Alonso - Por si las moscas",
+    "title": "Alonso - Por si las moscas: Schotis",
     "type": "88-note",
-    "work": "Por si las moscas"
+    "work": "Por si las moscas: Schotis"
   },
   {
     "arranger": "",
@@ -203,9 +203,9 @@
     "number": "4155",
     "performer": "",
     "publisher": "Victoria",
-    "title": "Beethoven - Sonata op. 31, no 1",
+    "title": "Beethoven - Sonata op. 31, no 1: Rondó",
     "type": "88-note",
-    "work": "Sonata op. 31, no 1"
+    "work": "Sonata op. 31, no 1: Rondó"
   },
   {
     "arranger": "",
@@ -216,9 +216,9 @@
     "number": "4388",
     "performer": "",
     "publisher": "Victoria",
-    "title": "Beethoven - Sonata, op. 2, no 1, en fa menor",
+    "title": "Beethoven - Sonata, op. 2, no 1, en fa menor: Minuetto",
     "type": "88-note",
-    "work": "Sonata, op. 2, no 1, en fa menor"
+    "work": "Sonata, op. 2, no 1, en fa menor: Minuetto"
   },
   {
     "arranger": "",
@@ -229,22 +229,9 @@
     "number": "11070",
     "performer": "",
     "publisher": "QRS",
-    "title": "Beethoven - Symphonie, op. 92, no. 7",
+    "title": "Beethoven - Symphonie, op. 92, no. 7: 2nd movement: Allegretto",
     "type": "88-note",
-    "work": "Symphonie, op. 92, no. 7"
-  },
-  {
-    "arranger": "",
-    "catkey": "in00000113462",
-    "composer": "Beethoven, Ludwig van",
-    "druid": "ky144fd6229",
-    "image_url": "https://stacks.stanford.edu/image/iiif/ky144fd6229/ky144fd6229_0001/info.json",
-    "number": "12507",
-    "performer": "",
-    "publisher": "QRS",
-    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Eroica)",
-    "type": "88-note",
-    "work": "Symphony no. 3 in e flat, op. 55: (Eroica)"
+    "work": "Symphonie, op. 92, no. 7: 2nd movement: Allegretto"
   },
   {
     "arranger": "",
@@ -255,9 +242,22 @@
     "number": "12506",
     "performer": "",
     "publisher": "QRS",
-    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Eroica)",
+    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Eroica): 1st movement: Allegro con brio",
     "type": "88-note",
-    "work": "Symphony no. 3 in e flat, op. 55: (Eroica)"
+    "work": "Symphony no. 3 in e flat, op. 55: (Eroica): 1st movement: Allegro con brio"
+  },
+  {
+    "arranger": "",
+    "catkey": "in00000113462",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "ky144fd6229",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ky144fd6229/ky144fd6229_0001/info.json",
+    "number": "12507",
+    "performer": "",
+    "publisher": "QRS",
+    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Eroica): 2nd movement: Funeral march",
+    "type": "88-note",
+    "work": "Symphony no. 3 in e flat, op. 55: (Eroica): 2nd movement: Funeral march"
   },
   {
     "arranger": "",
@@ -268,9 +268,9 @@
     "number": "12517",
     "performer": "",
     "publisher": "QRS",
-    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Euroica)",
+    "title": "Beethoven - Symphony no. 3 in e flat, op. 55: (Euroica): 3rd movement: Scherzo",
     "type": "88-note",
-    "work": "Symphony no. 3 in e flat, op. 55: (Euroica)"
+    "work": "Symphony no. 3 in e flat, op. 55: (Euroica): 3rd movement: Scherzo"
   },
   {
     "arranger": "Liszt, Franz",
@@ -307,9 +307,9 @@
     "number": "1462",
     "performer": "Bloomfield-Zeisler, Fannie",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Bloomfield-Zeisler - Sonata op. 111, c minor",
+    "title": "Beethoven/Bloomfield-Zeisler - Sonata op. 111, c minor: 1st movement",
     "type": "welte-red",
-    "work": "Sonata op. 111, c minor"
+    "work": "Sonata op. 111, c minor: 1st movement"
   },
   {
     "arranger": "",
@@ -320,9 +320,9 @@
     "number": "1463",
     "performer": "Bloomfield-Zeisler, Fannie",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Bloomfield-Zeisler - Sonate op. 111, c-moll",
+    "title": "Beethoven/Bloomfield-Zeisler - Sonate op. 111, c-moll: II. Teil",
     "type": "welte-red",
-    "work": "Sonate op. 111, c-moll"
+    "work": "Sonate op. 111, c-moll: II. Teil"
   },
   {
     "arranger": "",
@@ -333,9 +333,9 @@
     "number": "372",
     "performer": "Carreño, Teresa",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Carreño - Sonate c-dur, op. 53: (Waldstein)",
+    "title": "Beethoven/Carreño - Sonate c-dur, op. 53: (Waldstein): 1. Teil",
     "type": "welte-red",
-    "work": "Sonate c-dur, op. 53: (Waldstein)"
+    "work": "Sonate c-dur, op. 53: (Waldstein): 1. Teil"
   },
   {
     "arranger": "",
@@ -346,48 +346,9 @@
     "number": "373",
     "performer": "Carreño, Teresa",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Carreño - Waldstein sonata",
+    "title": "Beethoven/Carreño - Waldstein sonata: (2nd movement)",
     "type": "welte-red",
-    "work": "Waldstein sonata"
-  },
-  {
-    "arranger": "",
-    "catkey": "11064158",
-    "composer": "Beethoven, Ludwig van",
-    "druid": "dz112ky5575",
-    "image_url": "https://stacks.stanford.edu/image/iiif/dz112ky5575/dz112ky5575_0001/info.json",
-    "number": "2312",
-    "performer": "Del Grande, Carlo",
-    "publisher": "Welte-Mignon",
-    "title": "Beethoven/Del Grande - Symphonie eroica",
-    "type": "welte-red",
-    "work": "Symphonie eroica"
-  },
-  {
-    "arranger": "",
-    "catkey": "11064154",
-    "composer": "Beethoven, Ludwig van",
-    "druid": "ht339gy6128",
-    "image_url": "https://stacks.stanford.edu/image/iiif/ht339gy6128/ht339gy6128_0001/info.json",
-    "number": "2313",
-    "performer": "Del Grande, Carlo",
-    "publisher": "Welte-Mignon",
-    "title": "Beethoven/Del Grande - Symphonie eroica",
-    "type": "welte-red",
-    "work": "Symphonie eroica"
-  },
-  {
-    "arranger": "",
-    "catkey": "11064157",
-    "composer": "Beethoven, Ludwig van",
-    "druid": "ks452px2704",
-    "image_url": "https://stacks.stanford.edu/image/iiif/ks452px2704/ks452px2704_0001/info.json",
-    "number": "2314",
-    "performer": "Del Grande, Carlo",
-    "publisher": "Welte-Mignon",
-    "title": "Beethoven/Del Grande - Symphonie eroica",
-    "type": "welte-red",
-    "work": "Symphonie eroica"
+    "work": "Waldstein sonata: (2nd movement)"
   },
   {
     "arranger": "",
@@ -398,9 +359,48 @@
     "number": "2311",
     "performer": "Del Grande, Carlo",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Del Grande - Symphonie eroica",
+    "title": "Beethoven/Del Grande - Symphonie eroica: I. Satz",
     "type": "welte-red",
-    "work": "Symphonie eroica"
+    "work": "Symphonie eroica: I. Satz"
+  },
+  {
+    "arranger": "",
+    "catkey": "11064158",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "dz112ky5575",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dz112ky5575/dz112ky5575_0001/info.json",
+    "number": "2312",
+    "performer": "Del Grande, Carlo",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Del Grande - Symphonie eroica: II. Satz",
+    "type": "welte-red",
+    "work": "Symphonie eroica: II. Satz"
+  },
+  {
+    "arranger": "",
+    "catkey": "11064154",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "ht339gy6128",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ht339gy6128/ht339gy6128_0001/info.json",
+    "number": "2313",
+    "performer": "Del Grande, Carlo",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Del Grande - Symphonie eroica: III. Satz",
+    "type": "welte-red",
+    "work": "Symphonie eroica: III. Satz"
+  },
+  {
+    "arranger": "",
+    "catkey": "11064157",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "ks452px2704",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ks452px2704/ks452px2704_0001/info.json",
+    "number": "2314",
+    "performer": "Del Grande, Carlo",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Del Grande - Symphonie eroica: IV. Satz",
+    "type": "welte-red",
+    "work": "Symphonie eroica: IV. Satz"
   },
   {
     "arranger": "",
@@ -424,9 +424,9 @@
     "number": "1585",
     "performer": "Fryer, Herbert",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Fryer - Sonata op. 2, no. 2, a major",
+    "title": "Beethoven/Fryer - Sonata op. 2, no. 2, a major: 2nd and 3rd movements",
     "type": "welte-green",
-    "work": "Sonata op. 2, no. 2, a major"
+    "work": "Sonata op. 2, no. 2, a major: 2nd and 3rd movements"
   },
   {
     "arranger": "",
@@ -476,9 +476,9 @@
     "number": "3295",
     "performer": "Hoehn, Alfred",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Hoehn - Variations op. 35: Fugue eroica",
+    "title": "Beethoven/Hoehn - Variations op. 35: Fugue eroica: Finale alla fuga",
     "type": "welte-green",
-    "work": "Variations op. 35: Fugue eroica"
+    "work": "Variations op. 35: Fugue eroica: Finale alla fuga"
   },
   {
     "arranger": "",
@@ -489,9 +489,9 @@
     "number": "3026",
     "performer": "Hofmann, Josef",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Hofmann - Sonate a-dur, op. 101",
+    "title": "Beethoven/Hofmann - Sonate a-dur, op. 101: I. und II. Teil",
     "type": "welte-red",
-    "work": "Sonate a-dur, op. 101"
+    "work": "Sonate a-dur, op. 101: I. und II. Teil"
   },
   {
     "arranger": "",
@@ -502,9 +502,9 @@
     "number": "3027",
     "performer": "Hofmann, Josef",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Hofmann - Sonate op. 103",
+    "title": "Beethoven/Hofmann - Sonate op. 103: III. und IV. Teil",
     "type": "welte-red",
-    "work": "Sonate op. 103"
+    "work": "Sonate op. 103: III. und IV. Teil"
   },
   {
     "arranger": "",
@@ -515,9 +515,9 @@
     "number": "3156",
     "performer": "Kiek, Georges",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Kiek - 2nd symphony",
+    "title": "Beethoven/Kiek - 2nd symphony: Movements 2 & 3",
     "type": "welte-red",
-    "work": "2nd symphony"
+    "work": "2nd symphony: Movements 2 & 3"
   },
   {
     "arranger": "",
@@ -554,9 +554,9 @@
     "number": "561",
     "performer": "Lamond, Frederic",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Lamond - Sonate pathétique",
+    "title": "Beethoven/Lamond - Sonate pathétique: II. Satz",
     "type": "welte-red",
-    "work": "Sonate pathétique"
+    "work": "Sonate pathétique: II. Satz"
   },
   {
     "arranger": "",
@@ -593,9 +593,9 @@
     "number": "684",
     "performer": "Neitzel, Otto",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Neitzel - Sonate op. 31, no. 2",
+    "title": "Beethoven/Neitzel - Sonate op. 31, no. 2: III. Teil",
     "type": "welte-green",
-    "work": "Sonate op. 31, no. 2"
+    "work": "Sonate op. 31, no. 2: III. Teil"
   },
   {
     "arranger": "",
@@ -606,9 +606,9 @@
     "number": "1246",
     "performer": "Paderewski, Ignace Jan",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Paderewski - Moonlight sonata: C sharp minor",
+    "title": "Beethoven/Paderewski - Moonlight sonata: C sharp minor: 1st & 2nd movements",
     "type": "welte-red",
-    "work": "Moonlight sonata: C sharp minor"
+    "work": "Moonlight sonata: C sharp minor: 1st & 2nd movements"
   },
   {
     "arranger": "",
@@ -619,22 +619,9 @@
     "number": "1247",
     "performer": "Paderewski, Ignace Jan",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Paderewski - Sonata c sharp minor: (moonlight)",
+    "title": "Beethoven/Paderewski - Sonata c sharp minor: (moonlight): Part 3",
     "type": "welte-red",
-    "work": "Sonata c sharp minor: (moonlight)"
-  },
-  {
-    "arranger": "",
-    "catkey": "10791173",
-    "composer": "Beethoven, Ludwig van",
-    "druid": "wp877mn0317",
-    "image_url": "https://stacks.stanford.edu/image/iiif/wp877mn0317/wp877mn0317_0001/info.json",
-    "number": "1247",
-    "performer": "Paderewski, Ignace Jan",
-    "publisher": "Welte-Mignon",
-    "title": "Beethoven/Paderewski - Sonate cis-moll: (Mondschein)",
-    "type": "welte-red",
-    "work": "Sonate cis-moll: (Mondschein)"
+    "work": "Sonata c sharp minor: (moonlight): Part 3"
   },
   {
     "arranger": "",
@@ -645,9 +632,22 @@
     "number": "1246",
     "performer": "Paderewski, Ignace Jan",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Paderewski - Sonate cis-moll: (Mondschein)",
+    "title": "Beethoven/Paderewski - Sonate cis-moll: (Mondschein): I. und II. Teil",
     "type": "welte-red",
-    "work": "Sonate cis-moll: (Mondschein)"
+    "work": "Sonate cis-moll: (Mondschein): I. und II. Teil"
+  },
+  {
+    "arranger": "",
+    "catkey": "10791173",
+    "composer": "Beethoven, Ludwig van",
+    "druid": "wp877mn0317",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wp877mn0317/wp877mn0317_0001/info.json",
+    "number": "1247",
+    "performer": "Paderewski, Ignace Jan",
+    "publisher": "Welte-Mignon",
+    "title": "Beethoven/Paderewski - Sonate cis-moll: (Mondschein): III. Teil",
+    "type": "welte-red",
+    "work": "Sonate cis-moll: (Mondschein): III. Teil"
   },
   {
     "arranger": "",
@@ -684,9 +684,9 @@
     "number": "1505",
     "performer": "Pückler, Graf Carl von",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Pückler - Sonata appassionata",
+    "title": "Beethoven/Pückler - Sonata appassionata: II. u. III. Teil",
     "type": "welte-red",
-    "work": "Sonata appassionata"
+    "work": "Sonata appassionata: II. u. III. Teil"
   },
   {
     "arranger": "",
@@ -749,9 +749,9 @@
     "number": "239",
     "performer": "Scharwenka, Xaver",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Scharwenka - Sonata appassionata, op. 57",
+    "title": "Beethoven/Scharwenka - Sonata appassionata, op. 57: Part 1",
     "type": "welte-red",
-    "work": "Sonata appassionata, op. 57"
+    "work": "Sonata appassionata, op. 57: Part 1"
   },
   {
     "arranger": "",
@@ -762,9 +762,9 @@
     "number": "1443",
     "performer": "Schelling, Ernest",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, F Minor",
+    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, F Minor: 2nd and 3rd movements",
     "type": "welte-red",
-    "work": "Sonata appassionata: op. 57, F Minor"
+    "work": "Sonata appassionata: op. 57, F Minor: 2nd and 3rd movements"
   },
   {
     "arranger": "",
@@ -775,9 +775,9 @@
     "number": "1442",
     "performer": "Schelling, Ernest",
     "publisher": "Welte-Mignon",
-    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, F minor",
+    "title": "Beethoven/Schelling - Sonata appassionata: op. 57, F minor: 1st movement",
     "type": "welte-red",
-    "work": "Sonata appassionata: op. 57, F minor"
+    "work": "Sonata appassionata: op. 57, F minor: 1st movement"
   },
   {
     "arranger": "",
@@ -1048,9 +1048,9 @@
     "number": "3297",
     "performer": "Hoehn, Alfred",
     "publisher": "Welte-Mignon",
-    "title": "Brahms/Hoehn - Sonate f-moll, op. 5, i. teil",
+    "title": "Brahms/Hoehn - Sonate f-moll, op. 5, i. teil: (Allegro maestoso)",
     "type": "welte-green",
-    "work": "Sonate f-moll, op. 5, i. teil"
+    "work": "Sonate f-moll, op. 5, i. teil: (Allegro maestoso)"
   },
   {
     "arranger": "",
@@ -1061,9 +1061,9 @@
     "number": "1108",
     "performer": "Ney, Elly",
     "publisher": "Welte-Mignon",
-    "title": "Brahms/Ney - Sonata f minor, op. 5",
+    "title": "Brahms/Ney - Sonata f minor, op. 5: 2nd movement",
     "type": "welte-red",
-    "work": "Sonata f minor, op. 5"
+    "work": "Sonata f minor, op. 5: 2nd movement"
   },
   {
     "arranger": "",
@@ -1074,9 +1074,9 @@
     "number": "1085",
     "performer": "Nikisch, Arthur",
     "publisher": "Welte-Mignon",
-    "title": "Brahms/Nikisch - Ungarischer tanz",
+    "title": "Brahms/Nikisch - Ungarischer tanz: No. 1",
     "type": "welte-red",
-    "work": "Ungarischer tanz"
+    "work": "Ungarischer tanz: No. 1"
   },
   {
     "arranger": "",
@@ -1126,9 +1126,9 @@
     "number": "6298",
     "performer": "Perlstein, S. A. (Samuel A.)",
     "publisher": "Connorized",
-    "title": "Brody/Perlstein - A Chaver in leben =: A friend in life",
+    "title": "Brody/Perlstein - A Friend in life: A friend in life",
     "type": "88-note",
-    "work": "A Chaver in leben =: A friend in life"
+    "work": "A Friend in life: A friend in life"
   },
   {
     "arranger": "Reimann, Heinrich",
@@ -1139,9 +1139,9 @@
     "number": "1987",
     "performer": "",
     "publisher": "Connorized Music Co.",
-    "title": "Bruch-Reimann - Kol nidrei: (Stimme des Geluebdes)",
+    "title": "Bruch-Reimann - Kol nidrei; arranged: (Stimme des Geluebdes)",
     "type": "88-note",
-    "work": "Kol nidrei: (Stimme des Geluebdes)"
+    "work": "Kol nidrei; arranged: (Stimme des Geluebdes)"
   },
   {
     "arranger": "",
@@ -1347,9 +1347,9 @@
     "number": "84247",
     "performer": "",
     "publisher": "Universal",
-    "title": "Chopin - Mazurkas, op. 17",
+    "title": "Chopin - Mazurkas, op. 17: No.1, No.2: B flat; E minor",
     "type": "88-note",
-    "work": "Mazurkas, op. 17"
+    "work": "Mazurkas, op. 17: No.1, No.2: B flat ; E minor"
   },
   {
     "arranger": "",
@@ -1373,9 +1373,9 @@
     "number": "3310",
     "performer": "Backhaus, Wilhelm",
     "publisher": "Welte-Mignon",
-    "title": "Chopin-Backhaus/Backhaus - Pianoforte concerto op. ii, e minor",
+    "title": "Chopin-Backhaus/Backhaus - Pianoforte concerto op. ii, e minor: 2nd movement",
     "type": "welte-red",
-    "work": "Pianoforte concerto op. ii, e minor"
+    "work": "Pianoforte concerto op. ii, e minor: 2nd movement"
   },
   {
     "arranger": "Backhaus, Wilhelm",
@@ -1386,9 +1386,9 @@
     "number": "3310",
     "performer": "Backhaus, Wilhelm",
     "publisher": "Welte-Mignon",
-    "title": "Chopin-Backhaus/Backhaus - Romanze a. e-moll konzert",
+    "title": "Chopin-Backhaus/Backhaus - Romanze a. e-moll konzert: II. Satz",
     "type": "welte-red",
-    "work": "Romanze a. e-moll konzert"
+    "work": "Romanze a. e-moll konzert: II. Satz"
   },
   {
     "arranger": "",
@@ -1496,19 +1496,6 @@
   },
   {
     "arranger": "",
-    "catkey": "11348673",
-    "composer": "Chopin, Frédéric",
-    "druid": "kw738fg7467",
-    "image_url": "https://stacks.stanford.edu/image/iiif/kw738fg7467/kw738fg7467_0001/info.json",
-    "number": "2588",
-    "performer": "Bloomfield-Zeisler, Fannie",
-    "publisher": "Welte-Mignon",
-    "title": "Chopin/Bloomfield-Zeisler - Sonata op. 35",
-    "type": "welte-red",
-    "work": "Sonata op. 35"
-  },
-  {
-    "arranger": "",
     "catkey": "11111996",
     "composer": "Chopin, Frédéric",
     "druid": "fh358rd2268",
@@ -1516,9 +1503,22 @@
     "number": "2586",
     "performer": "Bloomfield-Zeisler, Fannie",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Bloomfield-Zeisler - Sonata op. 35, b minor",
+    "title": "Chopin/Bloomfield-Zeisler - Sonata op. 35, b minor: Part 1",
     "type": "welte-red",
-    "work": "Sonata op. 35, b minor"
+    "work": "Sonata op. 35, b minor: Part 1"
+  },
+  {
+    "arranger": "",
+    "catkey": "11348673",
+    "composer": "Chopin, Frédéric",
+    "druid": "kw738fg7467",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kw738fg7467/kw738fg7467_0001/info.json",
+    "number": "2588",
+    "performer": "Bloomfield-Zeisler, Fannie",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Bloomfield-Zeisler - Sonata op. 35: Funeralmarch and Presto",
+    "type": "welte-red",
+    "work": "Sonata op. 35: Funeralmarch and Presto"
   },
   {
     "arranger": "",
@@ -1568,9 +1568,9 @@
     "number": "3184",
     "performer": "Carreras, Maria",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Carreras - Preludes",
+    "title": "Chopin/Carreras - Preludes: No. 3, G major; No. 6, B minor",
     "type": "welte-red",
-    "work": "Preludes"
+    "work": "Preludes: No. 3, G major ; No. 6, B minor"
   },
   {
     "arranger": "",
@@ -1659,9 +1659,9 @@
     "number": "2621",
     "performer": "Di Benici, Tosta",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Di Benici - Etude ges dur, op. 10, no. 5",
+    "title": "Chopin/Di Benici - Etude ges dur, op. 10, no. 5: (Schwarze Tasten)",
     "type": "welte-red",
-    "work": "Etude ges dur, op. 10, no. 5"
+    "work": "Etude ges dur, op. 10, no. 5: (Schwarze Tasten)"
   },
   {
     "arranger": "",
@@ -1750,9 +1750,9 @@
     "number": "2159",
     "performer": "Goraïnoff, Irina",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Goraïnoff - Concert e-moll, op. 11",
+    "title": "Chopin/Goraïnoff - Concert e-moll, op. 11: 1. Teil",
     "type": "welte-red",
-    "work": "Concert e-moll, op. 11"
+    "work": "Concert e-moll, op. 11: 1. Teil"
   },
   {
     "arranger": "",
@@ -1763,9 +1763,9 @@
     "number": "2160",
     "performer": "Goraïnoff, Irina",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Goraïnoff - Concerto e minor",
+    "title": "Chopin/Goraïnoff - Concerto e minor: Part II",
     "type": "welte-red",
-    "work": "Concerto e minor"
+    "work": "Concerto e minor: Part II"
   },
   {
     "arranger": "",
@@ -1776,9 +1776,9 @@
     "number": "2161",
     "performer": "Goraïnoff, Irina",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Goraïnoff - Concerto op. 11, e minor",
+    "title": "Chopin/Goraïnoff - Concerto op. 11, e minor: 3rd movement",
     "type": "welte-red",
-    "work": "Concerto op. 11, e minor"
+    "work": "Concerto op. 11, e minor: 3rd movement"
   },
   {
     "arranger": "",
@@ -1841,9 +1841,9 @@
     "number": "3976",
     "performer": "Koczalski, Raoul",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Koczalski - Concerto op. 11, e minor, 1st movement",
+    "title": "Chopin/Koczalski - Concerto op. 11, e minor, 1st movement: Allegro maestoso",
     "type": "welte-red",
-    "work": "Concerto op. 11, e minor, 1st movement"
+    "work": "Concerto op. 11, e minor, 1st movement: Allegro maestoso"
   },
   {
     "arranger": "",
@@ -1906,9 +1906,9 @@
     "number": "1670",
     "performer": "Margolies, Vera",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Margolies - Sonata b-moll, op. 35",
+    "title": "Chopin/Margolies - Sonata b-moll, op. 35: Parts 2, 3, & 4",
     "type": "welte-red",
-    "work": "Sonata b-moll, op. 35"
+    "work": "Sonata b-moll, op. 35: Parts 2, 3, & 4"
   },
   {
     "arranger": "",
@@ -2127,9 +2127,9 @@
     "number": "325",
     "performer": "Reisenauer, Alfred",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Reisenauer - Chant polonais",
+    "title": "Chopin/Reisenauer - Chant polonais: (Des Mädchens Wunsch)",
     "type": "welte-red",
-    "work": "Chant polonais"
+    "work": "Chant polonais: (Des Mädchens Wunsch)"
   },
   {
     "arranger": "",
@@ -2146,19 +2146,6 @@
   },
   {
     "arranger": "",
-    "catkey": "11056085",
-    "composer": "Chopin, Frédéric",
-    "druid": "bf074nj8801",
-    "image_url": "https://stacks.stanford.edu/image/iiif/bf074nj8801/bf074nj8801_0001/info.json",
-    "number": "1473",
-    "performer": "Samaroff Stokowski, Olga",
-    "publisher": "Welte-Mignon",
-    "title": "Chopin/Samaroff Stokowski - Sonata b minor",
-    "type": "welte-red",
-    "work": "Sonata b minor"
-  },
-  {
-    "arranger": "",
     "catkey": "11055854",
     "composer": "Chopin, Frédéric",
     "druid": "dw559kr7002",
@@ -2166,9 +2153,22 @@
     "number": "1472",
     "performer": "Samaroff Stokowski, Olga",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Samaroff Stokowski - Sonata b minor",
+    "title": "Chopin/Samaroff Stokowski - Sonata b minor: 1st and 2nd movement",
     "type": "welte-red",
-    "work": "Sonata b minor"
+    "work": "Sonata b minor: 1st and 2nd movement"
+  },
+  {
+    "arranger": "",
+    "catkey": "11056085",
+    "composer": "Chopin, Frédéric",
+    "druid": "bf074nj8801",
+    "image_url": "https://stacks.stanford.edu/image/iiif/bf074nj8801/bf074nj8801_0001/info.json",
+    "number": "1473",
+    "performer": "Samaroff Stokowski, Olga",
+    "publisher": "Welte-Mignon",
+    "title": "Chopin/Samaroff Stokowski - Sonata b minor: 3rd and 4th movement",
+    "type": "welte-red",
+    "work": "Sonata b minor: 3rd and 4th movement"
   },
   {
     "arranger": "",
@@ -2179,9 +2179,9 @@
     "number": "1473",
     "performer": "Samaroff Stokowski, Olga",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Samaroff Stokowski - Sonata b minor",
+    "title": "Chopin/Samaroff Stokowski - Sonata b minor: 3rd and 4th movement",
     "type": "welte-red",
-    "work": "Sonata b minor"
+    "work": "Sonata b minor: 3rd and 4th movement"
   },
   {
     "arranger": "",
@@ -2348,9 +2348,9 @@
     "number": "470",
     "performer": "Zadora, Michael",
     "publisher": "Welte-Mignon",
-    "title": "Chopin/Zadora - Preludes",
+    "title": "Chopin/Zadora - Preludes: Nos. 2, 4, 9, 13 and 22",
     "type": "welte-red",
-    "work": "Preludes"
+    "work": "Preludes: Nos. 2, 4, 9, 13 and 22"
   },
   {
     "arranger": "",
@@ -2478,9 +2478,9 @@
     "number": "2739",
     "performer": "Debussy, Claude",
     "publisher": "Welte-Mignon",
-    "title": "Debussy/Debussy - Preludes",
+    "title": "Debussy/Debussy - Preludes: Le vent dans la plaine; Minstrels",
     "type": "welte-red",
-    "work": "Preludes"
+    "work": "Preludes: Le vent dans la plaine ; Minstrels"
   },
   {
     "arranger": "",
@@ -2491,9 +2491,9 @@
     "number": "2738",
     "performer": "Debussy, Claude",
     "publisher": "Welte-Mignon",
-    "title": "Debussy/Debussy - Préludes",
+    "title": "Debussy/Debussy - Préludes: Danseuses de Delphes; La chathédrale engloutie; La danse de Puck",
     "type": "welte-green",
-    "work": "Préludes"
+    "work": "Préludes: Danseuses de Delphes ; La chathédrale engloutie ; La danse de Puck"
   },
   {
     "arranger": "",
@@ -2504,9 +2504,9 @@
     "number": "3045",
     "performer": "Ganz, Rudolph",
     "publisher": "Welte-Mignon",
-    "title": "Debussy/Ganz - Preludes",
+    "title": "Debussy/Ganz - Preludes: La fille aux cheveux de lin; La puerto del vino",
     "type": "welte-red",
-    "work": "Preludes"
+    "work": "Preludes: La fille aux cheveux de lin ; La puerto del vino"
   },
   {
     "arranger": "",
@@ -2569,9 +2569,9 @@
     "number": "6959",
     "performer": "Perlstein, S. A. (Samuel A.)",
     "publisher": "Connorized",
-    "title": "Doctor/Perlstein - Oi oi die weiber: (Jewish word roll)",
+    "title": "Doctor/Perlstein - Oi oi de weiber; arranged: (Jewish word roll)",
     "type": "88-note",
-    "work": "Oi oi die weiber: (Jewish word roll)"
+    "work": "Oi oi de weiber; arranged: (Jewish word roll)"
   },
   {
     "arranger": "",
@@ -2855,9 +2855,9 @@
     "number": "4668",
     "performer": "",
     "publisher": "Princesa",
-    "title": "García Ibáñez - Félix rodríguez",
+    "title": "García Ibáñez - Félix rodríguez: Pasodoble flamenco",
     "type": "88-note",
-    "work": "Félix rodríguez"
+    "work": "Félix rodríguez: Pasodoble flamenco"
   },
   {
     "arranger": "",
@@ -2946,9 +2946,9 @@
     "number": "1939",
     "performer": "Glazunov, Aleksandr Konstantinovich",
     "publisher": "Welte-Mignon",
-    "title": "Glazunov/Glazunov - 1. sonata op. 74, b flat",
+    "title": "Glazunov/Glazunov - 1. sonata op. 74, b flat: 2nd movement, Andante",
     "type": "welte-red",
-    "work": "1. sonata op. 74, b flat"
+    "work": "1. sonata op. 74, b flat: 2nd movement, Andante"
   },
   {
     "arranger": "",
@@ -3193,9 +3193,9 @@
     "number": "3790",
     "performer": "Haass, Hans",
     "publisher": "Welte-Mignon",
-    "title": "Grainger/Haass - British folkmusic",
+    "title": "Grainger/Haass - British folkmusic: Settings Nr. 4: \"Shepherd's hey\"",
     "type": "welte-red",
-    "work": "British folkmusic"
+    "work": "British folkmusic: Settings Nr. 4: \"Shepherd's hey\""
   },
   {
     "arranger": "",
@@ -3206,9 +3206,9 @@
     "number": "3791",
     "performer": "Haass, Hans",
     "publisher": "Welte-Mignon",
-    "title": "Grainger/Haass - British folkmusic",
+    "title": "Grainger/Haass - British folkmusic: Settings Nr. 6: Irish tune from County Derry",
     "type": "welte-red",
-    "work": "British folkmusic"
+    "work": "British folkmusic: Settings Nr. 6: Irish tune from County Derry"
   },
   {
     "arranger": "",
@@ -3277,19 +3277,6 @@
   },
   {
     "arranger": "",
-    "catkey": "11055861",
-    "composer": "Grieg, Edvard",
-    "druid": "ym773gh2267",
-    "image_url": "https://stacks.stanford.edu/image/iiif/ym773gh2267/ym773gh2267_0001/info.json",
-    "number": "1478",
-    "performer": "Samaroff Stokowski, Olga",
-    "publisher": "Welte-Mignon",
-    "title": "Grieg/Samaroff Stokowski - Concerto a minor",
-    "type": "welte-red",
-    "work": "Concerto a minor"
-  },
-  {
-    "arranger": "",
     "catkey": "11055864",
     "composer": "Grieg, Edvard",
     "druid": "yr522jf5585",
@@ -3303,16 +3290,16 @@
   },
   {
     "arranger": "",
-    "catkey": "11055860",
+    "catkey": "11055861",
     "composer": "Grieg, Edvard",
-    "druid": "vz717bq6543",
-    "image_url": "https://stacks.stanford.edu/image/iiif/vz717bq6543/vz717bq6543_0001/info.json",
-    "number": "1480",
+    "druid": "ym773gh2267",
+    "image_url": "https://stacks.stanford.edu/image/iiif/ym773gh2267/ym773gh2267_0001/info.json",
+    "number": "1478",
     "performer": "Samaroff Stokowski, Olga",
     "publisher": "Welte-Mignon",
-    "title": "Grieg/Samaroff Stokowski - Peer gynt suite",
+    "title": "Grieg/Samaroff Stokowski - Concerto a minor: 1st movement",
     "type": "welte-red",
-    "work": "Peer gynt suite"
+    "work": "Concerto a minor: 1st movement"
   },
   {
     "arranger": "",
@@ -3326,6 +3313,19 @@
     "title": "Grieg/Samaroff Stokowski - Peer gynt suite ii",
     "type": "welte-red",
     "work": "Peer gynt suite ii"
+  },
+  {
+    "arranger": "",
+    "catkey": "11055860",
+    "composer": "Grieg, Edvard",
+    "druid": "vz717bq6543",
+    "image_url": "https://stacks.stanford.edu/image/iiif/vz717bq6543/vz717bq6543_0001/info.json",
+    "number": "1480",
+    "performer": "Samaroff Stokowski, Olga",
+    "publisher": "Welte-Mignon",
+    "title": "Grieg/Samaroff Stokowski - Peer gynt suite: No. 1",
+    "type": "welte-red",
+    "work": "Peer gynt suite: No. 1"
   },
   {
     "arranger": "",
@@ -3401,9 +3401,9 @@
     "number": "4323",
     "performer": "",
     "publisher": "Caecilia",
-    "title": "Guerrero - Don quintín el amargao",
+    "title": "Guerrero - Don quintín el amargao: Java",
     "type": "88-note",
-    "work": "Don quintín el amargao"
+    "work": "Don quintín el amargao: Java"
   },
   {
     "arranger": "",
@@ -3414,9 +3414,9 @@
     "number": "4504",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Guerrero - El   Huésped del sevillano",
+    "title": "Guerrero - El   Huésped del sevillano: Lagarteranas",
     "type": "88-note",
-    "work": "El   Huésped del sevillano"
+    "work": "El   Huésped del sevillano: Lagarteranas"
   },
   {
     "arranger": "",
@@ -3427,9 +3427,9 @@
     "number": "4540",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Guerrero - El   Sobre verde",
+    "title": "Guerrero - El   Sobre verde: Bombones de chocolate",
     "type": "88-note",
-    "work": "El   Sobre verde"
+    "work": "El   Sobre verde: Bombones de chocolate"
   },
   {
     "arranger": "",
@@ -3622,9 +3622,9 @@
     "number": "3055",
     "performer": "Ganz, Rudolph",
     "publisher": "Welte-Mignon",
-    "title": "Korngold/Ganz - Sonate e-dur, op. 2, no. 2",
+    "title": "Korngold/Ganz - Sonate e-dur, op. 2, no. 2: I. und II. Satz",
     "type": "welte-red",
-    "work": "Sonate e-dur, op. 2, no. 2"
+    "work": "Sonate e-dur, op. 2, no. 2: I. und II. Satz"
   },
   {
     "arranger": "",
@@ -3635,9 +3635,9 @@
     "number": "3056",
     "performer": "Ganz, Rudolph",
     "publisher": "Welte-Mignon",
-    "title": "Korngold/Ganz - Sonate e-dur, op. 2, no. 2",
+    "title": "Korngold/Ganz - Sonate e-dur, op. 2, no. 2: III. und IV. Satz",
     "type": "welte-red",
-    "work": "Sonate e-dur, op. 2, no. 2"
+    "work": "Sonate e-dur, op. 2, no. 2: III. und IV. Satz"
   },
   {
     "arranger": "",
@@ -3648,9 +3648,9 @@
     "number": "3842",
     "performer": "Heinemann, Käthe",
     "publisher": "Welte-Mignon",
-    "title": "Korngold/Heinemann - Märchenbilder",
+    "title": "Korngold/Heinemann - Märchenbilder: 5-7",
     "type": "welte-red",
-    "work": "Märchenbilder"
+    "work": "Märchenbilder: 5-7"
   },
   {
     "arranger": "",
@@ -3882,9 +3882,9 @@
     "number": "412",
     "performer": "Albert, Eugen d'",
     "publisher": "Welte-Mignon",
-    "title": "Liszt/Albert - Soirée de vienne",
+    "title": "Liszt/Albert - Soirée de vienne: I [i.e., 2]",
     "type": "welte-red",
-    "work": "Soirée de vienne"
+    "work": "Soirée de vienne: I [i.e., 2]"
   },
   {
     "arranger": "",
@@ -4337,9 +4337,9 @@
     "number": "3333",
     "performer": "Lászlò, Sándor",
     "publisher": "Welte-Mignon",
-    "title": "Liszt/Lászlò - Piano-concert e major",
+    "title": "Liszt/Lászlò - Piano-concert e major: 1st movement",
     "type": "welte-red",
-    "work": "Piano-concert e major"
+    "work": "Piano-concert e major: 1st movement"
   },
   {
     "arranger": "",
@@ -4519,9 +4519,9 @@
     "number": "951",
     "performer": "Sapellnikoff, W. (Wassily)",
     "publisher": "Welte-Mignon",
-    "title": "Liszt/Sapellnikoff - Nocturne",
+    "title": "Liszt/Sapellnikoff - Nocturne: No. 1: \"Hohe Liebe\"",
     "type": "welte-red",
-    "work": "Nocturne"
+    "work": "Nocturne: No. 1: \"Hohe Liebe\""
   },
   {
     "arranger": "",
@@ -4610,9 +4610,9 @@
     "number": "1032",
     "performer": "Stavenhagen, Bernhard",
     "publisher": "Welte-Mignon",
-    "title": "Liszt/Stavenhagen - Ii. legende",
+    "title": "Liszt/Stavenhagen - Ii. legende: Der hl. Franziskus über die Wogen schreitend",
     "type": "welte-red",
-    "work": "Ii. legende"
+    "work": "Ii. legende: Der hl. Franziskus über die Wogen schreitend"
   },
   {
     "arranger": "",
@@ -4662,9 +4662,9 @@
     "number": "376",
     "performer": "Wendling, Carl",
     "publisher": "Welte-Mignon",
-    "title": "Liszt/Wendling - Lohengrin",
+    "title": "Liszt/Wendling - Lohengrin: Elsa's bridal procession",
     "type": "welte-red",
-    "work": "Lohengrin"
+    "work": "Lohengrin: Elsa's bridal procession"
   },
   {
     "arranger": "",
@@ -4896,9 +4896,9 @@
     "number": "84307",
     "performer": "",
     "publisher": "Universal",
-    "title": "Mendelssohn-Bartholdy - Midsummer night's dream: op. 61",
+    "title": "Mendelssohn-Bartholdy - Midsummer night's dream: op. 61: Nocturne",
     "type": "88-note",
-    "work": "Midsummer night's dream: op. 61"
+    "work": "Midsummer night's dream: op. 61: Nocturne"
   },
   {
     "arranger": "Hutcheson, Ernest",
@@ -4941,19 +4941,6 @@
   },
   {
     "arranger": "",
-    "catkey": "10760612",
-    "composer": "Mendelssohn-Bartholdy, Felix",
-    "druid": "mx599qs6329",
-    "image_url": "https://stacks.stanford.edu/image/iiif/mx599qs6329/mx599qs6329_0001/info.json",
-    "number": "40",
-    "performer": "Adam-Benard, Eugenie",
-    "publisher": "Welte-Mignon",
-    "title": "Mendelssohn-Bartholdy/Adam-Benard - Lied ohne worte",
-    "type": "welte-red",
-    "work": "Lied ohne worte"
-  },
-  {
-    "arranger": "",
     "catkey": "10763579",
     "composer": "Mendelssohn-Bartholdy, Felix",
     "druid": "xn796bh4368",
@@ -4961,9 +4948,22 @@
     "number": "216",
     "performer": "Adam-Benard, Eugenie",
     "publisher": "Welte-Mignon",
-    "title": "Mendelssohn-Bartholdy/Adam-Benard - Lied ohne worte",
+    "title": "Mendelssohn-Bartholdy/Adam-Benard - Lied ohne worte: Moderato, No. 4",
     "type": "welte-red",
-    "work": "Lied ohne worte"
+    "work": "Lied ohne worte: Moderato, No. 4"
+  },
+  {
+    "arranger": "",
+    "catkey": "10760612",
+    "composer": "Mendelssohn-Bartholdy, Felix",
+    "druid": "mx599qs6329",
+    "image_url": "https://stacks.stanford.edu/image/iiif/mx599qs6329/mx599qs6329_0001/info.json",
+    "number": "40",
+    "performer": "Adam-Benard, Eugenie",
+    "publisher": "Welte-Mignon",
+    "title": "Mendelssohn-Bartholdy/Adam-Benard - Lied ohne worte: Volkslied, No. 23",
+    "type": "welte-red",
+    "work": "Lied ohne worte: Volkslied, No. 23"
   },
   {
     "arranger": "",
@@ -5013,9 +5013,9 @@
     "number": "3172",
     "performer": "Kiek, Georges",
     "publisher": "Welte-Mignon",
-    "title": "Mendelssohn-Bartholdy/Kiek - 3th symphony",
+    "title": "Mendelssohn-Bartholdy/Kiek - 3th symphony: Allegro vivacissimo",
     "type": "welte-red",
-    "work": "3th symphony"
+    "work": "3th symphony: Allegro vivacissimo"
   },
   {
     "arranger": "",
@@ -5195,9 +5195,9 @@
     "number": "4660",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Moreno Torroba - La   Marchenera",
+    "title": "Moreno Torroba - La   Marchenera: Petenera",
     "type": "88-note",
-    "work": "La   Marchenera"
+    "work": "La   Marchenera: Petenera"
   },
   {
     "arranger": "",
@@ -5260,9 +5260,9 @@
     "number": "50315",
     "performer": "",
     "publisher": "Hupfeld",
-    "title": "Mozart - Sonate, c-dur = ut majeur = c major: (Köch.-Verz. No. 330)",
+    "title": "Mozart - Sonate, c-dur = ut majeur = c major: (Köch.-Verz. No. 330): Allegro moderato; Andante cantabile",
     "type": "88-note",
-    "work": "Sonate, c-dur = ut majeur = c major: (Köch.-Verz. No. 330)"
+    "work": "Sonate, c-dur = ut majeur = c major: (Köch.-Verz. No. 330): Allegro moderato ; Andante cantabile"
   },
   {
     "arranger": "",
@@ -5299,9 +5299,9 @@
     "number": "50319",
     "performer": "Reinecke, Carl",
     "publisher": "Hupfeld",
-    "title": "Mozart/Reinecke - Sonata no. 12, f-dur = fa majeur = f major",
+    "title": "Mozart/Reinecke - Sonata no. 12, f-dur = fa majeur = f major: Allegro assai",
     "type": "88-note",
-    "work": "Sonata no. 12, f-dur = fa majeur = f major"
+    "work": "Sonata no. 12, f-dur = fa majeur = f major: Allegro assai"
   },
   {
     "arranger": "",
@@ -5325,9 +5325,9 @@
     "number": "3143",
     "performer": "Ritter, Franz",
     "publisher": "Welte-Mignon",
-    "title": "Mozart/Ritter - Don juan",
+    "title": "Mozart/Ritter - Don juan: Overture",
     "type": "welte-red",
-    "work": "Don juan"
+    "work": "Don juan: Overture"
   },
   {
     "arranger": "",
@@ -5526,6 +5526,19 @@
   },
   {
     "arranger": "",
+    "catkey": "in00001022888",
+    "composer": "",
+    "druid": "tg026vg8064",
+    "image_url": "https://stacks.stanford.edu/image/iiif/tg026vg8064/tg026vg8064_0001_Color/info.json",
+    "number": "20448",
+    "performer": "Perlstein, S. A. (Samuel A.)",
+    "publisher": "Connorized",
+    "title": "Perlstein - Dance of the roumanian jew",
+    "type": "88-note",
+    "work": "Dance of the roumanian jew"
+  },
+  {
+    "arranger": "",
     "catkey": "in00001022877",
     "composer": "",
     "druid": "fd310yk4226",
@@ -5591,19 +5604,6 @@
   },
   {
     "arranger": "",
-    "catkey": "in00001022879",
-    "composer": "",
-    "druid": "gc837vk5160",
-    "image_url": "https://stacks.stanford.edu/image/iiif/gc837vk5160/gc837vk5160_0001_Color/info.json",
-    "number": "20411",
-    "performer": "Perlstein, S. A. (Samuel A.)",
-    "publisher": "Connorized",
-    "title": "Perlstein - Kishenev schehr (scissors)",
-    "type": "88-note",
-    "work": "Kishenev schehr (scissors)"
-  },
-  {
-    "arranger": "",
     "catkey": "in00001022875",
     "composer": "",
     "druid": "db888vw5192",
@@ -5617,16 +5617,16 @@
   },
   {
     "arranger": "",
-    "catkey": "in00001022888",
+    "catkey": "in00001022879",
     "composer": "",
-    "druid": "tg026vg8064",
-    "image_url": "https://stacks.stanford.edu/image/iiif/tg026vg8064/tg026vg8064_0001_Color/info.json",
-    "number": "20448",
+    "druid": "gc837vk5160",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gc837vk5160/gc837vk5160_0001_Color/info.json",
+    "number": "20411",
     "performer": "Perlstein, S. A. (Samuel A.)",
     "publisher": "Connorized",
-    "title": "Perlstein - Rumanische sirba = dance of the roumanian jew",
+    "title": "Perlstein - Scissors",
     "type": "88-note",
-    "work": "Rumanische sirba = dance of the roumanian jew"
+    "work": "Scissors"
   },
   {
     "arranger": "Perlstein, S. A. (Samuel A.)",
@@ -5650,9 +5650,9 @@
     "number": "20831",
     "performer": "Perlstein, S. A. (Samuel A.)",
     "publisher": "Connorized",
-    "title": "Perlstein/Perlstein - A Silberne chosene =: (A silver wedding); Jewish frailichs",
+    "title": "Perlstein/Perlstein - A Silver wedding: (A silver wedding); Jewish frailichs",
     "type": "88-note",
-    "work": "A Silberne chosene =: (A silver wedding) ; Jewish frailichs"
+    "work": "A Silver wedding: (A silver wedding) ; Jewish frailichs"
   },
   {
     "arranger": "Perlstein, S. A. (Samuel A.)",
@@ -5793,9 +5793,9 @@
     "number": "4309",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Pérez Soriano - El   Guitarrico",
+    "title": "Pérez Soriano - El   Guitarrico: Jota",
     "type": "88-note",
-    "work": "El   Guitarrico"
+    "work": "El   Guitarrico: Jota"
   },
   {
     "arranger": "",
@@ -6105,9 +6105,9 @@
     "number": "953",
     "performer": "Sapellnikoff, W. (Wassily)",
     "publisher": "Welte-Mignon",
-    "title": "Rossini-Liszt/Sapellnikoff - William tell",
+    "title": "Rossini-Liszt/Sapellnikoff - William tell: Overture",
     "type": "welte-red",
-    "work": "William tell"
+    "work": "William tell: Overture"
   },
   {
     "arranger": "",
@@ -6222,9 +6222,9 @@
     "number": "6248",
     "performer": "Perlstein, S. A. (Samuel A.)",
     "publisher": "Connorized",
-    "title": "Rumshinsky/Perlstein - A Gruss fun der heim =: Regards from home",
+    "title": "Rumshinsky/Perlstein - A Regards from home: Regards from home",
     "type": "88-note",
-    "work": "A Gruss fun der heim =: Regards from home"
+    "work": "A Regards from home: Regards from home"
   },
   {
     "arranger": "Russotto, H.",
@@ -6248,9 +6248,9 @@
     "number": "2990",
     "performer": "Albert, Eugen d'",
     "publisher": "Welte-Mignon",
-    "title": "Saint-Saëns/Albert - Etude op. 52, no. 6",
+    "title": "Saint-Saëns/Albert - Etude op. 52, no. 6: (En forme de valse)",
     "type": "welte-green",
-    "work": "Etude op. 52, no. 6"
+    "work": "Etude op. 52, no. 6: (En forme de valse)"
   },
   {
     "arranger": "",
@@ -6261,9 +6261,9 @@
     "number": "2260",
     "performer": "Epstein, Richard",
     "publisher": "Welte-Mignon",
-    "title": "Saint-Saëns/Epstein - Samson and delilah",
+    "title": "Saint-Saëns/Epstein - Samson and delilah: Cantabile du grand duo",
     "type": "welte-red",
-    "work": "Samson and delilah"
+    "work": "Samson and delilah: Cantabile du grand duo"
   },
   {
     "arranger": "",
@@ -6274,9 +6274,9 @@
     "number": "2260",
     "performer": "Epstein, Richard",
     "publisher": "Welte-Mignon",
-    "title": "Saint-Saëns/Epstein - Samson and delilah",
+    "title": "Saint-Saëns/Epstein - Samson and delilah: Cantabile du grand duo",
     "type": "welte-red",
-    "work": "Samson and delilah"
+    "work": "Samson and delilah: Cantabile du grand duo"
   },
   {
     "arranger": "",
@@ -6313,9 +6313,9 @@
     "number": "797",
     "performer": "Saint-Saëns, Camille",
     "publisher": "Welte-Mignon",
-    "title": "Saint-Saëns/Saint-Saëns - Samson and delilah",
+    "title": "Saint-Saëns/Saint-Saëns - Samson and delilah: Finale, Act 1",
     "type": "welte-red",
-    "work": "Samson and delilah"
+    "work": "Samson and delilah: Finale, Act 1"
   },
   {
     "arranger": "",
@@ -6443,9 +6443,9 @@
     "number": "3312",
     "performer": "Backhaus, Wilhelm",
     "publisher": "Welte-Mignon",
-    "title": "Schubert-Backhaus/Backhaus - Wanderer-fantasie",
+    "title": "Schubert-Backhaus/Backhaus - Wanderer-fantasie: 1st and 2nd movements",
     "type": "welte-red",
-    "work": "Wanderer-fantasie"
+    "work": "Wanderer-fantasie: 1st and 2nd movements"
   },
   {
     "arranger": "Liszt, Franz",
@@ -6521,9 +6521,9 @@
     "number": "3317",
     "performer": "Lászlò, Sándor",
     "publisher": "Welte-Mignon",
-    "title": "Schubert-Liszt/Lászlò - Wanderer-fantasie",
+    "title": "Schubert-Liszt/Lászlò - Wanderer-fantasie: I. und II. Satz",
     "type": "welte-green",
-    "work": "Wanderer-fantasie"
+    "work": "Wanderer-fantasie: I. und II. Satz"
   },
   {
     "arranger": "Liszt, Franz",
@@ -6599,9 +6599,9 @@
     "number": "3313",
     "performer": "Backhaus, Wilhelm",
     "publisher": "Welte-Mignon",
-    "title": "Schubert/Backhaus - Wanderer-fantasie",
+    "title": "Schubert/Backhaus - Wanderer-fantasie: III. und IV. Satz",
     "type": "welte-red",
-    "work": "Wanderer-fantasie"
+    "work": "Wanderer-fantasie: III. und IV. Satz"
   },
   {
     "arranger": "",
@@ -6651,9 +6651,9 @@
     "number": "3316",
     "performer": "Lászlò, Sándor",
     "publisher": "Welte-Mignon",
-    "title": "Schubert/Lászlò - 8th symphony b minor",
+    "title": "Schubert/Lászlò - 8th symphony b minor: 2nd movement: Andante con motto (unfinished)",
     "type": "welte-red",
-    "work": "8th symphony b minor"
+    "work": "8th symphony b minor: 2nd movement : Andante con motto (unfinished)"
   },
   {
     "arranger": "",
@@ -6742,9 +6742,9 @@
     "number": "3020",
     "performer": "",
     "publisher": "Victoria",
-    "title": "Schumann - Fantaisiestück, op. 12",
+    "title": "Schumann - Fantaisiestück, op. 12: N. 8: Amici, comedia finita est",
     "type": "88-note",
-    "work": "Fantaisiestück, op. 12"
+    "work": "Fantaisiestück, op. 12: N. 8: Amici, comedia finita est"
   },
   {
     "arranger": "",
@@ -6755,9 +6755,9 @@
     "number": "28",
     "performer": "Adam-Benard, Eugenie",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Adam-Benard - Klavierconcert a-moll, op. 54",
+    "title": "Schumann/Adam-Benard - Klavierconcert a-moll, op. 54: Allegro affectuoso, allegro molto",
     "type": "welte-red",
-    "work": "Klavierconcert a-moll, op. 54"
+    "work": "Klavierconcert a-moll, op. 54: Allegro affectuoso, allegro molto"
   },
   {
     "arranger": "",
@@ -6768,9 +6768,9 @@
     "number": "28",
     "performer": "Adam-Benard, Eugenie",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Adam-Benard - Piano concerto op. 54, a minor",
+    "title": "Schumann/Adam-Benard - Piano concerto op. 54, a minor: Allegro affectuoso, allegro molto",
     "type": "welte-red",
-    "work": "Piano concerto op. 54, a minor"
+    "work": "Piano concerto op. 54, a minor: Allegro affectuoso, allegro molto"
   },
   {
     "arranger": "",
@@ -6794,9 +6794,9 @@
     "number": "361",
     "performer": "Carreño, Teresa",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Carreño - Fantasia op. 17, c-major",
+    "title": "Schumann/Carreño - Fantasia op. 17, c-major: Part 1",
     "type": "welte-red",
-    "work": "Fantasia op. 17, c-major"
+    "work": "Fantasia op. 17, c-major: Part 1"
   },
   {
     "arranger": "",
@@ -6807,9 +6807,9 @@
     "number": "363",
     "performer": "Carreño, Teresa",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Carreño - Fantasie c-dur, op. 17",
+    "title": "Schumann/Carreño - Fantasie c-dur, op. 17: III. Satz",
     "type": "welte-red",
-    "work": "Fantasie c-dur, op. 17"
+    "work": "Fantasie c-dur, op. 17: III. Satz"
   },
   {
     "arranger": "",
@@ -6820,9 +6820,9 @@
     "number": "362",
     "performer": "Carreño, Teresa",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Carreño - Fantasie op. 17, c-dur",
+    "title": "Schumann/Carreño - Fantasie op. 17, c-dur: II. Satz",
     "type": "welte-red",
-    "work": "Fantasie op. 17, c-dur"
+    "work": "Fantasie op. 17, c-dur: II. Satz"
   },
   {
     "arranger": "",
@@ -6846,9 +6846,9 @@
     "number": "1772",
     "performer": "Davies, Fanny",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Davies - Kinderscenen",
+    "title": "Schumann/Davies - Kinderscenen: 1-6",
     "type": "welte-red",
-    "work": "Kinderscenen"
+    "work": "Kinderscenen: 1-6"
   },
   {
     "arranger": "",
@@ -6859,9 +6859,9 @@
     "number": "1773",
     "performer": "Davies, Fanny",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Davies - Scenes from childhood",
+    "title": "Schumann/Davies - Scenes from childhood: No. 7-13",
     "type": "welte-red",
-    "work": "Scenes from childhood"
+    "work": "Scenes from childhood: No. 7-13"
   },
   {
     "arranger": "",
@@ -6898,9 +6898,9 @@
     "number": "1063",
     "performer": "Grosz, Gisella",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Grosz - 2nd sonata, op. 22, no. 2, g minor",
+    "title": "Schumann/Grosz - 2nd sonata, op. 22, no. 2, g minor: Adantino",
     "type": "welte-red",
-    "work": "2nd sonata, op. 22, no. 2, g minor"
+    "work": "2nd sonata, op. 22, no. 2, g minor: Adantino"
   },
   {
     "arranger": "",
@@ -7028,35 +7028,9 @@
     "number": "323",
     "performer": "Reisenauer, Alfred",
     "publisher": "Welte-Mignon",
-    "title": "Schumann/Reisenauer - Carnaval",
+    "title": "Schumann/Reisenauer - Carnaval: III. Teil",
     "type": "welte-red",
-    "work": "Carnaval"
-  },
-  {
-    "arranger": "",
-    "catkey": "10763547",
-    "composer": "Schumann, Robert",
-    "druid": "wk320bj4724",
-    "image_url": "https://stacks.stanford.edu/image/iiif/wk320bj4724/wk320bj4724_0001/info.json",
-    "number": "322",
-    "performer": "Reisenauer, Alfred",
-    "publisher": "Welte-Mignon",
-    "title": "Schumann/Reisenauer - Carneval",
-    "type": "welte-red",
-    "work": "Carneval"
-  },
-  {
-    "arranger": "",
-    "catkey": "10763550",
-    "composer": "Schumann, Robert",
-    "druid": "zt739gs4926",
-    "image_url": "https://stacks.stanford.edu/image/iiif/zt739gs4926/zt739gs4926_0001/info.json",
-    "number": "321",
-    "performer": "Reisenauer, Alfred",
-    "publisher": "Welte-Mignon",
-    "title": "Schumann/Reisenauer - Carneval",
-    "type": "welte-red",
-    "work": "Carneval"
+    "work": "Carnaval: III. Teil"
   },
   {
     "arranger": "",
@@ -7070,6 +7044,32 @@
     "title": "Schumann/Reisenauer - Carneval part. 1",
     "type": "welte-red",
     "work": "Carneval part. 1"
+  },
+  {
+    "arranger": "",
+    "catkey": "10763550",
+    "composer": "Schumann, Robert",
+    "druid": "zt739gs4926",
+    "image_url": "https://stacks.stanford.edu/image/iiif/zt739gs4926/zt739gs4926_0001/info.json",
+    "number": "321",
+    "performer": "Reisenauer, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Reisenauer - Carneval: Part. 1",
+    "type": "welte-red",
+    "work": "Carneval: Part. 1"
+  },
+  {
+    "arranger": "",
+    "catkey": "10763547",
+    "composer": "Schumann, Robert",
+    "druid": "wk320bj4724",
+    "image_url": "https://stacks.stanford.edu/image/iiif/wk320bj4724/wk320bj4724_0001/info.json",
+    "number": "322",
+    "performer": "Reisenauer, Alfred",
+    "publisher": "Welte-Mignon",
+    "title": "Schumann/Reisenauer - Carneval: Part. 2",
+    "type": "welte-red",
+    "work": "Carneval: Part. 2"
   },
   {
     "arranger": "",
@@ -7249,9 +7249,9 @@
     "number": "3196",
     "performer": "Carreras, Maria",
     "publisher": "Welte-Mignon",
-    "title": "Sgambati/Carreras - Concerto op. 15, g minor",
+    "title": "Sgambati/Carreras - Concerto op. 15, g minor: 2nd movement",
     "type": "welte-green",
-    "work": "Concerto op. 15, g minor"
+    "work": "Concerto op. 15, g minor: 2nd movement"
   },
   {
     "arranger": "",
@@ -7262,9 +7262,9 @@
     "number": "3197",
     "performer": "Carreras, Maria",
     "publisher": "Welte-Mignon",
-    "title": "Sgambati/Carreras - Concerto op. 15, g minor",
+    "title": "Sgambati/Carreras - Concerto op. 15, g minor: 3rd movement",
     "type": "welte-green",
-    "work": "Concerto op. 15, g minor"
+    "work": "Concerto op. 15, g minor: 3rd movement"
   },
   {
     "arranger": "",
@@ -7379,9 +7379,9 @@
     "number": "12515",
     "performer": "",
     "publisher": "QRS",
-    "title": "Sonato in a flat",
+    "title": "Sonato in a flat: Andante and variations",
     "type": "88-note",
-    "work": "Sonato in a flat"
+    "work": "Sonato in a flat: Andante and variations"
   },
   {
     "arranger": "",
@@ -7548,9 +7548,9 @@
     "number": "3980",
     "performer": "Koczalski, Raoul",
     "publisher": "Welte-Mignon",
-    "title": "Strauss/Koczalski - Sonata op. 5, b minor",
+    "title": "Strauss/Koczalski - Sonata op. 5, b minor: 3rd and 4th movements",
     "type": "welte-green",
-    "work": "Sonata op. 5, b minor"
+    "work": "Sonata op. 5, b minor: 3rd and 4th movements"
   },
   {
     "arranger": "",
@@ -7626,48 +7626,9 @@
     "number": "D-759",
     "performer": "Stravinsky, Igor",
     "publisher": "Aeolian Co., Ltd.",
-    "title": "Stravinsky/Stravinsky - My life and music",
+    "title": "Stravinsky/Stravinsky - My life and music: ROLL I",
     "type": "duo-art",
-    "work": "My life and music"
-  },
-  {
-    "arranger": "",
-    "catkey": "13465698",
-    "composer": "Stravinsky, Igor",
-    "druid": "gk717vy6323",
-    "image_url": "https://stacks.stanford.edu/image/iiif/gk717vy6323/gk717vy6323_0001/info.json",
-    "number": "D-763",
-    "performer": "Stravinsky, Igor",
-    "publisher": "Aeolian Co., Ltd.",
-    "title": "Stravinsky/Stravinsky - My life and music",
-    "type": "duo-art",
-    "work": "My life and music"
-  },
-  {
-    "arranger": "",
-    "catkey": "13465698",
-    "composer": "Stravinsky, Igor",
-    "druid": "kk651ck1593",
-    "image_url": "https://stacks.stanford.edu/image/iiif/kk651ck1593/kk651ck1593_0001/info.json",
-    "number": "D-765",
-    "performer": "Stravinsky, Igor",
-    "publisher": "Aeolian Co., Ltd.",
-    "title": "Stravinsky/Stravinsky - My life and music",
-    "type": "duo-art",
-    "work": "My life and music"
-  },
-  {
-    "arranger": "",
-    "catkey": "13465698",
-    "composer": "Stravinsky, Igor",
-    "druid": "rb863nd0220",
-    "image_url": "https://stacks.stanford.edu/image/iiif/rb863nd0220/rb863nd0220_0001/info.json",
-    "number": "D-769",
-    "performer": "Stravinsky, Igor",
-    "publisher": "Aeolian Co., Ltd.",
-    "title": "Stravinsky/Stravinsky - My life and music",
-    "type": "duo-art",
-    "work": "My life and music"
+    "work": "My life and music: ROLL I"
   },
   {
     "arranger": "",
@@ -7678,9 +7639,48 @@
     "number": "D-761",
     "performer": "Stravinsky, Igor",
     "publisher": "Aeolian Co., Ltd.",
-    "title": "Stravinsky/Stravinsky - My life and music",
+    "title": "Stravinsky/Stravinsky - My life and music: ROLL II",
     "type": "duo-art",
-    "work": "My life and music"
+    "work": "My life and music: ROLL II"
+  },
+  {
+    "arranger": "",
+    "catkey": "13465698",
+    "composer": "Stravinsky, Igor",
+    "druid": "gk717vy6323",
+    "image_url": "https://stacks.stanford.edu/image/iiif/gk717vy6323/gk717vy6323_0001/info.json",
+    "number": "D-763",
+    "performer": "Stravinsky, Igor",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: ROLL III",
+    "type": "duo-art",
+    "work": "My life and music: ROLL III"
+  },
+  {
+    "arranger": "",
+    "catkey": "13465698",
+    "composer": "Stravinsky, Igor",
+    "druid": "kk651ck1593",
+    "image_url": "https://stacks.stanford.edu/image/iiif/kk651ck1593/kk651ck1593_0001/info.json",
+    "number": "D-765",
+    "performer": "Stravinsky, Igor",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: ROLL IV",
+    "type": "duo-art",
+    "work": "My life and music: ROLL IV"
+  },
+  {
+    "arranger": "",
+    "catkey": "13465698",
+    "composer": "Stravinsky, Igor",
+    "druid": "rb863nd0220",
+    "image_url": "https://stacks.stanford.edu/image/iiif/rb863nd0220/rb863nd0220_0001/info.json",
+    "number": "D-769",
+    "performer": "Stravinsky, Igor",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: ROLL VI",
+    "type": "duo-art",
+    "work": "My life and music: ROLL VI"
   },
   {
     "arranger": "",
@@ -7912,9 +7912,9 @@
     "number": "473",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Verdi - Aida",
+    "title": "Verdi - Aida: Acto II,  Marcha triunfal",
     "type": "88-note",
-    "work": "Aida"
+    "work": "Aida: Acto II,  Marcha triunfal"
   },
   {
     "arranger": "",
@@ -8029,9 +8029,9 @@
     "number": "2841",
     "performer": "",
     "publisher": "Victoria",
-    "title": "Villa - Cantos asturianos, no 1",
+    "title": "Villa - Cantos asturianos, no 1: Andante, allegro non molto",
     "type": "88-note",
-    "work": "Cantos asturianos, no 1"
+    "work": "Cantos asturianos, no 1: Andante, allegro non molto"
   },
   {
     "arranger": "",
@@ -8042,9 +8042,9 @@
     "number": "357",
     "performer": "",
     "publisher": "Princesa",
-    "title": "Vives - Bohemios",
+    "title": "Vives - Bohemios: Escena y coro",
     "type": "88-note",
-    "work": "Bohemios"
+    "work": "Bohemios: Escena y coro"
   },
   {
     "arranger": "",
@@ -8094,9 +8094,9 @@
     "number": "C3494",
     "performer": "Brockway, Howard",
     "publisher": "Solostyle",
-    "title": "Wagner-Brockway/Brockway - Tannhauser",
+    "title": "Wagner-Brockway/Brockway - Tannhauser: \"Oh thou sublime sweet evening star\"",
     "type": "88-note",
-    "work": "Tannhauser"
+    "work": "Tannhauser: \"Oh thou sublime sweet evening star\""
   },
   {
     "arranger": "Brockway, Howard",
@@ -8107,9 +8107,9 @@
     "number": "C3484",
     "performer": "Brockway, Howard",
     "publisher": "Solostyle",
-    "title": "Wagner-Brockway/Brockway - Tannhauser",
+    "title": "Wagner-Brockway/Brockway - Tannhauser: \"Pilgrim's chorus\"",
     "type": "88-note",
-    "work": "Tannhauser"
+    "work": "Tannhauser: \"Pilgrim's chorus\""
   },
   {
     "arranger": "Bülow, Hans von",
@@ -8211,9 +8211,9 @@
     "number": "122",
     "performer": "Adam-Benard, Eugenie",
     "publisher": "Welte-Mignon",
-    "title": "Wagner/Adam-Benard - Lohengrin",
+    "title": "Wagner/Adam-Benard - Lohengrin: Prelude",
     "type": "welte-red",
-    "work": "Lohengrin"
+    "work": "Lohengrin: Prelude"
   },
   {
     "arranger": "",
@@ -8263,22 +8263,9 @@
     "number": "1352",
     "performer": "Mottl, Felix",
     "publisher": "Welte-Mignon",
-    "title": "Wagner/Mottl - Die  Meistersinger von nürnberg",
+    "title": "Wagner/Mottl - Die  Meistersinger von nürnberg: Am stillen Herd zur Winterszeit",
     "type": "welte-red",
-    "work": "Die  Meistersinger von nürnberg"
-  },
-  {
-    "arranger": "",
-    "catkey": "11048246",
-    "composer": "Wagner, Richard",
-    "druid": "dt046tz6296",
-    "image_url": "https://stacks.stanford.edu/image/iiif/dt046tz6296/dt046tz6296_0001/info.json",
-    "number": "1349",
-    "performer": "Mottl, Felix",
-    "publisher": "Welte-Mignon",
-    "title": "Wagner/Mottl - Lohengrin",
-    "type": "welte-red",
-    "work": "Lohengrin"
+    "work": "Die  Meistersinger von nürnberg: Am stillen Herd zur Winterszeit"
   },
   {
     "arranger": "",
@@ -8289,9 +8276,22 @@
     "number": "1348",
     "performer": "Mottl, Felix",
     "publisher": "Welte-Mignon",
-    "title": "Wagner/Mottl - Lohengrin",
+    "title": "Wagner/Mottl - Lohengrin: Bridal chorus",
     "type": "welte-red",
-    "work": "Lohengrin"
+    "work": "Lohengrin: Bridal chorus"
+  },
+  {
+    "arranger": "",
+    "catkey": "11048246",
+    "composer": "Wagner, Richard",
+    "druid": "dt046tz6296",
+    "image_url": "https://stacks.stanford.edu/image/iiif/dt046tz6296/dt046tz6296_0001/info.json",
+    "number": "1349",
+    "performer": "Mottl, Felix",
+    "publisher": "Welte-Mignon",
+    "title": "Wagner/Mottl - Lohengrin: Elsa's dream",
+    "type": "welte-red",
+    "work": "Lohengrin: Elsa's dream"
   },
   {
     "arranger": "",
@@ -8302,9 +8302,9 @@
     "number": "1347",
     "performer": "Mottl, Felix",
     "publisher": "Welte-Mignon",
-    "title": "Wagner/Mottl - Tristan und isolde",
+    "title": "Wagner/Mottl - Tristan und isolde: Vorspiel",
     "type": "welte-red",
-    "work": "Tristan und isolde"
+    "work": "Tristan und isolde: Vorspiel"
   },
   {
     "arranger": "",
@@ -8328,9 +8328,9 @@
     "number": "2566",
     "performer": "Paur, Emil",
     "publisher": "Welte-Mignon",
-    "title": "Wagner/Paur - Siegfried",
+    "title": "Wagner/Paur - Siegfried: Waldweben",
     "type": "welte-red",
-    "work": "Siegfried"
+    "work": "Siegfried: Waldweben"
   },
   {
     "arranger": "",
