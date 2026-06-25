@@ -12,6 +12,7 @@
 </script>
 
 <div id="playback-settings">
+  <legend>Performance Controls</legend>
   <SliderControl
     bind:value={$volumeCoefficient}
     min={controlsConfig.volume.min}

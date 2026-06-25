@@ -4,6 +4,7 @@ import { get } from "svelte/store";
 import IntervalTree from "node-interval-tree";
 import {
   bassExpCurve,
+  currentTick,
   expressionParameters,
   playExpressionsOnOff,
   rollMetadata,
@@ -373,6 +374,13 @@ export default class InAppExpressionizer {
     data,
     tick,
   }) => {
+    // The MIDI player is prone to regurgitating swarms of note events from
+    //  earlier in the roll when skipping ahead (due to mishandling simultaneous
+    //  note off events). But legitimate note on events also can lag the current
+    //  tick by a handful of ticks if there are multiple near simultaneous
+    //  attacks. Disregarding those from more than 100 ticks earlier seems OK.
+    if (tick < get(currentTick) - 100) return;
+
     const tempo = this.getTempoAtTick(tick);
 
     const playerTempo = tempo * get(tempoCoefficient);

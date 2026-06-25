@@ -81,9 +81,7 @@
       mousewheel={false}
       on:change={({ target: { value } }) => ($sustainProlong = value)}
     >
-      <svelte:fragment slot="label"
-        >Prolong Sustain Release (ms):</svelte:fragment
-      >
+      <svelte:fragment slot="label">Sustain Release (+ms):</svelte:fragment>
     </SliderControl>
   </fieldset>
   <fieldset>

@@ -264,12 +264,6 @@
   };
 
   const startNote = (noteNumber, velocity, noteSource, tick) => {
-    // The MIDI player is prone to regurgitating swarms of note events from
-    //  earlier in the roll when skipping ahead (due to mishandling simultaneous
-    //  note off events). But legitimate note on events also can lag the current
-    //  tick by a handful of ticks if there are multiple near simultaneous
-    //  attacks. Disregarding those from more than 100 ticks earlier seems OK.
-    if (tick < $currentTick - 100) return;
     const finalNoteNumber =
       noteSource === NoteSource.Midi
         ? noteNumber + $transposeHalfStep
@@ -354,8 +348,8 @@
     $isPlaying = true;
   };
 
-  const pausePlaybackOrLoop = async () => {
-    pausePlayback();
+  const stopPlaybackOrLoop = async () => {
+    resetPlayback();
     if ($playRepeat) {
       // the midiplayer resets some things when it hits endOfFile.
       // Let it reset, then restart.
@@ -464,7 +458,7 @@
     webMidi?.exportInAppMIDI();
   };
 
-  midiSamplePlayer.on("endOfFile", pausePlaybackOrLoop);
+  midiSamplePlayer.on("endOfFile", stopPlaybackOrLoop);
 
   /* eslint-disable no-unused-expressions, no-sequences */
   $: toggleSustain($sustainOnOff);

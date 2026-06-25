@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import IntervalTree from "node-interval-tree";
 import { NoteSource } from "../lib/utils";
 import {
+  currentTick,
   rollPedalingOnOff,
   softOnOff,
   sustainOnOff,
@@ -135,6 +136,12 @@ export default class ExpressiveMidiExpressionizer {
     data,
     tick,
   }) => {
+    // The MIDI player is prone to regurgitating swarms of note events from
+    //  earlier in the roll when skipping ahead (due to mishandling simultaneous
+    //  note off events). But legitimate note on events also can lag the current
+    //  tick by a handful of ticks if there are multiple near simultaneous
+    //  attacks. Disregarding those from more than 100 ticks earlier seems OK.
+    if (tick < get(currentTick) - 100) return;
     if (name === "Note on") {
       if (velocity === 0) {
         this.stopNote(noteNumber, NoteSource.Midi, undefined, tick);

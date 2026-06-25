@@ -42,6 +42,7 @@
     border: 1px solid #999;
     position: relative;
     width: max-content;
+    max-width: 99vw;
     z-index: z($main-context, roll-selector-dropdown);
 
     &.open {
@@ -53,14 +54,18 @@
     text-align: right;
     padding: 5px 15px;
     display: flex;
-    align-items: flex-end;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 15px;
 
     ul {
-      flex: 1 0 auto;
+      display: flex;
+      flex-wrap: wrap;
       margin: 0;
       text-align: left;
       padding: 0;
+      row-gap: 2px;
     }
 
     li {
@@ -71,6 +76,7 @@
       padding: 1px 8px 2px;
       margin: 0 4px;
       cursor: pointer;
+      word-break: keep-all;
 
       &.active {
         background-color: var(--primary-accent);
@@ -87,10 +93,11 @@
     max-height: calc(15 * (1rem + 10px) + 15px);
     min-width: 100%;
     overflow-y: auto;
-    padding: 10px 0;
+    padding: 1px 0;
     position: relative;
     top: 0px;
     user-select: none;
+    text-indent: 1em hanging;
     z-index: 99;
 
     li {
@@ -98,7 +105,6 @@
       cursor: pointer;
       line-height: 1;
       padding: 5px 15px;
-      white-space: nowrap;
       width: 100%;
 
       &.selected {
@@ -116,6 +122,9 @@
         font-weight: 700;
       }
     }
+  }
+  small {
+    white-space: nowrap;
   }
 
   .sr-only {
@@ -450,7 +459,7 @@
           {/each}
         </ul>
       {/if}
-      Matched: {filteredListItems?.length} / {listItems.length}
+      <span>Matched: {filteredListItems?.length} / {listItems.length}</span>
     </div>
     <ul
       id="droplist"
