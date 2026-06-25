@@ -487,8 +487,7 @@
         element: ".player-button-container",
         popover: {
           title: "Roll Player Controls",
-          description:
-            "Use these buttons to play, pause, and rewind the roll, as well as to skip forward and backward, highlight a section of the roll, get a bookmark URL, create and export MIDI and sound recordings, and set the roll to auto-repeat.",
+          description: `Use these buttons to play, pause, and rewind the roll, as well as to skip forward and backward, highlight a section of the roll, get a bookmark URL, and set the roll to auto-repeat. In Perform Mode, you also can use ${$appMode === "listen" ? "a" : "the"} record button to create and export MIDI and sound clips.`,
         },
       },
       {
@@ -558,7 +557,7 @@
         popover: {
           title: "Audio Settings",
           description:
-            "Use this menu to modify aspects of how the emulated piano sounds during playback, including sample resolution and volume, reverb, and other acoustic modifications.",
+            "Use this menu to change aspects of how the emulated piano sounds during playback, including sample resolution and volume, reverb, and other acoustic modifications.",
         },
       },
       {
@@ -574,7 +573,7 @@
         popover: {
           title: "Expression Settings",
           description:
-            'Use this menu to choose between hearing precalculated note velocities (via precomputed "expression MIDI") and the advanced "in-app expression mode," which allows for dynamic modification of the applicable emulation parameters during playback, as well as downloading the resulting MIDI and settings as files.',
+            'Use this menu to choose between hearing precalculated note velocities (from a bespoke "expression MIDI" file) and the advanced "in-app expression mode," which allows for dynamic modification of the applicable emulation parameters during playback, as well as downloading the resulting MIDI and settings as files.',
         },
       },
     ];
