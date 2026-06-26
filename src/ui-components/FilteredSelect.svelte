@@ -123,9 +123,6 @@
       }
     }
   }
-  small {
-    white-space: nowrap;
-  }
 
   .sr-only {
     position: absolute;

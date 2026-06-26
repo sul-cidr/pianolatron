@@ -4,6 +4,7 @@
     display: inline-block;
     text-align: right;
     margin-right: 1ch;
+    white-space: nowrap;
 
     &:first-child {
       width: 5ch;
