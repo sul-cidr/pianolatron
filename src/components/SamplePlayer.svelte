@@ -244,16 +244,16 @@
         message:
           "Increasing the sample count beyond four will consume large amounts " +
           "of your system's memory, and could result in crashing the browser " +
-          "or even the entire system.  If you experience issues, please " +
+          "or even the entire system. If you experience issues, please " +
           "lower the count to four or lower.",
         closable: false,
         actions: [
           {
-            label: "okay",
+            label: "OK",
             fn: loadSampleVelocities,
           },
           {
-            label: "cancel",
+            label: "Cancel",
             fn: () => ($sampleVelocities = piano.loadedVelocities),
           },
         ],
