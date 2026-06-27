@@ -395,6 +395,7 @@
     if ($recordingInBuffer && !$recordingOnOff) {
       notify({
         title: "Recording paused, ready for export",
+        type: "dialog",
         message: "",
         closable: true,
         actions: [

@@ -27,7 +27,8 @@
       font-weight: bold;
     }
 
-    &.default {
+    &.default,
+    &.dialog {
       background: white;
       border: 1px solid var(--primary-accent);
       color: black;
@@ -137,8 +138,10 @@
     await tick();
     $NotificationsStore.forEach((notification) => {
       announcement = `${notification.title ? notification.title : ""} ${notification.message}`;
-      const dialog = document.getElementById(`msg_${notification.id}`);
-      if (dialog) dialog.focus();
+      if (!!notification.type && notification.type === "dialog") {
+        const dialog = document.getElementById(`msg_${notification.id}`);
+        if (dialog) dialog.focus();
+      }
     });
   };
 
@@ -186,6 +189,7 @@
           <div
             class="close"
             role="button"
+            aria-label="close dialog"
             tabindex="0"
             on:click={() => clearNotification(notification.id)}
             on:keypress={(event) => {

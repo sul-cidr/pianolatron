@@ -247,6 +247,7 @@
           "or even the entire system. If you experience issues, please " +
           "lower the count to four or lower.",
         closable: false,
+        type: "dialog",
         actions: [
           {
             label: "OK",
