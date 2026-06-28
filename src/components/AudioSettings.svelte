@@ -6,12 +6,10 @@
     accentBump,
     sustainProlong,
     reverbWetDry,
-    velocityCurveLow,
-    velocityCurveMid,
-    velocityCurveHigh,
+    velocityMods,
   } from "../stores";
   import SliderControl from "../ui-components/SliderControl.svelte";
-  import VelocitySpliner from "./VelocitySpliner.svelte";
+  import { getNoteName } from "../lib/hole-data";
 
   let sampleVelocitiesSliderValue;
   let reverbWetDrySliderValue;
@@ -109,7 +107,30 @@
       <svelte:fragment slot="label">Reverb:</svelte:fragment>
     </SliderControl>
   </fieldset>
-  <VelocitySpliner keyboardRegion={velocityCurveLow} {accentColor} />
+  {#each Object.values($velocityMods) as keyboardRegion}
+    <fieldset>
+      <legend
+        >{getNoteName(keyboardRegion.firstMidi)}-{getNoteName(
+          keyboardRegion.lastMidi,
+        )} Velocity Tuning</legend
+      >
+      {#each Object.entries(keyboardRegion.mods) as [dynamic, modValue]}
+        <SliderControl
+          bind:value={modValue}
+          min="0"
+          max="2"
+          step=".1"
+          name="{keyboardRegion}-{dynamic}"
+          mousewheel={false}
+          on:change={({ target: { value } }) =>
+            (keyboardRegion.mods[dynamic] = value)}
+        >
+          <svelte:fragment slot="label">{dynamic}</svelte:fragment>
+        </SliderControl>
+      {/each}
+    </fieldset>
+  {/each}
+  <!-- <VelocitySpliner keyboardRegion={velocityCurveLow} {accentColor} />
   <VelocitySpliner keyboardRegion={velocityCurveMid} {accentColor} />
-  <VelocitySpliner keyboardRegion={velocityCurveHigh} {accentColor} />
+  <VelocitySpliner keyboardRegion={velocityCurveHigh} {accentColor} /> -->
 </div>

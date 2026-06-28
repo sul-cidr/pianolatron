@@ -47,9 +47,7 @@
     sampleVolumes,
     sampleVelocities,
     tempoCoefficient,
-    velocityCurveLow,
-    velocityCurveMid,
-    velocityCurveHigh,
+    velocityMods,
     userSettings,
     useMidiTempoEventsOnOff,
   } from "../stores";
@@ -72,9 +70,7 @@
       sampleVolumes: $sampleVolumes,
       sampleVelocities: $sampleVelocities,
       reverbWetDry: $reverbWetDry,
-      velocityCurveLow: $velocityCurveLow,
-      velocityCurveMid: $velocityCurveMid,
-      velocityCurveHigh: $velocityCurveHigh,
+      velocityMods: $velocityMods,
       currentTick: $currentTick,
       userSettings: $userSettings,
       drawVelocityCurves: $drawVelocityCurves,
@@ -124,9 +120,7 @@
       $sampleVolumes = allSettings.playbackSettings.sampleVolumes;
       $sampleVelocities = allSettings.playbackSettings.sampleVelocities;
       $reverbWetDry = allSettings.playbackSettings.reverbWetDry;
-      $velocityCurveLow = allSettings.playbackSettings.velocityCurveLow;
-      $velocityCurveMid = allSettings.playbackSettings.velocityCurveMid;
-      $velocityCurveHigh = allSettings.playbackSettings.velocityCurveHigh;
+      $velocityMods = allSettings.playbackSettings.velocityMods;
       $currentTick = allSettings.playbackSettings.currentTick;
       throttledTick.set($currentTick);
       $userSettings = allSettings.playbackSettings.userSettings;

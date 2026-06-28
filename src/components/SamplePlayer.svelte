@@ -31,9 +31,7 @@
     sampleVolumes,
     sampleVelocities,
     reverbWetDry,
-    velocityCurveLow,
-    velocityCurveMid,
-    velocityCurveHigh,
+    velocityMods,
     transposeHalfStep,
     playRepeat,
     latencyDetected,
@@ -55,6 +53,12 @@
 
   let latencyThreshold = 100;
   let latentNotes = [];
+
+  const VELOCITY_RANGES = {
+    p: { low: 0, high: 48 },
+    m: { low: 49, high: 80 },
+    f: { low: 81, high: 127 },
+  };
 
   // These are the MIDI controller values for these pedal events
   const SOFT_PEDAL = 67;
@@ -264,6 +268,17 @@
     loadSampleVelocities();
   };
 
+  const applyVelocityMods = (keyboardRegion, velocity, regionLabel) => {
+    for (const [dynamic, limits] of Object.entries(VELOCITY_RANGES)) {
+      const midiVelocity = velocity * 127.0;
+      if (midiVelocity >= limits.low && midiVelocity <= limits.high)
+        return (
+          (midiVelocity * parseFloat(keyboardRegion.mods[dynamic])) / 127.0
+        );
+    }
+    return velocity;
+  };
+
   const startNote = (noteNumber, velocity, noteSource, tick) => {
     const finalNoteNumber =
       noteSource === NoteSource.Midi
@@ -272,20 +287,18 @@
     activeNotes.add(finalNoteNumber);
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
-    [$velocityCurveLow, $velocityCurveMid, $velocityCurveHigh].forEach(
-      (keyboardRegion) => {
-        if (
-          keyboardRegion.velocityCurve !== null &&
-          finalNoteNumber >= keyboardRegion.firstMidi &&
-          finalNoteNumber <= keyboardRegion.lastMidi
-        ) {
-          [, baseVelocity] =
-            keyboardRegion.velocityCurve[
-              parseInt(keyboardRegion.velocityCurve.length * baseVelocity, 10)
-            ];
-        }
-      },
-    );
+    Object.entries($velocityMods).forEach(([regionLabel, keyboardRegion]) => {
+      if (
+        finalNoteNumber >= keyboardRegion.firstMidi &&
+        finalNoteNumber <= keyboardRegion.lastMidi
+      ) {
+        baseVelocity = applyVelocityMods(
+          keyboardRegion,
+          baseVelocity,
+          regionLabel,
+        );
+      }
+    });
     // Note: $softPedalRatio is only applied when calling piano.keyDown() as
     //       @tonejs/piano has so built-in soft pedaling and so we emulate in
     //       software.  For WebMIDI outputs we send soft pedal controller
