@@ -434,13 +434,13 @@
     switch (action) {
       case RecordingActions.Clear:
         webMidi?.clearRecording();
-        audioRecorder.clearRecording();
+        audioRecorder?.clearRecording();
         break;
       case RecordingActions.ExportMIDI:
         webMidi?.exportRecording();
         break;
       case RecordingActions.ExportWAV:
-        audioRecorder.exportRecording();
+        audioRecorder?.exportRecording();
         break;
       default:
     }
