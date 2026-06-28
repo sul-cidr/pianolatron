@@ -237,15 +237,15 @@
   };
 
   const updateSampleVelocities = () => {
-    if ($sampleVelocities > 4 && $sampleVelocities > piano.loadedVelocities) {
+    if ($sampleVelocities > 8 && $sampleVelocities > piano.loadedVelocities) {
       notify({
         modal: true,
         title: "Please confirm your choice",
         message:
-          "Increasing the sample count beyond four will consume large amounts " +
+          "Increasing the sample count beyond eight will consume large amounts " +
           "of your system's memory, and could result in crashing the browser " +
           "or even the entire system. If you experience issues, please " +
-          "lower the count to four or lower.",
+          "lower the count to eight or lower.",
         closable: false,
         type: "dialog",
         actions: [
