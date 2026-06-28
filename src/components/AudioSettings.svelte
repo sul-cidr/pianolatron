@@ -32,7 +32,7 @@
 
 <div id="audio-panel">
   <fieldset>
-    <legend>Piano Sample Volumes</legend>
+    <legend>Sample Gain (dBFS)</legend>
     {#each Object.keys($sampleVolumes) as sampleType}
       <SliderControl
         bind:value={$sampleVolumes[sampleType]}

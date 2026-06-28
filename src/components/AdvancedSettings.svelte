@@ -187,7 +187,7 @@
       ? null
       : "No Expressions are available for this roll type"}
   >
-    <legend>Roll Emulation Settings</legend>
+    <legend>Emulation Settings</legend>
     <label>
       Play Expressions:
       <input
