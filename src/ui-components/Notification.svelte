@@ -152,8 +152,9 @@
   $: ($NotificationsStore, announceNotifications());
 </script>
 
+<AriaAnnouncer {announcement} />
+
 {#if $NotificationsStore}
-  <AriaAnnouncer {announcement} />
   {#if $NotificationsStore.some((notification) => notification.modal)}
     <div class="modal-screen" transition:fade tabindex={-1} />
   {/if}
