@@ -118,7 +118,13 @@
       accentBump.reset();
       sustainProlong.reset();
       reverbWetDry.reset();
-      velocityMods.reset();
+      Object.keys($velocityMods).forEach((keyboardRegion) => {
+        $velocityMods[keyboardRegion].mods = {
+          "pp-p": 1,
+          "mp-mf": 1,
+          "f-ff": 1,
+        };
+      });
       notify({
         message: "Audio Settings have been reset!",
         type: "success",
@@ -126,25 +132,23 @@
       });
     }}>Reset Audio Settings</button
   >
-  {#each Object.values($velocityMods) as keyboardRegion}
+  {#each Object.entries($velocityMods) as [regionName, keyboardRegion]}
     <fieldset>
       <legend
         >{getNoteName(keyboardRegion.firstMidi)}-{getNoteName(
           keyboardRegion.lastMidi,
         )} Velocity Mods</legend
       >
-      {#each Object.entries(keyboardRegion.mods) as [dynamic, modValue]}
+      {#each Object.keys($velocityMods[regionName].mods) as dynamic}
         <SliderControl
-          bind:value={modValue}
+          bind:value={$velocityMods[regionName].mods[dynamic]}
           min="0"
           max="2"
           step=".1"
-          name="{keyboardRegion}-{dynamic}"
+          name="{regionName}-{dynamic}"
           mousewheel={false}
-          on:change={({ target: { value } }) =>
-            (keyboardRegion.mods[dynamic] = value)}
         >
-          <svelte:fragment slot="label">{dynamic}</svelte:fragment>
+          <span slot="label">{dynamic}:</span>
         </SliderControl>
       {/each}
     </fieldset>
