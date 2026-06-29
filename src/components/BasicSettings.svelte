@@ -19,6 +19,7 @@
     max={controlsConfig.volume.max}
     step={controlsConfig.volume.delta}
     name="volume"
+    mousewheel={false}
   >
     <svelte:fragment slot="label">
       Volume:
@@ -36,6 +37,7 @@
     max={controlsConfig.trebleVolume.max}
     step={controlsConfig.trebleVolume.delta}
     name="treble-volume"
+    mousewheel={false}
   >
     <svelte:fragment slot="label">
       Treble Volume:
@@ -53,6 +55,7 @@
     max={controlsConfig.bassVolume.max}
     step={controlsConfig.bassVolume.delta}
     name="bass-volume"
+    mousewheel={false}
   >
     <svelte:fragment slot="label">
       Bass Volume:
@@ -70,6 +73,7 @@
     max={controlsConfig.tempo.max}
     step={controlsConfig.tempo.delta}
     name="tempo"
+    mousewheel={false}
   >
     <svelte:fragment slot="label">
       Tempo:
@@ -86,6 +90,7 @@
     max={controlsConfig.transpose.max}
     step={controlsConfig.transpose.delta}
     name="transpose"
+    mousewheel={false}
   >
     <svelte:fragment slot="label">Transpose (Half Steps):</svelte:fragment>
   </SliderControl>
