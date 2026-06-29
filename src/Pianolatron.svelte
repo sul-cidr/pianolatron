@@ -574,7 +574,7 @@
         popover: {
           title: "Expression Settings",
           description:
-            'Use this menu to choose between hearing precalculated note velocities (from a bespoke "expression MIDI" file) and the advanced "in-app expression mode," which allows for dynamic modification of the applicable emulation parameters during playback, as well as downloading the resulting MIDI and settings as files.',
+            'Use this menu to choose between hearing precalculated note velocities (from a bespoke "expression MIDI" file) and the advanced "in-app expression" mode, which allows for dynamic modification of the applicable emulation parameters during playback, as well as downloading the resulting MIDI and settings as files, and loading a previously exported settings file.',
         },
       },
     ];
