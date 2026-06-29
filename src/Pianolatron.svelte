@@ -26,7 +26,7 @@
     }
   }
 
-  .listen-app,
+  .play-app,
   .perform-app {
     height: calc(100vh - 135px);
     transition: height 0.3s ease;
@@ -35,7 +35,7 @@
     height: 100vh;
   }
 
-  :global(body.header-hidden) .listen-app,
+  :global(body.header-hidden) .play-app,
   :global(body.header-hidden) .perform-app {
     height: 100vh;
   }
@@ -297,7 +297,7 @@
         if (loadingSpan !== null)
           loadingSpan.textContent = "Loading roll image...";
         previousRoll = currentRoll;
-        pageTitle = `${roll.title} | Pianolatron (${$appMode === "perform" ? "Perform Mode" : "Listen Mode"})`;
+        pageTitle = `${roll.title} | Pianolatron (${$appMode === "perform" ? "Perform Mode" : "Play Mode"})`;
         document.title = pageTitle;
         const params = new URLSearchParams(window.location.search);
         if (params.has("druid") && params.get("druid") !== currentRoll.druid) {
@@ -473,7 +473,7 @@
         element: ".mode-switch-container > .player-button",
         popover: {
           title: "Mode Toggle",
-          description: `Use this button to switch between "Listen Mode" and "Perform Mode." You are presently viewing the roll in ${$appMode === "perform" ? "Perform" : "Listen"} Mode. ${$appMode === "listen" ? "Take this tour again in Perform Mode to learn more about the advanced features available there." : "Perform Mode adds several more menus and options for influencing how a roll plays back interactively."}`,
+          description: `Use this button to switch between "Play Mode" and "Perform Mode." You are presently viewing the roll in ${$appMode === "perform" ? "Perform" : "Play"} Mode. ${$appMode === "play" ? "Take this tour again in Perform Mode to learn more about the advanced features available there." : "Perform Mode adds several more menus and options for influencing how a roll plays back interactively."}`,
         },
       },
       {
@@ -488,7 +488,7 @@
         element: ".player-button-container",
         popover: {
           title: "Roll Player Controls",
-          description: `Use these buttons to play, pause, and rewind the roll, as well as to skip forward and backward, highlight a section of the roll, get a bookmark URL, and set the roll to auto-repeat. In Perform Mode, you also can use ${$appMode === "listen" ? "a" : "the"} record button to create and export MIDI and sound clips.`,
+          description: `Use these buttons to play, pause, and rewind the roll, as well as to skip forward and backward, highlight a section of the roll, get a bookmark URL, and set the roll to auto-repeat. In Perform Mode, you also can use ${$appMode === "play" ? "a" : "the"} record button to create and export MIDI and sound clips.`,
         },
       },
       {
@@ -508,7 +508,7 @@
       },
     ];
 
-    const listenTourSteps = [
+    const playTourSteps = [
       {
         element: ".tempo-control-container",
         popover: {
@@ -582,8 +582,8 @@
     const driverObj = driver({
       showProgress: true,
       steps:
-        $appMode === "listen"
-          ? everyTourSteps.concat(listenTourSteps)
+        $appMode === "play"
+          ? everyTourSteps.concat(playTourSteps)
           : everyTourSteps.concat(performTourSteps),
       onHighlighted: (e) => {
         switch (e) {
