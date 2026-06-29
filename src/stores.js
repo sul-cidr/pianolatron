@@ -12,7 +12,7 @@ class KeyboardRegion {
   constructor(firstMidi, lastMidi) {
     this.firstMidi = firstMidi;
     this.lastMidi = lastMidi;
-    this.mods = {"p": 1, "m": 1, "f": 1};
+    this.mods = {"pp-p": 1, "mp-mf": 1, "f-ff": 1};
   }
 }
 

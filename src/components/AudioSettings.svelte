@@ -131,7 +131,7 @@
       <legend
         >{getNoteName(keyboardRegion.firstMidi)}-{getNoteName(
           keyboardRegion.lastMidi,
-        )} Velocity Tuning</legend
+        )} Velocity Mods</legend
       >
       {#each Object.entries(keyboardRegion.mods) as [dynamic, modValue]}
         <SliderControl

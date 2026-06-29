@@ -55,9 +55,9 @@
   let latentNotes = [];
 
   const VELOCITY_RANGES = {
-    p: { low: 0, high: 48 },
-    m: { low: 49, high: 80 },
-    f: { low: 81, high: 127 },
+    "pp-p": { low: 0, high: 48 },
+    "mp-mf": { low: 49, high: 80 },
+    "f-ff": { low: 81, high: 127 },
   };
 
   // These are the MIDI controller values for these pedal events
