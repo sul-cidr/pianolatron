@@ -5,6 +5,7 @@
     height: 1px;
     padding: 0;
     overflow: hidden;
+    top: -1px;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
