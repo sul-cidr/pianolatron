@@ -79,9 +79,6 @@
     rollPedalingOnOff,
     useMidiTempoEventsOnOff,
     userSettings,
-    sampleVolumes,
-    sampleVelocities,
-    reverbWetDry,
     gameController,
     volumeSensitivity,
     tempoSensitivity,
@@ -236,15 +233,12 @@
   <button
     on:click={() => {
       userSettings.reset();
-      sampleVolumes.reset();
-      sampleVelocities.reset();
-      reverbWetDry.reset();
       notify({
-        message: "Settings have been reset!",
+        message: "Advanced Settings have been reset!",
         type: "success",
         timeout: 4000,
       });
-    }}>Reset All Settings</button
+    }}>Reset Advanced Settings</button
   >
   <fieldset>
     <legend>Game Controller</legend>

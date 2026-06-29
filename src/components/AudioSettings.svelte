@@ -1,3 +1,9 @@
+<style lang="scss">
+  button {
+    @include button;
+  }
+</style>
+
 <script>
   import {
     sampleVolumes,
@@ -8,6 +14,7 @@
     reverbWetDry,
     velocityMods,
   } from "../stores";
+  import { notify } from "../ui-components/Notification.svelte";
   import SliderControl from "../ui-components/SliderControl.svelte";
   import { getNoteName } from "../lib/hole-data";
 
@@ -16,10 +23,6 @@
   let softPedalSliderValue;
   let accentBumpSliderValue; // the pianola's foot pump is basically a pedal
   let sustainProlongSliderValue;
-
-  const accentColor = getComputedStyle(
-    document.documentElement,
-  ).getPropertyValue("--primary-accent");
 
   $: sampleVelocitiesSliderValue = $sampleVelocities;
   $: reverbWetDrySliderValue = $reverbWetDry;
@@ -107,6 +110,22 @@
       <svelte:fragment slot="label">Reverb:</svelte:fragment>
     </SliderControl>
   </fieldset>
+  <button
+    on:click={() => {
+      sampleVolumes.reset();
+      sampleVelocities.reset();
+      softPedalRatio.reset();
+      accentBump.reset();
+      sustainProlong.reset();
+      reverbWetDry.reset();
+      velocityMods.reset();
+      notify({
+        message: "Audio Settings have been reset!",
+        type: "success",
+        timeout: 4000,
+      });
+    }}>Reset Audio Settings</button
+  >
   {#each Object.values($velocityMods) as keyboardRegion}
     <fieldset>
       <legend
@@ -130,7 +149,4 @@
       {/each}
     </fieldset>
   {/each}
-  <!-- <VelocitySpliner keyboardRegion={velocityCurveLow} {accentColor} />
-  <VelocitySpliner keyboardRegion={velocityCurveMid} {accentColor} />
-  <VelocitySpliner keyboardRegion={velocityCurveHigh} {accentColor} /> -->
 </div>
