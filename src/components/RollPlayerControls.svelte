@@ -143,7 +143,7 @@
         disabled={false}
         on:click={window.location.replace(`/?druid=${$rollMetadata.DRUID}`)}
         iconName="listen"
-        label="Reload in Listen Mode"
+        label="Reload in Play Mode"
         height="32"
         width="32"
       />
@@ -313,7 +313,7 @@
         />
       {/key}
     </div>
-    {#if $appMode === "listen"}
+    {#if $appMode === "play"}
       <div class="tempo-control-container">
         <SliderControl
           bind:value={$tempoCoefficient}

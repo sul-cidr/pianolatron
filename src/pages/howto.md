@@ -5,7 +5,7 @@ title: Using Pianolatron
 
 # Using Pianolatron
 
-Please consult the menu items in the navigation strip above for details on how to use specific aspects of the Pianolatron app, such as input from MIDI devices and game controllers. There are also interactive tours of the player interface that are available upon opening a piano roll in the "Listen" or "Perform" view. To start the tour, select "Tour" in the site navigation menu while viewing those pages.
+Please consult the menu items in the navigation strip above for details on how to use specific aspects of the Pianolatron app, such as input from MIDI devices and game controllers. There are also interactive tours of the player interface that are available upon opening a piano roll in the "Play" or "Perform" view. To start the tour, select "Tour" in the site navigation menu while viewing those pages.
 
 ## System Specifications and Compatibility
 

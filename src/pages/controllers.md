@@ -5,9 +5,9 @@ title: Controlling the Pianolatron
 
 # Controlling the Pianolatron
 
-In the basic "Listen" mode, the Pianolatron can only be controlled via the transport control buttons (play/pause, rewind, loop) and tempo slider at the top of the player, which can be accessed via a pointer device or keyboard navigation.
+In the basic "Play" mode, the Pianolatron can only be controlled via the transport control buttons (play/pause, rewind, loop) and tempo slider at the top of the player, which can be accessed via a pointer device or keyboard navigation.
 
-In the more advanced "Perform" mode, it is possible to modify many aspects of the playback of a piano roll interactively, including bass and treble volume, pedaling, accents, and transposition, as well as recording and all features available in "Listen" mode. In addition to the on-screen transport strip buttons, pedaling buttons and sliders in the Performance Controls menu, the app supports control of these features via mapped keyboard buttons, a gamepad controller, and a MIDI input device.
+In the more advanced "Perform" mode, it is possible to modify many aspects of the playback of a piano roll interactively, including bass and treble volume, pedaling, accents, and transposition, as well as recording and all features available in "Play" mode. In addition to the on-screen transport strip buttons, pedaling buttons and sliders in the Performance Controls menu, the app supports control of these features via mapped keyboard buttons, a gamepad controller, and a MIDI input device.
 
 
 ## Keyboard button mappings

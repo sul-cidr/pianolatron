@@ -35,8 +35,9 @@
   .page-container {
     display: flex;
     flex-direction: row;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif, sans-serif;
+    font-family:
+      "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+      Arial, sans-serif, sans-serif;
     gap: 0.5rem;
     height: 60%;
     justify-content: center;
@@ -104,7 +105,7 @@
 
     <div class="navigation-container">
       <div class="navigation">
-        <a href="/?druid=qm069fy5200">listen<span>to piano rolls</span></a>
+        <a href="/?druid=qm069fy5200">play<span> piano rolls</span></a>
         <a href="/perform/?druid=qm069fy5200"
           >perform<span>my own interpretation</span></a
         >

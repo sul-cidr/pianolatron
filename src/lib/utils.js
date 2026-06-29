@@ -14,7 +14,7 @@ export const RecordingActions = {
   Toggle: 3,
 };
 
-const modes = new Set(["perform", "listen", "embed"]);
+const modes = new Set(["perform", "play", "embed"]);
 export const getMode = (mode) => (modes.has(mode) ? mode : "perform");
 
 export const getPathJoiner = (base) => {
