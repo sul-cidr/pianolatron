@@ -75,8 +75,8 @@
     gap: 0.5em;
     padding: 0.5em;
     height: 100%;
-    min-width: 20vw;
-    max-width: 20vw;
+    min-width: 22vw;
+    max-width: 22vw;
   }
 
   .driver-popover {
@@ -705,7 +705,7 @@
 <main id="app" class={appClass}>
   <h1>{pageTitle || "Pianolatron"}</h1>
   <div>
-    <FlexCollapsible id="left-sidebar" width="20vw" position="left">
+    <FlexCollapsible id="left-sidebar" width="22vw" position="left">
       <h2>Roll Details</h2>
       <RollSelector bind:currentRoll {rollListItems} />
       {#if appReady}
@@ -758,7 +758,7 @@
       {/if}
     </div>
     {#if $appMode === "perform"}
-      <FlexCollapsible id="right-sidebar" width="20vw" position="right">
+      <FlexCollapsible id="right-sidebar" width="22vw" position="right">
         <h2>App Settings and Controls</h2>
         {#if appReady}
           <TabbedPanel {reloadRoll} {exportInAppMIDI} />
