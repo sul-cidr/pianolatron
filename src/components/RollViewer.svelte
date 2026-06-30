@@ -1217,6 +1217,7 @@
 
       if (osdCanvas) {
         osdCanvas.tabIndex = 0;
+        osdCanvas.setAttribute("role", "img");
         osdCanvas.setAttribute("aria-label", "Piano Roll Image Viewer");
       }
 
