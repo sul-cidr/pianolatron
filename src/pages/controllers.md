@@ -17,7 +17,7 @@ The assignment of keys on the computer keyboard to specific performance paramete
 
 ## Game controller button mappings
 
-In "Perform" mode, the Pianolatron supports interactive modification of many playback parameters via a gamepad controller that has been connected to the computer wirelessly or via USB. Information about recognized controllers (if any) is available at the bottom of the Advanced Settings menu, along with some adjustible sensitivity settings.
+In "Perform" mode, the Pianolatron supports interactive modification of many playback parameters via a gamepad controller that has been connected to the computer wirelessly or via USB. Information about recognized controllers (if any) is available at the bottom of the Advanced Settings menu, along with some adjustable sensitivity settings.
 
 Please note that the mappings given below may not be available or consistent for all combinations of game controller, web browser and operating system.
 
