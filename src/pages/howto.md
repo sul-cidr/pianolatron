@@ -24,7 +24,7 @@ The "Loading resources..." animation may appear for a long time when the Pianola
 
 ## Accessibility
 
-The Pianolatron web app is a multimodal piece of research software which presents inherent obstacles to full accessibility for users with disabilities. We have done our best to mitigate these wherever possible, but certain limitations may remain. We invite affected users to contact us with specific concerns.
+The Pianolatron web app is a multimodal work of research software which presents inherent obstacles to full accessibility for users with disabilities. We have done our best to mitigate these wherever possible, but certain limitations may remain. We invite affected users to contact us with specific concerns.
 
 ## Contacting Us
 

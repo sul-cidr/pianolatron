@@ -31,15 +31,12 @@ main {
     display: inline-block;
     font-size: 1.6em;
     font-weight: 400;
-    left: 50%;
     line-height: 1;
     padding-top: 0.25em;
     margin-bottom: 1em;
-    padding-bottom: 0.25em;
+    padding-bottom: 0.125em;
     position: relative;
-    text-align: center;
     text-transform: uppercase;
-    transform: translateX(-50%);
 
     &:after {
       animation: 1200ms cubic-bezier(0.25, 0.8, 0.25, 1) 1 headerUnderline;
@@ -56,16 +53,12 @@ main {
   }
 
   > h2 {
-    border-bottom: 1px solid currentColor;
     display: inline-block;
     font-size: 1.4em;
     font-weight: 400;
-    left: 50%;
-    margin: 0.5em auto 0.75em;
-    padding-top: 0.25em;
-    padding-bottom: 0.125em;
+    margin: 0.5em auto 0.5em;
     position: relative;
-    transform: translateX(-50%);
+    text-align: left;
   }
 
   > h3 {
