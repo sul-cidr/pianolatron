@@ -90,17 +90,10 @@
     },
     "full-screen": {
       svg: `
-        <rect x="1" y="1" width="22" height="22" stroke-width="1"/>
-        <line x1="4" y1="4" x2="20" y2="20" stroke-width="1.5"/>
-        <line x1="4" y1="20" x2="20" y2="4" stroke-width="1.5"/>
-        <line x1="3.5" y1="3.5" x2="7" y2="3.5" stroke-width="1"/>
-        <line x1="3.5" y1="3.5" x2="3.5" y2="7" stroke-width="1"/>
-        <line x1="20.5" y1="20.5" x2="16.5" y2="20.5" stroke-width="1"/>
-        <line x1="20.5" y1="20.5" x2="20.5" y2="16.5" stroke-width="1"/>
-        <line x1="20.5" y1="3.5" x2="20.5" y2="7" stroke-width="1"/>
-        <line x1="20.5" y1="3.5" x2="16.5" y2="3.5" stroke-width="1"/>
-        <line x1="3.5" y1="20.5" x2="7" y2="20.5" stroke-width="1"/>
-        <line x1="3.5" y1="20.5" x2="3.5" y2="16.5" stroke-width="1"/>
+        <path d="M4 8v-4h4"/>
+        <path d="M20 8v-4h-4"/>
+        <path d="M4 16v4h4"/>
+        <path d="M20 16v4h-4"/>
       `,
     },
     edit: {
