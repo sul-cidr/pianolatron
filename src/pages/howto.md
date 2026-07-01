@@ -9,7 +9,7 @@ Please consult the menu items in the navigation strip above for details on how t
 
 ## System Specifications and Compatibility
 
-The Pianolatron web app will play on most notebook and desktop systems of fairly recent vintage, as well as some large-format tablets. Mobile phones will have limited functionality. All major operating systems (Linux, Mac OS, Windows, Android, iOS) are supported. Firefox and Chrome/Edge-family web browsers are recommended; the Safari browser for Mac OS and iOS may not provide an acceptable experience.
+The Pianolatron web app will play on most notebook and desktop systems of fairly recent vintage, as well as some large-format tablets. Mobile phones will have limited functionality. All major operating systems (Linux, macOS, Windows, Android, iOS) are supported. Firefox and Chrome/Edge-family web browsers are recommended; the Safari browser for macOS and iOS may not provide an acceptable experience.
 
 ## Troubleshooting Playback Difficulties
 
