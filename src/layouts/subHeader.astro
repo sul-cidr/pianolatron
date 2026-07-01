@@ -42,6 +42,7 @@ const { tourClass } = Astro.props;
 <style>
   .masthead {
     background-color: #2e2d29;
+    font-size: small;
     height: 135px;
     overflow: hidden;
     padding: 0;
@@ -119,13 +120,16 @@ const { tourClass } = Astro.props;
     margin: 0;
     list-style: none;
   }
+  .navbar-nav li {
+    line-height: unset;
+  }
   .navbar-nav li a,button {
     color: #ffffff;
     text-decoration: none;
+    filter: brightness(0) invert(86%) sepia(0%) saturate(0%) hue-rotate(0deg) contrast(100%);
     font-family: SourceSans3, sans-serif;
     font-size: 15px;
     letter-spacing: 1.1px;
-    filter: brightness(0) invert(86%) sepia(0%) saturate(0%) hue-rotate(0deg) contrast(100%);
   }
   .navbar-nav li a.external {
     background-image: url(/link-external-small-ltr-progressive.svg);
