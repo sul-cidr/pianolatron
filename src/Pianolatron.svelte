@@ -627,11 +627,24 @@
         }
       },
       onDeselected: (e) => {
-        if (document.querySelector("#left-sidebar") === e) {
-          const leftSidebarDivElt = document.querySelector(
-            "#left-sidebar > div > .panel-show-hide-button ",
-          );
-          leftSidebarDivElt.removeAttribute("style");
+        switch (e) {
+          case document.querySelector("#keyboard > .overlay-buttons > button"):
+            e.blur();
+            break;
+          case document.querySelector("#left-sidebar"):
+            const leftSidebarDivElt = document.querySelector(
+              "#left-sidebar > div > .panel-show-hide-button ",
+            );
+            leftSidebarDivElt.removeAttribute("style");
+            break;
+          case document.querySelector("#roll-viewer"):
+            const rollViewerControlsButton = document.querySelector(
+              "#roll-viewer > .overlay-buttons > button",
+            );
+            rollViewerControlsButton.blur();
+            break;
+          default:
+            break;
         }
       },
       onDestroyed: () => {
