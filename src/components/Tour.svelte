@@ -1,5 +1,3 @@
-<svelte:options accessors />
-
 <script>
   import { driver } from "driver.js";
   import "driver.js/dist/driver.css";
