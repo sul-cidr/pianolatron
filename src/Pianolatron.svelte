@@ -592,16 +592,16 @@
             e.focus();
             break;
           case document.querySelector("#left-sidebar"):
-            const leftSidebarDivElt = document.querySelector(
-              "#left-sidebar > div > .panel-show-hide-button ",
-            );
-            leftSidebarDivElt.setAttribute("style", "opacity: 1");
+            document
+              .querySelector("#left-sidebar > div > .panel-show-hide-button ")
+              .setAttribute("style", "opacity: 1");
             break;
           case document.querySelector("#roll-viewer"):
-            const rollViewerControlsButton = document.querySelector(
-              "#roll-viewer > .overlay-buttons > button",
+            const rollViewerControlBar = document.querySelector(
+              "#roll-viewer > .overlay-buttons",
             );
-            rollViewerControlsButton.focus();
+            rollViewerControlBar.tabIndex = -1;
+            rollViewerControlBar.focus();
             break;
           case document.querySelector(
             "button[aria-label='Performance controls']",
@@ -632,16 +632,14 @@
             e.blur();
             break;
           case document.querySelector("#left-sidebar"):
-            const leftSidebarDivElt = document.querySelector(
-              "#left-sidebar > div > .panel-show-hide-button ",
-            );
-            leftSidebarDivElt.removeAttribute("style");
+            document
+              .querySelector("#left-sidebar > div > .panel-show-hide-button ")
+              .removeAttribute("style");
             break;
           case document.querySelector("#roll-viewer"):
-            const rollViewerControlsButton = document.querySelector(
-              "#roll-viewer > .overlay-buttons > button",
-            );
-            rollViewerControlsButton.blur();
+            document
+              .querySelector("#roll-viewer > .overlay-buttons")
+              .removeAttribute("tabIndex");
             break;
           default:
             break;
