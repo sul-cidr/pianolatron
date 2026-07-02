@@ -78,13 +78,6 @@
     min-width: 22vw;
     max-width: 22vw;
   }
-
-  .driver-popover {
-    min-width: 300px;
-  }
-  .driver-popover-progress-text {
-    white-space: nowrap;
-  }
 </style>
 
 <script>
@@ -154,10 +147,10 @@
   let metadata;
   let pageTitle;
 
-  let samplePlayer;
   let tour;
   let showTourIfRequested;
 
+  let samplePlayer;
   let midiSamplePlayer;
   let pianoReady;
   let updatePlayer;
