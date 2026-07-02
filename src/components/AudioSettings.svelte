@@ -1,3 +1,9 @@
+<style lang="scss">
+  button {
+    @include button;
+  }
+</style>
+
 <script>
   import {
     sampleVolumes,
@@ -6,22 +12,17 @@
     accentBump,
     sustainProlong,
     reverbWetDry,
-    velocityCurveLow,
-    velocityCurveMid,
-    velocityCurveHigh,
+    velocityMods,
   } from "../stores";
+  import { notify } from "../ui-components/Notification.svelte";
   import SliderControl from "../ui-components/SliderControl.svelte";
-  import VelocitySpliner from "./VelocitySpliner.svelte";
+  import { getNoteName } from "../lib/hole-data";
 
   let sampleVelocitiesSliderValue;
   let reverbWetDrySliderValue;
   let softPedalSliderValue;
   let accentBumpSliderValue; // the pianola's foot pump is basically a pedal
   let sustainProlongSliderValue;
-
-  const accentColor = getComputedStyle(
-    document.documentElement,
-  ).getPropertyValue("--primary-accent");
 
   $: sampleVelocitiesSliderValue = $sampleVelocities;
   $: reverbWetDrySliderValue = $reverbWetDry;
@@ -32,7 +33,7 @@
 
 <div id="audio-panel">
   <fieldset>
-    <legend>Piano Sample Volumes</legend>
+    <legend>Sample Gain (dBFS)</legend>
     {#each Object.keys($sampleVolumes) as sampleType}
       <SliderControl
         bind:value={$sampleVolumes[sampleType]}
@@ -109,7 +110,47 @@
       <svelte:fragment slot="label">Reverb:</svelte:fragment>
     </SliderControl>
   </fieldset>
-  <VelocitySpliner keyboardRegion={velocityCurveLow} {accentColor} />
-  <VelocitySpliner keyboardRegion={velocityCurveMid} {accentColor} />
-  <VelocitySpliner keyboardRegion={velocityCurveHigh} {accentColor} />
+  <button
+    on:click={() => {
+      sampleVolumes.reset();
+      sampleVelocities.reset();
+      softPedalRatio.reset();
+      accentBump.reset();
+      sustainProlong.reset();
+      reverbWetDry.reset();
+      Object.keys($velocityMods).forEach((keyboardRegion) => {
+        $velocityMods[keyboardRegion].mods = {
+          "pp-p": 1,
+          "mp-mf": 1,
+          "f-ff": 1,
+        };
+      });
+      notify({
+        message: "Audio Settings have been reset!",
+        type: "success",
+        timeout: 4000,
+      });
+    }}>Reset Audio Settings</button
+  >
+  {#each Object.entries($velocityMods) as [regionName, keyboardRegion]}
+    <fieldset>
+      <legend
+        >{getNoteName(keyboardRegion.firstMidi)}-{getNoteName(
+          keyboardRegion.lastMidi,
+        )} Velocity Mods</legend
+      >
+      {#each Object.keys($velocityMods[regionName].mods) as dynamic}
+        <SliderControl
+          bind:value={$velocityMods[regionName].mods[dynamic]}
+          min="0"
+          max="2"
+          step=".1"
+          name="{regionName}-{dynamic}"
+          mousewheel={false}
+        >
+          <span slot="label">{dynamic}:</span>
+        </SliderControl>
+      {/each}
+    </fieldset>
+  {/each}
 </div>

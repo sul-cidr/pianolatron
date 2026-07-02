@@ -485,7 +485,7 @@
     <div class="facets">
       <div id="facets-label" class="facet-heading">ROLL TYPE:</div>
       {#if facets}
-        <ul role="group" aria-labelledby="facets-label">
+        <ul role="list" aria-labelledby="facets-label">
           {#each facets as facet}
             <li>
               <button

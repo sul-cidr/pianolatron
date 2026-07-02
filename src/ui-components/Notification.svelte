@@ -5,6 +5,7 @@
     gap: 0.5em;
     left: 50%;
     min-width: 400px;
+    max-width: 800px;
     position: absolute;
     top: 5vh;
     transform: translate(-50%);
@@ -26,7 +27,8 @@
       font-weight: bold;
     }
 
-    &.default {
+    &.default,
+    &.dialog {
       background: white;
       border: 1px solid var(--primary-accent);
       color: black;
@@ -53,8 +55,6 @@
   }
 
   section {
-    display: flex;
-    flex-direction: column;
     padding: 0.75em 0.5em;
     width: 100%;
   }
@@ -82,8 +82,6 @@
 
   button {
     @include button;
-    margin-left: 1em;
-    margin-right: 1em;
 
     &:first-of-type {
       margin-top: 1em;
@@ -104,6 +102,7 @@
 <script context="module">
   import { writable } from "svelte/store";
   import { fly, fade } from "svelte/transition";
+  import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
 
   const NotificationsStore = writable([]);
   const timeouts = {};
@@ -131,18 +130,35 @@
 </script>
 
 <script>
-  import { onDestroy } from "svelte";
+  import { onDestroy, tick } from "svelte";
+
+  let announcement;
+
+  const announceNotifications = async () => {
+    await tick();
+    $NotificationsStore.forEach((notification) => {
+      announcement = `${notification.title ? notification.title : ""} ${notification.message}`;
+      if (!!notification.type && notification.type === "dialog") {
+        const dialog = document.getElementById(`msg_${notification.id}`);
+        if (dialog) dialog.focus();
+      }
+    });
+  };
 
   onDestroy(() =>
     Object.values(timeouts).forEach((timeout) => clearTimeout(timeout)),
   );
+
+  $: ($NotificationsStore, announceNotifications());
 </script>
+
+<AriaAnnouncer {announcement} />
 
 {#if $NotificationsStore}
   {#if $NotificationsStore.some((notification) => notification.modal)}
-    <div class="modal-screen" transition:fade />
+    <div class="modal-screen" transition:fade tabindex={-1} />
   {/if}
-  <div class="notifications">
+  <div class="notifications" tabindex={-1}>
     {#each $NotificationsStore as notification (notification.id)}
       <div
         transition:fly={{
@@ -150,15 +166,18 @@
           duration: notification.timeout ? 1000 : 400,
         }}
         class="notification {notification.type || 'default'}"
+        role="dialog"
+        aria-labelledby="notificationTitle"
       >
-        <div>
+        <div id="msg_{notification.id}" tabindex={0}>
           <section>
             {#if notification.title}
-              <header>{notification.title}</header>
+              <header id="notificationTitle">{notification.title}</header>
             {/if}
             <p>{@html notification.message}</p>
             {#each notification.actions || [] as action}
               <button
+                tabindex={0}
                 on:click={() => {
                   clearNotification(notification.id);
                   action.fn();
@@ -171,6 +190,7 @@
           <div
             class="close"
             role="button"
+            aria-label="close dialog"
             tabindex="0"
             on:click={() => clearNotification(notification.id)}
             on:keypress={(event) => {

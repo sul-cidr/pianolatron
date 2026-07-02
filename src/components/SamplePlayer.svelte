@@ -31,9 +31,7 @@
     sampleVolumes,
     sampleVelocities,
     reverbWetDry,
-    velocityCurveLow,
-    velocityCurveMid,
-    velocityCurveHigh,
+    velocityMods,
     transposeHalfStep,
     playRepeat,
     latencyDetected,
@@ -55,6 +53,12 @@
 
   let latencyThreshold = 100;
   let latentNotes = [];
+
+  const VELOCITY_RANGES = {
+    "pp-p": { low: 0, high: 48 },
+    "mp-mf": { low: 49, high: 80 },
+    "f-ff": { low: 81, high: 127 },
+  };
 
   // These are the MIDI controller values for these pedal events
   const SOFT_PEDAL = 67;
@@ -237,23 +241,24 @@
   };
 
   const updateSampleVelocities = () => {
-    if ($sampleVelocities > 4 && $sampleVelocities > piano.loadedVelocities) {
+    if ($sampleVelocities > 8 && $sampleVelocities > piano.loadedVelocities) {
       notify({
         modal: true,
         title: "Please confirm your choice",
         message:
-          "Increasing the sample count beyond four will consume large amounts " +
+          "Increasing the sample count beyond eight will consume large amounts " +
           "of your system's memory, and could result in crashing the browser " +
-          "or even the entire system.  If you experience issues, please " +
-          "lower the count to four or lower.",
+          "or even the entire system. If you experience issues, please " +
+          "lower the count to eight or lower.",
         closable: false,
+        type: "dialog",
         actions: [
           {
-            label: "okay",
+            label: "OK",
             fn: loadSampleVelocities,
           },
           {
-            label: "cancel",
+            label: "Cancel",
             fn: () => ($sampleVelocities = piano.loadedVelocities),
           },
         ],
@@ -261,6 +266,17 @@
       return;
     }
     loadSampleVelocities();
+  };
+
+  const applyVelocityMods = (keyboardRegion, velocity, regionLabel) => {
+    for (const [dynamic, limits] of Object.entries(VELOCITY_RANGES)) {
+      const midiVelocity = velocity * 127.0;
+      if (midiVelocity >= limits.low && midiVelocity <= limits.high)
+        return (
+          (midiVelocity * parseFloat(keyboardRegion.mods[dynamic])) / 127.0
+        );
+    }
+    return velocity;
   };
 
   const startNote = (noteNumber, velocity, noteSource, tick) => {
@@ -271,20 +287,18 @@
     activeNotes.add(finalNoteNumber);
     let baseVelocity =
       (($playExpressionsOnOff && velocity) || DEFAULT_NOTE_VELOCITY) / 100;
-    [$velocityCurveLow, $velocityCurveMid, $velocityCurveHigh].forEach(
-      (keyboardRegion) => {
-        if (
-          keyboardRegion.velocityCurve !== null &&
-          finalNoteNumber >= keyboardRegion.firstMidi &&
-          finalNoteNumber <= keyboardRegion.lastMidi
-        ) {
-          [, baseVelocity] =
-            keyboardRegion.velocityCurve[
-              parseInt(keyboardRegion.velocityCurve.length * baseVelocity, 10)
-            ];
-        }
-      },
-    );
+    Object.entries($velocityMods).forEach(([regionLabel, keyboardRegion]) => {
+      if (
+        finalNoteNumber >= keyboardRegion.firstMidi &&
+        finalNoteNumber <= keyboardRegion.lastMidi
+      ) {
+        baseVelocity = applyVelocityMods(
+          keyboardRegion,
+          baseVelocity,
+          regionLabel,
+        );
+      }
+    });
     // Note: $softPedalRatio is only applied when calling piano.keyDown() as
     //       @tonejs/piano has so built-in soft pedaling and so we emulate in
     //       software.  For WebMIDI outputs we send soft pedal controller
@@ -433,13 +447,13 @@
     switch (action) {
       case RecordingActions.Clear:
         webMidi?.clearRecording();
-        audioRecorder.clearRecording();
+        audioRecorder?.clearRecording();
         break;
       case RecordingActions.ExportMIDI:
         webMidi?.exportRecording();
         break;
       case RecordingActions.ExportWAV:
-        audioRecorder.exportRecording();
+        audioRecorder?.exportRecording();
         break;
       default:
     }

@@ -5,11 +5,11 @@ title: Using Pianolatron
 
 # Using Pianolatron
 
-Please consult the menu items in the navigation strip above for details on how to use specific aspects of the Pianolatron app, such as input from MIDI devices and game controllers. There are also interactive tours of the player interface that are available upon opening a piano roll in the "Listen" or "Perform" view. To start the tour, select "Tour" in the site navigation menu while viewing those pages.
+Please consult the menu items in the navigation strip above for details on how to use specific aspects of the Pianolatron app, such as input from MIDI devices and game controllers. There are also interactive tours of the player interface that are available upon opening a piano roll in the "Play" or "Perform" view. To start the tour, select "Tour" in the site navigation menu while viewing those pages.
 
 ## System Specifications and Compatibility
 
-The Pianolatron web app will play on most notebook and desktop systems of fairly recent vintage, as well as some large-format tablets. Mobile phones will have limited functionality. All major operating systems (Linux, Mac OS, Windows, Android, iOS) are supported. Firefox and Chrome/Edge-family web browsers are recommended; the Safari browser for Mac OS and iOS may not provide an acceptable experience.
+The Pianolatron web app will play on most notebook and desktop systems of fairly recent vintage, as well as some large-format tablets. Mobile phones will have limited functionality. All major operating systems (Linux, macOS, Windows, Android, iOS) are supported. Firefox and Chrome/Edge-family web browsers are recommended; the Safari browser for macOS and iOS may not provide an acceptable experience.
 
 ## Troubleshooting Playback Difficulties
 
@@ -24,7 +24,7 @@ The "Loading resources..." animation may appear for a long time when the Pianola
 
 ## Accessibility
 
-The Pianolatron web app is a multimodal piece of research software which presents inherent obstacles to full accessibility for users with disabilities. We have done our best to mitigate these wherever possible, but certain limitations may remain. We invite affected users to contact us with specific concerns.
+The Pianolatron web app is a multimodal work of research software which presents inherent obstacles to full accessibility for users with disabilities. We have done our best to mitigate these wherever possible, but certain limitations may remain. We invite affected users to contact us with specific concerns.
 
 ## Contacting Us
 

@@ -424,6 +424,7 @@
     aria-label={ariaLabel}
     aria-autocomplete="both"
     aria-activedescendant="droplist"
+    aria-expanded={open}
     bind:this={input}
     on:input={search}
     on:focus={activateDropdown}
