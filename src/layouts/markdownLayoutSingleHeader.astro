@@ -2,13 +2,8 @@
 import StanfordHeader from "./stanfordHeader.astro";
 import StanfordFooter from "./stanfordFooter.astro";
 import DocNav from "../pages/docNav.astro";
-import { execSync } from "node:child_process";
 
 import "../styles/styles.scss";
-
-const { title } = Astro.props.content || Astro.props;
-const commit = execSync("git rev-parse --short HEAD").toString().trim();
-const datetime = new Date().toISOString();
 ---
 
 <style>
@@ -16,7 +11,7 @@ const datetime = new Date().toISOString();
     color: var(--black);
     font-family: "Source Sans Pro", sans-serif;
     margin: 0 auto;
-    max-width: 80cm;
+    max-width: 80%;
     min-height: calc(100vh - 30px - 69px - 193px);
     padding: 1em 1em;
     position: relative;
