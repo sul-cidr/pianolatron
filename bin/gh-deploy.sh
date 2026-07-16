@@ -21,7 +21,7 @@ yarn build --site "$SITE";
 [ ! -d "$BUILD_FOLDER" ] && abort "'$BUILD_FOLDER' does not exist -- aborting!";
 
 # hack -- see https://github.com/snowpackjs/astro/issues/968
-sed -i "s#/_#${SITE}_#g" "${BUILD_FOLDER}/index.html";
+#sed -i "s#/_#${SITE}_#g" "${BUILD_FOLDER}/index.html";
 
 COMMIT_MESSAGE="Deploy from $(git log -n 1 --format="%h" HEAD) at $(date +"%Y-%m-%d %H:%M:%S %Z")";
 
