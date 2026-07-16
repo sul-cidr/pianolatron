@@ -16,22 +16,13 @@ const datetime = new Date().toISOString();
     color: var(--black);
     font-family: "Source Sans Pro", sans-serif;
     margin: 0 auto;
-    max-width: 80%;
+    max-width: 80cm;
     min-height: calc(100vh - 30px - 69px - 193px);
     padding: 1em 1em;
     position: relative;
   }
 </style>
 
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="version" content={commit} />
-<meta name="dcterms.modified" content={datetime} />
-<meta
-  name="description"
-  content="The Pianolatron application provides interactive engagement with the Stanford University Piano Rolls Archive."
-/>
-<title>{title}</title>
 <script>
   const { theme } =
     JSON.parse(window.localStorage.getItem("userSettings")) || {};

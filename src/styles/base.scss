@@ -30,6 +30,10 @@ dd {
   margin: 0;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 html:focus-within {
   scroll-behavior: smooth;
 }

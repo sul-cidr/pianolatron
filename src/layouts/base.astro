@@ -17,8 +17,22 @@ const datetime = new Date().toISOString();
     <meta name="dcterms.modified" content={datetime} />
     <meta
       name="description"
-      content="The Pianolatron application provides interactive engagement with the Stanford University Piano Rolls Archive."
+      content="The Pianolatron application provides interactive engagement with the Stanford University Piano Roll Archive."
     />
+    <title>{title}</title>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:url" content="https://pianolatron.stanford.edu">
+    <meta name="twitter:description" content="Pianolatron">
+    <meta name="twitter:image" content="/pianolatron_wide.jpg">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content={title}>
+    <meta property="og:article:published_time" content={datetime}>
+    <meta property="og:article:modified_time" content={datetime}>
+    <meta property="og:image" content="/pianolatron_thumb.jpg">
+    <meta property="og:site_name" content="Pianolatron">
+
     <link
       rel="apple-touch-icon"
       sizes="57x57"
@@ -125,7 +139,6 @@ const datetime = new Date().toISOString();
       name="msapplication-square310x310logo"
       content="//www-media.stanford.edu/assets/favicon/mstile-310x310.png"
     />
-    <title>{title}</title>
     <script>
       if (!document.documentElement.getAttribute("data-theme")) {
         let { theme } = JSON.parse(
