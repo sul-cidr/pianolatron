@@ -2,13 +2,8 @@
 import StanfordHeader from "./stanfordHeader.astro";
 import StanfordFooter from "./stanfordFooter.astro";
 import DocNav from "../pages/docNav.astro";
-import { execSync } from "node:child_process";
 
 import "../styles/styles.scss";
-
-const { title } = Astro.props.content || Astro.props;
-const commit = execSync("git rev-parse --short HEAD").toString().trim();
-const datetime = new Date().toISOString();
 ---
 
 <style>
@@ -23,15 +18,6 @@ const datetime = new Date().toISOString();
   }
 </style>
 
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="version" content={commit} />
-<meta name="dcterms.modified" content={datetime} />
-<meta
-  name="description"
-  content="The Pianolatron application provides interactive engagement with the Stanford University Piano Rolls Archive."
-/>
-<title>{title}</title>
 <script>
   const { theme } =
     JSON.parse(window.localStorage.getItem("userSettings")) || {};
