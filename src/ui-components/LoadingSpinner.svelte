@@ -67,6 +67,25 @@
     display: grid;
     place-items: center;
     text-shadow: 0px 0px 8px white;
+
+    &.sub-text {
+      opacity: 0;
+      max-height: 0;
+      animation: expandText 1s ease-in forwards;
+      animation-delay: 5s;
+      overflow: hidden;
+    }
+
+    @keyframes expandText {
+      0% {
+        max-height: 0;
+        opacity: 0;
+      }
+      100% {
+        max-height: 1.5em;
+        opacity: 1;
+      }
+    }
   }
 </style>
 
@@ -82,6 +101,9 @@
     <div>
       <div><div /></div>
       <span>{loadingSpinnerText}</span>
+      <span class="sub-text"
+        >If this message persists, please try reloading the page.</span
+      >
     </div>
   </div>
 {/if}
