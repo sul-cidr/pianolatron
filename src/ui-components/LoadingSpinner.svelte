@@ -72,7 +72,7 @@
       opacity: 0;
       max-height: 0;
       animation: expandText 1s ease-in forwards;
-      animation-delay: 5s;
+      animation-delay: 10s;
       overflow: hidden;
     }
 
