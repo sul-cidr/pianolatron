@@ -7673,19 +7673,6 @@
     "arranger": "",
     "catkey": "13465698",
     "composer": "Stravinsky, Igor",
-    "druid": "rb863nd0220",
-    "image_url": "https://stacks.stanford.edu/image/iiif/rb863nd0220/rb863nd0220_0001_Color/info.json",
-    "number": "D-769",
-    "performer": "Stravinsky, Igor",
-    "publisher": "Aeolian Co., Ltd.",
-    "title": "Stravinsky/Stravinsky - My life and music: to 'The fire-bird,' in six rolls. ROLL VI",
-    "type": "duo-art",
-    "work": "My life and music: ROLL VI"
-  },
-  {
-    "arranger": "",
-    "catkey": "13465698",
-    "composer": "Stravinsky, Igor",
     "druid": "zc974rs0069",
     "image_url": "https://stacks.stanford.edu/image/iiif/zc974rs0069/zc974rs0069_0001/info.json",
     "number": "D-767",
@@ -7694,6 +7681,19 @@
     "title": "Stravinsky/Stravinsky - My life and music: to 'The fire-bird,' in six rolls: ROLL V",
     "type": "duo-art",
     "work": "My life and music: ROLL V"
+  },
+  {
+    "arranger": "",
+    "catkey": "13465698",
+    "composer": "Stravinsky, Igor",
+    "druid": "rb863nd0220",
+    "image_url": "https://stacks.stanford.edu/image/iiif/rb863nd0220/rb863nd0220_0001_Color/info.json",
+    "number": "D-769",
+    "performer": "Stravinsky, Igor",
+    "publisher": "Aeolian Co., Ltd.",
+    "title": "Stravinsky/Stravinsky - My life and music: to 'The fire-bird,' in six rolls. ROLL VI",
+    "type": "duo-art",
+    "work": "My life and music: ROLL VI"
   },
   {
     "arranger": "",
