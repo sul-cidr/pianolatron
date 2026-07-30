@@ -109,7 +109,7 @@
         <a href="/perform/?druid=qm069fy5200"
           >perform<span>my own interpretation</span></a
         >
-        <a href="https://exhibits.stanford.edu/supra"
+        <a href="https://exhibits.stanford.edu/piano-roll-program"
           >learn<span>about piano rolls</span></a
         >
         <a href="/search/">explore<span>the archive</span></a>
