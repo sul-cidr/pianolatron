@@ -137,7 +137,7 @@
       piano.keyUp({ midi: finalNoteNumber, time: timeDelay });
     else piano.keyUp({ midi: finalNoteNumber });
     if (noteSource !== NoteSource.WebMidi) {
-      webMidi?.sendMidiMsg("NOTE_OFF", finalNoteNumber, 0, tick);
+      webMidi?.sendMidiMsg("NOTE_OFF", finalNoteNumber, 0);
     }
   };
 
@@ -151,9 +151,9 @@
     midiSamplePlayer.pause();
     midiSamplePlayer.triggerPlayerEvent("pause");
     stopAllNotes();
+    $isPlaying = false;
     webMidi?.sendMidiMsg("CONTROLLER", "SUSTAIN", false);
     webMidi?.sendMidiMsg("CONTROLLER", "SOFT", false);
-    $isPlaying = false;
   };
 
   const updatePlayer = (fn = () => {}) => {
@@ -339,8 +339,16 @@
       });
     }
     if (noteSource !== NoteSource.WebMidi) {
-      webMidi?.sendMidiMsg("NOTE_ON", finalNoteNumber, modifiedVelocity, tick);
+      webMidi?.sendMidiMsg("NOTE_ON", finalNoteNumber, modifiedVelocity);
     }
+  };
+
+  const clearAllMidiHolds = () => {
+    for (let i = 21; i <= 108; i++) {
+      webMidi?.sendMidiMsg("NOTE_OFF", i, 0);
+    }
+    webMidi?.sendMidiMsg("CONTROLLER", "SUSTAIN", false);
+    webMidi?.sendMidiMsg("CONTROLLER", "SOFT", false);
   };
 
   const resetPlayback = () => {
@@ -351,6 +359,7 @@
     softOnOff.reset();
     sustainOnOff.reset();
     accentOnOff.reset();
+    clearAllMidiHolds();
     $isPlaying = false;
   };
 
@@ -497,6 +506,7 @@
     resetPlayback,
     recordingControl,
     exportInAppMIDI,
+    clearAllMidiHolds,
   };
 </script>
 
