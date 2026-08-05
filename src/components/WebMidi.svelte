@@ -255,7 +255,7 @@
       midiBytes[entity] || entity,
       clamp(parseInt(value * 127, 10), 0, 127),
     ];
-    if ($isPlaying) $midiOutputs.forEach((output) => output.send(msg));
+    $midiOutputs.forEach((output) => output.send(msg));
     if ($recordingOnOff) {
       const now = Date.now();
       if (msgType === "NOTE_ON" && !(entity in heldDown)) {
