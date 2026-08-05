@@ -4,7 +4,6 @@
   import { clamp, NoteSource } from "../lib/utils";
   import { rollProfile } from "../config/roll-config";
   import {
-    isPlaying,
     midiInputs,
     midiOutputs,
     recordingOnOff,
