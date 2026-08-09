@@ -1258,7 +1258,7 @@
     });
 
     // disable OSD's own keyboard interactions
-    viewport.viewer.addHandler("canvas-key-press", (event) => {
+    viewport.viewer.addHandler("canvas-key", (event) => {
       event.preventDefaultAction = true;
     });
 

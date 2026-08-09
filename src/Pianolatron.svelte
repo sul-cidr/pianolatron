@@ -161,6 +161,7 @@
   let resetPlayback;
   let recordingControl;
   let exportInAppMIDI;
+  let clearAllMidiHolds;
 
   let rollViewer;
   let updateTickByViewportIncrement;
@@ -173,6 +174,7 @@
   const skipToTick = (tick) => {
     const targetTick = Math.round(tick);
     if (targetTick < 0 || targetTick >= midiSamplePlayer.totalTicks) stopApp();
+    clearAllMidiHolds();
     $currentTick = targetTick;
     throttledTick.set(targetTick);
     updatePlayer(() => midiSamplePlayer.skipToTick($currentTick));
@@ -470,6 +472,7 @@
       resetPlayback,
       recordingControl,
       exportInAppMIDI,
+      clearAllMidiHolds,
     } = samplePlayer);
 
     ({ showTourIfRequested } = tour);
