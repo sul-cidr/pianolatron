@@ -43,7 +43,7 @@ export default class InAppExpressionizer {
     welte_loud: { alias: "f velocity", min: 0, max: 127, step: 1 },
     left_adjust: { alias: "+/- bass velocity", min: -127, max: 127, step: 1 },
     slow_decay_rate: {
-      alias: "slow decresc (ms/vel)",
+      alias: "slow de/cresc (ms/vel)",
       min: 1,
       max: 4000,
       step: 10,
@@ -61,7 +61,7 @@ export default class InAppExpressionizer {
       step: 10,
     },
     tracker_diameter: {
-      alias: "trackerbar height (mm)",
+      alias: "trackerbar height (px)",
       min: 5,
       max: 25,
       step: 0.1,
