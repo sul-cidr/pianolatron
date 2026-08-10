@@ -3,6 +3,7 @@
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 1;
+    width: max-content;
 
     &:hover,
     &:focus-within {
