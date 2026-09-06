@@ -30,7 +30,7 @@
     height: 100%;
     line-height: calc(2.25em - 10px);
     overflow: hidden;
-    padding: 5px 2.5em 5px 11px;
+    padding: 5px 2.5em 5px 0.5em;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;

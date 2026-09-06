@@ -838,7 +838,7 @@
 
   const partitionOverlaySvgs = () => {
     partitionHolesOverlaySvgs();
-    partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
+    //partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
   };
 
   // Draw active note highlights on canvas instead of as DOM elements.

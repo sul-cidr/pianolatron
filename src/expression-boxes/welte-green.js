@@ -39,7 +39,7 @@ export default class WelteGreenExpressionizer extends ExpressionWelteMignon(
 
     // Ignore control holes that don't affect playback (most roll types
     //  will have some of these), or are likely to be damage holes
-    if (!["sfp", "mf", "cresc", "sff"].includes(ctrlFunc))
+    if ((noteNumber !== null) && !["sfp", "mf", "cresc", "sff"].includes(ctrlFunc))
       return [panExpMap, expState]; // Usually these are damage holes
 
     // The length of the perforation matters for all control holes

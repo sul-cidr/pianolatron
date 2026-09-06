@@ -54,7 +54,7 @@ export default class WelteRedExpressionizer extends ExpressionWelteMignon(
 
     // Ignore control holes that don't affect playback (most roll types
     //  will have some of these)
-    if (
+    if ((noteNumber !== null) && 
       !["sf_on", "sf_off", "cresc_on", "cresc_off", "mf_on", "mf_off"].includes(
         ctrlFunc,
       )

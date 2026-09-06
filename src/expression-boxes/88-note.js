@@ -97,10 +97,34 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
   panExpMapReducer = (
     [panExpMap, expState],
     { noteNumber, velocity, tick },
+    reduceIndex, inputMap
   ) => {
     const ctrlFunc = this.ctrlMap[noteNumber];
 
-    if (ctrlFunc == null) return [panExpMap, expState]; // Usually these are damage holes
+    // Upon reaching the final control message (whatever it is), add a
+    //  transition back to mf from the end of the last snakebite accent section
+    //  (if there was one). This ensures that the velocity doesn't erroneously
+    //  stay at the accented forte level until the end of the roll.
+    if ((reduceIndex === inputMap.length - 1) && (expState.snakebite_stop !== null)) {
+      panExpMap.insert(
+        expState.snakebite_stop,
+        expState.snakebite_stop,
+        [
+          this.expParams.tunable.accent_f.value,
+          this.expParams.tunable.default_mf.value,
+          expState.snakebite_stop,
+          expState.snakebite_stop,
+        ]
+      );
+
+      expState.time = expState.snakebite_stop;
+      expState.velocity = this.expParams.tunable.default_mf.value;
+
+      return [panExpMap, expState]; 
+    }
+
+    // Usually these are damage holes
+    if (ctrlFunc == null) return [panExpMap, expState];
 
     // The length of the perforation matters for all control holes
     const msgTime = this.convertTicksAndTime(tick);
@@ -116,8 +140,22 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
           msgTime - snakebite_extension.value,
         );
 
-        // Add an entry to the expression Interval Tree for the previous
-        //  interval (when the velocity was lower)
+        // This makes sure that there's an interval at default mf from the
+        //  beginning of the roll up until the first accent appears.
+        if ((expState.snakebite_stop === null) && (expState.time < expState.snakebite_start))
+          panExpMap.insert(
+            expState.time,
+            expState.snakebite_start,
+            [
+              this.expParams.tunable.default_mf.value,
+              this.expParams.tunable.default_mf.value,
+              expState.time,
+              expState.snakebite_start,
+            ]
+          )
+        // Add an entry to the expression map (Interval Tree) at default mf
+        //  from the end of the last snakebite accent section to the beginning
+        //  of this one.
         if (
           expState.snakebite_stop !== null &&
           expState.snakebite_start > expState.snakebite_stop
@@ -125,120 +163,37 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
           panExpMap.insert(
             expState.snakebite_stop,
             expState.snakebite_start,
-            panVelocity,
+            [
+              this.expParams.tunable.default_mf.value,
+              this.expParams.tunable.default_mf.value,
+              expState.snakebite_stop,
+              expState.snakebite_start,
+            ]
           );
         }
-
         expState.snakebite_stop = null;
       } else {
         expState.snakebite_stop = msgTime + snakebite_extension.value;
 
+        // Section at accent forte for the duration of the snakebite region
         if (expState.snakebite_start < expState.snakebite_stop) {
           panExpMap.insert(
             expState.snakebite_start,
             expState.snakebite_stop,
-            panVelocity,
+            [
+              this.expParams.tunable.accent_f.value,
+              this.expParams.tunable.accent_f.value,
+              expState.snakebite_start,
+              expState.snakebite_stop,
+            ]
           );
         }
       }
       expState.time = msgTime;
       expState.velocity = panVelocity;
-    }
+    } 
 
     return [panExpMap, expState];
-  };
-
-  buildNoteVelocitiesMap = () => {
-    const expressionMap = {};
-
-    const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs) => {
-      const expressionCurve = [];
-
-      const { default_mf } = this.expParams.tunable;
-
-      // First build the velocity expression map from the control track only
-      const [panExpMap] = ctrlTrackMsgs
-        .filter(({ name }) => name === "Note on")
-        .map(this.extendControlHoles)
-        // Adding the tracker extension to the snakebite accents control hole
-        //  events can result in unordered events; resort them.
-        .sort((a, b) => a.tick - b.tick)
-        .reduce(this.panExpMapReducer, [
-          new IntervalTree(),
-          { ...this.startingExpState },
-        ]);
-
-      const mapIntervals = Array.from(panExpMap.inOrder());
-      const finalExpTime = mapIntervals?.length
-        ? mapIntervals[mapIntervals.length - 1].high
-        : 0;
-
-      // Extend the expression map so that it extends from the accent event
-      //  to the final note on this side of the roll (if needed)
-      const finalTick = Math.max(
-        noteTrackMsgs[noteTrackMsgs.length - 1].tick,
-        ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
-      );
-      const finalTime = this.convertTicksAndTime(finalTick);
-
-      if (finalTime > finalExpTime) {
-        panExpMap.insert(finalExpTime, finalExpTime, default_mf.value);
-        panExpMap.insert(finalExpTime, finalTime, default_mf.value);
-      }
-
-      noteTrackMsgs
-        .filter(({ name, velocity }) => name === "Note on" && !!velocity)
-        .forEach(({ noteNumber: midiNumber, tick }) => {
-          const msgTime = this.convertTicksAndTime(tick);
-
-          let noteVelocity = panExpMap.search(msgTime, msgTime)[0];
-          if (noteVelocity == null) {
-            noteVelocity = default_mf.value;
-          }
-
-          if (tick in expressionMap) {
-            expressionMap[tick][midiNumber] = noteVelocity;
-          } else {
-            expressionMap[tick] = {};
-            expressionMap[tick][midiNumber] = noteVelocity;
-          }
-        });
-
-      let expVelocity = null;
-      const intervals = Array.from(panExpMap.inOrder());
-      Object.values(intervals).forEach((interval) => {
-        const expStartTick = this.convertTicksAndTime(interval.low, "tick");
-        const expEndTick = this.convertTicksAndTime(interval.high, "tick");
-        const thisVelocity = interval.data;
-
-        // Add a segment of the curve at the default velocity from the start of
-        //  the piece to the first velocity control event.
-        // ? XXX Should we also do this from the final velocity control event
-        // ? to the end of the piece (final tick)?
-        if (expVelocity === null) {
-          expressionCurve.push([0, default_mf.value, 0]);
-          expressionCurve.push([expStartTick, default_mf.value, interval.low]);
-          expVelocity = default_mf.value;
-        }
-        if (thisVelocity !== expVelocity) {
-          expressionCurve.push([expStartTick, thisVelocity, interval.low]);
-        }
-        expressionCurve.push([expEndTick, thisVelocity, interval.high]);
-        expVelocity = thisVelocity;
-      });
-
-      return expressionCurve;
-    };
-
-    bassExpCurve.set(
-      buildPanExpMap(this.bassNotesTrack, this.bassControlsTrack),
-    );
-
-    trebleExpCurve.set(
-      buildPanExpMap(this.trebleNotesTrack, this.trebleControlsTrack),
-    );
-
-    return expressionMap;
   };
 
   constructor(...args) {

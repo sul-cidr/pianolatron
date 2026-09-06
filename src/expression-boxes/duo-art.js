@@ -173,7 +173,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
     // Ignore control holes that don't affect playback (most roll types
     //  will have some of these), or are likely to be damage holes
-    if (!["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc))
+    if ((ctrlFunc == null) && !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc))
       return [panExpMap, expState]; // Usually these are damage holes
 
     // The length of the perforation matters for all control holes

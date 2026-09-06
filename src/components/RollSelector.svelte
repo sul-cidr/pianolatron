@@ -2,7 +2,7 @@
   :global(small) {
     color: var(--light-grey);
     display: inline-block;
-    text-align: right;
+    text-align: center;
     margin-right: 1ch;
     white-space: nowrap;
 
