@@ -50,9 +50,8 @@ export default class WelteGreenExpressionizer extends ExpressionWelteMignon(
       case "mf":
         if (velocity > 0) {
           expState.mf_start = msgTime;
-          expState.mf_stop = null;
         } else {
-          expState.mf_stop = msgTime;
+          expState.mf_start = null;
         }
         break;
 
