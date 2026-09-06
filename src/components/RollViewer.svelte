@@ -836,11 +836,6 @@
     }
   };
 
-  const partitionOverlaySvgs = () => {
-    partitionHolesOverlaySvgs();
-    //partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
-  };
-
   // Draw active note highlights on canvas instead of as DOM elements.
   const drawActiveHighlights = (tick) => {
     if (!highlightCtx || !openSeadragon) return;
@@ -1369,18 +1364,14 @@
   $: ($transposeHalfStep, rehighlightHoles($throttledTick));
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
+  $: ($useInAppExpression,
+    partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
   $: ($userSettings.activeNoteDetails,
     $userSettings.showNoteVelocities,
     $playExpressionsOnOff,
     drawActiveHighlights($throttledTick));
 
-  export {
-    adjustZoom,
-    updateTickByViewportIncrement,
-    panHorizontal,
-    partitionOverlaySvgs,
-    updateVisibleOverlays,
-  };
+  export { adjustZoom, updateTickByViewportIncrement, panHorizontal };
 </script>
 
 <AriaAnnouncer {announcement} />
