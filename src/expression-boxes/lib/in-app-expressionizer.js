@@ -18,6 +18,8 @@ import { NoteSource } from "../../lib/utils";
 import { rollProfile } from "../../config/roll-config";
 import { getHoleType } from "../../lib/hole-data";
 
+const MAP_TICK_INTERVAL = 10; // 1/30 inch
+
 export default class InAppExpressionizer {
   #rollType = get(rollMetadata).ROLL_TYPE;
   #midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
@@ -206,7 +208,7 @@ export default class InAppExpressionizer {
     this.expParams = this.computeDerivedExpressionParams();
 
     this.tempoMap = this.#buildTempoMap();
-    this.noteVelocitiesMap = this.buildNoteVelocitiesMap();
+    this.noteVelocitiesMap = this.#buildNoteVelocitiesMap();
     this.pedalingMap = this.buildPedalingMap();
     this.notesMap = this.#buildNotesMap();
   }
@@ -254,33 +256,45 @@ export default class InAppExpressionizer {
     return tempoMap;
   };
 
-  buildNoteVelocitiesMap = () => {
+  #buildNoteVelocitiesMap = () => {
     const expressionMap = {};
 
     const buildPanExpMap = (noteTrackMsgs, ctrlTrackMsgs, adjust) => {
       const expressionCurve = [];
+      const finalTick = Math.max(
+        noteTrackMsgs[noteTrackMsgs.length - 1].tick,
+        ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
+      );
+
+      // Interpolate "dummy" events at regular intervals between control events
+      //  so that the expression curves look more accurate (not needed for
+      //  88-note rolls)
+      let ctrlSampleMsgs = [...ctrlTrackMsgs];
+      if (this.#rollType !== "88-note") {
+        const ctrlTicks = [...new Set(ctrlTrackMsgs.map((msg) => msg.tick))];
+        for (let t = 0; t <= finalTick; t += MAP_TICK_INTERVAL) {
+          if (!ctrlTicks.includes(t))
+            ctrlSampleMsgs.push({name: "Note on", noteName: null, noteNumber: null, velocity: null, tick: t});
+        }
+      }
 
       // First build the velocity expression map from the control track only
-      const [panExpMap, expState] = ctrlTrackMsgs
+      const [panExpMap, expState] = ctrlSampleMsgs
         .filter(({ name }) => name === "Note on")
         .map(this.extendControlHoles)
         // Adding the tracker extension ticks to the ends of the fast cresc/
-        //  decresc holes can result in unordered events, so resort them.
+        //  decresc holes can result in unordered events, as does adding the
+        //  "dummy" sample messaes, so re-sort them.
         .sort((a, b) => a.tick - b.tick)
         .reduce(this.panExpMapReducer, [
           new IntervalTree(),
           { ...this.startingExpState },
         ]);
 
-      // Extend the expression map so that it extends from the last control hole
-      //  to the final note on this side of the roll (if needed)
-      const finalTick = Math.max(
-        noteTrackMsgs[noteTrackMsgs.length - 1].tick,
-        ctrlTrackMsgs[ctrlTrackMsgs.length - 1].tick,
-      );
+      // Extend the expression map so that it extends from the last control
+      //  event to the final note on this side of the roll (if needed)
       const finalTime = this.convertTicksAndTime(finalTick);
       const finalPanVelocity = this.getVelocityAtTime(finalTime, expState);
-
       if (finalTime > expState.time) {
         panExpMap.insert(expState.time, finalTime, [
           expState.velocity,
@@ -296,22 +310,29 @@ export default class InAppExpressionizer {
         .forEach(({ noteNumber: midiNumber, tick }) => {
           const msgTime = this.convertTicksAndTime(tick);
 
-          const [startVelocity, endVelocity, startTime, endTime] =
-            panExpMap.search(msgTime, msgTime)[0];
+          let noteVelocity = this.defaultNoteVelocity;
+          
+          const panExpMatch = panExpMap.search(msgTime, msgTime);
 
-          const notePositionInInterval =
-            (msgTime - startTime) / (endTime - startTime);
-
-          const noteVelocity =
-            startVelocity +
-            (endVelocity - startVelocity) * notePositionInInterval;
+          // Depending on the emulation algorithm being used, it's possible for
+          //  a section of the roll to have no expression state whatsoever. In
+          //  that case, all notes recive the default mezzo-forte velocity.
+          if (panExpMatch.length !== 0) {
+            const [startVelocity, endVelocity, startTime, endTime] =
+              panExpMatch[0];
+            const notePositionInInterval =
+              (msgTime - startTime) / (endTime - startTime);
+            noteVelocity =
+              startVelocity +
+              (endVelocity - startVelocity) * notePositionInInterval;
+          }
 
           if (tick in expressionMap) {
             expressionMap[tick][midiNumber] = noteVelocity + adjust;
           } else {
-            expressionMap[tick] = {};
-            expressionMap[tick][midiNumber] = noteVelocity + adjust;
+            expressionMap[tick] = { [midiNumber]: noteVelocity + adjust };
           }
+          
         });
 
       // Build the expression curve, which uses ticks (not ms)
@@ -334,7 +355,7 @@ export default class InAppExpressionizer {
       buildPanExpMap(
         this.bassNotesTrack,
         this.bassControlsTrack,
-        this.expParams.tunable.left_adjust.value,
+        (this.expParams.tunable.left_adjust) ? this.expParams.tunable.left_adjust.value : 0,
       ),
     );
 

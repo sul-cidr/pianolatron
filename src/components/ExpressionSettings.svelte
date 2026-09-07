@@ -179,8 +179,6 @@
                 on:change={(e) => {
                   $expressionParameters.tunable[expressionParam].value =
                     parseFloat(e.target.value);
-                  $expressionParameters.tunable[expressionParam].value =
-                    parseFloat(e.target.value);
                   reloadRoll();
                 }}
               />

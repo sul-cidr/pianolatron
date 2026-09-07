@@ -335,8 +335,6 @@
     if (resetExpression) $expressionParameters = {};
 
     loadRoll(currentRoll, false).then(() => {
-      rollViewer.partitionOverlaySvgs();
-      rollViewer.updateVisibleOverlays();
       skipToTick(savedTick);
       if (startPlayer) startPlayback();
     });

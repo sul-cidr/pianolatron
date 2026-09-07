@@ -396,7 +396,11 @@
   };
 
   const updateVisibleSvgPartitions = (svgPartitions, visiblePartitions) => {
-    if (viewport === undefined || svgPartitions === undefined)
+    if (
+      viewport === undefined ||
+      viewport.viewer === undefined ||
+      svgPartitions === undefined
+    )
       return visiblePartitions;
 
     const {
@@ -500,6 +504,8 @@
   };
 
   const partitionExpressionOverlaySvgs = (bassExpC, trebleExpC) => {
+    if (!viewport) return;
+
     const partitionGuidesAndCurve = (
       guides,
       expCurve,
@@ -620,9 +626,9 @@
     if (
       !$drawVelocityCurves ||
       !$useInAppExpression ||
-      bassExpC === null ||
+      !bassExpC ||
       bassExpC.length === 0 ||
-      trebleExpC === null ||
+      !trebleExpC ||
       trebleExpC.length === 0
     ) {
       updateVisibleOverlays(); // This removes any previously visible curves
@@ -834,11 +840,6 @@
         });
       }
     }
-  };
-
-  const partitionOverlaySvgs = () => {
-    partitionHolesOverlaySvgs();
-    partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
   };
 
   // Draw active note highlights on canvas instead of as DOM elements.
@@ -1241,9 +1242,9 @@
         $imageWidth,
         $imageLength,
       );
-
-      partitionHolesOverlaySvgs();
       updateSelectionOverlays();
+      partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve);
+      partitionHolesOverlaySvgs();
       updateViewportFromTick(0);
       navigator.viewport.fitVertically();
     });
@@ -1369,18 +1370,14 @@
   $: ($transposeHalfStep, rehighlightHoles($throttledTick));
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
+  $: ($useInAppExpression,
+    partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
   $: ($userSettings.activeNoteDetails,
     $userSettings.showNoteVelocities,
     $playExpressionsOnOff,
     drawActiveHighlights($throttledTick));
 
-  export {
-    adjustZoom,
-    updateTickByViewportIncrement,
-    panHorizontal,
-    partitionOverlaySvgs,
-    updateVisibleOverlays,
-  };
+  export { adjustZoom, updateTickByViewportIncrement, panHorizontal };
 </script>
 
 <AriaAnnouncer {announcement} />
