@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { get } from "svelte/store";
 import { expressionParameters } from "../stores";
+import { clamp } from "../lib/utils";
 
 import InAppExpressionizer from "./lib/in-app-expressionizer";
 import { PedalingContinuousInput } from "./lib/pedaling";
@@ -10,15 +11,18 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 ) {
   defaultExpressionParams = {
     tunable: {
+      // p, mf, f have no effect on the actual emulation of Duo-Art rolls;
+      //  changing their value just moves the guide on the overlay viz.
       welte_p: { value: 35.0 },
       welte_mf: { value: 60.0 },
       welte_f: { value: 90.0 },
       // XXX should the effect of the "theme" holes also extend *before* the
       //  beginning of the snakebite accent holes, as for 88-note rolls?
       theme_extent: { value: 20 }, // effective ms after theme selector snakebites
-      left_adjust: { value: -5.0 }, // used for Welte rolls, apply it here as well?
+      left_adjust: { value: 0 }, // -5.0 used for Welte rolls, apply it here as well?
       tracker_diameter: { value: 16.7 }, // TODO get value from P. Phillips
       punch_ext_ratio: { value: 0.75 },
+      slow_decay_rate: { alias: "decay rate (ms/mf-p)", value: 10, min: 1, max: 90, step: 1 },
       accelFtPerMin2: { value: 0.2 },
     },
   };
@@ -40,19 +44,20 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
   computeDerivedExpressionParams = () => {
     this.startingExpState.velocity =
-      get(expressionParameters)?.tunable.welte_mf.value ||
-      this.defaultExpressionParams.tunable.welte_mf.value;
+      get(expressionParameters)?.tunable.welte_p.value ||
+      this.defaultExpressionParams.tunable.welte_p.value;
 
     const tunable =
       get(expressionParameters)?.tunable ||
       this.defaultExpressionParams.tunable;
 
-    const { tracker_diameter, punch_ext_ratio } = tunable;
+    const { tracker_diameter, punch_ext_ratio, welte_mf, welte_p, slow_decay_rate } = tunable;
 
     const hydratedTunableParams = this.hydrateExpressionParams(tunable);
 
     return {
       tunable: hydratedTunableParams,
+      decay_step: (welte_mf.value - welte_p.value) / slow_decay_rate.value,
       tracker_extension: parseInt(
         tracker_diameter.value * punch_ext_ratio.value,
         10,
@@ -62,7 +67,10 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
   // ? TODO: refactor
   // eslint-disable-next-line class-methods-use-this
-  getVelocityAtTime = (_, expState) => {
+  getVelocityAtTime = (msgTime, expState) => {
+    const { decay_step, tunable } = this.expParams;
+    const { welte_f } = tunable;
+
     const convertStepToPressure = (step, isTheme) => {
       // Mappings from volume "steps" to pressure values are from
       // https://www.youtube.com/watch?v=w-XrDw04P2M&t=218s
@@ -89,8 +97,8 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
         0: 5,
         1: 6,
         2: 8,
-        3: 9,
-        4: 10,
+        3: 10,
+        4: 11,
         5: 13,
         6: 14,
         7: 16,
@@ -101,7 +109,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
         12: 26,
         13: 29,
         14: 31,
-        15: 33, // Could be 40???
+        15: 33, // Could be 40 (if crash valve triggered?)
       };
 
       if (!isTheme) {
@@ -110,9 +118,9 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
       return themeStepMap[step];
     };
 
-    let newVelocity = expState.velocity;
+    let targetVelocity = expState.velocity;
 
-    const isTheme = expState.theme_start !== null;
+    const isTheme = (expState.theme_start !== null) && (msgTime > expState.theme_start) && ((expState.theme_stop === null) || (expState.theme_stop > msgTime))
 
     let step = 0;
 
@@ -132,14 +140,18 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     const pressure = convertStepToPressure(step, isTheme);
 
     if (pressure <= 10) {
-      newVelocity = pressure * 5.8 + 6.0;
+      targetVelocity = pressure * 5.8 + 6.0;
     } else if (pressure > 10 && pressure <= 25) {
-      newVelocity = pressure * 1.4 + 50;
+      targetVelocity = pressure * 1.4 + 50;
     } else {
-      newVelocity = 90;
+      targetVelocity = 90;
     }
 
-    return newVelocity;
+    // Apply delay/decay
+    const computedVelocity = (targetVelocity > expState.velocity) ? Math.min(targetVelocity, expState.velocity + ((msgTime - expState.time) * decay_step))
+                                                                  : Math.max(targetVelocity, expState.velocity - ((msgTime - expState.time) * decay_step));
+    
+    return clamp(computedVelocity, 0, welte_f.value);                                                               
   };
 
   extendControlHoles = (item) => {
@@ -173,7 +185,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
     // Ignore control holes that don't affect playback (most roll types
     //  will have some of these), or are likely to be damage holes
-    if ((ctrlFunc == null) && !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc))
+    if ((noteNumber !== null) && !["acc", "vol+1", "vol+2", "vol+4", "vol+8"].includes(ctrlFunc))
       return [panExpMap, expState]; // Usually these are damage holes
 
     // The length of the perforation matters for all control holes
@@ -213,13 +225,6 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     }
 
     panExpMap.insert(expState.time, msgTime, [
-      expState.velocity,
-      expState.velocity,
-      expState.time,
-      msgTime,
-    ]);
-
-    panExpMap.insert(msgTime, msgTime, [
       expState.velocity,
       panVelocity,
       expState.time,
