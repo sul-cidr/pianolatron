@@ -147,7 +147,12 @@
     userSettings,
   } from "../stores";
   import { rollProfile } from "../config/roll-config";
-  import { clamp, defaultHoleColor, getHoleLabel } from "../lib/utils";
+  import {
+    clamp,
+    defaultHoleColor,
+    enforcePrecision,
+    getHoleLabel,
+  } from "../lib/utils";
   import RollViewerControls from "./RollViewerControls.svelte";
   import RollViewerScaleBar from "./RollViewerScaleBar.svelte";
   import AriaAnnouncer from "../ui-components/AriaAnnouncer.svelte";
@@ -206,10 +211,22 @@
         holeLabel = `${noteName}${octave}`;
       }
 
+      // Look up the note velocity in the current interval tree; otherwise the
+      //  mousover and tracker-induced highlights may show different velocities.
       if ($userSettings.showNoteVelocities) {
-        velocity = Math.round(
-          $playExpressionsOnOff ? (hole.v ?? 64) : 64,
-        ).toString();
+        velocity = 64;
+        if ($playExpressionsOnOff) {
+          const holeTick = $scrollDownwards
+            ? hole.startY - $firstHolePx
+            : $firstHolePx - hole.startY;
+          const notesAtTick = $holesIntervalTree.search(holeTick, holeTick);
+          const noteMatch = notesAtTick?.find((note) => note.m === hole.m);
+          if (noteMatch) {
+            velocity = enforcePrecision(noteMatch.v, 1);
+          } else {
+            velocity = hole.v ?? 64;
+          }
+        }
       }
     }
 
@@ -1362,12 +1379,19 @@
     updateSelectionOverlays();
   };
 
+  const refreshOverlays = () => {
+    // XXX Need to do a bit more to make the hole overlay colors update on
+    //  reload after changing the emulation settings.
+    partitionHolesOverlaySvgs();
+  };
+
   /* eslint-disable no-unused-expressions, no-sequences */
   $: ($userSettings.keyboardFocusHoles, updateVisibleOverlays());
   $: ($playbackProgressStart, updateSelection());
   $: ($playbackProgressEnd, updateSelection());
   $: updateViewportFromTick($throttledTick);
   $: ($transposeHalfStep, rehighlightHoles($throttledTick));
+  $: ($holesIntervalTree, refreshOverlays());
   $: ($drawVelocityCurves,
     partitionExpressionOverlaySvgs($bassExpCurve, $trebleExpCurve));
   $: ($useInAppExpression,
