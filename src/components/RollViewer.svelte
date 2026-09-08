@@ -1380,9 +1380,10 @@
   };
 
   const refreshOverlays = () => {
-    // XXX Need to do a bit more to make the hole overlay colors update on
+    // Some extra reactivity to make the hole overlay colors update on soft
     //  reload after changing the emulation settings.
     partitionHolesOverlaySvgs();
+    updateVisibleOverlays();
   };
 
   /* eslint-disable no-unused-expressions, no-sequences */
