@@ -45,19 +45,19 @@ export default class InAppExpressionizer {
     welte_loud: { alias: "f velocity", min: 0, max: 127, step: 1 },
     left_adjust: { alias: "+/- bass velocity", min: -127, max: 127, step: 1 },
     slow_decay_rate: {
-      alias: "slow de/cresc (ms/vel)",
+      alias: "slow de/cresc (ms/p-mf)",
       min: 1,
       max: 4000,
       step: 10,
     },
     fastC_decay_rate: {
-      alias: "fast cresc (ms/vel)",
+      alias: "fast cresc (ms/p-mf)",
       min: 1,
       max: 1000,
       step: 10,
     },
     fastD_decay_rate: {
-      alias: "fast decresc (ms/vel)",
+      alias: "fast decresc (ms/f-p)",
       min: 1,
       max: 1000,
       step: 10,

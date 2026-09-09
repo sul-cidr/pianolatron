@@ -9,12 +9,10 @@ import { PedalingContinuousInput } from "./lib/pedaling";
 export default class EightyEightNoteExpressionizer extends PedalingContinuousInput(
   InAppExpressionizer,
 ) {
-  defaultNoteVelocity = 50;
-
   defaultExpressionParams = {
     tunable: {
       default_mf: {
-        value: this.defaultNoteVelocity,
+        value: 50,
         alias: "default velocity",
         min: 0,
         max: 127,
@@ -130,7 +128,7 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
     const msgTime = this.convertTicksAndTime(tick);
     const panVelocity = this.getVelocityAtTime(msgTime, expState);
 
-    const { snakebite_extension } = this.expParams.tunable;
+    const { accent_f, default_mf, snakebite_extension } = this.expParams.tunable;
     if (ctrlFunc === "acc") {
       // It's only necessary to handle one of the "bites" of a snakebite accent
       //  but handling both doesn't seem to cause problems
@@ -147,8 +145,8 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
             expState.time,
             expState.snakebite_start,
             [
-              this.expParams.tunable.default_mf.value,
-              this.expParams.tunable.default_mf.value,
+              default_mf.value,
+              default_mf.value,
               expState.time,
               expState.snakebite_start,
             ]
@@ -164,8 +162,8 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
             expState.snakebite_stop,
             expState.snakebite_start,
             [
-              this.expParams.tunable.default_mf.value,
-              this.expParams.tunable.default_mf.value,
+              default_mf.value,
+              default_mf.value,
               expState.snakebite_stop,
               expState.snakebite_start,
             ]
@@ -181,8 +179,8 @@ export default class EightyEightNoteExpressionizer extends PedalingContinuousInp
             expState.snakebite_start,
             expState.snakebite_stop,
             [
-              this.expParams.tunable.accent_f.value,
-              this.expParams.tunable.accent_f.value,
+              accent_f.value,
+              accent_f.value,
               expState.snakebite_start,
               expState.snakebite_stop,
             ]
