@@ -18,7 +18,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
       welte_f: { value: 90.0 },
       // XXX should the effect of the "theme" holes also extend *before* the
       //  beginning of the snakebite accent holes, as for 88-note rolls?
-      theme_extent: { value: 250 }, // effective ms before/after theme selector snakebites
+      theme_extent: { value: 200, min: 10, max: 300, step: 10 }, // effective ms before/after theme selector snakebites
       left_adjust: { value: 0 }, // -5.0 used for Welte rolls, apply it here as well?
       tracker_diameter: { value: 16.7 }, // TODO get value from P. Phillips
       punch_ext_ratio: { value: 0.75 },
