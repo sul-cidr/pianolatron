@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { get } from "svelte/store";
-import { expressionParameters } from "../stores";
+import { expressionParameters, rollMetadata } from "../stores";
 import { clamp } from "../lib/utils";
 
 import InAppExpressionizer from "./lib/in-app-expressionizer";
@@ -18,7 +18,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
       welte_f: { value: 90.0 },
       // XXX should the effect of the "theme" holes also extend *before* the
       //  beginning of the snakebite accent holes, as for 88-note rolls?
-      theme_extent: { value: 200, min: 10, max: 300, step: 10 }, // effective ms before/after theme selector snakebites
+      theme_extent: { value: 50, min: 10, max: 100, step: 10 }, // effective ms before/after theme selector snakebites
       left_adjust: { value: 0 }, // -5.0 used for Welte rolls, apply it here as well?
       tracker_diameter: { value: 16.7 }, // TODO get value from P. Phillips
       punch_ext_ratio: { value: 0.75 },
@@ -32,6 +32,7 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     time: 0.0, // time (in ms) at last cresc/decresc event
     theme_start: null,
     theme_stop: null,
+    theme_activations: 0, // no destructive interference among theme snakebites
     vol1_start: null,
     vol1_stop: null,
     vol2_start: null,
@@ -41,6 +42,8 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     vol8_start: null,
     vol8_stop: null,
   };
+
+  #midiTPQ = get(rollMetadata).TICKS_PER_QUARTER;
 
   computeDerivedExpressionParams = () => {
     this.startingExpState.velocity =
@@ -163,11 +166,12 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
 
     if (ctrlFunc === null) return item;
 
+    // Theme snakebites affect notes from slightly ahead of their position on the roll
     if (ctrlFunc === "acc") {
       if (item.velocity !== 0) {
-        item.tick = Math.max(0, item.tick - theme_extent.value * 0.5);
+        item.tick = Math.max(0, item.tick - Math.round(theme_extent.value / 1000 * this.#midiTPQ));
       } else {
-        item.tick += theme_extent.value;
+        item.tick += Math.round(theme_extent.value / 1000 * this.#midiTPQ);
       }
     } else if (item.velocity === 0) {
       item.tick += tracker_extension;
@@ -192,21 +196,20 @@ export default class DuoArtExpressionizer extends PedalingContinuousInput(
     const msgTime = this.convertTicksAndTime(tick);
     const panVelocity = this.getVelocityAtTime(msgTime, expState);
 
-    const { theme_extent } = this.expParams.tunable;
-
     switch (ctrlFunc) {
       case "acc":
         if (velocity > 0) {
-          expState.theme_start = Math.max(
-            0,
-            msgTime - theme_extent.value * 0.1,
-          );
-          expState.theme_stop = null;
+          expState.theme_activations += 1;
+          if (expState.theme_activations === 1) {
+            expState.theme_start = msgTime;
+            expState.theme_stop = null;
+          }
         } else {
-          expState.theme_stop = msgTime + theme_extent.value;
+          expState.theme_activations -= 1;
+          if (expState.theme_activations === 0)
+            expState.theme_stop = msgTime;
         }
         break;
-
       case "vol+1":
       case "vol+2":
       case "vol+4":
