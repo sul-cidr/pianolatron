@@ -100,12 +100,17 @@
 </style>
 
 <script>
-  import Icon from "../ui-components/Icon.svelte";
   import catalog from "../config/catalog.json";
-
+  import IconButton from "../ui-components/IconButton.svelte";
+  import {
+    notify,
+    clearNotification,
+  } from "../ui-components/Notification.svelte";
   import { appMode } from "../stores";
 
   export let metadata;
+
+  let dialogState = { midi: null, roll: null };
 
   // Allow values from the catalog to override the matching keys in the roll data
   // const catalogRecord = catalog.find((r) => r.druid === metadata.druid);
@@ -121,7 +126,79 @@
       )
     : [];
 
-  const imageLink = `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.jp2`;
+  const linkToDownload = (dialogType, itemType) => {
+    // Create an ephemeral link to the image and click it
+    const element = document.createElement("a");
+    element.setAttribute("href", downloadLinks[dialogType][itemType]);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    // The dialog will close automatically, so make a note of that
+    dialogState[dialogType] = null;
+  };
+
+  const downloadDialog = (dialogType) => {
+    if (dialogState[dialogType] !== null) {
+      // Don't allow more than one instance of a dialog type to appear
+      clearNotification(dialogState[dialogType]);
+      dialogState[dialogType] = null;
+      return;
+    }
+    dialogState[dialogType] = notify({
+      title:
+        dialogType === "midi"
+          ? "MIDI Download Options"
+          : "Roll Image Download Options",
+      type: "dialog",
+      message: "",
+      closable: true,
+      callOnClose: () => {
+        dialogState[dialogType] = null;
+      },
+      actions:
+        dialogType === "midi"
+          ? [
+              {
+                label: "Expression MIDI",
+                fn: () => linkToDownload(dialogType, "exp_midi"),
+              },
+              {
+                label: "Note MIDI",
+                fn: () => linkToDownload(dialogType, "note_midi"),
+              },
+              // {
+              //   label: "Roll Image Analysis",
+              //   fn: () => linkToDownload(dialogType, "analysis"))
+              // }
+            ]
+          : [
+              {
+                label: "Color TIFF",
+                fn: () => linkToDownload(dialogType, "color_tiff"),
+              },
+              {
+                label: "Color JPEG 2000",
+                fn: () => linkToDownload(dialogType, "color_jp2"),
+              },
+              {
+                label: "Monochrome TIFF",
+                fn: () => linkToDownload(dialogType, "mono_tiff"),
+              },
+            ],
+    });
+  };
+
+  const downloadLinks = {
+    roll: {
+      color_jp2: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.jp2`,
+      color_tiff: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.tiff`,
+    },
+    midi: {
+      exp_midi: `/midi/${metadata.druid}.mid`,
+      note_midi: `/note_midi/${metadata.druid}.mid`,
+    },
+  };
   const unavailable = "<span>Unavailable</span>";
 </script>
 
@@ -171,7 +248,7 @@
       </ul>
     </dd>
   {/if}
-  <dt>External Records</dt>
+  <dt>Library Records</dt>
   <dd>
     <div class="download-links">
       <a
@@ -196,25 +273,26 @@
   <dt>Download</dt>
   <dd>
     <div class="download-links">
-      <div>
-        <a
-          href="/midi/{metadata.druid}.mid"
-          title="Download MIDI for roll {metadata.title}"
-        >
-          <Icon
-            name="midi"
-            aria-label="Download MIDI for roll {metadata.title}"
-          />
-        </a>
-      </div>
-      <div>
-        <a href={imageLink} title="Download image for roll {metadata.title}">
-          <Icon
-            name="roll-image"
-            aria-label="Download image for roll {metadata.title}"
-          />
-        </a>
-      </div>
+      <IconButton
+        class="player-button"
+        disabled={false}
+        on:click={() => downloadDialog("midi")}
+        iconName="midi"
+        label="Download MIDI files for roll {metadata.title}"
+        height="36"
+        width="36"
+        title="Download MIDI files for roll {metadata.title}"
+      />
+      <IconButton
+        class="player-button"
+        disabled={false}
+        on:click={() => downloadDialog("roll")}
+        iconName="roll-image"
+        label="Download images for roll {metadata.title}"
+        height="36"
+        width="36"
+        title="Download images for roll {metadata.title}"
+      />
     </div>
   </dd>
   <dt>Roll Type</dt>

@@ -55,6 +55,7 @@
   }
 
   section {
+    flex-grow: 1;
     padding: 0.75em 0.5em;
     width: 100%;
   }
@@ -126,6 +127,7 @@
     if (detail.timeout) {
       timeouts[id] = setTimeout(() => clearNotification(id), detail.timeout);
     }
+    return id;
   };
 </script>
 
@@ -169,30 +171,32 @@
         role="dialog"
         aria-labelledby="notificationTitle"
       >
-        <div id="msg_{notification.id}" tabindex={0}>
-          <section>
-            {#if notification.title}
-              <header id="notificationTitle">{notification.title}</header>
-            {/if}
-            <p>{@html notification.message}</p>
-            {#each notification.actions || [] as action}
-              <button
-                tabindex={0}
-                on:click={() => {
-                  clearNotification(notification.id);
-                  action.fn();
-                }}>{action.label}</button
-              >
-            {/each}
-          </section>
-        </div>
+        <section id="msg_{notification.id}" tabindex={0}>
+          {#if notification.title}
+            <header id="notificationTitle">{notification.title}</header>
+          {/if}
+          <p>{@html notification.message}</p>
+          {#each notification.actions || [] as action}
+            <button
+              tabindex={0}
+              on:click={() => {
+                clearNotification(notification.id);
+                action.fn();
+              }}>{action.label}</button
+            >
+          {/each}
+        </section>
         {#if notification.closable !== false}
           <div
             class="close"
             role="button"
             aria-label="close dialog"
             tabindex="0"
-            on:click={() => clearNotification(notification.id)}
+            on:click={() => {
+              if (typeof notification.callOnClose === "function")
+                notification.callOnClose();
+              clearNotification(notification.id);
+            }}
             on:keypress={(event) => {
               if (event.code === "Enter") clearNotification(notification.id);
             }}
