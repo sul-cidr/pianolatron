@@ -130,6 +130,10 @@
     // Create an ephemeral link to the image and click it
     const element = document.createElement("a");
     element.setAttribute("href", downloadLinks[dialogType][itemType]);
+    if (itemType === "exp_midi")
+      element.setAttribute("download", `${metadata.druid}_exp.mid`);
+    else if (itemType === "note_midi")
+      element.setAttribute("download", `${metadata.druid}_note.mid`);
     element.style.display = "none";
     document.body.appendChild(element);
     element.click();
@@ -182,8 +186,12 @@
                 fn: () => linkToDownload(dialogType, "color_jp2"),
               },
               {
-                label: "Monochrome TIFF",
-                fn: () => linkToDownload(dialogType, "mono_tiff"),
+                label: "Green-Channel TIFF (Monochrome)",
+                fn: () => linkToDownload(dialogType, "green_tiff"),
+              },
+              {
+                label: "Infrared JPEG 2000 (Monochrome)",
+                fn: () => linkToDownload(dialogType, "mono_jp2"),
               },
             ],
     });
@@ -193,6 +201,8 @@
     roll: {
       color_jp2: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.jp2`,
       color_tiff: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.tiff`,
+      green_tiff: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}_gr.tiff`,
+      mono_jp2: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}_ir.jp2`,
     },
     midi: {
       exp_midi: `/midi/${metadata.druid}.mid`,
