@@ -61,10 +61,10 @@
   }
 
   header {
+    text-align: center;
     font-size: 1.25em;
     font-weight: bold;
     padding: 0 0.25em 0.25em;
-    margin-bottom: 0.5em;
   }
 
   p {
