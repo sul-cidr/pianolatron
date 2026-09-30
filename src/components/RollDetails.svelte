@@ -100,6 +100,8 @@
 </style>
 
 <script>
+  import { onMount } from "svelte";
+
   import catalog from "../config/catalog.json";
   import IconButton from "../ui-components/IconButton.svelte";
   import {
@@ -160,41 +162,26 @@
       callOnClose: () => {
         dialogState[dialogType] = null;
       },
-      actions:
-        dialogType === "midi"
-          ? [
-              {
-                label: "Expression MIDI",
-                fn: () => linkToDownload(dialogType, "exp_midi"),
-              },
-              {
-                label: "Note MIDI",
-                fn: () => linkToDownload(dialogType, "note_midi"),
-              },
-              // {
-              //   label: "Roll Image Analysis",
-              //   fn: () => linkToDownload(dialogType, "analysis"))
-              // }
-            ]
-          : [
-              {
-                label: "Color TIFF",
-                fn: () => linkToDownload(dialogType, "color_tiff"),
-              },
-              {
-                label: "Color JPEG 2000",
-                fn: () => linkToDownload(dialogType, "color_jp2"),
-              },
-              {
-                label: "Green-Channel TIFF (Monochrome)",
-                fn: () => linkToDownload(dialogType, "green_tiff"),
-              },
-              {
-                label: "Infrared JPEG 2000 (Monochrome)",
-                fn: () => linkToDownload(dialogType, "mono_jp2"),
-              },
-            ],
+      actions: Object.keys(downloadLinks[dialogType]).flatMap((itemType) =>
+        activeLinks.includes(itemType)
+          ? {
+              label: linkLabels[itemType],
+              fn: () => linkToDownload(dialogType, itemType),
+            }
+          : [],
+      ),
     });
+  };
+
+  let activeLinks = ["exp_midi", "note_midi"];
+
+  const linkLabels = {
+    exp_midi: "Expression MIDI",
+    note_midi: "Note MIDI",
+    color_tiff: "Color TIFF",
+    color_jp2: "Color JPEG 2000",
+    green_tiff: "Green-Channel TIFF (Monochrome)",
+    mono_jp2: "Infrared JPEG 2000 (Monochrome)",
   };
 
   const downloadLinks = {
@@ -209,7 +196,25 @@
       note_midi: `/note_midi/${metadata.druid}.mid`,
     },
   };
+
   const unavailable = "<span>Unavailable</span>";
+
+  async function checkLink(url) {
+    try {
+      const response = await fetch(url, { method: "HEAD" });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  onMount(async () =>
+    Object.entries(downloadLinks["roll"]).forEach(([imageType, imageLink]) =>
+      checkLink(imageLink).then((res) =>
+        res ? activeLinks.push(imageType) : null,
+      ),
+    ),
+  );
 </script>
 
 <dl>
