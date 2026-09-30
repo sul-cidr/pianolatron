@@ -279,8 +279,8 @@
         on:click={() => downloadDialog("midi")}
         iconName="midi"
         label="Download MIDI files for roll {metadata.title}"
-        height="36"
-        width="36"
+        height="28"
+        width="28"
         title="Download MIDI files for roll {metadata.title}"
       />
       <IconButton
@@ -289,8 +289,8 @@
         on:click={() => downloadDialog("roll")}
         iconName="roll-image"
         label="Download images for roll {metadata.title}"
-        height="36"
-        width="36"
+        height="28"
+        width="28"
         title="Download images for roll {metadata.title}"
       />
     </div>

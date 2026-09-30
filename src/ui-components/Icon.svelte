@@ -237,7 +237,7 @@
         <path text-data="D" d="m 392,0 h 193 c 19.6,0 31,16.9 31,37 v 196 c 0,24.9 -10.4,33 -33,33 H 392 V 97 h 66 v 104 h 93 V 60 H 392 Z" />
         <rect text-data="I" x="646" y="0" width="66" height="266" />
       `,
-      attribs: { viewBox: "0 0 712 266", fill: "currentColor" },
+      attribs: { viewBox: "0 0 712 250", fill: "currentColor" },
     },
     skipForward: {
       svg: `
