@@ -353,7 +353,7 @@
           message:
             "Please check the specified DRUID, or select a roll to continue.",
           type: "error",
-          closable: false,
+          closable: true,
         });
       }
 
