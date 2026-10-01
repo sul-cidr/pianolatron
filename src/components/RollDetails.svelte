@@ -181,15 +181,23 @@
     color_tiff: "Color TIFF",
     color_jp2: "Color JPEG 2000",
     green_tiff: "Green-Channel TIFF (Monochrome)",
-    mono_jp2: "Infrared JPEG 2000 (Monochrome)",
+    infra_jp2: "Infrared JPEG 2000 (Monochrome)",
+    infra2_jp2: "Infrared JPEG 2000 (Monochrome) 2",
+    gray_jp2: "Monochrome JPEG 2000",
   };
+
+  const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}`;
 
   const downloadLinks = {
     roll: {
-      color_jp2: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.jp2`,
-      color_tiff: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.tiff`,
-      green_tiff: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}_gr.tiff`,
-      mono_jp2: `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}_ir.jp2`,
+      color_jp2: `${imageLinkBase}.jp2`,
+      color_tiff: `${imageLinkBase}.tiff`,
+      green_tiff: `${imageLinkBase}_gr.tiff`,
+      infra_jp2: `${imageLinkBase}_ir.jp2`,
+      infra2_jp2: imageLinkBase.includes("_Color")
+        ? `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
+        : "",
+      gray_jp2: `${imageLinkBase}_gs.jp2`,
     },
     midi: {
       exp_midi: `/midi/${metadata.druid}.mid`,
@@ -209,10 +217,12 @@
   }
 
   onMount(async () =>
-    Object.entries(downloadLinks["roll"]).forEach(([imageType, imageLink]) =>
-      checkLink(imageLink).then((res) =>
-        res ? activeLinks.push(imageType) : null,
-      ),
+    Object.entries(downloadLinks["roll"]).forEach(
+      ([imageType, imageLink]) =>
+        imageLink &&
+        checkLink(imageLink).then((res) =>
+          res ? activeLinks.push(imageType) : null,
+        ),
     ),
   );
 </script>
