@@ -100,7 +100,7 @@
 </style>
 
 <script>
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
 
   import catalog from "../config/catalog.json";
   import IconButton from "../ui-components/IconButton.svelte";
@@ -223,6 +223,12 @@
         checkLink(imageLink).then((res) =>
           res ? activeLinks.push(imageType) : null,
         ),
+    ),
+  );
+
+  onDestroy(() =>
+    Object.values(dialogState).forEach(
+      (dialogId) => dialogId !== null && clearNotification(dialogId),
     ),
   );
 </script>
