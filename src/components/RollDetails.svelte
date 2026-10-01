@@ -145,8 +145,16 @@
   };
 
   const downloadDialog = (dialogType) => {
+    // If one dialog is open and they clicked the button for the other one, don't open it
+    if (
+      Object.entries(dialogState).filter(
+        ([thisType, thisStatus]) =>
+          thisStatus !== null && thisType !== dialogType,
+      ).length > 0
+    )
+      return;
+    // If they click the button for a dialog that's already open, toggle it closed
     if (dialogState[dialogType] !== null) {
-      // Don't allow more than one instance of a dialog type to appear
       clearNotification(dialogState[dialogType]);
       dialogState[dialogType] = null;
       return;
