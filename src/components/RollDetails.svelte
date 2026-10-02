@@ -181,7 +181,7 @@
       },
       actions: Object.keys(downloadLinks[dialogType]).map((itemType) =>
         Object({
-          label: `${linkLabels[itemType]}${Object.hasOwn(downloadLinks[dialogType][itemType], "size") ? ` - ${downloadLinks[dialogType][itemType].size}` : ""}`,
+          label: `${itemType.startsWith("unlabeled") ? downloadLinks[dialogType][itemType].filename : linkLabels[itemType]}${Object.hasOwn(downloadLinks[dialogType][itemType], "size") ? ` - ${downloadLinks[dialogType][itemType].size}` : ""}`,
           fn: () => linkToDownload(dialogType, itemType),
         }),
       ),
@@ -204,6 +204,7 @@
 
   const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}`;
   const imageFilenameBase = `${metadata.image_url.split("/").slice(-2, -1)[0]}`;
+  let unlabeledLinks = 0;
 
   const downloadLinks = {
     roll: {},
@@ -235,6 +236,7 @@
         const linkData = {
           link: fileLink,
           size: formatBytes(parseInt(file_entry.size)),
+          filename: file_entry.filename,
         };
         if (file_entry.filename === `${imageFilenameBase}.jp2`)
           downloadLinks.roll.color_jp2 = linkData;
@@ -262,6 +264,10 @@
             `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
         )
           downloadLinks.roll.infra_sp_jp2 = linkData;
+        else {
+          unlabeledLinks++;
+          downloadLinks.roll[`unlabeled${unlabeledLinks}`] = linkData;
+        }
       }
     }),
   );
