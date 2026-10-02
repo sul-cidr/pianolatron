@@ -190,7 +190,8 @@
     color_jp2: "Color JPEG 2000",
     green_tiff: "Green-Channel TIFF (Monochrome)",
     infra_jp2: "Infrared JPEG 2000 (Monochrome)",
-    infra2_jp2: "Infrared JPEG 2000 (Monochrome) 2",
+    infra2_jp2: "Infrared JPEG 2000 (Monochrome)",
+    infra_ps_jp2: "Infrared JPEG 2000 (High-Contrast)",
     gray_jp2: "Monochrome JPEG 2000",
   };
 
@@ -205,6 +206,7 @@
       infra2_jp2: imageLinkBase.includes("_Color")
         ? `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
         : "",
+      infra_ps_jp2: `${imageLinkBase}_ir_sp.jp2`,
       gray_jp2: `${imageLinkBase}_gs.jp2`,
     },
     midi: {
