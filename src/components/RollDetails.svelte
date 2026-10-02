@@ -100,20 +100,27 @@
 </style>
 
 <script>
-  import Icon from "../ui-components/Icon.svelte";
-  import catalog from "../config/catalog.json";
+  import { onMount, onDestroy } from "svelte";
 
+  import catalog from "../config/catalog.json";
+  import IconButton from "../ui-components/IconButton.svelte";
+  import {
+    notify,
+    clearNotification,
+  } from "../ui-components/Notification.svelte";
   import { appMode } from "../stores";
 
   export let metadata;
 
+  let dialogState = { midi: null, roll: null };
+
   // Allow values from the catalog to override the matching keys in the roll data
-  // const catalogRecord = catalog.find((r) => r.druid === metadata.druid);
-  // for (const [key, value] of Object.entries(metadata)) {
-  //   if (catalogRecord[key] !== undefined && catalogRecord[key] !== value) {
-  //     metadata[key] = catalogRecord[key];
-  //   }
-  // }
+  const catalogRecord = catalog.find((r) => r.druid === metadata.druid);
+  for (const [key, value] of Object.entries(metadata)) {
+    if (catalogRecord[key] !== undefined && catalogRecord[key] !== value) {
+      metadata[key] = catalogRecord[key];
+    }
+  }
 
   const similarWorksByPerformer = metadata.performer
     ? catalog.filter(
@@ -121,8 +128,155 @@
       )
     : [];
 
-  const imageLink = `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}.jp2`;
+  const formatBytes = (bytes) => {
+    if (bytes === 0) return "0 Bytes";
+    if (bytes > 2 ** 40) return ">1 TB";
+
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const decimals = sizes[i] === "GB" ? 2 : 0;
+
+    return (
+      parseFloat((bytes / Math.pow(1024, i)).toFixed(decimals)) + " " + sizes[i]
+    );
+  };
+
+  const linkToDownload = (dialogType, itemType) => {
+    // Create an ephemeral link to the image and click it
+    const element = document.createElement("a");
+    element.setAttribute("href", downloadLinks[dialogType][itemType].link);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    // The dialog will close automatically, so make a note of that
+    dialogState[dialogType] = null;
+  };
+
+  const downloadDialog = (dialogType) => {
+    // If one dialog is open and they clicked the button for the other one, don't open it
+    if (
+      Object.entries(dialogState).filter(
+        ([thisType, thisStatus]) =>
+          thisStatus !== null && thisType !== dialogType,
+      ).length > 0
+    )
+      return;
+    // If user clicks the button for a dialog that's already open, toggle it closed
+    if (dialogState[dialogType] !== null) {
+      clearNotification(dialogState[dialogType]);
+      dialogState[dialogType] = null;
+      return;
+    }
+    dialogState[dialogType] = notify({
+      title:
+        dialogType === "midi"
+          ? "MIDI Download Options"
+          : "Roll Image Download Options",
+      type: "dialog",
+      message: "",
+      closable: true,
+      callOnClose: () => {
+        dialogState[dialogType] = null;
+      },
+      actions: Object.keys(downloadLinks[dialogType]).map((itemType) =>
+        Object({
+          label: `${itemType.startsWith("unlabeled") ? downloadLinks[dialogType][itemType].filename : linkLabels[itemType]}${Object.hasOwn(downloadLinks[dialogType][itemType], "size") ? ` - ${downloadLinks[dialogType][itemType].size}` : ""}`,
+          fn: () => linkToDownload(dialogType, itemType),
+        }),
+      ),
+    });
+  };
+
+  const linkLabels = {
+    exp_midi: "Expression MIDI",
+    note_midi: "Note MIDI",
+    color_tiff: "Color TIFF",
+    color_jp2: "Color JPEG 2000",
+    green_tiff: "Green-Channel TIFF (Monochrome)",
+    infra_jp2: "Infrared JPEG 2000 (Monochrome)",
+    infra_tiff: "Infrared TIFF (Monochrome)",
+    infra_sp_jp2: "Infrared JPEG 2000 (High-Contrast)",
+    infra_sp_tiff: "Infrared TIFF (High-Contrast)",
+    gray_jp2: "Monochrome JPEG 2000",
+    gray_tiff: "Monochrome TIFF",
+  };
+
+  const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}`;
+  const imageFilenameBase = `${metadata.image_url.split("/").slice(-2, -1)[0]}`;
+  let unlabeledLinks = 0;
+
+  const downloadLinks = {
+    roll: {},
+    midi: {
+      exp_midi: { link: `/midi/${metadata.druid}_exp.mid` },
+      note_midi: { link: `/midi/${metadata.druid}_note.mid` },
+    },
+  };
+
   const unavailable = "<span>Unavailable</span>";
+
+  async function checkLink(url) {
+    try {
+      const response = await fetch(url, { method: "HEAD" });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  onMount(async () =>
+    metadata.file_entries.forEach((file_entry) => {
+      const fileLink = `${imageLinkBase}/${file_entry.filename}`;
+      if (
+        file_entry.is_public === "yes" &&
+        file_entry.mime_type.startsWith("image") &&
+        checkLink(fileLink)
+      ) {
+        const linkData = {
+          link: fileLink,
+          size: formatBytes(parseInt(file_entry.size)),
+          filename: file_entry.filename,
+        };
+        if (file_entry.filename === `${imageFilenameBase}.jp2`)
+          downloadLinks.roll.color_jp2 = linkData;
+        else if (file_entry.filename.startsWith(`${imageFilenameBase}.tif`))
+          downloadLinks.roll.color_tiff = linkData;
+        else if (/_gr\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.green_tiff = linkData;
+        else if (file_entry.filename.endsWith("_gs.jp2"))
+          downloadLinks.roll.gray_jp2 = linkData;
+        else if (/_gs\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.gray_tiff = linkData;
+        else if (file_entry.filename.endsWith("_ir.jp2"))
+          downloadLinks.roll.infra_jp2 = linkData;
+        else if (file_entry.filename.endsWith("_Infrared.jp2"))
+          downloadLinks.roll.infra_jp2 = linkData;
+        else if (/_Infrared\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.infra_tiff = linkData;
+        else if (file_entry.filename.endsWith("_ir_sp.jp2"))
+          downloadLinks.roll.infra_sp_jp2 = linkData;
+        else if (/_ir_sp\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.infra_sp_tiff = linkData;
+        else if (
+          imageFilenameBase.includes("_Color") &&
+          file_entry.filename ===
+            `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
+        )
+          downloadLinks.roll.infra_sp_jp2 = linkData;
+        else {
+          unlabeledLinks++;
+          downloadLinks.roll[`unlabeled${unlabeledLinks}`] = linkData;
+        }
+      }
+    }),
+  );
+
+  onDestroy(() =>
+    Object.values(dialogState).forEach(
+      (dialogId) => dialogId !== null && clearNotification(dialogId),
+    ),
+  );
 </script>
 
 <dl>
@@ -171,7 +325,7 @@
       </ul>
     </dd>
   {/if}
-  <dt>External Records</dt>
+  <dt>Library Records</dt>
   <dd>
     <div class="download-links">
       <a
@@ -196,25 +350,26 @@
   <dt>Download</dt>
   <dd>
     <div class="download-links">
-      <div>
-        <a
-          href="/midi/{metadata.druid}.mid"
-          title="Download MIDI for roll {metadata.title}"
-        >
-          <Icon
-            name="midi"
-            aria-label="Download MIDI for roll {metadata.title}"
-          />
-        </a>
-      </div>
-      <div>
-        <a href={imageLink} title="Download image for roll {metadata.title}">
-          <Icon
-            name="roll-image"
-            aria-label="Download image for roll {metadata.title}"
-          />
-        </a>
-      </div>
+      <IconButton
+        class="player-button"
+        disabled={false}
+        on:click={() => downloadDialog("midi")}
+        iconName="midi"
+        label="Download MIDI files for roll {metadata.title}"
+        height="28"
+        width="28"
+        title="Download MIDI files for roll {metadata.title}"
+      />
+      <IconButton
+        class="player-button"
+        disabled={false}
+        on:click={() => downloadDialog("roll")}
+        iconName="roll-image"
+        label="Download images for roll {metadata.title}"
+        height="28"
+        width="28"
+        title="Download images for roll {metadata.title}"
+      />
     </div>
   </dd>
   <dt>Roll Type</dt>
