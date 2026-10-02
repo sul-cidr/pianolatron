@@ -128,10 +128,23 @@
       )
     : [];
 
+  const formatBytes = (bytes) => {
+    if (bytes === 0) return "0 Bytes";
+    if (bytes > 2 ** 40) return ">1 TB";
+
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const decimals = sizes[i] === "GB" ? 2 : 0;
+
+    return (
+      parseFloat((bytes / Math.pow(1024, i)).toFixed(decimals)) + " " + sizes[i]
+    );
+  };
+
   const linkToDownload = (dialogType, itemType) => {
     // Create an ephemeral link to the image and click it
     const element = document.createElement("a");
-    element.setAttribute("href", downloadLinks[dialogType][itemType]);
+    element.setAttribute("href", downloadLinks[dialogType][itemType].link);
     element.style.display = "none";
     document.body.appendChild(element);
     element.click();
@@ -149,7 +162,7 @@
       ).length > 0
     )
       return;
-    // If they click the button for a dialog that's already open, toggle it closed
+    // If user clicks the button for a dialog that's already open, toggle it closed
     if (dialogState[dialogType] !== null) {
       clearNotification(dialogState[dialogType]);
       dialogState[dialogType] = null;
@@ -166,18 +179,14 @@
       callOnClose: () => {
         dialogState[dialogType] = null;
       },
-      actions: Object.keys(downloadLinks[dialogType]).flatMap((itemType) =>
-        activeLinks.includes(itemType)
-          ? {
-              label: linkLabels[itemType],
-              fn: () => linkToDownload(dialogType, itemType),
-            }
-          : [],
+      actions: Object.keys(downloadLinks[dialogType]).map((itemType) =>
+        Object({
+          label: `${linkLabels[itemType]}${Object.hasOwn(downloadLinks[dialogType][itemType], "size") ? ` - ${downloadLinks[dialogType][itemType].size}` : ""}`,
+          fn: () => linkToDownload(dialogType, itemType),
+        }),
       ),
     });
   };
-
-  let activeLinks = ["exp_midi", "note_midi"];
 
   const linkLabels = {
     exp_midi: "Expression MIDI",
@@ -186,28 +195,21 @@
     color_jp2: "Color JPEG 2000",
     green_tiff: "Green-Channel TIFF (Monochrome)",
     infra_jp2: "Infrared JPEG 2000 (Monochrome)",
-    infra2_jp2: "Infrared JPEG 2000 (Monochrome)",
-    infra_ps_jp2: "Infrared JPEG 2000 (High-Contrast)",
+    infra_tiff: "Infrared TIFF (Monochrome)",
+    infra_sp_jp2: "Infrared JPEG 2000 (High-Contrast)",
+    infra_sp_tiff: "Infrared TIFF (High-Contrast)",
     gray_jp2: "Monochrome JPEG 2000",
+    gray_tiff: "Monochrome TIFF",
   };
 
-  const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}/${metadata.image_url.split("/").slice(-2, -1)[0]}`;
+  const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}`;
+  const imageFilenameBase = `${metadata.image_url.split("/").slice(-2, -1)[0]}`;
 
   const downloadLinks = {
-    roll: {
-      color_jp2: `${imageLinkBase}.jp2`,
-      color_tiff: `${imageLinkBase}.tiff`,
-      green_tiff: `${imageLinkBase}_gr.tiff`,
-      infra_jp2: `${imageLinkBase}_ir.jp2`,
-      infra2_jp2: imageLinkBase.includes("_Color")
-        ? `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
-        : "",
-      infra_ps_jp2: `${imageLinkBase}_ir_sp.jp2`,
-      gray_jp2: `${imageLinkBase}_gs.jp2`,
-    },
+    roll: {},
     midi: {
-      exp_midi: `/midi/${metadata.druid}_exp.mid`,
-      note_midi: `/midi/${metadata.druid}_note.mid`,
+      exp_midi: { link: `/midi/${metadata.druid}_exp.mid` },
+      note_midi: { link: `/midi/${metadata.druid}_note.mid` },
     },
   };
 
@@ -223,13 +225,45 @@
   }
 
   onMount(async () =>
-    Object.entries(downloadLinks["roll"]).forEach(
-      ([imageType, imageLink]) =>
-        imageLink &&
-        checkLink(imageLink).then((res) =>
-          res ? activeLinks.push(imageType) : null,
-        ),
-    ),
+    metadata.file_entries.forEach((file_entry) => {
+      const fileLink = `${imageLinkBase}/${file_entry.filename}`;
+      if (
+        file_entry.is_public === "yes" &&
+        file_entry.mime_type.startsWith("image") &&
+        checkLink(fileLink)
+      ) {
+        const linkData = {
+          link: fileLink,
+          size: formatBytes(parseInt(file_entry.size)),
+        };
+        if (file_entry.filename === `${imageFilenameBase}.jp2`)
+          downloadLinks.roll.color_jp2 = linkData;
+        else if (file_entry.filename.startsWith(`${imageFilenameBase}.tif`))
+          downloadLinks.roll.color_tiff = linkData;
+        else if (/_gr\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.green_tiff = linkData;
+        else if (file_entry.filename.endsWith("_gs.jp2"))
+          downloadLinks.roll.gray_jp2 = linkData;
+        else if (/_gs\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.gray_tiff = linkData;
+        else if (file_entry.filename.endsWith("_ir.jp2"))
+          downloadLinks.roll.infra_jp2 = linkData;
+        else if (file_entry.filename.endsWith("_Infrared.jp2"))
+          downloadLinks.roll.infra_jp2 = linkData;
+        else if (/_Infrared\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.infra_tiff = linkData;
+        else if (file_entry.filename.endsWith("_ir_sp.jp2"))
+          downloadLinks.roll.infra_sp_jp2 = linkData;
+        else if (/_ir_sp\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.infra_sp_tiff = linkData;
+        else if (
+          imageFilenameBase.includes("_Color") &&
+          file_entry.filename ===
+            `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
+        )
+          downloadLinks.roll.infra_sp_jp2 = linkData;
+      }
+    }),
   );
 
   onDestroy(() =>
