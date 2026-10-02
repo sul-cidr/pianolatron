@@ -229,7 +229,7 @@
   const loadRoll = (roll, doReset = true) => {
     $appWaiting = true;
     mididataReady = fetch(
-      `/${$useInAppExpression ? "note_midi" : "midi"}/${roll.druid}.mid`,
+      `/midi/${roll.druid}${$useInAppExpression ? "_note" : "_exp"}.mid`,
     )
       .then((mididataResponse) => {
         if (mididataResponse.status === 200)

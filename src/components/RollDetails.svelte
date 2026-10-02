@@ -132,10 +132,6 @@
     // Create an ephemeral link to the image and click it
     const element = document.createElement("a");
     element.setAttribute("href", downloadLinks[dialogType][itemType]);
-    if (itemType === "exp_midi")
-      element.setAttribute("download", `${metadata.druid}_exp.mid`);
-    else if (itemType === "note_midi")
-      element.setAttribute("download", `${metadata.druid}_note.mid`);
     element.style.display = "none";
     document.body.appendChild(element);
     element.click();
@@ -210,8 +206,8 @@
       gray_jp2: `${imageLinkBase}_gs.jp2`,
     },
     midi: {
-      exp_midi: `/midi/${metadata.druid}.mid`,
-      note_midi: `/note_midi/${metadata.druid}.mid`,
+      exp_midi: `/midi/${metadata.druid}_exp.mid`,
+      note_midi: `/midi/${metadata.druid}_note.mid`,
     },
   };
 
