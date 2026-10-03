@@ -229,8 +229,11 @@
       />
     {/each}
   </div>
-  <button on:click={toggleKeybindingsConfig}>Configure Key Bindings</button>
+  <button on:click={toggleKeybindingsConfig} aria-haspopup="dialog"
+    >Configure Key Bindings</button
+  >
   <button
+    aria-haspopup="dialog"
     on:click={() => {
       userSettings.reset();
       notify({

@@ -169,6 +169,7 @@
         disabled={false}
         on:click={bookmarkRoll}
         iconName="bookmark"
+        opensDialog="true"
         label="Bookmark"
         height="32"
         width="32"
@@ -241,6 +242,7 @@
             disabled={false}
             on:click={toggleRecording}
             iconName="continueRecording"
+            opensDialog="true"
             label={`Continue Recording${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
             height="32"
             width="32"
@@ -252,6 +254,7 @@
             disabled={false}
             on:click={toggleRecording}
             iconName="record"
+            opensDialog="true"
             label={`Record${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
             height="32"
             width="32"
@@ -264,6 +267,7 @@
           disabled={false}
           on:click={toggleRecording}
           iconName="recordingActive"
+          opensDialog="true"
           label={`Pause Recording${$appMode === "perform" ? ` (${$keyMap.TOGGLE_RECORD.key})` : ""}`}
           height="32"
           width="32"

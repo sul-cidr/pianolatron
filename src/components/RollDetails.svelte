@@ -112,7 +112,11 @@
 
   export let metadata;
 
-  let dialogState = { midi: null, roll: null };
+  const dialogState = { midi: null, roll: null };
+  const unavailable = "<span>Unavailable</span>";
+  const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}`;
+  const imageFilenameBase = `${metadata.image_url.split("/").slice(-2, -1)[0]}`;
+  let unlabeledLinks = 0;
 
   // Allow values from the catalog to override the matching keys in the roll data
   const catalogRecord = catalog.find((r) => r.druid === metadata.druid);
@@ -191,6 +195,8 @@
   const linkLabels = {
     exp_midi: "Expression MIDI",
     note_midi: "Note MIDI",
+    raw_midi: "Raw MIDI",
+    analysis: "Analysis Output",
     color_tiff: "Color TIFF",
     color_jp2: "Color JPEG 2000",
     green_tiff: "Green-Channel TIFF (Monochrome)",
@@ -202,10 +208,6 @@
     gray_tiff: "Monochrome TIFF",
   };
 
-  const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}`;
-  const imageFilenameBase = `${metadata.image_url.split("/").slice(-2, -1)[0]}`;
-  let unlabeledLinks = 0;
-
   const downloadLinks = {
     roll: {},
     midi: {
@@ -213,8 +215,6 @@
       note_midi: { link: `/midi/${metadata.druid}_note.mid` },
     },
   };
-
-  const unavailable = "<span>Unavailable</span>";
 
   async function checkLink(url) {
     try {
@@ -227,50 +227,78 @@
 
   onMount(async () =>
     metadata.file_entries.forEach((file_entry) => {
-      const fileLink = `${imageLinkBase}/${file_entry.filename}`;
+      const thisFilename = file_entry.filename;
+      const mimeType = file_entry.mime_type;
+      const fileLink = `${imageLinkBase}/${thisFilename}`;
+      // Don't bother checking links if they're not the types we care about
       if (
-        file_entry.is_public === "yes" &&
-        file_entry.mime_type.startsWith("image") &&
-        checkLink(fileLink)
-      ) {
-        const linkData = {
-          link: fileLink,
-          size: formatBytes(parseInt(file_entry.size)),
-          filename: file_entry.filename,
-        };
-        if (file_entry.filename === `${imageFilenameBase}.jp2`)
-          downloadLinks.roll.color_jp2 = linkData;
-        else if (file_entry.filename.startsWith(`${imageFilenameBase}.tif`))
-          downloadLinks.roll.color_tiff = linkData;
-        else if (/_gr\.tif.?$/.test(file_entry.filename))
-          downloadLinks.roll.green_tiff = linkData;
-        else if (file_entry.filename.endsWith("_gs.jp2"))
-          downloadLinks.roll.gray_jp2 = linkData;
-        else if (/_gs\.tif.?$/.test(file_entry.filename))
-          downloadLinks.roll.gray_tiff = linkData;
-        else if (file_entry.filename.endsWith("_ir.jp2"))
-          downloadLinks.roll.infra_jp2 = linkData;
-        else if (file_entry.filename.endsWith("_Infrared.jp2"))
-          downloadLinks.roll.infra_jp2 = linkData;
-        else if (/_Infrared\.tif.?$/.test(file_entry.filename))
-          downloadLinks.roll.infra_tiff = linkData;
-        else if (/_ir\.tif.?$/.test(file_entry.filename))
-          downloadLinks.roll.infra_tiff = linkData;
-        else if (file_entry.filename.endsWith("_ir_sp.jp2"))
-          downloadLinks.roll.infra_sp_jp2 = linkData;
-        else if (/_ir_sp\.tif.?$/.test(file_entry.filename))
-          downloadLinks.roll.infra_sp_tiff = linkData;
-        else if (
-          imageFilenameBase.includes("_Color") &&
-          file_entry.filename ===
-            `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
-        )
-          downloadLinks.roll.infra_sp_jp2 = linkData;
-        else {
-          unlabeledLinks++;
-          downloadLinks.roll[`unlabeled${unlabeledLinks}`] = linkData;
+        file_entry.is_public !== "yes" ||
+        (!mimeType.startsWith("image") &&
+          !["application/bzip2", "audio/midi"].includes(mimeType))
+      )
+        return;
+
+      const linkData = {
+        link: fileLink,
+        size: formatBytes(parseInt(file_entry.size)),
+        filename: thisFilename,
+      };
+
+      checkLink(fileLink).then((checkResult) => {
+        if (!checkResult) return;
+        if (mimeType.startsWith("image")) {
+          if (thisFilename === `${imageFilenameBase}.jp2`)
+            downloadLinks.roll.color_jp2 = linkData;
+          else if (thisFilename.startsWith(`${imageFilenameBase}.tif`))
+            downloadLinks.roll.color_tiff = linkData;
+          else if (/_gr\.tif.?$/.test(thisFilename))
+            downloadLinks.roll.green_tiff = linkData;
+          else if (thisFilename.endsWith("_gs.jp2"))
+            downloadLinks.roll.gray_jp2 = linkData;
+          else if (/_gs\.tif.?$/.test(thisFilename))
+            downloadLinks.roll.gray_tiff = linkData;
+          else if (thisFilename.endsWith("_ir.jp2"))
+            downloadLinks.roll.infra_jp2 = linkData;
+          else if (thisFilename.endsWith("_Infrared.jp2"))
+            downloadLinks.roll.infra_jp2 = linkData;
+          else if (/_Infrared\.tif.?$/.test(thisFilename))
+            downloadLinks.roll.infra_tiff = linkData;
+          else if (/_ir\.tif.?$/.test(thisFilename))
+            downloadLinks.roll.infra_tiff = linkData;
+          else if (thisFilename.endsWith("_ir_sp.jp2"))
+            downloadLinks.roll.infra_sp_jp2 = linkData;
+          else if (/_ir_sp\.tif.?$/.test(thisFilename))
+            downloadLinks.roll.infra_sp_tiff = linkData;
+          else if (
+            imageFilenameBase.includes("_Color") &&
+            thisFilename ===
+              `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
+          )
+            downloadLinks.roll.infra_sp_jp2 = linkData;
+          // Display filenames for any image file that doesn't match a type
+          //  template, but only if it matches the sequence number of the image
+          //  displayed via the IIIF image server
+          else if (thisFilename.includes(imageFilenameBase)) {
+            unlabeledLinks++;
+            downloadLinks.roll[`unlabeled${unlabeledLinks}`] = linkData;
+          }
         }
-      }
+
+        if (
+          file_entry.mime_type === "application/bzip2" &&
+          thisFilename.endsWith("_analysis.txt.bz2")
+        ) {
+          downloadLinks.midi.analysis = linkData;
+        }
+
+        if (
+          file_entry.mime_type === "audio/midi" &&
+          thisFilename.endsWith("_raw.mid")
+        ) {
+          delete linkData.size;
+          downloadLinks.midi.raw_midi = linkData;
+        }
+      });
     }),
   );
 
@@ -357,6 +385,7 @@
         disabled={false}
         on:click={() => downloadDialog("midi")}
         iconName="midi"
+        opensDialog="true"
         label="Download MIDI files for roll {metadata.title}"
         height="28"
         width="28"
@@ -367,6 +396,7 @@
         disabled={false}
         on:click={() => downloadDialog("roll")}
         iconName="roll-image"
+        opensDialog="true"
         label="Download images for roll {metadata.title}"
         height="28"
         width="28"
