@@ -254,6 +254,8 @@
           downloadLinks.roll.infra_jp2 = linkData;
         else if (/_Infrared\.tif.?$/.test(file_entry.filename))
           downloadLinks.roll.infra_tiff = linkData;
+        else if (/_ir\.tif.?$/.test(file_entry.filename))
+          downloadLinks.roll.infra_tiff = linkData;
         else if (file_entry.filename.endsWith("_ir_sp.jp2"))
           downloadLinks.roll.infra_sp_jp2 = linkData;
         else if (/_ir_sp\.tif.?$/.test(file_entry.filename))
