@@ -112,11 +112,16 @@
 
   export let metadata;
 
-  const dialogState = { midi: null, roll: null };
   const unavailable = "<span>Unavailable</span>";
+
+  const dialogState = { midi: null, roll: null };
   const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}`;
   const imageFilenameBase = `${metadata.image_url.split("/").slice(-2, -1)[0]}`;
   let unlabeledLinks = 0;
+  let fileCheckStatus = {
+    midi: "Unable to check for additional downloads on the server. Please try again in a few minutes.",
+    roll: "No available downloads found on the server. It may be busy. Please try again in a few minutes.",
+  };
 
   // Allow values from the catalog to override the matching keys in the roll data
   const catalogRecord = catalog.find((r) => r.druid === metadata.druid);
@@ -146,7 +151,7 @@
   };
 
   const linkToDownload = (dialogType, itemType) => {
-    // Create an ephemeral link to the image and click it
+    // Create an ephemeral link to the download file and click it
     const element = document.createElement("a");
     element.setAttribute("href", downloadLinks[dialogType][itemType].link);
     element.style.display = "none";
@@ -178,7 +183,7 @@
           ? "MIDI Download Options"
           : "Roll Image Download Options",
       type: "dialog",
-      message: "",
+      message: fileCheckStatus[dialogType],
       closable: true,
       callOnClose: () => {
         dialogState[dialogType] = null;
@@ -246,6 +251,7 @@
 
       checkLink(fileLink).then((checkResult) => {
         if (!checkResult) return;
+        fileCheckStatus = { midi: "", roll: "" }; // A very basic indicator of stacks availability
         if (mimeType.startsWith("image")) {
           if (thisFilename === `${imageFilenameBase}.jp2`)
             downloadLinks.roll.color_jp2 = linkData;
