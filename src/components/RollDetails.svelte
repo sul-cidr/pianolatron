@@ -71,13 +71,18 @@
   .download-links {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
     padding-left: 0.5rem;
     flex-wrap: wrap;
 
     a {
       text-transform: capitalize;
     }
+  }
+
+  .download-images {
+    column-gap: 1.5rem;
   }
 
   .download-links a {
@@ -116,7 +121,7 @@
 
   const dialogState = { midi: null, roll: null };
   const imageLinkBase = `https://stacks.stanford.edu/file/${metadata.druid}`;
-  const imageFilenameBase = `${metadata.image_url.split("/").slice(-2, -1)[0]}`;
+  const imageFilenameBase = `${metadata.image_url.split("/").slice(-2, -1)[0].replace("_Color", "")}`;
   let unlabeledLinks = 0;
   let fileCheckStatus = {
     midi: "Unable to check for additional downloads on the server. Please try again in a few minutes.",
@@ -188,12 +193,14 @@
       callOnClose: () => {
         dialogState[dialogType] = null;
       },
-      actions: Object.keys(downloadLinks[dialogType]).map((itemType) =>
-        Object({
-          label: `${itemType.startsWith("unlabeled") ? downloadLinks[dialogType][itemType].filename : linkLabels[itemType]}${Object.hasOwn(downloadLinks[dialogType][itemType], "size") ? ` - ${downloadLinks[dialogType][itemType].size}` : ""}`,
-          fn: () => linkToDownload(dialogType, itemType),
-        }),
-      ),
+      actions: Object.keys(downloadLinks[dialogType])
+        .sort()
+        .map((itemType) =>
+          Object({
+            label: `${itemType.startsWith("unlabeled") ? downloadLinks[dialogType][itemType].filename : linkLabels[itemType]}${Object.hasOwn(downloadLinks[dialogType][itemType], "size") ? ` - ${downloadLinks[dialogType][itemType].size}` : ""}`,
+            fn: () => linkToDownload(dialogType, itemType),
+          }),
+        ),
     });
   };
 
@@ -257,6 +264,10 @@
             downloadLinks.roll.color_jp2 = linkData;
           else if (thisFilename.startsWith(`${imageFilenameBase}.tif`))
             downloadLinks.roll.color_tiff = linkData;
+          else if (/_Color\.tif.?$/.test(thisFilename))
+            downloadLinks.roll.color_tiff = linkData;
+          else if (thisFilename === `${imageFilenameBase}_Color.jp2`)
+            downloadLinks.roll.color_jp2 = linkData;
           else if (/_gr\.tif.?$/.test(thisFilename))
             downloadLinks.roll.green_tiff = linkData;
           else if (thisFilename.endsWith("_gs.jp2"))
@@ -275,12 +286,6 @@
             downloadLinks.roll.infra_sp_jp2 = linkData;
           else if (/_ir_sp\.tif.?$/.test(thisFilename))
             downloadLinks.roll.infra_sp_tiff = linkData;
-          else if (
-            imageFilenameBase.includes("_Color") &&
-            thisFilename ===
-              `${imageLinkBase.replace("_Color", "_Infrared")}.jp2`
-          )
-            downloadLinks.roll.infra_sp_jp2 = linkData;
           // Display filenames for any image file that doesn't match a type
           //  template, but only if it matches the sequence number of the image
           //  displayed via the IIIF image server
@@ -292,14 +297,14 @@
 
         if (
           file_entry.mime_type === "application/bzip2" &&
-          thisFilename.endsWith("_analysis.txt.bz2")
+          thisFilename.endsWith("analysis.txt.bz2")
         ) {
           downloadLinks.midi.analysis = linkData;
         }
 
         if (
           file_entry.mime_type === "audio/midi" &&
-          thisFilename.endsWith("_raw.mid")
+          thisFilename.endsWith("raw.mid")
         ) {
           delete linkData.size;
           downloadLinks.midi.raw_midi = linkData;
@@ -385,7 +390,7 @@
   {/if}
   <dt>Download</dt>
   <dd>
-    <div class="download-links">
+    <div class="download-links download-images">
       <IconButton
         class="player-button"
         disabled={false}
