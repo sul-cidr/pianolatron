@@ -212,6 +212,7 @@
     color_tiff: "Color TIFF",
     color_jp2: "Color JPEG 2000",
     green_tiff: "Green-Channel TIFF (Monochrome)",
+    green_jp2: "Green-Channel JPEG 2000 (Monochrome)",
     infra_jp2: "Infrared JPEG 2000 (Monochrome)",
     infra_tiff: "Infrared TIFF (Monochrome)",
     infra_sp_jp2: "Infrared JPEG 2000 (High-Contrast)",
@@ -268,6 +269,8 @@
             downloadLinks.roll.color_tiff = linkData;
           else if (thisFilename === `${imageFilenameBase}_Color.jp2`)
             downloadLinks.roll.color_jp2 = linkData;
+          else if (thisFilename === `${imageFilenameBase}_gr.jp2`)
+            downloadLinks.roll.green_jp2 = linkData;
           else if (/_gr\.tif.?$/.test(thisFilename))
             downloadLinks.roll.green_tiff = linkData;
           else if (thisFilename.endsWith("_gs.jp2"))
