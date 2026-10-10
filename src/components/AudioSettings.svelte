@@ -111,6 +111,7 @@
     </SliderControl>
   </fieldset>
   <button
+    aria-haspopup="dialog"
     on:click={() => {
       sampleVolumes.reset();
       sampleVelocities.reset();
